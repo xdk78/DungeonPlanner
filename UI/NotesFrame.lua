@@ -16,7 +16,7 @@
 local _, ns = ...
 local NotesFrame = ns:NewModule("NotesFrame")
 local S, W, L = ns.Style, ns.Widgets, ns.L
-local SP, SZ = S.SPACE, S.SIZE
+local SP = S.SPACE
 local Pages, Util = ns.Pages, ns.Util
 
 local MIN_W, MIN_H = 220, 150
@@ -289,21 +289,23 @@ local function build()
 	f.source:SetPoint("TOPLEFT", f.pageTitle, "BOTTOMLEFT", 0, -SP.xxs)
 	f.source:SetPoint("RIGHT", -SP.sm, 0)
 
-	f.prev = W.IconButton(inner, "<", L["Previous page"], function()
+	-- The game's page arrows (the spell book's), the counter between them, as the game's paged frames show it.
+	f.prev = W.PageButton(inner, "prev", L["Previous page"], function()
 		NotesFrame.Step(-1)
 	end)
-	f.prev:SetPoint("BOTTOMLEFT")
-	f.next = W.IconButton(inner, ">", L["Next page"], function()
+	f.prev:SetPoint("BOTTOMLEFT", 0, -2)
+	f.counter = W.Text(inner, "caption", "muted")
+	f.counter:SetPoint("LEFT", f.prev, "RIGHT", SP.xs, 0)
+	f.counter:SetJustifyH("CENTER")
+	f.counter:SetWidth(64)
+	f.next = W.PageButton(inner, "next", L["Next page"], function()
 		NotesFrame.Step(1)
 	end)
-	f.next:SetPoint("LEFT", f.prev, "RIGHT", SP.xs, 0)
-	f.counter = W.Text(inner, "caption", "muted")
-	f.counter:SetPoint("LEFT", f.next, "RIGHT", SP.sm, 0)
-	f.counter:SetWidth(90)
+	f.next:SetPoint("LEFT", f.counter, "RIGHT", SP.xs, 0)
 
 	f.doc = W.Document(inner)
 	f.doc:SetPoint("TOPLEFT", f.source, "BOTTOMLEFT", 0, -SP.sm)
-	f.doc:SetPoint("BOTTOMRIGHT", 0, SZ.small + SP.sm)
+	f.doc:SetPoint("BOTTOMRIGHT", 0, 26 + SP.sm)
 	f:Hide()
 	frame = f
 end

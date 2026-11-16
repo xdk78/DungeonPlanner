@@ -53,7 +53,7 @@ Defaults.ui = {
 	homeSelected = nil, -- the instance selected in the home table (its key)
 	step = nil, -- the current step: { plan = id, index = n } (Model/Steps.lua)
 	run = {}, -- run mode window: { point, shown }
-	notes = { width = 300, height = 240 }, -- the Notes window: { point, width, height }
+	notes = { width = 380, height = 400 }, -- the Notes window: { point, width, height }; resizable, its size saved
 	partyMode = "assignments", -- the Party section: "assignments" | "pages"
 }
 

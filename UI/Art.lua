@@ -130,6 +130,15 @@ Art.SPECS = {
 	listHover = { atlas = "Options_List_Hover", file = "Interface\\QuestFrame\\UI-QuestTitleHighlight" },
 	listSelected = { atlas = "Options_List_Active" },
 	headerStrip = { file = "Interface\\QuestFrame\\UI-QuestLogTitleHighlight" }, -- GearQuest Forever, NR, DBM
+	-- The game's page arrows (the spell book's and merchant's previous / next page; W.PageButton). FDJ, OM, NR,
+	-- Leatrix Plus.
+	pagePrevUp = { file = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up" },
+	pagePrevDown = { file = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down" },
+	pagePrevDisabled = { file = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled" },
+	pageNextUp = { file = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up" },
+	pageNextDown = { file = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down" },
+	pageNextDisabled = { file = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled" },
+	buttonHighlight = { file = "Interface\\Buttons\\UI-Common-MouseHilight" },
 }
 
 -- Which icon the launcher shows: our logo, or the game's map icon when the player picks it (settings.gameIcon). Every

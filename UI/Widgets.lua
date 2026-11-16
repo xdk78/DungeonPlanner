@@ -547,6 +547,34 @@ function W.IconButton(parent, glyph, tooltip, onClick)
 	return b
 end
 
+-- The game's page arrow ("prev" or "next"): the spell book's round arrow buttons with their pressed and disabled
+-- looks and the game's highlight, `size` px (default 26). Without the files: a drawn "<" / ">" button. :SetDisabled.
+function W.PageButton(parent, dir, tooltip, onClick, size)
+	local key = dir == "prev" and "pagePrev" or "pageNext"
+	local up = Art.SPECS[key .. "Up"]
+	if Art.FileExists(up.file) == false then
+		return W.IconButton(parent, dir == "prev" and "<" or ">", tooltip, onClick)
+	end
+	local b = CreateFrame("Button", nil, parent)
+	b:SetSize(size or 26, size or 26)
+	b:SetNormalTexture(up.file)
+	b:SetPushedTexture(Art.SPECS[key .. "Down"].file)
+	b:SetDisabledTexture(Art.SPECS[key .. "Disabled"].file)
+	b:SetHighlightTexture(Art.SPECS.buttonHighlight.file, "ADD")
+	b.dpNative = true
+	b:RegisterForClicks("LeftButtonUp")
+	b:SetScript("OnClick", function()
+		ns.SafeCall(onClick)
+	end)
+	if tooltip then
+		W.SetTooltip(b, tooltip)
+	end
+	function b:SetDisabled(disabled)
+		self:SetEnabled(not disabled)
+	end
+	return b
+end
+
 -- The game's red close button (UIPanelCloseButton), or a drawn one.
 function W.CloseButton(parent, onClick)
 	local b, templated = Art.CreateFrame("Button", nil, parent, "UIPanelCloseButton")

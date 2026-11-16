@@ -1,7 +1,7 @@
 -- Run mode: a compact window to keep open while running the instance. It shows the plan's current step (Model/Steps.lua),
 -- the next pull with its note, tips for the next boss, and a mini map framing the step and its neighbours, with its
 -- route segment, a ring on the step's spot and only that step's party positions (no labels: MapCanvas compact mode).
--- Spots the plan only estimates carry a small "≈" (Style.WithApprox) instead of the words "(approx.)".
+-- Spots the plan only estimates carry a small "~" (Style.WithApprox) instead of the words "(approx.)".
 -- Prev / Next move through the steps; so do the "Next pull" / "Previous pull" key bindings while it is open, and a
 -- boss kill the tracker detects moves past that boss's step. "Toggle run mode" has its own key binding (no default).
 --
@@ -37,14 +37,22 @@ local function excerpt(text, n)
 	return cut .. "..."
 end
 
--- A titled block: a gold label, a title line and a wrapping text.
-local function block(parent, label, maxLines)
+-- A titled block: a gold label, a title (one line, or `titleLines` lines that wrap) and a wrapping text. A block
+-- with a wrapping title takes the height its lines need (b:Fit).
+local function block(parent, label, maxLines, titleLines)
 	local b = CreateFrame("Frame", nil, parent)
 	b.label = W.Label(b, label)
 	b.label:SetPoint("TOPLEFT")
 	b.title = W.Text(b, "title", "ink")
 	b.title:SetPoint("TOPLEFT", b.label, "BOTTOMLEFT", 0, -SP.xxs)
 	b.title:SetPoint("RIGHT")
+	if titleLines and titleLines > 1 then
+		b.title:SetWordWrap(true)
+		b.title:SetJustifyV("TOP")
+		if b.title.SetMaxLines then
+			b.title:SetMaxLines(titleLines)
+		end
+	end
 	b.text = W.Paragraph(b, "caption", "muted")
 	b.text:SetPoint("TOPLEFT", b.title, "BOTTOMLEFT", 0, -SP.xxs)
 	b.text:SetPoint("RIGHT")
@@ -55,6 +63,15 @@ local function block(parent, label, maxLines)
 	function b:Set(title, text)
 		W.FitText(self.title, title or "")
 		self.text:SetText(text or "")
+		if titleLines and titleLines > 1 then
+			self:Fit()
+		end
+	end
+	-- The height of the label, the title's lines and the text's, with their gaps.
+	function b:Fit()
+		local h = (self.label:GetStringHeight() or 12) + SP.xxs + (self.title:GetStringHeight() or 16) + SP.xxs
+			+ ((self.text:GetText() or "") ~= "" and (self.text:GetStringHeight() or 0) or 0)
+		self:SetHeight(math.ceil(h) + SP.xxs)
 	end
 	b:EnableMouse(true)
 	b:SetScript("OnEnter", function(self)
@@ -315,7 +332,7 @@ local function build()
 	W.SetTooltip(f.drawings, L["Drawings"],
 		L["Click to show this step's drawings (and those tied to no step), all of them, or none."])
 
-	f.pull = block(inner, L["Next pull"], 2)
+	f.pull = block(inner, L["Next pull"], 2, 2) -- "Pull 1: Dark Iron Summoner patrol (Magmatus)" on two lines
 	f.pull:SetPoint("TOPLEFT", f.map, "BOTTOMLEFT", 0, -(SP.sm + 14))
 	f.pull:SetPoint("RIGHT")
 	f.pull:SetHeight(64)
@@ -325,7 +342,8 @@ local function build()
 	f.boss:SetPoint("BOTTOM", 0, SZ.control + SP.sm)
 	S.TextColor(f.boss.title, "gold")
 
-	f.prev = W.Button(inner, L["Prev"], "outline", function()
+	-- Both the game's panel buttons: a disabled Prev (on the first step) looks as the game's disabled buttons do.
+	f.prev = W.Button(inner, L["Prev"], "primary", function()
 		RunMode.Step(-1)
 	end)
 	f.prev:SetPoint("BOTTOMLEFT")
@@ -441,7 +459,9 @@ function RunMode.Refresh()
 				points[#points + 1] = { s.x, s.y }
 			end
 		end
-		frame.map:FrameSteps(points)
+		-- With room around them: the step and its neighbours stay clear of the map's frame (labels painted on the map
+		-- and the route leaving the box are not cut at the edge right by them).
+		frame.map:FrameSteps(points, { pad = 0.1, minSpan = 0.3 })
 	else
 		frame.map:ResetView()
 	end
