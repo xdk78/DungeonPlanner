@@ -15,6 +15,9 @@ local SP, SZ = S.SPACE, S.SIZE
 local UI = ns.UI
 
 local WIDTH, HEIGHT, MAP_H = 300, 556, 170
+-- The step block's room: its label, title and two lines of text. A step with one line takes less, and the mini map
+-- grows into the rest, so no gap is left between the step's text and the map.
+local STEP_H = 72
 local BUTTON_W = 92 -- Prev and Next; the step counter sits between them
 local frame
 
@@ -238,7 +241,7 @@ local function build()
 	f.step = block(inner, L["Step"], 2)
 	f.step:SetPoint("TOPLEFT", f.rec, "BOTTOMLEFT", 0, -SP.sm)
 	f.step:SetPoint("RIGHT")
-	f.step:SetHeight(72)
+	f.step:SetHeight(STEP_H)
 	f.step.title:SetFontObject(S.fonts.page)
 	S.TextColor(f.step.title, "gold")
 
@@ -386,6 +389,7 @@ function RunMode.Refresh()
 	frame.counter:SetText(index and string.format(L["%d of %d"], index, #steps) or "")
 	if not plan or #steps == 0 then
 		frame.step:Set(plan and L["No steps yet"] or "", "")
+		frame.step:SetHeight(STEP_H)
 		frame.pull:Set("-", "")
 		frame.boss:Set("-", "")
 		frame.map:Hide()
@@ -411,6 +415,11 @@ function RunMode.Refresh()
 		text = text .. "  ·  " .. note
 	end
 	frame.step:Set(title, S.WithApprox(text, approx))
+	-- As tall as its lines; the map below takes what is left of the block's room (the blocks under it stay put).
+	frame.step:Fit()
+	local stepH = math.min(STEP_H, math.ceil(frame.step:GetHeight() or STEP_H))
+	frame.step:SetHeight(stepH)
+	frame.map:SetHeight(MAP_H + STEP_H - stepH)
 
 	-- Next pull and next boss, from the current step on.
 	local pi, pullStep = ns.Steps.Next(steps, index or 1, "pull")
