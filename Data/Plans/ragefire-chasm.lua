@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Horde-only. All quest givers are outside (Thrall and Neeru in Orgrimmar, Rahauro in Thunder Bluff, Varimathras in the Undercity).",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Horde-only. All quest givers are outside (Thrall and Neeru in Orgrimmar, Rahauro in Thunder Bluff, Varimathras in the Undercity).",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Ragefire Chasm", kind = "dungeon", origin = "classic", uiMapID = 213, levelMin = 13, levelMax = 18 },
 	floors = {

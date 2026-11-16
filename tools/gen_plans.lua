@@ -926,7 +926,7 @@ local function build(data, routes)
 	plan.description = intro .. coverage
 	local notes = {
 		intro .. coverage,
-		'Spots marked "(approx.)" are estimates, not measurements. Party positions are generic suggestions: tank where '
+		'Spots marked "~" are estimates, not measurements. Party positions are generic suggestions: tank where '
 			.. "the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it "
 			.. "in your own copy.",
 	}

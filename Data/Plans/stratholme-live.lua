@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Forever splits Stratholme into Live and Undead for the Group Finder; this file is the live (Main Gate) side. Route is typical.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Forever splits Stratholme into Live and Undead for the Group Finder; this file is the live (Main Gate) side. Route is typical.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Stratholme: Live (Main Gate)", kind = "dungeon", origin = "classic", levelMin = 58, levelMax = 60 },
 	floors = {

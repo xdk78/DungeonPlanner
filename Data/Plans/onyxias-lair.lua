@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Boss order",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: medium. All 1 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: medium. All 1 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Level 60 raid; clear the whelp rooms first.",
+	notes = "Community-researched plan with approximate positions. Confidence: medium. All 1 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Level 60 raid; clear the whelp rooms first.",
 	tags = { "recommended", "raid", "confidence: medium" },
 	instance = { name = "Onyxia's Lair", kind = "raid", origin = "classic", levelMin = 60, levelMax = 60 },
 	floors = {

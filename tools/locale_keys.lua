@@ -70,6 +70,8 @@ local DYNAMIC = {
 	"Blank plan", "Dungeon run (5 players)", "Raid night",
 	"waiting for answers", "sending", "sent", "declined", "nobody accepted", "cancelled", "receiving", "failed",
 	"Tank", "Healer", "Damage",
+	-- the recommended plans' standard notes paragraph (UI/Panels/NotesPanel.lua ESTIMATES)
+	'Spots marked "~" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.',
 }
 
 local keys, seen = {}, {}

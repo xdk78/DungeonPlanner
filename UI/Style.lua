@@ -503,7 +503,10 @@ function Style.WithApprox(text, approx)
 end
 
 -- Level range text coloured like the game colours quest difficulty (GetQuestDifficultyColor, guarded; OpenMap uses
--- the same call), or the heading colour without it.
+-- the same call), or the heading colour without it. Grey, green, yellow and orange as the quest log shows them, but
+-- never its red: a dungeon far above the player's level is shown in the orange of "very difficult" (probed at five
+-- levels above at most), because a list of red level ranges read as a warning or an error, not as "later". The home
+-- table's Levels heading explains the colours in its tooltip (UI/Home.lua).
 function Style.LevelColor(levelMin, levelMax)
 	if not levelMin then
 		return Style.Color("gold")
@@ -514,6 +517,7 @@ function Style.LevelColor(levelMin, levelMax)
 		if levelMax and playerLevel > levelMax then
 			probe = levelMax - 2
 		end
+		probe = math.min(probe, playerLevel + 4) -- orange at most (5 levels above is the quest log's red)
 		local ok, color = pcall(GetQuestDifficultyColor, probe)
 		if ok and type(color) == "table" and color.r then
 			return color.r, color.g, color.b, 1

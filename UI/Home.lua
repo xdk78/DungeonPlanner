@@ -36,8 +36,10 @@ local function instanceRowCreate(row)
 	row.tag = W.Text(row, "caption", "muted")
 	row.tag:SetPoint("BOTTOMLEFT", row.thumb, "BOTTOMRIGHT", SP.md, 1)
 	row.tag:SetPoint("RIGHT", row.title, "RIGHT")
-	-- "Forever" after the tag line: the instance is new in WoW: Forever.
+	-- "Forever": the instance is new in WoW: Forever. Centred on the row at the end of the name column, left of the
+	-- levels as in the instance picker: on the tag line it touched the name above it and read as an underline.
 	row.forever = W.Chip(row, L["Forever"], L["Forever"], L["New in WoW: Forever"])
+	row.forever:SetPoint("RIGHT", -(COL.level + COL.plans + COL.bosses + SP.md), 0)
 	row.bosses = W.Text(row, "body", "ink")
 	row.bosses:SetPoint("RIGHT", -SP.md, 0)
 	row.bosses:SetWidth(COL.bosses)
@@ -63,16 +65,19 @@ local function instanceRowUpdate(row, entry)
 	if not hasArt then
 		ns.Art.Set(row.emblem, entry.kind == "raid" and "emblemRaid" or "emblemDungeon")
 	end
+	local forever = ns.Picker.IsForever(entry)
+	row.forever:SetShown(forever)
+	-- The name and the tag line end before the chip when it shows.
+	row.title:ClearAllPoints()
+	row.title:SetPoint("TOPLEFT", row.thumb, "TOPRIGHT", SP.md, -1)
+	if forever then
+		row.title:SetPoint("RIGHT", row.forever, "LEFT", -SP.md, 0)
+	else
+		row.title:SetPoint("RIGHT", -(COL.level + COL.plans + COL.bosses + SP.md), 0)
+	end
 	W.FitText(row.title, entry.name ~= "" and entry.name or L["Unnamed instance"])
 	row.tag:SetText(entry.recommended > 0 and L["Recommended plan"] or (entry.kind == "raid" and L["Raid"] or L["Dungeon"]))
 	S.TextColor(row.tag, entry.recommended > 0 and "goldBright" or "muted")
-	local forever = ns.Picker.IsForever(entry)
-	row.forever:SetShown(forever)
-	if forever then
-		row.forever:ClearAllPoints()
-		-- Centred on the tag line, just after its text.
-		row.forever:SetPoint("LEFT", row.tag, "LEFT", math.ceil(row.tag:GetStringWidth()) + SP.sm, 0)
-	end
 	local total = entry.plans + entry.recommended
 	row.count:SetText(total > 0 and ns.Plural(total, L["%d plan|%d plans"]) or "-")
 	S.TextColor(row.count, total > 0 and "ink" or "dim")
@@ -366,6 +371,13 @@ function Home.Create(parent, ctx, actionBar)
 	heads.bosses = head(L["Bosses"], COL.bosses, "RIGHT", -(SP.md + SP.md))
 	heads.plans = head(L["Plans"], COL.plans, "RIGHT", -(SP.md + SP.md + COL.bosses))
 	heads.level = head(L["Levels"], COL.level, "RIGHT", -(SP.md + SP.md + COL.bosses + COL.plans))
+	-- What the level colours mean (Style.LevelColor), on hovering the heading.
+	heads.levelHit = CreateFrame("Frame", nil, heads)
+	heads.levelHit:SetPoint("TOPLEFT", heads.level, "TOPLEFT", 0, 2)
+	heads.levelHit:SetPoint("BOTTOMRIGHT", heads.level, "BOTTOMRIGHT", 0, -2)
+	heads.levelHit:EnableMouse(true)
+	W.SetTooltip(heads.levelHit, L["Levels"],
+		L["Coloured like quests for your level: grey is trivial, green easy, yellow a fair match, orange hard or still above your level."])
 	heads.rule = S.Hairline(heads)
 	heads.rule:SetPoint("BOTTOMLEFT")
 	heads.rule:SetPoint("BOTTOMRIGHT", -SP.md, 0)

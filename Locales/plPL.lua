@@ -872,4 +872,11 @@ ns.Locales.plPL = {
 	["not yet"] = "jeszcze nie",
 	["unknown"] = "nieznane",
 	["unknown: %d"] = "nieznane: %d",
+	["Coloured like quests for your level: grey is trivial, green easy, yellow a fair match, orange hard or still above your level."] = "Kolory jak przy zadaniach dla twojego poziomu: szary - za łatwe, zielony - łatwe, żółty - w sam raz, pomarańczowy - trudne albo jeszcze za wysokie.",
+	["Fill from my party takes the roles your group chose; + adds a name by hand. Right-click a name to remove it."] = "„Wypełnij z mojej drużyny” bierze role wybrane przez grupę; + dodaje imię ręcznie. Prawy przycisk na imieniu usuwa je.",
+	["In the run"] = "W przebiegu",
+	["No assignments in a recommended plan. Make an editable copy to say who does what, per boss."] = "Plan zalecany nie ma przydziałów. Zrób edytowalną kopię, by ustalić, kto co robi przy każdym bossie.",
+	['Spots marked "~" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.'] = "Miejsca oznaczone „~” są szacunkami, nie pomiarami. Pozycje drużyny to ogólne sugestie: tank tam, gdzie grupa dochodzi, uzdrowiciel i dystansowi z tyłu, walczący wręcz obok bossa. Sprawdź wszystko w grze i popraw we własnej kopii.",
+	["Step %d of %d"] = "Krok %d z %d",
+	["Step %d of %d, before %s"] = "Krok %d z %d, przed: %s",
 }

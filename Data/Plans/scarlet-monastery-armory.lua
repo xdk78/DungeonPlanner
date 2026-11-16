@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 1 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 1 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: One boss wing.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 1 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: One boss wing.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Scarlet Monastery: Armory", kind = "dungeon", origin = "classic", levelMin = 36, levelMax = 44 },
 	floors = {

@@ -9,7 +9,7 @@ One recommended plan per instance (see `data-src/dungeons/README.md` for the lis
 Group Finder level range, the floors, the bosses in clearing order with short strategies, boss positions where a source
 has them, a route with numbered stops, pulls, party positions per boss, and NPC and item IDs where a web source confirms
 them. Every plan says in its note that it is community-researched, that positions are approximate, and how confident
-the research is (`low` or `medium`). Estimated markers and stops carry "(approx.)" in their note. Bosses without a
+the research is (`low` or `medium`). Estimated markers and stops carry "(approx.)" in their note (the UI shows a small "~" instead of the words). Bosses without a
 position get the Adventure Guide's own pin at runtime (the map shows those for any boss the plan does not place).
 
 Treat everything as a starting point: check it in game and adjust it in an editable copy.

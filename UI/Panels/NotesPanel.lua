@@ -9,6 +9,12 @@ local SP = S.SPACE
 local Panel = {}
 ns.Panels.notes = Panel
 
+-- Every recommended plan's notes carry this paragraph (tools/gen_plans.lua, word for word; a test checks): shown
+-- translated. Estimated spots carry a small "~" in the UI (Style.WithApprox).
+Panel.ESTIMATES = 'Spots marked "~" are estimates, not measurements. Party positions are generic suggestions: tank where '
+	.. "the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in "
+	.. "your own copy."
+
 function Panel.Create(parent, ctx)
 	local f = CreateFrame("Frame", nil, parent)
 
@@ -106,6 +112,11 @@ function Panel.Create(parent, ctx)
 			local notes = p.notes
 			if p.description ~= "" and notes:sub(1, #p.description) == p.description then
 				notes = notes:sub(#p.description + 1):gsub("^%s+", "")
+			end
+			-- The recommended plans' standard paragraph (tools/gen_plans.lua writes it in English) in the player's language.
+			local i, j = notes:find(Panel.ESTIMATES, 1, true)
+			if i then
+				notes = notes:sub(1, i - 1) .. L[Panel.ESTIMATES] .. notes:sub(j + 1)
 			end
 			doc:Add("text", notes)
 		end

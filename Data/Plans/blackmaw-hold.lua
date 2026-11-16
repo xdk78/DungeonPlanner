@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Moontouched Wanderer - Rare, level 55.\nRare: Gortek the Apprentice - Rare, level 55.\nRare: Tunnelweb Matriarch - Rare, level 55.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: The ORDER IS A GUESS (sorted by boss level).",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 7 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Moontouched Wanderer - Rare, level 55.\nRare: Gortek the Apprentice - Rare, level 55.\nRare: Tunnelweb Matriarch - Rare, level 55.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: The ORDER IS A GUESS (sorted by boss level).",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Blackmaw Hold", kind = "dungeon", origin = "forever", levelMin = 55, levelMax = 60 },
 	floors = {

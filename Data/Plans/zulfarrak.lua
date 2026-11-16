@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Zerillis - Rare near the pyramid base.\nRare: Sandarr Dunereaver - Rare in the central south.\nRare: Dustwraith - Rare, west-centre.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route order is an estimate of a clean clear; Zul'Farrak is open-ended.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Zerillis - Rare near the pyramid base.\nRare: Sandarr Dunereaver - Rare in the central south.\nRare: Dustwraith - Rare, west-centre.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route order is an estimate of a clean clear; Zul'Farrak is open-ended.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Zul'Farrak", kind = "dungeon", origin = "classic", levelMin = 44, levelMax = 54 },
 	floors = {

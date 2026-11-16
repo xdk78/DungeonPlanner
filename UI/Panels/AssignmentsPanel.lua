@@ -9,7 +9,11 @@ local S, W, L = ns.Style, ns.Widgets, ns.L
 local Plan, Util, Schema = ns.Plan, ns.Util, ns.Schema
 local SP, SZ = S.SPACE, S.SIZE
 
-local GROUPS_W = 300
+-- The groups column: about two fifths of the section (300 to 440 px), so a dungeon's party box does not sit far off on
+-- the right of an empty assignments column; f:LayoutColumns sets it on every resize.
+local GROUPS_MIN, GROUPS_MAX, GROUPS_SHARE = 300, 440, 0.42
+local GROUPS_SHARE_PARTY = 0.5 -- a dungeon's party: two even columns
+
 
 local Panel = {}
 ns.Panels.assignments = Panel
@@ -100,7 +104,7 @@ function Panel.Create(parent, ctx)
 	f.filter:SetPoint("TOPLEFT", 0, MODE_TOP)
 	f.pages = ns.PagesEditor.Create(f, ctx)
 	f.pages:SetPoint("TOPLEFT", 0, MODE_TOP)
-	f.pages:SetPoint("BOTTOMRIGHT", -(GROUPS_W + SP.xl), 0)
+	f.pages:SetPoint("BOTTOMRIGHT", -(GROUPS_MIN + SP.xl), 0)
 
 	f.add = W.Button(f, L["Add assignment"], "red", function()
 		local p = plan()
@@ -154,13 +158,13 @@ function Panel.Create(parent, ctx)
 		end,
 	})
 	f.list:SetPoint("TOPLEFT", f.filter, "BOTTOMLEFT", 0, -SP.md)
-	f.list:SetPoint("RIGHT", -(GROUPS_W + SP.xl), 0)
+	f.list:SetPoint("RIGHT", -(GROUPS_MIN + SP.xl), 0)
 	f.list:SetPoint("BOTTOM", 0, SZ.control * 2 + SP.md * 3 + 16)
 
 	-- Editor under the list.
 	local ed = CreateFrame("Frame", nil, f)
 	ed:SetPoint("TOPLEFT", f.list, "BOTTOMLEFT", 0, -SP.md)
-	ed:SetPoint("BOTTOMRIGHT", -(GROUPS_W + SP.xl), 0)
+	ed:SetPoint("BOTTOMRIGHT", -(GROUPS_MIN + SP.xl), 0)
 	f.editor = ed
 
 	local function update(fields)
@@ -280,7 +284,7 @@ function Panel.Create(parent, ctx)
 	local groups = CreateFrame("Frame", nil, f)
 	groups:SetPoint("TOPRIGHT")
 	groups:SetPoint("BOTTOMRIGHT")
-	groups:SetWidth(GROUPS_W)
+	groups:SetWidth(GROUPS_MIN)
 	f.groups = groups
 	groups.title = W.Heading(groups, L["Raid groups"], nil, true)
 	groups.title:SetPoint("TOPLEFT")
@@ -376,18 +380,20 @@ function Panel.Create(parent, ctx)
 	local party = W.Panel(groups, "surface", "hairline")
 	party:SetPoint("TOPLEFT", 0, -(SZ.control + SP.md))
 	party:SetPoint("RIGHT")
-	party:SetHeight(#PARTY * (SZ.row + SP.xs) + SP.sm * 2)
+	-- Rows of the larger size (34 px), with the role glyph a little bigger: the party is the column's whole content.
+	local PARTY_ROW = 34
+	party:SetHeight(#PARTY * (PARTY_ROW + SP.xs) + SP.sm * 2)
 	groups.party = party
 	party.rows = {}
 	for i, slot in ipairs(PARTY) do
 		local row = CreateFrame("Button", nil, party)
-		row:SetHeight(SZ.row)
-		row:SetPoint("TOPLEFT", SP.sm, -(SP.sm + (i - 1) * (SZ.row + SP.xs)))
+		row:SetHeight(PARTY_ROW)
+		row:SetPoint("TOPLEFT", SP.sm, -(SP.sm + (i - 1) * (PARTY_ROW + SP.xs)))
 		row:SetPoint("RIGHT", -SP.sm, 0)
-		row.icon = W.RoundIcon(row, 18, "pinRing")
-		row.icon:SetPoint("LEFT", 4, 0)
+		row.icon = W.RoundIcon(row, 22, "pinRing")
+		row.icon:SetPoint("LEFT", 6, 0)
 		ns.Art.Set(row.icon.icon, ROLE_ART[slot[1]])
-		row.role = W.Text(row, "caption", "muted")
+		row.role = W.Text(row, "body", "muted")
 		row.role:SetPoint("LEFT", row.icon, "RIGHT", SP.md, 0)
 		row.role:SetWidth(70)
 		row.role:SetText(L[ROLE_TEXT[slot[1]]])
@@ -409,10 +415,15 @@ function Panel.Create(parent, ctx)
 		local w = row.role.GetUnboundedStringWidth and row.role:GetUnboundedStringWidth() or row.role:GetStringWidth()
 		roleW = math.max(roleW, math.ceil(tonumber(w) or 0))
 	end
-	roleW = math.min(130, math.max(70, roleW + 2))
+	roleW = math.min(150, math.max(70, roleW + 2))
 	for _, row in ipairs(party.rows) do
 		row.role:SetWidth(roleW)
 	end
+	-- How the seats fill, under the box.
+	party.hint = W.Paragraph(groups, "caption", "muted")
+	party.hint:SetPoint("TOPLEFT", party, "BOTTOMLEFT", SP.xs, -SP.sm)
+	party.hint:SetPoint("RIGHT", -SP.xs, 0)
+	party.hint:SetText(L["Fill from my party takes the roles your group chose; + adds a name by hand. Right-click a name to remove it."])
 
 	-- Raid: the eight groups in two columns, scrolling when the window is short.
 	local grid = W.ScrollArea(groups)
@@ -422,12 +433,19 @@ function Panel.Create(parent, ctx)
 	groups.boxes = {}
 	-- Names start under the box's "+" button (24 px tall at 2 px from the top), so the two never overlap.
 	local NAMES_TOP = 28
-	local boxW, boxH = (GROUPS_W - SP.md - SP.sm) / 2, 5 * 16 + NAMES_TOP + SP.xs
+	local boxH = 5 * 16 + NAMES_TOP + SP.xs
+	-- Two boxes a line, as wide as the column allows (f:LayoutColumns).
+	local function placeBoxes()
+		local boxW = ((f.groupsW or GROUPS_MIN) - SP.md - SP.sm) / 2
+		for g, box in ipairs(groups.boxes) do
+			box:SetSize(boxW, boxH)
+			local col, row = (g - 1) % 2, math.floor((g - 1) / 2)
+			box:ClearAllPoints()
+			box:SetPoint("TOPLEFT", col * (boxW + SP.sm), -(row * (boxH + SP.sm)))
+		end
+	end
 	for g = 1, Schema.MAX.groups do
 		local box = CreateFrame("Frame", nil, grid.content)
-		box:SetSize(boxW, boxH)
-		local col, row = (g - 1) % 2, math.floor((g - 1) / 2)
-		box:SetPoint("TOPLEFT", col * (boxW + SP.sm), -(row * (boxH + SP.sm)))
 		S.Surface(box, "surface", S.RADIUS.container, "hairline")
 		box.title = W.Text(box, "caption", "muted")
 		box.title:SetPoint("TOPLEFT", SP.sm, -SP.xs)
@@ -449,7 +467,26 @@ function Panel.Create(parent, ctx)
 		end
 		groups.boxes[g] = box
 	end
+	placeBoxes()
 	grid:SetContentHeight(math.ceil(Schema.MAX.groups / 2) * (boxH + SP.sm))
+
+	-- The two columns share the width: the groups take about two fifths, the left column the rest.
+	function f:LayoutColumns()
+		local share = isParty() and GROUPS_SHARE_PARTY or GROUPS_SHARE
+		local w = math.floor(math.max(GROUPS_MIN, math.min(GROUPS_MAX, (self:GetWidth() or 0) * share)))
+		if w == f.groupsW then
+			return
+		end
+		self.groupsW = w
+		groups:SetWidth(w)
+		self.pages:SetPoint("BOTTOMRIGHT", -(w + SP.xl), 0)
+		self.list:SetPoint("RIGHT", -(w + SP.xl), 0)
+		self.editor:SetPoint("BOTTOMRIGHT", -(w + SP.xl), 0)
+		placeBoxes()
+	end
+	f:SetScript("OnSizeChanged", function(self)
+		self:LayoutColumns()
+	end)
 
 	-- Post to chat: lines go out spaced 0.4 s apart, out of combat only, never during a messaging lockdown.
 	function f:PostToChat()
@@ -518,6 +555,9 @@ function Panel.Create(parent, ctx)
 		end
 		self.filter:Refresh()
 		self.list:SetItems(items)
+		-- A recommended plan has none: say how to get some.
+		self.list.emptyText:SetText(ctx:ReadOnly() and L["No assignments in a recommended plan. Make an editable copy to say who does what, per boss."]
+			or L["No assignments yet."])
 		local ro = ctx:ReadOnly()
 		self.add:SetShown(not ro)
 		self.post:ClearAllPoints()
@@ -550,11 +590,13 @@ function Panel.Create(parent, ctx)
 			self.list:Show()
 			self.post:Show()
 		end
+		self:LayoutColumns()
 		local partyMode = isParty()
 		groups.title:SetText(partyMode and L["Party"] or L["Raid groups"])
 		groups.fill:SetLabel(partyMode and L["Fill from my party"] or L["Fill from my raid"])
 		groups.fill:SetShown(not ro)
 		groups.party:SetShown(partyMode)
+		groups.party.hint:SetShown(partyMode and not ro)
 		groups.grid:SetShown(not partyMode)
 		if partyMode then
 			for _, row in ipairs(groups.party.rows) do

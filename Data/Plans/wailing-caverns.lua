@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: medium. All 8 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: medium. All 8 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Deviate Faerie Dragon - Wandering rare; no stable position.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route order is a common clockwise clear, not the only valid one. The Deviate Faerie Dragon wanders and has no position here.",
+	notes = "Community-researched plan with approximate positions. Confidence: medium. All 8 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Deviate Faerie Dragon - Wandering rare; no stable position.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route order is a common clockwise clear, not the only valid one. The Deviate Faerie Dragon wanders and has no position here.",
 	tags = { "recommended", "dungeon", "confidence: medium" },
 	instance = { name = "Wailing Caverns", kind = "dungeon", origin = "classic", uiMapID = 279, levelMin = 15, levelMax = 24 },
 	floors = {

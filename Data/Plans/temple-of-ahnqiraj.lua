@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Boss order",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Order is the common kill order (bug trio, Sartura, Fankriss and Viscidus are interchangeable).",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 9 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Order is the common kill order (bug trio, Sartura, Fankriss and Viscidus are interchangeable).",
 	tags = { "recommended", "raid", "confidence: low" },
 	instance = { name = "Temple of Ahn'Qiraj", kind = "raid", origin = "classic", levelMin = 60, levelMax = 60 },
 	floors = {

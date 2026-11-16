@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Quests: An Ancient Grudge and The Treaty of Understanding are obtained inside; Thom Filch, Afadra Dunwall and Earthseer Farsen are outside. The Dark Iron Map (looted from Dark Iron Spies in Dun Morogh) starts a breadcrumb.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Quests: An Ancient Grudge and The Treaty of Understanding are obtained inside; Thom Filch, Afadra Dunwall and Earthseer Farsen are outside. The Dark Iron Map (looted from Dark Iron Spies in Dun Morogh) starts a breadcrumb.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Hall of Thanes", kind = "dungeon", origin = "forever", levelMin = 13, levelMax = 20 },
 	floors = {

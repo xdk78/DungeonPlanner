@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 8 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 8 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route is a typical clear, not measured.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 8 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Route is a typical clear, not measured.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "The Temple of Atal'Hakkar", kind = "dungeon", origin = "classic", levelMin = 50, levelMax = 60 },
 	floors = {

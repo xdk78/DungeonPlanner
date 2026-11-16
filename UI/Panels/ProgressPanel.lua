@@ -86,18 +86,20 @@ function Panel.Create(parent, ctx)
 
 	f.bossTitle = W.Heading(left, L["Bosses"], nil, true)
 	f.bossTitle:SetPoint("TOPLEFT")
+	-- Two lines a boss: the name gets the column's whole width ("Durgen Dirgehammer" was cut beside "not tracked"),
+	-- the kills or "not tracked" under it.
 	f.bosses = W.List(left, {
-		rowHeight = SZ.row,
+		rowHeight = SZ.row2,
 		empty = L["Add bosses on the Bosses page."],
 		create = function(row)
-			row.dot = W.Dot(row, "dim")
-			row.dot:SetPoint("LEFT", SP.sm, 0)
-			row.meta = W.Text(row, "caption", "muted")
-			row.meta:SetPoint("RIGHT", -SP.sm, 0)
-			row.meta:SetJustifyH("RIGHT")
 			row.text = W.Text(row, "body", "ink")
-			row.text:SetPoint("LEFT", row.dot, "RIGHT", SP.sm, 0)
-			row.text:SetPoint("RIGHT", row.meta, "LEFT", -SP.sm, 0)
+			row.text:SetPoint("TOPLEFT", SP.sm + 8 + SP.sm, -6)
+			row.text:SetPoint("RIGHT", -SP.sm, 0)
+			row.dot = W.Dot(row, "dim")
+			row.dot:SetPoint("RIGHT", row.text, "LEFT", -SP.sm, 0)
+			row.meta = W.Text(row, "caption", "muted")
+			row.meta:SetPoint("TOPLEFT", row.text, "BOTTOMLEFT", 0, -SP.xxs)
+			row.meta:SetPoint("RIGHT", -SP.sm, 0)
 		end,
 		update = function(row, enc)
 			local id = gameID(enc)

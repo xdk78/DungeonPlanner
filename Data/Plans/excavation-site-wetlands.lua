@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Quest NPCs inside: the Relic Guardian itself (Lost Relic Carry for Alliance, Elder Knowledge for Horde).",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 4 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.\n\nMore: Quest NPCs inside: the Relic Guardian itself (Lost Relic Carry for Alliance, Elder Knowledge for Horde).",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Excavation Site: Wetlands", kind = "dungeon", origin = "forever", levelMin = 26, levelMax = 33 },
 	floors = {

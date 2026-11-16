@@ -250,6 +250,9 @@ T.case("Recommended plans: no source, licence or researcher remark in any shippe
 				T.ok(not l:find(word, 1, true), slug .. ": '" .. word .. "' in: " .. s:sub(1, 80))
 			end
 		end)
+		-- The standard notes paragraph, word for word as the Notes section translates it, and the "~" the UI shows.
+		T.ok((raw.notes or ""):find(T.ns.Panels.notes.ESTIMATES, 1, true), "the estimates paragraph: " .. slug)
+		T.ok(not (raw.notes or ""):find("(approx.)", 1, true), "the notes name the mark the UI shows: " .. slug)
 		for _, m in ipairs(raw.markers) do
 			if m.kind == "position" then
 				T.ok((m.note or ""):find("(approx.)", 1, true), "position marked approximate: " .. slug)

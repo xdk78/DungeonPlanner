@@ -8,7 +8,9 @@ local S, W, L = ns.Style, ns.Widgets, ns.L
 local Plan, Util, Schema = ns.Plan, ns.Util, ns.Schema
 local SP, SZ = S.SPACE, S.SIZE
 
-local LIST_W = 280
+-- The list takes nearly half the section (at least 280 px, at most 440): wide enough for pull names on two
+-- lines, leaving the detail the rest.
+local LIST_MIN, LIST_MAX, LIST_SHARE = 280, 440, 0.45
 
 local Panel = {}
 ns.Panels.pulls = Panel
@@ -58,8 +60,9 @@ function Panel.Create(parent, ctx)
 	end)
 	f.down:SetPoint("LEFT", f.up, "RIGHT", SP.sm, 0)
 
+	-- Rows of two lines: a pull's name ("Dark Iron Summoner patrol (Magmatus)") wraps instead of being cut.
 	f.list = W.List(f, {
-		rowHeight = SZ.row,
+		rowHeight = SZ.row2,
 		empty = L["No pulls yet. Add one here, or use the Pull tool on the map."],
 		create = function(row)
 			row.swatch = row:CreateTexture(nil, "ARTWORK")
@@ -72,10 +75,15 @@ function Panel.Create(parent, ctx)
 			row.text = W.Text(row, "body", "ink")
 			row.text:SetPoint("LEFT", row.swatch, "RIGHT", SP.sm, 0)
 			row.text:SetPoint("RIGHT", row.count, "LEFT", -SP.sm, 0)
+			row.text:SetWordWrap(true)
+			if row.text.SetMaxLines then
+				row.text:SetMaxLines(2)
+			end
 		end,
 		update = function(row, pull, index)
 			row.swatch:SetVertexColor(S.PaletteColor(pull.color))
-			-- The name cut after a whole word when it is long (hover: whole); its marks after it when they fit.
+			-- The name on up to two lines, cut after a whole word beyond that (hover: whole); its marks after it when
+			-- they fit.
 			local marks = ns.UI.PullMarks(pull)
 			local shown, cut = W.FitText(row.text, index .. ". " .. pull.name)
 			if marks ~= "" and not cut then
@@ -106,7 +114,20 @@ function Panel.Create(parent, ctx)
 	})
 	f.list:SetPoint("TOPLEFT", f.add, "BOTTOMLEFT", 0, -SP.md)
 	f.list:SetPoint("BOTTOMLEFT")
-	f.list:SetWidth(LIST_W)
+	f.list:SetWidth(LIST_MIN)
+	function f:SizeList()
+		local w = math.floor(math.max(LIST_MIN, math.min(LIST_MAX, (self:GetWidth() or 0) * LIST_SHARE)))
+		if math.abs((self.list:GetWidth() or 0) - w) >= 1 then
+			self.list:SetWidth(w)
+			return true
+		end
+		return false
+	end
+	f:SetScript("OnSizeChanged", function(self)
+		if self:SizeList() and self:IsShown() then
+			self:Refresh() -- the names fit again at the new width
+		end
+	end)
 
 	-- Editor.
 	local ed = CreateFrame("Frame", nil, f)
@@ -328,6 +349,18 @@ function Panel.Create(parent, ctx)
 			doc:Add("heading", L["On the map"])
 			doc:Add("muted", table.concat(names, ", "))
 		end
+		-- Where it comes in the run: its step and the boss it leads to (Model/Steps.lua).
+		local steps = ctx:Steps()
+		for i, step in ipairs(steps) do
+			if step.kind == "pull" and step.pull == pull.id then
+				doc:Add("heading", L["In the run"])
+				local _, bossStep = ns.Steps.Next(steps, i, "boss")
+				local enc = bossStep and Util.FindById(p.encounters, bossStep.encounter)
+				doc:Add("muted", enc and string.format(L["Step %d of %d, before %s"], i, #steps, ns.Names.Encounter(enc))
+					or string.format(L["Step %d of %d"], i, #steps))
+				break
+			end
+		end
 		doc:Space(SP.lg)
 		actions.all:SetShown(ctx.focusPull ~= nil)
 		doc:Place(actions, SZ.control)
@@ -345,6 +378,7 @@ function Panel.Create(parent, ctx)
 		if not selectedId and p.pulls[1] then
 			selectedId = p.pulls[1].id
 		end
+		self:SizeList()
 		self.list:SetItems(p.pulls)
 		local ro = ctx:ReadOnly()
 		-- Read-only plans have nothing to add or reorder: the toolbar goes and the list moves up.

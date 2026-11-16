@@ -10,7 +10,7 @@ ns.Bundled.Add({
 	name = "Full clear",
 	author = "Dungeon Planner",
 	description = "Community-researched plan with approximate positions. Confidence: low. All 2 bosses are placed on the map.",
-	notes = "Community-researched plan with approximate positions. Confidence: low. All 2 bosses are placed on the map.\n\nSpots marked \"(approx.)\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Azshir the Sleepless - Rare in the Forlorn Cloister.\nRare: Fallen Champion - Rare in the Forlorn Cloister.\nRare: Ironspine - Rare in the Forlorn Cloister.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.",
+	notes = "Community-researched plan with approximate positions. Confidence: low. All 2 bosses are placed on the map.\n\nSpots marked \"~\" are estimates, not measurements. Party positions are generic suggestions: tank where the group arrives, healer and ranged behind, melee beside the boss. Check everything in game and adjust it in your own copy.\n\nNot on the map (no position known):\nRare: Azshir the Sleepless - Rare in the Forlorn Cloister.\nRare: Fallen Champion - Rare in the Forlorn Cloister.\nRare: Ironspine - Rare in the Forlorn Cloister.\n\nRoute: Forever Dungeon Routes (MIT), by Checkov23.",
 	tags = { "recommended", "dungeon", "confidence: low" },
 	instance = { name = "Scarlet Monastery: Graveyard", kind = "dungeon", origin = "classic", uiMapID = 302, levelMin = 30, levelMax = 38 },
 	floors = {
