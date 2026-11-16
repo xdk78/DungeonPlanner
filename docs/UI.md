@@ -79,7 +79,7 @@ differently:
 ```
 [Hall of Thanes v]
 +------------------------------------------+
-| (search) Search instances or a level...  |
+| (search) Search dungeons and raids...    |
 | [(D) Dungeons      ][(R) Raids         ] |
 |------------------------------------------|
 | Levels 10-19 ----------------------------|
@@ -231,6 +231,9 @@ The right column's "Show" dropdown: This run (time, splits against the best and 
 plan (each boss's stretch: planned against actual pulls, paired in order, "+ extra pull", "- skipped", "next:" for the
 stretch in progress, and a closing line on what the pairing cannot know), and "Compare with <date>" for each other run:
 a table with the columns A (the selected run), B and A - B, differences that are better in green and worse in orange.
+Before the instance has a run, the Run column says how to start ("Turn on "Record my runs" and play this instance"),
+or, with recording on, "Recording is on. Your next run in this instance will appear here."; the check box and the
+Settings panel's switch both redraw it (`RECORDER_CHANGED`).
 
 ### Raid pages and the Notes window
 
@@ -341,8 +344,10 @@ tall as its content; a recommended plan's single route on a floor is not listed 
 takes 248 px and the full height. It shows by itself the first time the map opens and stays off after that until the
 Legend button turns it on (the button's choice is saved). Its title is a disclosure (`UI/Panels/MapLegend.lua`):
 folded, the legend is that one line, so the art under it shows (Molten Core's painted title is in that corner). Until
-the player folds or opens it, it opens only where the whole map, centred, leaves the plan clear of it, and starts
-folded elsewhere; a click on the title is saved (`ui.legendFolded`) and holds on every map. The whole map (zoom 1,
+the player folds or opens it, it starts folded wherever the open legend would lie over any of the whole map's picture
+(a painted title, the plan) or move or shrink the map (`MapLayout.PanelOverMap`), and opens by itself only in an empty
+band beside a narrow map; a click on the title is saved (`ui.legendFolded`) and holds on every map. At a usual window
+size that means folded on Molten Core, Hall of Thanes and the Deadmines alike. The whole map (zoom 1,
 `MapLayout.MapFit`) is as large as the section allows and centred in it (equal bands left and right), with the legend
 floating over the map's edge rather than leaving an empty band above and below a map squeezed beside it. With the
 legend open over the plan, the map first shrinks about its centre (to 85% at most), then moves sideways within its
@@ -396,6 +401,12 @@ segment and ring show where they are. A stop that makes two steps (a pull, then 
 number, since it is drawn on the boss; the pull keeps its pull-number disc. Pull discs always show pull numbers. The
 stop's tooltip says "Step 6" with "Stop 5" under it, for editing a route.
 
+The side panel's badges follow the same two looks, so a step number never wears a pull's badge: a pull shows its
+pull number on a disc in the pull's colour in the gold pin ring; a move step (a stop with nothing on it) shows its
+map stop, a smaller dark disc ringed in the route's colour with the step number the stop shows; bosses, entrances,
+quest givers and other markers show their icon. A step's caption names its floor only where the plan has several and
+the floor is not named as the instance (the Deadmines' first floor is "The Deadmines"; "Ironclad Cove" stays).
+
 ### Marker icons
 
 | Kind | Icon | Layer |
@@ -410,8 +421,14 @@ stop's tooltip says "Step 6" with "Stop 5" under it, for editing a route.
 | position | role icon: `Ability_Warrior_DefensiveStance`, `Spell_Holy_FlashHeal`, `Ability_MeleeDamage`, `Ability_Marksmanship`; ring in the role's colour | Party positions |
 | note | `INV_Misc_Note_01` | Notes |
 
-Positions tied to a boss or a pull show while that boss or pull is in focus (the Focus picker or the current step);
-untied positions always show.
+**Party positions are focus-only, by design.** Positions tied to a boss or a pull show while that boss or pull is in
+focus (the Focus picker, the current step, or the legend's hint below); untied positions always show. Every
+recommended plan ties its positions to a boss, so at "Focus: everything" the map shows none of them: a tank, a healer
+and damage spots around every boss at once would crowd the bosses' pins and labels, and they only mean something for
+the fight in focus. The legend says so instead of leaving a count with nothing on the map: while nothing is in focus
+and the floor has tied positions, the Party positions row carries a gold line "Focus a boss to show them" ("...a pull"
+when only pulls have them), and a click on it focuses the first boss (else pull) with positions on the floor, as the
+Focus picker would (`MapLegend.FocusTarget`). The count stays the floor's total.
 
 ### Enemies layer
 
@@ -500,7 +517,11 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 - The map centred in its frame on every classic and drawn map (equal bands left and right, the table's parchment in
   them); the legend's caret (right when folded, down when open), its folded box, and that it starts folded on Molten
-  Core (its painted title shows).
+  Core (its painted title shows), Hall of Thanes and the Deadmines. Opened, the Party positions row's gold hint and
+  its click (the first boss in focus, its positions on the map).
+- The side panel's move steps (the Deadmines' 2, 5, 7): the small route-ringed stop disc beside the pulls' badges;
+  no "The Deadmines" after every caption. Bosses: an ability's note starting under its name. The instance picker's
+  search placeholder while it has the focus. The Runs section with recording on and no run yet.
 - The Party section: the dungeon's party card (seat plates, role glyphs, "+", the right-click menu), the raid groups
   filling their column, the empty messages centred in their boxes, at the minimum width in Polish.
 - Pulls: the two-line names' spacing, the pull's card. Run mode: no gap above the mini map on a one-line step. The

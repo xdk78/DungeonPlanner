@@ -143,7 +143,8 @@ function InstancePicker.Spec(current)
 		height = HEIGHT,
 		rowHeight = ROW_H,
 		headerHeight = HEAD_H,
-		search = { placeholder = L["Search instances or a level..."] }, -- "forever" finds the new instances too
+		-- The words match the home list's search; a level ("15") and "forever" (the new instances) find rows too.
+		search = { placeholder = L["Search dungeons and raids..."] },
 		tabs = {
 			{ id = "dungeon", text = L["Dungeons"], art = "emblemDungeon" },
 			{ id = "raid", text = L["Raids"], art = "emblemRaid" },

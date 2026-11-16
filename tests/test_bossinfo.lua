@@ -361,3 +361,39 @@ T.case("Bosses page and run mode show the same facts, hidden without them", func
 	T.ok(not has(texts, "Drops") and not has(texts, "Dungeon Journal") and not has(texts, "Summon with"))
 	T.ok(has(texts, "Boss 2 of 4"), "the header without a level")
 end)
+
+T.case("Bosses page: an ability's note hangs under its name, not under its icon", function()
+	boot()
+	local saved = ns.BossData.enabled
+	ns.BossData.enabled = true -- the bundled abilities and their notes, as in game
+	P.ResetCaches()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("encounters")
+	local page = _G.DungeonPlannerMainFrame.instancePage.panels.encounters.inner
+	page:Refresh()
+	local plan = ns.UI.ctx:Plan()
+	for _, row in ipairs(page.list.rows) do
+		if row.item == plan.encounters[1] then
+			row:GetScript("OnClick")(row, "LeftButton")
+		end
+	end
+	local found
+	for _, row in ipairs(page.doc.dpItemRows or {}) do
+		if row:IsShown() and row.dpSpell and row.note:IsShown() then
+			found = row
+			break
+		end
+	end
+	T.ok(found, "an ability with a note (Hall of Thanes' first boss)")
+	local note, name = found.note:FindPoint("TOPLEFT"), found.name:FindPoint("TOPLEFT")
+	T.ok(note and note[2] == found.icon and note[3] == "BOTTOMRIGHT", "the note starts at the icon's right edge")
+	T.eq(note[4], name[4], "as far in as the name")
+	T.eq(name[2], found.icon)
+	local icon = found.icon:FindPoint("TOPLEFT")
+	T.ok(icon and (icon[2] == nil or icon[2] == found), "the icon at the row's top")
+	ns.BossData.enabled = saved
+	P.ResetCaches()
+end)

@@ -191,6 +191,51 @@ T.case("Recorder: off by default; records a run from events, nameplates and kill
 	mock.units, mock.plates, mock.subzone = {}, {}, nil
 end)
 
+T.case("Runs section: before the first run, the Run pane says whether recording is on, and follows the switch", function()
+	boot()
+	local R, L = ns.Recorder, ns.L
+	R.SetEnabled(false)
+	R.ClearHistory()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("runs")
+	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.runs.inner -- the section inside its inset panel
+	-- What the Run pane is given, line by line (the document's own Add).
+	local lines = {}
+	local add = panel.detail.Add
+	panel.detail.Add = function(doc, style, text)
+		lines[#lines + 1] = text
+		return add(doc, style, text)
+	end
+	local function says(text)
+		for _, line in ipairs(lines) do
+			if line == text then
+				return true
+			end
+		end
+		return false
+	end
+	local off = L["Turn on \"Record my runs\" and play this instance: each run shows up here."]
+	local on = L["Recording is on. Your next run in this instance will appear here."]
+	panel:Refresh()
+	T.ok(says(off), "off: how to turn it on")
+	-- Ticking "Record my runs" redraws the pane (RECORDER_CHANGED), with no run recorded yet.
+	lines = {}
+	panel.record:GetScript("OnClick")(panel.record, "LeftButton")
+	T.eq(R.Enabled(), true, "the check box turns recording on")
+	T.ok(R.Current() == nil or R.Current().k ~= ns.Recorder.KeyForPlan(ns.UI.ctx:Plan()), "no run of this instance yet")
+	T.ok(says(on), "on: the next run will appear here")
+	T.ok(not says(off), "not the turn-on hint")
+	-- Turned off again (here, or in the Settings panel: the same call), the hint comes back.
+	lines = {}
+	R.SetEnabled(false)
+	T.ok(says(off), "off again")
+	panel.detail.Add = add
+	R.ClearHistory()
+end)
+
 T.case("Runs section lists recorded runs and drafts a plan", function()
 	boot()
 	local R = ns.Recorder

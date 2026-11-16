@@ -451,8 +451,13 @@ function UI.StepText(plan, step)
 		title = note and note ~= "" and note or L["Move on"]
 		caption = L["Move"]
 	end
+	-- Where the plan has several floors, the step's, unless it is named as the instance (the Deadmines' first floor is
+	-- "The Deadmines": every step there would repeat what the header says). The other floors keep their names.
 	if step.floor and #plan.floors > 1 and plan.floors[step.floor] then
-		caption = caption .. "  ·  " .. ns.Names.Floor(plan.floors[step.floor], step.floor)
+		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor)
+		if floorName ~= ns.Names.Instance(plan.instance) and floorName ~= plan.instance.name then
+			caption = caption .. "  ·  " .. floorName
+		end
 	end
 	return title, caption, approx, note
 end

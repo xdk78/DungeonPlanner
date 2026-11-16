@@ -407,6 +407,7 @@ local function build()
 
 	p.search = W.Input(p, {
 		search = true,
+		placeholder = "", -- the spec's (Open)
 		maxBytes = 64,
 		onChange = function(text)
 			p:SetQuery(text)

@@ -14,8 +14,10 @@ local function paintField(holder)
 	local edit = holder.edit
 	local active = edit:HasFocus() or holder.dpHover
 	S.PaintBackdrop(holder, "field", active and "borderHover" or "border")
+	-- A search field keeps its placeholder while it is empty, focused or not (a picker focuses its search on open);
+	-- other fields hide it on focus.
 	if holder.placeholder then
-		holder.placeholder:SetShown(edit:GetText() == "" and not edit:HasFocus())
+		holder.placeholder:SetShown(edit:GetText() == "" and (holder.dpSearch or not edit:HasFocus()))
 	end
 	if holder.clear then
 		holder.clear:SetShown(edit:GetText() ~= "")
@@ -118,6 +120,7 @@ function W.Input(parent, opts)
 	S.Register(holder, paintField)
 
 	local left = SP.sm
+	holder.dpSearch = opts.search and true or nil
 	if opts.search then
 		holder.icon = holder:CreateTexture(nil, "ARTWORK")
 		holder.icon:SetSize(14, 14)

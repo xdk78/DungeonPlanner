@@ -81,16 +81,17 @@ local function newRow(parent)
 	row:SetHeight(ROW_H)
 	row.icon = row:CreateTexture(nil, "ARTWORK")
 	row.icon:SetSize(ICON, ICON)
-	row.icon:SetPoint("LEFT", 0, 0)
+	-- At the top of the row (an ability's row grows downwards for its note), centred on the name and meta lines.
+	row.icon:SetPoint("TOPLEFT", 0, -(ROW_H - ICON) / 2)
 	row.name = W.Text(row, "body", "white")
 	row.name:SetPoint("TOPLEFT", row.icon, "TOPRIGHT", SP.sm, 0)
 	row.name:SetPoint("RIGHT", -SP.xs, 0)
 	row.meta = W.Text(row, "caption", "muted")
 	row.meta:SetPoint("BOTTOMLEFT", row.icon, "BOTTOMRIGHT", SP.sm, 0)
 	row.meta:SetPoint("RIGHT", -SP.xs, 0)
-	-- An ability's note, wrapped under the icon (hidden on item rows).
+	-- An ability's note (hidden on item rows), with a hanging indent: it starts under the name, beside the icon's column.
 	row.note = W.Paragraph(row, "caption", "muted")
-	row.note:SetPoint("TOPLEFT", row.icon, "BOTTOMLEFT", 0, -SP.xxs)
+	row.note:SetPoint("TOPLEFT", row.icon, "BOTTOMRIGHT", SP.sm, -SP.xxs)
 	row.note:SetPoint("RIGHT", -SP.xs, 0)
 	if row.note.SetMaxLines then
 		row.note:SetMaxLines(3)

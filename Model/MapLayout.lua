@@ -354,6 +354,20 @@ function MapLayout.MapFit(o)
 	return centred(full)
 end
 
+-- Does a floating panel lie over the whole map at its fit? panel = { x0, y0, x1, y1 } in view pixels (top left origin),
+-- fit = MapFit's { scale, ox, oy } for a map of baseW x baseH. True when they share more than a pixel's sliver: a panel
+-- in the empty band beside a narrow map, or touching its edge, is not over it.
+function MapLayout.PanelOverMap(panel, fit, baseW, baseH)
+	if not (panel and fit and (baseW or 0) > 0 and (baseH or 0) > 0) then
+		return false
+	end
+	local x0, y0 = fit.ox, fit.oy
+	local x1, y1 = x0 + baseW * fit.scale, y0 + baseH * fit.scale
+	local w = math.min(panel[3], x1) - math.max(panel[1], x0)
+	local h = math.min(panel[4], y1) - math.max(panel[2], y0)
+	return w > 1 and h > 1
+end
+
 -- Fit a view around points (normalized 0..1 map coordinates, { x, y } pairs): the zoom and offset that frame them with a
 -- margin, inside the part of the view not covered by a floating panel on the right (reserveRight px). o = { viewW,
 -- viewH, baseW, baseH (the map's size at scale 1), fitScale (scale at zoom 1), inset, reserveRight, maxZoom, pad (the

@@ -68,6 +68,15 @@ function Panel.CompareOptions(plan)
 	}
 end
 
+-- What the Run pane says before this instance has a run: how to start recording, or, with recording on, that the next
+-- run will show up (the check box above and the Settings panel both fire RECORDER_CHANGED, which redraws it).
+function Panel.EmptyText(recording)
+	if recording then
+		return L["Recording is on. Your next run in this instance will appear here."]
+	end
+	return L["Turn on \"Record my runs\" and play this instance: each run shows up here."]
+end
+
 function Panel.Overlay(plan, run)
 	return RunCompare.Overlay(plan, run, ns.Steps.Build(plan), Panel.CompareOptions(plan))
 end
@@ -505,7 +514,7 @@ function Panel.Create(parent, ctx)
 		elseif selectedRun then
 			showRun(doc, selectedRun)
 		else
-			doc:Add("muted", L["Turn on \"Record my runs\" and play this instance: each run shows up here."])
+			doc:Add("muted", Panel.EmptyText(Recorder.Enabled()))
 		end
 		showQuests(doc, p)
 		doc:Finish()

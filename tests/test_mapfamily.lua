@@ -276,3 +276,49 @@ T.case("Drawn maps from other addons come first again; profiles that held the ol
 	T.eq(ns.DB.ProviderMapsFirst(nil), 0)
 	T.eq(ns.DB.ProviderMapsFirst({}), 0, "a new install")
 end)
+
+T.case("Steps list: a move wears its map stop (route ring, step number), a pull its own number; no repeated floor", function()
+	boot()
+	ns.UI.SelectPlan("b:the-deadmines")
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+	local side = _G.DungeonPlannerMainFrame.instancePage.side
+	local plan = ns.UI.ctx:Plan()
+	local steps = ns.UI.ctx:Steps()
+	local numbers = Steps.StopNumbers(steps)
+	local moves, pulls = 0, 0
+	-- The floors' names as the client has them ("The Deadmines", "Ironclad Cove"; the mock names them by map ID).
+	local first, second = ns.Names.Floor(plan.floors[1], 1), ns.Names.Floor(plan.floors[2], 2)
+	T.eq(first, ns.Names.Instance(plan.instance), "the first floor is named as the instance")
+	T.ok(first ~= second)
+	for _, row in ipairs(side.list.rows) do
+		local step, index = row.item, row.index
+		if row:IsShown() and step and index then
+			local b = row.badge
+			if step.kind == "move" then
+				moves = moves + 1
+				T.ok(b.stopRing:IsShown() and not b.ring:IsShown(), "a move: the stop's ring, not the pin's gold ring")
+				T.eq(b.stopNum:GetText(), tostring(index), "with the step's number")
+				T.eq(b.num:GetText(), "", "not in the pull badge's number")
+				T.eq(numbers[step.route] and numbers[step.route][step.to], index, "the number its map stop shows")
+				local route = ns.Util.FindById(plan.routes, step.route)
+				local r, g, bl = ns.Style.PaletteColor(route.color)
+				local cr, cg, cb = b.stopRing:GetVertexColor()
+				T.ok(near(cr, r) and near(cg, g) and near(cb, bl), "ringed in the route's colour")
+				T.ok(b.disc:GetWidth() < 24, "smaller than a pull's badge")
+			elseif step.kind == "pull" then
+				pulls = pulls + 1
+				local _, pullIndex = ns.Util.FindById(plan.pulls, step.pull)
+				T.ok(b.ring:IsShown() and not b.stopRing:IsShown(), "a pull: the gold ring")
+				T.eq(b.num:GetText(), tostring(pullIndex), "its pull number")
+			end
+			-- The first floor is named as the instance: not repeated on every row; the second floor's name stays.
+			local caption = row.caption:GetText() or ""
+			T.ok(not caption:find(first, 1, true), "no floor named as the instance: " .. caption)
+			if step.floor == 2 then
+				T.ok(caption:find(second, 1, true), "the other floor's name: " .. caption)
+			end
+		end
+	end
+	T.ok(moves >= 2 and pulls >= 1, "moves and pulls seen")
+end)

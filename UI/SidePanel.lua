@@ -18,10 +18,24 @@ local SLOT_DISC = 30 -- the party slot's plate
 local PARTY_H = (SZ.row - 4) + SP.sm + SLOT_DISC + 2 + 14
 local STEP_ART = { entrance = "kind_entrance", objective = "check" }
 
--- A step's badge, an icon in a ring like the game's map pins, one look per kind of step: a boss shows its portrait in
--- the same gold ring (the skull until the portrait loads); a pull its number on a disc in the pull's colour in
--- the gold ring; an entrance, objective or marker its icon in the gold ring (unmasked when the art is not a round icon);
--- anything else its number on a dark disc.
+-- A step's badge, one look per kind of step: a boss shows its portrait in the gold ring of the game's map pins (the
+-- skull until the portrait loads); a pull its own number on a disc in the pull's colour in the gold ring (as its map
+-- pin); an entrance, objective or marker its icon in the gold ring (unmasked when the art is not a round icon). A move
+-- (a route stop with nothing on it) is drawn as its stop on the map: a smaller dark disc ringed in the route's colour,
+-- with the step's number, which the stop shows too (Steps.StopNumbers). So a step number never wears a pull's badge.
+local STOP = 18 -- a move step's stop disc
+local function stopBadge(b, plan, step, index)
+	local route = step.route and ns.Util.FindById(plan.routes, step.route)
+	b.disc:SetSize(STOP, STOP)
+	b.disc:SetVertexColor(0.1, 0.07, 0.04, 1)
+	b.ring:Hide()
+	b.stopRing:SetVertexColor(S.PaletteColor(route and route.color or 1))
+	b.stopRing:Show()
+	b.num:SetText("")
+	b.stopNum:SetText(tostring(index))
+	b.stopNum:Show()
+end
+
 local function stepBadge(row, plan, step, index)
 	local b = row.badge
 	if step.kind ~= "boss" then
@@ -29,6 +43,10 @@ local function stepBadge(row, plan, step, index)
 	end
 	b.icon:Hide()
 	b.flat:Hide()
+	b.stopRing:Hide()
+	b.stopNum:Hide()
+	b.ring:Show()
+	b.disc:SetSize(BADGE, BADGE)
 	b.disc:Show()
 	b.num:SetText(tostring(index))
 	local r, g, bl = 0.12, 0.09, 0.06
@@ -56,7 +74,11 @@ local function stepBadge(row, plan, step, index)
 		if Art.Set(tex, art) then
 			tex:Show()
 			b.num:SetText("")
+			return
 		end
+	end
+	if step.kind ~= "pull" and step.kind ~= "boss" then
+		stopBadge(b, plan, step, index)
 	end
 end
 
@@ -94,7 +116,8 @@ function SidePanel.Create(parent, ctx)
 			b:SetPoint("LEFT", SP.sm + 2, 0)
 			b.disc = b:CreateTexture(nil, "ARTWORK", nil, 0)
 			b.disc:SetTexture(S.MEDIA .. "Circle")
-			b.disc:SetAllPoints()
+			b.disc:SetPoint("CENTER") -- sized per kind (stepBadge, stopBadge)
+			b.disc:SetSize(BADGE, BADGE)
 			b.icon = Art.RoundTexture(b, "ARTWORK", 1)
 			b.icon:SetAllPoints()
 			b.flat = b:CreateTexture(nil, "ARTWORK", nil, 1)
@@ -107,6 +130,16 @@ function SidePanel.Create(parent, ctx)
 			b.num = W.Text(b, "number", "white")
 			b.num:SetPoint("CENTER", 0, 0)
 			b.num:SetJustifyH("CENTER")
+			-- A move step's stop: the route's ring and the step number, as the stop on the map (stopBadge).
+			b.stopRing = b:CreateTexture(nil, "OVERLAY", nil, 1)
+			b.stopRing:SetTexture(S.MEDIA .. "Ring")
+			b.stopRing:SetSize(STOP, STOP)
+			b.stopRing:SetPoint("CENTER")
+			b.stopRing:Hide()
+			b.stopNum = W.Text(b, "caption", "white")
+			b.stopNum:SetPoint("CENTER", 0, 0)
+			b.stopNum:SetJustifyH("CENTER")
+			b.stopNum:Hide()
 			row.badge = b
 			row.title = W.Text(row, "body", "ink")
 			-- The two lines sit together, centred on the row and clear of its highlight's bright lines (top and bottom).

@@ -2,6 +2,9 @@
 -- a check box, plus "Enemies" where spawn data exists and "Addon route" where another addon has a route here. Its
 -- title is a disclosure: folded, the legend is that one line, so the art under it (a map's painted title in that
 -- corner) shows; the choice is saved (ui.legendFolded).
+-- Party positions belong to a boss or a pull and show on the map only while it is in focus (MapCanvas.PositionShown):
+-- at "Focus: everything" the positions row says so under its count ("Focus a boss to show them"), and a click there
+-- focuses the first boss (else pull) with positions on this floor.
 
 local _, ns = ...
 local S, W, L, Art = ns.Style, ns.Widgets, ns.L, ns.Art
@@ -41,9 +44,37 @@ local LAYER_ART = {
 }
 
 local HEAD_H = 18 -- the title line
+local HINT_H = 14 -- the positions row's focus hint
+
+-- The positions on `floor` that belong to a boss or pull, and the first of those (bosses first, in the plan's order):
+-- n, { kind = "encounter" | "pull", id } or nil.
+function MapLegend.FocusTarget(p, floor)
+	local n, byEnc, byPull = 0, {}, {}
+	for _, m in ipairs(p.markers) do
+		if m.floor == floor and m.kind == "position" and (m.encounter or m.pull) then
+			n = n + 1
+			if m.encounter then
+				byEnc[m.encounter] = true
+			else
+				byPull[m.pull] = true
+			end
+		end
+	end
+	for _, enc in ipairs(p.encounters) do
+		if byEnc[enc.id] then
+			return n, { kind = "encounter", id = enc.id }
+		end
+	end
+	for _, pull in ipairs(p.pulls) do
+		if byPull[pull.id] then
+			return n, { kind = "pull", id = pull.id }
+		end
+	end
+	return n, nil
+end
 
 -- Folded: the player's choice (ui.legendFolded), else as the map section decided for this map (MapLegend.auto: folded
--- where the open legend would cover the plan on the whole, centred map).
+-- where the open legend would lie over the whole map's picture or move the map).
 MapLegend.auto = false
 function MapLegend.Folded()
 	if ns.db.ui.legendFolded ~= nil then
@@ -52,7 +83,8 @@ function MapLegend.Folded()
 	return MapLegend.auto == true
 end
 
--- The legend inside `rail`. o = { canvas, layerVisible(id), onToggle() (lays the map section out again) }.
+-- The legend inside `rail`. o = { canvas, layerVisible(id), onToggle() (lays the map section out again), focused() -> true
+-- while a boss or pull is in focus, onFocus(target) (MapLegend.FocusTarget's) }.
 function MapLegend.Build(rail, o)
 	local canvas = o.canvas
 	local legend = CreateFrame("Frame", nil, rail)
@@ -82,6 +114,9 @@ function MapLegend.Build(rail, o)
 		row.check = W.Check(row, "", function(on)
 			ns.db.ui.mapLayers[layer.id] = on and true or false
 			canvas:DrawContent()
+			if layer.id == "positions" and o.onToggle then
+				o.onToggle() -- the focus hint under it follows the switch
+			end
 		end)
 		row.index = #legend.rows + 1
 		row.check:SetPoint("LEFT")
@@ -99,7 +134,26 @@ function MapLegend.Build(rail, o)
 		row.count:SetJustifyH("RIGHT")
 		row.layer = layer
 		legend.rows[#legend.rows + 1] = row
+		if layer.id == "positions" then
+			legend.positionsRow = row
+		end
 	end
+	-- Under the positions row while nothing is in focus: why the map shows none of them, and a way to see some.
+	local hint = CreateFrame("Button", nil, legend)
+	hint:SetHeight(HINT_H)
+	hint.text = W.Text(hint, "caption", "gold")
+	hint.text:SetPoint("LEFT", SZ.small + SP.xs + 16 + SP.sm, 0)
+	hint.text:SetPoint("RIGHT")
+	hint:RegisterForClicks("LeftButtonUp")
+	hint:SetScript("OnClick", function(self)
+		if self.target and o.onFocus then
+			o.onFocus(self.target)
+		end
+	end)
+	W.SetTooltip(hint, L["Party positions"],
+		L["Each party position belongs to a boss or pull and shows while it is in focus (the Focus menu above the map). Click to focus the first one."])
+	hint:Hide()
+	legend.positionsHint = hint
 
 	function legend:IsFolded()
 		return MapLegend.Folded()
@@ -125,6 +179,14 @@ function MapLegend.Build(rail, o)
 		counts.drawings = ns.Drawing.Count(p, floor)
 		local extraRoutes, extraInfo = ns.MapCanvas.ProviderRoutes(p, floor, artInfo)
 		counts.providerRoutes = extraRoutes and #extraRoutes or 0
+		local _, target = MapLegend.FocusTarget(p, floor)
+		local hinted = not folded and target ~= nil and o.layerVisible("positions") and not (o.focused and o.focused())
+		self.positionsHint.target = hinted and target or nil
+		self.positionsHint:SetShown(hinted)
+		if hinted then
+			self.positionsHint.text:SetText(target.kind == "pull" and L["Focus a pull to show them"]
+				or L["Focus a boss to show them"])
+		end
 		local ry = -(HEAD_H + SP.sm)
 		for _, row in ipairs(self.rows) do
 			local spawns, provider = row.layer.spawns, row.layer.providerRoutes
@@ -135,6 +197,12 @@ function MapLegend.Build(rail, o)
 				row:SetPoint("TOPLEFT", 0, ry)
 				row:SetPoint("RIGHT")
 				ry = ry - (SZ.small + 2)
+				if row == self.positionsRow and hinted then
+					self.positionsHint:ClearAllPoints()
+					self.positionsHint:SetPoint("TOPLEFT", 0, ry + 2)
+					self.positionsHint:SetPoint("RIGHT")
+					ry = ry - HINT_H
+				end
 			end
 			if spawns then
 				row.check:SetChecked(ns.MapSpawns.LayerShown(p))

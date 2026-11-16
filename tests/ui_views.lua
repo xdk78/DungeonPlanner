@@ -401,6 +401,20 @@ V.views = {
 	sectionView("plan"),
 	runsView("runs-plan", "plan"),
 	runsView("runs-compare", "compare"),
+	-- Recording on, no run of this instance yet: the Run column says the next run will appear.
+	{
+		name = "runs-recording",
+		setup = function()
+			ns.Recorder.ClearHistory()
+			ns.Recorder.SetEnabled(true)
+			openPlan("hall-of-thanes", "runs")
+		end,
+		window = window,
+		teardown = function()
+			ns.Recorder.SetEnabled(false)
+			ns.Recorder.ClearHistory()
+		end,
+	},
 	{
 		name = "section-share-advanced",
 		setup = function()
@@ -569,6 +583,18 @@ V.views = {
 		setup = function()
 			ns.db.ui.legendFolded = true
 			openPlan("molten-core", "map")
+		end,
+		window = window,
+		teardown = function()
+			ns.db.ui.legendFolded = nil
+		end,
+	},
+	-- The legend opened by the player (untouched it folds over the map): the Party positions row's focus hint.
+	{
+		name = "map-legend-open",
+		setup = function()
+			ns.db.ui.legendFolded = false
+			openPlan("hall-of-thanes", "map")
 		end,
 		window = window,
 		teardown = function()

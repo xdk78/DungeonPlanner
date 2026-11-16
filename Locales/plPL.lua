@@ -538,6 +538,9 @@ ns.Locales.plPL = {
 	["Opens the instance or zone you are in."] = "Otwiera instancję lub krainę, w której jesteś.",
 	["Packs and patrols"] = "Grupy i patrole",
 	["Party positions"] = "Pozycje drużyny",
+	["Focus a boss to show them"] = "Wybierz bossa, by je pokazać",
+	["Focus a pull to show them"] = "Wybierz pull, by je pokazać",
+	["Each party position belongs to a boss or pull and shows while it is in focus (the Focus menu above the map). Click to focus the first one."] = "Każda pozycja drużyny należy do bossa lub pulla i widać ją, gdy jest w skupieniu (menu Skupienie nad mapą). Kliknij, by skupić się na pierwszym.",
 	["Paste a Dungeon Planner string (it starts with !DP). Discord messages in several parts can be pasted together."] = "Wklej ciąg Dungeon Plannera (zaczyna się od !DP). Wiadomości z Discorda w kilku częściach można wkleić razem.",
 	["Plan"] = "Plan",
 	["Position"] = "Pozycja",
@@ -719,6 +722,7 @@ ns.Locales.plPL = {
 	["Run recorder: %s, %d runs saved, nameplates %s, unit names %s."] = "Zapis przejść: %s, zapisane przejścia: %d, paski nad wrogami %s, nazwy jednostek %s.",
 	["Source"] = "Źródło",
 	["Turn on \"Record my runs\" and play this instance: each run shows up here."] = "Włącz \"Zapisuj moje przejścia\" i zagraj tę instancję: każde przejście pojawi się tutaj.",
+	["Recording is on. Your next run in this instance will appear here."] = "Zapis jest włączony. Twoje następne przejście tej instancji pojawi się tutaj.",
 	["Use %s"] = "Używaj: %s",
 	["Uses that addon's public interface."] = "Używa publicznego interfejsu tamtego dodatku.",
 	["Floor maps: %d game map, %d old map tiles, %d Santiago Reyes maps, %d other addons, %d minimap pictures, %d grid."] = "Mapy pięter: %d mapa gry, %d stare kafelki mapy, %d mapy Santiago Reyesa, %d inne dodatki, %d obrazki minimapy, %d siatka.",
@@ -765,7 +769,7 @@ ns.Locales.plPL = {
 	-- Instance picker and map legend
 	["Levels %d-%d"] = "Poziomy %d-%d",
 	["Other"] = "Inne",
-	["Search instances or a level..."] = "Szukaj instancji lub poziomu...",
+	["Search dungeons and raids..."] = "Szukaj lochów i rajdów...",
 	["No instance matches the search."] = "Żadna instancja nie pasuje do wyszukiwania.",
 	["Entrances and exits"] = "Wejścia i wyjścia",
 	-- /dp shots (UI/Shots.lua)

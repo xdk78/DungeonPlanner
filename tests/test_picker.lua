@@ -126,6 +126,17 @@ T.case("Instance picker: an opaque popup with sections, bands and the open insta
 	T.eq(p.tab, "dungeon", "opens on the open instance's section")
 	T.ok(p.tabBar and p.tabBar:IsShown(), "Dungeons and Raids tabs")
 	T.ok(p.search:IsShown(), "a search field at the top")
+	-- Its placeholder, worded like the home list's, shows while the field is empty, though the field has the focus.
+	T.ok(p.search.placeholder and p.search.placeholder:IsShown(), "the search's placeholder shows")
+	T.eq(p.search.placeholder:GetText(), ns.L["Search dungeons and raids..."])
+	p.search.edit:SetFocus()
+	p.search.edit:GetScript("OnEditFocusGained")(p.search.edit)
+	T.ok(p.search.placeholder:IsShown(), "still there while the empty field has the focus")
+	p.search.edit:SetText("rag")
+	p.search.edit:GetScript("OnTextChanged")(p.search.edit, false)
+	T.ok(not p.search.placeholder:IsShown(), "gone once something is typed")
+	p.search.edit:SetText("")
+	p.search.edit:GetScript("OnTextChanged")(p.search.edit, false)
 	T.eq(p:GetHeight() - 2 * p.shadowY, 440, "a fixed height (the menu art's shadow around it)")
 	T.ok(p.rows[1].kind == "header", "the first band's divider")
 	local cur = p.rows[p.cursor]

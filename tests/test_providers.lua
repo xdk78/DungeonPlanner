@@ -488,6 +488,69 @@ T.case("Map legend: its title folds it, the choice sticks; untouched, it folds w
 	ns.db.ui.legendFolded, ns.db.ui.showLegend = nil, nil
 end)
 
+T.case("Map legend: untouched, it folds wherever it lies over the map's picture (Molten Core's painted title)", function()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	-- The game's old dungeon maps (the client has their first tiles), as in game.
+	local files = mock.files
+	mock.files = {}
+	mock.files[("Interface\\WorldMap\\MoltenCore\\MoltenCore1_1"):lower()] = 451000
+	mock.files[("Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_1"):lower()] = 449591
+	ns.GameFiles.Reset()
+	ns.db.ui.showLegend, ns.db.ui.legendFolded = true, nil
+	ns.UI.SelectPlan("b:molten-core")
+	ns.UI.SelectTab("map")
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	local canvas = map.canvas
+	-- The map view as large as in game on a 1440p screen (1170 x 718): Molten Core's whole map (1002 x 668) fits
+	-- centred at its full size, and the open legend lies over its top-right corner (the painted "THE MOLTEN CORE"),
+	-- clear of every boss.
+	local getW, getH = canvas.GetWidth, canvas.GetHeight
+	canvas.GetWidth = function()
+		return 1170
+	end
+	canvas.GetHeight = function()
+		return 718
+	end
+	canvas.loadedKey = nil
+	map:RefreshNow()
+	T.eq(canvas.artInfo and canvas.artInfo.source, "tiles", "Molten Core's map tiles")
+	ns.db.ui.legendFolded = false -- the open legend, as the player would see it
+	map:RefreshNow()
+	T.ok(canvas:FitIsWhole(), "the open legend neither moves nor shrinks the map (the old rule kept it open)")
+	local w, h = canvas:BaseSize()
+	local rail = { 1170 - 15 - map.rail:GetWidth(), 15, 1170 - 15, 15 + map.rail:GetHeight() }
+	T.ok(ns.MapLayout.PanelOverMap(rail, canvas:FitBox(), w, h), "but it lies over the map's picture")
+	ns.db.ui.legendFolded = nil
+	map:RefreshNow()
+	T.eq(map.legend:IsFolded(), true, "so it starts folded: the painted title shows")
+	T.ok(map.rail:IsShown() and map.rail:GetWidth() < 150, "the title alone")
+	T.ok(canvas:FitIsWhole(), "the whole map, centred, at its full size")
+	-- The other maps of the in-game walk start folded too.
+	for _, id in ipairs({ "b:hall-of-thanes", "b:the-deadmines" }) do
+		ns.UI.SelectPlan(id)
+		ns.UI.SelectTab("map")
+		map:RefreshNow()
+		T.eq(map.legend:IsFolded(), true, id .. ": folded")
+	end
+	-- The player's choice wins: opened, it stays open over the map.
+	ns.db.ui.legendFolded = false
+	map:RefreshNow()
+	T.eq(map.legend:IsFolded(), false, "opened by the player")
+	-- In an empty band beside a narrow map (or only touching its edge), a panel is not over it.
+	local fit = { scale = 1, ox = 100, oy = 0 }
+	T.eq(ns.MapLayout.PanelOverMap({ 520, 15, 700, 300 }, fit, 400, 600), false, "beside the map")
+	T.eq(ns.MapLayout.PanelOverMap({ 500, 15, 700, 300 }, fit, 400, 600), false, "touching its edge")
+	T.eq(ns.MapLayout.PanelOverMap({ 480, 15, 700, 300 }, fit, 400, 600), true, "over its corner")
+	canvas.GetWidth, canvas.GetHeight = getW, getH
+	canvas.loadedKey = nil
+	mock.files = files
+	ns.GameFiles.Reset()
+	ns.db.ui.legendFolded, ns.db.ui.showLegend = nil, nil
+end)
+
 T.case("MapLayout.MapFit: the whole map as large as the view allows, always centred, the legend and controls clear of the plan", function()
 	local M = ns.MapLayout
 	-- The legend (top right, 219 wide with its margin, 300 tall) and the controls (bottom left) of a 1000 x 700 view.
@@ -795,4 +858,53 @@ T.case("Dungeon Journal adapter: its own card pictures only, with shape checks",
 	mock.RemoveProviders()
 	preferProviders(false)
 	fresh()
+end)
+
+T.case("Party positions: shown for the boss or pull in focus; at \"everything\" the legend says so and focuses one", function()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.db.ui.showLegend, ns.db.ui.legendFolded = true, false
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("map")
+	local ctx = ns.UI.ctx
+	ctx.focusEncounter, ctx.focusPull = nil, nil
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	local canvas = map.canvas
+	map:RefreshNow()
+	local plan = ctx:Plan()
+	local function shownPositions()
+		local n = 0
+		for _, b in ipairs(canvas.pools.pins) do
+			local m = b:IsShown() and b.markerId and ns.Util.FindById(plan.markers, b.markerId)
+			if m and m.kind == "position" then
+				n = n + 1
+			end
+		end
+		return n
+	end
+	-- Every recommended position belongs to a boss: none on the map at "Focus: everything" (by design: one boss's
+	-- tank, healer and damage spots around every boss would crowd the whole map).
+	local n, target = ns.MapLegend.FocusTarget(plan, 1)
+	T.eq(n, 12, "Hall of Thanes: twelve positions, each a boss's")
+	T.eq(shownPositions(), 0, "none shown with nothing in focus")
+	local hint = map.legend.positionsHint
+	T.ok(hint:IsShown(), "the positions row says why")
+	T.eq(hint.text:GetText(), ns.L["Focus a boss to show them"])
+	T.eq(target.kind, "encounter")
+	T.eq(target.id, plan.encounters[1].id, "the first boss with positions")
+	-- A click on the hint focuses that boss, as the Focus menu would: its positions show, the hint goes.
+	hint:GetScript("OnClick")(hint, "LeftButton")
+	map:RefreshNow()
+	T.eq(ctx.focusEncounter, target.id, "the boss in focus")
+	T.ok(shownPositions() > 0, "its positions on the map")
+	T.ok(not hint:IsShown(), "no hint while something is in focus")
+	-- The layer switched off: no hint either.
+	ctx.focusEncounter = nil
+	ns.db.ui.mapLayers.positions = false
+	map:RefreshNow()
+	T.ok(not hint:IsShown(), "no hint for a hidden layer")
+	ns.db.ui.mapLayers.positions = nil
+	ns.db.ui.legendFolded, ns.db.ui.showLegend = nil, nil
 end)

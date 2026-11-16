@@ -88,6 +88,17 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- Map: until you open or fold it yourself, the legend starts folded wherever it would lie over the map, so Molten
+  Core's painted title (and Hall of Thanes' and the Deadmines' corners) show; it opens by itself only beside a narrow
+  map. Party positions belong to a boss or pull and show while it is in focus: at "Focus: everything" the legend's
+  Party positions row now says "Focus a boss to show them", and a click there focuses the first boss with positions.
+- Steps: a move step shows its map stop (a small disc ringed in the route's colour, with the step number the stop
+  shows) instead of a badge like a pull's, so "2" no longer looks the same for a move and for Pull 2; a floor named
+  as the instance ("The Deadmines") no longer follows every step's caption.
+- Runs: with "Record my runs" on and no run yet, the Run column says "Recording is on. Your next run in this
+  instance will appear here." instead of asking to turn recording on.
+- Bosses: an ability's note starts under its name (a hanging indent), not under its icon.
+- Instance picker: its search shows "Search dungeons and raids..." while empty, also while it has the focus.
 - `/dp debug`: the font test is part of the dialog, under the Polish letters test, instead of a second panel that
   stacked under it over the window.
 - Notes window: the page label sits between the page arrows ("1 of 3", "No pages" when there is none, where two dark

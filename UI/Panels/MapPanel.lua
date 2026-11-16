@@ -395,16 +395,21 @@ function Panel.Create(parent, ctx)
 	rail:SetFrameLevel(canvas.edge:GetFrameLevel() + 10)
 	rail:EnableMouse(true)
 	f.rail = rail
+	-- The legend's box in the map view's pixels (top left origin).
+	local function railRect()
+		local vw = canvas:GetWidth() or 0
+		local rw, rh = rail:GetWidth() or 0, rail:GetHeight() or 0
+		return { vw - RAIL_INSET - rw, RAIL_INSET, vw - RAIL_INSET, RAIL_INSET + rh }
+	end
 	-- The whole map is fitted so that neither the legend nor the controls cover the plan's points (MapLayout.MapFit):
-	-- their boxes in the map view's pixels (top left origin).
+	-- their boxes in the map view's pixels.
 	canvas.fitAvoid = function()
-		local vw, vh = canvas:GetWidth() or 0, canvas:GetHeight() or 0
+		local vh = canvas:GetHeight() or 0
 		local inset = ns.MapCanvas.FRAME_INSET + SP.sm
 		local cw, ch = controls:GetWidth() or 0, controls:GetHeight() or 0
 		local rects = { { inset, vh - inset - ch, inset + cw, vh - inset } }
 		if rail:IsShown() and (canvas.reserveRight or 0) > 0 then
-			local rw, rh = rail:GetWidth() or 0, rail:GetHeight() or 0
-			rects[#rects + 1] = { vw - RAIL_INSET - rw, RAIL_INSET, vw - RAIL_INSET, RAIL_INSET + rh }
+			rects[#rects + 1] = railRect()
 		end
 		for _, r in ipairs(rects) do
 			for i = 1, 4 do
@@ -415,9 +420,23 @@ function Panel.Create(parent, ctx)
 	end
 
 	-- Legend and layers (UI/Panels/MapLegend.lua): its title folds it to one line.
-	local legend = ns.MapLegend.Build(rail, { canvas = canvas, layerVisible = layerVisible, onToggle = function()
-		f:Refresh()
-	end })
+	local legend = ns.MapLegend.Build(rail, {
+		canvas = canvas,
+		layerVisible = layerVisible,
+		onToggle = function()
+			f:Refresh()
+		end,
+		focused = function()
+			return ctx.focusEncounter ~= nil or ctx.focusPull ~= nil
+		end,
+		-- The positions row's hint: focus the first boss (or pull) with party positions, as the Focus menu would.
+		onFocus = function(target)
+			ctx.focusEncounter = target.kind == "encounter" and target.id or nil
+			ctx.focusPull = target.kind == "pull" and target.id or nil
+			ctx.focusSegment = nil
+			f:Refresh()
+		end,
+	})
 	f.legend = legend
 
 	f.help = W.Paragraph(rail, "caption", "muted")
@@ -647,9 +666,10 @@ function Panel.Create(parent, ctx)
 			end
 		end
 		self:PlaceLegend(p, m, ro, list)
-		-- Until the player folds or opens the legend (its title), it opens only where the whole map, centred, leaves
-		-- the plan clear of it; elsewhere it starts folded, so the map keeps its centre and its full size.
-		if not m and legendShown() and ns.db.ui.legendFolded == nil and not self.canvas:FitIsWhole() then
+		-- Until the player folds or opens the legend (its title), it starts folded wherever the open legend would lie
+		-- over the map's picture (its painted title, the plan) or move the map; it opens by itself only in an empty band
+		-- beside a narrow map. Folded, the map keeps its centre, its full size and its corner.
+		if not m and legendShown() and ns.db.ui.legendFolded == nil and self:LegendOverMap() then
 			ns.MapLegend.auto = true
 			reserve()
 			self:PlaceLegend(p, m, ro, list)
@@ -658,6 +678,16 @@ function Panel.Create(parent, ctx)
 		if not self.canvas:Refit() then
 			self.canvas:DrawContent()
 		end
+	end
+
+	-- Would the open legend cover any of the whole map (zoom 1), or has it moved or shrunk the map?
+	function f:LegendOverMap()
+		local c = self.canvas
+		if not c:FitIsWhole() then
+			return true
+		end
+		local w, h = c:BaseSize()
+		return ns.MapLayout.PanelOverMap(railRect(), c:FitBox(), w, h)
 	end
 
 	-- The rail: the legend (counts, switches, the tool's help, the routes) or the marker editor, and its size.

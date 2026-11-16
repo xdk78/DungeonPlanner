@@ -136,8 +136,10 @@ T.case("Drawing UI: move, restyle, erase, the menu, the legend switch and cleari
 	T.eq(line.width, 1)
 	-- The right-click menu opens for a drawing.
 	canvas.cb.onShapeMenu(line)
-	-- Legend: the Drawings layer hides them.
+	-- Legend (opened: untouched, it folds over the map): the Drawings layer hides them.
+	ns.db.ui.legendFolded = false
 	map:Refresh()
+	ns.db.ui.legendFolded = nil
 	local row
 	for _, r in ipairs(map.legend.rows) do
 		if r.layer.id == "drawings" then
