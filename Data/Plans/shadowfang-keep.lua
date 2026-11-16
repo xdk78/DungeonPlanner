@@ -107,13 +107,13 @@ ns.Bundled.Add({
 			{ 0.6641, 0.7219, step = 2, pull = "u1", note = "Rethilgore in the kennel (Courtyard) (approx.)" },
 		} },
 		{ id = "r2", name = "Dining Hall", floor = 2, color = 2, points = {
-			{ 0.3044, 0.774, step = 1, note = "Baron Silverlaine (floor 2, south end)" },
+			{ 0.3044, 0.774, step = 3, note = "Baron Silverlaine (floor 2, south end)" },
 		} },
 		{ id = "r3", name = "The Courtyard", floor = 1, color = 3, points = {
-			{ 0.2804, 0.5973, step = 1, pull = "u2", note = "Back down to the Courtyard: Commander Springvale (floor 1, west)" },
+			{ 0.2804, 0.5973, step = 4, pull = "u2", note = "Back down to the Courtyard: Commander Springvale (floor 1, west)" },
 		} },
 		{ id = "r4", name = "The Wall Walk", floor = 7, color = 4, points = {
-			{ 0.5975, 0.8192, step = 1, note = "Odo the Blindwatcher on the Wall Walk (floor 7) (approx.)" },
+			{ 0.5975, 0.8192, step = 5, note = "Odo the Blindwatcher on the Wall Walk (floor 7) (approx.)" },
 			{ 0.6007, 0.828 },
 			{ 0.6182, 0.8189 },
 			{ 0.6504, 0.8132 },
@@ -124,13 +124,13 @@ ns.Bundled.Add({
 			{ 0.7268, 0.6341 },
 			{ 0.7208, 0.6132 },
 			{ 0.6915, 0.591 },
-			{ 0.5639, 0.5079, step = 2, note = "Deathsworn Captain (rare, not in every run) (approx.)" },
+			{ 0.5639, 0.5079, step = 6, note = "Deathsworn Captain (rare, not in every run) (approx.)" },
 		} },
 		{ id = "r5", name = "Lower Observatory", floor = 4, color = 5, points = {
-			{ 0.5423, 0.5291, step = 1, note = "Fenrus in the Lower Observatory (floor 4) (approx.)" },
+			{ 0.5423, 0.5291, step = 7, note = "Fenrus in the Lower Observatory (floor 4) (approx.)" },
 		} },
 		{ id = "r6", name = "Lord Godfrey's Chamber", floor = 6, color = 6, points = {
-			{ 0.5622, 0.6259, step = 1, note = "Up to Lord Godfrey's Chamber: Wolf Master Nandos (floor 6) (approx.)" },
+			{ 0.5622, 0.6259, step = 8, note = "Up to Lord Godfrey's Chamber: Wolf Master Nandos (floor 6) (approx.)" },
 			{ 0.5975, 0.5014 },
 			{ 0.6025, 0.4984 },
 			{ 0.6091, 0.4765 },
@@ -138,7 +138,7 @@ ns.Bundled.Add({
 			{ 0.6399, 0.4075 },
 			{ 0.6727, 0.3512 },
 			{ 0.6736, 0.3343 },
-			{ 0.6803, 0.3313, step = 2, note = "Archmage Arugal in the same chamber, final boss (approx.)" },
+			{ 0.6803, 0.3313, step = 9, note = "Archmage Arugal in the same chamber, final boss (approx.)" },
 		} },
 		{ id = "r7", name = "Way through this floor", floor = 2, color = 2, optional = true, points = {
 			{ 0.6203, 0.1262 },

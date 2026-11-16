@@ -123,7 +123,7 @@ ns.Bundled.Add({
 			{ 0.4563, 0.1988, step = 7, pull = "u5", note = "Kill Ramstein the Gorger" },
 		} },
 		{ id = "r2", name = "Crusader's Square", floor = 1, color = 2, points = {
-			{ 0.5581, 0.6841, step = 1, pull = "u6", note = "Kill Postmaster Malown" },
+			{ 0.5581, 0.6841, step = 8, pull = "u6", note = "Kill Postmaster Malown" },
 		} },
 	},
 })

@@ -88,6 +88,9 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- Recommended plans over more than one floor (The Deadmines, Blackrock Depths, Naxxramas and 13 more) listed their
+  steps in turns between the floors, so the Deadmines showed "Pull 2" and Gilnid before Rhahk'Zor. The route's stops
+  are now numbered once over every floor, and the steps follow the route from the entrance to the last boss.
 - Item names in gear lists, boss drops, run mode and the Discord text no longer stay "Item 12345" while the client has
   not cached the item: it is asked to load it and the open lists update when the names arrive.
 - Item names now really fill in while the Bosses and Gear pages are open (they listened for the wrong answer from the

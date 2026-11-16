@@ -63,22 +63,22 @@ ns.Bundled.Add({
 			{ 0.4307, 0.7116, step = 2, note = "Kill Impaan the Imprisoner (approx.)" },
 		} },
 		{ id = "r2", name = "Festering Grotto", floor = 2, color = 2, points = {
-			{ 0.2344, 0.4773, step = 1, note = "Kill Withermaw (approx.)" },
+			{ 0.2344, 0.4773, step = 3, note = "Kill Withermaw (approx.)" },
 		} },
 		{ id = "r3", name = "Blackmaw Grove", floor = 1, color = 3, points = {
-			{ 0.6387, 0.5769, step = 1, note = "Kill Bonesnout the Unbroken (approx.)" },
+			{ 0.6387, 0.5769, step = 4, note = "Kill Bonesnout the Unbroken (approx.)" },
 		} },
 		{ id = "r4", name = "Elders' Cavern", floor = 5, color = 4, points = {
-			{ 0.4307, 0.3529, step = 1, note = "Kill Elder Shaman Bloodmane (approx.)" },
+			{ 0.4307, 0.3529, step = 5, note = "Kill Elder Shaman Bloodmane (approx.)" },
 		} },
 		{ id = "r5", name = "Burrow", floor = 4, color = 5, points = {
-			{ 0.5645, 0.3514, step = 1, note = "Kill Blackmaw Behemoth (approx.)" },
+			{ 0.5645, 0.3514, step = 6, note = "Kill Blackmaw Behemoth (approx.)" },
 		} },
 		{ id = "r6", name = "Fallen Grove", floor = 3, color = 6, points = {
-			{ 0.5547, 0.3031, step = 1, note = "Kill Unbound Spirit (approx.)" },
+			{ 0.5547, 0.3031, step = 7, note = "Kill Unbound Spirit (approx.)" },
 		} },
 		{ id = "r7", name = "Forbidden Magic", floor = 6, color = 7, points = {
-			{ 0.582, 0.5681, step = 1, note = "Kill Varrox Bleakhoof (approx.)" },
+			{ 0.582, 0.5681, step = 8, note = "Kill Varrox Bleakhoof (approx.)" },
 		} },
 		{ id = "r8", name = "Side path: Impaan the Imprisoner", floor = 1, color = 1, optional = true, points = {
 			{ 0.4922, 0.4261 },

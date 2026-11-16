@@ -77,13 +77,15 @@ T.case("Recommended plans: every plan validates without losing a field, ids are 
 		for i, m in ipairs(raw.markers) do
 			T.eq(plan.markers[i].note, m.note or "", "marker note kept whole: " .. slug .. " " .. m.id)
 		end
-		-- Route points are numbered stops (1, 2, 3 ... in path order) or bare bends between them.
+		-- Route points are numbered stops (one count over every floor's route, in path order: 1, 2, 3 ..., the next
+		-- floor's route going on from there) or bare bends between them.
+		local count = 0
 		for _, route in ipairs(plan.routes) do
 			local n = 0
 			for _, p in ipairs(route.points) do
 				if p.step then
-					n = n + 1
-					T.eq(p.step, n, "stops numbered in order: " .. slug)
+					n, count = n + 1, count + 1
+					T.eq(p.step, count, "stops numbered in order: " .. slug)
 				else
 					T.ok(p.note == nil and p.pull == nil, "a bend carries no note or pull: " .. slug)
 				end
@@ -239,6 +241,39 @@ T.case("Recommended plans: loaded into the addon, matched to their instance, no 
 		end
 	end
 	T.ok(#all >= #slugs)
+end)
+
+-- The Deadmines once listed "Pull 2" before "Pull 1": its second floor's route numbered its stops from 1 again, so the
+-- steps (in stop order over every route) took turns between the floors. One numbering over every floor fixes it.
+T.case("Recommended plans: steps follow the route across floors, pulls come in their own order, stops count up", function()
+	for _, slug in ipairs(tocSlugs()) do
+		local plan = ns.Bundled.Get("b:" .. slug)
+		local index = {}
+		for i, pull in ipairs(plan.pulls) do
+			index[pull.id] = i
+		end
+		local steps = ns.Steps.Build(plan)
+		local lastPull, lastStop = 0, 0
+		for i, step in ipairs(steps) do
+			if step.kind == "pull" and index[step.pull] then
+				T.ok(index[step.pull] > lastPull, string.format("%s: pull %d comes after pull %d (step %d)", slug,
+					index[step.pull], lastPull, i))
+				lastPull = math.max(lastPull, index[step.pull])
+			end
+			if step.stop then
+				T.ok(step.stop >= lastStop, string.format("%s: stop %d after stop %d (step %d)", slug, step.stop, lastStop, i))
+				lastStop = step.stop
+			end
+		end
+	end
+	local deadmines = ns.Steps.Build(ns.Bundled.Get("b:the-deadmines"))
+	local kinds = {}
+	for _, step in ipairs(deadmines) do
+		if step.kind == "pull" or step.kind == "boss" then
+			kinds[#kinds + 1] = step.kind == "pull" and ("pull" .. step.pull) or step.encounter
+		end
+	end
+	T.eq(table.concat(kinds, " "), "pullu1 e1 e2 pullu2 e3 pullu3 e4 e5 e6 e7", "the Deadmines: Rhahk'Zor's pull first")
 end)
 
 T.case("Recommended plans: no source, licence or researcher remark in any shipped text; positions carry their approx mark", function()

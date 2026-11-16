@@ -77,7 +77,7 @@ ns.Bundled.Add({
 			{ 0.7787, 0.6701, step = 2, pull = "u1", note = "Grubbis in the trogg cave (after the Emi Shortfuse event)" },
 		} },
 		{ id = "r2", name = "The Dormitory", floor = 2, color = 2, points = {
-			{ 0.7596, 0.4652, step = 1, note = "Viscous Fallout in the Hall of Gears (floor 2)" },
+			{ 0.7596, 0.4652, step = 3, note = "Viscous Fallout in the Hall of Gears (floor 2)" },
 			{ 0.7596, 0.4598 },
 			{ 0.7546, 0.4599 },
 			{ 0.7417, 0.4666 },
@@ -129,19 +129,19 @@ ns.Bundled.Add({
 			{ 0.1386, 0.6434 },
 			{ 0.161, 0.6595 },
 			{ 0.2428, 0.6806 },
-			{ 0.2432, 0.6844, step = 2, note = "Electrocutioner 6000 in the Launch Bay (floor 2)" },
+			{ 0.2432, 0.6844, step = 4, note = "Electrocutioner 6000 in the Launch Bay (floor 2)" },
 		} },
 		{ id = "r3", name = "Launch Bay", floor = 3, color = 3, points = {
-			{ 0.4317, 0.8832, step = 1, pull = "u2", note = "Crowd Pummeler 9-60 in the Engineering Labs (floor 3)" },
+			{ 0.4317, 0.8832, step = 5, pull = "u2", note = "Crowd Pummeler 9-60 in the Engineering Labs (floor 3)" },
 		} },
 		{ id = "r4", name = "Tinkers' Court", floor = 4, color = 4, points = {
-			{ 0.277, 0.6259, step = 1, note = "Dark Iron Ambassador if you want the rare (floor 4) (approx.)" },
+			{ 0.277, 0.6259, step = 6, note = "Dark Iron Ambassador if you want the rare (floor 4) (approx.)" },
 			{ 0.279, 0.6248 },
 			{ 0.2765, 0.6145 },
 			{ 0.2761, 0.5801 },
 			{ 0.2782, 0.5465 },
 			{ 0.2993, 0.4065 },
-			{ 0.3115, 0.3033, step = 2, note = "Mekgineer Thermaplugg, final boss" },
+			{ 0.3115, 0.3033, step = 7, note = "Mekgineer Thermaplugg, final boss" },
 		} },
 		{ id = "r5", name = "Way through this floor", floor = 3, color = 3, optional = true, points = {
 			{ 0.1929, 0.2623 },

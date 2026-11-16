@@ -156,10 +156,10 @@ ns.Bundled.Add({
 			{ 0.3361, 0.5369, step = 3, pull = "u2", note = "Kill Tendris Warpwood" },
 		} },
 		{ id = "r2", name = "Court of the Highborne", floor = 2, color = 2, points = {
-			{ 0.3388, 0.4508, step = 1, pull = "u3", note = "Kill Magister Kalendris" },
+			{ 0.3388, 0.4508, step = 4, pull = "u3", note = "Kill Magister Kalendris" },
 		} },
 		{ id = "r3", name = "Prison of Immol'Thar", floor = 3, color = 3, points = {
-			{ 0.3497, 0.5758, step = 1, pull = "u4", note = "Kill Immol'thar" },
+			{ 0.3497, 0.5758, step = 5, pull = "u4", note = "Kill Immol'thar" },
 			{ 0.3542, 0.5692 },
 			{ 0.3749, 0.5554 },
 			{ 0.4243, 0.5337 },
@@ -170,7 +170,7 @@ ns.Bundled.Add({
 			{ 0.6093, 0.2726 },
 			{ 0.6139, 0.264 },
 			{ 0.6283, 0.2573 },
-			{ 0.623, 0.2316, step = 2, pull = "u5", note = "Kill Prince Tortheldrin" },
+			{ 0.623, 0.2316, step = 6, pull = "u5", note = "Kill Prince Tortheldrin" },
 		} },
 		{ id = "r4", name = "Way through this floor", floor = 2, color = 2, optional = true, points = {
 			{ 0.5626, 0.2728 },

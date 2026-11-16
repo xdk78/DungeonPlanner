@@ -820,7 +820,7 @@ local function build(data, routes)
 			end
 			local x, y = routes.Move(floor, step.x, step.y)
 			run.points[#run.points + 1] = {
-				step = #run.points + 1,
+				step = stopsTotal + 1, -- one numbering over every floor: the steps follow the route across floors
 				pull = step.point and pullOf[step.point] or nil,
 				note = approxNote(text, step.approx, 120),
 				x = x,

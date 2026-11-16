@@ -182,7 +182,7 @@ ns.Bundled.Add({
 			{ 0.2199, 0.2561, step = 8, pull = "u7", note = "Kill Grimlok" },
 		} },
 		{ id = "r2", name = "Khaz'Goroth's Seat", floor = 2, color = 2, points = {
-			{ 0.5533, 0.5041, step = 1, pull = "u8", note = "Kill Archaedas" },
+			{ 0.5533, 0.5041, step = 9, pull = "u8", note = "Kill Archaedas" },
 		} },
 	},
 })
