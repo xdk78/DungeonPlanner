@@ -283,7 +283,9 @@ T.case("Forever Dungeon Routes adapter: shape checks, its maps after Dungeon Jou
 	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
 	local canvas = map.canvas
 	canvas.loadedKey = nil
+	ns.db.ui.legendFolded = false -- the legend open (its rows)
 	map:Refresh()
+	ns.db.ui.legendFolded = nil
 	canvas:DrawContent()
 	local before = canvas.counts.lines
 	local legendRow
@@ -430,7 +432,10 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	map:Refresh()
 	T.eq(canvas.artInfo, nil, "no art: the grid")
 	canvas:ResetView()
-	T.ok(canvas.zoom > 1, "Fit zooms onto the markers")
+	local w, h = canvas:BaseSize()
+	local framed = ns.MapLayout.FitView(canvas:ContentPoints(), { viewW = canvas:GetWidth(), viewH = canvas:GetHeight(),
+		baseW = w, baseH = h, fitScale = canvas:FitScale(), inset = ns.MapCanvas.FRAME_INSET, reserveRight = canvas.reserveRight or 0 })
+	T.ok(framed and math.abs(canvas.zoom - framed.zoom) < 1e-6, "Fit frames the markers")
 	ns.MinimapArtData = data
 	ns.ReyesMaps.DUNGEONS.hallofthanes = bundled
 	ns.db.settings.preferProviderMaps = nil
@@ -446,7 +451,44 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	ns.db.ui.showLegend = nil
 end)
 
-T.case("MapLayout.MapFit: the whole map as large as the view allows, centred, the legend and controls clear of the plan", function()
+T.case("Map legend: its title folds it, the choice sticks; untouched, it folds where it would move the map", function()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.db.ui.showLegend = true
+	ns.UI.SelectPlan("b:molten-core")
+	ns.UI.SelectTab("map")
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	local canvas = map.canvas
+	local whole = canvas.FitIsWhole
+	-- Untouched: open where the whole map stays centred, folded where the open legend would move or shrink it.
+	ns.db.ui.legendFolded = nil
+	canvas.FitIsWhole = function()
+		return true
+	end
+	map:RefreshNow()
+	T.eq(map.legend:IsFolded(), false, "open: the map keeps its place")
+	T.ok(map.legend.rows[1]:IsShown(), "with its rows")
+	canvas.FitIsWhole = function()
+		return ns.MapLegend.Folded()
+	end
+	map:RefreshNow()
+	T.eq(map.legend:IsFolded(), true, "folded: the map keeps its centre")
+	T.ok(not map.legend.rows[1]:IsShown(), "the title alone")
+	T.ok(map.rail:GetWidth() < 150 and map.rail:GetHeight() < 60, "a small box")
+	-- The title opens it, and that choice sticks on every map.
+	map.legend.heading:GetScript("OnClick")(map.legend.heading, "LeftButton")
+	T.eq(ns.db.ui.legendFolded, false, "opened by the player")
+	map:RefreshNow()
+	T.eq(map.legend:IsFolded(), false, "stays open")
+	map.legend.heading:GetScript("OnClick")(map.legend.heading, "LeftButton")
+	T.eq(ns.db.ui.legendFolded, true, "folded by the player")
+	canvas.FitIsWhole = whole
+	ns.db.ui.legendFolded, ns.db.ui.showLegend = nil, nil
+end)
+
+T.case("MapLayout.MapFit: the whole map as large as the view allows, always centred, the legend and controls clear of the plan", function()
 	local M = ns.MapLayout
 	-- The legend (top right, 219 wide with its margin, 300 tall) and the controls (bottom left) of a 1000 x 700 view.
 	local legend = { 1000 - 219, 15, 1000 - 15, 315 }
@@ -479,19 +521,30 @@ T.case("MapLayout.MapFit: the whole map as large as the view allows, centred, th
 	local over = M.MapFit(o(away))
 	T.eq(over.scale, fit.scale, "no band above and below for the legend")
 	T.eq(over.ox, fit.ox)
-	-- A point under the legend, one level with the controls: smaller, until both are clear.
-	local near = { { 0.8, 0.1 }, { 0.1, 0.97 }, { 0.5, 0.5 } }
+	-- A point under the legend, one level with the controls: smaller about the centre, until both are clear.
+	local near = { { 0.77, 0.1 }, { 0.15, 0.97 }, { 0.5, 0.5 } }
 	local shrunk = M.MapFit(o(near))
-	T.ok(shrunk.scale < fit.scale, "smaller only as needed")
+	T.ok(shrunk.scale < fit.scale and shrunk.scale > fit.scale * 0.85, "smaller only as needed")
 	T.ok(clear(shrunk, near), "no point under a panel")
+	T.ok(math.abs((shrunk.ox - 7) - (986 - 1002 * shrunk.scale - (shrunk.ox - 7))) < 1e-6, "still centred: equal bands")
 	-- A point below the legend (not level with it) does not count.
 	local below = M.MapFit(o({ { 0.97, 0.8 } }))
 	T.eq(below.scale, fit.scale, "below the legend: the full size")
+	-- A point at the very edge: shrinking about the centre does not clear it, moving within the map's band does.
+	local edge = M.MapFit(o({ { 0.9, 0.3 } }, { baseW = 800 }))
+	T.ok(edge.ox + 0.9 * 800 * edge.scale < 1000 - 219 - 30, "clear of the legend")
+	T.ok(math.abs(edge.scale - 686 / 668) < 1e-6, "at the full size")
+	T.ok(edge.ox < 7 + (986 - 800 * edge.scale) / 2, "moved left")
+	T.ok(edge.ox >= 7 - 1e-6, "never past the frame's inset")
 	-- Nothing clears it: the size beside the legend, centred in the room it leaves.
 	local least = M.MapFit(o({ { 1, 0 }, { 0, 1 } }, { viewW = 600, avoid = { { 600 - 219, 15, 585, 315 }, controls } }))
 	local room = 600 - 14 - 219
 	T.ok(math.abs(least.scale - math.min(room / 1002, 686 / 668)) < 1e-6, "the size beside the legend")
 	T.ok(math.abs(least.ox - (7 + (room - 1002 * least.scale) / 2)) < 1e-6, "centred beside the legend")
+	-- No panel beside: the full size, centred, whatever the points.
+	local none = M.MapFit({ viewW = 1000, viewH = 700, baseW = 1002, baseH = 668, inset = 7, points = { { 1, 0 } },
+		avoid = { legend } })
+	T.ok(math.abs(none.ox - fit.ox) < 1e-6 and none.scale == fit.scale, "no reserve: centred at the full size")
 	T.eq(M.MapFit({ viewW = 0, viewH = 1, baseW = 1, baseH = 1 }), nil)
 end)
 

@@ -88,6 +88,10 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- The map is centred in its frame again (Molten Core sat 13 px from the left and 83 px from the right). With the
+  legend open over the plan it shrinks a little about its centre before it moves; the legend's title folds it to one
+  line (the choice is saved), and it starts folded where it would cover the plan or a map's painted title. The bands
+  beside a 3:2 map are the parchment of the table, not a black gap.
 - Recommended plans over more than one floor (The Deadmines, Blackrock Depths, Naxxramas and 13 more) listed their
   steps in turns between the floors, so the Deadmines showed "Pull 2" and Gilnid before Rhahk'Zor. The route's stops
   are now numbered once over every floor, and the steps follow the route from the entrance to the last boss.

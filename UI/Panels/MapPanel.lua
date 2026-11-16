@@ -8,7 +8,7 @@
 -- A recommended plan is read-only: no tools, and the rail shows the marker's details instead of an editor.
 
 local _, ns = ...
-local S, W, L, Art = ns.Style, ns.Widgets, ns.L, ns.Art
+local S, W, L = ns.Style, ns.Widgets, ns.L
 local Plan, Util, Schema, Route = ns.Plan, ns.Util, ns.Schema, ns.Route
 local SP, SZ = S.SPACE, S.SIZE
 
@@ -34,34 +34,6 @@ local TOOL_HELP = {
 	erase = "Click a marker or route point to delete it.",
 	draw = "Pick a tool, colour and width above. Drawings made while a boss or pull is in focus belong to it. Right-click one for more.",
 	readOnly = "A recommended plan. Hover markers for notes; make an editable copy to change it.",
-}
-local LAYER_TEXT = {
-	spawns = "Enemies",
-	bosses = "Bosses and rares",
-	enemies = "Packs and patrols",
-	loot = "Loot and chests",
-	quests = "Quests and NPCs",
-	travel = "Entrances and exits", -- the full name, "Entrances, exits and shortcuts", did not fit the legend
-	hazards = "Hazards",
-	positions = "Party positions",
-	notes = "Notes",
-	route = "Route",
-	drawings = "Drawings",
-	providerRoutes = "Routes: %s",
-}
-local LAYER_ART = {
-	spawns = "skull",
-	bosses = "kind_boss",
-	enemies = "skull",
-	loot = "kind_loot",
-	quests = "kind_quest_npc",
-	travel = "kind_entrance",
-	hazards = "kind_hazard",
-	positions = "role_TANK",
-	notes = "kind_note",
-	route = "sectionPulls",
-	drawings = "drawings",
-	providerRoutes = "sectionPulls",
 }
 
 local Panel = {}
@@ -442,51 +414,11 @@ function Panel.Create(parent, ctx)
 		return rects
 	end
 
-	-- Legend and layers.
-	local legend = CreateFrame("Frame", nil, rail)
-	legend:SetPoint("TOPLEFT", SP.md, -SP.md)
-	legend:SetPoint("RIGHT", -SP.md, 0)
+	-- Legend and layers (UI/Panels/MapLegend.lua): its title folds it to one line.
+	local legend = ns.MapLegend.Build(rail, { canvas = canvas, layerVisible = layerVisible, onToggle = function()
+		f:Refresh()
+	end })
 	f.legend = legend
-	legend.heading = W.Heading(legend, L["Legend"])
-	legend.heading:SetPoint("TOPLEFT")
-	legend.rows = {}
-	local ly = -(18 + SP.sm)
-	local layers = {}
-	for i, layer in ipairs(Schema.LAYERS) do
-		layers[#layers + 1] = layer
-		if i == 2 then
-			layers[#layers + 1] = { id = "spawns", spawns = true } -- Data/Spawns.lua: where enemies stand
-		end
-	end
-	layers[#layers + 1] = { id = "providerRoutes", providerRoutes = true } -- another addon's route (Data/Providers.lua)
-	for _, layer in ipairs(layers) do
-		local row = CreateFrame("Frame", nil, legend)
-		row:SetHeight(SZ.small + 2)
-		row:SetPoint("TOPLEFT", 0, ly)
-		row:SetPoint("RIGHT")
-		row.check = W.Check(row, "", function(on)
-			ns.db.ui.mapLayers[layer.id] = on and true or false
-			canvas:DrawContent()
-		end)
-		row.index = #legend.rows + 1
-		row.check:SetPoint("LEFT")
-		row.check:SetWidth(SZ.small)
-		row.icon = Art.RoundTexture(row, "ARTWORK")
-		row.icon:SetSize(16, 16)
-		row.icon:SetPoint("LEFT", SZ.small + SP.xs, 0)
-		Art.Set(row.icon, LAYER_ART[layer.id])
-		row.text = W.Text(row, "caption", "ink")
-		row.text:SetPoint("LEFT", row.icon, "RIGHT", SP.sm, 0)
-		row.text:SetPoint("RIGHT", -22, 0)
-		row.text:SetText(L[LAYER_TEXT[layer.id]])
-		row.count = W.Text(row, "caption", "muted")
-		row.count:SetPoint("RIGHT")
-		row.count:SetJustifyH("RIGHT")
-		row.layer = layer
-		legend.rows[#legend.rows + 1] = row
-		ly = ly - (SZ.small + 2)
-	end
-	legend:SetHeight(-ly)
 
 	f.help = W.Paragraph(rail, "caption", "muted")
 	f.help:SetPoint("TOPLEFT", legend, "BOTTOMLEFT", 0, -SP.sm)
@@ -648,7 +580,13 @@ function Panel.Create(parent, ctx)
 		-- Fitting keeps the map's content clear of the floating legend.
 		local sel = selected()
 		local railShown = sel ~= nil or legendShown()
-		self.canvas.reserveRight = railShown and ((sel and RAIL or LEGEND_W) + RAIL_INSET) or 0
+		local function reserve()
+			local legendW = sel and RAIL or ns.MapLegend.Folded() and (self.legend.heading:GetWidth() + 2 * SP.md) or LEGEND_W
+			self.canvas.reserveRight = railShown and (legendW + RAIL_INSET) or 0
+		end
+		ns.MapLegend.auto = false
+		reserve()
+		self.canvas.fitBeside = sel ~= nil -- the marker editor takes the full height: the map sits beside it
 		self:LoadFloor()
 		for tool, b in pairs(self.toolButtons) do
 			b:SetShown(not ro)
@@ -696,62 +634,10 @@ function Panel.Create(parent, ctx)
 		self.labels:SetChecked(ctx.showLabels)
 		self.iconSize:Refresh()
 
-		-- Legend counts (this floor) and layer switches.
-		local counts = {}
-		for _, m in ipairs(p.markers) do
-			if m.floor == ctx.floor then
-				local layer = Schema.KIND_LAYER[m.kind] or "notes"
-				counts[layer] = (counts[layer] or 0) + 1
-			end
-		end
-		for _, r in ipairs(p.routes) do
-			if r.floor == ctx.floor then
-				counts.route = (counts.route or 0) + 1
-			end
-		end
-		counts.spawns = #ns.MapSpawns.Visible(p, ctx.floor)
-		counts.drawings = ns.Drawing.Count(p, ctx.floor)
-		local extraRoutes, extraInfo = ns.MapCanvas.ProviderRoutes(p, ctx.floor, canvas.artInfo)
-		counts.providerRoutes = extraRoutes and #extraRoutes or 0
-		local ry = -(18 + SP.sm)
-		for _, row in ipairs(self.legend.rows) do
-			local spawns, provider = row.layer.spawns, row.layer.providerRoutes
-			local shown = (not spawns or counts.spawns > 0) and (not provider or counts.providerRoutes > 0)
-			row:SetShown(shown)
-			if shown then
-				row:ClearAllPoints()
-				row:SetPoint("TOPLEFT", 0, ry)
-				row:SetPoint("RIGHT")
-				ry = ry - (SZ.small + 2)
-			end
-			if spawns then
-				row.check:SetChecked(ns.MapSpawns.LayerShown(p))
-			elseif provider then
-				row.check:SetChecked(ns.db.ui.mapLayers.providerRoutes == true)
-				-- The provider's full name does not fit the compact legend: a short label, the name in the tooltip.
-				row.text:SetText(L["Addon route"])
-				W.SetTooltip(row, L["Addon route"], string.format(L["Routes: %s"], extraInfo and extraInfo.credit or ""))
-			else
-				row.check:SetChecked(layerVisible(row.layer.id))
-			end
-			row.count:SetText(tostring(counts[row.layer.id] or 0))
-			row.text:SetAlpha((counts[row.layer.id] or 0) > 0 and 1 or 0.55)
-		end
-		self.legend:SetHeight(-ry)
-
 		local m = selected()
 		if not m then
 			ctx.selectedMarker = nil
 		end
-		self.rail:SetShown(m ~= nil or legendShown())
-		self.legendButton:SetActive(legendShown())
-		self.editor:SetShown(m ~= nil)
-		self.legend:SetShown(m == nil)
-		-- The legend alone is compact: the tool's help only while editing, the routes only when there are some (or the
-		-- route tools can make one); the rail is as tall as that. The marker editor takes the full height and width.
-		self.help:SetShown(m == nil and not ro)
-		routes.fromPulls:SetShown(not ro)
-		routes:Place(not ro)
 		local list = {}
 		if not m then
 			for _, route in ipairs(p.routes) do
@@ -760,7 +646,37 @@ function Panel.Create(parent, ctx)
 				end
 			end
 		end
-		self.routes:SetShown(m == nil and (#list > 0 or not ro))
+		self:PlaceLegend(p, m, ro, list)
+		-- Until the player folds or opens the legend (its title), it opens only where the whole map, centred, leaves
+		-- the plan clear of it; elsewhere it starts folded, so the map keeps its centre and its full size.
+		if not m and legendShown() and ns.db.ui.legendFolded == nil and not self.canvas:FitIsWhole() then
+			ns.MapLegend.auto = true
+			reserve()
+			self:PlaceLegend(p, m, ro, list)
+		end
+		-- The legend's final size: a whole map (zoom 1) is fitted again around it when that moves the map.
+		if not self.canvas:Refit() then
+			self.canvas:DrawContent()
+		end
+	end
+
+	-- The rail: the legend (counts, switches, the tool's help, the routes) or the marker editor, and its size.
+	function f:PlaceLegend(p, m, ro, list)
+		-- Legend counts (this floor) and layer switches.
+		self.legend:Update(p, ctx.floor, self.canvas.artInfo)
+		local folded = self.legend:IsFolded()
+		self.rail:SetShown(m ~= nil or legendShown())
+		self.legendButton:SetActive(legendShown())
+		self.editor:SetShown(m ~= nil)
+		self.legend:SetShown(m == nil)
+		-- The legend alone is compact: the tool's help only while editing, the routes only when there are some (or the
+		-- route tools can make one); the rail is as tall as that. The marker editor takes the full height and width.
+		self.help:SetShown(m == nil and not ro and not folded)
+		routes.fromPulls:SetShown(not ro)
+		routes:Place(not ro)
+		-- A recommended plan with one route on this floor: the Route row above already says so (the list would only
+		-- repeat it, and its height would cover more of the map).
+		self.routes:SetShown(m == nil and not folded and (ro and #list > 1 or not ro))
 		-- A short map keeps the legend inside it: the tool's help gives way first (the tools' tooltips say the same),
 		-- then the routes (the Pulls section and the route tool list them too).
 		local maxH = (self.canvas:GetHeight() or 0) - 24
@@ -793,14 +709,11 @@ function Panel.Create(parent, ctx)
 			self.rail:SetPoint("BOTTOM", self.canvas, "BOTTOM", 0, RAIL_INSET)
 			ed:ShowMarker(p, m, ro)
 		else
-			self.rail:SetWidth(LEGEND_W)
+			-- Folded: the title alone, as wide as it is.
+			self.rail:SetWidth(folded and (self.legend.heading:GetWidth() + 2 * SP.md) or LEGEND_W)
 			local h = railHeight()
 			self.rail:SetHeight(maxH > 80 and math.min(h, maxH) or h)
 			self.routes.list:SetItems(list)
-		end
-		-- The legend's final size: a whole map (zoom 1) is fitted again around it when that moves the map.
-		if not self.canvas:Refit() then
-			self.canvas:DrawContent()
 		end
 	end
 

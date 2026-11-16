@@ -236,6 +236,7 @@ UI\SidePanel.lua
 UI\InstancePage.lua
 UI\Panels\MapEditor.lua
 UI\Panels\DrawBar.lua
+UI\Panels\MapLegend.lua
 UI\Panels\MapPanel.lua
 UI\Panels\MapMenus.lua
 UI\Panels\PullsPanel.lua

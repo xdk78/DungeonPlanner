@@ -262,41 +262,68 @@ function MapLayout.Cluster(points, cell, limit)
 	return groups
 end
 
--- The whole map in a view (zoom 1): as large as the view allows and centred in it, so no empty band is left above and
--- below a map that a floating panel (the legend, the map's own controls) would otherwise squeeze beside it. Panels
--- float over the map's edges, never over the plan: `avoid` lists their boxes in view pixels { x0, y0, x1, y1 } (top
--- left origin, y down), `points` the plan's points (0..1 of the map, { x, y }). A point level with a panel stays `gap`
--- px clear of it, on its inner side (left of a panel in the right half, right of one in the left half): the map slides
--- sideways as far as the frame's inset allows, and shrinks (a few per cent a step) only when sliding is not enough,
--- down to the size that fits beside the right-hand panel (reserveRight px; without one, a tenth smaller). When even
--- that does not clear every point, the map is centred in the room left of that panel.
--- o = { viewW, viewH, baseW, baseH, inset, reserveRight, avoid, points, gap (default 30 px: a boss pin's reach) }.
+-- The whole map in a view (zoom 1): as large as the view allows and always centred in it (equal bands left and right,
+-- above and below), so no empty band is left beside a map that a floating panel (the legend, the map's own controls)
+-- would otherwise squeeze or push aside. Panels float over the map's edges, never over the plan: `avoid` lists their
+-- boxes in view pixels { x0, y0, x1, y1 } (top left origin, y down), `points` the plan's points (0..1 of the map,
+-- { x, y }). While a point is under a panel (within `gap` px of its box), the map shrinks about its centre, a few per
+-- cent a step, down to the size that fits beside the right-hand panel (reserveRight px; without one, or never below,
+-- 0.85 of the full size). Only when no centred size clears every point does the map move sideways, within its own band
+-- (never past the frame's inset), as little as it can, at the largest size that then clears them. When nothing does,
+-- the map takes the size beside the right-hand panel, centred in the room it leaves (with no such panel: the full
+-- size, centred). The legend also folds to its title (UI/Panels/MapLegend.lua), which gives the map its centre back.
+-- A panel the whole height of the view (the marker editor: `besideRight`) is no corner to float over: the map is then
+-- fitted and centred in the room left of it.
+-- o = { viewW, viewH, baseW, baseH, inset, reserveRight, besideRight, avoid, points, gap (default 30 px: a boss pin's
+-- reach) }.
 -- Returns { scale, ox, oy }, or nil without a size.
 function MapLayout.MapFit(o)
-	local inset, reserve = o.inset or 0, math.max(0, o.reserveRight or 0)
+	local inset = o.inset or 0
 	local availW, availH = (o.viewW or 0) - 2 * inset, (o.viewH or 0) - 2 * inset
+	if o.besideRight then
+		availW = availW - math.max(0, o.reserveRight or 0)
+	end
 	local w, h = o.baseW or 0, o.baseH or 0
 	if availW <= 0 or availH <= 0 or w <= 0 or h <= 0 then
 		return nil
 	end
 	local full = math.min(availW / w, availH / h)
-	local beside = math.max(0, math.min((availW - reserve) / w, availH / h))
 	local avoid, points, gap = o.avoid or {}, o.points or {}, o.gap or 30
-	local mid = (o.viewW or 0) / 2
-	-- The offsets that keep every point clear at `scale`, nearest the centred one; nil when none does.
-	local function place(scale)
+	local function centred(scale)
 		local cw, ch = w * scale, h * scale
-		local centred = inset + (availW - cw) / 2
-		local lo, hi = math.min(inset, centred), math.max(inset, inset + availW - cw)
-		local oy = inset + (availH - ch) / 2
+		return { scale = scale, ox = inset + (availW - cw) / 2, oy = inset + (availH - ch) / 2 }
+	end
+	-- How many points a panel covers at this fit.
+	local function covered(fit)
+		local cw, ch, n = w * fit.scale, h * fit.scale, 0
 		for _, p in ipairs(points) do
-			local px, py = p[1] * cw, oy + p[2] * ch
+			local px, py = fit.ox + p[1] * cw, fit.oy + p[2] * ch
+			for _, r in ipairs(avoid) do
+				if px > r[1] - gap + 1e-9 and px < r[3] + gap - 1e-9 and py > r[2] - gap + 1e-9 and py < r[4] + gap - 1e-9 then
+					n = n + 1
+					break
+				end
+			end
+		end
+		return n
+	end
+	local reserve = math.max(0, o.reserveRight or 0)
+	local beside = o.besideRight and full or math.min((availW - reserve) / w, availH / h)
+	local floor = o.besideRight and full * 0.7 or math.max(full * 0.85, math.min(beside, full))
+	-- Moved sideways as little as keeps every point clear at `scale`; nil when no place in the band does.
+	local mid = (o.viewW or 0) / 2
+	local function slid(scale)
+		local fit = centred(scale)
+		local cw, ch = w * scale, h * scale
+		local lo, hi = math.min(inset, fit.ox), math.max(inset, inset + availW - cw)
+		for _, p in ipairs(points) do
+			local px, py = p[1] * cw, fit.oy + p[2] * ch
 			for _, r in ipairs(avoid) do
 				if py >= r[2] - gap and py <= r[4] + gap then
 					if (r[1] + r[3]) / 2 >= mid then
-						hi = math.min(hi, r[1] - gap - px)
+						hi = math.min(hi, r[1] - gap - px - 1)
 					else
-						lo = math.max(lo, r[3] + gap - px)
+						lo = math.max(lo, r[3] + gap - px + 1)
 					end
 				end
 			end
@@ -304,24 +331,27 @@ function MapLayout.MapFit(o)
 		if lo > hi + 1e-9 then
 			return nil
 		end
-		return { scale = scale, ox = math.max(lo, math.min(hi, centred)), oy = oy }
+		fit.ox = math.max(lo, math.min(hi, fit.ox))
+		return fit
 	end
-	-- From the full size down to the size beside the right-hand panel (without one, a tenth smaller at most).
-	local floor = math.min(beside, full * 0.9)
-	local scale = full
-	while true do
-		local fit = place(scale)
-		if fit then
-			return fit
+	for _, try in ipairs({ centred, slid }) do
+		local scale = full
+		while true do
+			local fit = try(scale)
+			if fit and covered(fit) == 0 then
+				return fit
+			end
+			if scale <= floor + 1e-9 then
+				break
+			end
+			scale = math.max(floor, scale * 0.97)
 		end
-		if scale <= floor + 1e-9 then
-			break
-		end
-		scale = math.max(floor, scale * 0.97)
 	end
-	-- Beside the right-hand panel: centred in the room it leaves (the old way of fitting).
-	local cw, ch = w * beside, h * beside
-	return { scale = beside, ox = inset + (availW - reserve - cw) / 2, oy = inset + (availH - ch) / 2 }
+	if reserve > 0 and not o.besideRight then
+		local cw, ch = w * beside, h * beside
+		return { scale = beside, ox = inset + (availW - reserve - cw) / 2, oy = inset + (availH - ch) / 2 }
+	end
+	return centred(full)
 end
 
 -- Fit a view around points (normalized 0..1 map coordinates, { x, y } pairs): the zoom and offset that frame them with a

@@ -83,6 +83,17 @@ function MapCanvas.Create(parent, cb)
 	view.zoom = 1
 	view.ox, view.oy = 0, 0
 	view.drag = { mode = "idle" }
+	-- The table under the map: where a map's shape leaves bands beside it (a 3:2 map in a wider frame), the quest-log
+	-- parchment, a shade darker than the map and burnt at the edges, rather than a black gap.
+	view.board = view:CreateTexture(nil, "BACKGROUND", nil, 1)
+	view.board:SetAllPoints()
+	Art.Set(view.board, "parchment")
+	view.board:SetTexCoord(0, 0.6, 0, 0.75)
+	view.board:SetVertexColor(0.5, 0.4, 0.28, 1)
+	view.boardEdge = view:CreateTexture(nil, "BACKGROUND", nil, 2)
+	view.boardEdge:SetAllPoints()
+	view.boardEdge:SetTexture(S.MEDIA .. "Vignette")
+	view.boardEdge:SetVertexColor(0.16, 0.09, 0.03, 0.85)
 
 	local canvas = CreateFrame("Frame", nil, view)
 	canvas:SetPoint("TOPLEFT")
@@ -204,14 +215,13 @@ function MapCanvas.Install(view)
 		return self.contentPts
 	end
 
-	-- The whole map at zoom 1 (MapLayout.MapFit): as large as the frame allows, centred, the floating panels (the
-	-- legend, the map's controls: view.fitAvoid() gives their boxes) over its edges but clear of the plan. Cached per
-	-- size, panels and plan.
+	-- The whole map at zoom 1 (MapLayout.MapFit): as large as the frame allows, always centred, the floating panels
+	-- (the legend, the map's controls: view.fitAvoid() gives their boxes) over its edges and, where shrinking a little
+	-- about the centre does it, clear of the plan. Cached per size, panels and plan.
 	function view:FitBox()
 		local w, h = self:BaseSize()
-		local reserve = self.reserveRight or 0
 		local avoid = self.fitAvoid and self.fitAvoid() or nil
-		local parts = { w, h, self:GetWidth(), self:GetHeight(), reserve }
+		local parts = { w, h, self:GetWidth(), self:GetHeight(), self.reserveRight or 0, tostring(self.fitBeside) }
 		for _, r in ipairs(avoid or {}) do
 			parts[#parts + 1] = table.concat(r, ",")
 		end
@@ -221,9 +231,21 @@ function MapCanvas.Install(view)
 		if self.fitKey ~= key then
 			self.fitKey = key
 			self.fitBox = ns.MapLayout.MapFit({ viewW = self:GetWidth(), viewH = self:GetHeight(), baseW = w, baseH = h,
-				inset = FRAME_INSET, reserveRight = reserve, avoid = avoid, points = pts })
+				inset = FRAME_INSET, reserveRight = self.reserveRight or 0, besideRight = self.fitBeside, avoid = avoid, points = pts })
 		end
 		return self.fitBox
+	end
+
+	-- Is the whole map at its full size and centred (no panel made it smaller or moved it)?
+	function view:FitIsWhole()
+		local box = self:FitBox()
+		local w, h = self:BaseSize()
+		local availW, availH = (self:GetWidth() or 0) - 2 * FRAME_INSET, (self:GetHeight() or 0) - 2 * FRAME_INSET
+		if not box or availW <= 0 or availH <= 0 then
+			return true
+		end
+		local full = math.min(availW / w, availH / h)
+		return math.abs(box.scale - full) < 1e-6 and math.abs(box.ox - (FRAME_INSET + (availW - w * full) / 2)) < 0.5
 	end
 
 	-- Scale that fits the whole map inside the frame.

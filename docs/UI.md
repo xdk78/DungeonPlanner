@@ -330,12 +330,18 @@ Labels and the icon-size stepper sit in the map's bottom-left corner, inside the
 (as the legend in the other corner). The **legend** floats over the top-right corner:
 layer switches with icons and counts, the tool's help while editing, the routes on this floor when there are any, and
 the marker editor (`UI/Panels/MapEditor.lua`) whenever a marker is selected. Alone it is compact (204 px wide, as
-tall as its content); the editor takes 248 px and the full height. It shows by itself the first time the map opens and
-stays off after that until the Legend button turns it on (the button's choice is saved). The whole map (zoom 1,
-`MapLayout.MapFit`) is as large as the section allows and centred in it, with the legend floating over the map's edge
-rather than leaving an empty band above and below a map squeezed beside it; only while the plan's rightmost point
-(and a pull disc beside it) would be under the legend does the map slide left, then shrink, never below the size
-that fits beside the legend. Centring on a step also keeps it clear of the legend. Fit on a map without art frames
+tall as its content; a recommended plan's single route on a floor is not listed again under the Route row); the editor
+takes 248 px and the full height. It shows by itself the first time the map opens and stays off after that until the
+Legend button turns it on (the button's choice is saved). Its title is a disclosure (`UI/Panels/MapLegend.lua`):
+folded, the legend is that one line, so the art under it shows (Molten Core's painted title is in that corner). Until
+the player folds or opens it, it opens only where the whole map, centred, leaves the plan clear of it, and starts
+folded elsewhere; a click on the title is saved (`ui.legendFolded`) and holds on every map. The whole map (zoom 1,
+`MapLayout.MapFit`) is as large as the section allows and centred in it (equal bands left and right), with the legend
+floating over the map's edge rather than leaving an empty band above and below a map squeezed beside it. With the
+legend open over the plan, the map first shrinks about its centre (to 85% at most), then moves sideways within its
+own band, and only then takes the size beside the legend. Centring on a step also keeps it clear of the legend.
+Where a map's shape leaves bands beside it (a 3:2 map in a wider frame), the table under it is the quest-log parchment,
+a shade darker than the map and burnt at the edges, not a black gap. Fit on a map without art frames
 the plan's markers and route points (`MapLayout.FitView`) instead of the empty grid. The map's credit ("Map by
 Santiago Reyes", or "Map: Dungeon Journal" where another addon provides the map, Data/Providers.lua) is a chip on a
 dark plate in the map's own top-left corner, on the picture (in the frame's corner while that corner is scrolled

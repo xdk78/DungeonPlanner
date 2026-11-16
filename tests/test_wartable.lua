@@ -391,7 +391,9 @@ T.case("Enemies layer: drawn from spawn data, decluttered, without doubling the 
 		end,
 	}
 	ns.db.ui.mapLayers.spawns = nil
+	ns.db.ui.legendFolded = false -- the legend open (its rows)
 	map:Refresh()
+	ns.db.ui.legendFolded = nil
 	T.eq(map.canvas.counts.spawns, 3, "two trogs merged, the boss and the named NPC skipped")
 	local spawnRow
 	for _, row in ipairs(map.legend.rows) do

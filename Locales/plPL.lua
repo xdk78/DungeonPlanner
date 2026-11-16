@@ -612,6 +612,7 @@ ns.Locales.plPL = {
 	["The plan on the table. Recommended plans are marked with a star."] = "Plan na stole. Plany polecane są oznaczone gwiazdką.",
 	["Options and language. Automatic uses Polish when WoW Po Polsku is set to Polish, otherwise the game's language."] = "Opcje i język. Automatycznie oznacza polski, gdy WoW Po Polsku ma wybrany polski, a w przeciwnym razie język gry.",
 	["Show or hide the legend: map layers, routes and the selected marker."] = "Pokaż lub ukryj legendę: warstwy mapy, trasy i wybrany znacznik.",
+	["Fold the legend to its title, so the map under it shows; click again to open it."] = "Zwiń legendę do tytułu, by odsłonić mapę pod nią; kliknij ponownie, by ją rozwinąć.",
 	["Steps"] = "Kroki",
 	["Step"] = "Krok",
 	["First step"] = "Pierwszy krok",

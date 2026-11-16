@@ -415,6 +415,7 @@ V.views = {
 		name = "boss-detail",
 		setup = function()
 			openPlan("hall-of-thanes", "map")
+			page().panels.map.canvas:ResetView() -- the whole map (not where an earlier view left it)
 			local plan = ns.UI.ctx:Plan()
 			for _, m in ipairs(plan.markers) do
 				if m.kind == "boss" and m.label == "Magmatus" then
@@ -508,6 +509,18 @@ V.views = {
 			openPlan("molten-core", "map")
 		end,
 		window = window,
+	},
+	-- The legend folded to its title: Molten Core's painted title in that corner shows.
+	{
+		name = "map-raid-folded",
+		setup = function()
+			ns.db.ui.legendFolded = true
+			openPlan("molten-core", "map")
+		end,
+		window = window,
+		teardown = function()
+			ns.db.ui.legendFolded = nil
+		end,
 	},
 	{
 		name = "map-draw",
