@@ -151,6 +151,17 @@ function Providers.Report()
 	return rows
 end
 
+-- Adapters whose addon is not loaded in this client (not installed, or disabled), for the settings hint: { adapter }.
+function Providers.Missing()
+	local out = {}
+	for _, a in ipairs(Providers.list) do
+		if Providers.AddonLoaded(a.addon) == false then
+			out[#out + 1] = a
+		end
+	end
+	return out
+end
+
 -- An error message made short enough for one line: the file name without its folders, at most 120 characters.
 function Providers.ShortError(err)
 	local s = tostring(err or "?"):gsub("^[^\n]-([^/\\\n]+%.lua:%d+:)", "%1"):gsub("\n.*$", "")

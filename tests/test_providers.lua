@@ -55,6 +55,10 @@ T.case("Providers: nothing installed means every adapter is inactive and nothing
 	T.eq(P.FloorArt(hot(), 1), nil)
 	T.eq(P.Loot(hot(), hot().encounters[1]), nil)
 	T.eq(#P.LootLinks(), 0)
+	-- The settings hint lists what is not installed (an adapter whose addon the client does not report as loaded).
+	for _, a in ipairs(P.Missing()) do
+		T.ok(P.AddonLoaded(a.addon) == false, a.id .. " is missing")
+	end
 end)
 
 T.case("Dungeon Journal adapter: map, pins, loot and portraits from its tables", function()

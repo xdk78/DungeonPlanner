@@ -60,6 +60,25 @@ The addon's code ships **no game data**: instances, bosses and maps come from yo
 pulls, strategies and party positions; positions are approximate, and each plan states its confidence). Sources and
 credits: [docs/DATA-SOURCES.md](docs/DATA-SOURCES.md).
 
+## Recommended companion addons
+
+Dungeon Planner works on its own. If you also have these addons, it reads extra data from them in your game only
+(nothing is copied; each source is named where its data shows, and each can be switched off under Settings > Data from
+other addons). Settings lists the ones you do not have, with what they would add.
+
+| Addon | What it adds to Dungeon Planner | |
+|---|---|---|
+| **[DungeonJournal](https://www.curseforge.com/wow/addons/dungeonjournal)** (Dungeon Journal) | **Recommended.** Drawn parchment maps for Forever's new dungeons, boss pins and portraits, each boss's loot (Gear), its level and description, and a button on the Bosses page that opens it | Maps, portraits, loot |
+| **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)** | **Recommended.** Its routes as an extra map layer (off until you tick it in the legend; not shown in run mode), and its drawn maps of Forever's new dungeons where the game and Dungeon Journal have none | Maps, routes |
+| [OpenMap](https://www.curseforge.com/wow/addons/openmap) | Drawn maps and boss pins as a further map source (used after the two above), your plans listed on its dungeon cards, and a Dungeon Planner switch in its menu | Maps, plans on its cards |
+| [NeedRoll](https://www.curseforge.com/wow/addons/needroll) | An "Open in NeedRoll" button in Gear that opens its loot page for the boss you picked | Loot |
+| [QuestieDB](https://www.curseforge.com/wow/addons/questiedb) (the data part of [Questie](https://www.curseforge.com/wow/addons/questie)) | The dungeon's quests, with level and quest giver, in Runs | Quests |
+| [DBM](https://www.curseforge.com/wow/addons/deadly-boss-mods) or [BigWigs](https://www.curseforge.com/wow/addons/big-wigs) | A backup boss-kill signal for progress tracking when the game's own encounter events are missed | Kills |
+| [WoW Po Polsku Forever](https://www.curseforge.com/wow/addons/forever-wowpopolsku-2-0) | Dungeon Planner switches to Polish automatically when you chose Polish in it, and follows its fonts | Polish UI |
+
+Without any of them, Forever's new dungeons are drawn from the game's own minimap pictures, and boss data, portraits and
+loot come from Dungeon Planner's bundled facts.
+
 ## Install
 
 - From CurseForge (when published), or

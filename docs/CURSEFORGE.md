@@ -31,6 +31,21 @@ it: its floor, its stretch of the route, the pull or boss, and where each role s
 - English and Polish (automatic with WoW Po Polsku), a colour-blind setting, minimap button, key bindings, options in
   the game's Settings panel.
 
+### Recommended companion addons
+
+Dungeon Planner works on its own, but reads extra data from these addons when you have them (in your game only; each
+can be switched off in the settings):
+
+- **Dungeon Journal** (recommended): drawn parchment maps of Forever's new dungeons, boss portraits and pins, each
+  boss's loot in the Gear tab, boss levels and a button to open it. https://www.curseforge.com/wow/addons/dungeonjournal
+- **Forever Dungeon Routes** (recommended): its routes as an extra map layer, and its drawn maps of the new dungeons.
+  https://www.curseforge.com/wow/addons/forever-dungeon-routes
+- **OpenMap**: further drawn dungeon maps, and your plans listed on its dungeon cards. https://www.curseforge.com/wow/addons/openmap
+- **NeedRoll**: "Open in NeedRoll" in Gear. https://www.curseforge.com/wow/addons/needroll
+- **QuestieDB** (with Questie): the dungeon's quests in the Runs tab. https://www.curseforge.com/wow/addons/questiedb
+- **DBM** or **BigWigs**: a backup boss-kill signal. https://www.curseforge.com/wow/addons/deadly-boss-mods and https://www.curseforge.com/wow/addons/big-wigs
+- **WoW Po Polsku Forever**: the Polish interface switches on automatically. https://www.curseforge.com/wow/addons/forever-wowpopolsku-2-0
+
 ### Good to know
 
 - WoW: Forever does not tell addons where you or any creature are inside an instance, so nothing is placed on the map

@@ -280,6 +280,29 @@ local function options()
 							end,
 						}
 					end
+					-- Supported addons that are not loaded, one line each (read when the panel is drawn).
+					local BENEFITS = {
+						dungeonJournal = L["drawn maps of Forever's new dungeons, boss portraits and loot"],
+						foreverDungeonRoutes = L["a route layer on the map and drawn maps of Forever's new dungeons"],
+						openMap = L["more drawn dungeon maps, and your plans on its dungeon cards"],
+						needRoll = L["\"Open in NeedRoll\" in Gear"],
+						questie = L["the dungeon's quests in Runs"],
+					}
+					args.missing = {
+						type = "description",
+						order = #ns.Providers.list + 2,
+						width = "full",
+						hidden = function()
+							return #ns.Providers.Missing() == 0
+						end,
+						name = function()
+							local lines = { L["Not installed (optional):"] }
+							for _, a in ipairs(ns.Providers.Missing()) do
+								lines[#lines + 1] = string.format("%s: %s", a.title, BENEFITS[a.id] or "")
+							end
+							return table.concat(lines, "\n")
+						end,
+					}
 					-- Floors drawn from the game's minimap pictures (Data/MinimapArt.lua) can show another addon's drawn
 					-- map instead.
 					args.preferProviderMaps = {

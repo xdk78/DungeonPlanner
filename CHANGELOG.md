@@ -9,6 +9,7 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 `docs/RELEASE-NOTES-0.1.0.md` in the source repository.
 
 ### Added
+- **Settings, "Data from other addons"** lists the supported addons you do not have, with what each would add.
 - **The war table**: a window in the game's own look (framed window, inset panels, window tabs) with the dungeon map
   filling it, the plan's steps (entrance, pulls, bosses, quest givers, objectives) and your party beside it, and the
   sections (Map, Bosses, Pulls, Party, Gear, Runs, Share, Notes) as tabs under the window. Clicking a step shows it on
