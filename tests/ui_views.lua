@@ -399,6 +399,39 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- An own dungeon plan's party: three seats taken, two assignments, the first selected (its editor under the list).
+	{
+		name = "party-own",
+		setup = function()
+			local plan = ownPlan()
+			plan.groups[1] = { "Bram" }
+			plan.groups[2] = { "Corin" }
+			plan.groups[3] = { "Aldra" }
+			if #plan.assignments == 0 then
+				ns.Plan.AddAssignment(plan, "role:TANK", "Pull Magmatus away from the group", plan.encounters[2].id)
+				ns.Plan.AddAssignment(plan, "Aldra", "Interrupt the Summoner", nil)
+			end
+			openOwn("assignments", "select")
+			local list = page().panels.assignments.inner.list
+			if list.rows[1] and list.rows[1]:GetScript("OnClick") then
+				list.rows[1]:GetScript("OnClick")(list.rows[1], "LeftButton")
+			end
+			ns.UI.RefreshPage()
+		end,
+		window = window,
+	},
+	-- An own raid plan's assignments beside its groups.
+	{
+		name = "party-raid-own",
+		setup = function()
+			closeAll()
+			ns.UI.SelectPlan(raidPlan().id)
+			ns.db.ui.partyMode = "assignments"
+			ns.UI.SelectTab("assignments")
+			ns.UI.RefreshPage()
+		end,
+		window = window,
+	},
 	{
 		name = "gear-dropdown",
 		setup = function()

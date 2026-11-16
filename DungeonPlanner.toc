@@ -242,6 +242,7 @@ UI\Panels\MapMenus.lua
 UI\Panels\PullsPanel.lua
 UI\Panels\EncountersPanel.lua
 UI\Panels\PagesEditor.lua
+UI\Panels\PartyGroups.lua
 UI\Panels\AssignmentsPanel.lua
 UI\Panels\GearPanel.lua
 UI\Panels\RunsPanel.lua

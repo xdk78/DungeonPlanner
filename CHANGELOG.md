@@ -88,6 +88,10 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- The Party section no longer leaves its text on the left, a box on the right and an empty half below. A dungeon's party
+  is a card of five seats with their role icons, centred at the top, with the assignments under it across the section;
+  a raid's eight groups fill their column beside the assignments or pages. Empty lists say so in the middle of their
+  box.
 - The map is centred in its frame again (Molten Core sat 13 px from the left and 83 px from the right). With the
   legend open over the plan it shrinks a little about its centre before it moves; the legend's title folds it to one
   line (the choice is saved), and it starts folded where it would cover the plan or a map's painted title. The bands

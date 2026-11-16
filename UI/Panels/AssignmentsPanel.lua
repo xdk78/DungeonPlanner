@@ -1,19 +1,19 @@
--- Assignments tab: who does what (per boss and phase), the raid groups, and "Post to chat" for the group.
--- Targets are a player, a role, a raid group or everyone. Dungeon Planner never moves players between groups; groups
--- here are the plan, and "Fill from my raid" copies the current layout into it. A dungeon shows its party instead:
--- tank, healer and three damage dealers, filled from the party by the roles players chose.
--- A switch over the left column shows the assignments or the raid pages (UI/Panels/PagesEditor.lua); the groups stay.
+-- Party section: who does what (per boss and phase), the party or raid groups (UI/Panels/PartyGroups.lua), and "Post
+-- to chat" for the group. Targets are a player, a role, a raid group or everyone. A switch shows the assignments or
+-- the raid pages (UI/Panels/PagesEditor.lua).
+-- A dungeon: the party as a card of five seats, centred at the top, the assignments (or pages) under it across the
+-- section. A raid: the assignments (or pages) on the left, the eight groups beside them in a grid that fills the column.
+-- The list sits in an inset; its empty state is centred inside it.
 
 local _, ns = ...
 local S, W, L = ns.Style, ns.Widgets, ns.L
 local Plan, Util, Schema = ns.Plan, ns.Util, ns.Schema
 local SP, SZ = S.SPACE, S.SIZE
 
--- The groups column: about two fifths of the section (300 to 440 px), so a dungeon's party box does not sit far off on
--- the right of an empty assignments column; f:LayoutColumns sets it on every resize.
+-- A raid's groups column: about two fifths of the section (300 to 440 px); f:Arrange sets it on every resize.
 local GROUPS_MIN, GROUPS_MAX, GROUPS_SHARE = 300, 440, 0.42
-local GROUPS_SHARE_PARTY = 0.5 -- a dungeon's party: two even columns
-
+local MODE_TOP = -(SZ.control + SP.md) -- under the Assignments | Pages switch
+local EDITOR_H = SZ.control * 2 + SP.md -- the selected assignment's editor, under the list
 
 local Panel = {}
 ns.Panels.assignments = Panel
@@ -74,7 +74,33 @@ function Panel.Create(parent, ctx)
 		ctx:Changed("assignments")
 	end
 
-	f.filter = W.Dropdown(f, {
+	-- Assignments or pages.
+	f.mode = W.Tabs(f, {
+		{ id = "assignments", text = L["Assignments"] },
+		{ id = "pages", text = L["Pages"] },
+	}, function(id)
+		ns.db.ui.partyMode = id
+		f:Refresh()
+	end)
+	f.mode:SetPoint("TOPLEFT")
+
+	-- The people: the party card or the raid's groups, and "Fill from my party / raid".
+	local groups = ns.PartyGroups.Create(f, {
+		plan = plan,
+		changed = changed,
+		readOnly = function()
+			return ctx:ReadOnly()
+		end,
+	})
+	f.groups = groups
+
+	-- Where the assignments or the pages go (f:Arrange places it).
+	local content = CreateFrame("Frame", nil, f)
+	f.content = content
+	f.pages = ns.PagesEditor.Create(content, ctx)
+	f.pages:SetAllPoints()
+
+	f.filter = W.Dropdown(content, {
 		width = 200,
 		options = function()
 			local out = { { text = L["All bosses"], value = "all" }, { text = L["General"], value = "general" } }
@@ -91,22 +117,9 @@ function Panel.Create(parent, ctx)
 			f:Refresh()
 		end,
 	})
-	-- Assignments or pages, over the left column.
-	local MODE_TOP = -(SZ.control + SP.md)
-	f.mode = W.Tabs(f, {
-		{ id = "assignments", text = L["Assignments"] },
-		{ id = "pages", text = L["Pages"] },
-	}, function(id)
-		ns.db.ui.partyMode = id
-		f:Refresh()
-	end)
-	f.mode:SetPoint("TOPLEFT")
-	f.filter:SetPoint("TOPLEFT", 0, MODE_TOP)
-	f.pages = ns.PagesEditor.Create(f, ctx)
-	f.pages:SetPoint("TOPLEFT", 0, MODE_TOP)
-	f.pages:SetPoint("BOTTOMRIGHT", -(GROUPS_MIN + SP.xl), 0)
+	f.filter:SetPoint("TOPLEFT")
 
-	f.add = W.Button(f, L["Add assignment"], "red", function()
+	f.add = W.Button(content, L["Add assignment"], "red", function()
 		local p = plan()
 		if not p then
 			return
@@ -122,14 +135,19 @@ function Panel.Create(parent, ctx)
 	end)
 	f.add:SetPoint("LEFT", f.filter, "RIGHT", SP.sm, 0)
 
-	f.post = W.Button(f, L["Post to chat"], "outline", function()
+	f.post = W.Button(content, L["Post to chat"], "outline", function()
 		f:PostToChat()
 	end)
 	f.post:SetPoint("LEFT", f.add, "RIGHT", SP.sm, 0)
 	W.SetTooltip(f.post, L["Post to chat"], L["Sends the shown assignments to your group chat, one line at a time."])
 
-	-- List.
-	f.list = W.List(f, {
+	-- The list, in an inset; with nothing in it, its message is centred in the box.
+	local box = W.Panel(content)
+	box:SetPoint("TOPLEFT", f.filter, "BOTTOMLEFT", 0, -SP.md)
+	box:SetPoint("RIGHT")
+	box:SetPoint("BOTTOM")
+	f.listBox = box
+	f.list = W.List(box, {
 		rowHeight = SZ.row2,
 		empty = L["No assignments yet."],
 		create = function(row)
@@ -157,14 +175,19 @@ function Panel.Create(parent, ctx)
 			f:Refresh()
 		end,
 	})
-	f.list:SetPoint("TOPLEFT", f.filter, "BOTTOMLEFT", 0, -SP.md)
-	f.list:SetPoint("RIGHT", -(GROUPS_MIN + SP.xl), 0)
-	f.list:SetPoint("BOTTOM", 0, SZ.control * 2 + SP.md * 3 + 16)
+	f.list:SetPoint("TOPLEFT", SP.xs, -SP.xs)
+	f.list:SetPoint("BOTTOMRIGHT", -SP.xs, SP.xs)
+	local empty = f.list.emptyText
+	empty:ClearAllPoints()
+	empty:SetPoint("LEFT", SP.xl, 0)
+	empty:SetPoint("RIGHT", -SP.xl, 0)
+	empty:SetJustifyH("CENTER")
 
 	-- Editor under the list.
-	local ed = CreateFrame("Frame", nil, f)
-	ed:SetPoint("TOPLEFT", f.list, "BOTTOMLEFT", 0, -SP.md)
-	ed:SetPoint("BOTTOMRIGHT", -(GROUPS_MIN + SP.xl), 0)
+	local ed = CreateFrame("Frame", nil, content)
+	ed:SetPoint("BOTTOMLEFT")
+	ed:SetPoint("BOTTOMRIGHT")
+	ed:SetHeight(EDITOR_H)
 	f.editor = ed
 
 	local function update(fields)
@@ -226,7 +249,7 @@ function Panel.Create(parent, ctx)
 		end,
 	})
 	ed.task:SetPoint("LEFT", ed.who, "RIGHT", SP.sm, 0)
-	ed.task:SetPoint("RIGHT")
+	ed.task:SetPoint("RIGHT", ed, "TOPRIGHT", 0, -SZ.control / 2) -- on the first line, as the dropdown
 
 	ed.encounter = W.Dropdown(ed, {
 		width = 170,
@@ -279,213 +302,42 @@ function Panel.Create(parent, ctx)
 	ed.delete:SetPoint("LEFT", ed.phase, "RIGHT", SP.sm, 0)
 	ed.delete.dpGround = "surface"
 
-	-- Groups: a dungeon's party (tank, healer, three damage dealers) or a raid's eight groups (a scrolling grid). In a
-	-- dungeon plan the party is stored in groups 1-3 by role: 1 = tank, 2 = healer, 3 = damage.
-	local groups = CreateFrame("Frame", nil, f)
-	groups:SetPoint("TOPRIGHT")
-	groups:SetPoint("BOTTOMRIGHT")
-	groups:SetWidth(GROUPS_MIN)
-	f.groups = groups
-	groups.title = W.Heading(groups, L["Raid groups"], nil, true)
-	groups.title:SetPoint("TOPLEFT")
-
-	local function isParty()
-		local p = plan()
-		return p ~= nil and p.instance.kind ~= "raid"
-	end
-
-	local function askName(title, g)
-		W.AskText(title, L["Type the player's name."], "", function(name)
-			local p = plan()
-			if p and name ~= "" then
-				local ok, err = Plan.SetGroup(p, name, g)
-				if not ok then
-					ns:Print(L["Could not add the player:"], err)
-				end
-				changed()
-			end
-		end)
-	end
-
-	local function memberMenu(self)
-		local p = plan()
-		if p and self.name and not ctx:ReadOnly() then
-			W.Menu(self, {
-				{ title = self.name },
-				{
-					L["Remove from group"],
-					function()
-						Plan.SetGroup(p, self.name, nil)
-						changed()
-					end,
-				},
-			})
+	-- The layout. A dungeon: the switch and "Fill from my party" on the top line, the party card centred under them,
+	-- the content across the section under the card. A raid: the content on the left under the switch, the groups
+	-- column on the right with its own heading and "Fill from my raid".
+	function f:Arrange()
+		local w, h = self:GetWidth() or 0, self:GetHeight() or 0
+		local party = groups.IsParty()
+		groups:ClearAllPoints()
+		groups.fill:ClearAllPoints()
+		content:ClearAllPoints()
+		if party then
+			local cardW = math.floor(math.min(w, ns.PartyGroups.CARD_MAX))
+			local cardH = groups:LayoutCard(math.max(200, cardW))
+			groups:SetPoint("TOP", self, "TOP", 0, MODE_TOP)
+			groups:SetSize(math.max(200, cardW), cardH)
+			groups.card:ClearAllPoints()
+			groups.card:SetAllPoints()
+			groups.fill:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+			content:SetPoint("TOPLEFT", 0, MODE_TOP - cardH - SP.lg)
+			content:SetPoint("BOTTOMRIGHT")
+		else
+			local gw = math.floor(math.max(GROUPS_MIN, math.min(GROUPS_MAX, w * GROUPS_SHARE)))
+			groups:SetPoint("TOPRIGHT")
+			groups:SetPoint("BOTTOMRIGHT")
+			groups:SetWidth(gw)
+			groups:LayoutGrid(gw, h)
+			groups.fill:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 0)
+			content:SetPoint("TOPLEFT", 0, MODE_TOP)
+			content:SetPoint("BOTTOMRIGHT", -(gw + SP.xl), 0)
 		end
-	end
-
-	groups.fill = W.Button(groups, L["Fill from my raid"], "outline", function()
-		local p = plan()
-		if not p then
-			return
-		end
-		if isParty() then
-			-- The party by the roles players chose (UnitGroupRolesAssigned): tank, healer, damage.
-			if not (IsInGroup and IsInGroup()) then
-				ns:Print(L["You are not in a group."])
-				return
-			end
-			for g = 1, Schema.MAX.groups do
-				p.groups[g] = {}
-			end
-			local units = { "player", "party1", "party2", "party3", "party4" }
-			for _, unit in ipairs(units) do
-				if UnitExists and UnitExists(unit) then
-					local name = Util.ShortName(UnitName(unit))
-					local role = UnitGroupRolesAssigned and Util.Plain(UnitGroupRolesAssigned(unit)) or nil
-					local g = role == "TANK" and 1 or role == "HEALER" and 2 or 3
-					if name and #p.groups[g] >= (g == 3 and 3 or 1) then
-						g = #p.groups[3] < 3 and 3 or (#p.groups[1] < 1 and 1 or 2)
-					end
-					if name then
-						Plan.SetGroup(p, name, g)
-					end
-				end
-			end
-			changed()
-			return
-		end
-		if not (IsInRaid and IsInRaid() and GetRaidRosterInfo) then
-			ns:Print(L["You are not in a raid."])
-			return
-		end
-		for g = 1, Schema.MAX.groups do
-			p.groups[g] = {}
-		end
-		for i = 1, GetNumGroupMembers() do
-			local name, _, subgroup = GetRaidRosterInfo(i)
-			name, subgroup = Util.ShortName(name), Util.Plain(subgroup)
-			if name and Util.IsInteger(subgroup) then
-				Plan.SetGroup(p, name, subgroup)
-			end
-		end
-		changed()
-	end)
-	groups.fill:SetPoint("TOPRIGHT", 0, 2)
-	groups.fill.dpGround = "surface"
-
-	-- Party: five rows (role icon, role, name or "+").
-	local PARTY = { { "TANK", 1, 1 }, { "HEALER", 2, 1 }, { "DAMAGER", 3, 1 }, { "DAMAGER", 3, 2 }, { "DAMAGER", 3, 3 } }
-	local ROLE_ART = { TANK = "role_TANK", HEALER = "role_HEALER", DAMAGER = "role_MELEE" }
-	local ROLE_TEXT = { TANK = "Tank", HEALER = "Healer", DAMAGER = "Damage" }
-	local party = W.Panel(groups, "surface", "hairline")
-	party:SetPoint("TOPLEFT", 0, -(SZ.control + SP.md))
-	party:SetPoint("RIGHT")
-	-- Rows of the larger size (34 px), with the role glyph a little bigger: the party is the column's whole content.
-	local PARTY_ROW = 34
-	party:SetHeight(#PARTY * (PARTY_ROW + SP.xs) + SP.sm * 2)
-	groups.party = party
-	party.rows = {}
-	for i, slot in ipairs(PARTY) do
-		local row = CreateFrame("Button", nil, party)
-		row:SetHeight(PARTY_ROW)
-		row:SetPoint("TOPLEFT", SP.sm, -(SP.sm + (i - 1) * (PARTY_ROW + SP.xs)))
-		row:SetPoint("RIGHT", -SP.sm, 0)
-		row.icon = W.RoundIcon(row, 22, "pinRing")
-		row.icon:SetPoint("LEFT", 6, 0)
-		ns.Art.Set(row.icon.icon, ROLE_ART[slot[1]])
-		row.role = W.Text(row, "body", "muted")
-		row.role:SetPoint("LEFT", row.icon, "RIGHT", SP.md, 0)
-		row.role:SetWidth(70)
-		row.role:SetText(L[ROLE_TEXT[slot[1]]])
-		row.text = W.Text(row, "body", "ink")
-		row.text:SetPoint("LEFT", row.role, "RIGHT", SP.sm, 0)
-		row.text:SetPoint("RIGHT", -28, 0)
-		row.add = W.IconButton(row, "+", L["Add a player"], function()
-			askName(L[ROLE_TEXT[slot[1]]], slot[2])
-		end)
-		row.add:SetPoint("RIGHT")
-		row.slot = slot
-		row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-		row:SetScript("OnClick", memberMenu)
-		party.rows[i] = row
-	end
-	-- The role column is as wide as its longest name ("Zadający obrażenia" in Polish), within reason.
-	local roleW = 0
-	for _, row in ipairs(party.rows) do
-		local w = row.role.GetUnboundedStringWidth and row.role:GetUnboundedStringWidth() or row.role:GetStringWidth()
-		roleW = math.max(roleW, math.ceil(tonumber(w) or 0))
-	end
-	roleW = math.min(150, math.max(70, roleW + 2))
-	for _, row in ipairs(party.rows) do
-		row.role:SetWidth(roleW)
-	end
-	-- How the seats fill, under the box.
-	party.hint = W.Paragraph(groups, "caption", "muted")
-	party.hint:SetPoint("TOPLEFT", party, "BOTTOMLEFT", SP.xs, -SP.sm)
-	party.hint:SetPoint("RIGHT", -SP.xs, 0)
-	party.hint:SetText(L["Fill from my party takes the roles your group chose; + adds a name by hand. Right-click a name to remove it."])
-
-	-- Raid: the eight groups in two columns, scrolling when the window is short.
-	local grid = W.ScrollArea(groups)
-	grid:SetPoint("TOPLEFT", 0, -(SZ.control + SP.md))
-	grid:SetPoint("BOTTOMRIGHT")
-	groups.grid = grid
-	groups.boxes = {}
-	-- Names start under the box's "+" button (24 px tall at 2 px from the top), so the two never overlap.
-	local NAMES_TOP = 28
-	local boxH = 5 * 16 + NAMES_TOP + SP.xs
-	-- Two boxes a line, as wide as the column allows (f:LayoutColumns).
-	local function placeBoxes()
-		local boxW = ((f.groupsW or GROUPS_MIN) - SP.md - SP.sm) / 2
-		for g, box in ipairs(groups.boxes) do
-			box:SetSize(boxW, boxH)
-			local col, row = (g - 1) % 2, math.floor((g - 1) / 2)
-			box:ClearAllPoints()
-			box:SetPoint("TOPLEFT", col * (boxW + SP.sm), -(row * (boxH + SP.sm)))
-		end
-	end
-	for g = 1, Schema.MAX.groups do
-		local box = CreateFrame("Frame", nil, grid.content)
-		S.Surface(box, "surface", S.RADIUS.container, "hairline")
-		box.title = W.Text(box, "caption", "muted")
-		box.title:SetPoint("TOPLEFT", SP.sm, -SP.xs)
-		box.title:SetText(string.format(L["Group %s"], g))
-		box.addButton = W.IconButton(box, "+", L["Add a player to this group"], function()
-			askName(string.format(L["Group %s"], g), g)
-		end)
-		box.addButton:SetPoint("TOPRIGHT", -2, -2)
-		box.names = {}
-		for i = 1, Schema.MAX.groupSize do
-			local b = CreateFrame("Button", nil, box)
-			b:SetHeight(16)
-			b:SetPoint("TOPLEFT", SP.sm, -(NAMES_TOP + (i - 1) * 16))
-			b:SetPoint("RIGHT", -SP.sm, 0)
-			b.text = W.Text(b, "caption", "ink")
-			b.text:SetAllPoints()
-			b:SetScript("OnClick", memberMenu)
-			box.names[i] = b
-		end
-		groups.boxes[g] = box
-	end
-	placeBoxes()
-	grid:SetContentHeight(math.ceil(Schema.MAX.groups / 2) * (boxH + SP.sm))
-
-	-- The two columns share the width: the groups take about two fifths, the left column the rest.
-	function f:LayoutColumns()
-		local share = isParty() and GROUPS_SHARE_PARTY or GROUPS_SHARE
-		local w = math.floor(math.max(GROUPS_MIN, math.min(GROUPS_MAX, (self:GetWidth() or 0) * share)))
-		if w == f.groupsW then
-			return
-		end
-		self.groupsW = w
-		groups:SetWidth(w)
-		self.pages:SetPoint("BOTTOMRIGHT", -(w + SP.xl), 0)
-		self.list:SetPoint("RIGHT", -(w + SP.xl), 0)
-		self.editor:SetPoint("BOTTOMRIGHT", -(w + SP.xl), 0)
-		placeBoxes()
+		-- The filter gives up width so its buttons stay on the line.
+		local cw = party and w or (w - (groups:GetWidth() or 0) - SP.xl)
+		local buttons = (self.add:IsShown() and (self.add:GetWidth() + SP.sm) or 0) + self.post:GetWidth() + SP.sm
+		self.filter:SetWidth(math.floor(math.max(110, math.min(200, cw - buttons))))
 	end
 	f:SetScript("OnSizeChanged", function(self)
-		self:LayoutColumns()
+		self:Arrange()
 	end)
 
 	-- Post to chat: lines go out spaced 0.4 s apart, out of combat only, never during a messaging lockdown.
@@ -553,21 +405,19 @@ function Panel.Create(parent, ctx)
 				items[#items + 1] = a
 			end
 		end
+		local ro = ctx:ReadOnly()
 		self.filter:Refresh()
 		self.list:SetItems(items)
 		-- A recommended plan has none: say how to get some.
-		self.list.emptyText:SetText(ctx:ReadOnly() and L["No assignments in a recommended plan. Make an editable copy to say who does what, per boss."]
+		self.list.emptyText:SetText(ro and L["No assignments in a recommended plan. Make an editable copy to say who does what, per boss."]
 			or L["No assignments yet."])
-		local ro = ctx:ReadOnly()
 		self.add:SetShown(not ro)
 		self.post:ClearAllPoints()
-		if ro then
-			self.post:SetPoint("LEFT", self.filter, "RIGHT", SP.sm, 0)
-		else
-			self.post:SetPoint("LEFT", self.add, "RIGHT", SP.sm, 0)
-		end
+		self.post:SetPoint("LEFT", ro and self.filter or self.add, "RIGHT", SP.sm, 0)
 		local a = selected()
-		ed:SetShown(a ~= nil and not ro)
+		local editing = a ~= nil and not ro
+		ed:SetShown(editing)
+		box:SetPoint("BOTTOM", 0, editing and (EDITOR_H + SP.md) or 0)
 		if a then
 			ed.who:Refresh()
 			ed.task:SetValue(a.task)
@@ -576,48 +426,21 @@ function Panel.Create(parent, ctx)
 			ed.phase:SetShown(a.encounter ~= nil)
 			ed.delete:SetDisabled(ro)
 		end
-		-- Assignments or pages in the left column.
+		-- Assignments or pages.
 		local pagesMode = ns.db.ui.partyMode == "pages"
 		self.mode:Select(pagesMode and "pages" or "assignments")
 		self.pages:SetShown(pagesMode)
+		for _, w in ipairs({ self.filter, self.post, box }) do
+			w:SetShown(not pagesMode)
+		end
 		if pagesMode then
+			self.add:Hide()
+			ed:Hide()
 			self.pages:Refresh()
-			for _, w in ipairs({ self.filter, self.add, self.post, self.list, ed }) do
-				w:Hide()
-			end
-		else
-			self.filter:Show()
-			self.list:Show()
-			self.post:Show()
 		end
-		self:LayoutColumns()
-		local partyMode = isParty()
-		groups.title:SetText(partyMode and L["Party"] or L["Raid groups"])
-		groups.fill:SetLabel(partyMode and L["Fill from my party"] or L["Fill from my raid"])
-		groups.fill:SetShown(not ro)
-		groups.party:SetShown(partyMode)
-		groups.party.hint:SetShown(partyMode and not ro)
-		groups.grid:SetShown(not partyMode)
-		if partyMode then
-			for _, row in ipairs(groups.party.rows) do
-				local name = (p.groups[row.slot[2]] or {})[row.slot[3]]
-				row.name = name
-				row.text:SetText(name or L["empty"])
-				S.TextColor(row.text, name and "ink" or "dim")
-				row.add:SetShown(not ro and name == nil and #(p.groups[row.slot[2]] or {}) < row.slot[3])
-			end
-		else
-			for g, box in ipairs(groups.boxes) do
-				local members = p.groups[g] or {}
-				for i, b in ipairs(box.names) do
-					b.name = members[i]
-					b.text:SetText(members[i] or "")
-					b:SetShown(members[i] ~= nil)
-				end
-				box.addButton:SetShown(not ro)
-				box.addButton:SetDisabled(#members >= Schema.MAX.groupSize)
-			end
-		end
+		groups:Refresh()
+		self:Arrange()
+		self.filter:Refresh() -- its text fits the width Arrange gave it
 	end
 	return f
 end

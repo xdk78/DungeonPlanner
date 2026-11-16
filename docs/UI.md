@@ -232,13 +232,18 @@ a table with the columns A (the selected run), B and A - B, differences that are
 
 ### Raid pages and the Notes window
 
-The Party section has a switch over its left column, Assignments | Pages; the raid groups stay on the right, so names
-are at hand while writing. Pages: Add page (the red button, first) and the page picker with a delete "x"; the title and
-the boss the page belongs to; the text in a multi-line field; a two-line keyword help; Send to group, Show and Post to
-chat at the bottom. Recommended plans have no pages (a muted line says to make a copy). The groups column takes about
-two fifths of the section (300 to 440 px; a dungeon's party half of it, so its box does not sit far off beside an
-empty column), with the party's rows at the larger size (34 px) and a line under the box on how its seats fill.
-Without assignments, a recommended plan's left column says to make a copy to add some.
+The Party section (`UI/Panels/AssignmentsPanel.lua`, the people in `UI/Panels/PartyGroups.lua`) has a switch at its
+top left, Assignments | Pages, and "Fill from my party / raid" at the top right. A dungeon shows its party as a card
+centred under the switch (at most 640 px wide): five seats in a row, each the side panel's role plate larger (40 px)
+with the role in gold and the player, or a muted "Open" with "+" while the plan can change, and a line on how the seats
+fill; the assignments or pages take the section's width under it. A raid keeps them on the left and its eight groups
+on the right, a column of about two fifths (300 to 440 px), two boxes a line whose height fills the column (never less
+than five names; the grid scrolls on a short window), each box with its count ("5/5"). The assignment list sits in an
+inset that runs to the bottom (the editor of the selected one under it); with nothing in it, its message is centred
+in the inset, as is the Pages editor's when there is no page to write (a recommended plan has none: the message says
+to make a copy). Pages: Add page (the red button, first) and the page picker with a delete "x"; the title and the boss
+the page belongs to; the text in a multi-line field; a two-line keyword help; Send to group, Show and Post to chat at
+the bottom. The filter gives up width (down to 110 px) so Add assignment and Post to chat stay on its line.
 
 ```
 + Notes ---------------- X +      the run mode window's frame, 380 x 400 by default, resizable (220 x 150 at

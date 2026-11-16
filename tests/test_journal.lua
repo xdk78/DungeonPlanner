@@ -235,7 +235,7 @@ T.case("Read-only pages show text, not inputs; gear lists the guide's drops; par
 	-- Assignments: a dungeon shows the party.
 	ns.UI.SelectTab("assignments")
 	local assign = page.panels.assignments.inner
-	T.ok(assign.groups.party:IsShown() and not assign.groups.grid:IsShown(), "party layout")
+	T.ok(assign.groups.card:IsShown() and not assign.groups.raid:IsShown(), "party layout: the card of seats")
 	T.ok(not assign.groups.fill:IsShown(), "read-only: no fill")
 	-- Map: the guide's map, the pull disc moved off the boss.
 	ns.UI.SelectTab("map")

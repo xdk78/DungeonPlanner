@@ -179,9 +179,13 @@ function Editor.Create(parent, ctx)
 	f.text:SetPoint("RIGHT")
 	f.text:SetPoint("BOTTOM", f.hint, "TOP", 0, SP.sm)
 
-	f.empty = W.Paragraph(f, "body", "muted")
-	f.empty:SetPoint("TOPLEFT", 0, ROW2)
-	f.empty:SetPoint("RIGHT")
+	-- Nothing to edit: the message centred in an inset where the page would be.
+	f.emptyBox = W.Panel(f)
+	f.emptyBox:SetPoint("BOTTOMRIGHT")
+	f.empty = W.Paragraph(f.emptyBox, "body", "muted")
+	f.empty:SetPoint("LEFT", SP.xl, 0)
+	f.empty:SetPoint("RIGHT", -SP.xl, 0)
+	f.empty:SetJustifyH("CENTER")
 
 	function f:Refresh()
 		local p = plan()
@@ -208,7 +212,10 @@ function Editor.Create(parent, ctx)
 		for _, b in ipairs({ self.send, self.show, self.post }) do
 			b:SetShown(page ~= nil)
 		end
-		self.empty:SetShown(not editing)
+		self.emptyBox:SetShown(not editing)
+		-- Under the page line when there is one (the picker, Add page), else from the top.
+		self.emptyBox:SetPoint("TOPLEFT", 0, (not ro or #list > 0) and ROW2 or 0)
+		self.emptyBox:SetPoint("BOTTOMRIGHT", 0, page ~= nil and (SZ.control + SP.md) or 0)
 		if ro then
 			self.empty:SetText(#list > 0 and L["A recommended plan's pages can be shown and sent, not changed."]
 				or L["Recommended plans have no raid pages. Make an editable copy to write some."])
