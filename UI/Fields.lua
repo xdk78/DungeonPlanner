@@ -291,7 +291,7 @@ function W.Check(parent, label, onToggle)
 	b.label = W.Text(b, "body", "ink")
 	b.label:SetPoint("LEFT", box, "RIGHT", SP.xxs, 0)
 	b.label:SetText(label or "")
-	b:SetWidth(SZ.small + SP.xxs + math.ceil(b.label:GetStringWidth()) + SP.xs)
+	b:SetWidth(SZ.small + SP.xxs + math.ceil(b.label:GetStringWidth())) -- the hit area ends with the text
 
 	function b:SetChecked(v)
 		self.dpChecked = v and true or false

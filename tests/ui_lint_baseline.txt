@@ -1,9 +1,3 @@
 # Accepted UI lint findings (wowui.lint): one "<view> | <key>" per line, each under a "#" line that says why it is
 # accepted. Only findings that come from the offline measurement and not from the layout belong here (CI measures
 # with the bundled Alegreya Sans widened to Friz Quadrata's average, not with the game's fonts); fix everything else.
-
-# Ragefire Chasm opens centred on its first step (zoomed in), where a pin sits just right of the "Labels" check in the
-# map's corner. The bundled font measures "Labels" (and "Etykiety") a few pixels wider than Friz Quadrata, so the check's
-# hit area reaches the pin by 2 to 4 px; with the game's fonts it ends before the pin (no finding in either language).
-map-ragefire | overlap | DungeonPlannerMapSection.canvas.overlay/Button#15 + DungeonPlannerMapSection.controls/Frame#1/Button#1
-plPL/map-ragefire | overlap | DungeonPlannerMapSection.canvas.overlay/Button#15 + DungeonPlannerMapSection.controls/Frame#1/Button#1
