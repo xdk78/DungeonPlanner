@@ -1,0 +1,97 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "hyjal-summit",
+ "name": "Hyjal Summit",
+ "kind": "raid",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Bandalar",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p3",
+   "name": "Time-Lost Battalion",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p4",
+   "name": "Old Gloomlurker",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p5",
+   "name": "Kathris the Haunted",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p6",
+   "name": "Elder Minderel",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p7",
+   "name": "Council of Thorns",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p8",
+   "name": "The Wild King",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p9",
+   "name": "Ancient of Decay",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p10",
+   "name": "Sylvestris Dusksong",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p11",
+   "name": "Gharalis the Abyssal",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p12",
+   "name": "Anara Chillwind",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p13",
+   "name": "Tracker Stillwind",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p14",
+   "name": "Nythus the Dreambound",
+   "gap": "no source had data for this boss",
+   "src": {}
+  }
+ ]
+}

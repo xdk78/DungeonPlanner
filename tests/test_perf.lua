@@ -1,0 +1,218 @@
+-- Micro-benchmarks that fail on regressions (thresholds are generous: several times the measured cost, for slower
+-- machines): the steps of a plan at the schema's limits, a pan that moves the canvas without redrawing, one refresh
+-- of the map per edit, and the per-revision caches of the Enemies layer and the boss portraits.
+local T = ...
+local ns, mock = T.ns, T.mock
+local MAX = ns.Schema.MAX
+
+local function boot()
+	if not _G.DungeonPlannerDB then
+		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
+		mock.loggedIn = true
+		mock.FireEvent("PLAYER_LOGIN")
+		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+	end
+	ns.UI.Show()
+end
+
+-- A plan at every list limit on one floor: 500 markers (bosses, packs in pulls, quest givers and other notable markers
+-- the route passes), 20 routes of 200 points with a numbered stop on every fourth, 100 pulls, 40 bosses, 100
+-- objectives. `scatter`: route points anywhere on the map (the worst case for the route index) instead of a walk.
+local function limitPlan(scatter)
+	local seed = 7
+	local function rnd()
+		seed = (seed * 1103515245 + 12345) % 2147483648
+		return seed / 2147483648
+	end
+	local p = { id = "perf", floors = { { name = "Floor" } }, markers = {}, routes = {}, pulls = {}, encounters = {},
+		objectives = {} }
+	for i = 1, MAX.pulls do
+		p.pulls[i] = { id = "u" .. i, name = "Pull " .. i }
+	end
+	for i = 1, MAX.encounters do
+		p.encounters[i] = { id = "e" .. i, name = "Boss " .. i }
+	end
+	for i = 1, MAX.objectives do
+		p.objectives[i] = { id = "o" .. i, text = "Objective", encounter = "e" .. (i % MAX.encounters + 1) }
+	end
+	local kinds = { "quest_npc", "npc", "quest_item", "interactive", "pack" }
+	for i = 1, MAX.markers do
+		local m = { id = "m" .. i, floor = 1, x = rnd(), y = rnd(), label = "" }
+		if i <= MAX.encounters then
+			m.kind, m.encounter = "boss", "e" .. i
+		else
+			m.kind = kinds[i % #kinds + 1]
+			if m.kind == "pack" then
+				m.pull = "u" .. (i % MAX.pulls + 1)
+			end
+		end
+		p.markers[i] = m
+	end
+	local step = 0
+	for r = 1, MAX.routes do
+		local route = { id = "r" .. r, floor = 1, color = 1, points = {} }
+		local x, y = rnd(), rnd()
+		for k = 1, MAX.routePoints do
+			if scatter then
+				x, y = rnd(), rnd()
+			else
+				x = math.max(0, math.min(1, x + (rnd() - 0.5) * 0.08))
+				y = math.max(0, math.min(1, y + (rnd() - 0.5) * 0.08))
+			end
+			local pt = { x, y }
+			if k % 4 == 0 and step < ns.Schema.MAX_STEP then
+				step = step + 1
+				pt.step = step
+			end
+			route.points[k] = pt
+		end
+		p.routes[r] = route
+	end
+	return p
+end
+
+local function timed(fn, runs)
+	local best = math.huge
+	for _ = 1, runs or 3 do
+		local t0 = os.clock()
+		fn()
+		best = math.min(best, os.clock() - t0)
+	end
+	return best
+end
+
+T.case("Perf: Steps.Build at the schema's limits", function()
+	local walk, scatter = limitPlan(false), limitPlan(true)
+	local n
+	local t = timed(function()
+		n = #ns.Steps.Build(walk)
+	end)
+	T.ok(n > 1000, "every stop, pull, boss, notable marker and objective: " .. n)
+	-- Measured about 0.03 s (0.45 s before the follow-ups).
+	T.ok(t < 0.2, string.format("steps of a plan at the limits: %.3f s", t))
+	t = timed(function()
+		ns.Steps.Build(scatter)
+	end)
+	-- Measured about 0.07 s (0.45 s before).
+	T.ok(t < 0.35, string.format("with routes scattered over the map: %.3f s", t))
+	-- Half the plan costs about half (near-linear, not quadratic).
+	local half = limitPlan(false)
+	for _, key in ipairs({ "markers", "routes", "pulls", "objectives" }) do
+		for i = #half[key], math.floor(#half[key] / 2) + 1, -1 do
+			half[key][i] = nil
+		end
+	end
+	local tFull = timed(function()
+		ns.Steps.Build(walk)
+	end, 5)
+	local tHalf = timed(function()
+		ns.Steps.Build(half)
+	end, 5)
+	-- Generous (timing noise on a busy machine): quadratic work would take about four times as long.
+	T.ok(tFull < 6 * tHalf + 0.05, string.format("double the plan, %.3f s against %.3f s", tFull, tHalf))
+end)
+
+T.case("Perf: a pan moves the canvas only; one layout on release", function()
+	boot()
+	local entry = ns.Instances.Get("ej:63") or { key = "ej:63", name = "Test Dungeon", kind = "dungeon", ejInstanceID = 63 }
+	local plan = ns.Home.CreatePlan("dungeon", "Perf pan", entry)
+	ns.UI.SelectTab("map")
+	local view = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	for i = 1, 60 do
+		ns.Plan.AddMarker(plan, 1, (i % 10) / 10, math.floor(i / 10) / 7, "pack")
+	end
+	ns.UI.ctx:Changed("markers")
+	local realGet, cx = _G.GetCursorPosition, 100
+	_G.GetCursorPosition = function()
+		return cx, 100
+	end
+	local layouts, draws, realLayout, realDraw = 0, 0, view.Layout, view.DrawContent
+	view.Layout = function(...)
+		layouts = layouts + 1
+		return realLayout(...)
+	end
+	view.DrawContent = function(...)
+		draws = draws + 1
+		return realDraw(...)
+	end
+	view:GetScript("OnMouseDown")(view, "LeftButton")
+	local t = timed(function()
+		for _ = 1, 100 do
+			cx = cx + 2
+			view:GetScript("OnUpdate")(view, 0.016)
+		end
+	end, 3)
+	T.eq(draws + layouts, 0, "300 pointer moves, no layout")
+	T.ok(t < 0.1, string.format("100 pan moves: %.3f s", t))
+	view:GetScript("OnMouseUp")(view, "LeftButton")
+	T.eq(layouts, 1, "one layout on release")
+	view.Layout, view.DrawContent = realLayout, realDraw
+	_G.GetCursorPosition = realGet
+	ns.DB.DeletePlan(plan.id)
+end)
+
+T.case("Perf: one edit refreshes the map once", function()
+	boot()
+	local entry = ns.Instances.Get("ej:63") or { key = "ej:63", name = "Test Dungeon", kind = "dungeon", ejInstanceID = 63 }
+	local plan = ns.Home.CreatePlan("dungeon", "Perf refresh", entry)
+	ns.UI.SelectTab("map")
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	local count, real = 0, map.RefreshNow
+	map.RefreshNow = function(...)
+		count = count + 1
+		return real(...)
+	end
+	ns.Plan.AddMarker(plan, 1, 0.5, 0.5, "pack")
+	ns.UI.ctx:Changed("markers")
+	T.eq(count, 1, "one refresh for one edit")
+	count = 0
+	ns.UI.SelectTab("pulls")
+	ns.UI.SelectTab("map")
+	T.eq(count, 1, "one when the section is shown")
+	map.RefreshNow = real
+	ns.DB.DeletePlan(plan.id)
+end)
+
+T.case("Perf: the Enemies layer and boss portraits are computed once per plan revision", function()
+	boot()
+	local plan = ns.Bundled.Get("b:ragefire-chasm")
+	local realSpawns, calls = ns.Spawns, 0
+	ns.Spawns = {
+		Available = function()
+			return true
+		end,
+		For = function()
+			calls = calls + 1
+			return { { x = 0.2, y = 0.2, name = "Trogg", kind = "mob" } }
+		end,
+	}
+	local a = ns.MapSpawns.Visible(plan, 1)
+	local b = ns.MapSpawns.Visible(plan, 1)
+	T.eq(a, b, "the same list")
+	T.eq(calls, 1, "read once")
+	ns.MapSpawns.Visible(plan, 2)
+	T.eq(calls, 2, "per floor")
+	local own = ns.Util.DeepCopy(plan)
+	own.bundled = nil
+	ns.MapSpawns.Visible(own, 1)
+	ns.DB.Changed(own, "markers")
+	ns.MapSpawns.Visible(own, 1)
+	T.eq(calls, 4, "again after a change")
+	ns.Spawns = realSpawns
+	-- Portraits.
+	local enc = own.encounters[1]
+	local realFor, pairs_ = ns.Journal.EncounterFor, 0
+	ns.Journal.EncounterFor = function(...)
+		pairs_ = pairs_ + 1
+		return realFor(...)
+	end
+	for _ = 1, 20 do
+		ns.Journal.BossArt(own, enc)
+	end
+	T.ok(pairs_ <= 2, "matched once, not per call: " .. pairs_)
+	local before = pairs_
+	ns.DB.Changed(own, "encounters")
+	ns.Journal.BossArt(own, enc)
+	T.ok(pairs_ > before, "and again after a change")
+	ns.Journal.EncounterFor = realFor
+end)

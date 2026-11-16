@@ -1,0 +1,183 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-cathedral",
+ "name": "Scarlet Monastery: Cathedral",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  38,
+  46
+ ],
+ "ejInstanceID": 316,
+ "instanceMapID": 189,
+ "maps": [
+  {
+   "uiMapID": 438,
+   "floor": 1,
+   "name": "Cathedral",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Scarlet Monastery: Cathedral (outside portal)",
+   "uiMapID": 1420,
+   "floor": 0,
+   "x": 0.826,
+   "y": 0.324,
+   "approx": true,
+   "source": 4,
+   "note": "Scarlet Monastery gate in north-east Tirisfal Glades (ATT 82.6, 32.4)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "High Inquisitor Fairbanks",
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Inquisitor in the Cathedral's upper hall, before the altar room."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Scarlet Commander Mograine",
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Fights in the altar hall together with Whitemane's room behind him."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "High Inquisitor Whitemane",
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Joins after Mograine falls; she resurrects him once."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill High Inquisitor Fairbanks",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Scarlet Commander Mograine",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 438,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill High Inquisitor Whitemane",
+   "point": "p5",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Casts a strong shadow/heal pattern; interrupt his heals and keep him off the casters."
+  },
+  {
+   "boss": "p4",
+   "text": "Do not burn him down alone: Whitemane arrives mid-fight. Pull Mograine to the door side so she cannot reach the healer."
+  },
+  {
+   "boss": "p5",
+   "text": "Kill Whitemane first when both are up; she revives Mograine once, so do not tunnel the dead one. Interrupt her big heal and her sleep."
+  }
+ ],
+ "notes": "Mograine/Whitemane coordinates are only ~0.11 apart in y. The long entry corridor trash (Scarlet Monks, Chaplains, Abbots) has no sourced positions. uiMapID 438 inferred. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

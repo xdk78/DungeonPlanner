@@ -1,0 +1,293 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-graveyard",
+ "name": "Scarlet Monastery: Graveyard",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  30,
+  38
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 189,
+ "maps": [
+  {
+   "uiMapID": 302,
+   "floor": 1,
+   "name": "Graveyard",
+   "instanceMapID": 189
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/scarlet-monastery",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.845,
+   "y": 0.79,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the bottom right; a long corridor leads north into the Chamber of Atonement."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Interrogator Vishas",
+   "npcID": 3983,
+   "idSource": 5,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.72,
+   "y": 0.6,
+   "approx": true,
+   "source": 3,
+   "note": "Chamber of Atonement, the round room on the first stretch of the clear."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Bloodmage Thalnos",
+   "npcID": 4543,
+   "idSource": 5,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.24,
+   "y": 0.56,
+   "approx": true,
+   "source": 3,
+   "note": "Honor's Tomb at the west end of the Forlorn Cloister."
+  },
+  {
+   "id": "p4",
+   "kind": "rare",
+   "name": "Azshir the Sleepless",
+   "npcID": 6490,
+   "idSource": 5,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare in the Forlorn Cloister."
+  },
+  {
+   "id": "p5",
+   "kind": "rare",
+   "name": "Fallen Champion",
+   "npcID": 6488,
+   "idSource": 5,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare in the Forlorn Cloister."
+  },
+  {
+   "id": "p6",
+   "kind": "rare",
+   "name": "Ironspine",
+   "npcID": 6489,
+   "idSource": 5,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare in the Forlorn Cloister."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.845,
+   "y": 0.79,
+   "note": "Enter and follow the corridor north",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.72,
+   "y": 0.6,
+   "note": "Interrogator Vishas in the Chamber of Atonement",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.45,
+   "y": 0.55,
+   "note": "West along the Forlorn Cloister",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.24,
+   "y": 0.56,
+   "note": "Bloodmage Thalnos in Honor's Tomb, final boss",
+   "point": "p3",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.7299,
+   "y": 0.615,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.7082,
+   "y": 0.6221,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.768,
+   "y": 0.6402,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.7197,
+   "y": 0.6541,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.258,
+   "y": 0.5591,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.253,
+   "y": 0.5814,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.2991,
+   "y": 0.5392,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 302,
+   "floor": 1,
+   "x": 0.2864,
+   "y": 0.5878,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Casts Shadow Word: Pain and a fear (Psychic Scream); kill him quickly and keep the tank topped."
+  },
+  {
+   "boss": "p3",
+   "text": "Fire Nova, Flame Shock and Shadow Bolt: spread to avoid Fire Nova and interrupt the casts."
+  },
+  {
+   "boss": "p4",
+   "text": "Optional rare; avoid pulling it together with a graveyard pack."
+  },
+  {
+   "boss": "p5",
+   "text": "Optional rare in the Cloister."
+  },
+  {
+   "boss": "p6",
+   "text": "Optional rare in the Cloister."
+  }
+ ],
+ "notes": "Level range is the client's Group Finder table (30-38); NeedRoll shows 26-36. The wing shares instance map 189 with Library, Armory and Cathedral. OpenMap has no pins for Scarlet Monastery. Vishas and Thalnos are placed by the room names on the map picture (Chamber of Atonement, Honor's Tomb); the three Graveyard rares have no position. No Method page was read for this wing: strategies are short summaries of the Classic fights, and Forever may have changed them. uiMapID 302 is from the retail table (unverified)."
+}

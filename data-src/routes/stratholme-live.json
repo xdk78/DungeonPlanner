@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "slug": "stratholme-live",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles Stratholme\\Stratholme1_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default:living' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p2", "floor": 1, "at": [0.6666, 0.8662], "approx": true, "name": "Entrance (inside)"},
+      {"point": "p3", "floor": 1, "at": [0.5728, 0.6518], "approx": true, "name": "Skul"},
+      {"point": "p7", "floor": 1, "at": [0.2984, 0.4102], "approx": true, "name": "Malor the Zealous"},
+      {"point": "p8", "floor": 1, "at": [0.0382, 0.4954], "approx": true, "name": "Cannon Master Willey"},
+      {"point": "p9", "floor": 1, "at": [0.2774, 0.7397], "approx": true, "name": "Archivist Galford"}
+    ],
+    "add": [
+    ],
+    "side": [
+      {"floor": 1, "name": "Side path: The Unforgiven", "points": [[0.6056, 0.3231], [0.6805, 0.2486], [0.731, 0.179]]}
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.6302, 0.3135], "to": [0.6267, 0.3114], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5752, 0.3535], "to": [0.5778, 0.3518], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.6252, 0.3735], "to": [0.6128, 0.3653], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.7244, 0.2499], "to": [0.7196, 0.244], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5199, 0.1802], "to": [0.513, 0.1766], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.1936, 0.7681], "to": [0.1976, 0.7814], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.735, 0.201], "to": [0.5, 0.1783], "bends": [[0.6417, 0.271], [0.6098, 0.3144], [0.5858, 0.3144], [0.5549, 0.2725], [0.5339, 0.2635], [0.499, 0.2111]], "generated": true},
+    {"floor": 1, "from": [0.5, 0.1783], "to": [0.2984, 0.4102], "bends": [[0.491, 0.2096], [0.4611, 0.2545], [0.4172, 0.2859], [0.3653, 0.2919], [0.3184, 0.3503], [0.3184, 0.3728], [0.3034, 0.3952]], "generated": true},
+    {"floor": 1, "from": [0.2984, 0.4102], "to": [0.0382, 0.4954], "bends": [[0.2595, 0.4476], [0.2385, 0.4476], [0.1826, 0.5299], [0.0599, 0.5299]], "generated": true},
+    {"floor": 1, "from": [0.6666, 0.8662], "to": [0.5728, 0.6518], "bends": [[0.6635, 0.8658], [0.6699, 0.6413], [0.6683, 0.594], [0.6573, 0.582], [0.6393, 0.5714], [0.6171, 0.5615], [0.6064, 0.5612], [0.5979, 0.5735], [0.5845, 0.6263]], "import": "fdr"},
+    {"floor": 1, "from": [0.5728, 0.6518], "to": [0.6052, 0.3135], "bends": [[0.5786, 0.6246], [0.5797, 0.6013], [0.5999, 0.4688], [0.6047, 0.3429], [0.6034, 0.3192]], "import": "fdr"},
+    {"floor": 1, "from": [0.6052, 0.3135], "to": [0.735, 0.201], "bends": [[0.6083, 0.3204], [0.6805, 0.2486], [0.7259, 0.1861]], "import": "fdr"},
+    {"floor": 1, "from": [0.0382, 0.4954], "to": [0.2774, 0.7397], "bends": [[0.0441, 0.5362], [0.0648, 0.5811], [0.0762, 0.5925], [0.0844, 0.589], [0.0971, 0.5771], [0.1072, 0.5606], [0.1078, 0.5521], [0.102, 0.5176], [0.1034, 0.5101], [0.1091, 0.5035], [0.1122, 0.5035], [0.1509, 0.5696], [0.1565, 0.5682], [0.2064, 0.5198], [0.2138, 0.529], [0.2217, 0.5615], [0.2084, 0.5804], [0.2068, 0.5869], [0.2316, 0.674], [0.2297, 0.6826], [0.2174, 0.6971], [0.2189, 0.7076], [0.2335, 0.7396], [0.2413, 0.7497], [0.251, 0.752]], "import": "fdr"},
+    {"floor": 1, "from": [0.2774, 0.7397], "to": [0.204, 0.817], "bends": [[0.2055, 0.8195]], "import": "fdr"}
+  ]
+}

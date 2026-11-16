@@ -1,0 +1,130 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "onyxias-lair",
+ "name": "Onyxia's Lair",
+ "kind": "raid",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": 760,
+ "instanceMapID": 249,
+ "maps": [
+  {
+   "uiMapID": 248,
+   "floor": 1,
+   "name": "Onyxia's Lair"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Onyxia's Lair (outside portal)",
+   "uiMapID": 1445,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Onyxia's Lair cave in Dustwallow Marsh."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 248,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Onyxia",
+   "uiMapID": 248,
+   "floor": 1,
+   "x": 0.6724,
+   "y": 0.3099,
+   "approx": false,
+   "source": 1,
+   "note": "Three phases: ground, air, deep breath fear phase."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 248,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 248,
+   "floor": 1,
+   "x": 0.6724,
+   "y": 0.3099,
+   "note": "Kill Onyxia",
+   "point": "p3",
+   "approx": false
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Ground phase tank, then air phase with whelps to kill, then fear phase; stay out of the breath cone and keep a fear ward ready."
+  }
+ ],
+ "notes": "uiMapID 248 and journal ID 760 are from AllTheThings. Level 60 raid; clear the whelp rooms first. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

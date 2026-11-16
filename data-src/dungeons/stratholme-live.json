@@ -1,0 +1,491 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "stratholme-live",
+ "name": "Stratholme: Live (Main Gate)",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  58,
+  60
+ ],
+ "ejInstanceID": 236,
+ "instanceMapID": 329,
+ "maps": [
+  {
+   "uiMapID": 317,
+   "floor": 1,
+   "name": "Crusader's Square"
+  },
+  {
+   "uiMapID": 318,
+   "floor": 2,
+   "name": "The Gauntlet"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Stratholme: Live (Main Gate) (outside portal)",
+   "uiMapID": 1423,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Stratholme main gate in the Eastern Plaguelands."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "rare",
+   "name": "Skul",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, east side."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Hearthsinger Forresten",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6052,
+   "y": 0.3135,
+   "approx": false,
+   "source": 1,
+   "note": "Position per OpenMap journal data; may be off."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "The Unforgiven",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.735,
+   "y": 0.201,
+   "approx": false,
+   "source": 1,
+   "note": "North-east, near the Valley/Postmaster approach."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Timmy the Cruel",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.1783,
+   "approx": false,
+   "source": 1,
+   "note": "Position per OpenMap journal data; may be off."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Malor the Zealous",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "West of the central road."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Cannon Master Willey",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Far west."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Archivist Galford",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "South-west."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Balnazzar",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.204,
+   "y": 0.817,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss in the south-west (Crimson Dawn / Balnazzar's keep)."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Skul",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6052,
+   "y": 0.3135,
+   "note": "Kill Hearthsinger Forresten",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.735,
+   "y": 0.201,
+   "note": "Kill The Unforgiven",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.1783,
+   "note": "Kill Timmy the Cruel",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Malor the Zealous",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Cannon Master Willey",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Archivist Galford",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.204,
+   "y": 0.817,
+   "note": "Kill Balnazzar",
+   "point": "p10",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p10"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6052,
+   "y": 0.3335,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6302,
+   "y": 0.3135,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5752,
+   "y": 0.3535,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6252,
+   "y": 0.3735,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.7199,
+   "y": 0.2141,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.7186,
+   "y": 0.1821,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.7244,
+   "y": 0.2499,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.6766,
+   "y": 0.2252,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5199,
+   "y": 0.1802,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.4976,
+   "y": 0.2032,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5427,
+   "y": 0.1523,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5578,
+   "y": 0.204,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.2124,
+   "y": 0.7989,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.2267,
+   "y": 0.8275,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.1936,
+   "y": 0.7681,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.2474,
+   "y": 0.771,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p5",
+   "text": "Charges at the first player in line; tank at the door and kill his adds as they spill in."
+  },
+  {
+   "boss": "p6",
+   "text": "He enrages and hits very hard; save defensive cooldowns until after the first pull."
+  },
+  {
+   "boss": "p8",
+   "text": "Pull the guards away first; he has a cannon shot that hits the group, so stand on a spot where it hits few."
+  },
+  {
+   "boss": "p10",
+   "text": "Mind-controls and fears; the group should stay together so one player can be freed fast."
+  }
+ ],
+ "notes": "Forever splits Stratholme into Live and Undead for the Group Finder; this file is the live (Main Gate) side. Floor 2 uiMapID 318 is verified by AllTheThings (maps={318} on Stratholme). Route is typical. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

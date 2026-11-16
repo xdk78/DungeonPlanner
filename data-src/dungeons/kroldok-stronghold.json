@@ -1,0 +1,370 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "kroldok-stronghold",
+ "name": "Krol'dok Stronghold",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  40,
+  47
+ ],
+ "ejInstanceID": 3039,
+ "instanceMapID": 3039,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Krol'dok Stronghold"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.warcrafttavern.com/forever/guides/kroldok-stronghold/",
+   "what": "boss order, route, quest NPCs",
+   "forever": true
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Krol'dok Stronghold (outside portal)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.375,
+   "y": 0.373,
+   "approx": true,
+   "source": 2,
+   "note": "Cave west of the fortress gates, northern Riverglades (guide: 37.5, 37.5; FDJ/OpenMap 37.5, 37.3)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Slavecrusher Grox",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Patrols the quarry, down and right of the entrance."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Twilight Commander Zarmok",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Patrols a compound by a large gate; pull from the left wall after the arena. Gate opens after he dies."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "War Handler Ashka",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Wolf pen past Zarmok, with wolves Snarlfang and Terrorhowl."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Tunk",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Forge on the left curve; drops the Krol'dok Moulding quest item."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Zalfan Moonshadow",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Up the road past Twilight Warlocks; needed for the quest Vengeance of the Highborne."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Nar'gurk",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Ogre magi in a summoning circle at the top of the main path; carries the Tome of Twilight."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Bossman Toof",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Endurance fight over two bridges with two Krol'dok Shamans; start by pulling the Centurions at the first bridge."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Overlord Mugg",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Final boss in a house at the end of the long road; drops Eye of Mugg and the Ogre Key."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_npc",
+   "name": "Da'grosh (Horde: A Token of Vengeance)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.334,
+   "y": 0.38,
+   "approx": true,
+   "source": 6,
+   "note": "Riverglades (33.4, 38.0)."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_npc",
+   "name": "Krom'rosh (Horde: Eye of Mugg)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.595,
+   "y": 0.458,
+   "approx": true,
+   "source": 6,
+   "note": "Inside Rom'gar (59.5, 45.8)."
+  },
+  {
+   "id": "p13",
+   "kind": "quest_npc",
+   "name": "Tran'gul (Horde: Tome of Twilight)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.595,
+   "y": 0.44,
+   "approx": true,
+   "source": 6,
+   "note": "Inside Rom'gar (59.5, 44.0)."
+  },
+  {
+   "id": "p14",
+   "kind": "quest_npc",
+   "name": "Demar Brant (Alliance: Eye of Mugg)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.667,
+   "y": 0.811,
+   "approx": true,
+   "source": 6,
+   "note": "Inside Farholde Keep (66.7, 81.1)."
+  },
+  {
+   "id": "p15",
+   "kind": "quest_npc",
+   "name": "Ashe Amberhall (Alliance: Tome of Twilight)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.666,
+   "y": 0.81,
+   "approx": true,
+   "source": 6,
+   "note": "Inside Farholde Keep (66.6, 81.0)."
+  },
+  {
+   "id": "p16",
+   "kind": "quest_npc",
+   "name": "Sergeant Riftan (Alliance: Twilight Mementos)",
+   "uiMapID": 2548,
+   "floor": 0,
+   "x": 0.305,
+   "y": 0.489,
+   "approx": true,
+   "source": 6,
+   "note": "Riverglades (30.5, 48.9)."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Slavecrusher Grox",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Twilight Commander Zarmok",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill War Handler Ashka",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Tunk",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Zalfan Moonshadow",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Nar'gurk",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Bossman Toof",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Overlord Mugg",
+   "point": "p10",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p4",
+   "text": "Pull from the leftmost wall after clearing the arena so you do not drag extra packs."
+  },
+  {
+   "boss": "p9",
+   "text": "Treat it as an endurance fight over two bridges: stop at the first bridge for the Centurions, then push to Toof and his two shamans. Kill shamans first."
+  },
+  {
+   "boss": "p10",
+   "text": "Two Centurions defend him; clear them first or tank them separately from Mugg."
+  }
+ ],
+ "notes": "Order and route from the Warcraft Tavern guide (Forever). In-dungeon coordinates are not sourced anywhere I could read, so boss x/y are null. Quest NPC rows (floor 0) are OUTSIDE the dungeon: Riverglades map 2548 is assumed for all of them (the guide says Rom'gar and Farholde Keep; I did not verify they are on that map). Level range: client table says 40-47, news corrected to 40-45. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

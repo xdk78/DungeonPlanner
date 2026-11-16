@@ -1,0 +1,583 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "wailing-caverns",
+ "name": "Wailing Caverns",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Lady Anacondra",
+   "npcID": 3671,
+   "displayID": 4313,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 23381,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 20295,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 8040,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Puts a player to sleep; dispel it or leave them be."
+    },
+    {
+     "spell": 8148,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 10412,
+     "src": 1
+    },
+    {
+     "item": 273088,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Lord Cobrahn",
+   "npcID": 3669,
+   "displayID": 4213,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 7965,
+     "src": 2
+    },
+    {
+     "spell": 8040,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Puts a player to sleep; dispel it or leave them be."
+    },
+    {
+     "spell": 5188,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 9532,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 744,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 10410,
+     "src": 1
+    },
+    {
+     "item": 6460,
+     "src": 1
+    },
+    {
+     "item": 6465,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Lord Pythas",
+   "npcID": 3670,
+   "displayID": 4214,
+   "class": "elite",
+   "level": [
+    21,
+    21
+   ],
+   "abilities": [
+    {
+     "spell": 11431,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 20805,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 8040,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Puts a player to sleep; dispel it or leave them be."
+    },
+    {
+     "spell": 8147,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Hits nearby players and slows their attacks."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6472,
+     "src": 1
+    },
+    {
+     "item": 6473,
+     "src": 1
+    },
+    {
+     "item": 273089,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Kresh",
+   "npcID": 3653,
+   "displayID": 5126,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 80362,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13245,
+     "src": 1
+    },
+    {
+     "item": 12983,
+     "src": 1
+    },
+    {
+     "item": 273084,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Verdan the Everliving",
+   "npcID": 5775,
+   "displayID": 4256,
+   "class": "elite",
+   "level": [
+    21,
+    21
+   ],
+   "abilities": [
+    {
+     "spell": 8142,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 6630,
+     "src": 1
+    },
+    {
+     "item": 6631,
+     "src": 1
+    },
+    {
+     "item": 12988,
+     "src": 1
+    },
+    {
+     "item": 6629,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Lord Serpentis",
+   "npcID": 3673,
+   "displayID": 4215,
+   "class": "elite",
+   "level": [
+    21,
+    21
+   ],
+   "abilities": [
+    {
+     "spell": 23381,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 9532,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 700,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Puts a player to sleep; dispel it or leave them be."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6469,
+     "src": 1
+    },
+    {
+     "item": 12982,
+     "src": 1
+    },
+    {
+     "item": 6459,
+     "src": 1
+    },
+    {
+     "item": 10411,
+     "src": 1
+    },
+    {
+     "item": 5970,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Skum",
+   "npcID": 3674,
+   "displayID": 4203,
+   "class": "elite",
+   "level": [
+    21,
+    21
+   ],
+   "abilities": [
+    {
+     "spell": 6254,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ],
+     "note": "Chain lightning that jumps between players; interrupt it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6449,
+     "src": 1
+    },
+    {
+     "item": 12983,
+     "src": 1
+    },
+    {
+     "item": 6448,
+     "src": 1
+    },
+    {
+     "item": 273137,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Mutanus the Devourer",
+   "npcID": 3654,
+   "displayID": 4088,
+   "class": "elite",
+   "level": [
+    22,
+    22
+   ],
+   "abilities": [
+    {
+     "spell": 7967,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Puts a player to sleep; dispel it or leave them be."
+    },
+    {
+     "spell": 7399,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Fears a player; use tremor or fear ward if you have them."
+    },
+    {
+     "spell": 8150,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 6463,
+     "src": 1
+    },
+    {
+     "item": 6461,
+     "src": 1
+    },
+    {
+     "item": 6627,
+     "src": 1
+    },
+    {
+     "item": 12997,
+     "src": 1
+    },
+    {
+     "item": 21525,
+     "src": 1
+    },
+    {
+     "item": 21524,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 914,
+   "name": "Leaders of the Fang",
+   "level": 22,
+   "req": 10,
+   "side": "horde",
+   "src": 1,
+   "giver": 5770
+  },
+  {
+   "id": 959,
+   "name": "Trouble at the Docks",
+   "level": 18,
+   "req": 14,
+   "side": "both",
+   "src": 1,
+   "giver": 3665
+  },
+  {
+   "id": 962,
+   "name": "Serpentbloom",
+   "level": 18,
+   "req": 14,
+   "side": "horde",
+   "src": 1,
+   "giver": 3419
+  },
+  {
+   "id": 999,
+   "name": "When Dreams Turn to Nightmares",
+   "level": 25,
+   "req": 10,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 1486,
+   "name": "Deviate Hides",
+   "level": 17,
+   "req": 13,
+   "side": "both",
+   "src": 1,
+   "giver": 5767
+  },
+  {
+   "id": 1487,
+   "name": "Deviate Eradication",
+   "level": 21,
+   "req": 15,
+   "side": "both",
+   "src": 1,
+   "giver": 5768
+  },
+  {
+   "id": 1489,
+   "name": "Hamuul Runetotem",
+   "level": 16,
+   "req": 10,
+   "side": "horde",
+   "src": 1,
+   "giver": 3448
+  },
+  {
+   "id": 1490,
+   "name": "Nara Wildmane",
+   "level": 16,
+   "req": 10,
+   "side": "horde",
+   "src": 1,
+   "giver": 5769
+  },
+  {
+   "id": 1491,
+   "name": "Smart Drinks",
+   "level": 18,
+   "req": 13,
+   "side": "both",
+   "src": 1,
+   "giver": 3446
+  },
+  {
+   "id": 1500,
+   "name": "Waking Naralex",
+   "level": 25,
+   "req": 10,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 3366,
+   "name": "The Glowing Shard",
+   "level": 25,
+   "req": 15,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 6981,
+   "name": "The Glowing Shard",
+   "level": 26,
+   "req": 15,
+   "side": "both",
+   "src": 1
+  }
+ ]
+}

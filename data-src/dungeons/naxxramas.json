@@ -1,0 +1,458 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "naxxramas",
+ "name": "Naxxramas",
+ "kind": "raid",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 533,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Construct Quarter"
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "Arachnid Quarter"
+  },
+  {
+   "uiMapID": null,
+   "floor": 3,
+   "name": "Military Quarter"
+  },
+  {
+   "uiMapID": null,
+   "floor": 4,
+   "name": "Plague Quarter"
+  },
+  {
+   "uiMapID": null,
+   "floor": 5,
+   "name": "Hub"
+  },
+  {
+   "uiMapID": null,
+   "floor": 6,
+   "name": "Frostwyrm Lair"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Naxxramas (outside portal)",
+   "uiMapID": 1423,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Naxxramas (floating necropolis) over Eastern Plaguelands."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 5,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Anub'Rekhan",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Arachnid Quarter."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Grand Widow Faerlina",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Arachnid Quarter."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Maexxna",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Arachnid Quarter."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Instructor Razuvious",
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Military Quarter."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Gothik the Harvester",
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Military Quarter."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "The Four Horsemen",
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Military Quarter."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Noth the Plaguebringer",
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Plague Quarter."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Heigan the Unclean",
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Plague Quarter."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Loatheb",
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Plague Quarter."
+  },
+  {
+   "id": "p12",
+   "kind": "boss",
+   "name": "Patchwerk",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Construct Quarter."
+  },
+  {
+   "id": "p13",
+   "kind": "boss",
+   "name": "Grobbulus",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Construct Quarter."
+  },
+  {
+   "id": "p14",
+   "kind": "boss",
+   "name": "Gluth",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Construct Quarter."
+  },
+  {
+   "id": "p15",
+   "kind": "boss",
+   "name": "Thaddius",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Construct Quarter."
+  },
+  {
+   "id": "p16",
+   "kind": "boss",
+   "name": "Sapphiron",
+   "uiMapID": null,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Frostwyrm Lair."
+  },
+  {
+   "id": "p17",
+   "kind": "boss",
+   "name": "Kel'Thuzad",
+   "uiMapID": null,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Frostwyrm Lair final boss."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 5,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Anub'Rekhan",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Grand Widow Faerlina",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Maexxna",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Instructor Razuvious",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Gothik the Harvester",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill The Four Horsemen",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Noth the Plaguebringer",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Heigan the Unclean",
+   "point": "p10",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": null,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Loatheb",
+   "point": "p11",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Patchwerk",
+   "point": "p12",
+   "approx": true
+  },
+  {
+   "step": 12,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Grobbulus",
+   "point": "p13",
+   "approx": true
+  },
+  {
+   "step": 13,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Gluth",
+   "point": "p14",
+   "approx": true
+  },
+  {
+   "step": 14,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Thaddius",
+   "point": "p15",
+   "approx": true
+  },
+  {
+   "step": 15,
+   "uiMapID": null,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "note": "Kill Sapphiron",
+   "point": "p16",
+   "approx": true
+  },
+  {
+   "step": 16,
+   "uiMapID": null,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "note": "Kill Kel'Thuzad",
+   "point": "p17",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "OpenMap has no Naxxramas bosses. The quarters are free-order, so the route is one common order (arachnid, military, plague, construct, then the lair). Quarter names inferred from boss groupings. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

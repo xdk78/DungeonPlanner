@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "slug": "onyxias-lair",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles OnyxiasLair\\OnyxiasLair1_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (WoW dungeon journal (boss positions), paths over the walkable floors in the game's files)",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p2", "floor": 1, "at": [0.3398, 0.2094], "approx": true, "name": "Entrance (inside)"}
+    ],
+    "add": [
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.3398, 0.2094], "to": [0.6724, 0.3099], "bends": [[0.3785, 0.2674], [0.3793, 0.2802], [0.4335, 0.3604], [0.4348, 0.5683], [0.4422, 0.5811], [0.4437, 0.5891], [0.4664, 0.6232], [0.4877, 0.6638], [0.5717, 0.7892], [0.6327, 0.7905], [0.6728, 0.7275]], "import": "fdr"}
+  ]
+}

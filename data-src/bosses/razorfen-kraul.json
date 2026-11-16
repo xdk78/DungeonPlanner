@@ -1,0 +1,515 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "razorfen-kraul",
+ "name": "Razorfen Kraul",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages: which drops and spells Forever added or changed on a boss, compared with the Classic list"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Roogug",
+   "npcID": 6168,
+   "displayID": 6110,
+   "class": "elite",
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 8270,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 9532,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 14184,
+     "src": 1
+    },
+    {
+     "item": 15559,
+     "src": 1
+    },
+    {
+     "item": 15524,
+     "src": 1
+    },
+    {
+     "item": 274155,
+     "forever": true,
+     "src": 3
+    },
+    {
+     "item": 274152,
+     "forever": true,
+     "src": 3
+    },
+    {
+     "item": 274149,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Death Speaker Jargba",
+   "npcID": 4428,
+   "displayID": 4644,
+   "class": "elite",
+   "level": [
+    30,
+    30
+   ],
+   "abilities": [
+    {
+     "spell": 151253,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 2816,
+     "src": 1
+    },
+    {
+     "item": 2264,
+     "src": 1
+    },
+    {
+     "item": 4438,
+     "src": 1
+    },
+    {
+     "item": 6685,
+     "src": 1
+    },
+    {
+     "item": 6682,
+     "src": 1
+    },
+    {
+     "item": 14758,
+     "src": 1
+    },
+    {
+     "item": 14196,
+     "src": 1
+    },
+    {
+     "item": 15892,
+     "src": 1
+    },
+    {
+     "item": 15549,
+     "src": 1
+    },
+    {
+     "item": 14180,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Aggem Thorncurse",
+   "npcID": 4424,
+   "displayID": 6097,
+   "class": "elite",
+   "level": [
+    30,
+    30
+   ],
+   "abilities": [
+    {
+     "spell": 151273,
+     "src": 2,
+     "tags": [
+      "healer"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 2549,
+     "src": 1
+    },
+    {
+     "item": 14579,
+     "src": 1
+    },
+    {
+     "item": 14608,
+     "src": 1
+    },
+    {
+     "item": 15128,
+     "src": 1
+    },
+    {
+     "item": 14180,
+     "src": 1
+    },
+    {
+     "item": 15129,
+     "src": 1
+    },
+    {
+     "item": 14583,
+     "src": 1
+    },
+    {
+     "item": 274159,
+     "forever": true,
+     "src": 3
+    },
+    {
+     "item": 274158,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Overlord Ramtusk",
+   "npcID": 4420,
+   "displayID": 4652,
+   "class": "elite",
+   "level": [
+    32,
+    32
+   ],
+   "abilities": [
+    {
+     "spell": 9128,
+     "src": 2
+    },
+    {
+     "spell": 15548,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Hits nearby players and slows their attacks."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6687,
+     "src": 1
+    },
+    {
+     "item": 776,
+     "src": 1
+    },
+    {
+     "item": 6686,
+     "src": 1
+    },
+    {
+     "item": 15350,
+     "src": 1
+    },
+    {
+     "item": 14583,
+     "src": 1
+    },
+    {
+     "item": 14190,
+     "src": 1
+    },
+    {
+     "item": 14587,
+     "src": 1
+    },
+    {
+     "item": 15552,
+     "src": 1
+    },
+    {
+     "item": 14404,
+     "src": 1
+    },
+    {
+     "item": 274161,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Charlga Razorflank",
+   "npcID": 4421,
+   "displayID": 4642,
+   "class": "elite",
+   "level": [
+    33,
+    33
+   ],
+   "abilities": [
+    {
+     "spell": 8292,
+     "src": 1,
+     "note": "Chain lightning that jumps between players; interrupt it."
+    },
+    {
+     "spell": 8358,
+     "src": 1
+    },
+    {
+     "spell": 8361,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 6693,
+     "src": 1
+    },
+    {
+     "item": 6694,
+     "src": 1
+    },
+    {
+     "item": 6692,
+     "src": 1
+    },
+    {
+     "item": 776,
+     "src": 1
+    },
+    {
+     "item": 14398,
+     "src": 1
+    },
+    {
+     "item": 14761,
+     "src": 1
+    },
+    {
+     "item": 15556,
+     "src": 1
+    },
+    {
+     "item": 15560,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Agathelos the Raging",
+   "npcID": 4422,
+   "displayID": 2450,
+   "class": "elite",
+   "level": [
+    33,
+    33
+   ],
+   "abilities": [
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 8260,
+     "src": 2
+    },
+    {
+     "spell": 8285,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 6691,
+     "src": 1
+    },
+    {
+     "item": 6690,
+     "src": 1
+    },
+    {
+     "item": 14398,
+     "src": 1
+    },
+    {
+     "item": 14210,
+     "src": 1
+    },
+    {
+     "item": 15357,
+     "src": 1
+    },
+    {
+     "item": 15571,
+     "src": 1
+    },
+    {
+     "item": 14408,
+     "src": 1
+    },
+    {
+     "item": 14221,
+     "src": 1
+    },
+    {
+     "item": 15354,
+     "src": 1
+    },
+    {
+     "item": 15358,
+     "src": 1
+    },
+    {
+     "item": 14219,
+     "src": 1
+    },
+    {
+     "item": 14229,
+     "src": 1
+    },
+    {
+     "item": 274160,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1101,
+   "name": "The Crone of the Kraul",
+   "level": 34,
+   "req": 29,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4048
+  },
+  {
+   "id": 1102,
+   "name": "A Vengeful Fate",
+   "level": 34,
+   "req": 29,
+   "side": "horde",
+   "src": 1,
+   "giver": 4451
+  },
+  {
+   "id": 1109,
+   "name": "Going, Going, Guano!",
+   "level": 33,
+   "req": 30,
+   "side": "horde",
+   "src": 1,
+   "giver": 2055
+  },
+  {
+   "id": 1142,
+   "name": "Mortality Wanes",
+   "level": 30,
+   "req": 25,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4510
+  },
+  {
+   "id": 1144,
+   "name": "Willix the Importer",
+   "level": 30,
+   "req": 22,
+   "side": "both",
+   "src": 1,
+   "giver": 4508
+  },
+  {
+   "id": 1221,
+   "name": "Blueleaf Tubers",
+   "level": 26,
+   "req": 20,
+   "side": "both",
+   "src": 1,
+   "giver": 3446
+  }
+ ]
+}

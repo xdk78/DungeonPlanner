@@ -1,0 +1,396 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-cathedral",
+ "name": "Scarlet Monastery: Cathedral",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "High Inquisitor Fairbanks",
+   "npcID": 4542,
+   "displayID": 2605,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 8282,
+     "src": 2,
+     "note": "Raises physical damage taken; dispel it."
+    },
+    {
+     "spell": 15090,
+     "src": 2
+    },
+    {
+     "spell": 22678,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12039,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Heals an ally; interrupt it."
+    },
+    {
+     "spell": 11647,
+     "src": 2
+    },
+    {
+     "spell": 8399,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Sleeps the nearby group; spread and cleanse."
+    }
+   ],
+   "loot": [
+    {
+     "item": 870,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 7730,
+     "src": 1
+    },
+    {
+     "item": 7758,
+     "src": 1
+    },
+    {
+     "item": 7760,
+     "src": 1
+    },
+    {
+     "item": 2262,
+     "src": 1
+    },
+    {
+     "item": 7727,
+     "src": 1
+    },
+    {
+     "item": 8225,
+     "src": 1
+    },
+    {
+     "item": 10332,
+     "src": 1
+    },
+    {
+     "item": 19507,
+     "src": 1
+    },
+    {
+     "item": 19508,
+     "src": 1
+    },
+    {
+     "item": 19509,
+     "src": 1
+    },
+    {
+     "item": 9882,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Scarlet Commander Mograine",
+   "npcID": 3976,
+   "displayID": 2042,
+   "class": "elite",
+   "level": [
+    42,
+    42
+   ],
+   "abilities": [
+    {
+     "spell": 14518,
+     "src": 2
+    },
+    {
+     "spell": 1020,
+     "src": 2
+    },
+    {
+     "spell": 25771,
+     "src": 2
+    },
+    {
+     "spell": 5589,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 9257,
+     "src": 2
+    },
+    {
+     "spell": 8990,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 2825,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 7726,
+     "src": 1
+    },
+    {
+     "item": 7724,
+     "src": 1
+    },
+    {
+     "item": 7723,
+     "src": 1
+    },
+    {
+     "item": 10330,
+     "src": 1
+    },
+    {
+     "item": 7752,
+     "src": 1
+    },
+    {
+     "item": 7753,
+     "src": 1
+    },
+    {
+     "item": 7728,
+     "src": 1
+    },
+    {
+     "item": 7730,
+     "src": 1
+    },
+    {
+     "item": 7757,
+     "src": 1
+    },
+    {
+     "item": 7787,
+     "src": 1
+    },
+    {
+     "item": 7496,
+     "src": 1
+    },
+    {
+     "item": 8144,
+     "src": 1
+    },
+    {
+     "item": 4062,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "High Inquisitor Whitemane",
+   "npcID": 3977,
+   "displayID": 2043,
+   "class": "elite",
+   "level": [
+    42,
+    42
+   ],
+   "abilities": [
+    {
+     "spell": 225692,
+     "src": 2
+    },
+    {
+     "spell": 9232,
+     "src": 1
+    },
+    {
+     "spell": 9256,
+     "src": 1,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Sleeps the nearby group; spread and cleanse."
+    },
+    {
+     "spell": 9481,
+     "src": 1
+    },
+    {
+     "spell": 12039,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Heals an ally; interrupt it."
+    },
+    {
+     "spell": 14515,
+     "src": 1,
+     "note": "Takes over a player for a few seconds; hold your damage on them."
+    }
+   ],
+   "loot": [
+    {
+     "item": 1204,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 7722,
+     "src": 1
+    },
+    {
+     "item": 7720,
+     "src": 1
+    },
+    {
+     "item": 7721,
+     "src": 1
+    },
+    {
+     "item": 7736,
+     "src": 1
+    },
+    {
+     "item": 7495,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1048,
+   "name": "Into The Scarlet Monastery",
+   "level": 42,
+   "req": 33,
+   "side": "horde",
+   "src": 1,
+   "giver": 2425,
+   "shared": true
+  },
+  {
+   "id": 1049,
+   "name": "Compendium of the Fallen",
+   "level": 38,
+   "req": 28,
+   "side": "horde",
+   "src": 1,
+   "giver": 3978,
+   "shared": true
+  },
+  {
+   "id": 1050,
+   "name": "Mythology of the Titans",
+   "level": 38,
+   "req": 28,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3979,
+   "shared": true
+  },
+  {
+   "id": 1051,
+   "name": "Vorrel's Revenge",
+   "level": 33,
+   "req": 25,
+   "side": "horde",
+   "src": 1,
+   "giver": 3981,
+   "shared": true
+  },
+  {
+   "id": 1053,
+   "name": "In the Name of the Light",
+   "level": 40,
+   "req": 34,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3980,
+   "shared": true
+  },
+  {
+   "id": 1113,
+   "name": "Hearts of Zeal",
+   "level": 33,
+   "req": 30,
+   "side": "horde",
+   "src": 1,
+   "giver": 2055,
+   "shared": true
+  },
+  {
+   "id": 1160,
+   "name": "Test of Lore",
+   "level": 36,
+   "req": 26,
+   "side": "horde",
+   "src": 1,
+   "giver": 4488,
+   "shared": true
+  }
+ ]
+}

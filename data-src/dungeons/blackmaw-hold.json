@@ -1,0 +1,324 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackmaw-hold",
+ "name": "Blackmaw Hold",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  55,
+  60
+ ],
+ "ejInstanceID": 2974,
+ "instanceMapID": 2974,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Blackmaw Grove"
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "Festering Grotto"
+  },
+  {
+   "uiMapID": null,
+   "floor": 3,
+   "name": "Fallen Grove"
+  },
+  {
+   "uiMapID": null,
+   "floor": 4,
+   "name": "Burrow"
+  },
+  {
+   "uiMapID": null,
+   "floor": 5,
+   "name": "Elders' Cavern"
+  },
+  {
+   "uiMapID": null,
+   "floor": 6,
+   "name": "Forbidden Magic"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 9,
+   "url": "https://www.warcrafttavern.com/forever/guides/blackmaw-hold/",
+   "what": "entrance, early info",
+   "forever": true
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Blackmaw Hold (outside portal)",
+   "uiMapID": 1447,
+   "floor": 0,
+   "x": 0.386,
+   "y": 0.332,
+   "approx": true,
+   "source": 2,
+   "note": "Furbolg tunnel in northern Azshara (guide 38.7, 33.4); the portal sits at the far end, shown on Winterspring at 66.6, 84.4."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Impaan the Imprisoner",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 57."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Withermaw",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 58."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Bonesnout the Unbroken",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 58."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Elder Shaman Bloodmane",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 59."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Blackmaw Behemoth",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 59."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Unbound Spirit",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 59."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Varrox Bleakhoof",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Level 60; the only boss named in public preview info."
+  },
+  {
+   "id": "p10",
+   "kind": "rare",
+   "name": "Moontouched Wanderer",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, level 55."
+  },
+  {
+   "id": "p11",
+   "kind": "rare",
+   "name": "Gortek the Apprentice",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, level 55."
+  },
+  {
+   "id": "p12",
+   "kind": "rare",
+   "name": "Tunnelweb Matriarch",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, level 55."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Impaan the Imprisoner",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Withermaw",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Bonesnout the Unbroken",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Elder Shaman Bloodmane",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Blackmaw Behemoth",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Unbound Spirit",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Varrox Bleakhoof",
+   "point": "p9",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "The ORDER IS A GUESS (sorted by boss level). No map pins or guides exist for this dungeon yet (Warcraft Tavern says the author has not seen the inside). Sub-areas listed from ForeverDungeonJournal/OpenMap media names (Blackmaw Grove, Festering Grotto, ...); which boss is where is unknown. uiMapIDs unknown. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

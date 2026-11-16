@@ -1,0 +1,449 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "razorfen-downs",
+ "name": "Razorfen Downs",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Tuten'kash",
+   "npcID": 7355,
+   "displayID": 7845,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 12251,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Poison on a player; cleanse it."
+    },
+    {
+     "spell": 12252,
+     "src": 2,
+     "note": "Roots players in a cone; break free."
+    },
+    {
+     "spell": 12255,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Slows casting nearby; dispel it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 870,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 10776,
+     "src": 1
+    },
+    {
+     "item": 10775,
+     "src": 1
+    },
+    {
+     "item": 10777,
+     "src": 1
+    },
+    {
+     "item": 10583,
+     "src": 1
+    },
+    {
+     "item": 10582,
+     "src": 1
+    },
+    {
+     "item": 10573,
+     "src": 1
+    },
+    {
+     "item": 15979,
+     "src": 1
+    },
+    {
+     "item": 15362,
+     "src": 1
+    },
+    {
+     "item": 14592,
+     "src": 1
+    },
+    {
+     "item": 15369,
+     "src": 1
+    },
+    {
+     "item": 15580,
+     "src": 1
+    },
+    {
+     "item": 14251,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Mordresh Fire Eye",
+   "npcID": 7357,
+   "displayID": 8055,
+   "class": "elite",
+   "level": [
+    39,
+    39
+   ],
+   "abilities": [
+    {
+     "spell": 150001,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 150016,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 10770,
+     "src": 1
+    },
+    {
+     "item": 10769,
+     "src": 1
+    },
+    {
+     "item": 10771,
+     "src": 1
+    },
+    {
+     "item": 10570,
+     "src": 1
+    },
+    {
+     "item": 15595,
+     "src": 1
+    },
+    {
+     "item": 14233,
+     "src": 1
+    },
+    {
+     "item": 15154,
+     "src": 1
+    },
+    {
+     "item": 14598,
+     "src": 1
+    },
+    {
+     "item": 14600,
+     "src": 1
+    },
+    {
+     "item": 15606,
+     "src": 1
+    },
+    {
+     "item": 14223,
+     "src": 1
+    },
+    {
+     "item": 14241,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Glutton",
+   "npcID": 8567,
+   "displayID": 7864,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 12795,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true,
+     "note": "Frenzy; use a tranquilizing shot if you have one."
+    },
+    {
+     "spell": 77978,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Disease around the carrier; cleanse and keep away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 2825,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 10774,
+     "src": 1
+    },
+    {
+     "item": 10578,
+     "src": 1
+    },
+    {
+     "item": 10567,
+     "src": 1
+    },
+    {
+     "item": 10584,
+     "src": 1
+    },
+    {
+     "item": 10772,
+     "src": 1
+    },
+    {
+     "item": 15359,
+     "src": 1
+    },
+    {
+     "item": 15146,
+     "src": 1
+    },
+    {
+     "item": 15593,
+     "src": 1
+    },
+    {
+     "item": 14426,
+     "src": 1
+    },
+    {
+     "item": 15366,
+     "src": 1
+    },
+    {
+     "item": 15597,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Amnennar the Coldbringer",
+   "npcID": 7358,
+   "displayID": 7971,
+   "class": "elite",
+   "level": [
+    41,
+    41
+   ],
+   "abilities": [
+    {
+     "spell": 12642,
+     "src": 1,
+     "note": "Calls frost adds; kill them quickly."
+    },
+    {
+     "spell": 13009,
+     "src": 1
+    },
+    {
+     "spell": 15530,
+     "src": 1
+    },
+    {
+     "spell": 15531,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 2825,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 10762,
+     "src": 1
+    },
+    {
+     "item": 10763,
+     "src": 1
+    },
+    {
+     "item": 10764,
+     "src": 1
+    },
+    {
+     "item": 10761,
+     "src": 1
+    },
+    {
+     "item": 10574,
+     "src": 1
+    },
+    {
+     "item": 10582,
+     "src": 1
+    },
+    {
+     "item": 10570,
+     "src": 1
+    },
+    {
+     "item": 10578,
+     "src": 1
+    },
+    {
+     "item": 10765,
+     "src": 1
+    },
+    {
+     "item": 14896,
+     "src": 1
+    },
+    {
+     "item": 14772,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 3341,
+   "name": "Bring the End",
+   "level": 42,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 2308
+  },
+  {
+   "id": 3523,
+   "name": "Scourge of the Downs",
+   "level": 37,
+   "req": 32,
+   "side": "both",
+   "src": 1,
+   "giver": 8516
+  },
+  {
+   "id": 3525,
+   "name": "Extinguishing the Idol",
+   "level": 37,
+   "req": 32,
+   "side": "both",
+   "src": 1,
+   "giver": 8516
+  },
+  {
+   "id": 3636,
+   "name": "Bring the Light",
+   "level": 42,
+   "req": 39,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1284
+  },
+  {
+   "id": 6521,
+   "name": "An Unholy Alliance",
+   "level": 36,
+   "req": 28,
+   "side": "horde",
+   "src": 1,
+   "giver": 2425
+  },
+  {
+   "id": 6522,
+   "name": "An Unholy Alliance",
+   "level": 36,
+   "req": 28,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 6626,
+   "name": "A Host of Evil",
+   "level": 35,
+   "req": 28,
+   "side": "both",
+   "src": 1,
+   "giver": 12866
+  }
+ ]
+}

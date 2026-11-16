@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "slug": "stratholme-undead",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"2": "game map tiles Stratholme\\Stratholme2_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default:undead' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p2", "floor": 2, "at": [0.6595, 0.906], "approx": true, "name": "Entrance (inside)"}
+    ],
+    "add": [
+      {"after": 4, "floor": 2, "at": [0.72, 0.495], "note": "Black Guard Swordsmith (optional)", "approx": true}
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+    {"floor": 2, "from": [0.5424, 0.5011], "to": [0.5559, 0.5045], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.6869, 0.4465], "to": [0.6936, 0.4596], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.6805, 0.2467], "to": [0.6747, 0.2425], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.584, 0.1723], "to": [0.5768, 0.1602], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.6078, 0.2101], "to": [0.5958, 0.2111], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.4847, 0.1577], "to": [0.485, 0.1617], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 2, "from": [0.6595, 0.906], "to": [0.5724, 0.4611], "bends": [[0.6617, 0.8776], [0.6768, 0.8651], [0.6847, 0.8508], [0.6845, 0.8366], [0.6735, 0.7955], [0.6836, 0.7759], [0.6838, 0.7669], [0.6768, 0.7563], [0.6557, 0.7533], [0.6453, 0.741], [0.6321, 0.6546], [0.6154, 0.5909], [0.62, 0.5805], [0.647, 0.5503], [0.6501, 0.5404], [0.6491, 0.5315], [0.6369, 0.4948], [0.6235, 0.4731], [0.6132, 0.4668], [0.5885, 0.4635], [0.5802, 0.4592]], "import": "fdr"},
+    {"floor": 2, "from": [0.5724, 0.4611], "to": [0.7459, 0.4693], "bends": [[0.6187, 0.4606], [0.6685, 0.4833], [0.6901, 0.4877], [0.7128, 0.4824], [0.7362, 0.4637]], "import": "fdr"},
+    {"floor": 2, "from": [0.7459, 0.4693], "to": [0.72, 0.495], "bends": [[0.7362, 0.4637], [0.7158, 0.4805]], "import": "fdr"},
+    {"floor": 2, "from": [0.72, 0.495], "to": [0.6749, 0.2275], "bends": [[0.7158, 0.4805], [0.7362, 0.4637], [0.7381, 0.459], [0.7367, 0.4472], [0.6996, 0.3707], [0.68, 0.3161], [0.6748, 0.2667]], "import": "fdr"},
+    {"floor": 2, "from": [0.6749, 0.2275], "to": [0.5669, 0.1619], "bends": [[0.6737, 0.2185], [0.6612, 0.228], [0.6293, 0.2411], [0.6164, 0.2427], [0.605, 0.2416], [0.5887, 0.2333], [0.5521, 0.2051]], "import": "fdr"},
+    {"floor": 2, "from": [0.5669, 0.1619], "to": [0.4563, 0.1988], "bends": [[0.5403, 0.196], [0.5235, 0.1871], [0.4563, 0.1931]], "import": "fdr"}
+  ]
+}

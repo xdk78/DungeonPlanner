@@ -1,0 +1,638 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "zulfarrak",
+ "name": "Zul'Farrak",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  44,
+  54
+ ],
+ "ejInstanceID": 241,
+ "instanceMapID": 209,
+ "maps": [
+  {
+   "uiMapID": 219,
+   "floor": 1,
+   "name": "Zul'Farrak"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Zul'Farrak (outside portal)",
+   "uiMapID": 1446,
+   "floor": 0,
+   "x": 0.39,
+   "y": 0.19,
+   "approx": true,
+   "source": 2,
+   "note": "Zul'Farrak in Tanaris."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Antu'sul",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6462,
+   "y": 0.2766,
+   "approx": false,
+   "source": 1,
+   "note": "North-east; heals himself with snake adds."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Theka the Martyr",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5314,
+   "y": 0.2623,
+   "approx": false,
+   "source": 1,
+   "note": "North-centre; reanimates after death in Classic."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Witch Doctor Zum'rah",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4426,
+   "y": 0.1762,
+   "approx": false,
+   "source": 1,
+   "note": "North-centre ledge; summons zombie waves."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Nekrum Gutchewer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Troll boss paired with Shadowpriest Sezz'ziz, north-west."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Shadowpriest Sezz'ziz",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Shadowpriest in the north-west, fights alongside Nekrum."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Hydromancer Velratha",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3362,
+   "y": 0.4484,
+   "approx": false,
+   "source": 1,
+   "note": "West-centre; patrols near the pool. Sources differ by ~0.1."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Gahz'rilla",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.2809,
+   "y": 0.3828,
+   "approx": false,
+   "source": 1,
+   "note": "Summoned at his pool with the Mallet of Zul'Farrak. West-centre."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Chief Ukorz Sandscalp",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4221,
+   "y": 0.3299,
+   "approx": false,
+   "source": 1,
+   "note": "Top of the pyramid, final boss."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Sergeant Bly",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Prisoner event leader; the event happens on the pyramid stairs before Ukorz."
+  },
+  {
+   "id": "p12",
+   "kind": "rare",
+   "name": "Zerillis",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare near the pyramid base."
+  },
+  {
+   "id": "p13",
+   "kind": "rare",
+   "name": "Sandarr Dunereaver",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare in the central south."
+  },
+  {
+   "id": "p14",
+   "kind": "rare",
+   "name": "Dustwraith",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, west-centre."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6462,
+   "y": 0.2766,
+   "note": "Kill Antu'sul",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5314,
+   "y": 0.2623,
+   "note": "Kill Theka the Martyr",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4426,
+   "y": 0.1762,
+   "note": "Kill Witch Doctor Zum'rah",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Nekrum Gutchewer",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Shadowpriest Sezz'ziz",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3362,
+   "y": 0.4484,
+   "note": "Kill Hydromancer Velratha",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.2809,
+   "y": 0.3828,
+   "note": "Kill Gahz'rilla",
+   "point": "p9",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Sergeant Bly",
+   "point": "p11",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4221,
+   "y": 0.3299,
+   "note": "Kill Chief Ukorz Sandscalp",
+   "point": "p10",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p8"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p9"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 6,
+   "points": [
+    "p10"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6462,
+   "y": 0.2966,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6712,
+   "y": 0.2766,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6162,
+   "y": 0.3166,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.6662,
+   "y": 0.3366,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5512,
+   "y": 0.2648,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5283,
+   "y": 0.2871,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5748,
+   "y": 0.2375,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.5885,
+   "y": 0.2896,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.457,
+   "y": 0.1901,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4252,
+   "y": 0.1941,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4922,
+   "y": 0.1825,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4718,
+   "y": 0.2323,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3435,
+   "y": 0.4298,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3595,
+   "y": 0.4575,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3228,
+   "y": 0.4002,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3767,
+   "y": 0.3998,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.2938,
+   "y": 0.3981,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.2618,
+   "y": 0.3989,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3296,
+   "y": 0.394,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3043,
+   "y": 0.4416,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4034,
+   "y": 0.3369,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.4133,
+   "y": 0.3065,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3952,
+   "y": 0.372,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 219,
+   "floor": 1,
+   "x": 0.3589,
+   "y": 0.3322,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Tank him away from the pack and kill the snake adds as they spawn."
+  },
+  {
+   "boss": "p5",
+   "text": "Summons zombies from graves; clear or tank them away from the healer."
+  },
+  {
+   "boss": "p9",
+   "text": "Needs a summon item. Keep the healer out of range of his frost effects."
+  },
+  {
+   "boss": "p10",
+   "text": "Fight at the top of the pyramid; survive the prisoner event first so you arrive with full resources."
+  }
+ ],
+ "notes": "Route order is an estimate of a clean clear; Zul'Farrak is open-ended. uiMapID 219 from AllTheThings. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

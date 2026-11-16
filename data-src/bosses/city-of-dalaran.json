@@ -1,0 +1,522 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "city-of-dalaran",
+ "name": "City of Dalaran",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Atrexis the Grave Knight",
+   "npcID": 247126,
+   "level": [
+    29,
+    29
+   ],
+   "abilities": [
+    {
+     "spell": 6713,
+     "src": 3,
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 1303266,
+     "src": 3
+    },
+    {
+     "spell": 1303264,
+     "src": 3
+    },
+    {
+     "spell": 3391,
+     "src": 3
+    },
+    {
+     "spell": 12057,
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 273036,
+     "src": 2
+    },
+    {
+     "item": 273032,
+     "src": 2
+    },
+    {
+     "item": 273033,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 145787
+  },
+  {
+   "point": "p3",
+   "name": "Lyn the Ignored",
+   "npcID": 247032,
+   "level": [
+    31,
+    31
+   ],
+   "abilities": [
+    {
+     "spell": 1304473,
+     "src": 3,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 1303266,
+     "src": 3
+    },
+    {
+     "spell": 17228,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 273054,
+     "src": 2
+    },
+    {
+     "item": 273055,
+     "src": 2
+    },
+    {
+     "item": 273053,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 130235
+  },
+  {
+   "point": "p4",
+   "name": "Arcane Anomaly",
+   "loot": [
+    {
+     "item": 273031,
+     "src": 2
+    },
+    {
+     "item": 273034,
+     "src": 2
+    },
+    {
+     "item": 273035,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 245999,
+   "displayID": 129891,
+   "abilities": [
+    {
+     "spell": 1240682,
+     "tags": [
+      "interrupt"
+     ],
+     "src": 3
+    },
+    {
+     "spell": 1241501,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p5",
+   "name": "Arcanic Enigma",
+   "npcID": 246016,
+   "level": [
+    30,
+    30
+   ],
+   "abilities": [
+    {
+     "spell": 1224125,
+     "tags": [
+      "healer",
+      "dispel"
+     ],
+     "src": 3
+    },
+    {
+     "spell": 1240869,
+     "src": 3,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Turns a player into an animal; dispel or wait."
+    },
+    {
+     "spell": 1304455,
+     "src": 3
+    },
+    {
+     "spell": 8988,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Silences nearby casters; melee keep going."
+    }
+   ],
+   "loot": [
+    {
+     "item": 273045,
+     "src": 2
+    },
+    {
+     "item": 273043,
+     "src": 2
+    },
+    {
+     "item": 273044,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 129900
+  },
+  {
+   "point": "p6",
+   "name": "Unstable Sentinel",
+   "npcID": 246017,
+   "level": [
+    31,
+    31
+   ],
+   "abilities": [
+    {
+     "spell": 1241329,
+     "src": 3
+    },
+    {
+     "spell": 16169,
+     "src": 3,
+     "note": "Sweeping blow in front of it; do not stand there."
+    },
+    {
+     "spell": 1241325,
+     "src": 3,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 273046,
+     "src": 2
+    },
+    {
+     "item": 273047,
+     "src": 2
+    },
+    {
+     "item": 273048,
+     "src": 2
+    },
+    {
+     "item": 273099,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 129954
+  },
+  {
+   "point": "p7",
+   "name": "Fel Ancient",
+   "npcID": 246003,
+   "level": [
+    32,
+    32
+   ],
+   "abilities": [
+    {
+     "spell": 1240692,
+     "src": 3,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 1240688,
+     "src": 3,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Roots players near it; dispel it."
+    },
+    {
+     "spell": 1240687,
+     "src": 3,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 273038,
+     "src": 2
+    },
+    {
+     "item": 273039,
+     "src": 2
+    },
+    {
+     "item": 273037,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 129894
+  },
+  {
+   "point": "p8",
+   "name": "Mana Devourer",
+   "npcID": 246008,
+   "loot": [
+    {
+     "item": 273041,
+     "src": 2
+    },
+    {
+     "item": 273042,
+     "src": 2
+    },
+    {
+     "item": 273040,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "displayID": 129895,
+   "abilities": [
+    {
+     "spell": 1240750,
+     "src": 3
+    },
+    {
+     "spell": 1240738,
+     "tags": [
+      "dispel"
+     ],
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p9",
+   "name": "Shade of the Archmage",
+   "npcID": 246020,
+   "level": [
+    33,
+    33
+   ],
+   "abilities": [
+    {
+     "spell": 1241515,
+     "src": 3,
+     "note": "A mana orb chases a player; lead it away from the group."
+    },
+    {
+     "spell": 1303598,
+     "src": 3,
+     "note": "Turns nearby players into animals; dispel or wait."
+    },
+    {
+     "spell": 1304398,
+     "src": 3,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 1241506,
+     "src": 3
+    },
+    {
+     "spell": 1303350,
+     "tags": [
+      "dispel"
+     ],
+     "src": 3
+    },
+    {
+     "spell": 1303599,
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 251961,
+     "src": 3
+    },
+    {
+     "item": 273051,
+     "src": 2
+    },
+    {
+     "item": 273052,
+     "src": 2
+    },
+    {
+     "item": 273049,
+     "src": 2
+    },
+    {
+     "item": 273103,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 130061
+  }
+ ],
+ "quests": [
+  {
+   "id": 92456,
+   "name": "A Green Sample",
+   "level": 33,
+   "req": 24,
+   "side": "alliance",
+   "src": 2,
+   "giver": 5502
+  },
+  {
+   "id": 92458,
+   "name": "Heart of Disruption",
+   "level": 33,
+   "req": 24,
+   "side": "alliance",
+   "src": 2,
+   "giver": 269127,
+   "items": [
+    277507
+   ]
+  },
+  {
+   "id": 96984,
+   "name": "Heart of Disruption",
+   "level": 33,
+   "req": 24,
+   "side": "horde",
+   "src": 2,
+   "giver": 269127,
+   "items": [
+    277507
+   ]
+  },
+  {
+   "id": 96987,
+   "name": "Opportunistic Education",
+   "level": 33,
+   "req": 24,
+   "side": "horde",
+   "src": 2,
+   "giver": 268743
+  },
+  {
+   "id": 92489,
+   "name": "Power Overwhelming",
+   "level": 33,
+   "req": 24,
+   "side": "alliance",
+   "src": 2,
+   "giver": 5694
+  },
+  {
+   "id": 96988,
+   "name": "Source of Power",
+   "level": 33,
+   "req": 24,
+   "side": "horde",
+   "src": 2,
+   "giver": 11044
+  },
+  {
+   "id": 92457,
+   "name": "Starving Arcane",
+   "level": 33,
+   "req": 24,
+   "side": "alliance",
+   "src": 2,
+   "giver": 269127
+  },
+  {
+   "id": 96986,
+   "name": "The Grave Knight",
+   "level": 33,
+   "req": 24,
+   "side": "horde",
+   "src": 2,
+   "giver": 2278
+  }
+ ]
+}

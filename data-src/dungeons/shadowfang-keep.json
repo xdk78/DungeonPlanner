@@ -1,0 +1,711 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "shadowfang-keep",
+ "name": "Shadowfang Keep",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  20,
+  30
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 33,
+ "maps": [
+  {
+   "uiMapID": 310,
+   "floor": 1,
+   "name": "The Courtyard",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 311,
+   "floor": 2,
+   "name": "Dining Hall",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 312,
+   "floor": 3,
+   "name": "The Vacant Den",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 313,
+   "floor": 4,
+   "name": "Lower Observatory",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 314,
+   "floor": 5,
+   "name": "Upper Observatory",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 315,
+   "floor": 6,
+   "name": "Lord Godfrey's Chamber",
+   "instanceMapID": 33
+  },
+  {
+   "uiMapID": 316,
+   "floor": 7,
+   "name": "The Wall Walk",
+   "instanceMapID": 33
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/shadowfang-keep",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in (Courtyard)",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.71,
+   "y": 0.6,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the east edge of the Courtyard map."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Rethilgore",
+   "npcID": 3914,
+   "idSource": 6,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.7,
+   "approx": true,
+   "source": 3,
+   "note": "Tinted kennel room on the Courtyard map."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Razorclaw the Butcher",
+   "npcID": 3886,
+   "idSource": 6,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source)."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Baron Silverlaine",
+   "npcID": 3887,
+   "idSource": 6,
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.3044,
+   "y": 0.774,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Commander Springvale",
+   "npcID": 4278,
+   "idSource": 6,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.2804,
+   "y": 0.5973,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Odo the Blindwatcher",
+   "npcID": 4279,
+   "idSource": 6,
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.6,
+   "y": 0.79,
+   "approx": true,
+   "source": 3,
+   "note": "Tinted room on the Wall Walk map."
+  },
+  {
+   "id": "p7",
+   "kind": "rare",
+   "name": "Deathsworn Captain",
+   "npcID": 3872,
+   "idSource": 6,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare; Method places him after Odo."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Fenrus the Devourer",
+   "npcID": 4274,
+   "idSource": 6,
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.54,
+   "y": 0.5,
+   "approx": true,
+   "source": 3,
+   "note": "Centre of the tinted round Lower Observatory room."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Wolf Master Nandos",
+   "npcID": 3927,
+   "idSource": 6,
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.56,
+   "y": 0.62,
+   "approx": true,
+   "source": 3,
+   "note": "Tinted room in Lord Godfrey's Chamber map; guards Arugal's door."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Archmage Arugal",
+   "npcID": 4275,
+   "idSource": 6,
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.68,
+   "y": 0.32,
+   "approx": true,
+   "source": 3,
+   "note": "Tinted large chamber at the top of the Lord Godfrey's Chamber map."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_item",
+   "name": "Head of Arugal",
+   "itemID": 5442,
+   "idSource": 6,
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.68,
+   "y": 0.32,
+   "approx": true,
+   "source": 3,
+   "note": "Dropped by Arugal."
+  },
+  {
+   "id": "p12",
+   "kind": "pack",
+   "name": "Kennel guards around Rethilgore",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.68,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Shadowfang trash with Rethilgore in the blue kennel room."
+  },
+  {
+   "id": "p13",
+   "kind": "pack",
+   "name": "Wailing Guardsmen and Haunted Servitors near Springvale",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.3,
+   "y": 0.58,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: kill the Guardsman first (AoE silence)."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.71,
+   "y": 0.6,
+   "note": "Enter the Courtyard",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.7,
+   "note": "Rethilgore in the kennel (Courtyard)",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Razorclaw the Butcher (floor 2, up the stairs)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.3044,
+   "y": 0.774,
+   "note": "Baron Silverlaine (floor 2, south end)",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.2804,
+   "y": 0.5973,
+   "note": "Back down to the Courtyard: Commander Springvale (floor 1, west)",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.6,
+   "y": 0.79,
+   "note": "Odo the Blindwatcher on the Wall Walk (floor 7)",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.54,
+   "y": 0.5,
+   "note": "Fenrus in the Lower Observatory (floor 4)",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.56,
+   "y": 0.62,
+   "note": "Up to Lord Godfrey's Chamber: Wolf Master Nandos (floor 6)",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.68,
+   "y": 0.32,
+   "note": "Archmage Arugal in the same chamber, final boss",
+   "point": "p10",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p12",
+    "p2"
+   ],
+   "note": "Kennel: Rethilgore with a few adds; stun through Soul Drain."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p13",
+    "p5"
+   ],
+   "note": "Springvale with Guardsman and Servitor; Guardsman dies first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.668,
+   "y": 0.6839,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.685,
+   "y": 0.6991,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.6707,
+   "y": 0.6383,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.707,
+   "y": 0.6732,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.3044,
+   "y": 0.792,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.2824,
+   "y": 0.786,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.3224,
+   "y": 0.834,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 311,
+   "floor": 2,
+   "x": 0.2744,
+   "y": 0.819,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.2978,
+   "y": 0.602,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.2862,
+   "y": 0.6217,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.343,
+   "y": 0.5956,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 310,
+   "floor": 1,
+   "x": 0.316,
+   "y": 0.638,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.6,
+   "y": 0.808,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.578,
+   "y": 0.802,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.618,
+   "y": 0.85,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 316,
+   "floor": 7,
+   "x": 0.57,
+   "y": 0.835,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.54,
+   "y": 0.518,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.518,
+   "y": 0.512,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.558,
+   "y": 0.56,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 313,
+   "floor": 4,
+   "x": 0.51,
+   "y": 0.545,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.56,
+   "y": 0.638,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.538,
+   "y": 0.632,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.578,
+   "y": 0.68,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.53,
+   "y": 0.665,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.6733,
+   "y": 0.3367,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.6551,
+   "y": 0.323,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.6744,
+   "y": 0.3824,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 315,
+   "floor": 6,
+   "x": 0.6354,
+   "y": 0.3506,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Soul Drain stuns and drains the target; stun back when possible. Kill adds, then the boss."
+  },
+  {
+   "boss": "p3",
+   "text": "Only Butcher Drain (drains a resource). Kill the adds first."
+  },
+  {
+   "boss": "p4",
+   "text": "Veil of Shadow on the tank cuts healing received by 75% for 15 s; healers cover. Do not pull extra adds."
+  },
+  {
+   "boss": "p5",
+   "text": "Paladin with stun, Holy Light and Divine Shield. Kill the Wailing Guardsman first, then the Haunted Servitor, then him."
+  },
+  {
+   "boss": "p6",
+   "text": "Two Vile Bats cleave and disarm; kill them first and keep them off the group. Howling Rage ramps his damage, so keep the fight short."
+  },
+  {
+   "boss": "p7",
+   "text": "Cleave and Hamstring. Do not pull with trash."
+  },
+  {
+   "boss": "p8",
+   "text": "Toxic Saliva (poison) needs a cleanse; otherwise an easy melee fight."
+  },
+  {
+   "boss": "p9",
+   "text": "Four wolves guard him; killing them pulls him. He summons a Bleak Worg or Lupine Horror: kill the summon, then him."
+  },
+  {
+   "boss": "p10",
+   "text": "Void Bolt hits the tank hard, so the tank breaks line of sight during casts. Arugal's Curse mind-controls a player for 10 s: taunt the controlled player's target or crowd-control the player. He teleports (Shadow Port) and uses Thundershock."
+  }
+ ],
+ "notes": "Floor numbering follows OpenMap's map list (1 Courtyard ... 7 Wall Walk) and the uiMapID table 310-316. Only Baron Silverlaine and Commander Springvale have OpenMap (Encounter Journal) pins. Rethilgore, Fenrus, Nandos, Arugal and Odo are estimates read off the tinted boss rooms on the map picture; Razorclaw and the Deathsworn Captain have no position (floor of Razorclaw is also unsourced; floor 1 is a placeholder). NeedRoll was used only as a cross-check. Stair/door transitions between floors are not on the map art, so the route lists boss order only. Forever's loot adds new items (Sorcerer Collar, Blade of Silverlaine, ...) but no layout change was reported. Quest givers are all outside; Arugal drops the Head of Arugal (itemID 5442). Method mentions the Black Tome in Arugal's room (used for the City of Dalaran key chain)."
+}

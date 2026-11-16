@@ -1,0 +1,271 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-graveyard",
+ "name": "Scarlet Monastery: Graveyard",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Interrogator Vishas",
+   "npcID": 3983,
+   "displayID": 2044,
+   "class": "elite",
+   "level": [
+    32,
+    32
+   ],
+   "abilities": [
+    {
+     "spell": 9034,
+     "src": 2
+    },
+    {
+     "spell": 14032,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 7682,
+     "src": 1
+    },
+    {
+     "item": 5819,
+     "src": 1
+    },
+    {
+     "item": 7727,
+     "src": 1
+    },
+    {
+     "item": 1717,
+     "src": 1
+    },
+    {
+     "item": 4301,
+     "src": 1
+    },
+    {
+     "item": 7728,
+     "src": 1
+    },
+    {
+     "item": 7729,
+     "src": 1
+    },
+    {
+     "item": 7752,
+     "src": 1
+    },
+    {
+     "item": 7787,
+     "src": 1
+    },
+    {
+     "item": 9719,
+     "src": 1
+    },
+    {
+     "item": 4716,
+     "src": 1
+    },
+    {
+     "item": 4351,
+     "src": 1
+    },
+    {
+     "item": 274290,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Bloodmage Thalnos",
+   "npcID": 4543,
+   "displayID": 11396,
+   "class": "elite",
+   "level": [
+    34,
+    34
+   ],
+   "abilities": [
+    {
+     "spell": 12470,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23038,
+     "src": 2
+    },
+    {
+     "spell": 8814,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire zone on the ground; move out of it."
+    },
+    {
+     "spell": 20825,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 7685,
+     "src": 1
+    },
+    {
+     "item": 3871,
+     "src": 1
+    },
+    {
+     "item": 7728,
+     "src": 1
+    },
+    {
+     "item": 2262,
+     "src": 1
+    },
+    {
+     "item": 7729,
+     "src": 1
+    },
+    {
+     "item": 7753,
+     "src": 1
+    },
+    {
+     "item": 7761,
+     "src": 1
+    },
+    {
+     "item": 8225,
+     "src": 1
+    },
+    {
+     "item": 10332,
+     "src": 1
+    },
+    {
+     "item": 7684,
+     "src": 1
+    },
+    {
+     "item": 274291,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1048,
+   "name": "Into The Scarlet Monastery",
+   "level": 42,
+   "req": 33,
+   "side": "horde",
+   "src": 1,
+   "giver": 2425,
+   "shared": true
+  },
+  {
+   "id": 1049,
+   "name": "Compendium of the Fallen",
+   "level": 38,
+   "req": 28,
+   "side": "horde",
+   "src": 1,
+   "giver": 3978,
+   "shared": true
+  },
+  {
+   "id": 1050,
+   "name": "Mythology of the Titans",
+   "level": 38,
+   "req": 28,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3979,
+   "shared": true
+  },
+  {
+   "id": 1051,
+   "name": "Vorrel's Revenge",
+   "level": 33,
+   "req": 25,
+   "side": "horde",
+   "src": 1,
+   "giver": 3981,
+   "shared": true
+  },
+  {
+   "id": 1053,
+   "name": "In the Name of the Light",
+   "level": 40,
+   "req": 34,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3980,
+   "shared": true
+  },
+  {
+   "id": 1113,
+   "name": "Hearts of Zeal",
+   "level": 33,
+   "req": 30,
+   "side": "horde",
+   "src": 1,
+   "giver": 2055,
+   "shared": true
+  },
+  {
+   "id": 1160,
+   "name": "Test of Lore",
+   "level": 36,
+   "req": 26,
+   "side": "horde",
+   "src": 1,
+   "giver": 4488,
+   "shared": true
+  }
+ ]
+}

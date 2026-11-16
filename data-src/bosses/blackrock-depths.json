@@ -1,0 +1,1812 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackrock-depths",
+ "name": "Blackrock Depths",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "High Interrogator Gerstahn",
+   "npcID": 9018,
+   "displayID": 8761,
+   "class": "elite",
+   "level": [
+    52,
+    52
+   ],
+   "abilities": [
+    {
+     "spell": 14033,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 13704,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Fears several players; spread out so fewer are hit."
+    },
+    {
+     "spell": 14032,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 12040,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11624,
+     "src": 1
+    },
+    {
+     "item": 11625,
+     "src": 1
+    },
+    {
+     "item": 11626,
+     "src": 1
+    },
+    {
+     "item": 22240,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Lord Roccor",
+   "npcID": 9025,
+   "displayID": 5781,
+   "class": "rareelite",
+   "level": [
+    51,
+    51
+   ],
+   "abilities": [
+    {
+     "spell": 6524,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Stuns everyone near the boss; keep the casters back."
+    },
+    {
+     "spell": 13728,
+     "src": 2,
+     "note": "Hurts and interrupts a caster; keep casters out of reach."
+    },
+    {
+     "spell": 13729,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Burning damage over time; dispel it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 11632,
+     "src": 1
+    },
+    {
+     "item": 11631,
+     "src": 1
+    },
+    {
+     "item": 22397,
+     "src": 1
+    },
+    {
+     "item": 22234,
+     "src": 1
+    },
+    {
+     "item": 11630,
+     "src": 1
+    },
+    {
+     "item": 11813,
+     "src": 1
+    },
+    {
+     "item": 10198,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Houndmaster Grebmar",
+   "npcID": 9319,
+   "displayID": 9212,
+   "class": "elite",
+   "level": [
+    52,
+    52
+   ],
+   "abilities": [
+    {
+     "spell": 86629,
+     "src": 2
+    },
+    {
+     "spell": 13730,
+     "src": 2
+    },
+    {
+     "spell": 15615,
+     "src": 2
+    },
+    {
+     "spell": 21049,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Speeds up an ally; dispel it or save cooldowns."
+    }
+   ],
+   "loot": [
+    {
+     "item": 942,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 11627,
+     "src": 1
+    },
+    {
+     "item": 11623,
+     "src": 1
+    },
+    {
+     "item": 11629,
+     "src": 1
+    },
+    {
+     "item": 11628,
+     "src": 1
+    },
+    {
+     "item": 12550,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Ring of Law",
+   "npcID": 9027,
+   "members": [
+    9028,
+    9029,
+    9030,
+    9031,
+    9032
+   ],
+   "displayID": 8760,
+   "class": "elite",
+   "level": [
+    56,
+    56
+   ],
+   "abilities": [
+    {
+     "spell": 13736,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Spins and hits everyone close; get out of melee range."
+    },
+    {
+     "spell": 15708,
+     "src": 1,
+     "note": "Cuts healing on the tank; plan extra healing or swap."
+    },
+    {
+     "spell": 21049,
+     "src": 1,
+     "note": "Speeds up an ally; dispel it or save cooldowns."
+    }
+   ],
+   "loot": [
+    {
+     "item": 11726,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 2824,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 812,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 11610,
+     "src": 1
+    },
+    {
+     "item": 11675,
+     "src": 1
+    },
+    {
+     "item": 11662,
+     "src": 1
+    },
+    {
+     "item": 11679,
+     "src": 1
+    },
+    {
+     "item": 11633,
+     "src": 1
+    },
+    {
+     "item": 11703,
+     "src": 1
+    },
+    {
+     "item": 11677,
+     "src": 1
+    },
+    {
+     "item": 11685,
+     "src": 1
+    },
+    {
+     "item": 11702,
+     "src": 1
+    },
+    {
+     "item": 11665,
+     "src": 1
+    },
+    {
+     "item": 11634,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Bael'Gar",
+   "npcID": 9016,
+   "displayID": 12162,
+   "class": "elite",
+   "level": [
+    54,
+    54
+   ],
+   "abilities": [
+    {
+     "spell": 23379,
+     "src": 2
+    },
+    {
+     "spell": 13895,
+     "src": 2,
+     "tags": [
+      "deadly"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11802,
+     "src": 1
+    },
+    {
+     "item": 11803,
+     "src": 1
+    },
+    {
+     "item": 11807,
+     "src": 1
+    },
+    {
+     "item": 11805,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Lord Incendius",
+   "npcID": 9017,
+   "displayID": 1204,
+   "class": "elite",
+   "level": [
+    55,
+    55
+   ],
+   "abilities": [
+    {
+     "spell": 13899,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire zone on the ground; move out of it."
+    },
+    {
+     "spell": 13900,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 14099,
+     "src": 2,
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 26977,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11764,
+     "src": 1
+    },
+    {
+     "item": 11766,
+     "src": 1
+    },
+    {
+     "item": 11767,
+     "src": 1
+    },
+    {
+     "item": 11765,
+     "src": 1
+    },
+    {
+     "item": 19268,
+     "src": 1
+    },
+    {
+     "item": 12531,
+     "src": 1
+    },
+    {
+     "item": 12535,
+     "src": 1
+    },
+    {
+     "item": 11768,
+     "src": 1
+    },
+    {
+     "item": 13489,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Fineous Darkvire",
+   "npcID": 9056,
+   "displayID": 8704,
+   "class": "elite",
+   "level": [
+    54,
+    54
+   ],
+   "abilities": [
+    {
+     "spell": 13953,
+     "src": 2
+    },
+    {
+     "spell": 17232,
+     "src": 2
+    },
+    {
+     "spell": 343151,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 283681,
+     "src": 2
+    },
+    {
+     "spell": 284436,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11841,
+     "src": 1
+    },
+    {
+     "item": 11842,
+     "src": 1
+    },
+    {
+     "item": 11839,
+     "src": 1
+    },
+    {
+     "item": 22223,
+     "src": 1
+    },
+    {
+     "item": 12552,
+     "src": 1
+    },
+    {
+     "item": 12542,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Pyromancer Loregrain",
+   "npcID": 9024,
+   "displayID": 8762,
+   "class": "rareelite",
+   "level": [
+    52,
+    52
+   ],
+   "abilities": [
+    {
+     "spell": 15038,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 62546,
+     "src": 2
+    },
+    {
+     "spell": 15616,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 15095,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 15041,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11748,
+     "src": 1
+    },
+    {
+     "item": 11747,
+     "src": 1
+    },
+    {
+     "item": 11749,
+     "src": 1
+    },
+    {
+     "item": 11750,
+     "src": 1
+    },
+    {
+     "item": 11207,
+     "src": 1
+    },
+    {
+     "item": 15291,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Warder Stilgiss",
+   "npcID": 9041,
+   "displayID": 9089,
+   "class": "rareelite",
+   "level": [
+    56,
+    56
+   ],
+   "abilities": [
+    {
+     "spell": 12674,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Roots nearby players; dispel or kill it from range."
+    },
+    {
+     "spell": 12675,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 12544,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 6136,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 15044,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 15042,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11783,
+     "src": 1
+    },
+    {
+     "item": 11782,
+     "src": 1
+    },
+    {
+     "item": 11784,
+     "src": 1
+    },
+    {
+     "item": 22241,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p12",
+   "name": "Hurley Blackbreath",
+   "npcID": 9537,
+   "displayID": 8658,
+   "class": "elite",
+   "level": [
+    55,
+    55
+   ],
+   "abilities": [
+    {
+     "spell": 9573,
+     "src": 2
+    },
+    {
+     "spell": 14872,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14552,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18044,
+     "src": 1
+    },
+    {
+     "item": 18043,
+     "src": 1
+    },
+    {
+     "item": 22275,
+     "src": 1
+    },
+    {
+     "item": 11735,
+     "src": 1
+    },
+    {
+     "item": 11732,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p13",
+   "name": "Phalanx",
+   "npcID": 9502,
+   "displayID": 8177,
+   "class": "elite",
+   "level": [
+    55,
+    55
+   ],
+   "abilities": [
+    {
+     "spell": 15285,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 15588,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits nearby players and slows their attacks."
+    }
+   ],
+   "loot": [
+    {
+     "item": 11745,
+     "src": 1
+    },
+    {
+     "item": 11744,
+     "src": 1
+    },
+    {
+     "item": 22212,
+     "src": 1
+    },
+    {
+     "item": 11746,
+     "src": 1
+    },
+    {
+     "item": 12550,
+     "src": 1
+    },
+    {
+     "item": 11743,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p14",
+   "name": "Ribbly Screwspigot",
+   "npcID": 9543,
+   "displayID": 8667,
+   "class": "elite",
+   "level": [
+    53,
+    53
+   ],
+   "abilities": [
+    {
+     "spell": 9080,
+     "src": 2
+    },
+    {
+     "spell": 12540,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 11612,
+     "src": 1
+    },
+    {
+     "item": 11742,
+     "src": 1
+    },
+    {
+     "item": 2663,
+     "src": 1
+    },
+    {
+     "item": 2662,
+     "src": 1
+    },
+    {
+     "item": 10198,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p15",
+   "name": "Plugger Spazzring",
+   "npcID": 9499,
+   "displayID": 8652,
+   "class": "elite",
+   "level": [
+    55,
+    55
+   ],
+   "abilities": [
+    {
+     "spell": 125212,
+     "src": 2
+    },
+    {
+     "spell": 348,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 79934,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 1714,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "healer"
+     ],
+     "note": "Slows casting; dispel it or avoid casting for a moment."
+    },
+    {
+     "spell": 710,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 12793,
+     "src": 1
+    },
+    {
+     "item": 12791,
+     "src": 1
+    },
+    {
+     "item": 18653,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p16",
+   "name": "Golem Lord Argelmach",
+   "npcID": 8983,
+   "displayID": 8759,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 15305,
+     "src": 2
+    },
+    {
+     "spell": 15605,
+     "src": 2
+    },
+    {
+     "spell": 15507,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11823,
+     "src": 1
+    },
+    {
+     "item": 11822,
+     "src": 1
+    },
+    {
+     "item": 11669,
+     "src": 1
+    },
+    {
+     "item": 11819,
+     "src": 1
+    },
+    {
+     "item": 12542,
+     "src": 1
+    },
+    {
+     "item": 10374,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p17",
+   "name": "General Angerforge",
+   "npcID": 9033,
+   "displayID": 8756,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 15572,
+     "src": 2,
+     "note": "Strips the tank's armor; expect more damage."
+    },
+    {
+     "spell": 15061,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 36678,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ],
+     "note": "Heals an ally; interrupt it."
+    },
+    {
+     "spell": 596,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 8092,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 13864,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 11820,
+     "src": 1
+    },
+    {
+     "item": 11816,
+     "src": 1
+    },
+    {
+     "item": 11821,
+     "src": 1
+    },
+    {
+     "item": 11817,
+     "src": 1
+    },
+    {
+     "item": 11810,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p18",
+   "name": "Ambassador Flamelash",
+   "npcID": 9156,
+   "displayID": 8329,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 14744,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 11808,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 11812,
+     "src": 1
+    },
+    {
+     "item": 11814,
+     "src": 1
+    },
+    {
+     "item": 11809,
+     "src": 1
+    },
+    {
+     "item": 11832,
+     "src": 1
+    },
+    {
+     "item": 12532,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p19",
+   "name": "The Seven",
+   "npcID": 9039,
+   "members": [
+    9037,
+    9038,
+    9035,
+    9040,
+    9034,
+    9036
+   ],
+   "displayID": 8687,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 8994,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12493,
+     "src": 1
+    },
+    {
+     "spell": 12742,
+     "src": 1
+    },
+    {
+     "spell": 13787,
+     "src": 1
+    },
+    {
+     "spell": 15092,
+     "src": 1
+    },
+    {
+     "spell": 15245,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 11925,
+     "src": 1
+    },
+    {
+     "item": 11927,
+     "src": 1
+    },
+    {
+     "item": 11923,
+     "src": 1
+    },
+    {
+     "item": 11926,
+     "src": 1
+    },
+    {
+     "item": 11929,
+     "src": 1
+    },
+    {
+     "item": 11921,
+     "src": 1
+    },
+    {
+     "item": 11922,
+     "src": 1
+    },
+    {
+     "item": 11920,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p20",
+   "name": "Magmus",
+   "npcID": 9938,
+   "displayID": 12162,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 13900,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24375,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns and knocks back close players; stay out of melee range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 11746,
+     "src": 1
+    },
+    {
+     "item": 11935,
+     "src": 1
+    },
+    {
+     "item": 22208,
+     "src": 1
+    },
+    {
+     "item": 22400,
+     "src": 1
+    },
+    {
+     "item": 22395,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p21",
+   "name": "Princess Moira Bronzebeard",
+   "npcID": 8929,
+   "displayID": 8705,
+   "class": "elite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 84822,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Heals an ally; interrupt it."
+    },
+    {
+     "spell": 84825,
+     "src": 2
+    },
+    {
+     "spell": 84824,
+     "src": 2
+    },
+    {
+     "spell": 140602,
+     "src": 2
+    },
+    {
+     "spell": 435242,
+     "src": 2
+    },
+    {
+     "spell": 435397,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 12554,
+     "src": 1
+    },
+    {
+     "item": 12553,
+     "src": 1
+    },
+    {
+     "item": 12557,
+     "src": 1
+    },
+    {
+     "item": 12556,
+     "src": 1
+    },
+    {
+     "item": 22206,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p22",
+   "name": "Emperor Dagran Thaurissan",
+   "npcID": 9019,
+   "displayID": 8807,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 15636,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 11684,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 11924,
+     "src": 1
+    },
+    {
+     "item": 11931,
+     "src": 1
+    },
+    {
+     "item": 11932,
+     "src": 1
+    },
+    {
+     "item": 11928,
+     "src": 1
+    },
+    {
+     "item": 11934,
+     "src": 1
+    },
+    {
+     "item": 11930,
+     "src": 1
+    },
+    {
+     "item": 11933,
+     "src": 1
+    },
+    {
+     "item": 22204,
+     "src": 1
+    },
+    {
+     "item": 22207,
+     "src": 1
+    },
+    {
+     "item": 11815,
+     "src": 1
+    },
+    {
+     "item": 16724,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 3801,
+   "name": "Dark Iron Legacy",
+   "level": 52,
+   "req": 48,
+   "side": "both",
+   "src": 1,
+   "giver": 8888
+  },
+  {
+   "id": 3802,
+   "name": "Dark Iron Legacy",
+   "level": 52,
+   "req": 48,
+   "side": "both",
+   "src": 1,
+   "giver": 8888
+  },
+  {
+   "id": 3907,
+   "name": "Disharmony of Fire",
+   "level": 56,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 9084
+  },
+  {
+   "id": 3911,
+   "name": "The Last Element",
+   "level": 20,
+   "req": 20,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 3981,
+   "name": "Commander Gor'shak",
+   "level": 52,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 9081
+  },
+  {
+   "id": 3982,
+   "name": "What Is Going On?",
+   "level": 54,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 9020
+  },
+  {
+   "id": 4001,
+   "name": "What Is Going On?",
+   "level": 54,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 9020
+  },
+  {
+   "id": 4002,
+   "name": "The Eastern Kingdoms",
+   "level": 54,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 4949
+  },
+  {
+   "id": 4003,
+   "name": "The Royal Rescue",
+   "level": 59,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 4949
+  },
+  {
+   "id": 4004,
+   "name": "The Princess Saved?",
+   "level": 60,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 8929
+  },
+  {
+   "id": 4024,
+   "name": "A Taste of Flame",
+   "level": 58,
+   "req": 52,
+   "side": "both",
+   "src": 1,
+   "giver": 9459
+  },
+  {
+   "id": 4063,
+   "name": "The Rise of the Machines",
+   "level": 58,
+   "req": 52,
+   "side": "horde",
+   "src": 1,
+   "giver": 2921
+  },
+  {
+   "id": 4081,
+   "name": "KILL ON SIGHT: Dark Iron Dwarves",
+   "level": 52,
+   "req": 48,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 4082,
+   "name": "KILL ON SIGHT: High Ranking Dark Iron Officials",
+   "level": 54,
+   "req": 50,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 4083,
+   "name": "The Spectral Chalice",
+   "level": 55,
+   "req": 40,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4121,
+   "name": "Precarious Predicament",
+   "level": 58,
+   "req": 52,
+   "side": "horde",
+   "src": 1,
+   "giver": 9520
+  },
+  {
+   "id": 4122,
+   "name": "Grark Lorkrub",
+   "level": 58,
+   "req": 52,
+   "side": "horde",
+   "src": 1,
+   "giver": 9080
+  },
+  {
+   "id": 4123,
+   "name": "The Heart of the Mountain",
+   "level": 55,
+   "req": 50,
+   "side": "both",
+   "src": 1,
+   "giver": 9536
+  },
+  {
+   "id": 4126,
+   "name": "Hurley Blackbreath",
+   "level": 55,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1267
+  },
+  {
+   "id": 4128,
+   "name": "Ragnar Thunderbrew",
+   "level": 55,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9540
+  },
+  {
+   "id": 4132,
+   "name": "Operation: Death to Angerforge",
+   "level": 58,
+   "req": 52,
+   "side": "horde",
+   "src": 1,
+   "giver": 9077
+  },
+  {
+   "id": 4133,
+   "name": "Vivian Lagrave",
+   "level": 55,
+   "req": 50,
+   "side": "horde",
+   "src": 1,
+   "giver": 5204
+  },
+  {
+   "id": 4134,
+   "name": "Lost Thunderbrew Recipe",
+   "level": 55,
+   "req": 50,
+   "side": "horde",
+   "src": 1,
+   "giver": 9078
+  },
+  {
+   "id": 4136,
+   "name": "Ribbly Screwspigot",
+   "level": 53,
+   "req": 48,
+   "side": "both",
+   "src": 1,
+   "giver": 9544
+  },
+  {
+   "id": 4201,
+   "name": "The Love Potion",
+   "level": 54,
+   "req": 50,
+   "side": "both",
+   "src": 1,
+   "giver": 9500
+  },
+  {
+   "id": 4241,
+   "name": "Marshal Windsor",
+   "level": 54,
+   "req": 48,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9560
+  },
+  {
+   "id": 4242,
+   "name": "Abandoned Hope",
+   "level": 54,
+   "req": 48,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9023
+  },
+  {
+   "id": 4263,
+   "name": "Incendius!",
+   "level": 56,
+   "req": 48,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9561
+  },
+  {
+   "id": 4264,
+   "name": "A Crumpled Up Note",
+   "level": 58,
+   "req": 50,
+   "side": "alliance",
+   "src": 1
+  },
+  {
+   "id": 4282,
+   "name": "A Shred of Hope",
+   "level": 58,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9023
+  },
+  {
+   "id": 4286,
+   "name": "The Good Stuff",
+   "level": 56,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9177
+  },
+  {
+   "id": 4295,
+   "name": "Rocknot's Ale",
+   "level": 1,
+   "req": 1,
+   "side": "both",
+   "src": 1,
+   "giver": 9503
+  },
+  {
+   "id": 4299,
+   "name": "<NYI> <TXT>The Tomb of the Seven",
+   "level": 50,
+   "req": 50,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4322,
+   "name": "Jail Break!",
+   "level": 58,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9023
+  },
+  {
+   "id": 4324,
+   "name": "Yuka Screwspigot",
+   "level": 53,
+   "req": 48,
+   "side": "both",
+   "src": 1,
+   "giver": 9706
+  },
+  {
+   "id": 4341,
+   "name": "Kharan Mighthammer",
+   "level": 59,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2784
+  },
+  {
+   "id": 4342,
+   "name": "Kharan's Tale",
+   "level": 59,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9021
+  },
+  {
+   "id": 4361,
+   "name": "The Bearer of Bad News",
+   "level": 59,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9021
+  },
+  {
+   "id": 4362,
+   "name": "The Fate of the Kingdom",
+   "level": 59,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2784
+  },
+  {
+   "id": 4363,
+   "name": "The Princess's Surprise",
+   "level": 59,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 8929
+  },
+  {
+   "id": 7201,
+   "name": "The Last Element",
+   "level": 54,
+   "req": 48,
+   "side": "horde",
+   "src": 1,
+   "giver": 9078
+  },
+  {
+   "id": 7604,
+   "name": "A Binding Contract",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 9015,
+   "name": "The Challenge",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032
+  }
+ ]
+}

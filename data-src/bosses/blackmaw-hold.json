@@ -1,0 +1,139 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackmaw-hold",
+ "name": "Blackmaw Hold",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Impaan the Imprisoner",
+   "loot": [
+    {
+     "item": 280056,
+     "src": 2
+    },
+    {
+     "item": 280058,
+     "src": 2
+    },
+    {
+     "item": 280057,
+     "src": 2
+    }
+   ],
+   "src": {}
+  },
+  {
+   "point": "p4",
+   "name": "Withermaw",
+   "loot": [
+    {
+     "item": 280063,
+     "src": 2
+    },
+    {
+     "item": 280062,
+     "src": 2
+    },
+    {
+     "item": 280064,
+     "src": 2
+    }
+   ],
+   "src": {}
+  },
+  {
+   "point": "p5",
+   "name": "Bonesnout the Unbroken",
+   "loot": [
+    {
+     "item": 280060,
+     "src": 2
+    },
+    {
+     "item": 280061,
+     "src": 2
+    },
+    {
+     "item": 280059,
+     "src": 2
+    }
+   ],
+   "src": {}
+  },
+  {
+   "point": "p6",
+   "name": "Elder Shaman Bloodmane",
+   "loot": [
+    {
+     "item": 280068,
+     "src": 2
+    },
+    {
+     "item": 280069,
+     "src": 2
+    },
+    {
+     "item": 280070,
+     "src": 2
+    }
+   ],
+   "src": {}
+  },
+  {
+   "point": "p7",
+   "name": "Blackmaw Behemoth",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p8",
+   "name": "Unbound Spirit",
+   "loot": [
+    {
+     "item": 280057,
+     "src": 2
+    },
+    {
+     "item": 280072,
+     "src": 2
+    },
+    {
+     "item": 280071,
+     "src": 2
+    }
+   ],
+   "src": {}
+  },
+  {
+   "point": "p9",
+   "name": "Varrox Bleakhoof",
+   "loot": [
+    {
+     "item": 280075,
+     "src": 2
+    },
+    {
+     "item": 280076,
+     "src": 2
+    },
+    {
+     "item": 280074,
+     "src": 2
+    }
+   ],
+   "src": {}
+  }
+ ]
+}

@@ -1,0 +1,478 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scholomance",
+ "name": "Scholomance",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  58,
+  60
+ ],
+ "ejInstanceID": 246,
+ "instanceMapID": 289,
+ "maps": [
+  {
+   "uiMapID": 476,
+   "floor": 1,
+   "name": "The Reliquary"
+  },
+  {
+   "uiMapID": 477,
+   "floor": 2,
+   "name": "Chamber of Summoning",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 478,
+   "floor": 3,
+   "name": "The Upper Study",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 479,
+   "floor": 4,
+   "name": "Headmaster's Study",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Scholomance (outside portal)",
+   "uiMapID": 1422,
+   "floor": 0,
+   "x": 0.693,
+   "y": 0.733,
+   "approx": true,
+   "source": 2,
+   "note": "Scholomance entrance in the Western Plaguelands."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 476,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "rare",
+   "name": "Blood Steward of Kirtonos",
+   "uiMapID": 476,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Walks the Reliquary; drops the item that summons Kirtonos."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Kirtonos the Herald",
+   "uiMapID": 477,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Summoned with the Blood of Innocents at the brazier in the Chamber of Summoning."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Jandice Barov",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Illusionist; the room has stealth-like illusions of her."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Rattlegore",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Great Ossuary boss, south-west of the Upper Study."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Marduk Blackpool",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "In the Viewing Room area; position not found in any source."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Vectus",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Same room as Marduk Blackpool; position not found."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Instructor Malicia",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "East of the Upper Study."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Doctor Theolen Krastinov",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Far east of the Upper Study."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Lorekeeper Polkelt",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "North-east library on the Upper Study."
+  },
+  {
+   "id": "p12",
+   "kind": "rare",
+   "name": "Death Knight Darkreaver",
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Special/rare boss in the Upper Study."
+  },
+  {
+   "id": "p13",
+   "kind": "boss",
+   "name": "The Ravenian",
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Headmaster's Study."
+  },
+  {
+   "id": "p14",
+   "kind": "boss",
+   "name": "Lord Alexei Barov",
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Headmaster's Study, north-east."
+  },
+  {
+   "id": "p15",
+   "kind": "boss",
+   "name": "Lady Illucia Barov",
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Headmaster's Study, north."
+  },
+  {
+   "id": "p16",
+   "kind": "boss",
+   "name": "Ras Frostwhisper",
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Headmaster's Study, south-west."
+  },
+  {
+   "id": "p17",
+   "kind": "boss",
+   "name": "Darkmaster Gandling",
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Final boss of the Headmaster's Study; position not found."
+  },
+  {
+   "id": "p18",
+   "kind": "boss",
+   "name": "Kormok",
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Optional summoned boss."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 476,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 476,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Blood Steward of Kirtonos",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 477,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Kirtonos the Herald",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Jandice Barov",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Rattlegore",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Marduk Blackpool",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": null,
+   "x": null,
+   "y": null,
+   "note": "Kill Vectus",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Instructor Malicia",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Doctor Theolen Krastinov",
+   "point": "p10",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": 478,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Lorekeeper Polkelt",
+   "point": "p11",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill The Ravenian",
+   "point": "p13",
+   "approx": true
+  },
+  {
+   "step": 12,
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Lord Alexei Barov",
+   "point": "p14",
+   "approx": true
+  },
+  {
+   "step": 13,
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Lady Illucia Barov",
+   "point": "p15",
+   "approx": true
+  },
+  {
+   "step": 14,
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Ras Frostwhisper",
+   "point": "p16",
+   "approx": true
+  },
+  {
+   "step": 15,
+   "uiMapID": 479,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Kill Darkmaster Gandling",
+   "point": "p17",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p4",
+   "text": "Summon him with the Blood of the Innocents at the brazier; he fears and flies, so bring a tank who handles his phase swap."
+  },
+  {
+   "boss": "p5",
+   "text": "She casts illusions; ignore the copies and only kill the real one (the one you target first)."
+  },
+  {
+   "boss": "p6",
+   "text": "Big bone beast with a wide cleave; tank him away from adds."
+  },
+  {
+   "boss": "p9",
+   "text": "Caster with curses and healing; interrupt her heal and dispel the curse."
+  },
+  {
+   "boss": "p16",
+   "text": "Frost caster with chilling effects; dispels and interrupts keep the group alive."
+  },
+  {
+   "boss": "p17",
+   "text": "Teleports players around; stay alert for his phase effects and kill the adds he summons."
+  }
+ ],
+ "notes": "the floor numbering assumes the same four floors as OpenMap (The Reliquary, Chamber of Summoning, The Upper Study, Headmaster's Study). Marduk, Vectus, Kormok and Gandling have no sourced position. uiMapID 476 from AllTheThings; 477-479 inferred. Skeleton Key / Viewing Room Key requirements are from memory and not verified in Forever. Route is a typical order. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

@@ -1,0 +1,302 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-drowned-city",
+ "name": "The Drowned City",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  35,
+  42
+ ],
+ "ejInstanceID": 2970,
+ "instanceMapID": 2970,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "The Drowned City"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.warcrafttavern.com/forever/guides/the-drowned-city/",
+   "what": "boss order, entrance, layout",
+   "forever": true
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "The Drowned City (outside portal)",
+   "uiMapID": 1434,
+   "floor": 0,
+   "x": 0.214,
+   "y": 0.279,
+   "approx": true,
+   "source": 2,
+   "note": "Underwater cavern west of the Vile Reef, Stranglethorn Vale; swim down to Sunken Hollow (Forever dungeon guide and client tables agree on ~21.4, 27.9)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Zul'Alai",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "First boss, top of the hill right after the entrance trash. Level 37 elite undead troll."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Var'Taka",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Naga with two Brinescale Priestess adds; near the Glowing Pearls and the stairs to Umbra. Level 38."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Captain Dreadrise",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Patrols the north side of the central pool. Level 38."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Deathless Marrow",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Spawns at the altar in the west and calls waves of undead guardians and sorcerers. Level 39."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Primeval Elemental",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Underwater room in the southern area; kill the Undying Offering trolls to make him appear. Level 38."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Min'Loth the Serpent",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Far west, final boss, two phases (troll, then serpent). Level 40."
+  },
+  {
+   "id": "p9",
+   "kind": "rare",
+   "name": "Umbra",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Rare murloc, not always present, by the stairs to Var'Taka with Saltscale Murloc adds. Level 38."
+  },
+  {
+   "id": "p10",
+   "kind": "rare",
+   "name": "Gill",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Rare goblin on the way to the Primeval Elemental."
+  },
+  {
+   "id": "p11",
+   "kind": "rare",
+   "name": "\"Pyromancer\" Braxton",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Rare human in the pirate section."
+  },
+  {
+   "id": "p12",
+   "kind": "interactive",
+   "name": "Glowing Pearls (barrier)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 6,
+   "note": "Interact near Var'Taka / Dreadrise to lower the barrier that blocks progress."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Zul'Alai",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Var'Taka",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Captain Dreadrise",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Deathless Marrow",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Primeval Elemental",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Min'Loth the Serpent",
+   "point": "p8",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Monstrous Slam stuns anyone close to him, so melee can step out; Rotted Strike slows, so dispel the tank first. Below 30% he speeds up and heals: save cooldowns for the last third."
+  },
+  {
+   "boss": "p6",
+   "text": "Kill the guardians first (they stun with Shield Slam) and cleave the adds off the boss; crowd control or fear when they pile up."
+  },
+  {
+   "boss": "p8",
+   "text": "Two phases; he returns to full health in serpent form, which adds a fear and a poison volley that needs cleansing. Save defensive cooldowns for it."
+  }
+ ],
+ "notes": "Positions inside the dungeon are not available from any source I could read (no map pins; Forever guides give no coordinates), so boss points carry x/y = null and only the ORDER is real. Order follows the Warcraft Tavern guide; one boost-service page lists a different boss set (Zin'aka instead of Var'Taka), so confirm in game. Level range from client tables (35-42). uiMapID unknown for this dungeon (instance map 2970). Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

@@ -1,0 +1,448 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ruins-of-lordaeron",
+ "name": "Ruins of Lordaeron",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Witherfang",
+   "npcID": 250483,
+   "level": [
+    17,
+    17
+   ],
+   "abilities": [
+    {
+     "spell": 3358,
+     "src": 3,
+     "tags": [
+      "healer",
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 275443,
+     "src": 3
+    },
+    {
+     "item": 271203,
+     "src": 2
+    },
+    {
+     "item": 271202,
+     "src": 2
+    },
+    {
+     "item": 271201,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144189
+  },
+  {
+   "point": "p3",
+   "name": "The Baron",
+   "npcID": 250660,
+   "level": [
+    17,
+    17
+   ],
+   "abilities": [
+    {
+     "spell": 17307,
+     "src": 3,
+     "tags": [
+      "tank",
+      "healer"
+     ]
+    },
+    {
+     "spell": 5568,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 280438,
+     "src": 3
+    },
+    {
+     "item": 268518,
+     "src": 3
+    },
+    {
+     "item": 271206,
+     "src": 2
+    },
+    {
+     "item": 271204,
+     "src": 2
+    },
+    {
+     "item": 271205,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144188
+  },
+  {
+   "point": "p4",
+   "name": "Viktor the Vile",
+   "npcID": 256035,
+   "level": [
+    19,
+    19
+   ],
+   "abilities": [
+    {
+     "spell": 3358,
+     "src": 3,
+     "tags": [
+      "healer",
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 271211,
+     "src": 2
+    },
+    {
+     "item": 271212,
+     "src": 2
+    },
+    {
+     "item": 271218,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 139455
+  },
+  {
+   "point": "p5",
+   "name": "The Abandoned",
+   "npcID": 250631,
+   "level": [
+    18,
+    18
+   ],
+   "abilities": [
+    {
+     "spell": 6136,
+     "tags": [
+      "dispel"
+     ],
+     "src": 3
+    },
+    {
+     "spell": 1266011,
+     "src": 3,
+     "tags": [
+      "interrupt",
+      "dispel"
+     ]
+    },
+    {
+     "spell": 1220855,
+     "tags": [
+      "dispel"
+     ],
+     "src": 3
+    },
+    {
+     "spell": 14907,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 271207,
+     "src": 2
+    },
+    {
+     "item": 271216,
+     "src": 2
+    },
+    {
+     "item": 271208,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 138667
+  },
+  {
+   "point": "p6",
+   "name": "Bjork",
+   "npcID": 256097,
+   "level": [
+    19,
+    19
+   ],
+   "abilities": [
+    {
+     "spell": 1301635,
+     "src": 3,
+     "note": "Magic-proof for a short time; use physical attacks."
+    }
+   ],
+   "loot": [
+    {
+     "item": 271210,
+     "src": 2
+    },
+    {
+     "item": 271217,
+     "src": 2
+    },
+    {
+     "item": 271209,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144170
+  },
+  {
+   "point": "p7",
+   "name": "Rath'mael",
+   "npcID": 250657,
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 18399,
+     "src": 3,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire zone on the ground; move out of it."
+    },
+    {
+     "spell": 13376,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 271213,
+     "src": 2
+    },
+    {
+     "item": 271215,
+     "src": 2
+    },
+    {
+     "item": 271214,
+     "src": 2
+    },
+    {
+     "item": 273085,
+     "src": 3
+    },
+    {
+     "item": 273103,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144175
+  }
+ ],
+ "quests": [
+  {
+   "id": 95250,
+   "name": "Abominable Creatures",
+   "level": 21,
+   "req": 16,
+   "side": "alliance",
+   "src": 2,
+   "giver": 265701,
+   "items": [
+    268518
+   ]
+  },
+  {
+   "id": 95195,
+   "name": "Bloodied Insignia",
+   "level": 22,
+   "req": 16,
+   "side": "alliance",
+   "src": 2,
+   "items": [
+    268540
+   ]
+  },
+  {
+   "id": 92421,
+   "name": "Light's Justice",
+   "level": 22,
+   "req": 15,
+   "side": "horde",
+   "src": 2,
+   "giver": 266484,
+   "items": [
+    268579
+   ]
+  },
+  {
+   "id": 92415,
+   "name": "Remember That I Love You",
+   "level": 22,
+   "req": 15,
+   "side": "alliance",
+   "src": 2,
+   "items": [
+    251522
+   ]
+  },
+  {
+   "id": 95216,
+   "name": "The New Plague",
+   "level": 22,
+   "req": 16,
+   "side": "horde",
+   "src": 2,
+   "giver": 11835,
+   "items": [
+    275443
+   ]
+  },
+  {
+   "id": 92422,
+   "name": "The Wrath of Rath'mael",
+   "level": 22,
+   "req": 15,
+   "side": "horde",
+   "src": 2,
+   "giver": 251001
+  },
+  {
+   "id": 97288,
+   "name": "Unending Torment",
+   "level": 21,
+   "req": 15,
+   "side": "horde",
+   "src": 2,
+   "items": [
+    280438
+   ],
+   "giver": 250660
+  },
+  {
+   "id": 97289,
+   "name": "Unending Torment (2)",
+   "level": 21,
+   "req": 16,
+   "side": "both",
+   "src": 2,
+   "items": [
+    268518
+   ]
+  },
+  {
+   "id": 97291,
+   "name": "Unending Torment (4)",
+   "level": 21,
+   "req": 16,
+   "side": "both",
+   "src": 2,
+   "items": [
+    8923
+   ]
+  },
+  {
+   "id": 97292,
+   "name": "Unending Torment (5)",
+   "level": 21,
+   "req": 16,
+   "side": "both",
+   "src": 2
+  },
+  {
+   "id": 92401,
+   "name": "A Frightened Request",
+   "level": 22,
+   "side": "horde",
+   "giver": 250686,
+   "src": 3
+  },
+  {
+   "id": 95204,
+   "name": "Crest of Lordaeron",
+   "level": 22,
+   "side": "horde",
+   "src": 3
+  },
+  {
+   "id": 95189,
+   "name": "Crest of Lordaeron",
+   "level": 22,
+   "side": "alliance",
+   "src": 3
+  }
+ ]
+}

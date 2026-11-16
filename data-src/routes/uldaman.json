@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "slug": "uldaman",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles Uldaman\\Uldaman1_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p3", "floor": 1, "at": [0.6757, 0.7242], "approx": true, "name": "Entrance (inside)"}
+    ],
+    "add": [
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.5592, 0.7254], "to": [0.5619, 0.726], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5542, 0.7854], "to": [0.5629, 0.7829], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5797, 0.9007], "to": [0.5838, 0.9057], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.589, 0.857], "to": [0.5868, 0.8608], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.3882, 0.7528], "to": [0.3862, 0.7455], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2678, 0.6101], "to": [0.2745, 0.6108], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.3355, 0.6167], "to": [0.3174, 0.6018], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.3025, 0.6593], "to": [0.2884, 0.6692], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2559, 0.3499], "to": [0.2585, 0.3443], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.311, 0.3741], "to": [0.3054, 0.3518], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.1991, 0.27], "to": [0.2096, 0.2635], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2366, 0.3171], "to": [0.2545, 0.3249], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.6757, 0.7242], "to": [0.5342, 0.7254], "bends": [[0.665, 0.729], [0.6582, 0.7418], [0.6547, 0.7613], [0.6536, 0.8127], [0.651, 0.8148], [0.6295, 0.8179], [0.6224, 0.8129], [0.6201, 0.8034], [0.6194, 0.7656], [0.616, 0.7524], [0.5833, 0.7505], [0.5715, 0.7596], [0.5689, 0.796], [0.5707, 0.8443], [0.5922, 0.866], [0.5978, 0.8804], [0.5959, 0.8963], [0.5864, 0.9176], [0.5932, 0.906], [0.5968, 0.8772], [0.5916, 0.8632], [0.5714, 0.8452], [0.5674, 0.7741], [0.5689, 0.7635], [0.5677, 0.7601], [0.5558, 0.7551], [0.5335, 0.7277]], "import": "fdr"},
+    {"floor": 1, "from": [0.5342, 0.7254], "to": [0.5847, 0.9201], "bends": [[0.5335, 0.7277], [0.5558, 0.7551], [0.5677, 0.7601], [0.5689, 0.7635], [0.5674, 0.7741], [0.5714, 0.8452], [0.5916, 0.8632], [0.5968, 0.8772], [0.5932, 0.906]], "import": "fdr"},
+    {"floor": 1, "from": [0.5847, 0.9201], "to": [0.373, 0.7398], "bends": [[0.5932, 0.906], [0.5968, 0.8772], [0.5916, 0.8632], [0.5714, 0.8452], [0.5674, 0.7741], [0.5689, 0.7635], [0.5677, 0.7601], [0.5558, 0.7551], [0.5372, 0.7304], [0.5287, 0.7242], [0.441, 0.7324], [0.4217, 0.7287], [0.4127, 0.7343], [0.3874, 0.7397], [0.3733, 0.7343]], "import": "fdr"},
+    {"floor": 1, "from": [0.373, 0.7398], "to": [0.2894, 0.5974], "bends": [[0.373, 0.7343], [0.3847, 0.7292], [0.4365, 0.7154], [0.4434, 0.7033], [0.4366, 0.6864], [0.4267, 0.6712], [0.4123, 0.6575], [0.3624, 0.6341], [0.3602, 0.622], [0.361, 0.5895], [0.3565, 0.5711], [0.3349, 0.548], [0.325, 0.549]], "import": "fdr"},
+    {"floor": 1, "from": [0.2894, 0.5974], "to": [0.4754, 0.4406], "bends": [[0.3039, 0.5664], [0.3261, 0.5389], [0.3375, 0.5386], [0.3559, 0.5578], [0.3621, 0.5563], [0.3651, 0.5431], [0.3673, 0.508], [0.3733, 0.4979], [0.4162, 0.4828], [0.4677, 0.4826], [0.4739, 0.4723]], "import": "fdr"},
+    {"floor": 1, "from": [0.4754, 0.4406], "to": [0.2678, 0.3279], "bends": [[0.4628, 0.4309], [0.449, 0.4124], [0.4178, 0.4117], [0.4149, 0.4058], [0.4098, 0.3717], [0.4042, 0.3627], [0.3965, 0.3683], [0.3807, 0.3883], [0.3696, 0.3918], [0.3558, 0.3842], [0.325, 0.353], [0.3089, 0.3466], [0.283, 0.3423], [0.2696, 0.3248]], "import": "fdr"},
+    {"floor": 1, "from": [0.2678, 0.3279], "to": [0.2199, 0.2561], "bends": [[0.2696, 0.3248]], "import": "fdr"}
+  ]
+}

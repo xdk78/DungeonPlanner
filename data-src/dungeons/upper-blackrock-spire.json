@@ -1,0 +1,381 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "upper-blackrock-spire",
+ "name": "Upper Blackrock Spire",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  59,
+  60
+ ],
+ "ejInstanceID": 229,
+ "instanceMapID": 229,
+ "maps": [
+  {
+   "uiMapID": 250,
+   "floor": 1,
+   "name": "Tazz'Alor"
+  },
+  {
+   "uiMapID": 251,
+   "floor": 2,
+   "name": "Skitterweb Tunnels",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 252,
+   "floor": 3,
+   "name": "Hordemar City",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 253,
+   "floor": 4,
+   "name": "Hall of Blackhand",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 254,
+   "floor": 5,
+   "name": "Halycon's Lair",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 255,
+   "floor": 6,
+   "name": "Chamber of Battle",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 256,
+   "floor": 7,
+   "name": "Upper Blackrock Spire",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Upper Blackrock Spire (outside portal)",
+   "uiMapID": 1428,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Blackrock Mountain entrance in the Burning Steppes."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Pyroguard Emberseer",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.3033,
+   "y": 0.2664,
+   "approx": false,
+   "source": 1,
+   "note": "Opens the door to the next section; Blackhand Incarcerators must be killed before he engages."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Solakar Flamewreath",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Optional egg event after Emberseer."
+  },
+  {
+   "id": "p5",
+   "kind": "rare",
+   "name": "Jed Runewatcher",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare; stands above the Hall of Binding."
+  },
+  {
+   "id": "p6",
+   "kind": "rare",
+   "name": "Goraluk Anvilcrack",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare orc smith; drops the smith item."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Gyth",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rend's mount; fight starts with Rend."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Warchief Rend Blackhand",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Arena in the north; Gyth joins later."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "The Beast",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Hunting beast in the east lair; Finkle Einhorn's quest item."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "General Drakkisath",
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Final boss, south-west through the Dragonspire."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 255,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.3033,
+   "y": 0.2664,
+   "note": "Kill Pyroguard Emberseer",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 255,
+   "floor": 6,
+   "x": null,
+   "y": null,
+   "note": "Kill Solakar Flamewreath",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill Jed Runewatcher",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill Goraluk Anvilcrack",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill Warchief Rend Blackhand",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill Gyth",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill The Beast",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 256,
+   "floor": 7,
+   "x": null,
+   "y": null,
+   "note": "Kill General Drakkisath",
+   "point": "p10",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.3033,
+   "y": 0.2864,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.3283,
+   "y": 0.2664,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.2733,
+   "y": 0.3064,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.3233,
+   "y": 0.3264,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Kill the Incarcerators first; after he is up he pulses fire, so use fire protection and keep healers out of the cone."
+  },
+  {
+   "boss": "p8",
+   "text": "Whirlwind plus knockback in melee; do not tank near the edges. Gyth joins at about half health."
+  },
+  {
+   "boss": "p9",
+   "text": "Charge and bleed; he calls his pack, so avoid pulling extra beasts."
+  },
+  {
+   "boss": "p10",
+   "text": "Cleave and knockback; tank him in a corner and kill his adds."
+  }
+ ],
+ "notes": "Emberseer from OpenMap floor 6 (MIT); UBRS positions may therefore be off. Route is the standard Emberseer-Rend-Beast-Drakkisath order. Attunement/Seal of Ascension requirements are from memory. uiMapIDs 250 verified, rest inferred. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

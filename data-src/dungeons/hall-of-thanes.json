@@ -1,0 +1,365 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "hall-of-thanes",
+ "name": "Hall of Thanes",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  13,
+  20
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 3065,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "The Hall of Thanes",
+   "instanceMapID": 3065
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/hall-of-thanes",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.95,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the bottom of the map; the dungeon runs north along a central hall."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Faldrim Anvilmar",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.66,
+   "approx": true,
+   "source": 3,
+   "note": "Anvilmar's Rest, the first chamber with undead dwarves around his tomb."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Magmatus",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.73,
+   "y": 0.47,
+   "approx": true,
+   "source": 3,
+   "note": "Dark Iron Ingress, the side cave to the east; a patrolling Dark Iron Summoner is nearby."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Plunder",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Elemental guardian patrolling a hallway; position not sourced."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Durgen Dirgehammer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.16,
+   "approx": true,
+   "source": 3,
+   "note": "Reliquary of Kings at the north end; patrols left and right of a central platform."
+  },
+  {
+   "id": "p6",
+   "kind": "quest_npc",
+   "name": "Ghostly Attendant",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.8,
+   "approx": true,
+   "source": 2,
+   "note": "Gives An Ancient Grudge after the first room; position is an estimate."
+  },
+  {
+   "id": "p7",
+   "kind": "pack",
+   "name": "Dark Iron Summoner patrol (Magmatus)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7,
+   "y": 0.5,
+   "approx": true,
+   "source": 3,
+   "note": "Kill the Summoner before Magmatus; the tank pulls the elemental away from the group."
+  },
+  {
+   "id": "p8",
+   "kind": "pack",
+   "name": "Final pack: Golem, Looter, Summoner",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.28,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Method describes one Lesser Stone Golem, one Looter and one Summoner before Durgen. Polymorph the Summoner and kill the Looter and Golem first."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.95,
+   "note": "Enter and clear the ghost dwarves",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.66,
+   "note": "Faldrim Anvilmar",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.73,
+   "y": 0.47,
+   "note": "East to Magmatus (kill the Summoner first)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Back to the central hall: Plunder in the hallway",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.16,
+   "note": "Durgen Dirgehammer, final boss",
+   "point": "p5",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p7",
+    "p3"
+   ],
+   "note": "Summoner, then Magmatus pulled away from the group."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p8",
+    "p5"
+   ],
+   "note": "Final pack, then Durgen (clear the Looters first)."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.51,
+   "y": 0.678,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.488,
+   "y": 0.672,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.528,
+   "y": 0.72,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.48,
+   "y": 0.705,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7164,
+   "y": 0.4818,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7065,
+   "y": 0.4612,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6964,
+   "y": 0.5228,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6763,
+   "y": 0.4767,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5204,
+   "y": 0.1747,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.499,
+   "y": 0.1825,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5594,
+   "y": 0.1985,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5116,
+   "y": 0.2141,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Mind Blast and Anvilmar's Curse. The risk is pulling his undead dwarves too: clear a safe spot first."
+  },
+  {
+   "boss": "p3",
+   "text": "Fire Nova hits everyone nearby, Combust lands on a random player. Kill the Summoner first; the tank drags Magmatus away."
+  },
+  {
+   "boss": "p4",
+   "text": "Only Knock Away. Pull him into a corner away from other packs and keep players out of the knockback path."
+  },
+  {
+   "boss": "p5",
+   "text": "Fear for 8 s, Rend on the tank, and two Lesser Stone Golem adds. Kill Dirgehammer fast, then the golems. Clear the Dark Iron Looters before the pull."
+  }
+ ],
+ "notes": "Forever-only dungeon: no uiMapID is known, use instanceMapID 3065 and the floor name. Level range is the client's Group Finder table (13-20; NeedRoll shows 13-18). Boss order and mechanics come from Method. Faldrim (Anvilmar's Rest), Magmatus (Dark Iron Ingress) and Durgen (Reliquary of Kings) are estimates from the room names on the map picture; Plunder is not placed (Method: he patrols the hallway between the first two bosses and the last). No NPC IDs: the Forever IDs have no open source. OpenMap's journal calls Magmatus 'Infurnus' in older data. NeedRoll was used only as a cross-check. Quests: An Ancient Grudge and The Treaty of Understanding are obtained inside; Thom Filch, Afadra Dunwall and Earthseer Farsen are outside. The Dark Iron Map (looted from Dark Iron Spies in Dun Morogh) starts a breadcrumb."
+}

@@ -1,0 +1,22 @@
+# Packager output and local tooling
+.release/
+.luarocks/
+lua_modules/
+luacov.*
+*.zip
+# Route tool work folder (game art, masks, previews; tools/route_paths.py)
+.route-work/
+# UI dump and render work folder (wow-ui-harness; AGENTS.md "Seeing the UI")
+.ui-work/
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+.lua/
+# Python tooling caches (tools/*.py run through uv)
+.ruff_cache/
+__pycache__/
+*.pyc
+.venv/

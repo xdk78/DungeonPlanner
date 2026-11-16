@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "slug": "scarlet-monastery-graveyard",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles ScarletMonastery\\ScarletMonastery1_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p1", "floor": 1, "at": [0.833, 0.8199], "approx": true, "name": "Portal in"},
+      {"point": "p2", "floor": 1, "at": [0.7236, 0.593], "approx": true, "name": "Interrogator Vishas"},
+      {"point": "p3", "floor": 1, "at": [0.2402, 0.5637], "approx": true, "name": "Bloodmage Thalnos"}
+    ],
+    "add": [
+      {"after": 2, "floor": 1, "at": [0.4287, 0.6852], "note": "Ironspine (rare, not in every run)", "approx": true},
+      {"after": 2, "floor": 1, "at": [0.2471, 0.694], "note": "Azshir the Sleepless (rare, not in every run)", "approx": true},
+      {"after": 4, "floor": 1, "at": [0.2207, 0.5154], "note": "Fallen Champion (rare, not in every run)", "approx": true}
+    ],
+    "side": [
+      {"floor": 1, "name": "Side path: Fallen Champion", "points": [[0.2402, 0.5637], [0.2439, 0.5379], [0.243, 0.524], [0.2207, 0.5154]]}
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.7299, 0.615], "to": [0.7265, 0.6123], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.7082, 0.6221], "to": [0.7186, 0.6228], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.768, 0.6402], "to": [0.7655, 0.6437], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2864, 0.5878], "to": [0.2934, 0.5853], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.2471, 0.694], "to": [0.45, 0.55], "bends": [[0.2475, 0.6392], [0.2665, 0.6078], [0.2695, 0.5629], [0.4411, 0.5629]], "generated": true},
+    {"floor": 1, "from": [0.45, 0.55], "to": [0.2402, 0.5637], "bends": [[0.4411, 0.5629]], "generated": true},
+    {"floor": 1, "from": [0.833, 0.8199], "to": [0.7236, 0.593], "bends": [[0.831, 0.7974], [0.8245, 0.7894], [0.7825, 0.7912], [0.7698, 0.7893], [0.7636, 0.7838], [0.7601, 0.77], [0.7561, 0.7262], [0.7584, 0.6746], [0.7571, 0.6588], [0.7533, 0.6541], [0.733, 0.6524], [0.7271, 0.6473], [0.7239, 0.6334]], "import": "fdr"},
+    {"floor": 1, "from": [0.7236, 0.593], "to": [0.4287, 0.6852], "bends": [[0.6871, 0.5994], [0.6492, 0.5922], [0.6465, 0.5887], [0.6428, 0.5703], [0.6386, 0.5639], [0.5873, 0.564], [0.5573, 0.5677], [0.5399, 0.5743], [0.5152, 0.5902], [0.4379, 0.63], [0.4302, 0.6391], [0.4254, 0.6506]], "import": "fdr"},
+    {"floor": 1, "from": [0.4287, 0.6852], "to": [0.2471, 0.694], "bends": [[0.4259, 0.6825], [0.4016, 0.6816]], "import": "fdr"},
+    {"floor": 1, "from": [0.2402, 0.5637], "to": [0.2207, 0.5154], "bends": [[0.2439, 0.5379], [0.243, 0.524]], "import": "fdr"}
+  ]
+}

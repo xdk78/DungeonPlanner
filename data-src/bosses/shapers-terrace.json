@@ -1,0 +1,96 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "shapers-terrace",
+ "name": "Shaper's Terrace",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Cinder",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p4",
+   "name": "Snowtalon",
+   "npcID": 262297,
+   "src": {
+    "npcID": 2
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Titanosaur",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p6",
+   "name": "Izha'Rel and Tor'Rel",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p7",
+   "name": "Vitrix",
+   "npcID": 272561,
+   "src": {
+    "npcID": 2
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Direhorn Matriarch",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p9",
+   "name": "Thunderhoof",
+   "npcID": 76389,
+   "abilities": [
+    {
+     "spell": 146329,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "src": {
+    "npcID": 2
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Venomridge",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p11",
+   "name": "Bolt",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p12",
+   "name": "Nanaya",
+   "gap": "no source had data for this boss",
+   "src": {}
+  }
+ ]
+}

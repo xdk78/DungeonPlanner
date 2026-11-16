@@ -1,0 +1,198 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-armory",
+ "name": "Scarlet Monastery: Armory",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Herod",
+   "npcID": 3975,
+   "displayID": 2041,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 15496,
+     "src": 2
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 8260,
+     "src": 2
+    },
+    {
+     "spell": 8989,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Spins and hits everyone close; get out of melee range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 873,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 7718,
+     "src": 1
+    },
+    {
+     "item": 7719,
+     "src": 1
+    },
+    {
+     "item": 10330,
+     "src": 1
+    },
+    {
+     "item": 7717,
+     "src": 1
+    },
+    {
+     "item": 2262,
+     "src": 1
+    },
+    {
+     "item": 7452,
+     "src": 1
+    },
+    {
+     "item": 1992,
+     "src": 1
+    },
+    {
+     "item": 5756,
+     "src": 1
+    },
+    {
+     "item": 7727,
+     "src": 1
+    },
+    {
+     "item": 7728,
+     "src": 1
+    },
+    {
+     "item": 7730,
+     "src": 1
+    },
+    {
+     "item": 7736,
+     "src": 1
+    },
+    {
+     "item": 7759,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1048,
+   "name": "Into The Scarlet Monastery",
+   "level": 42,
+   "req": 33,
+   "side": "horde",
+   "src": 1,
+   "giver": 2425,
+   "shared": true
+  },
+  {
+   "id": 1049,
+   "name": "Compendium of the Fallen",
+   "level": 38,
+   "req": 28,
+   "side": "horde",
+   "src": 1,
+   "giver": 3978,
+   "shared": true
+  },
+  {
+   "id": 1050,
+   "name": "Mythology of the Titans",
+   "level": 38,
+   "req": 28,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3979,
+   "shared": true
+  },
+  {
+   "id": 1051,
+   "name": "Vorrel's Revenge",
+   "level": 33,
+   "req": 25,
+   "side": "horde",
+   "src": 1,
+   "giver": 3981,
+   "shared": true
+  },
+  {
+   "id": 1053,
+   "name": "In the Name of the Light",
+   "level": 40,
+   "req": 34,
+   "side": "alliance",
+   "src": 1,
+   "giver": 3980,
+   "shared": true
+  },
+  {
+   "id": 1113,
+   "name": "Hearts of Zeal",
+   "level": 33,
+   "req": 30,
+   "side": "horde",
+   "src": 1,
+   "giver": 2055,
+   "shared": true
+  },
+  {
+   "id": 1160,
+   "name": "Test of Lore",
+   "level": 36,
+   "req": 26,
+   "side": "horde",
+   "src": 1,
+   "giver": 4488,
+   "shared": true
+  }
+ ]
+}

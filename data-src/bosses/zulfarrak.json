@@ -1,0 +1,812 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "zulfarrak",
+ "name": "Zul'Farrak",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Antu'sul",
+   "npcID": 8127,
+   "displayID": 7353,
+   "class": "elite",
+   "level": [
+    48,
+    48
+   ],
+   "abilities": [
+    {
+     "spell": 8376,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Roots everyone nearby; kill the totem."
+    },
+    {
+     "spell": 11893,
+     "src": 1
+    },
+    {
+     "spell": 11894,
+     "src": 1
+    },
+    {
+     "spell": 11895,
+     "src": 1
+    },
+    {
+     "spell": 11899,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 1169,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 943,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 9641,
+     "src": 1
+    },
+    {
+     "item": 9640,
+     "src": 1
+    },
+    {
+     "item": 9639,
+     "src": 1
+    },
+    {
+     "item": 9379,
+     "src": 1
+    },
+    {
+     "item": 14286,
+     "src": 1
+    },
+    {
+     "item": 14848,
+     "src": 1
+    },
+    {
+     "item": 14960,
+     "src": 1
+    },
+    {
+     "item": 14954,
+     "src": 1
+    },
+    {
+     "item": 14952,
+     "src": 1
+    },
+    {
+     "item": 14779,
+     "src": 1
+    },
+    {
+     "item": 15641,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Theka the Martyr",
+   "npcID": 7272,
+   "displayID": 6696,
+   "class": "elite",
+   "level": [
+    45,
+    46
+   ],
+   "abilities": [
+    {
+     "spell": 8600,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "A disease on a player; cleanse it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13100,
+     "src": 1
+    },
+    {
+     "item": 15980,
+     "src": 1
+    },
+    {
+     "item": 14434,
+     "src": 1
+    },
+    {
+     "item": 15369,
+     "src": 1
+    },
+    {
+     "item": 15630,
+     "src": 1
+    },
+    {
+     "item": 7552,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Witch Doctor Zum'rah",
+   "npcID": 7271,
+   "displayID": 6434,
+   "class": "elite",
+   "level": [
+    46,
+    46
+   ],
+   "abilities": [
+    {
+     "spell": 11086,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12491,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12739,
+     "src": 1
+    },
+    {
+     "spell": 15245,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 18083,
+     "src": 1
+    },
+    {
+     "item": 18082,
+     "src": 1
+    },
+    {
+     "item": 13055,
+     "src": 1
+    },
+    {
+     "item": 10087,
+     "src": 1
+    },
+    {
+     "item": 14271,
+     "src": 1
+    },
+    {
+     "item": 14427,
+     "src": 1
+    },
+    {
+     "item": 7468,
+     "src": 1
+    },
+    {
+     "item": 7540,
+     "src": 1
+    },
+    {
+     "item": 7332,
+     "src": 1
+    },
+    {
+     "item": 10088,
+     "src": 1
+    },
+    {
+     "item": 9905,
+     "src": 1
+    },
+    {
+     "item": 9913,
+     "src": 1
+    },
+    {
+     "item": 9962,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Nekrum Gutchewer",
+   "npcID": 7796,
+   "displayID": 6690,
+   "class": "elite",
+   "level": [
+    45,
+    46
+   ],
+   "abilities": [
+    {
+     "spell": 8600,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "A disease on a player; cleanse it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 9511,
+     "src": 1
+    },
+    {
+     "item": 5616,
+     "src": 1
+    },
+    {
+     "item": 2040,
+     "src": 1
+    },
+    {
+     "item": 14913,
+     "src": 1
+    },
+    {
+     "item": 14442,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Shadowpriest Sezz'ziz",
+   "npcID": 7275,
+   "displayID": 6441,
+   "class": "elite",
+   "level": [
+    47,
+    47
+   ],
+   "abilities": [
+    {
+     "spell": 12739,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 13704,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Fears several players; spread out so fewer are hit."
+    },
+    {
+     "spell": 8362,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 12039,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ],
+     "note": "Heals an ally; interrupt it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 9470,
+     "src": 1
+    },
+    {
+     "item": 9473,
+     "src": 1
+    },
+    {
+     "item": 9475,
+     "src": 1
+    },
+    {
+     "item": 9474,
+     "src": 1
+    },
+    {
+     "item": 9481,
+     "src": 1
+    },
+    {
+     "item": 9482,
+     "src": 1
+    },
+    {
+     "item": 9484,
+     "src": 1
+    },
+    {
+     "item": 14848,
+     "src": 1
+    },
+    {
+     "item": 15385,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Hydromancer Velratha",
+   "npcID": 7795,
+   "displayID": 6685,
+   "class": "elite",
+   "level": [
+    46,
+    46
+   ],
+   "abilities": [
+    {
+     "spell": 119575,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 38669,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 79539,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 1447,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 9482,
+     "src": 1
+    },
+    {
+     "item": 14954,
+     "src": 1
+    },
+    {
+     "item": 15629,
+     "src": 1
+    },
+    {
+     "item": 14780,
+     "src": 1
+    },
+    {
+     "item": 14271,
+     "src": 1
+    },
+    {
+     "item": 14442,
+     "src": 1
+    },
+    {
+     "item": 14658,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Gahz'rilla",
+   "npcID": 7273,
+   "displayID": 7271,
+   "class": "elite",
+   "level": [
+    46,
+    46
+   ],
+   "abilities": [
+    {
+     "spell": 11131,
+     "src": 1
+    },
+    {
+     "spell": 11836,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 11902,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 9469,
+     "src": 1
+    },
+    {
+     "item": 9467,
+     "src": 1
+    },
+    {
+     "item": 14788,
+     "src": 1
+    },
+    {
+     "item": 14292,
+     "src": 1
+    },
+    {
+     "item": 14847,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Chief Ukorz Sandscalp",
+   "npcID": 7267,
+   "displayID": 6439,
+   "class": "elite",
+   "level": [
+    48,
+    48
+   ],
+   "abilities": [
+    {
+     "spell": 15496,
+     "src": 2
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 11837,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 9476,
+     "src": 1
+    },
+    {
+     "item": 9477,
+     "src": 1
+    },
+    {
+     "item": 9478,
+     "src": 1
+    },
+    {
+     "item": 9479,
+     "src": 1
+    },
+    {
+     "item": 2040,
+     "src": 1
+    },
+    {
+     "item": 10605,
+     "src": 1
+    },
+    {
+     "item": 11086,
+     "src": 1
+    },
+    {
+     "item": 9483,
+     "src": 1
+    },
+    {
+     "item": 9484,
+     "src": 1
+    },
+    {
+     "item": 14274,
+     "src": 1
+    },
+    {
+     "item": 14279,
+     "src": 1
+    },
+    {
+     "item": 15636,
+     "src": 1
+    },
+    {
+     "item": 14286,
+     "src": 1
+    },
+    {
+     "item": 14788,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Sergeant Bly",
+   "npcID": 7604,
+   "displayID": 6433,
+   "class": "elite",
+   "level": [
+    45,
+    45
+   ],
+   "abilities": [
+    {
+     "spell": 3639,
+     "src": 2
+    },
+    {
+     "spell": 12170,
+     "src": 2
+    },
+    {
+     "spell": 11972,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 1169,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 1981,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 9511,
+     "src": 1
+    },
+    {
+     "item": 2802,
+     "src": 1
+    },
+    {
+     "item": 1715,
+     "src": 1
+    },
+    {
+     "item": 1718,
+     "src": 1
+    },
+    {
+     "item": 15629,
+     "src": 1
+    },
+    {
+     "item": 7552,
+     "src": 1
+    },
+    {
+     "item": 15980,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 2768,
+   "name": "Divino-matic Rod",
+   "level": 47,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 7407
+  },
+  {
+   "id": 2770,
+   "name": "Gahz'rilla",
+   "level": 50,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 4453
+  },
+  {
+   "id": 2846,
+   "name": "Tiara of the Deep",
+   "level": 46,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 6546
+  },
+  {
+   "id": 2861,
+   "name": "Tabetha's Task",
+   "level": 46,
+   "req": 40,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2864,
+   "name": "Tran'rek",
+   "level": 45,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 773
+  },
+  {
+   "id": 2865,
+   "name": "Scarab Shells",
+   "level": 45,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 7876
+  },
+  {
+   "id": 2936,
+   "name": "The Spider God",
+   "level": 45,
+   "req": 40,
+   "side": "horde",
+   "src": 1,
+   "giver": 3188
+  },
+  {
+   "id": 2991,
+   "name": "Nekrum's Medallion",
+   "level": 47,
+   "req": 40,
+   "side": "alliance",
+   "src": 1,
+   "giver": 8022
+  },
+  {
+   "id": 3042,
+   "name": "Troll Temper",
+   "level": 45,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 7804
+  },
+  {
+   "id": 3527,
+   "name": "The Prophecy of Mosh'aru",
+   "level": 47,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 8579
+  }
+ ]
+}

@@ -1,0 +1,235 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ruins-of-ahnqiraj",
+ "name": "Ruins of Ahn'Qiraj",
+ "kind": "raid",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 509,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Ruins of Ahn'Qiraj"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Ruins of Ahn'Qiraj (outside portal)",
+   "uiMapID": 1451,
+   "floor": 0,
+   "x": 0.5,
+   "y": 0.9,
+   "approx": true,
+   "source": 2,
+   "note": "Silithus gate (client tables only give world yards; map percent not sourced)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Kurinnaxx",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5635,
+   "y": 0.3574,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "General Rajaxx",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.584,
+   "y": 0.4913,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Moam",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3286,
+   "y": 0.3605,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Buru the Gorger",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6979,
+   "y": 0.6205,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Ayamiss the Hunter",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6168,
+   "y": 0.9051,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Ossirian the Unscarred",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4291,
+   "y": 0.6959,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5635,
+   "y": 0.3574,
+   "note": "Kill Kurinnaxx",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.584,
+   "y": 0.4913,
+   "note": "Kill General Rajaxx",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3286,
+   "y": 0.3605,
+   "note": "Kill Moam",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6979,
+   "y": 0.6205,
+   "note": "Kill Buru the Gorger",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6168,
+   "y": 0.9051,
+   "note": "Kill Ayamiss the Hunter",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4291,
+   "y": 0.6959,
+   "note": "Kill Ossirian the Unscarred",
+   "point": "p8",
+   "approx": false
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "Rajaxx has Andorov-style escort waves in Classic. Order is common but each boss after Kurinnaxx can be taken in any order. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

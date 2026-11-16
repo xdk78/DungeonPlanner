@@ -1,0 +1,662 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ruins-of-ahnqiraj",
+ "name": "Ruins of Ahn'Qiraj",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Kurinnaxx",
+   "npcID": 15348,
+   "displayID": 15742,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 26527,
+     "src": 2
+    },
+    {
+     "spell": 25646,
+     "src": 2,
+     "note": "Stacking healing reduction on the tank; swap when it grows."
+    },
+    {
+     "spell": 25656,
+     "src": 2,
+     "note": "Makes players miss and stops casts in the trap; stay out."
+    },
+    {
+     "spell": 26446,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 25814,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 21499,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21498,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20889,
+     "src": 1
+    },
+    {
+     "item": 20885,
+     "src": 1
+    },
+    {
+     "item": 21502,
+     "src": 1
+    },
+    {
+     "item": 21501,
+     "src": 1
+    },
+    {
+     "item": 21503,
+     "src": 1
+    },
+    {
+     "item": 21500,
+     "src": 1
+    },
+    {
+     "item": 20888,
+     "src": 1
+    },
+    {
+     "item": 20884,
+     "src": 1
+    },
+    {
+     "item": 21298,
+     "src": 1
+    },
+    {
+     "item": 21306,
+     "src": 1
+    },
+    {
+     "item": 21284,
+     "src": 1
+    },
+    {
+     "item": 21300,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "General Rajaxx",
+   "npcID": 15341,
+   "displayID": 15376,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 6713,
+     "src": 1
+    },
+    {
+     "spell": 8269,
+     "src": 1,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 25471,
+     "src": 1
+    },
+    {
+     "spell": 25599,
+     "src": 1
+    },
+    {
+     "spell": 26550,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 21493,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21492,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20889,
+     "src": 1
+    },
+    {
+     "item": 20885,
+     "src": 1
+    },
+    {
+     "item": 21495,
+     "src": 1
+    },
+    {
+     "item": 21496,
+     "src": 1
+    },
+    {
+     "item": 21497,
+     "src": 1
+    },
+    {
+     "item": 21494,
+     "src": 1
+    },
+    {
+     "item": 20884,
+     "src": 1
+    },
+    {
+     "item": 20888,
+     "src": 1
+    },
+    {
+     "item": 21280,
+     "src": 1
+    },
+    {
+     "item": 21302,
+     "src": 1
+    },
+    {
+     "item": 21279,
+     "src": 1
+    },
+    {
+     "item": 21214,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Moam",
+   "npcID": 15340,
+   "displayID": 15392,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 15550,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 25672,
+     "src": 1
+    },
+    {
+     "spell": 25685,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20886,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20890,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21467,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21471,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21479,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21472,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21455,
+     "src": 1
+    },
+    {
+     "item": 21469,
+     "src": 1
+    },
+    {
+     "item": 21474,
+     "src": 1
+    },
+    {
+     "item": 21473,
+     "src": 1
+    },
+    {
+     "item": 21468,
+     "src": 1
+    },
+    {
+     "item": 21470,
+     "src": 1
+    },
+    {
+     "item": 21477,
+     "src": 1
+    },
+    {
+     "item": 22220,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Buru the Gorger",
+   "npcID": 15370,
+   "displayID": 15654,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 96,
+     "src": 1
+    },
+    {
+     "spell": 1557,
+     "src": 1
+    },
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 20512,
+     "src": 1
+    },
+    {
+     "spell": 25640,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20890,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21485,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20886,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21486,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21487,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20888,
+     "src": 1
+    },
+    {
+     "item": 20884,
+     "src": 1
+    },
+    {
+     "item": 21491,
+     "src": 1
+    },
+    {
+     "item": 21490,
+     "src": 1
+    },
+    {
+     "item": 21488,
+     "src": 1
+    },
+    {
+     "item": 21489,
+     "src": 1
+    },
+    {
+     "item": 20885,
+     "src": 1
+    },
+    {
+     "item": 20889,
+     "src": 1
+    },
+    {
+     "item": 21284,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Ayamiss the Hunter",
+   "npcID": 15369,
+   "displayID": 15431,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 8269,
+     "src": 1,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 25725,
+     "src": 1
+    },
+    {
+     "spell": 25748,
+     "src": 1
+    },
+    {
+     "spell": 25749,
+     "src": 1
+    },
+    {
+     "spell": 25852,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 20890,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20886,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21478,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21479,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21466,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20884,
+     "src": 1
+    },
+    {
+     "item": 20888,
+     "src": 1
+    },
+    {
+     "item": 21480,
+     "src": 1
+    },
+    {
+     "item": 21483,
+     "src": 1
+    },
+    {
+     "item": 21484,
+     "src": 1
+    },
+    {
+     "item": 21481,
+     "src": 1
+    },
+    {
+     "item": 20889,
+     "src": 1
+    },
+    {
+     "item": 20885,
+     "src": 1
+    },
+    {
+     "item": 21482,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Ossirian the Unscarred",
+   "npcID": 15339,
+   "displayID": 15432,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 25176,
+     "src": 1
+    },
+    {
+     "spell": 25177,
+     "src": 1
+    },
+    {
+     "spell": 25178,
+     "src": 1
+    },
+    {
+     "spell": 25180,
+     "src": 1
+    },
+    {
+     "spell": 25181,
+     "src": 1
+    },
+    {
+     "spell": 25183,
+     "src": 1
+    },
+    {
+     "spell": 25188,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 21220,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20886,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20890,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21458,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21457,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21456,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21463,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21464,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21460,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21461,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21462,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21452,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21453,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21459,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 8791,
+   "name": "The Fall of Ossirian",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1
+  }
+ ]
+}

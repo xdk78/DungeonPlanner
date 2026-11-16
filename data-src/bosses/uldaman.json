@@ -1,0 +1,889 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "uldaman",
+ "name": "Uldaman",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p4",
+   "name": "Revelosh",
+   "npcID": 6910,
+   "displayID": 5945,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 16006,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 15801,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 9391,
+     "src": 1
+    },
+    {
+     "item": 9389,
+     "src": 1
+    },
+    {
+     "item": 9387,
+     "src": 1
+    },
+    {
+     "item": 9390,
+     "src": 1
+    },
+    {
+     "item": 9388,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "The Lost Dwarves",
+   "npcID": 6906,
+   "members": [
+    6907,
+    6908
+   ],
+   "displayID": 5710,
+   "class": "elite",
+   "level": [
+    41,
+    41
+   ],
+   "loot": [
+    {
+     "item": 870,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 9404,
+     "src": 1
+    },
+    {
+     "item": 9401,
+     "src": 1
+    },
+    {
+     "item": 9394,
+     "src": 1
+    },
+    {
+     "item": 9406,
+     "src": 1
+    },
+    {
+     "item": 9383,
+     "src": 1
+    },
+    {
+     "item": 9428,
+     "src": 1
+    },
+    {
+     "item": 9399,
+     "src": 1
+    },
+    {
+     "item": 9398,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Ironaya",
+   "npcID": 7228,
+   "displayID": 6089,
+   "class": "elite",
+   "level": [
+    40,
+    40
+   ],
+   "abilities": [
+    {
+     "spell": 8374,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Sweeping blow in front of it; do not stand there."
+    },
+    {
+     "spell": 110762,
+     "src": 2
+    },
+    {
+     "spell": 11876,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns players near the boss; keep ranged away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 9407,
+     "src": 1
+    },
+    {
+     "item": 9409,
+     "src": 1
+    },
+    {
+     "item": 9408,
+     "src": 1
+    },
+    {
+     "item": 10605,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Obsidian Sentinel",
+   "npcID": 7023,
+   "displayID": 5285,
+   "class": "elite",
+   "level": [
+    42,
+    42
+   ],
+   "abilities": [
+    {
+     "spell": 9941,
+     "src": 2
+    },
+    {
+     "spell": 10072,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 2825,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 9384,
+     "src": 1
+    },
+    {
+     "item": 9899,
+     "src": 1
+    },
+    {
+     "item": 10088,
+     "src": 1
+    },
+    {
+     "item": 4080,
+     "src": 1
+    },
+    {
+     "item": 9935,
+     "src": 1
+    },
+    {
+     "item": 7496,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Ancient Stone Keeper",
+   "npcID": 7206,
+   "displayID": 10798,
+   "class": "elite",
+   "level": [
+    44,
+    44
+   ],
+   "abilities": [
+    {
+     "spell": 10094,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 10132,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 9410,
+     "src": 1
+    },
+    {
+     "item": 9424,
+     "src": 1
+    },
+    {
+     "item": 9386,
+     "src": 1
+    },
+    {
+     "item": 9430,
+     "src": 1
+    },
+    {
+     "item": 9411,
+     "src": 1
+    },
+    {
+     "item": 8121,
+     "src": 1
+    },
+    {
+     "item": 9918,
+     "src": 1
+    },
+    {
+     "item": 9935,
+     "src": 1
+    },
+    {
+     "item": 8108,
+     "src": 1
+    },
+    {
+     "item": 9882,
+     "src": 1
+    },
+    {
+     "item": 7540,
+     "src": 1
+    },
+    {
+     "item": 8138,
+     "src": 1
+    },
+    {
+     "item": 8116,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Galgann Firehammer",
+   "npcID": 7291,
+   "displayID": 6059,
+   "class": "elite",
+   "level": [
+    45,
+    45
+   ],
+   "abilities": [
+    {
+     "spell": 3356,
+     "src": 1
+    },
+    {
+     "spell": 9482,
+     "src": 1
+    },
+    {
+     "spell": 11969,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 1982,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 2164,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 11310,
+     "src": 1
+    },
+    {
+     "item": 9412,
+     "src": 1
+    },
+    {
+     "item": 9392,
+     "src": 1
+    },
+    {
+     "item": 9381,
+     "src": 1
+    },
+    {
+     "item": 11311,
+     "src": 1
+    },
+    {
+     "item": 9419,
+     "src": 1
+    },
+    {
+     "item": 8138,
+     "src": 1
+    },
+    {
+     "item": 4062,
+     "src": 1
+    },
+    {
+     "item": 9918,
+     "src": 1
+    },
+    {
+     "item": 8143,
+     "src": 1
+    },
+    {
+     "item": 8108,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Grimlok",
+   "npcID": 4854,
+   "displayID": 11165,
+   "class": "elite",
+   "level": [
+    45,
+    45
+   ],
+   "abilities": [
+    {
+     "spell": 6742,
+     "src": 1,
+     "note": "Speeds up an ally; dispel it or save cooldowns."
+    },
+    {
+     "spell": 8292,
+     "src": 1,
+     "note": "Chain lightning that jumps between players; interrupt it."
+    },
+    {
+     "spell": 9532,
+     "src": 1
+    },
+    {
+     "spell": 11892,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 9415,
+     "src": 1
+    },
+    {
+     "item": 9416,
+     "src": 1
+    },
+    {
+     "item": 9406,
+     "src": 1
+    },
+    {
+     "item": 9414,
+     "src": 1
+    },
+    {
+     "item": 8144,
+     "src": 1
+    },
+    {
+     "item": 8114,
+     "src": 1
+    },
+    {
+     "item": 8116,
+     "src": 1
+    },
+    {
+     "item": 8117,
+     "src": 1
+    },
+    {
+     "item": 8127,
+     "src": 1
+    },
+    {
+     "item": 9914,
+     "src": 1
+    },
+    {
+     "item": 7495,
+     "src": 1
+    },
+    {
+     "item": 10087,
+     "src": 1
+    },
+    {
+     "item": 4080,
+     "src": 1
+    },
+    {
+     "item": 6423,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Archaedas",
+   "npcID": 2748,
+   "displayID": 5988,
+   "class": "elite",
+   "level": [
+    47,
+    47
+   ],
+   "abilities": [
+    {
+     "spell": 6524,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Stuns everyone near the boss; keep the casters back."
+    },
+    {
+     "spell": 8269,
+     "src": 1,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 10252,
+     "src": 1,
+     "note": "Wakes the stone guardians; kill the adds."
+    },
+    {
+     "spell": 10258,
+     "src": 1,
+     "note": "Wakes the stone guardians; kill the adds."
+    }
+   ],
+   "loot": [
+    {
+     "item": 11118,
+     "src": 1
+    },
+    {
+     "item": 9413,
+     "src": 1
+    },
+    {
+     "item": 9418,
+     "src": 1
+    },
+    {
+     "item": 9432,
+     "src": 1
+    },
+    {
+     "item": 9420,
+     "src": 1
+    },
+    {
+     "item": 4069,
+     "src": 1
+    },
+    {
+     "item": 6427,
+     "src": 1
+    },
+    {
+     "item": 7540,
+     "src": 1
+    },
+    {
+     "item": 8114,
+     "src": 1
+    },
+    {
+     "item": 8273,
+     "src": 1
+    },
+    {
+     "item": 8279,
+     "src": 1
+    },
+    {
+     "item": 8117,
+     "src": 1
+    },
+    {
+     "item": 7113,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 17,
+   "name": "Uldaman Reagent Run",
+   "level": 42,
+   "req": 38,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1470
+  },
+  {
+   "id": 704,
+   "name": "Agmond's Fate",
+   "level": 38,
+   "req": 30,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1344
+  },
+  {
+   "id": 709,
+   "name": "Solution to Doom",
+   "level": 40,
+   "req": 30,
+   "side": "both",
+   "src": 1,
+   "giver": 2785
+  },
+  {
+   "id": 721,
+   "name": "A Sign of Hope",
+   "level": 35,
+   "req": 35,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2910
+  },
+  {
+   "id": 722,
+   "name": "Amulet of Secrets",
+   "level": 40,
+   "req": 35,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2909
+  },
+  {
+   "id": 1139,
+   "name": "The Lost Tablets of Will",
+   "level": 45,
+   "req": 35,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2918
+  },
+  {
+   "id": 1360,
+   "name": "Reclaimed Treasures",
+   "level": 43,
+   "req": 33,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6294
+  },
+  {
+   "id": 2198,
+   "name": "The Shattered Necklace",
+   "level": 41,
+   "req": 37,
+   "side": "alliance",
+   "src": 1
+  },
+  {
+   "id": 2199,
+   "name": "Lore for a Price",
+   "level": 41,
+   "req": 37,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6826
+  },
+  {
+   "id": 2200,
+   "name": "Back to Uldaman",
+   "level": 42,
+   "req": 37,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6826
+  },
+  {
+   "id": 2201,
+   "name": "Find the Gems",
+   "level": 43,
+   "req": 37,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6912
+  },
+  {
+   "id": 2202,
+   "name": "Uldaman Reagent Run",
+   "level": 42,
+   "req": 36,
+   "side": "horde",
+   "src": 1,
+   "giver": 6868
+  },
+  {
+   "id": 2204,
+   "name": "Restoring the Necklace",
+   "level": 44,
+   "req": 37,
+   "side": "alliance",
+   "src": 1
+  },
+  {
+   "id": 2240,
+   "name": "The Hidden Chamber",
+   "level": 40,
+   "req": 35,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6906
+  },
+  {
+   "id": 2278,
+   "name": "The Platinum Discs",
+   "level": 47,
+   "req": 40,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2279,
+   "name": "The Platinum Discs",
+   "level": 47,
+   "req": 40,
+   "side": "alliance",
+   "src": 1
+  },
+  {
+   "id": 2280,
+   "name": "The Platinum Discs",
+   "level": 47,
+   "req": 40,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 2283,
+   "name": "Necklace Recovery",
+   "level": 41,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6986
+  },
+  {
+   "id": 2284,
+   "name": "Necklace Recovery, Take 2",
+   "level": 41,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6986
+  },
+  {
+   "id": 2318,
+   "name": "Translating the Journal",
+   "level": 42,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6912
+  },
+  {
+   "id": 2338,
+   "name": "Translating the Journal",
+   "level": 42,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6868
+  },
+  {
+   "id": 2339,
+   "name": "Find the Gems and Power Source",
+   "level": 44,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6868
+  },
+  {
+   "id": 2340,
+   "name": "Deliver the Gems",
+   "level": 44,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6868
+  },
+  {
+   "id": 2341,
+   "name": "Necklace Recovery, Take 3",
+   "level": 44,
+   "req": 37,
+   "side": "horde",
+   "src": 1,
+   "giver": 6986
+  },
+  {
+   "id": 2342,
+   "name": "Reclaimed Treasures",
+   "level": 43,
+   "req": 33,
+   "side": "horde",
+   "src": 1,
+   "giver": 5651
+  },
+  {
+   "id": 2361,
+   "name": "Restoring the Necklace",
+   "level": 44,
+   "req": 37,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6826
+  },
+  {
+   "id": 2398,
+   "name": "The Lost Dwarves",
+   "level": 40,
+   "req": 35,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1356
+  },
+  {
+   "id": 2418,
+   "name": "Power Stones",
+   "level": 36,
+   "req": 30,
+   "side": "both",
+   "src": 1,
+   "giver": 2817
+  },
+  {
+   "id": 3375,
+   "name": "Replacement Phial",
+   "level": 42,
+   "req": 37,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6826
+  }
+ ]
+}

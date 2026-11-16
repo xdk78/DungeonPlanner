@@ -1,0 +1,1056 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "temple-of-ahnqiraj",
+ "name": "Temple of Ahn'Qiraj",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "The Prophet Skeram",
+   "npcID": 15263,
+   "displayID": 15345,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 26192,
+     "src": 2
+    },
+    {
+     "spell": 26194,
+     "src": 2
+    },
+    {
+     "spell": 785,
+     "src": 2
+    },
+    {
+     "spell": 747,
+     "src": 2
+    },
+    {
+     "spell": 13810,
+     "src": 2
+    },
+    {
+     "spell": 370066,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 21707,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21699,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21698,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21708,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21706,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21701,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21814,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21700,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21702,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21704,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21128,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21703,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21705,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22222,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Silithid Royalty",
+   "npcID": 15543,
+   "members": [
+    15544,
+    15511
+   ],
+   "displayID": 15657,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 3242,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 25807,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 25808,
+     "src": 1
+    },
+    {
+     "spell": 26580,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 21688,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21689,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21686,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21690,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21682,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21691,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21687,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21681,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21603,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21680,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21685,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21693,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21696,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21695,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Battleguard Sartura",
+   "npcID": 15516,
+   "displayID": 15583,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 25174,
+     "src": 2
+    },
+    {
+     "spell": 26083,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Spins and hits everyone close; get out of melee range."
+    },
+    {
+     "spell": 26084,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 21648,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21671,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21672,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21674,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21675,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21676,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21678,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21669,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21670,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21667,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21673,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21666,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21668,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21232,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Fankriss the Unyielding",
+   "npcID": 15510,
+   "displayID": 125331,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 518,
+     "src": 1
+    },
+    {
+     "spell": 720,
+     "src": 1
+    },
+    {
+     "spell": 731,
+     "src": 1
+    },
+    {
+     "spell": 1121,
+     "src": 1
+    },
+    {
+     "spell": 20311,
+     "src": 1
+    },
+    {
+     "spell": 25646,
+     "src": 1,
+     "note": "Stacking healing reduction on the tank; swap when it grows."
+    },
+    {
+     "spell": 25831,
+     "src": 1
+    },
+    {
+     "spell": 25832,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 21665,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21647,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21627,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21664,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21663,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21652,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21639,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21651,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21645,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21635,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21650,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22402,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22396,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21237,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Viscidus",
+   "npcID": 15299,
+   "displayID": 15686,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 25937,
+     "src": 1
+    },
+    {
+     "spell": 25991,
+     "src": 1
+    },
+    {
+     "spell": 25993,
+     "src": 1
+    },
+    {
+     "spell": 26608,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20932,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20928,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21677,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21626,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21625,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22399,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21622,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21623,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21624,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21232,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21237,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20731,
+     "src": 1
+    },
+    {
+     "item": 20730,
+     "src": 1
+    },
+    {
+     "item": 20734,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Princess Huhuran",
+   "npcID": 15509,
+   "displayID": 15739,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 26050,
+     "src": 1
+    },
+    {
+     "spell": 26051,
+     "src": 1
+    },
+    {
+     "spell": 26053,
+     "src": 1
+    },
+    {
+     "spell": 26068,
+     "src": 1
+    },
+    {
+     "spell": 26180,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 1215752,
+     "src": 1
+    },
+    {
+     "spell": 1215755,
+     "src": 1
+    },
+    {
+     "spell": 1215756,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20932,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20928,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21617,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21619,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21618,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21620,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21621,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21616,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21232,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21237,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20729,
+     "src": 1
+    },
+    {
+     "item": 20727,
+     "src": 1
+    },
+    {
+     "item": 20731,
+     "src": 1
+    },
+    {
+     "item": 20734,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Twin Emperors",
+   "npcID": 15276,
+   "members": [
+    15275
+   ],
+   "displayID": 15778,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 568,
+     "src": 1
+    },
+    {
+     "spell": 799,
+     "src": 1
+    },
+    {
+     "spell": 800,
+     "src": 1
+    },
+    {
+     "spell": 802,
+     "src": 1
+    },
+    {
+     "spell": 804,
+     "src": 1
+    },
+    {
+     "spell": 7393,
+     "src": 1
+    },
+    {
+     "spell": 20477,
+     "src": 1
+    },
+    {
+     "spell": 26006,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20926,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20930,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21609,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21605,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21598,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21600,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21602,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21604,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21608,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21599,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21601,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21606,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21679,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21597,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Ouro",
+   "npcID": 15517,
+   "displayID": 15509,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 26058,
+     "src": 1
+    },
+    {
+     "spell": 26102,
+     "src": 1
+    },
+    {
+     "spell": 26103,
+     "src": 1
+    },
+    {
+     "spell": 26586,
+     "src": 1
+    },
+    {
+     "spell": 26615,
+     "src": 1
+    },
+    {
+     "spell": 26616,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20931,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20927,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 23557,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21610,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 23570,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21611,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 23558,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21615,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21237,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21232,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20731,
+     "src": 1
+    },
+    {
+     "item": 20727,
+     "src": 1
+    },
+    {
+     "item": 20729,
+     "src": 1
+    },
+    {
+     "item": 20730,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "C'thun",
+   "npcID": 15727,
+   "displayID": 15787,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 26029,
+     "src": 1
+    },
+    {
+     "spell": 26134,
+     "src": 1
+    },
+    {
+     "spell": 26476,
+     "src": 1
+    },
+    {
+     "spell": 364340,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20933,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21221,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20929,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21581,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21583,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22732,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21586,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21596,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22730,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22731,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21582,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21585,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21579,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 21126,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ]
+}

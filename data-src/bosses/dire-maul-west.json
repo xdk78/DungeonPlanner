@@ -1,0 +1,770 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "dire-maul-west",
+ "name": "Dire Maul: West",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Tendris Warpwood",
+   "npcID": 11489,
+   "displayID": 14383,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 5568,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    },
+    {
+     "spell": 22916,
+     "src": 1
+    },
+    {
+     "spell": 22924,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22994,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 18390,
+     "src": 1
+    },
+    {
+     "item": 18393,
+     "src": 1
+    },
+    {
+     "item": 18352,
+     "src": 1
+    },
+    {
+     "item": 18353,
+     "src": 1
+    },
+    {
+     "item": 15987,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Illyanna Ravenoak",
+   "npcID": 11488,
+   "displayID": 11270,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 20735,
+     "src": 1
+    },
+    {
+     "spell": 22914,
+     "src": 1
+    },
+    {
+     "spell": 22915,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18383,
+     "src": 1
+    },
+    {
+     "item": 18386,
+     "src": 1
+    },
+    {
+     "item": 18347,
+     "src": 1
+    },
+    {
+     "item": 18349,
+     "src": 1
+    },
+    {
+     "item": 22206,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Magister Kalendris",
+   "npcID": 11487,
+   "displayID": 14384,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 7645,
+     "src": 1,
+     "note": "Takes over a player for a few seconds; hold your damage on them."
+    },
+    {
+     "spell": 17146,
+     "src": 1
+    },
+    {
+     "spell": 17287,
+     "src": 1
+    },
+    {
+     "spell": 22917,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18401,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18374,
+     "src": 1
+    },
+    {
+     "item": 18397,
+     "src": 1
+    },
+    {
+     "item": 18371,
+     "src": 1
+    },
+    {
+     "item": 18359,
+     "src": 1
+    },
+    {
+     "item": 18350,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Immol'thar",
+   "npcID": 11496,
+   "displayID": 14173,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 22950,
+     "src": 2,
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 16128,
+     "src": 2,
+     "tags": [
+      "healer",
+      "dispel"
+     ]
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "tags": [
+      "tank",
+      "healer"
+     ],
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 5568,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18401,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18377,
+     "src": 1
+    },
+    {
+     "item": 18379,
+     "src": 1
+    },
+    {
+     "item": 18391,
+     "src": 1
+    },
+    {
+     "item": 18381,
+     "src": 1
+    },
+    {
+     "item": 18385,
+     "src": 1
+    },
+    {
+     "item": 18389,
+     "src": 1
+    },
+    {
+     "item": 18384,
+     "src": 1
+    },
+    {
+     "item": 18394,
+     "src": 1
+    },
+    {
+     "item": 18372,
+     "src": 1
+    },
+    {
+     "item": 18370,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Prince Tortheldrin",
+   "npcID": 11486,
+   "displayID": 11256,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 15589,
+     "src": 1,
+     "note": "Spins and hits everyone close; get out of melee range."
+    },
+    {
+     "spell": 22920,
+     "src": 1
+    },
+    {
+     "spell": 22995,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18395,
+     "src": 1
+    },
+    {
+     "item": 18382,
+     "src": 1
+    },
+    {
+     "item": 18380,
+     "src": 1
+    },
+    {
+     "item": 18378,
+     "src": 1
+    },
+    {
+     "item": 18396,
+     "src": 1
+    },
+    {
+     "item": 18392,
+     "src": 1
+    },
+    {
+     "item": 18376,
+     "src": 1
+    },
+    {
+     "item": 18375,
+     "src": 1
+    },
+    {
+     "item": 18388,
+     "src": 1
+    },
+    {
+     "item": 18373,
+     "src": 1
+    },
+    {
+     "item": 21525,
+     "src": 1
+    },
+    {
+     "item": 14456,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1193,
+   "name": "A Broken Trap",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 1318,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5518,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5519,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5525,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5528,
+   "name": "The Gordok Taste Test",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14322,
+   "shared": true
+  },
+  {
+   "id": 7429,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 7441,
+   "name": "Pusillin and the Elder Azj'Tordin",
+   "level": 58,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14355,
+   "shared": true
+  },
+  {
+   "id": 7461,
+   "name": "The Madness Within",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 7462,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7463,
+   "name": "Arcane Refreshment",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7481,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 14373,
+   "shared": true
+  },
+  {
+   "id": 7482,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 14374,
+   "shared": true
+  },
+  {
+   "id": 7483,
+   "name": "Libram of Rapidity",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7484,
+   "name": "Libram of Focus",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7485,
+   "name": "Libram of Protection",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7488,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7877,
+   "shared": true
+  },
+  {
+   "id": 7489,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 7776,
+   "shared": true
+  },
+  {
+   "id": 7492,
+   "name": "Camp Mojache",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 10879,
+   "shared": true
+  },
+  {
+   "id": 7494,
+   "name": "Feathermoon Stronghold",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2198,
+   "shared": true
+  },
+  {
+   "id": 7498,
+   "name": "Garona: A Study on Stealth and Treachery",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7499,
+   "name": "Codex of Defense",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7500,
+   "name": "The Arcanist's Cookbook",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7501,
+   "name": "The Light and How To Swing It",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7502,
+   "name": "Harnessing Shadows",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7503,
+   "name": "The Greatest Race of Hunters",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7504,
+   "name": "Holy Bologna: What the Light Won't Tell You",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7505,
+   "name": "Frost Shock and You",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7506,
+   "name": "The Emerald Dream...",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7507,
+   "name": "Nostro's Compendium",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7508,
+   "name": "The Forging of Quel'Serrar",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7703,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14325,
+   "shared": true
+  },
+  {
+   "id": 7877,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 8948,
+   "name": "Anthion's Old Friend",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16016,
+   "shared": true
+  },
+  {
+   "id": 8949,
+   "name": "Falrin's Vendetta",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8950,
+   "name": "The Instigator's Enchantment",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8967,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8990,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 9030,
+   "name": "Anthion's Parting Words",
+   "level": 15,
+   "req": 15,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  }
+ ]
+}

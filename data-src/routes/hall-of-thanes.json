@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "slug": "hall-of-thanes",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "Dungeon Journal HallOfThanesMap (same)"},
+  "overrides": {"1": {"block_rects": [[0.81, 0, 1, 1], [0, 0, 0.27, 1], [0.56, 0.76, 0.81, 1], [0.27, 0.76, 0.47, 1]], "open_paths": [{"points": [[0.51, 0.95], [0.51, 0.72]], "width": 7}, {"points": [[0.51, 0.25], [0.51, 0.16]], "width": 12}]}},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (Route from several guides and addons (boss spots agree within about 30 px), not checked in the game)",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p1", "floor": 1, "at": [0.5078, 0.937], "approx": true, "name": "Portal in"},
+      {"point": "p2", "floor": 1, "at": [0.5029, 0.6662], "approx": true, "name": "Faldrim Anvilmar"},
+      {"point": "p3", "floor": 1, "at": [0.7207, 0.4729], "approx": true, "name": "Magmatus"},
+      {"point": "p4", "floor": 1, "at": [0.5088, 0.5183], "approx": true, "name": "Plunder"},
+      {"point": "p5", "floor": 1, "at": [0.5078, 0.164], "approx": true, "name": "Durgen Dirgehammer"}
+    ],
+    "add": [
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.5204, 0.1747], "to": [0.5127, 0.1742], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.499, 0.1825], "to": [0.4971, 0.1772], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5594, 0.1985], "to": [0.5488, 0.1845], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.5078, 0.937], "to": [0.5029, 0.6662], "bends": [[0.5064, 0.8862], [0.5036, 0.8766], [0.4896, 0.859], [0.4854, 0.8329], [0.4855, 0.8127], [0.4896, 0.7876], [0.4994, 0.7753], [0.5055, 0.7547]], "import": "fdr"},
+    {"floor": 1, "from": [0.5029, 0.6662], "to": [0.7207, 0.4729], "bends": [[0.5031, 0.6927], [0.5062, 0.6969], [0.527, 0.6969], [0.5323, 0.6897], [0.5468, 0.6882], [0.548, 0.7015], [0.558, 0.716], [0.5782, 0.7157], [0.6012, 0.6814], [0.6052, 0.6808], [0.6035, 0.677], [0.6058, 0.6735], [0.6307, 0.6765], [0.64, 0.6925], [0.6613, 0.6923], [0.6881, 0.6492], [0.6906, 0.6323], [0.6953, 0.6293], [0.6934, 0.5818], [0.6954, 0.5784], [0.7009, 0.5783], [0.6953, 0.5763], [0.6953, 0.5555], [0.6984, 0.5459], [0.7117, 0.5243], [0.7131, 0.5125], [0.7264, 0.5124], [0.7324, 0.5031], [0.7322, 0.4903]], "import": "fdr"},
+    {"floor": 1, "from": [0.7207, 0.4729], "to": [0.5088, 0.5183], "bends": [[0.7303, 0.4585], [0.7304, 0.4482], [0.7245, 0.4393], [0.684, 0.4436], [0.6776, 0.4498], [0.6674, 0.468], [0.6643, 0.4685], [0.6689, 0.4731], [0.6689, 0.483], [0.6569, 0.5007], [0.6439, 0.5007], [0.6393, 0.4949], [0.6234, 0.4949], [0.6171, 0.4891], [0.6095, 0.4889], [0.6057, 0.4835], [0.6064, 0.4918], [0.6017, 0.499], [0.5958, 0.4994], [0.5897, 0.508], [0.5814, 0.5081], [0.5778, 0.5124], [0.5597, 0.5124], [0.5567, 0.5079], [0.5566, 0.4982], [0.5565, 0.5082], [0.5465, 0.5227], [0.5267, 0.5227], [0.5231, 0.5183]], "import": "fdr"},
+    {"floor": 1, "from": [0.5088, 0.5183], "to": [0.5078, 0.164], "bends": [[0.5043, 0.5159], [0.5029, 0.4841], [0.5029, 0.4486], [0.5059, 0.4387], [0.5059, 0.4134], [0.5076, 0.4098], [0.5059, 0.4065], [0.5059, 0.3651], [0.5039, 0.3582], [0.5039, 0.2963], [0.5076, 0.2928], [0.5029, 0.2864], [0.5029, 0.2392], [0.5058, 0.2341], [0.5059, 0.2231], [0.4846, 0.1891], [0.4844, 0.1587], [0.4899, 0.1523], [0.4972, 0.161]], "import": "fdr"}
+  ]
+}

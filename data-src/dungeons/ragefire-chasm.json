@@ -1,0 +1,389 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ragefire-chasm",
+ "name": "Ragefire Chasm",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  13,
+  18
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 389,
+ "maps": [
+  {
+   "uiMapID": 213,
+   "floor": 1,
+   "name": "Ragefire Chasm",
+   "instanceMapID": 389
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/ragefire-chasm",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.61,
+   "y": 0.07,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl drawn at the top of the map; the long trogg corridor runs south from here."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Oggleflint",
+   "npcID": 11517,
+   "idSource": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Early boss with trogg adds, in the first third of the dungeon."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Taragaman the Hungerer",
+   "npcID": 11520,
+   "idSource": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.41,
+   "y": 0.58,
+   "approx": true,
+   "source": 3,
+   "note": "Stands on the platform in the middle of the lava hall (skull icon on the map)."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Jergosh the Invoker",
+   "npcID": 11518,
+   "idSource": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.34,
+   "y": 0.81,
+   "approx": true,
+   "source": 3,
+   "note": "Warlock in the southern chasm room."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Bazzalan",
+   "npcID": 11519,
+   "idSource": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Southern cave with Jergosh."
+  },
+  {
+   "id": "p6",
+   "kind": "quest_item",
+   "name": "Taragaman the Hungerer's Heart",
+   "itemID": 14540,
+   "idSource": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.41,
+   "y": 0.58,
+   "approx": true,
+   "source": 3,
+   "note": "Drops from Taragaman; handed in outside for the Searing Blade quest line."
+  },
+  {
+   "id": "p7",
+   "kind": "pack",
+   "name": "Trogg and shaman cluster in the entry corridor",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.22,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Ragefire Troggs with Shamans (heal each other) early in the corridor; pull around a corner."
+  },
+  {
+   "id": "p8",
+   "kind": "pack",
+   "name": "Molten Elementals around the lava hall",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.47,
+   "y": 0.52,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Molten Elementals (Fire Shield) and troggs on the walkways leading to Taragaman."
+  },
+  {
+   "id": "p9",
+   "kind": "pack",
+   "name": "Searing Blade cultists, enforcers and warlocks",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.37,
+   "y": 0.72,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: cultist group on the slope down to Jergosh; warlocks have a Voidwalker."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.61,
+   "y": 0.07,
+   "note": "Enter and go south down the corridor",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.24,
+   "note": "Corridor, pull the troggs back to the corner",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Oggleflint with a few of his troggs",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.66,
+   "y": 0.62,
+   "note": "Walk the loop south then west",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.41,
+   "y": 0.58,
+   "note": "Taragaman on his platform",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.37,
+   "y": 0.7,
+   "note": "Down the ramp into the southern cave",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.34,
+   "y": 0.81,
+   "note": "Jergosh first (the strongest of the pair)",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 213,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Bazzalan last; end of the dungeon",
+   "point": "p5",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p7",
+    "p2"
+   ],
+   "note": "Entry corridor and Oggleflint; take only a few troggs with him."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p8",
+    "p3"
+   ],
+   "note": "Lava hall trash, then Taragaman."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p9",
+    "p4",
+    "p5"
+   ],
+   "note": "Southern cave: cultists, then Jergosh, then Bazzalan."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.4278,
+   "y": 0.5828,
+   "approx": true,
+   "note": "Tank dead centre of the platform, back to the lava-free side."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.4184,
+   "y": 0.6036,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.4721,
+   "y": 0.5717,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.4497,
+   "y": 0.6167,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.3447,
+   "y": 0.7926,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.3644,
+   "y": 0.8042,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.3384,
+   "y": 0.7474,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 213,
+   "floor": 1,
+   "x": 0.3808,
+   "y": 0.7745,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Only a cleave to watch; face him away from the group. Bring a handful of troggs in so the room is not overwhelming."
+  },
+  {
+   "boss": "p3",
+   "text": "Fire Nova at melee range and an Uppercut that launches the tank. Tank him in the middle of the platform so a launch cannot drop the tank into lava. Clear patrols first."
+  },
+  {
+   "boss": "p4",
+   "text": "The strongest of the pair: kill Jergosh before his two adds. He curses (Weakness) and casts Immolate."
+  },
+  {
+   "boss": "p5",
+   "text": "Poisons the main target and uses Sinister Strike. Kill him first, then the two adds."
+  }
+ ],
+ "notes": "Horde-only. OpenMap has no boss pins for this dungeon, so Taragaman (skull icon on the map picture) and Jergosh (tinted chasm room) are art estimates and Oggleflint and Bazzalan have no position. NeedRoll's pins were looked at only as a cross-check (they agree with the Taragaman and Jergosh estimates); nothing was copied from them. The map picture carries two more skull icons (about 0.54,0.29 and 0.69,0.43) that were not matched to a boss. All quest givers are outside (Thrall and Neeru in Orgrimmar, Rahauro in Thunder Bluff, Varimathras in the Undercity)."
+}

@@ -1,0 +1,439 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "temple-of-atalhakkar",
+ "name": "The Temple of Atal'Hakkar",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  50,
+  60
+ ],
+ "ejInstanceID": 237,
+ "instanceMapID": 109,
+ "maps": [
+  {
+   "uiMapID": 220,
+   "floor": 1,
+   "name": "The Temple of Atal'Hakkar"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "The Temple of Atal'Hakkar (outside portal)",
+   "uiMapID": 1435,
+   "floor": 0,
+   "x": 0.692,
+   "y": 0.548,
+   "approx": true,
+   "source": 4,
+   "note": "Temple entrance on the Swamp of Sorrows island (ATT 69.2, 54.8)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Jammal'an the Prophet",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7609,
+   "y": 0.459,
+   "approx": false,
+   "source": 1,
+   "note": "East side; Ogom the Wretched fights with him."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Avatar of Hakkar",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.2432,
+   "y": 0.459,
+   "approx": false,
+   "source": 1,
+   "note": "Far west, after the Eternal Flames event."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Shade of Eranikus",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6708,
+   "y": 0.877,
+   "approx": false,
+   "source": 1,
+   "note": "South-east final boss."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Atal'alarion",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Central boss at the statue puzzle."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Dreamscythe",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "One of the dragon-wing bosses (south)."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Weaver",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Dragon-wing boss that comes with Dreamscythe."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Morphaz",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Dragon-wing boss in the south."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Hazzas",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Dragon-wing boss in the south."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Atal'alarion",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7609,
+   "y": 0.459,
+   "note": "Kill Jammal'an the Prophet",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.2432,
+   "y": 0.459,
+   "note": "Kill Avatar of Hakkar",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Dreamscythe",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Weaver",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Morphaz",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Hazzas",
+   "point": "p10",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6708,
+   "y": 0.877,
+   "note": "Kill Shade of Eranikus",
+   "point": "p5",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7609,
+   "y": 0.479,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7859,
+   "y": 0.459,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7309,
+   "y": 0.499,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.7809,
+   "y": 0.519,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.2632,
+   "y": 0.459,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.2432,
+   "y": 0.484,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.2832,
+   "y": 0.429,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.3032,
+   "y": 0.479,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6565,
+   "y": 0.863,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6883,
+   "y": 0.8591,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6212,
+   "y": 0.8705,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 220,
+   "floor": 1,
+   "x": 0.6419,
+   "y": 0.8208,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p6",
+   "text": "Light the statues in the right order and clear the trolls first."
+  },
+  {
+   "boss": "p3",
+   "text": "Mind-control and ward caster: kill the shamans and Ogom, keep dispels ready."
+  },
+  {
+   "boss": "p4",
+   "text": "The Eternal Flames have to be lit before the Avatar spawns; fight is fire-based."
+  },
+  {
+   "boss": "p5",
+   "text": "Fear/slow caster; interrupt where you can and keep the group together."
+  }
+ ],
+ "notes": "OpenMap lists only Jammal'an, Avatar and Shade; The map is one composite picture in these sources, although the real dungeon has stairs between levels. Route is a typical clear, not measured. uiMapID 220 from AllTheThings. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

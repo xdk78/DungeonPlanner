@@ -1,0 +1,23 @@
+FONTLOG for the fonts in this folder
+===================================
+
+AlegreyaSans-Medium.ttf
+  Alegreya Sans Medium 2.004 by Huerta Tipografica (Juan Pablo del Peral), unmodified, from
+  https://github.com/google/fonts/tree/main/ofl/alegreyasans (upstream:
+  https://github.com/huertatipografica/Alegreya-Sans). SIL Open Font License 1.1, see OFL.txt.
+
+DPSans.ttf ("DP Sans Medium")
+  A Modified Version of AlegreyaSans-Medium.ttf above, in the sense of the SIL Open Font License 1.1 (OFL.txt), which
+  also covers this file. Alegreya Sans declares no Reserved Font Name; the modified font is renamed anyway (family
+  "DP Sans", PostScript name "DPSans-Medium") so it is not mistaken for the original. The copyright notice and the
+  licence entries of the name table are kept.
+
+  Changes (2026-11-16, made with fontTools for Dungeon Planner):
+  - Subset to Basic Latin, Latin-1 Supplement, Latin Extended-A and a few punctuation and currency signs (371 glyphs).
+  - Removed the OpenType layout tables (GSUB, GPOS, GDEF), the TrueType hinting (fpgm, prep, cvt, gasp) and the
+    empty DSIG table; glyph names dropped (post format 3).
+  - One cmap in format 4 (Windows Unicode BMP and its Unicode-platform twin); no Macintosh cmap.
+  - Outlines, advance widths and vertical metrics are unchanged.
+
+  Why: Dungeon Planner tests whether the game client loads the full file; the plain copy tells a problem with the
+  file apart from a problem with the folder (docs/COMPATIBILITY.md, "Fonts").

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "about": "Which of the game's minimap pictures make up each plan floor that has no map art in the client; tools/minimap_art.py writes Data/MinimapArtData.lua from it (docs/DATA-SOURCES.md, section Maps from the game's minimap pictures). source: terrain (the map's terrain tiles) or building (some parts of one WMO: wmo = its file ID, groups = its part numbers). rect: content (the box of what is drawn), fdr (the rectangle Forever Dungeon Routes gives the floor) or [north max, west max, north min, west min] in yards; the plan's points are always inside. map: the instance map ID; wdt: its WdtFileDataID (the client's Map table). fdr: that addon's floor whose frame turns the plan's space into world positions. planSpace: provider (the default: the plan was placed on the providers' picture) or uimap (the plan is in the old dungeon map's space, fdr then names that map).",
+  "floors": [
+    { "slug": "hall-of-thanes", "floor": 1, "map": 3065, "wdt": 7713294, "source": "terrain", "fdr": 1030651, "rect": "content", "pad": 0.12 },
+    { "slug": "ruins-of-lordaeron", "floor": 1, "map": 2999, "wdt": 7255103, "source": "terrain", "fdr": 1029991, "rect": "fdr" },
+    { "slug": "excavation-site-wetlands", "floor": 1, "map": 2998, "wdt": 7252920, "source": "terrain", "fdr": 1029981, "rect": "fdr" },
+    { "slug": "city-of-dalaran", "floor": 1, "map": 2959, "wdt": 6982267, "source": "terrain", "fdr": 1029591, "rect": "fdr" },
+    { "slug": "the-drowned-city", "floor": 1, "map": 2970, "wdt": 6992746, "source": "terrain", "fdr": 1029701, "rect": "fdr" },
+    { "slug": "kroldok-stronghold", "floor": 1, "map": 3039, "wdt": 7540069, "source": "terrain", "fdr": 1030391, "rect": "fdr" },
+    { "slug": "alcaz-prison", "floor": 1, "map": 2994, "wdt": 7244526, "source": "terrain", "fdr": 1029941, "rect": "content" },
+    { "slug": "blackmaw-hold", "floor": 1, "map": 2974, "wdt": 7011642, "source": "terrain", "fdr": 1029741, "rect": "fdr" },
+    { "slug": "shapers-terrace", "floor": 1, "map": 3001, "wdt": 7278158, "source": "terrain", "fdr": 1030011, "rect": "fdr" },
+    {"slug": "blackmaw-hold", "floor": 2, "map": 2974, "wdt": 7011642, "source": "building", "wmo": 7216078, "groups": [0, 1, 2, 3, 4, 5, 6, 7, 8], "fdr": 1029742, "rect": "content"},
+    {"slug": "blackmaw-hold", "floor": 3, "map": 2974, "wdt": 7011642, "source": "building", "wmo": 7212893, "groups": [1, 2, 3, 6, 13, 15, 17], "fdr": 1029743, "rect": "content"},
+    {"slug": "blackmaw-hold", "floor": 4, "map": 2974, "wdt": 7011642, "source": "building", "wmo": 7212893, "groups": [1, 8, 11], "fdr": 1029745, "rect": "content"},
+    {"slug": "blackmaw-hold", "floor": 5, "map": 2974, "wdt": 7011642, "source": "building", "wmo": 7212893, "groups": [5, 7, 9, 10, 14, 16], "fdr": 1029744, "rect": "content"},
+    {"slug": "blackmaw-hold", "floor": 6, "map": 2974, "wdt": 7011642, "source": "building", "wmo": 7212893, "groups": [12, 18], "fdr": 1029746, "rect": "content"},
+    {"slug": "scholomance", "floor": 1, "map": 289, "wdt": 790713, "source": "building", "wmo": 111490, "groups": [0, 9, 14], "fdr": 306, "planSpace": "uimap", "rect": "content"},
+    {"slug": "scholomance", "floor": 2, "map": 289, "wdt": 790713, "source": "building", "wmo": 111490, "groups": [1, 2, 3, 4, 5, 7, 9, 11, 12], "fdr": 307, "planSpace": "uimap", "rect": "content"},
+    {"slug": "scholomance", "floor": 3, "map": 289, "wdt": 790713, "source": "building", "wmo": 111490, "groups": [4, 8, 12, 15, 16, 17, 18], "fdr": 308, "planSpace": "uimap", "rect": "content"},
+    {"slug": "scholomance", "floor": 4, "map": 289, "wdt": 790713, "source": "building", "wmo": 111490, "groups": [10, 11, 15, 19, 20, 21], "fdr": 309, "planSpace": "uimap", "rect": "content"}
+  ]
+}

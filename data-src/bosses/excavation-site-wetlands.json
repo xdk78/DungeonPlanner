@@ -1,0 +1,333 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "excavation-site-wetlands",
+ "name": "Excavation Site: Wetlands",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Saltspine",
+   "npcID": 260322,
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 3604,
+     "src": 3
+    },
+    {
+     "spell": 1316382,
+     "src": 3,
+     "tags": [
+      "healer"
+     ]
+    },
+    {
+     "spell": 16495,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 273022,
+     "src": 2
+    },
+    {
+     "item": 273023,
+     "src": 2
+    },
+    {
+     "item": 273024,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144209
+  },
+  {
+   "point": "p3",
+   "name": "Shadetooth",
+   "npcID": 260325,
+   "level": [
+    29,
+    29
+   ],
+   "abilities": [
+    {
+     "spell": 14100,
+     "src": 3,
+     "tags": [
+      "healer"
+     ],
+     "note": "Mass fear; use tremor or fear ward and spread."
+    },
+    {
+     "spell": 1284435,
+     "src": 3,
+     "tags": [
+      "tank",
+      "healer"
+     ]
+    },
+    {
+     "spell": 12054,
+     "src": 3
+    },
+    {
+     "spell": 3427,
+     "tags": [
+      "dispel"
+     ],
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 273027,
+     "src": 2
+    },
+    {
+     "item": 273026,
+     "src": 2
+    },
+    {
+     "item": 273025,
+     "src": 2
+    },
+    {
+     "item": 273106,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144210
+  },
+  {
+   "point": "p4",
+   "name": "Highland Horror",
+   "npcID": 260808,
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 1316480,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots players near it; dispel it."
+    },
+    {
+     "spell": 9616,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Relic Guardian",
+   "npcID": 260326,
+   "level": [
+    31,
+    31
+   ],
+   "abilities": [
+    {
+     "spell": 8078,
+     "src": 3,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Hits nearby players and slows their attacks."
+    },
+    {
+     "spell": 8374,
+     "src": 3,
+     "note": "Sweeping blow in front of it; do not stand there.",
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 10101,
+     "src": 3,
+     "note": "Throws its target back; tank with a wall behind you.",
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 11876,
+     "src": 3,
+     "tags": [
+      "tank"
+     ],
+     "note": "Stuns players near the boss; keep ranged away."
+    },
+    {
+     "spell": 1284450,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 270866,
+     "src": 3
+    },
+    {
+     "item": 270865,
+     "src": 2
+    },
+    {
+     "item": 273028,
+     "src": 2
+    },
+    {
+     "item": 273029,
+     "src": 2
+    },
+    {
+     "item": 273030,
+     "src": 2
+    },
+    {
+     "item": 273097,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 2,
+    "level": 2,
+    "displayID": 3
+   },
+   "displayID": 144224
+  }
+ ],
+ "quests": [
+  {
+   "id": 95697,
+   "name": "Changing Tastes",
+   "level": 31,
+   "side": "horde",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95664,
+   "name": "Elder Knowledge",
+   "level": 31,
+   "side": "horde",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 98823,
+   "name": "Earthen Echo",
+   "level": 31,
+   "side": "horde",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95682,
+   "name": "Open the Maw",
+   "level": 31,
+   "side": "horde",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 98815,
+   "name": "Highland Hides",
+   "level": 28,
+   "side": "alliance",
+   "req": 24,
+   "giver": 2094,
+   "src": 3
+  },
+  {
+   "id": 95772,
+   "name": "Songblade Search",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95646,
+   "name": "Horrors in the Highland",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95647,
+   "name": "Lost in the Thicket Things",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95809,
+   "name": "Heartwoven",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 95810,
+   "name": "Lost Relic Carry",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  },
+  {
+   "id": 98824,
+   "name": "Prehistoric Prism",
+   "level": 31,
+   "side": "alliance",
+   "req": 24,
+   "src": 3
+  }
+ ]
+}

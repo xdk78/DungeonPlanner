@@ -1,0 +1,993 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackwing-lair",
+ "name": "Blackwing Lair",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Razorgore the Untamed",
+   "npcID": 12435,
+   "displayID": 10115,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19873,
+     "src": 2
+    },
+    {
+     "spell": 19872,
+     "src": 2
+    },
+    {
+     "spell": 19632,
+     "src": 2
+    },
+    {
+     "spell": 22425,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23023,
+     "src": 2,
+     "note": "Fire damage over time on a player; heal it."
+    },
+    {
+     "spell": 23040,
+     "src": 2
+    },
+    {
+     "spell": 24375,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns and knocks back close players; stay out of melee range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16959,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16926,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16911,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16935,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16918,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16934,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16904,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19337,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19336,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19369,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19370,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16951,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16943,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19334,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Vaelastrasz the Corrupt",
+   "npcID": 13020,
+   "displayID": 13992,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 23513,
+     "src": 2
+    },
+    {
+     "spell": 23642,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23461,
+     "src": 2
+    },
+    {
+     "spell": 18173,
+     "src": 2,
+     "note": "A player burns out of control; take them away from the group."
+    },
+    {
+     "spell": 19983,
+     "src": 2
+    },
+    {
+     "spell": 15847,
+     "src": 2,
+     "note": "Hits whoever is behind the boss; do not stand there."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16960,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16818,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16925,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16936,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16910,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16933,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16903,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19371,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19372,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19339,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19340,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16952,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19346,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16944,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Broodlord Lashlayer",
+   "npcID": 12017,
+   "displayID": 14308,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 15284,
+     "src": 1
+    },
+    {
+     "spell": 15754,
+     "src": 1
+    },
+    {
+     "spell": 18670,
+     "src": 1,
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 23331,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24573,
+     "src": 1,
+     "note": "Cuts healing on the tank; plan extra healing."
+    },
+    {
+     "spell": 367369,
+     "src": 1
+    },
+    {
+     "spell": 367418,
+     "src": 1
+    },
+    {
+     "spell": 368007,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 20383,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16941,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16906,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16919,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16965,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16912,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16927,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16898,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19342,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19341,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19373,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19374,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16957,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16949,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Firemaw",
+   "npcID": 11983,
+   "displayID": 6377,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 23341,
+     "src": 2
+    },
+    {
+     "spell": 22539,
+     "src": 2,
+     "note": "Cone of fire in front of the boss; do not stand there."
+    },
+    {
+     "spell": 20279,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23339,
+     "src": 2,
+     "note": "Cone in front of the boss; stay behind it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 19365,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19400,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19399,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19398,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19402,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19343,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16907,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16940,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16964,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16920,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16913,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16928,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19401,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16899,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Ebonroc",
+   "npcID": 14601,
+   "displayID": 6377,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 23340,
+     "src": 2,
+     "note": "Hits on the target heal the boss; swap the tank."
+    },
+    {
+     "spell": 22539,
+     "src": 2,
+     "note": "Cone of fire in front of the boss; do not stand there."
+    },
+    {
+     "spell": 20279,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23339,
+     "src": 2,
+     "note": "Cone in front of the boss; stay behind it."
+    },
+    {
+     "spell": 368515,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 19345,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19406,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19405,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19403,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19407,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19368,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16940,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16920,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16964,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16907,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16913,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16899,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16928,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19395,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Flamegor",
+   "npcID": 11981,
+   "displayID": 6377,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 23342,
+     "src": 2,
+     "note": "Enrage; dispel it with a tranquilizing shot."
+    },
+    {
+     "spell": 22539,
+     "src": 2,
+     "note": "Cone of fire in front of the boss; do not stand there."
+    },
+    {
+     "spell": 20279,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23339,
+     "src": 2,
+     "note": "Cone in front of the boss; stay behind it."
+    },
+    {
+     "spell": 368521,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 19430,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19432,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19433,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19431,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19357,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19367,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16913,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16920,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16964,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16940,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16907,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16899,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16928,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19395,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Chromaggus",
+   "npcID": 14020,
+   "displayID": 14367,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 2649,
+     "src": 1
+    },
+    {
+     "spell": 17253,
+     "src": 1
+    },
+    {
+     "spell": 22277,
+     "src": 1
+    },
+    {
+     "spell": 22278,
+     "src": 1
+    },
+    {
+     "spell": 22279,
+     "src": 1
+    },
+    {
+     "spell": 22280,
+     "src": 1
+    },
+    {
+     "spell": 22281,
+     "src": 1
+    },
+    {
+     "spell": 23128,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 16917,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16961,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16924,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16832,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16937,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16932,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16902,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19387,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19390,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19385,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19386,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19389,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19388,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19391,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Nefarian",
+   "npcID": 11583,
+   "displayID": 11380,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19983,
+     "src": 1
+    },
+    {
+     "spell": 20279,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 20311,
+     "src": 1
+    },
+    {
+     "spell": 22539,
+     "src": 1,
+     "note": "Cone of fire in front of the boss; do not stand there."
+    },
+    {
+     "spell": 22667,
+     "src": 1
+    },
+    {
+     "spell": 22682,
+     "src": 1
+    },
+    {
+     "spell": 22686,
+     "src": 1
+    },
+    {
+     "spell": 22687,
+     "src": 1,
+     "note": "Lowers healing on a target; dispel the curse."
+    }
+   ],
+   "loot": [
+    {
+     "item": 19003,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19002,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16916,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16942,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16905,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16923,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16966,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16931,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16897,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19380,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19378,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19379,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19375,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19377,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 8288,
+   "name": "Only One May Rise",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1
+  }
+ ]
+}

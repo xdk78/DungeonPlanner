@@ -1,0 +1,760 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "stratholme-undead",
+ "name": "Stratholme: Undead (Service Entrance)",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p4",
+   "name": "Nerub'enkan",
+   "npcID": 10437,
+   "displayID": 9793,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 17235,
+     "src": 2
+    },
+    {
+     "spell": 31602,
+     "src": 2
+    },
+    {
+     "spell": 6016,
+     "src": 2
+    },
+    {
+     "spell": 4962,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13529,
+     "src": 1
+    },
+    {
+     "item": 18740,
+     "src": 1
+    },
+    {
+     "item": 18738,
+     "src": 1
+    },
+    {
+     "item": 16675,
+     "src": 1
+    },
+    {
+     "item": 18739,
+     "src": 1
+    },
+    {
+     "item": 18736,
+     "src": 1
+    },
+    {
+     "item": 13530,
+     "src": 1
+    },
+    {
+     "item": 13531,
+     "src": 1
+    },
+    {
+     "item": 13532,
+     "src": 1
+    },
+    {
+     "item": 13533,
+     "src": 1
+    },
+    {
+     "item": 13508,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Baroness Anastari",
+   "npcID": 10436,
+   "displayID": 10698,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 16867,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18730,
+     "src": 1
+    },
+    {
+     "item": 18728,
+     "src": 1
+    },
+    {
+     "item": 13534,
+     "src": 1
+    },
+    {
+     "item": 16704,
+     "src": 1
+    },
+    {
+     "item": 18729,
+     "src": 1
+    },
+    {
+     "item": 13535,
+     "src": 1
+    },
+    {
+     "item": 13539,
+     "src": 1
+    },
+    {
+     "item": 13537,
+     "src": 1
+    },
+    {
+     "item": 13538,
+     "src": 1
+    },
+    {
+     "item": 13514,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Maleki the Pallid",
+   "npcID": 10438,
+   "displayID": 10546,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 16869,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 17238,
+     "src": 1
+    },
+    {
+     "spell": 17243,
+     "src": 1
+    },
+    {
+     "spell": 17503,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18737,
+     "src": 1
+    },
+    {
+     "item": 18734,
+     "src": 1
+    },
+    {
+     "item": 16691,
+     "src": 1
+    },
+    {
+     "item": 13524,
+     "src": 1
+    },
+    {
+     "item": 18735,
+     "src": 1
+    },
+    {
+     "item": 12833,
+     "src": 1
+    },
+    {
+     "item": 18741,
+     "src": 1
+    },
+    {
+     "item": 13526,
+     "src": 1
+    },
+    {
+     "item": 13525,
+     "src": 1
+    },
+    {
+     "item": 13527,
+     "src": 1
+    },
+    {
+     "item": 13528,
+     "src": 1
+    },
+    {
+     "item": 13509,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Magistrate Barthilas",
+   "npcID": 10435,
+   "displayID": 10433,
+   "class": "elite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 10887,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 16791,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ]
+    },
+    {
+     "spell": 16793,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 18727,
+     "src": 1
+    },
+    {
+     "item": 18725,
+     "src": 1
+    },
+    {
+     "item": 18722,
+     "src": 1
+    },
+    {
+     "item": 13376,
+     "src": 1
+    },
+    {
+     "item": 18726,
+     "src": 1
+    },
+    {
+     "item": 23198,
+     "src": 1
+    },
+    {
+     "item": 12382,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Ramstein the Gorger",
+   "npcID": 10439,
+   "displayID": 12818,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 5568,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    },
+    {
+     "spell": 17307,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 17687,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 14557,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16737,
+     "src": 1
+    },
+    {
+     "item": 13515,
+     "src": 1
+    },
+    {
+     "item": 13374,
+     "src": 1
+    },
+    {
+     "item": 13375,
+     "src": 1
+    },
+    {
+     "item": 13372,
+     "src": 1
+    },
+    {
+     "item": 13373,
+     "src": 1
+    },
+    {
+     "item": 18723,
+     "src": 1
+    },
+    {
+     "item": 18745,
+     "src": 1
+    },
+    {
+     "item": 12735,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    },
+    {
+     "item": 10226,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Baron Rivendare",
+   "npcID": 10440,
+   "displayID": 10729,
+   "class": "elite",
+   "level": [
+    62,
+    62
+   ],
+   "abilities": [
+    {
+     "spell": 15284,
+     "src": 2
+    },
+    {
+     "spell": 15708,
+     "src": 2,
+     "note": "Cuts healing on the tank; plan extra healing or swap."
+    },
+    {
+     "spell": 9613,
+     "src": 2
+    },
+    {
+     "spell": 17434,
+     "src": 2
+    },
+    {
+     "spell": 17467,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13505,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 14558,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22408,
+     "src": 1
+    },
+    {
+     "item": 22409,
+     "src": 1
+    },
+    {
+     "item": 22412,
+     "src": 1
+    },
+    {
+     "item": 13346,
+     "src": 1
+    },
+    {
+     "item": 13340,
+     "src": 1
+    },
+    {
+     "item": 13349,
+     "src": 1
+    },
+    {
+     "item": 13344,
+     "src": 1
+    },
+    {
+     "item": 22410,
+     "src": 1
+    },
+    {
+     "item": 22411,
+     "src": 1
+    },
+    {
+     "item": 13345,
+     "src": 1
+    },
+    {
+     "item": 16687,
+     "src": 1
+    },
+    {
+     "item": 16709,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Postmaster Malown",
+   "npcID": 11143,
+   "displayID": 10669,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 12741,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13392,
+     "src": 1
+    },
+    {
+     "item": 13388,
+     "src": 1
+    },
+    {
+     "item": 13389,
+     "src": 1
+    },
+    {
+     "item": 13391,
+     "src": 1
+    },
+    {
+     "item": 13393,
+     "src": 1
+    },
+    {
+     "item": 13390,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 5122,
+   "name": "The Medallion of Faith",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10917,
+   "shared": true
+  },
+  {
+   "id": 5125,
+   "name": "Aurius' Reckoning",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10917,
+   "shared": true
+  },
+  {
+   "id": 5212,
+   "name": "The Flesh Does Not Lie",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11035,
+   "shared": true
+  },
+  {
+   "id": 5213,
+   "name": "The Active Agent",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11035,
+   "shared": true
+  },
+  {
+   "id": 5214,
+   "name": "The Great Ezra Grimm",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11033,
+   "shared": true
+  },
+  {
+   "id": 5243,
+   "name": "Houses of the Holy",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11036,
+   "shared": true
+  },
+  {
+   "id": 5251,
+   "name": "The Archivist",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11039,
+   "shared": true
+  },
+  {
+   "id": 5262,
+   "name": "The Truth Comes Crashing Down",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5263,
+   "name": "Above and Beyond",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11039,
+   "shared": true
+  },
+  {
+   "id": 5282,
+   "name": "The Restless Souls",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11140,
+   "shared": true
+  },
+  {
+   "id": 5463,
+   "name": "Menethil's Gift",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 11036,
+   "shared": true
+  },
+  {
+   "id": 5848,
+   "name": "Of Love and Family",
+   "level": 60,
+   "req": 52,
+   "side": "both",
+   "src": 1,
+   "giver": 11936,
+   "shared": true
+  },
+  {
+   "id": 6163,
+   "name": "Ramstein",
+   "level": 60,
+   "req": 56,
+   "side": "horde",
+   "src": 1,
+   "giver": 11878,
+   "shared": true
+  },
+  {
+   "id": 6201,
+   "name": "<UNUSED> The Legacy of the Ashbringer",
+   "level": 65,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 6202,
+   "name": "<UNUSED> Good and Evil",
+   "level": 1,
+   "req": 1,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 8945,
+   "name": "Dead Man's Plea",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16016,
+   "shared": true
+  },
+  {
+   "id": 8968,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8991,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  }
+ ]
+}

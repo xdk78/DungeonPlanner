@@ -1,0 +1,701 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "maraudon",
+ "name": "Maraudon",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  46,
+  55
+ ],
+ "ejInstanceID": 232,
+ "instanceMapID": 349,
+ "maps": [
+  {
+   "uiMapID": 280,
+   "floor": 1,
+   "name": "Caverns of Maraudon"
+  },
+  {
+   "uiMapID": 281,
+   "floor": 2,
+   "name": "Zaetar's Grave",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Maraudon (outside portal)",
+   "uiMapID": 1443,
+   "floor": 0,
+   "x": 0.357,
+   "y": 0.555,
+   "approx": true,
+   "source": 4,
+   "note": "Maraudon in Desolace (ATT 35.7, 55.5);"
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Noxxion",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.362,
+   "y": 0.0984,
+   "approx": false,
+   "source": 1,
+   "note": "Orange wing: Foulspore Cavern; spawns Noxxious scourgers."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Razorlash",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.1667,
+   "y": 0.3443,
+   "approx": false,
+   "source": 1,
+   "note": "Orange wing: west side of floor 1."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Lord Vyletongue",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.3784,
+   "y": 0.7049,
+   "approx": false,
+   "source": 1,
+   "note": "Purple wing: Wicked Grotto, south-centre."
+  },
+  {
+   "id": "p6",
+   "kind": "rare",
+   "name": "Meshlok the Harvester",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare in the lower-left of floor 1."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Celebras the Cursed",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2459,
+   "y": 0.1434,
+   "approx": false,
+   "source": 1,
+   "note": "Zaetar's Grave: north-west."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Landslide",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4085,
+   "y": 0.4877,
+   "approx": false,
+   "source": 1,
+   "note": "Centre of Zaetar's Grave."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Tinkerer Gizlock",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.5096,
+   "y": 0.5307,
+   "approx": false,
+   "source": 1,
+   "note": "Floor per OpenMap."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Rotgrip",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4139,
+   "y": 0.8176,
+   "approx": false,
+   "source": 1,
+   "note": "South of Zaetar's Grave."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Princess Theradras",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2582,
+   "y": 0.7889,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss at the end of the inner halls."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.362,
+   "y": 0.0984,
+   "note": "Kill Noxxion",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.1667,
+   "y": 0.3443,
+   "note": "Kill Razorlash",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.3784,
+   "y": 0.7049,
+   "note": "Kill Lord Vyletongue",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.5096,
+   "y": 0.5307,
+   "note": "Kill Tinkerer Gizlock",
+   "point": "p9",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 280,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Descend to Zaetar's Grave",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2459,
+   "y": 0.1434,
+   "note": "Kill Celebras the Cursed",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4085,
+   "y": 0.4877,
+   "note": "Kill Landslide",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4139,
+   "y": 0.8176,
+   "note": "Kill Rotgrip",
+   "point": "p10",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2582,
+   "y": 0.7889,
+   "note": "Kill Princess Theradras",
+   "point": "p11",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p9"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 6,
+   "points": [
+    "p8"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 7,
+   "points": [
+    "p10"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 8,
+   "points": [
+    "p11"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.362,
+   "y": 0.1184,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.387,
+   "y": 0.0984,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.332,
+   "y": 0.1384,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.382,
+   "y": 0.1584,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.1791,
+   "y": 0.3286,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.1863,
+   "y": 0.3598,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.1681,
+   "y": 0.2943,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.2197,
+   "y": 0.3098,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.3683,
+   "y": 0.6877,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.6922,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.3323,
+   "y": 0.6856,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.3653,
+   "y": 0.643,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.4976,
+   "y": 0.5467,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.4896,
+   "y": 0.5157,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.5095,
+   "y": 0.5807,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 280,
+   "floor": 1,
+   "x": 0.4575,
+   "y": 0.5666,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2459,
+   "y": 0.1634,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2709,
+   "y": 0.1434,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2159,
+   "y": 0.1834,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2659,
+   "y": 0.2034,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4,
+   "y": 0.4696,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4311,
+   "y": 0.477,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.3643,
+   "y": 0.4643,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.401,
+   "y": 0.4249,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4136,
+   "y": 0.7976,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4389,
+   "y": 0.8172,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.3832,
+   "y": 0.7781,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.4329,
+   "y": 0.7573,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p11",
+   "role": "tank",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2779,
+   "y": 0.7925,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p11",
+   "role": "melee",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.2537,
+   "y": 0.8135,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p11",
+   "role": "ranged",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.303,
+   "y": 0.7666,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p11",
+   "role": "healer",
+   "uiMapID": 281,
+   "floor": 2,
+   "x": 0.3136,
+   "y": 0.8194,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Spawns waves of scourgers; kill the adds first and then focus him."
+  },
+  {
+   "boss": "p5",
+   "text": "Poison cloud; keep moving between pulls and cure the poison."
+  },
+  {
+   "boss": "p7",
+   "text": "Roots; ranged should kill the spirit adds on the side."
+  },
+  {
+   "boss": "p11",
+   "text": "Her earth elementals stomp and knock back; hold her near a wall and kill adds as needed."
+  }
+ ],
+ "notes": "Boss positions: OpenMap (MIT) except Gizlock and Meshlok. Route is a typical full clear estimate (orange, purple, inner). uiMapID 280 from AllTheThings, 281 inferred. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

@@ -1,0 +1,589 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "stratholme-undead",
+ "name": "Stratholme: Undead (Service Entrance)",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  58,
+  60
+ ],
+ "ejInstanceID": 236,
+ "instanceMapID": 329,
+ "maps": [
+  {
+   "uiMapID": 317,
+   "floor": 1,
+   "name": "Crusader's Square"
+  },
+  {
+   "uiMapID": 318,
+   "floor": 2,
+   "name": "The Gauntlet"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Stratholme: Undead (Service Entrance) (outside portal)",
+   "uiMapID": 1423,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Stratholme gates in the Eastern Plaguelands."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "rare",
+   "name": "Stonespine",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare that walks the loop around the middle block."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Nerub'enkan",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5724,
+   "y": 0.4611,
+   "approx": false,
+   "source": 1,
+   "note": "Centre of the Gauntlet."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Baroness Anastari",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.7459,
+   "y": 0.4693,
+   "approx": false,
+   "source": 1,
+   "note": "East of the Gauntlet."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Maleki the Pallid",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6749,
+   "y": 0.2275,
+   "approx": false,
+   "source": 1,
+   "note": "North-east in the Gauntlet."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Magistrate Barthilas",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5669,
+   "y": 0.1619,
+   "approx": false,
+   "source": 1,
+   "note": "North end of the Gauntlet."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Ramstein the Gorger",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.4563,
+   "y": 0.1988,
+   "approx": false,
+   "source": 1,
+   "note": "Slaughter Square, north-centre."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Baron Rivendare",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Final boss past Slaughter Square."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Postmaster Malown",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5581,
+   "y": 0.6841,
+   "approx": false,
+   "source": 1,
+   "note": "Crusader's Square south-centre; reachable from the Gauntlet. Optional."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Stonespine",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5724,
+   "y": 0.4611,
+   "note": "Kill Nerub'enkan",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.7459,
+   "y": 0.4693,
+   "note": "Kill Baroness Anastari",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6749,
+   "y": 0.2275,
+   "note": "Kill Maleki the Pallid",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5669,
+   "y": 0.1619,
+   "note": "Kill Magistrate Barthilas",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.4563,
+   "y": 0.1988,
+   "note": "Kill Ramstein the Gorger",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 318,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Kill Baron Rivendare",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5581,
+   "y": 0.6841,
+   "note": "Kill Postmaster Malown",
+   "point": "p10",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p8"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 6,
+   "points": [
+    "p10"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5724,
+   "y": 0.4811,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5974,
+   "y": 0.4611,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5424,
+   "y": 0.5011,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5924,
+   "y": 0.5211,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.7259,
+   "y": 0.4684,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.7471,
+   "y": 0.4443,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.7045,
+   "y": 0.4974,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6869,
+   "y": 0.4465,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6805,
+   "y": 0.2467,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6509,
+   "y": 0.2345,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.715,
+   "y": 0.2574,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6726,
+   "y": 0.2907,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.584,
+   "y": 0.1723,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5539,
+   "y": 0.1833,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6167,
+   "y": 0.157,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.6078,
+   "y": 0.2101,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.4753,
+   "y": 0.1925,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.4642,
+   "y": 0.2225,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.4847,
+   "y": 0.1577,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 318,
+   "floor": 2,
+   "x": 0.5195,
+   "y": 0.1988,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5581,
+   "y": 0.7041,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5831,
+   "y": 0.6841,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5281,
+   "y": 0.7241,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 317,
+   "floor": 1,
+   "x": 0.5781,
+   "y": 0.7441,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p5",
+   "text": "Mind-control caster; keep a CC breaker and kill her quickly so the controlled player is not lost."
+  },
+  {
+   "boss": "p6",
+   "text": "Frost-based caster; keep the group together and dispel his debuffs."
+  },
+  {
+   "boss": "p7",
+   "text": "Hits hard and rages; tank him at the corridor end so the cleave only hits the tank."
+  },
+  {
+   "boss": "p8",
+   "text": "Surrounded by ghouls in Slaughter Square; clear them first."
+  },
+  {
+   "boss": "p9",
+   "text": "Summons skeletons and a death-knight style mount; use defensive cooldowns and kill the adds."
+  }
+ ],
+ "notes": "OpenMap (MIT) positions except Rivendare and Stonespine. Same floors as the live wing; the service entrance is on floor 2. Route is typical; Postmaster Malown is optional and on floor 1. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

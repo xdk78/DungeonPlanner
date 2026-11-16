@@ -1,0 +1,504 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "temple-of-atalhakkar",
+ "name": "The Temple of Atal'Hakkar",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Jammal'an the Prophet",
+   "npcID": 5710,
+   "displayID": 6708,
+   "class": "elite",
+   "level": [
+    54,
+    54
+   ],
+   "abilities": [
+    {
+     "spell": 8376,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Roots everyone nearby; kill the totem."
+    },
+    {
+     "spell": 12468,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12480,
+     "src": 1
+    },
+    {
+     "spell": 12492,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 810,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 10808,
+     "src": 1
+    },
+    {
+     "item": 10807,
+     "src": 1
+    },
+    {
+     "item": 10806,
+     "src": 1
+    },
+    {
+     "item": 10625,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Avatar of Hakkar",
+   "npcID": 8443,
+   "displayID": 8053,
+   "class": "elite",
+   "abilities": [
+    {
+     "spell": 12888,
+     "src": 2,
+     "note": "Makes a player attack the group; crowd control or wait it out."
+    },
+    {
+     "spell": 12889,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Slows casting; dispel it or avoid casting for a moment."
+    },
+    {
+     "spell": 31286,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 10838,
+     "src": 1
+    },
+    {
+     "item": 10842,
+     "src": 1
+    },
+    {
+     "item": 10843,
+     "src": 1
+    },
+    {
+     "item": 10844,
+     "src": 1
+    },
+    {
+     "item": 10845,
+     "src": 1
+    },
+    {
+     "item": 10846,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Shade of Eranikus",
+   "npcID": 5709,
+   "displayID": 7806,
+   "class": "elite",
+   "level": [
+    55,
+    55
+   ],
+   "abilities": [
+    {
+     "spell": 11876,
+     "src": 1,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns players near the boss; keep ranged away."
+    },
+    {
+     "spell": 12890,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12891,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 10847,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 10829,
+     "src": 1
+    },
+    {
+     "item": 10833,
+     "src": 1
+    },
+    {
+     "item": 10835,
+     "src": 1
+    },
+    {
+     "item": 10836,
+     "src": 1
+    },
+    {
+     "item": 10828,
+     "src": 1
+    },
+    {
+     "item": 10837,
+     "src": 1
+    },
+    {
+     "item": 10632,
+     "src": 1
+    },
+    {
+     "item": 10454,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Atal'alarion",
+   "npcID": 8580,
+   "displayID": 7873,
+   "class": "elite",
+   "level": [
+    50,
+    50
+   ],
+   "abilities": [
+    {
+     "spell": 6524,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Stuns everyone near the boss; keep the casters back."
+    },
+    {
+     "spell": 12887,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 10800,
+     "src": 1
+    },
+    {
+     "item": 10798,
+     "src": 1
+    },
+    {
+     "item": 10799,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Dreamscythe",
+   "npcID": 5721,
+   "displayID": 7553,
+   "class": "elite",
+   "level": [
+    53,
+    53
+   ],
+   "abilities": [
+    {
+     "spell": 12533,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12882,
+     "src": 2,
+     "note": "Pushes everyone in front of it back; stay beside it."
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Weaver",
+   "npcID": 5720,
+   "displayID": 6375,
+   "class": "elite",
+   "level": [
+    51,
+    51
+   ],
+   "abilities": [
+    {
+     "spell": 12882,
+     "src": 1,
+     "note": "Pushes everyone in front of it back; stay beside it."
+    },
+    {
+     "spell": 12884,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 10632,
+     "src": 1
+    },
+    {
+     "item": 10629,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Morphaz",
+   "npcID": 5719,
+   "displayID": 7975,
+   "class": "elite",
+   "level": [
+    52,
+    52
+   ],
+   "abilities": [
+    {
+     "spell": 12533,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12882,
+     "src": 2,
+     "note": "Pushes everyone in front of it back; stay beside it."
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Hazzas",
+   "npcID": 5722,
+   "displayID": 9584,
+   "class": "elite",
+   "level": [
+    53,
+    53
+   ],
+   "abilities": [
+    {
+     "spell": 12882,
+     "src": 1,
+     "note": "Pushes everyone in front of it back; stay beside it."
+    },
+    {
+     "spell": 12884,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1445,
+   "name": "The Temple of Atal'Hakkar",
+   "level": 50,
+   "req": 38,
+   "side": "horde",
+   "src": 1,
+   "giver": 1443
+  },
+  {
+   "id": 1446,
+   "name": "Jammal'an the Prophet",
+   "level": 53,
+   "req": 38,
+   "side": "both",
+   "src": 1,
+   "giver": 5598
+  },
+  {
+   "id": 1475,
+   "name": "Into The Temple of Atal'Hakkar",
+   "level": 50,
+   "req": 38,
+   "side": "alliance",
+   "src": 1,
+   "giver": 5384
+  },
+  {
+   "id": 2868,
+   "name": "<TXT> The Shriveled Heart",
+   "level": 50,
+   "req": 40,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 3373,
+   "name": "The Essence of Eranikus",
+   "level": 55,
+   "req": 48,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 3380,
+   "name": "The Sunken Temple",
+   "level": 51,
+   "req": 46,
+   "side": "horde",
+   "src": 1,
+   "giver": 8115
+  },
+  {
+   "id": 3446,
+   "name": "Into the Depths",
+   "level": 51,
+   "req": 46,
+   "side": "both",
+   "src": 1,
+   "giver": 7771
+  },
+  {
+   "id": 3447,
+   "name": "Secret of the Circle",
+   "level": 51,
+   "req": 46,
+   "side": "both",
+   "src": 1,
+   "giver": 7771
+  },
+  {
+   "id": 3528,
+   "name": "The God Hakkar",
+   "level": 53,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 8579
+  },
+  {
+   "id": 8733,
+   "name": "Eranikus, Tyrant of the Dream",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "giver": 15362
+  }
+ ]
+}

@@ -1,0 +1,669 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "stratholme-live",
+ "name": "Stratholme: Live (Main Gate)",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p4",
+   "name": "Hearthsinger Forresten",
+   "npcID": 10558,
+   "displayID": 10482,
+   "class": "rareelite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 14443,
+     "src": 1
+    },
+    {
+     "spell": 16798,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Sleeps a player; do not damage them, wake or dispel."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13378,
+     "src": 1
+    },
+    {
+     "item": 13379,
+     "src": 1
+    },
+    {
+     "item": 13384,
+     "src": 1
+    },
+    {
+     "item": 13383,
+     "src": 1
+    },
+    {
+     "item": 16682,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "The Unforgiven",
+   "npcID": 10516,
+   "displayID": 10771,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 14907,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13405,
+     "src": 1
+    },
+    {
+     "item": 13404,
+     "src": 1
+    },
+    {
+     "item": 13408,
+     "src": 1
+    },
+    {
+     "item": 13409,
+     "src": 1
+    },
+    {
+     "item": 16717,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Timmy the Cruel",
+   "npcID": 10808,
+   "displayID": 571,
+   "class": "rareelite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 8599,
+     "src": 1,
+     "note": "Hits harder and faster for a while; heal through it."
+    },
+    {
+     "spell": 17470,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 13400,
+     "src": 1
+    },
+    {
+     "item": 13402,
+     "src": 1
+    },
+    {
+     "item": 13401,
+     "src": 1
+    },
+    {
+     "item": 13403,
+     "src": 1
+    },
+    {
+     "item": 16724,
+     "src": 1
+    },
+    {
+     "item": 18744,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Malor the Zealous",
+   "npcID": 11032,
+   "displayID": 10458,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 12734,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 16172,
+     "src": 2
+    },
+    {
+     "spell": 15493,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 17233,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 18741,
+     "src": 1
+    },
+    {
+     "item": 17061,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Cannon Master Willey",
+   "npcID": 10997,
+   "displayID": 10674,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 10101,
+     "src": 2,
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 15615,
+     "src": 2
+    },
+    {
+     "spell": 17279,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13377,
+     "src": 1
+    },
+    {
+     "item": 22403,
+     "src": 1
+    },
+    {
+     "item": 13380,
+     "src": 1
+    },
+    {
+     "item": 18721,
+     "src": 1
+    },
+    {
+     "item": 13382,
+     "src": 1
+    },
+    {
+     "item": 22407,
+     "src": 1
+    },
+    {
+     "item": 16708,
+     "src": 1
+    },
+    {
+     "item": 13381,
+     "src": 1
+    },
+    {
+     "item": 22405,
+     "src": 1
+    },
+    {
+     "item": 22404,
+     "src": 1
+    },
+    {
+     "item": 22406,
+     "src": 1
+    },
+    {
+     "item": 12839,
+     "src": 1
+    },
+    {
+     "item": 21524,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Archivist Galford",
+   "npcID": 10811,
+   "displayID": 10544,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 17293,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 17366,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13386,
+     "src": 1
+    },
+    {
+     "item": 13387,
+     "src": 1
+    },
+    {
+     "item": 18716,
+     "src": 1
+    },
+    {
+     "item": 16692,
+     "src": 1
+    },
+    {
+     "item": 13385,
+     "src": 1
+    },
+    {
+     "item": 22897,
+     "src": 1
+    },
+    {
+     "item": 12811,
+     "src": 1
+    },
+    {
+     "item": 22206,
+     "src": 1
+    },
+    {
+     "item": 13518,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Balnazzar",
+   "npcID": 10813,
+   "displayID": 10691,
+   "class": "elite",
+   "abilities": [
+    {
+     "spell": 196977,
+     "src": 2
+    },
+    {
+     "spell": 219616,
+     "src": 2
+    },
+    {
+     "spell": 221808,
+     "src": 2
+    },
+    {
+     "spell": 196944,
+     "src": 2
+    },
+    {
+     "spell": 217003,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 14512,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 12103,
+     "src": 1
+    },
+    {
+     "item": 13348,
+     "src": 1
+    },
+    {
+     "item": 13358,
+     "src": 1
+    },
+    {
+     "item": 13359,
+     "src": 1
+    },
+    {
+     "item": 13360,
+     "src": 1
+    },
+    {
+     "item": 13369,
+     "src": 1
+    },
+    {
+     "item": 16725,
+     "src": 1
+    },
+    {
+     "item": 18717,
+     "src": 1
+    },
+    {
+     "item": 18718,
+     "src": 1
+    },
+    {
+     "item": 18720,
+     "src": 1
+    },
+    {
+     "item": 12662,
+     "src": 1
+    },
+    {
+     "item": 13520,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 5122,
+   "name": "The Medallion of Faith",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10917,
+   "shared": true
+  },
+  {
+   "id": 5125,
+   "name": "Aurius' Reckoning",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10917,
+   "shared": true
+  },
+  {
+   "id": 5212,
+   "name": "The Flesh Does Not Lie",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11035,
+   "shared": true
+  },
+  {
+   "id": 5213,
+   "name": "The Active Agent",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11035,
+   "shared": true
+  },
+  {
+   "id": 5214,
+   "name": "The Great Ezra Grimm",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11033,
+   "shared": true
+  },
+  {
+   "id": 5243,
+   "name": "Houses of the Holy",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11036,
+   "shared": true
+  },
+  {
+   "id": 5251,
+   "name": "The Archivist",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11039,
+   "shared": true
+  },
+  {
+   "id": 5262,
+   "name": "The Truth Comes Crashing Down",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5263,
+   "name": "Above and Beyond",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11039,
+   "shared": true
+  },
+  {
+   "id": 5282,
+   "name": "The Restless Souls",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11140,
+   "shared": true
+  },
+  {
+   "id": 5463,
+   "name": "Menethil's Gift",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 11036,
+   "shared": true
+  },
+  {
+   "id": 5848,
+   "name": "Of Love and Family",
+   "level": 60,
+   "req": 52,
+   "side": "both",
+   "src": 1,
+   "giver": 11936,
+   "shared": true
+  },
+  {
+   "id": 6163,
+   "name": "Ramstein",
+   "level": 60,
+   "req": 56,
+   "side": "horde",
+   "src": 1,
+   "giver": 11878,
+   "shared": true
+  },
+  {
+   "id": 6201,
+   "name": "<UNUSED> The Legacy of the Ashbringer",
+   "level": 65,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 6202,
+   "name": "<UNUSED> Good and Evil",
+   "level": 1,
+   "req": 1,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 8945,
+   "name": "Dead Man's Plea",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16016,
+   "shared": true
+  },
+  {
+   "id": 8968,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8991,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  }
+ ]
+}

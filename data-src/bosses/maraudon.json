@@ -1,0 +1,825 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "maraudon",
+ "name": "Maraudon",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Noxxion",
+   "npcID": 13282,
+   "displayID": 11172,
+   "class": "elite",
+   "level": [
+    48,
+    48
+   ],
+   "abilities": [
+    {
+     "spell": 21687,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Poison volley on the group; cleanse it."
+    },
+    {
+     "spell": 10966,
+     "src": 2
+    },
+    {
+     "spell": 21707,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Splits into several adds; use area damage on them."
+    }
+   ],
+   "loot": [
+    {
+     "item": 940,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17746,
+     "src": 1
+    },
+    {
+     "item": 17744,
+     "src": 1
+    },
+    {
+     "item": 17745,
+     "src": 1
+    },
+    {
+     "item": 13018,
+     "src": 1
+    },
+    {
+     "item": 15387,
+     "src": 1
+    },
+    {
+     "item": 15177,
+     "src": 1
+    },
+    {
+     "item": 15635,
+     "src": 1
+    },
+    {
+     "item": 15643,
+     "src": 1
+    },
+    {
+     "item": 14285,
+     "src": 1
+    },
+    {
+     "item": 14779,
+     "src": 1
+    },
+    {
+     "item": 14904,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Razorlash",
+   "npcID": 12258,
+   "displayID": 12389,
+   "class": "elite",
+   "level": [
+    48,
+    48
+   ],
+   "abilities": [
+    {
+     "spell": 11427,
+     "src": 1
+    },
+    {
+     "spell": 15976,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 17749,
+     "src": 1
+    },
+    {
+     "item": 17748,
+     "src": 1
+    },
+    {
+     "item": 17750,
+     "src": 1
+    },
+    {
+     "item": 17751,
+     "src": 1
+    },
+    {
+     "item": 15643,
+     "src": 1
+    },
+    {
+     "item": 14953,
+     "src": 1
+    },
+    {
+     "item": 15176,
+     "src": 1
+    },
+    {
+     "item": 15636,
+     "src": 1
+    },
+    {
+     "item": 15652,
+     "src": 1
+    },
+    {
+     "item": 14271,
+     "src": 1
+    },
+    {
+     "item": 15171,
+     "src": 1
+    },
+    {
+     "item": 15630,
+     "src": 1
+    },
+    {
+     "item": 15982,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Lord Vyletongue",
+   "npcID": 12236,
+   "displayID": 12334,
+   "class": "elite",
+   "level": [
+    47,
+    47
+   ],
+   "abilities": [
+    {
+     "spell": 21390,
+     "src": 2
+    },
+    {
+     "spell": 7964,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Stuns players in the cloud; step out of it."
+    },
+    {
+     "spell": 21655,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14551,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17752,
+     "src": 1
+    },
+    {
+     "item": 17754,
+     "src": 1
+    },
+    {
+     "item": 17755,
+     "src": 1
+    },
+    {
+     "item": 13102,
+     "src": 1
+    },
+    {
+     "item": 14913,
+     "src": 1
+    },
+    {
+     "item": 14779,
+     "src": 1
+    },
+    {
+     "item": 14785,
+     "src": 1
+    },
+    {
+     "item": 15385,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Celebras the Cursed",
+   "npcID": 12225,
+   "displayID": 12350,
+   "class": "elite",
+   "level": [
+    49,
+    49
+   ],
+   "abilities": [
+    {
+     "spell": 12747,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 21807,
+     "src": 1
+    },
+    {
+     "spell": 21968,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 17739,
+     "src": 1
+    },
+    {
+     "item": 17738,
+     "src": 1
+    },
+    {
+     "item": 17740,
+     "src": 1
+    },
+    {
+     "item": 4091,
+     "src": 1
+    },
+    {
+     "item": 13102,
+     "src": 1
+    },
+    {
+     "item": 14448,
+     "src": 1
+    },
+    {
+     "item": 14920,
+     "src": 1
+    },
+    {
+     "item": 15170,
+     "src": 1
+    },
+    {
+     "item": 15638,
+     "src": 1
+    },
+    {
+     "item": 14427,
+     "src": 1
+    },
+    {
+     "item": 14846,
+     "src": 1
+    },
+    {
+     "item": 14960,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Landslide",
+   "npcID": 12203,
+   "displayID": 12293,
+   "class": "elite",
+   "level": [
+    50,
+    50
+   ],
+   "abilities": [
+    {
+     "spell": 5568,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    },
+    {
+     "spell": 18670,
+     "src": 1,
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 21727,
+     "src": 1
+    },
+    {
+     "spell": 21808,
+     "src": 1,
+     "tags": [
+      "control",
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Keeps summoning small adds; kill them or stay clear."
+    }
+   ],
+   "loot": [
+    {
+     "item": 17943,
+     "src": 1
+    },
+    {
+     "item": 17737,
+     "src": 1
+    },
+    {
+     "item": 17736,
+     "src": 1
+    },
+    {
+     "item": 17734,
+     "src": 1
+    },
+    {
+     "item": 15385,
+     "src": 1
+    },
+    {
+     "item": 14466,
+     "src": 1
+    },
+    {
+     "item": 15653,
+     "src": 1
+    },
+    {
+     "item": 14661,
+     "src": 1
+    },
+    {
+     "item": 15965,
+     "src": 1
+    },
+    {
+     "item": 14277,
+     "src": 1
+    },
+    {
+     "item": 14441,
+     "src": 1
+    },
+    {
+     "item": 14666,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Tinkerer Gizlock",
+   "npcID": 13601,
+   "displayID": 7125,
+   "class": "elite",
+   "level": [
+    50,
+    50
+   ],
+   "abilities": [
+    {
+     "spell": 9143,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 29419,
+     "src": 2
+    },
+    {
+     "spell": 21833,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 17719,
+     "src": 1
+    },
+    {
+     "item": 17717,
+     "src": 1
+    },
+    {
+     "item": 17718,
+     "src": 1
+    },
+    {
+     "item": 13076,
+     "src": 1
+    },
+    {
+     "item": 15291,
+     "src": 1
+    },
+    {
+     "item": 14277,
+     "src": 1
+    },
+    {
+     "item": 14861,
+     "src": 1
+    },
+    {
+     "item": 14927,
+     "src": 1
+    },
+    {
+     "item": 14274,
+     "src": 1
+    },
+    {
+     "item": 14291,
+     "src": 1
+    },
+    {
+     "item": 14443,
+     "src": 1
+    },
+    {
+     "item": 14655,
+     "src": 1
+    },
+    {
+     "item": 14661,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Rotgrip",
+   "npcID": 13596,
+   "displayID": 13589,
+   "class": "elite",
+   "level": [
+    50,
+    50
+   ],
+   "abilities": [
+    {
+     "spell": 7938,
+     "src": 2
+    },
+    {
+     "spell": 15976,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14551,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17732,
+     "src": 1
+    },
+    {
+     "item": 17728,
+     "src": 1
+    },
+    {
+     "item": 17730,
+     "src": 1
+    },
+    {
+     "item": 13089,
+     "src": 1
+    },
+    {
+     "item": 14792,
+     "src": 1
+    },
+    {
+     "item": 15622,
+     "src": 1
+    },
+    {
+     "item": 14948,
+     "src": 1
+    },
+    {
+     "item": 14965,
+     "src": 1
+    },
+    {
+     "item": 15176,
+     "src": 1
+    },
+    {
+     "item": 15637,
+     "src": 1
+    },
+    {
+     "item": 15183,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Princess Theradras",
+   "npcID": 12201,
+   "displayID": 12292,
+   "class": "elite",
+   "level": [
+    51,
+    51
+   ],
+   "abilities": [
+    {
+     "spell": 21832,
+     "src": 1
+    },
+    {
+     "spell": 21909,
+     "src": 1
+    },
+    {
+     "spell": 22592,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 942,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17780,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17713,
+     "src": 1
+    },
+    {
+     "item": 17714,
+     "src": 1
+    },
+    {
+     "item": 17707,
+     "src": 1
+    },
+    {
+     "item": 17710,
+     "src": 1
+    },
+    {
+     "item": 17715,
+     "src": 1
+    },
+    {
+     "item": 17766,
+     "src": 1
+    },
+    {
+     "item": 17711,
+     "src": 1
+    },
+    {
+     "item": 14922,
+     "src": 1
+    },
+    {
+     "item": 14437,
+     "src": 1
+    },
+    {
+     "item": 14904,
+     "src": 1
+    },
+    {
+     "item": 10198,
+     "src": 1
+    },
+    {
+     "item": 15394,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 7028,
+   "name": "Twisted Evils",
+   "level": 47,
+   "req": 41,
+   "side": "both",
+   "src": 1,
+   "giver": 13656
+  },
+  {
+   "id": 7029,
+   "name": "Vyletongue Corruption",
+   "level": 47,
+   "req": 41,
+   "side": "horde",
+   "src": 1,
+   "giver": 11823
+  },
+  {
+   "id": 7041,
+   "name": "Vyletongue Corruption",
+   "level": 47,
+   "req": 41,
+   "side": "alliance",
+   "src": 1,
+   "giver": 11715
+  },
+  {
+   "id": 7044,
+   "name": "Legends of Maraudon",
+   "level": 49,
+   "req": 41,
+   "side": "both",
+   "src": 1,
+   "giver": 13697
+  },
+  {
+   "id": 7046,
+   "name": "The Scepter of Celebras",
+   "level": 49,
+   "req": 41,
+   "side": "both",
+   "src": 1,
+   "giver": 13716
+  },
+  {
+   "id": 7064,
+   "name": "Corruption of Earth and Seed",
+   "level": 51,
+   "req": 45,
+   "side": "horde",
+   "src": 1,
+   "giver": 13699
+  },
+  {
+   "id": 7065,
+   "name": "Corruption of Earth and Seed",
+   "level": 51,
+   "req": 45,
+   "side": "alliance",
+   "src": 1,
+   "giver": 13698
+  },
+  {
+   "id": 7066,
+   "name": "Seed of Life",
+   "level": 51,
+   "req": 39,
+   "side": "both",
+   "src": 1,
+   "giver": 12238
+  },
+  {
+   "id": 7067,
+   "name": "The Pariah's Instructions",
+   "level": 48,
+   "req": 39,
+   "side": "both",
+   "src": 1,
+   "giver": 13717
+  },
+  {
+   "id": 7068,
+   "name": "Shadowshard Fragments",
+   "level": 42,
+   "req": 39,
+   "side": "horde",
+   "src": 1,
+   "giver": 7311
+  },
+  {
+   "id": 7070,
+   "name": "Shadowshard Fragments",
+   "level": 42,
+   "req": 39,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4967
+  }
+ ]
+}

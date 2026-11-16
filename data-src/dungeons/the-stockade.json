@@ -1,0 +1,469 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-stockade",
+ "name": "The Stockade",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  24,
+  32
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 34,
+ "maps": [
+  {
+   "uiMapID": 225,
+   "floor": 1,
+   "name": "The Stockade",
+   "instanceMapID": 34
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/the-stockade",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Stairs in",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.78,
+   "approx": true,
+   "source": 3,
+   "note": "Spiral stair at the bottom of the map; the hallway splits left and right to the north."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Targorr the Dread",
+   "npcID": 1696,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.21,
+   "approx": true,
+   "source": 3,
+   "note": "Tinted cell at the top of the central corridor; may spawn in another first-hallway cell."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Dextren Ward",
+   "npcID": 1663,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.22,
+   "y": 0.26,
+   "approx": true,
+   "source": 3,
+   "note": "Round chamber at the end of the left hallway."
+  },
+  {
+   "id": "p4",
+   "kind": "rare",
+   "name": "Bruegal Ironknuckle",
+   "npcID": 1720,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare in the left hallway toward Dextren Ward (per Method)."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Kam Deepfury",
+   "npcID": 1666,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Chamber in the right hallway."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Hamhock",
+   "npcID": 1717,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.78,
+   "y": 0.44,
+   "approx": true,
+   "source": 3,
+   "note": "Round chamber at the end of the right hallway."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Bazil Thredd",
+   "npcID": 1716,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Final boss, in the chambers beside Hamhock."
+  },
+  {
+   "id": "p8",
+   "kind": "quest_npc",
+   "name": "Warden Thelwater",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.74,
+   "approx": true,
+   "source": 2,
+   "note": "Gives Quell the Uprising and The Stockade Riots inside the dungeon; exact spot not sourced, placed in the entrance chamber."
+  },
+  {
+   "id": "p9",
+   "kind": "quest_item",
+   "name": "Head of Targorr",
+   "itemID": 3630,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.21,
+   "approx": true,
+   "source": 2,
+   "note": "Quest item from Targorr."
+  },
+  {
+   "id": "p10",
+   "kind": "quest_item",
+   "name": "Hand of Dextren Ward",
+   "itemID": 3628,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.22,
+   "y": 0.26,
+   "approx": true,
+   "source": 2,
+   "note": "Quest item from Dextren Ward."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_item",
+   "name": "Head of Deepfury",
+   "itemID": 3640,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Quest item from Kam Deepfury."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_item",
+   "name": "Head of Bazil Thredd",
+   "itemID": 2926,
+   "idSource": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Quest item from Bazil Thredd."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.78,
+   "note": "Enter and walk north into the junction",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.21,
+   "note": "Targorr first (check the first-hallway cells)",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.22,
+   "y": 0.26,
+   "note": "Left hallway to Dextren Ward; Bruegal may be on the way",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Back to the right hallway: Kam Deepfury",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.78,
+   "y": 0.44,
+   "note": "Hamhock",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 225,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Bazil Thredd, final boss",
+   "point": "p7",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p2"
+   ],
+   "note": "Targorr alone or with one or two inmates."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p3"
+   ],
+   "note": "Dextren Ward; pull him away from the other hallways because of the fear."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p6",
+    "p7"
+   ],
+   "note": "Hamhock, then Bazil Thredd in the neighbouring cells."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.228,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.478,
+   "y": 0.222,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.518,
+   "y": 0.27,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.47,
+   "y": 0.255,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.2377,
+   "y": 0.2568,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.2357,
+   "y": 0.2795,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.2759,
+   "y": 0.2317,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.2696,
+   "y": 0.2816,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.7629,
+   "y": 0.4345,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.7753,
+   "y": 0.4154,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.7174,
+   "y": 0.4388,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 225,
+   "floor": 1,
+   "x": 0.7463,
+   "y": 0.3977,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Thrash and an enrage at 20% health. Usually comes with one to three other prisoners: check for extras before the pull."
+  },
+  {
+   "boss": "p3",
+   "text": "Intimidating Shout fears the group; pull him where the fear cannot carry you into other hallways. A Tremor Totem cancels it."
+  },
+  {
+   "boss": "p5",
+   "text": "Shield Slam stuns the tank for 2 s and Improved Blocking spikes his block chance. Mostly a tank-focused fight."
+  },
+  {
+   "boss": "p6",
+   "text": "Spams Chain Lightning and Bloodlusts himself (+30% speed, adds too). Stun him and slow attack speed (Thunderclap)."
+  },
+  {
+   "boss": "p7",
+   "text": "Dual-wielding hard hitter. Smoke Bomb stuns everyone nearby for 4 s and he then hits the next un-stunned player on threat, so ranged players stay back and move if targeted."
+  },
+  {
+   "boss": "p4",
+   "text": "Rare with no special abilities."
+  }
+ ],
+ "notes": "Alliance only (inside Stormwind). OpenMap has no pins for this dungeon: Dextren Ward, Hamhock and Targorr are estimates from the three tinted rooms on the map picture; Kam Deepfury, Bazil Thredd and Bruegal Ironknuckle have no position (Method: Kam is in a chamber of the right hallway, Bazil is in the final chambers beyond Hamhock). Targorr can appear in several first-hallway chambers according to Method, so the tinted room is only one of them. NeedRoll's pins were used only as a cross-check; nothing was copied from them. Quest chain starts: The Unsent Letter from VanCleef (Deadmines) unlocks The Stockade Riots from Warden Thelwater, who stands inside the entrance."
+}

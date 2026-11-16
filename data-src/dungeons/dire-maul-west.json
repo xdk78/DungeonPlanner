@@ -1,0 +1,528 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "dire-maul-west",
+ "name": "Dire Maul: West",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  56,
+  60
+ ],
+ "ejInstanceID": 230,
+ "instanceMapID": 429,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Capital Gardens"
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "Court of the Highborne"
+  },
+  {
+   "uiMapID": null,
+   "floor": 3,
+   "name": "Prison of Immol'Thar"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Dire Maul: West (outside portal)",
+   "uiMapID": 1444,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Dire Maul west entrance in Feralas."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Tendris Warpwood",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3361,
+   "y": 0.5369,
+   "approx": false,
+   "source": 1,
+   "note": "Garden boss in the north-west."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Illyanna Ravenoak",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2036,
+   "y": 0.7766,
+   "approx": false,
+   "source": 1,
+   "note": "Patrols the garden's west/south; pull her away from the corridor."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Magister Kalendris",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3388,
+   "y": 0.4508,
+   "approx": false,
+   "source": 1,
+   "note": "Library/court boss on the second floor."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Immol'thar",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3497,
+   "y": 0.5758,
+   "approx": false,
+   "source": 1,
+   "note": "Prison of Immol'Thar; needs the pylons disabled first."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Prince Tortheldrin",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.623,
+   "y": 0.2316,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss in the north of the Prison."
+  },
+  {
+   "id": "p8",
+   "kind": "rare",
+   "name": "Tsu'zee",
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, near Immol'thar's door."
+  },
+  {
+   "id": "p9",
+   "kind": "interactive",
+   "name": "Pylons (five)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Disable the pylons to open the way to Immol'thar; positions not sourced."
+  },
+  {
+   "id": "p10",
+   "kind": "chest",
+   "name": "Knot Thimblejack's Cache",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Library cache, opened with Knot's lockpick; position not sourced."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2036,
+   "y": 0.7766,
+   "note": "Kill Illyanna Ravenoak",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3361,
+   "y": 0.5369,
+   "note": "Kill Tendris Warpwood",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Up to the Court of the Highborne",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3388,
+   "y": 0.4508,
+   "note": "Kill Magister Kalendris",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "note": "Kill Tsu'zee",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3497,
+   "y": 0.5758,
+   "note": "Kill Immol'thar",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.623,
+   "y": 0.2316,
+   "note": "Kill Prince Tortheldrin",
+   "point": "p7",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2036,
+   "y": 0.7966,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2286,
+   "y": 0.7766,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.1736,
+   "y": 0.8166,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2236,
+   "y": 0.8366,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3264,
+   "y": 0.5544,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3142,
+   "y": 0.5248,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.343,
+   "y": 0.5864,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2896,
+   "y": 0.5797,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3388,
+   "y": 0.4708,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3638,
+   "y": 0.4508,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3088,
+   "y": 0.4908,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.3588,
+   "y": 0.5108,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3497,
+   "y": 0.5958,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3747,
+   "y": 0.5758,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3197,
+   "y": 0.6158,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.3697,
+   "y": 0.6358,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.6106,
+   "y": 0.2473,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.6034,
+   "y": 0.2161,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.6216,
+   "y": 0.2816,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.57,
+   "y": 0.2662,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p5",
+   "text": "Caster boss that curses and fears; interrupts and dispels matter."
+  },
+  {
+   "boss": "p6",
+   "text": "Spawns adds that shield him. The tank should not step into the adds; use the pylon shield only after the fight starts."
+  },
+  {
+   "boss": "p7",
+   "text": "Strong tank-and-spank with a reflect/stun; heal through spikes and break line of sight on his caster adds."
+  }
+ ],
+ "notes": "Floors are wing-local (1 Capital Gardens, 2 Court of the Highborne, 3 Prison of Immol'Thar = OpenMap floors 2-4). uiMapIDs unknown. Route/waypoint is an estimate. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

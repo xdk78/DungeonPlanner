@@ -1,0 +1,480 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "shadowfang-keep",
+ "name": "Shadowfang Keep",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages: which drops and spells Forever added or changed on a boss, compared with the Classic list"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Rethilgore",
+   "npcID": 3914,
+   "displayID": 524,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 93863,
+     "src": 2
+    },
+    {
+     "spell": 7295,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 12988,
+     "src": 1
+    },
+    {
+     "item": 12982,
+     "src": 1
+    },
+    {
+     "item": 273457,
+     "forever": true,
+     "src": 3
+    },
+    {
+     "item": 273456,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Razorclaw the Butcher",
+   "npcID": 3886,
+   "displayID": 524,
+   "class": "elite",
+   "level": [
+    22,
+    22
+   ],
+   "abilities": [
+    {
+     "spell": 93930,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 93914,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 1292,
+     "src": 1
+    },
+    {
+     "item": 6226,
+     "src": 1
+    },
+    {
+     "item": 6633,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Baron Silverlaine",
+   "npcID": 3887,
+   "displayID": 3222,
+   "class": "elite",
+   "level": [
+    24,
+    24
+   ],
+   "abilities": [
+    {
+     "spell": 23224,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Lowers healing on a target; dispel the curse."
+    },
+    {
+     "spell": 93956,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Heavy shadow burst; dispel it."
+    },
+    {
+     "spell": 93857,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 6321,
+     "src": 1
+    },
+    {
+     "item": 2205,
+     "src": 1
+    },
+    {
+     "item": 6323,
+     "src": 1
+    },
+    {
+     "item": 9802,
+     "src": 1
+    },
+    {
+     "item": 273637,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Commander Springvale",
+   "npcID": 4278,
+   "displayID": 3223,
+   "class": "elite",
+   "level": [
+    24,
+    24
+   ],
+   "abilities": [
+    {
+     "spell": 93685,
+     "src": 2
+    },
+    {
+     "spell": 93687,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 6320,
+     "src": 1
+    },
+    {
+     "item": 3191,
+     "src": 1
+    },
+    {
+     "item": 6341,
+     "src": 1
+    },
+    {
+     "item": 9802,
+     "src": 1
+    },
+    {
+     "item": 273643,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Odo the Blindwatcher",
+   "npcID": 4279,
+   "displayID": 522,
+   "class": "elite",
+   "level": [
+    24,
+    24
+   ],
+   "abilities": [
+    {
+     "spell": 93952,
+     "src": 2
+    },
+    {
+     "spell": 93931,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 6318,
+     "src": 1
+    },
+    {
+     "item": 2807,
+     "src": 1
+    },
+    {
+     "item": 2205,
+     "src": 1
+    },
+    {
+     "item": 6319,
+     "src": 1
+    },
+    {
+     "item": 273645,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Fenrus the Devourer",
+   "npcID": 4274,
+   "displayID": 2352,
+   "class": "elite",
+   "level": [
+    25,
+    25
+   ],
+   "abilities": [
+    {
+     "spell": 7125,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 6340,
+     "src": 1
+    },
+    {
+     "item": 3230,
+     "src": 1
+    },
+    {
+     "item": 273646,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Wolf Master Nandos",
+   "npcID": 3927,
+   "displayID": 11179,
+   "class": "elite",
+   "level": [
+    25,
+    25
+   ],
+   "abilities": [
+    {
+     "spell": 7487,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 7488,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 7489,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 3748,
+     "src": 1
+    },
+    {
+     "item": 2292,
+     "src": 1
+    },
+    {
+     "item": 6314,
+     "src": 1
+    },
+    {
+     "item": 273647,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Archmage Arugal",
+   "npcID": 4275,
+   "displayID": 2353,
+   "class": "elite",
+   "level": [
+    26,
+    26
+   ],
+   "abilities": [
+    {
+     "spell": 7588,
+     "src": 1
+    },
+    {
+     "spell": 7621,
+     "src": 1,
+     "note": "Turns a player into a hostile worgen; remove the curse."
+    },
+    {
+     "spell": 7803,
+     "src": 1,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns everyone nearby; spread out and heal through."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6324,
+     "src": 1
+    },
+    {
+     "item": 6392,
+     "src": 1
+    },
+    {
+     "item": 6220,
+     "src": 1
+    },
+    {
+     "item": 2807,
+     "src": 1
+    },
+    {
+     "item": 21524,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1013,
+   "name": "The Book of Ur",
+   "level": 26,
+   "req": 16,
+   "side": "horde",
+   "src": 1,
+   "giver": 2934
+  },
+  {
+   "id": 1014,
+   "name": "Arugal Must Die",
+   "level": 27,
+   "req": 18,
+   "side": "horde",
+   "src": 1,
+   "giver": 1938
+  },
+  {
+   "id": 1098,
+   "name": "Deathstalkers in Shadowfang",
+   "level": 25,
+   "req": 18,
+   "side": "horde",
+   "src": 1,
+   "giver": 1952
+  }
+ ]
+}

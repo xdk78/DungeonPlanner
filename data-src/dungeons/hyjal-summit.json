@@ -1,0 +1,377 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "hyjal-summit",
+ "name": "Hyjal Summit",
+ "kind": "raid",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": null,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Hyjal Summit"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Bandalar",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Time-Lost Battalion",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Old Gloomlurker",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Kathris the Haunted",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Elder Minderel",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Council of Thorns",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "The Wild King",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Ancient of Decay",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Sylvestris Dusksong",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Gharalis the Abyssal",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p12",
+   "kind": "boss",
+   "name": "Anara Chillwind",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p13",
+   "kind": "boss",
+   "name": "Tracker Stillwind",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  },
+  {
+   "id": "p14",
+   "kind": "boss",
+   "name": "Nythus the Dreambound",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Boss list only; no positions or order are sourced."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Bandalar",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Time-Lost Battalion",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Old Gloomlurker",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Kathris the Haunted",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Elder Minderel",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Council of Thorns",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill The Wild King",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Ancient of Decay",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Sylvestris Dusksong",
+   "point": "p10",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Gharalis the Abyssal",
+   "point": "p11",
+   "approx": true
+  },
+  {
+   "step": 12,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Anara Chillwind",
+   "point": "p12",
+   "approx": true
+  },
+  {
+   "step": 13,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Tracker Stillwind",
+   "point": "p13",
+   "approx": true
+  },
+  {
+   "step": 14,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Nythus the Dreambound",
+   "point": "p14",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "A Forever-only 20-player raid, announced for 2026-12-09 (not open on 2026-11-15). the Warcraft Tavern encounter list gives the first six in the same order but says the order is unconfirmed. ROUTE IS A PLACEHOLDER (list order), no coordinates, no guide exists yet. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

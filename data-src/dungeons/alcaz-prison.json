@@ -1,0 +1,276 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "alcaz-prison",
+ "name": "Alcaz Prison",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  48,
+  55
+ ],
+ "ejInstanceID": 2994,
+ "instanceMapID": 2994,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Alcaz Prison"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 8,
+   "url": "https://www.warcrafttavern.com/forever/guides/alcaz-island-prison/",
+   "what": "boss order, route, quest NPCs",
+   "forever": true
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Alcaz Prison (outside portal)",
+   "uiMapID": 1445,
+   "floor": 0,
+   "x": 0.753,
+   "y": 0.141,
+   "approx": true,
+   "source": 2,
+   "note": "Portal in the cellar of the prison building on Alcaz Island, NE of Dustwallow Marsh (guide 75, 15; client tables 75.3, 14.1)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Tidemistress Ca'zass",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "First boss, straight ahead at the end of the main corridor, with two Strashaz Enchantresses."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Overseer Wrex",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Left from the entrance; clear the three side cells first, then pull him away. He drops the Overseer's Keyring that opens the right side."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Katerina the Cleaner",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Right side, behind the barred door, with two Alcaz Chaplain Priests. Commander Folkar is chained behind her."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Blazeroar",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Largest chamber past Katerina; the guide also names Zarla Ober."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "The Questioner",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Locked door on the right of the entrance. Guide: skip him on the first pass, he is the real last boss."
+  },
+  {
+   "id": "p8",
+   "kind": "quest_npc",
+   "name": "Commander Folkar (Horde: The Honor of the Kor'kron)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Chained inside the dungeon behind Katerina. Position not sourced."
+  },
+  {
+   "id": "p9",
+   "kind": "quest_npc",
+   "name": "Mason Connery (The Man in the Iron Chains)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "In a cell in Zarla's room. Position not sourced."
+  },
+  {
+   "id": "p10",
+   "kind": "quest_item",
+   "name": "Overseer's Keyring",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Dropped by Overseer Wrex; unlocks the right side."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_item",
+   "name": "Ornate Shackle Key",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 8,
+   "note": "Guide implies The Questioner drops it; not stated outright."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Tidemistress Ca'zass",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Overseer Wrex",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Katerina the Cleaner",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Blazeroar",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill The Questioner",
+   "point": "p7",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p4",
+   "text": "He pulls the whole section, so clear the cells first and drag him back; the key drop opens the next area."
+  },
+  {
+   "boss": "p5",
+   "text": "Priest adds heal her; kill or interrupt the priests."
+  }
+ ],
+ "notes": "No coordinates inside the dungeon were found (journals and OpenMap have none for it). Order, entrance and key flow are from the Warcraft Tavern guide; another site disagrees on whether Overseer Wrex exists. uiMapID unknown for Forever-only dungeons. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

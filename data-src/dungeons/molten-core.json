@@ -1,0 +1,323 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "molten-core",
+ "name": "Molten Core",
+ "kind": "raid",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 409,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Molten Core"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Molten Core (outside portal)",
+   "uiMapID": 1428,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Blackrock Mountain entrance, Burning Steppes."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Lucifron",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6586,
+   "y": 0.375,
+   "approx": false,
+   "source": 1,
+   "note": "Core hound trash first."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Magmadar",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6943,
+   "y": 0.2368,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Gehennas",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3309,
+   "y": 0.4853,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Garr",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3151,
+   "y": 0.6896,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Shazzrah",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5584,
+   "y": 0.8526,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Baron Geddon",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5239,
+   "y": 0.7763,
+   "approx": false,
+   "source": 1,
+   "note": "OpenMap 0.52, 0.78;"
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Sulfuron Harbinger",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.8283,
+   "y": 0.8255,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Golemagg the Incinerator",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6887,
+   "y": 0.5764,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Majordomo Executus",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.8415,
+   "y": 0.6528,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p12",
+   "kind": "boss",
+   "name": "Ragnaros",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5623,
+   "y": 0.534,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6586,
+   "y": 0.375,
+   "note": "Kill Lucifron",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6943,
+   "y": 0.2368,
+   "note": "Kill Magmadar",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3309,
+   "y": 0.4853,
+   "note": "Kill Gehennas",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3151,
+   "y": 0.6896,
+   "note": "Kill Garr",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5584,
+   "y": 0.8526,
+   "note": "Kill Shazzrah",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5239,
+   "y": 0.7763,
+   "note": "Kill Baron Geddon",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.8283,
+   "y": 0.8255,
+   "note": "Kill Sulfuron Harbinger",
+   "point": "p9",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6887,
+   "y": 0.5764,
+   "note": "Kill Golemagg the Incinerator",
+   "point": "p10",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.8415,
+   "y": 0.6528,
+   "note": "Kill Majordomo Executus",
+   "point": "p11",
+   "approx": false
+  },
+  {
+   "step": 11,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5623,
+   "y": 0.534,
+   "note": "Kill Ragnaros",
+   "point": "p12",
+   "approx": false
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "Boss positions: OpenMap (MIT). Route is the common order of kills; Majordomo and Ragnaros last. Trash skipped. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

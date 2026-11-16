@@ -1,0 +1,311 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "temple-of-ahnqiraj",
+ "name": "Temple of Ahn'Qiraj",
+ "kind": "raid",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  60,
+  60
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 531,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Temple of Ahn'Qiraj 1"
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "Temple of Ahn'Qiraj 2"
+  },
+  {
+   "uiMapID": null,
+   "floor": 3,
+   "name": "Temple of Ahn'Qiraj 3"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Temple of Ahn'Qiraj (outside portal)",
+   "uiMapID": 1451,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Silithus gate (map percent not sourced)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "The Prophet Skeram",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.4579,
+   "y": 0.522,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Silithid Royalty",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2845,
+   "y": 0.4974,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Battleguard Sartura",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4456,
+   "y": 0.3359,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Fankriss the Unyielding",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.623,
+   "y": 0.219,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Viscidus",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7215,
+   "y": 0.179,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Princess Huhuran",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4353,
+   "y": 0.5036,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Twin Emperors",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Vek'lor and Vek'nilash."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Ouro",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.302,
+   "y": 0.819,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "C'thun",
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.5707,
+   "y": 0.6251,
+   "approx": false,
+   "source": 1,
+   "note": ""
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.4579,
+   "y": 0.522,
+   "note": "Kill The Prophet Skeram",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.2845,
+   "y": 0.4974,
+   "note": "Kill Silithid Royalty",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4456,
+   "y": 0.3359,
+   "note": "Kill Battleguard Sartura",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.623,
+   "y": 0.219,
+   "note": "Kill Fankriss the Unyielding",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7215,
+   "y": 0.179,
+   "note": "Kill Viscidus",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4353,
+   "y": 0.5036,
+   "note": "Kill Princess Huhuran",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Twin Emperors",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.302,
+   "y": 0.819,
+   "note": "Kill Ouro",
+   "point": "p10",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": null,
+   "floor": 3,
+   "x": 0.5707,
+   "y": 0.6251,
+   "note": "Kill C'thun",
+   "point": "p11",
+   "approx": false
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [],
+ "notes": "OpenMap positions (MIT) except Twin Emperors. Order is the common kill order (bug trio, Sartura, Fankriss and Viscidus are interchangeable). Floors unnamed in the source. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

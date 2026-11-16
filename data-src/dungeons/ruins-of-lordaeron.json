@@ -1,0 +1,375 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ruins-of-lordaeron",
+ "name": "Ruins of Lordaeron",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  15,
+  22
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 2999,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Ruins of Lordaeron",
+   "instanceMapID": 2999
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/ruins-of-lordaeron",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Entrance (portal / gate)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.605,
+   "y": 0.17,
+   "approx": true,
+   "source": 3,
+   "note": "Yellow portal-like marker in the north-east of the map; Horde enter from the Undercity side. Exact entry is not sourced."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Witherfang",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.72,
+   "y": 0.42,
+   "approx": true,
+   "source": 3,
+   "note": "Patrols King's Alley with two adds."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "The Baron",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Guarded by packs of skeletal soldiers and mages."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Viktor the Vile",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.42,
+   "y": 0.68,
+   "approx": true,
+   "source": 3,
+   "note": "Optional: click the chimney southwest of the Lordamere Overlook to start five waves, he is wave six."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "The Abandoned",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Event boss: the Market Square statue quakes and he appears on wave four."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Bjork",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Patrols the central area."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Rath'mael",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Final boss."
+  },
+  {
+   "id": "p8",
+   "kind": "interactive",
+   "name": "Chimney (starts the Viktor event)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.42,
+   "y": 0.68,
+   "approx": true,
+   "source": 2,
+   "note": "Southwest of the Lordamere Overlook."
+  },
+  {
+   "id": "p9",
+   "kind": "interactive",
+   "name": "Market Square statue (starts The Abandoned)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position not sourced."
+  },
+  {
+   "id": "p10",
+   "kind": "quest_item",
+   "name": "Crest of Lordaeron",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Spawns in several places (behind the door near the Baron, near Bjork's path, rooftop path ends)."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.605,
+   "y": 0.17,
+   "note": "Enter",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.72,
+   "y": 0.42,
+   "note": "Witherfang in King's Alley",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "The Baron (skeleton packs around him)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.42,
+   "y": 0.68,
+   "note": "Viktor the Vile, optional event at the chimney",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "The Abandoned, at the Market Square statue",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Bjork (keep away from ghoul packs)",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Rath'mael, final boss",
+   "point": "p7",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p2"
+   ],
+   "note": "Witherfang and his two adds; clear the banshees nearby first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p3"
+   ],
+   "note": "Skeleton soldiers and mages, then the Baron."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7125,
+   "y": 0.4036,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.735,
+   "y": 0.3999,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6786,
+   "y": 0.373,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.7284,
+   "y": 0.3666,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4336,
+   "y": 0.6682,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4435,
+   "y": 0.6888,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4536,
+   "y": 0.6271,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4737,
+   "y": 0.6732,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Two spider adds come with him: kill them first. Cleanse the Leech Poison on the tank."
+  },
+  {
+   "boss": "p3",
+   "text": "Hits hard; Knockout removes nearly half the tank's health and stuns, so keep the tank high."
+  },
+  {
+   "boss": "p4",
+   "text": "Easy optional fight after five waves of adds with short gaps: conserve mana. Gains threat fast and uses Leech Poison."
+  },
+  {
+   "boss": "p5",
+   "text": "Starts after three add waves. Chilled on melee attackers and Life Drain on the tank: stun him as Life Drain starts. Frost Nova too."
+  },
+  {
+   "boss": "p6",
+   "text": "Only a short Anti-Magic Shield (3 s). Do not pull him with nearby ghoul packs."
+  },
+  {
+   "boss": "p7",
+   "text": "Easy: his only ability is Flamestrike. Move out of it; a stun stops casts."
+  }
+ ],
+ "notes": "Forever-only dungeon (the open Ruins of Lordaeron above the Undercity): no uiMapID, use instanceMapID 2999. Level range is the client table (15-22; NeedRoll 15-20). Only Witherfang (King's Alley) and Viktor (chimney southwest of the Lordamere Overlook) have a place in Method; both are estimates against the map's room labels. The other four bosses have no position. No NPC IDs (no open source for the Forever IDs). NeedRoll was used only as a cross-check. Alliance quest NPC inside: Captain Truman (Abominable Creatures), no position. Method lists the Crest of Lordaeron as spawning behind a door near the Baron, near Bjork's patrol path and at the end of rooftop paths with gargoyles. Horde quest givers are outside. Alliance travel: boat via Southshore."
+}

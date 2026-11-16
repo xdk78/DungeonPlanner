@@ -1,0 +1,1070 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scholomance",
+ "name": "Scholomance",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p4",
+   "name": "Kirtonos the Herald",
+   "npcID": 10506,
+   "displayID": 7534,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 12889,
+     "src": 2,
+     "note": "Slows casting; dispel it or avoid casting for a moment."
+    },
+    {
+     "spell": 8379,
+     "src": 2
+    },
+    {
+     "spell": 14515,
+     "src": 2,
+     "note": "Takes over a player for a few seconds; hold your damage on them."
+    },
+    {
+     "spell": 16467,
+     "src": 2
+    },
+    {
+     "spell": 17228,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 18144,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13957,
+     "src": 1
+    },
+    {
+     "item": 13960,
+     "src": 1
+    },
+    {
+     "item": 13967,
+     "src": 1
+    },
+    {
+     "item": 13969,
+     "src": 1
+    },
+    {
+     "item": 16734,
+     "src": 1
+    },
+    {
+     "item": 14024,
+     "src": 1
+    },
+    {
+     "item": 13956,
+     "src": 1
+    },
+    {
+     "item": 13955,
+     "src": 1
+    },
+    {
+     "item": 13983,
+     "src": 1
+    },
+    {
+     "item": 18699,
+     "src": 1
+    },
+    {
+     "item": 10226,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Jandice Barov",
+   "npcID": 10503,
+   "displayID": 11073,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 16098,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Raises physical damage taken; dispel it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16701,
+     "src": 1
+    },
+    {
+     "item": 14545,
+     "src": 1
+    },
+    {
+     "item": 14548,
+     "src": 1
+    },
+    {
+     "item": 18690,
+     "src": 1
+    },
+    {
+     "item": 14541,
+     "src": 1
+    },
+    {
+     "item": 18689,
+     "src": 1
+    },
+    {
+     "item": 22394,
+     "src": 1
+    },
+    {
+     "item": 14543,
+     "src": 1
+    },
+    {
+     "item": 18697,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    },
+    {
+     "item": 10226,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Rattlegore",
+   "npcID": 11622,
+   "displayID": 12073,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 16727,
+     "src": 1,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns players near the boss; keep ranged away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16711,
+     "src": 1
+    },
+    {
+     "item": 14539,
+     "src": 1
+    },
+    {
+     "item": 14531,
+     "src": 1
+    },
+    {
+     "item": 14528,
+     "src": 1
+    },
+    {
+     "item": 14537,
+     "src": 1
+    },
+    {
+     "item": 14538,
+     "src": 1
+    },
+    {
+     "item": 18686,
+     "src": 1
+    },
+    {
+     "item": 18782,
+     "src": 1
+    },
+    {
+     "item": 18701,
+     "src": 1
+    },
+    {
+     "item": 18699,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Marduk Blackpool",
+   "npcID": 10433,
+   "displayID": 10248,
+   "class": "elite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 15754,
+     "src": 2
+    },
+    {
+     "spell": 17695,
+     "src": 2
+    },
+    {
+     "spell": 17228,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12040,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 18692,
+     "src": 1
+    },
+    {
+     "item": 14576,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Vectus",
+   "npcID": 10432,
+   "displayID": 2606,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 16046,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 18399,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire zone on the ground; move out of it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 14577,
+     "src": 1
+    },
+    {
+     "item": 18691,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Instructor Malicia",
+   "npcID": 10505,
+   "displayID": 11069,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 85850,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 16710,
+     "src": 1
+    },
+    {
+     "item": 14621,
+     "src": 1
+    },
+    {
+     "item": 14623,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Doctor Theolen Krastinov",
+   "npcID": 11261,
+   "displayID": 10901,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 18103,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16684,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Lorekeeper Polkelt",
+   "npcID": 10901,
+   "displayID": 11492,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 8245,
+     "src": 2
+    },
+    {
+     "spell": 18151,
+     "src": 2
+    },
+    {
+     "spell": 18149,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 16705,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p13",
+   "name": "The Ravenian",
+   "npcID": 10507,
+   "displayID": 10433,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 40504,
+     "src": 2
+    },
+    {
+     "spell": 15550,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 16716,
+     "src": 1
+    },
+    {
+     "item": 14623,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p14",
+   "name": "Lord Alexei Barov",
+   "npcID": 10504,
+   "displayID": 11072,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 15570,
+     "src": 2
+    },
+    {
+     "spell": 17467,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 17820,
+     "src": 2,
+     "note": "Lowers healing on a target; dispel the curse."
+    }
+   ],
+   "loot": [
+    {
+     "item": 14626,
+     "src": 1
+    },
+    {
+     "item": 18683,
+     "src": 1
+    },
+    {
+     "item": 18680,
+     "src": 1
+    },
+    {
+     "item": 14637,
+     "src": 1
+    },
+    {
+     "item": 18684,
+     "src": 1
+    },
+    {
+     "item": 18681,
+     "src": 1
+    },
+    {
+     "item": 18682,
+     "src": 1
+    },
+    {
+     "item": 14624,
+     "src": 1
+    },
+    {
+     "item": 14611,
+     "src": 1
+    },
+    {
+     "item": 16722,
+     "src": 1
+    },
+    {
+     "item": 23201,
+     "src": 1
+    },
+    {
+     "item": 23200,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p15",
+   "name": "Lady Illucia Barov",
+   "npcID": 10502,
+   "displayID": 11835,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 18671,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 14515,
+     "src": 2,
+     "note": "Takes over a player for a few seconds; hold your damage on them."
+    },
+    {
+     "spell": 12542,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 12528,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Silences nearby casters; melee keep going."
+    }
+   ],
+   "loot": [
+    {
+     "item": 14557,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 14621,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p16",
+   "name": "Ras Frostwhisper",
+   "npcID": 10508,
+   "displayID": 7919,
+   "class": "elite",
+   "level": [
+    62,
+    62
+   ],
+   "abilities": [
+    {
+     "spell": 18099,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 18101,
+     "src": 2
+    },
+    {
+     "spell": 12096,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 18763,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 8398,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 11130,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Knocks back everyone close to it; stay at range if you can."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13314,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16689,
+     "src": 1
+    },
+    {
+     "item": 14487,
+     "src": 1
+    },
+    {
+     "item": 18694,
+     "src": 1
+    },
+    {
+     "item": 14502,
+     "src": 1
+    },
+    {
+     "item": 18696,
+     "src": 1
+    },
+    {
+     "item": 18693,
+     "src": 1
+    },
+    {
+     "item": 18695,
+     "src": 1
+    },
+    {
+     "item": 13952,
+     "src": 1
+    },
+    {
+     "item": 14522,
+     "src": 1
+    },
+    {
+     "item": 14525,
+     "src": 1
+    },
+    {
+     "item": 14340,
+     "src": 1
+    },
+    {
+     "item": 14503,
+     "src": 1
+    },
+    {
+     "item": 12711,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p17",
+   "name": "Darkmaster Gandling",
+   "npcID": 1853,
+   "displayID": 11070,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 79932,
+     "src": 2
+    },
+    {
+     "spell": 86845,
+     "src": 2
+    },
+    {
+     "spell": 86780,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14514,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 13937,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 12717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 13951,
+     "src": 1
+    },
+    {
+     "item": 13938,
+     "src": 1
+    },
+    {
+     "item": 13944,
+     "src": 1
+    },
+    {
+     "item": 13964,
+     "src": 1
+    },
+    {
+     "item": 16677,
+     "src": 1
+    },
+    {
+     "item": 16686,
+     "src": 1
+    },
+    {
+     "item": 13398,
+     "src": 1
+    },
+    {
+     "item": 13953,
+     "src": 1
+    },
+    {
+     "item": 22433,
+     "src": 1
+    },
+    {
+     "item": 16731,
+     "src": 1
+    },
+    {
+     "item": 16698,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p18",
+   "name": "Kormok",
+   "npcID": 16118,
+   "displayID": 16020,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 27689,
+     "src": 2
+    },
+    {
+     "spell": 27688,
+     "src": 2
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 17228,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 27695,
+     "src": 2
+    },
+    {
+     "spell": 27687,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 22333,
+     "src": 1
+    },
+    {
+     "item": 22303,
+     "src": 1
+    },
+    {
+     "item": 22332,
+     "src": 1
+    },
+    {
+     "item": 22331,
+     "src": 1
+    },
+    {
+     "item": 22326,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 4771,
+   "name": "Dawn's Gambit",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 11035
+  },
+  {
+   "id": 5341,
+   "name": "Barov Family Fortune",
+   "level": 60,
+   "req": 52,
+   "side": "horde",
+   "src": 1,
+   "giver": 11022
+  },
+  {
+   "id": 5343,
+   "name": "Barov Family Fortune",
+   "level": 60,
+   "req": 52,
+   "side": "alliance",
+   "src": 1,
+   "giver": 11023
+  },
+  {
+   "id": 5382,
+   "name": "Doctor Theolen Krastinov, the Butcher",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11216
+  },
+  {
+   "id": 5383,
+   "name": "Krastinov's Bag of Horrors",
+   "level": 30,
+   "req": 30,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 5384,
+   "name": "Kirtonos the Herald",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11216
+  },
+  {
+   "id": 5466,
+   "name": "The Lich, Ras Frostwhisper",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 11286
+  },
+  {
+   "id": 5515,
+   "name": "Krastinov's Bag of Horrors",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11216
+  },
+  {
+   "id": 5529,
+   "name": "Plagued Hatchlings",
+   "level": 58,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 11035
+  },
+  {
+   "id": 5531,
+   "name": "Betina Bigglezink",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 11036
+  },
+  {
+   "id": 5582,
+   "name": "Healthy Dragon Scale",
+   "level": 58,
+   "req": 55,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 8969,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033
+  },
+  {
+   "id": 8992,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033
+  }
+ ]
+}

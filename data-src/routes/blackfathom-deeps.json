@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "slug": "blackfathom-deeps",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles BlackFathomDeeps\\BlackFathomDeeps1_", "2": "game map tiles BlackFathomDeeps\\BlackFathomDeeps2_", "3": "game map tiles BlackFathomDeeps\\BlackFathomDeeps3_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p1", "floor": 1, "at": [0.4566, 0.1146], "approx": true, "name": "Portal in"},
+      {"point": "p6", "floor": 2, "at": [0.3991, 0.7507], "approx": true, "name": "Baron Aquanis"}
+    ],
+    "add": [
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.4, 0.3], "to": [0.4361, 0.3563], "kind": "stop", "generated": true},
+    {"floor": 1, "from": [0.46, 0.2], "to": [0.487, 0.1737], "kind": "quest_npc", "generated": true},
+    {"floor": 1, "from": [0.4, 0.45], "to": [0.4082, 0.4566], "kind": "pack", "generated": true},
+    {"floor": 1, "from": [0.4809, 0.5584], "to": [0.4721, 0.5644], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.5128, 0.5195], "to": [0.519, 0.5389], "kind": "position", "generated": true},
+    {"floor": 2, "from": [0.4759, 0.768], "to": [0.481, 0.7754], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.4566, 0.1146], "to": [0.4361, 0.3563], "bends": [[0.479, 0.1228], [0.517, 0.1871], [0.5299, 0.232], [0.5299, 0.271], [0.478, 0.3488]], "generated": true},
+    {"floor": 1, "from": [0.4361, 0.3563], "to": [0.3333, 0.6069], "bends": [[0.4271, 0.4431]], "generated": true},
+    {"floor": 1, "from": [0.3333, 0.6069], "to": [0.1119, 0.3896], "bends": [[0.3332, 0.5957], [0.3273, 0.5955], [0.3215, 0.5896], [0.2711, 0.5038], [0.2344, 0.4541], [0.2143, 0.44], [0.1991, 0.4343], [0.1523, 0.4298], [0.1307, 0.414], [0.1146, 0.3978]], "import": "fdr"},
+    {"floor": 1, "from": [0.1119, 0.3896], "to": [0.5433, 0.5642], "bends": [[0.1237, 0.4165], [0.1409, 0.4324], [0.148, 0.4275], [0.1503, 0.4369], [0.158, 0.4422], [0.1706, 0.4403], [0.2209, 0.4529], [0.2303, 0.4615], [0.2397, 0.477], [0.245, 0.5139], [0.2477, 0.5643], [0.2463, 0.5962], [0.238, 0.6261], [0.2221, 0.6634], [0.2206, 0.6755], [0.2237, 0.6813], [0.2178, 0.6797], [0.2113, 0.6963], [0.2055, 0.7446], [0.2296, 0.7303], [0.2618, 0.7276], [0.2724, 0.7239], [0.2777, 0.7183], [0.307, 0.7147], [0.3165, 0.716], [0.3201, 0.72], [0.3251, 0.7297], [0.3266, 0.7501], [0.3239, 0.7789], [0.3186, 0.7949], [0.3155, 0.8179], [0.3109, 0.8793], [0.3127, 0.8943], [0.3188, 0.9042], [0.3573, 0.9038], [0.3745, 0.9069], [0.3871, 0.8973], [0.4062, 0.8705], [0.414, 0.8644], [0.4193, 0.8677], [0.4221, 0.8803], [0.4233, 0.9135], [0.4264, 0.9303], [0.4302, 0.9361], [0.4416, 0.9358], [0.4821, 0.9126], [0.508, 0.8885], [0.5234, 0.8679], [0.5357, 0.8611], [0.5557, 0.8409], [0.5634, 0.819], [0.556, 0.8033], [0.5653, 0.8163], [0.5699, 0.818], [0.5774, 0.7986], [0.5807, 0.7765], [0.5816, 0.7436], [0.5754, 0.6624], [0.5641, 0.6293], [0.5626, 0.6082], [0.5574, 0.5913], [0.5458, 0.573]], "import": "fdr"},
+    {"floor": 2, "from": [0.4, 0.62], "to": [0.3991, 0.7507], "bends": [[0.4046, 0.654], [0.4084, 0.6582], [0.4117, 0.6754], [0.4036, 0.7286], [0.3973, 0.7361]], "import": "fdr"},
+    {"floor": 2, "from": [0.3991, 0.7507], "to": [0.5239, 0.8082], "bends": [[0.4181, 0.7612], [0.4122, 0.8013], [0.4138, 0.8114], [0.4179, 0.8139], [0.4505, 0.8178], [0.4605, 0.8079], [0.471, 0.7876], [0.5057, 0.7825], [0.5218, 0.7872], [0.5253, 0.7936]], "import": "fdr"},
+    {"floor": 2, "from": [0.75, 0.85], "to": [0.8552, 0.8642], "bends": [[0.75, 0.8584], [0.8311, 0.8592]], "import": "fdr"},
+    {"floor": 3, "from": [0.6, 0.2], "to": [0.5866, 0.309], "bends": [[0.5898, 0.2171]], "generated": true}
+  ]
+}

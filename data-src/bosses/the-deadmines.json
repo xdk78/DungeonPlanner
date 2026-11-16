@@ -1,0 +1,428 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-deadmines",
+ "name": "The Deadmines",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Rhahk'Zor",
+   "npcID": 644,
+   "displayID": 14403,
+   "class": "elite",
+   "level": [
+    19,
+    19
+   ],
+   "abilities": [
+    {
+     "spell": 6304,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 190411,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Spins and hits everyone close; get out of melee range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 872,
+     "src": 1
+    },
+    {
+     "item": 273289,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Sneed's Shredder / Sneed",
+   "npcID": 642,
+   "members": [
+    643
+   ],
+   "displayID": 1269,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 3603,
+     "src": 1
+    },
+    {
+     "spell": 5141,
+     "src": 1
+    },
+    {
+     "spell": 7399,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Fears a player; use tremor or fear ward if you have them."
+    }
+   ],
+   "loot": [
+    {
+     "item": 5194,
+     "src": 1
+    },
+    {
+     "item": 5195,
+     "src": 1
+    },
+    {
+     "item": 1937,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Gilnid",
+   "npcID": 1763,
+   "displayID": 7124,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 5213,
+     "src": 2
+    },
+    {
+     "spell": 5159,
+     "src": 2,
+     "tags": [
+      "interrupt",
+      "dispel"
+     ]
+    },
+    {
+     "spell": 450542,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 1156,
+     "src": 1
+    },
+    {
+     "item": 5199,
+     "src": 1
+    },
+    {
+     "item": 273297,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Mr. Smite",
+   "npcID": 646,
+   "displayID": 2026,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 6435,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 6432,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 3238,
+     "src": 2
+    },
+    {
+     "spell": 185763,
+     "src": 2,
+     "tags": [
+      "healer",
+      "interrupt"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 7230,
+     "src": 1
+    },
+    {
+     "item": 5192,
+     "src": 1
+    },
+    {
+     "item": 5196,
+     "src": 1
+    },
+    {
+     "item": 284715,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Cookie",
+   "npcID": 645,
+   "displayID": 1305,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 6306,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 5174,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 5198,
+     "src": 1
+    },
+    {
+     "item": 5197,
+     "src": 1
+    },
+    {
+     "item": 273298,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Captain Greenskin",
+   "npcID": 647,
+   "displayID": 7113,
+   "class": "elite",
+   "level": [
+    20,
+    20
+   ],
+   "abilities": [
+    {
+     "spell": 40505,
+     "src": 2
+    },
+    {
+     "spell": 5208,
+     "src": 2
+    },
+    {
+     "spell": 185763,
+     "src": 2,
+     "tags": [
+      "healer"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 5201,
+     "src": 1
+    },
+    {
+     "item": 5200,
+     "src": 1
+    },
+    {
+     "item": 10403,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Edwin VanCleef",
+   "npcID": 639,
+   "displayID": 2029,
+   "class": "rareelite",
+   "level": [
+    21,
+    21
+   ],
+   "abilities": [
+    {
+     "spell": 5200,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 5202,
+     "src": 1
+    },
+    {
+     "item": 5193,
+     "src": 1
+    },
+    {
+     "item": 5191,
+     "src": 1
+    },
+    {
+     "item": 10399,
+     "src": 1
+    },
+    {
+     "item": 21525,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 166,
+   "name": "The Defias Brotherhood",
+   "level": 22,
+   "req": 14,
+   "side": "alliance",
+   "src": 1,
+   "giver": 234
+  },
+  {
+   "id": 167,
+   "name": "Oh Brother. . .",
+   "level": 20,
+   "req": 15,
+   "side": "alliance",
+   "src": 1,
+   "giver": 656
+  },
+  {
+   "id": 168,
+   "name": "Collecting Memories",
+   "level": 18,
+   "req": 14,
+   "side": "alliance",
+   "src": 1,
+   "giver": 656
+  },
+  {
+   "id": 214,
+   "name": "Red Silk Bandanas",
+   "level": 17,
+   "req": 14,
+   "side": "alliance",
+   "src": 1,
+   "giver": 820
+  },
+  {
+   "id": 2040,
+   "name": "Underground Assault",
+   "level": 20,
+   "req": 15,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6579
+  }
+ ]
+}

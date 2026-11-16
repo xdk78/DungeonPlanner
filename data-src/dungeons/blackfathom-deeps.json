@@ -1,0 +1,689 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackfathom-deeps",
+ "name": "Blackfathom Deeps",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  24,
+  32
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 48,
+ "maps": [
+  {
+   "uiMapID": 221,
+   "floor": 1,
+   "name": "The Pool of Ask'Ar",
+   "instanceMapID": 48
+  },
+  {
+   "uiMapID": 222,
+   "floor": 2,
+   "name": "Moonshrine Sanctum",
+   "instanceMapID": 48
+  },
+  {
+   "uiMapID": 223,
+   "floor": 3,
+   "name": "The Forgotten Pool",
+   "instanceMapID": 48
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/blackfathom-deeps",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.455,
+   "y": 0.075,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the top of the first map."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Ghamoo-ra",
+   "npcID": 4887,
+   "idSource": 6,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3333,
+   "y": 0.6069,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Lady Sarevess",
+   "npcID": 4831,
+   "idSource": 6,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.1119,
+   "y": 0.3896,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Gelihast",
+   "npcID": 6243,
+   "idSource": 6,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.5433,
+   "y": 0.5642,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p5",
+   "kind": "rare",
+   "name": "Lorgus Jett",
+   "npcID": 12902,
+   "idSource": 6,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare; also on a Horde quest line."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Baron Aquanis",
+   "npcID": 12876,
+   "idSource": 6,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Quest elemental (Horde, Baron Aquanis); needs the Strange Water Globe (itemID 16782)."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Twilight Lord Kelris",
+   "npcID": 4832,
+   "idSource": 6,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.5239,
+   "y": 0.8082,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Old Serra'kis",
+   "npcID": 4830,
+   "idSource": 6,
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.5866,
+   "y": 0.309,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Aku'mai",
+   "npcID": 4829,
+   "idSource": 6,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8552,
+   "y": 0.8642,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p10",
+   "kind": "quest_item",
+   "name": "Head of Kelris",
+   "itemID": 5881,
+   "idSource": 6,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.5239,
+   "y": 0.8082,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by Twilight Lord Kelris."
+  },
+  {
+   "id": "p11",
+   "kind": "interactive",
+   "name": "Aku'mai's four braziers",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8252,
+   "y": 0.8642,
+   "approx": true,
+   "source": 2,
+   "note": "Four braziers in Aku'mai's chamber; each one summons a wave of adds. Light them one at a time (per Method). Position is an estimate at the chamber."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_npc",
+   "name": "Argent Guard Thaelrid",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.46,
+   "y": 0.2,
+   "approx": true,
+   "source": 2,
+   "note": "Horde quest giver inside the dungeon (Blackfathom Villainy); exact position not sourced, placed near the start."
+  },
+  {
+   "id": "p13",
+   "kind": "pack",
+   "name": "Twilight Shadowmages and Acolytes near the pool",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.45,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Shadowmages Dominate Mind; pull with line of sight."
+  },
+  {
+   "id": "p14",
+   "kind": "pack",
+   "name": "Sea Witches, Myrmidons and Snapclaws",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.22,
+   "y": 0.42,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: naga on the way to Sarevess."
+  },
+  {
+   "id": "p15",
+   "kind": "pack",
+   "name": "Murloc packs around Gelihast",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.52,
+   "y": 0.58,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: pull one or two murlocs at a time."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.455,
+   "y": 0.075,
+   "note": "Enter",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.3,
+   "note": "Down into the Pool of Ask'Ar",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3333,
+   "y": 0.6069,
+   "note": "Ghamoo-Ra in the centre of the pool",
+   "point": "p2",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.1119,
+   "y": 0.3896,
+   "note": "West to Lady Sarevess",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.5433,
+   "y": 0.5642,
+   "note": "East to Gelihast",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 221,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Lorgus Jett if present (rare)",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.4,
+   "y": 0.62,
+   "note": "Go down to the Moonshrine ruins (floor 2; stairway not marked)",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Baron Aquanis (only for the Horde quest)",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.5239,
+   "y": 0.8082,
+   "note": "Twilight Lord Kelris",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.6,
+   "y": 0.2,
+   "note": "Dive to the Forgotten Pool (floor 3)",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.5866,
+   "y": 0.309,
+   "note": "Old Serra'kis (underwater; watch your breath)",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 12,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.75,
+   "y": 0.85,
+   "note": "Back to the Moonshrine and east to Aku'mai's lair",
+   "approx": true
+  },
+  {
+   "step": 13,
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8552,
+   "y": 0.8642,
+   "note": "Aku'mai, final boss",
+   "point": "p9",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p13",
+    "p14"
+   ],
+   "note": "Pool packs; break line of sight on the casters."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p15",
+    "p4"
+   ],
+   "note": "Murlocs in small groups, then Gelihast."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3371,
+   "y": 0.5893,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3573,
+   "y": 0.5998,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3285,
+   "y": 0.5444,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.3722,
+   "y": 0.5693,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.1247,
+   "y": 0.4022,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.1051,
+   "y": 0.4137,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.1673,
+   "y": 0.4188,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.123,
+   "y": 0.4425,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.5266,
+   "y": 0.5574,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.5404,
+   "y": 0.5393,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.4809,
+   "y": 0.5584,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 221,
+   "floor": 1,
+   "x": 0.5128,
+   "y": 0.5195,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.514,
+   "y": 0.7932,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.5357,
+   "y": 0.7861,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.4759,
+   "y": 0.768,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.5242,
+   "y": 0.7541,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.5888,
+   "y": 0.2911,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.6099,
+   "y": 0.2998,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.5761,
+   "y": 0.2473,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 223,
+   "floor": 3,
+   "x": 0.6219,
+   "y": 0.268,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8374,
+   "y": 0.8618,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8463,
+   "y": 0.8408,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.7933,
+   "y": 0.874,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 222,
+   "floor": 2,
+   "x": 0.8146,
+   "y": 0.8285,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Only Trample, but very high armour: physical DPS should debuff armour, casters are unaffected."
+  },
+  {
+   "boss": "p3",
+   "text": "Kill her two naga adds first (CC or stun). Forked Lightning hits everything in front of her, so face her away; Frost Nova and Slow follow."
+  },
+  {
+   "boss": "p4",
+   "text": "Clear the room, then pull him. His Net roots for 10 s; he dies fast once his murlocs are gone."
+  },
+  {
+   "boss": "p7",
+   "text": "Clear adds first; use the wall by the entrance to pull casters out of line of sight. Mind Blast on the tank and Sleep on random players (healers too)."
+  },
+  {
+   "boss": "p8",
+   "text": "No abilities; the danger is drowning. Pull him fast and kill him before breath runs out."
+  },
+  {
+   "boss": "p9",
+   "text": "Click the four braziers one at a time; each summons adds. His Poison Cloud damages everyone in it every 5 s for 45 s, so move out. He enrages with Frenzied Rage (+75% attack speed); heal the tank."
+  }
+ ],
+ "notes": "Six bosses have OpenMap (Encounter Journal) pins; Lorgus Jett (rare) and Baron Aquanis (Horde quest elemental) have no position. Old Serra'kis is fought underwater in The Forgotten Pool (floor 3). The map shows no stairway between floors, so transitions are estimates. Method says Aku'mai is reached through a side chamber past Kelris and describes four braziers in his chamber; the older Classic 'fire bowls' door puzzle is not confirmed for Forever, so it is not listed. Quest NPC Argent Guard Thaelrid (Horde, Blackfathom Villainy) is inside the dungeon, exact spot unknown. Alliance reach it by boat to Auberdine, Horde via the Zoram Strand flight path."
+}

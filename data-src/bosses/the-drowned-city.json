@@ -1,0 +1,298 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-drowned-city",
+ "name": "The Drowned City",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Zul'Alai",
+   "loot": [
+    {
+     "item": 274600,
+     "src": 2
+    },
+    {
+     "item": 274599,
+     "src": 2
+    },
+    {
+     "item": 274598,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258905,
+   "displayID": 144475,
+   "abilities": [
+    {
+     "spell": 1282504,
+     "src": 3
+    },
+    {
+     "spell": 1282519,
+     "src": 3
+    },
+    {
+     "spell": 1282511,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p4",
+   "name": "Var'Taka",
+   "loot": [
+    {
+     "item": 274602,
+     "src": 2
+    },
+    {
+     "item": 274613,
+     "src": 2
+    },
+    {
+     "item": 274601,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258924,
+   "displayID": 144487,
+   "abilities": [
+    {
+     "spell": 1282615,
+     "src": 3
+    },
+    {
+     "spell": 15284,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p5",
+   "name": "Captain Dreadrise",
+   "loot": [
+    {
+     "item": 274605,
+     "src": 2
+    },
+    {
+     "item": 274603,
+     "src": 2
+    },
+    {
+     "item": 274604,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 260042,
+   "displayID": 142144,
+   "abilities": [
+    {
+     "spell": 1282842,
+     "src": 3
+    },
+    {
+     "spell": 1282860,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p6",
+   "name": "Deathless Marrow",
+   "npcID": 269586,
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "displayID": 146027,
+   "abilities": [
+    {
+     "spell": 1283034,
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 274606,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p7",
+   "name": "Primeval Elemental",
+   "loot": [
+    {
+     "item": 274612,
+     "src": 2
+    },
+    {
+     "item": 274615,
+     "src": 2
+    },
+    {
+     "item": 274611,
+     "src": 2
+    },
+    {
+     "item": 271718,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 263886,
+   "displayID": 143898,
+   "abilities": [
+    {
+     "spell": 1290978,
+     "src": 3
+    },
+    {
+     "spell": 1290983,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p8",
+   "name": "Min'Loth the Serpent",
+   "loot": [
+    {
+     "item": 274609,
+     "src": 2
+    },
+    {
+     "item": 274608,
+     "src": 2
+    },
+    {
+     "item": 274610,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 260243,
+   "displayID": 142286,
+   "abilities": [
+    {
+     "spell": 1283250,
+     "src": 3
+    },
+    {
+     "spell": 1283233,
+     "src": 3
+    },
+    {
+     "spell": 1313471,
+     "src": 3
+    },
+    {
+     "spell": 1283313,
+     "src": 3
+    }
+   ]
+  }
+ ],
+ "quests": [
+  {
+   "id": 95788,
+   "name": "Magics of the Drowned City",
+   "side": "alliance",
+   "req": 30,
+   "giver": 2277,
+   "src": 3
+  },
+  {
+   "id": 95787,
+   "name": "Take Two With Water",
+   "side": "alliance",
+   "req": 30,
+   "giver": 2277,
+   "src": 3
+  },
+  {
+   "id": 97130,
+   "name": "Ancient Gurubashi Secrets",
+   "side": "alliance",
+   "req": 34,
+   "giver": 31439,
+   "src": 3
+  },
+  {
+   "id": 95775,
+   "name": "The Drowned City",
+   "side": "horde",
+   "req": 30,
+   "giver": 2519,
+   "src": 3
+  },
+  {
+   "id": 95776,
+   "name": "The Only Good Brinescale...",
+   "side": "horde",
+   "req": 30,
+   "giver": 2464,
+   "src": 3
+  },
+  {
+   "id": 96774,
+   "name": "Ancient Gurubashi Idol",
+   "side": "horde",
+   "req": 30,
+   "giver": 264074,
+   "src": 3
+  },
+  {
+   "id": 95789,
+   "name": "Shady Saltseers",
+   "req": 34,
+   "giver": 773,
+   "src": 3
+  },
+  {
+   "id": 95791,
+   "name": "The Saltseer Captain",
+   "req": 34,
+   "giver": 773,
+   "src": 3
+  }
+ ]
+}

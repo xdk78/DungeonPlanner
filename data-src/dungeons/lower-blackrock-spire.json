@@ -1,0 +1,845 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "lower-blackrock-spire",
+ "name": "Lower Blackrock Spire",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  55,
+  60
+ ],
+ "ejInstanceID": 229,
+ "instanceMapID": 229,
+ "maps": [
+  {
+   "uiMapID": 250,
+   "floor": 1,
+   "name": "Tazz'Alor"
+  },
+  {
+   "uiMapID": 251,
+   "floor": 2,
+   "name": "Skitterweb Tunnels",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 252,
+   "floor": 3,
+   "name": "Hordemar City",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 253,
+   "floor": 4,
+   "name": "Hall of Blackhand",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 254,
+   "floor": 5,
+   "name": "Halycon's Lair",
+   "uiMapIDInferred": true
+  },
+  {
+   "uiMapID": 255,
+   "floor": 6,
+   "name": "Chamber of Battle",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Lower Blackrock Spire (outside portal)",
+   "uiMapID": 1428,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Blackrock Mountain entrance in the Burning Steppes; take the Blackrock Spire portal inside."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "War Master Voone",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.5246,
+   "y": 0.5451,
+   "approx": false,
+   "source": 1,
+   "note": "Tazz'Alor floor."
+  },
+  {
+   "id": "p4",
+   "kind": "rare",
+   "name": "Bannok Grimaxe",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Shadow Hunter Vosh'gajin",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5533,
+   "y": 0.6926,
+   "approx": false,
+   "source": 1,
+   "note": "Skitterweb Tunnels; patrols the Smolderweb area."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Mother Smolderweb",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6207,
+   "y": 0.7414,
+   "approx": false,
+   "source": 1,
+   "note": "Spider boss in the tunnels."
+  },
+  {
+   "id": "p7",
+   "kind": "rare",
+   "name": "Crystal Fang",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare spider."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Highlord Omokk",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.3866,
+   "y": 0.5902,
+   "approx": false,
+   "source": 1,
+   "note": "Hordemar City."
+  },
+  {
+   "id": "p9",
+   "kind": "rare",
+   "name": "Spirestone Butcher",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare ogre of the Hordemar group."
+  },
+  {
+   "id": "p10",
+   "kind": "rare",
+   "name": "Spirestone Battle Lord",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare ogre."
+  },
+  {
+   "id": "p11",
+   "kind": "rare",
+   "name": "Spirestone Lord Magus",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare ogre."
+  },
+  {
+   "id": "p12",
+   "kind": "boss",
+   "name": "Urok Doomhowl",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4549,
+   "y": 0.5574,
+   "approx": false,
+   "source": 1,
+   "note": "Summoned ogre boss in the Hall of Blackhand."
+  },
+  {
+   "id": "p13",
+   "kind": "boss",
+   "name": "Quartermaster Zigris",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5396,
+   "y": 0.8443,
+   "approx": false,
+   "source": 1,
+   "note": "Halycon's Lair side; drops the quartermaster loot."
+  },
+  {
+   "id": "p14",
+   "kind": "boss",
+   "name": "Halycon",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3798,
+   "y": 0.8402,
+   "approx": false,
+   "source": 1,
+   "note": "Hatchling/halycon boss paired with Gizrul."
+  },
+  {
+   "id": "p15",
+   "kind": "boss",
+   "name": "Gizrul the Slavener",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3948,
+   "y": 0.793,
+   "approx": false,
+   "source": 1,
+   "note": "Dragonkin handler next to Halycon."
+  },
+  {
+   "id": "p16",
+   "kind": "rare",
+   "name": "Ghok Bashguud",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare ogre."
+  },
+  {
+   "id": "p17",
+   "kind": "boss",
+   "name": "Overlord Wyrmthalak",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.5751,
+   "y": 0.6004,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss of Lower in the Chamber of Battle."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 253,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.5246,
+   "y": 0.5451,
+   "note": "Kill War Master Voone",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6207,
+   "y": 0.7414,
+   "note": "Kill Mother Smolderweb",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5533,
+   "y": 0.6926,
+   "note": "Kill Shadow Hunter Vosh'gajin",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.3866,
+   "y": 0.5902,
+   "note": "Kill Highlord Omokk",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4549,
+   "y": 0.5574,
+   "note": "Kill Urok Doomhowl",
+   "point": "p12",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5396,
+   "y": 0.8443,
+   "note": "Kill Quartermaster Zigris",
+   "point": "p13",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3798,
+   "y": 0.8402,
+   "note": "Kill Halycon",
+   "point": "p14",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3948,
+   "y": 0.793,
+   "note": "Kill Gizrul the Slavener",
+   "point": "p15",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.5751,
+   "y": 0.6004,
+   "note": "Kill Overlord Wyrmthalak",
+   "point": "p17",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p8"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p12"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 6,
+   "points": [
+    "p13"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 7,
+   "points": [
+    "p14"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 8,
+   "points": [
+    "p15"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 9,
+   "points": [
+    "p17"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.5246,
+   "y": 0.5651,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.5496,
+   "y": 0.5451,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.4946,
+   "y": 0.5851,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 250,
+   "floor": 1,
+   "x": 0.5446,
+   "y": 0.6051,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6207,
+   "y": 0.7614,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6457,
+   "y": 0.7414,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5907,
+   "y": 0.7814,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6407,
+   "y": 0.8014,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5695,
+   "y": 0.7043,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5386,
+   "y": 0.7128,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.6033,
+   "y": 0.6918,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 251,
+   "floor": 2,
+   "x": 0.5902,
+   "y": 0.744,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.3866,
+   "y": 0.6102,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.4116,
+   "y": 0.5902,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.3566,
+   "y": 0.6302,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 252,
+   "floor": 3,
+   "x": 0.4066,
+   "y": 0.6502,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p12",
+   "role": "tank",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4549,
+   "y": 0.5774,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p12",
+   "role": "melee",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4799,
+   "y": 0.5574,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p12",
+   "role": "ranged",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4249,
+   "y": 0.5974,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p12",
+   "role": "healer",
+   "uiMapID": 253,
+   "floor": 4,
+   "x": 0.4749,
+   "y": 0.6174,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p13",
+   "role": "tank",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5396,
+   "y": 0.8643,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p13",
+   "role": "melee",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5646,
+   "y": 0.8443,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p13",
+   "role": "ranged",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5096,
+   "y": 0.8843,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p13",
+   "role": "healer",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.5596,
+   "y": 0.9043,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p14",
+   "role": "tank",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3998,
+   "y": 0.8407,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p14",
+   "role": "melee",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3792,
+   "y": 0.8652,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p14",
+   "role": "ranged",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.4206,
+   "y": 0.8112,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p14",
+   "role": "healer",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.4393,
+   "y": 0.8617,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p15",
+   "role": "tank",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3887,
+   "y": 0.8121,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p15",
+   "role": "melee",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.371,
+   "y": 0.7854,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p15",
+   "role": "ranged",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.4113,
+   "y": 0.8402,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p15",
+   "role": "healer",
+   "uiMapID": 254,
+   "floor": 5,
+   "x": 0.3576,
+   "y": 0.8441,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p17",
+   "role": "tank",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.5751,
+   "y": 0.6204,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p17",
+   "role": "melee",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.6001,
+   "y": 0.6004,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p17",
+   "role": "ranged",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.5451,
+   "y": 0.6404,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p17",
+   "role": "healer",
+   "uiMapID": 255,
+   "floor": 6,
+   "x": 0.5951,
+   "y": 0.6604,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Melee boss with a stun; tank him against a wall and let him chew the pack."
+  },
+  {
+   "boss": "p6",
+   "text": "Poisons the group with web bites; keep the poison cured and keep the tank in the middle of the room."
+  },
+  {
+   "boss": "p8",
+   "text": "Big ogre; pull trash away from him and use ranged to take down his shamans."
+  },
+  {
+   "boss": "p17",
+   "text": "Heavy tank-and-spank with adds; clear them as they appear."
+  }
+ ],
+ "notes": "The walking order of floors is uncertain: the journal numbers floors 1..6 but I do not know the real order, so the route is by floor number, not by a tested clear. Emberseer and the rest of Upper are in upper-blackrock-spire. uiMapIDs 250 verified (ATT 229 -> map 250), 251..255 inferred. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

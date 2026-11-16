@@ -1,0 +1,1161 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "zulgurub",
+ "name": "Zul'Gurub",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "High Priestess Jeklik",
+   "npcID": 14517,
+   "displayID": 15219,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 81944,
+     "src": 2
+    },
+    {
+     "spell": 22884,
+     "src": 1
+    },
+    {
+     "spell": 23918,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23952,
+     "src": 1
+    },
+    {
+     "spell": 23954,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19918,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19920,
+     "src": 1
+    },
+    {
+     "item": 19915,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "High Priest Venoxis",
+   "npcID": 14507,
+   "displayID": 15217,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 83849,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "Heals an ally; interrupt it."
+    },
+    {
+     "spell": 23860,
+     "src": 1
+    },
+    {
+     "spell": 23861,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 23865,
+     "src": 1
+    },
+    {
+     "spell": 23895,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19903,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19904,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19906,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "High Priestess Mar'li",
+   "npcID": 14510,
+   "displayID": 15220,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 24083,
+     "src": 1
+    },
+    {
+     "spell": 24109,
+     "src": 1
+    },
+    {
+     "spell": 24111,
+     "src": 1
+    },
+    {
+     "spell": 24300,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19927,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20032,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19925,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Bloodlord Mandokir",
+   "npcID": 11382,
+   "displayID": 11288,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 16856,
+     "src": 1,
+     "note": "Cuts healing on the tank; plan extra healing or swap."
+    },
+    {
+     "spell": 24314,
+     "src": 1
+    },
+    {
+     "spell": 24318,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20038,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19867,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19866,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19874,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19872,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Edge of Madness",
+   "npcID": 15082,
+   "members": [
+    15083,
+    15084,
+    15085
+   ],
+   "displayID": 8390,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 6524,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Stuns everyone near the boss; keep the casters back."
+    },
+    {
+     "spell": 18765,
+     "src": 1,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24646,
+     "src": 1
+    },
+    {
+     "spell": 24647,
+     "src": 1
+    },
+    {
+     "spell": 24648,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 19962,
+     "src": 1
+    },
+    {
+     "item": 19965,
+     "src": 1
+    },
+    {
+     "item": 19963,
+     "src": 1
+    },
+    {
+     "item": 19967,
+     "src": 1
+    },
+    {
+     "item": 19993,
+     "src": 1
+    },
+    {
+     "item": 19968,
+     "src": 1
+    },
+    {
+     "item": 19964,
+     "src": 1
+    },
+    {
+     "item": 19961,
+     "src": 1
+    },
+    {
+     "item": 19941,
+     "src": 1
+    },
+    {
+     "item": 19942,
+     "src": 1
+    },
+    {
+     "item": 19940,
+     "src": 1
+    },
+    {
+     "item": 19939,
+     "src": 1
+    },
+    {
+     "item": 16203,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Gahz'ranka",
+   "npcID": 15114,
+   "displayID": 15288,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 16099,
+     "src": 2
+    },
+    {
+     "spell": 24326,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22421,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22422,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 19945,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19944,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19946,
+     "src": 1
+    },
+    {
+     "item": 19947,
+     "src": 1
+    },
+    {
+     "item": 22739,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    },
+    {
+     "item": 14982,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "High Priest Thekal",
+   "npcID": 14509,
+   "displayID": 15216,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 24689,
+     "src": 2
+    },
+    {
+     "spell": 22666,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Silences a player; plan healing without them."
+    },
+    {
+     "spell": 12540,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24193,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 24189,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24192,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24183,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19897,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19896,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19902,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "High Priestess Arlokk",
+   "npcID": 14515,
+   "displayID": 15218,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 12540,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24210,
+     "src": 2
+    },
+    {
+     "spell": 24213,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24236,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Spins and hits everyone close; get out of melee range."
+    },
+    {
+     "spell": 24690,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19909,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19910,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19913,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Jin'do the Hexxer",
+   "npcID": 11380,
+   "displayID": 11311,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 17172,
+     "src": 1,
+     "note": "Turns a player into a frog; dispel or wait."
+    },
+    {
+     "spell": 24261,
+     "src": 1
+    },
+    {
+     "spell": 24262,
+     "src": 1,
+     "note": "A totem that makes things worse; kill it."
+    },
+    {
+     "spell": 24306,
+     "src": 1,
+     "note": "A curse on a player; dispel it."
+    },
+    {
+     "spell": 24309,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true,
+     "note": "A ward that heals the boss and its helpers; kill it first."
+    },
+    {
+     "spell": 24466,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 19724,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19723,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19722,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19884,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19891,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19885,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19890,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19720,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19721,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19719,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19717,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19718,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19716,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 22637,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p12",
+   "name": "Hakkar",
+   "npcID": 14834,
+   "displayID": 15295,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 24324,
+     "src": 1
+    },
+    {
+     "spell": 24327,
+     "src": 1
+    },
+    {
+     "spell": 24328,
+     "src": 1
+    },
+    {
+     "spell": 24686,
+     "src": 1
+    },
+    {
+     "spell": 24687,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24688,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 24689,
+     "src": 1
+    },
+    {
+     "spell": 24690,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 19802,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19857,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19856,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19876,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19855,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19862,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19865,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19853,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19854,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19852,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19861,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19864,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19859,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 20264,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ]
+}

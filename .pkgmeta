@@ -1,0 +1,30 @@
+# BigWigs packager (https://github.com/BigWigsMods/packager).
+# Libraries are vendored in Libs/ (pinned copies, see docs/LIBRARIES.md), so there are no externals: the zip contains
+# exactly what the repository runs in game and what the offline tests load. Refresh them with tools/fetch_libs.sh.
+# Left out: everything for development (tests with the vendored test harness, tools, research data, the community
+# plan repository, CI, contributor docs). docs/licenses/ ships: the licence notices of imported data.
+package-as: DungeonPlanner
+
+enable-nolib-creation: no
+
+ignore:
+  - tests
+  - tools
+  - data-src
+  - docs/*.md
+  - docs/research
+  - docs/screenshots
+  - community-plans
+  - .github
+  - .luacheckrc
+  - .editorconfig
+  - .gitattributes
+  - .gitignore
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - CODE_OF_CONDUCT.md
+  - SECURITY.md
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown

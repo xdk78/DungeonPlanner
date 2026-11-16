@@ -1,0 +1,465 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-stockade",
+ "name": "The Stockade",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages: which drops and spells Forever added or changed on a boss, compared with the Classic list"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Targorr the Dread",
+   "npcID": 1696,
+   "displayID": 517,
+   "class": "elite",
+   "level": [
+    24,
+    24
+   ],
+   "abilities": [
+    {
+     "spell": 8599,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true,
+     "note": "Hits harder and faster for a while; heal through it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 12987,
+     "src": 1
+    },
+    {
+     "item": 12999,
+     "src": 1
+    },
+    {
+     "item": 2800,
+     "src": 1
+    },
+    {
+     "item": 13041,
+     "src": 1
+    },
+    {
+     "item": 273805,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273806,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273804,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Dextren Ward",
+   "npcID": 1663,
+   "displayID": 2149,
+   "class": "elite",
+   "level": [
+    26,
+    26
+   ],
+   "abilities": [
+    {
+     "spell": 19134,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Mass fear; use tremor or fear ward and spread."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13016,
+     "src": 1
+    },
+    {
+     "item": 13049,
+     "src": 1
+    },
+    {
+     "item": 2011,
+     "src": 1
+    },
+    {
+     "item": 3021,
+     "src": 1
+    },
+    {
+     "item": 2236,
+     "src": 1
+    },
+    {
+     "item": 9802,
+     "src": 1
+    },
+    {
+     "item": 273819,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273817,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273820,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Kam Deepfury",
+   "npcID": 1666,
+   "displayID": 825,
+   "class": "elite",
+   "level": [
+    27,
+    27
+   ],
+   "abilities": [
+    {
+     "spell": 8242,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 871,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 2800,
+     "src": 1
+    },
+    {
+     "item": 13012,
+     "src": 1
+    },
+    {
+     "item": 2098,
+     "src": 1
+    },
+    {
+     "item": 13032,
+     "src": 1
+    },
+    {
+     "item": 2280,
+     "src": 1
+    },
+    {
+     "item": 273808,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273807,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Hamhock",
+   "npcID": 1717,
+   "displayID": 3250,
+   "class": "elite",
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 6742,
+     "src": 2,
+     "note": "Speeds up an ally; dispel it or save cooldowns."
+    },
+    {
+     "spell": 421,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13041,
+     "src": 1
+    },
+    {
+     "item": 13057,
+     "src": 1
+    },
+    {
+     "item": 4298,
+     "src": 1
+    },
+    {
+     "item": 13031,
+     "src": 1
+    },
+    {
+     "item": 2878,
+     "src": 1
+    },
+    {
+     "item": 13005,
+     "src": 1
+    },
+    {
+     "item": 13016,
+     "src": 1
+    },
+    {
+     "item": 720,
+     "src": 1
+    },
+    {
+     "item": 273809,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273810,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273811,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Bazil Thredd",
+   "npcID": 1716,
+   "displayID": 1621,
+   "class": "elite",
+   "level": [
+    29,
+    29
+   ],
+   "abilities": [
+    {
+     "spell": 9128,
+     "src": 2
+    },
+    {
+     "spell": 7964,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Stuns players in the cloud; step out of it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 12974,
+     "src": 1
+    },
+    {
+     "item": 2098,
+     "src": 1
+    },
+    {
+     "item": 1717,
+     "src": 1
+    },
+    {
+     "item": 13012,
+     "src": 1
+    },
+    {
+     "item": 13099,
+     "src": 1
+    },
+    {
+     "item": 13094,
+     "src": 1
+    },
+    {
+     "item": 13011,
+     "src": 1
+    },
+    {
+     "item": 13097,
+     "src": 1
+    },
+    {
+     "item": 720,
+     "src": 1
+    },
+    {
+     "item": 2912,
+     "src": 1
+    },
+    {
+     "item": 13049,
+     "src": 1
+    },
+    {
+     "item": 13057,
+     "src": 1
+    },
+    {
+     "item": 273829,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273827,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273824,
+     "forever": true,
+     "src": 3
+    },
+    {
+     "item": 273825,
+     "forever": true,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 377,
+   "name": "Crime and Punishment",
+   "level": 26,
+   "req": 22,
+   "side": "alliance",
+   "src": 1,
+   "giver": 270
+  },
+  {
+   "id": 378,
+   "name": "The Fury Runs Deep",
+   "level": 27,
+   "req": 22,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1074
+  },
+  {
+   "id": 386,
+   "name": "What Comes Around...",
+   "level": 25,
+   "req": 22,
+   "side": "alliance",
+   "src": 1,
+   "giver": 859
+  },
+  {
+   "id": 387,
+   "name": "Quell The Uprising",
+   "level": 26,
+   "req": 22,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1719
+  },
+  {
+   "id": 388,
+   "name": "The Color of Blood",
+   "level": 26,
+   "req": 22,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1721
+  },
+  {
+   "id": 391,
+   "name": "The Stockade Riots",
+   "level": 29,
+   "req": 16,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1719
+  }
+ ]
+}

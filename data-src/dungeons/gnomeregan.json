@@ -1,0 +1,613 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "gnomeregan",
+ "name": "Gnomeregan",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  29,
+  38
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 90,
+ "maps": [
+  {
+   "uiMapID": 226,
+   "floor": 1,
+   "name": "The Hall of Gears",
+   "instanceMapID": 90
+  },
+  {
+   "uiMapID": 227,
+   "floor": 2,
+   "name": "The Dormitory",
+   "instanceMapID": 90
+  },
+  {
+   "uiMapID": 228,
+   "floor": 3,
+   "name": "Launch Bay",
+   "instanceMapID": 90
+  },
+  {
+   "uiMapID": 229,
+   "floor": 4,
+   "name": "Tinkers' Court",
+   "instanceMapID": 90
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/gnomeregan",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Main portal",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.645,
+   "y": 0.255,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl in the north-east of the first map."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Back entrance portal (needs the Workshop Key)",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.865,
+   "y": 0.48,
+   "approx": true,
+   "source": 3,
+   "note": "Second portal swirl on the Engineering Labs map; unlocked with the Workshop Key."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Grubbis",
+   "npcID": 7361,
+   "idSource": 6,
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.7787,
+   "y": 0.6701,
+   "approx": false,
+   "source": 5,
+   "note": "Comes with Chomper the crocolisk."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Viscous Fallout",
+   "npcID": 7079,
+   "idSource": 6,
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7596,
+   "y": 0.4652,
+   "approx": false,
+   "source": 5,
+   "note": "Patrols the Hall of Gears."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Electrocutioner 6000",
+   "npcID": 6235,
+   "idSource": 6,
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2432,
+   "y": 0.6844,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Crowd Pummeler 9-60",
+   "npcID": 6229,
+   "idSource": 6,
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4317,
+   "y": 0.8832,
+   "approx": false,
+   "source": 5,
+   "note": "Patrols the upper level of the Engineering Labs."
+  },
+  {
+   "id": "p7",
+   "kind": "rare",
+   "name": "Dark Iron Ambassador",
+   "npcID": 6228,
+   "idSource": 6,
+   "uiMapID": 229,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare that paces near the corridor to Tinkers' Court with other Dark Irons."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Mekgineer Thermaplugg",
+   "npcID": 7800,
+   "idSource": 6,
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3115,
+   "y": 0.3033,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Mechanical Menagerie",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 1,
+   "note": "Position unknown (no measured source). Listed by OpenMap's Places.lua (client journal) as the sixth boss; not covered by Method."
+  },
+  {
+   "id": "p10",
+   "kind": "interactive",
+   "name": "Thermaplugg's pillar buttons",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3115,
+   "y": 0.3033,
+   "approx": true,
+   "source": 2,
+   "note": "Pressing the buttons on the pillars around the room stops the Walking Bomb spawns; position is the room centre."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_item",
+   "name": "Workshop Key",
+   "itemID": 6893,
+   "idSource": 6,
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2432,
+   "y": 0.6844,
+   "approx": false,
+   "source": 2,
+   "note": "Drops from Electrocutioner 6000; opens the back entrance."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_item",
+   "name": "Thermaplugg's Safe Combination",
+   "itemID": 9299,
+   "idSource": 6,
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3115,
+   "y": 0.3033,
+   "approx": false,
+   "source": 2,
+   "note": "Quest item from Thermaplugg."
+  },
+  {
+   "id": "p13",
+   "kind": "quest_npc",
+   "name": "Blastmaster Emi Shortfuse",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position not sourced: near the trogg caves just inside the main entrance."
+  },
+  {
+   "id": "p14",
+   "kind": "quest_npc",
+   "name": "Kerbonee",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position not sourced; found in The Clean Room (A Fine Mess)."
+  },
+  {
+   "id": "p15",
+   "kind": "pack",
+   "name": "Trogg waves at the two caves (Emi Shortfuse event)",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.74,
+   "y": 0.62,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: the cave beside Grubbis where the escort event fights waves of troggs."
+  },
+  {
+   "id": "p16",
+   "kind": "pack",
+   "name": "Mobile Alert Systems and Dark Iron Agents",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.43,
+   "y": 0.8,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: kill Mobile Alert Systems quickly or they call reinforcements."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.645,
+   "y": 0.255,
+   "note": "Enter through the main portal",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.7787,
+   "y": 0.6701,
+   "note": "Grubbis in the trogg cave (after the Emi Shortfuse event)",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7596,
+   "y": 0.4652,
+   "note": "Viscous Fallout in the Hall of Gears (floor 2)",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2432,
+   "y": 0.6844,
+   "note": "Electrocutioner 6000 in the Launch Bay (floor 2)",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4317,
+   "y": 0.8832,
+   "note": "Crowd Pummeler 9-60 in the Engineering Labs (floor 3)",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 229,
+   "floor": 4,
+   "x": null,
+   "y": null,
+   "note": "Dark Iron Ambassador if you want the rare (floor 4)",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3115,
+   "y": 0.3033,
+   "note": "Mekgineer Thermaplugg, final boss",
+   "point": "p8",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p15",
+    "p3"
+   ],
+   "note": "Event waves, then Grubbis and Chomper."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p16",
+    "p6"
+   ],
+   "note": "Engineering Labs patrols, then Crowd Pummeler."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.7732,
+   "y": 0.653,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.796,
+   "y": 0.6519,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.7432,
+   "y": 0.6185,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 226,
+   "floor": 1,
+   "x": 0.7935,
+   "y": 0.6181,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7596,
+   "y": 0.4832,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7376,
+   "y": 0.4772,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7776,
+   "y": 0.5252,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.7296,
+   "y": 0.5102,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2598,
+   "y": 0.6774,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2628,
+   "y": 0.7,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2914,
+   "y": 0.6444,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 227,
+   "floor": 2,
+   "x": 0.2963,
+   "y": 0.6944,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4317,
+   "y": 0.9012,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4097,
+   "y": 0.8952,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4497,
+   "y": 0.9432,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 228,
+   "floor": 3,
+   "x": 0.4017,
+   "y": 0.9282,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3115,
+   "y": 0.3213,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.2895,
+   "y": 0.3153,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.3295,
+   "y": 0.3633,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 229,
+   "floor": 4,
+   "x": 0.2815,
+   "y": 0.3483,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Hard auto-attacks from Grubbis and Chomper. Stun and focus one at a time; avoid cleaving."
+  },
+  {
+   "boss": "p4",
+   "text": "Nature auto-attacks ignore armour, so armour does not help. Stuns and Demoralizing Shout / Roar reduce the damage."
+  },
+  {
+   "boss": "p5",
+   "text": "Chain Bolt chains lightning to nearby players, Megavolt is a frontal nature hit (face him away) and Shock hurts the tank. Spread out and stun."
+  },
+  {
+   "boss": "p6",
+   "text": "Arcing Smash is a frontal hit, Crowd Pummel knocks players back and Trample hits everyone close. Fight near a wall so nobody is knocked off a ledge; ranged stand left and right of him."
+  },
+  {
+   "boss": "p7",
+   "text": "Fireball, Fire Shield II (melee take damage) and a Burning Servant add. Patrols with other Dark Irons; pull only when nothing else is near."
+  },
+  {
+   "boss": "p8",
+   "text": "Walking Bombs drop from the pillars; pressing the pillar buttons stops them. Knock Away cuts threat sharply, so the tank taunts back; give a ranged player the job of killing bombs and pressing buttons."
+  }
+ ],
+ "notes": "Floor names follow OpenMap's journal data; the map picture of floor 2 labels its rooms 'Hall of Gears', 'Dormitory' and 'Launch Bay'. Five boss positions are OpenMap (Encounter Journal) data. OpenMap's Places.lua also lists a sixth boss, 'Mechanical Menagerie', not mentioned by Method: it is included without a position. NeedRoll's pins differ (Viscous Fallout on floor 1, Electrocutioner and Crowd Pummeler swapped); OpenMap's agree with the room tints on the map picture and are used. The Dark Iron Ambassador (rare patrol, floor 4) has no position. Floor transitions are not on the map art. Method: the main entrance is the portal on floor 1; the back entrance needs the Workshop Key from Electrocutioner 6000. Horde can use Chief Engineer Scooty (Booty Bay teleport). Quest NPCs inside: Kerbonee (The Clean Room, 'A Fine Mess'); Blastmaster Emi Shortfuse starts the pre-Grubbis trogg-cave event. Neither has a position."
+}

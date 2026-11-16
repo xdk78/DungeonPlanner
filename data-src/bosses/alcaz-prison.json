@@ -1,0 +1,320 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "alcaz-prison",
+ "name": "Alcaz Prison",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Tidemistress Ca'zass",
+   "loot": [
+    {
+     "item": 276737,
+     "src": 2
+    },
+    {
+     "item": 276736,
+     "src": 2
+    },
+    {
+     "item": 276735,
+     "src": 2
+    },
+    {
+     "item": 273883,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 255997,
+   "displayID": 4973,
+   "abilities": [
+    {
+     "spell": 15532,
+     "src": 3
+    },
+    {
+     "spell": 8398,
+     "src": 3
+    },
+    {
+     "spell": 1271375,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p4",
+   "name": "Overseer Wrex",
+   "loot": [
+    {
+     "item": 276733,
+     "src": 2
+    },
+    {
+     "item": 276734,
+     "src": 2
+    },
+    {
+     "item": 276732,
+     "src": 2
+    },
+    {
+     "item": 263992,
+     "src": 3
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 255391,
+   "displayID": 7914,
+   "abilities": [
+    {
+     "spell": 16856,
+     "src": 3
+    },
+    {
+     "spell": 9128,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p5",
+   "name": "Katerina the Cleaner",
+   "loot": [
+    {
+     "item": 276739,
+     "src": 2
+    },
+    {
+     "item": 276740,
+     "src": 2
+    },
+    {
+     "item": 276738,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 257016,
+   "displayID": 2317,
+   "abilities": [
+    {
+     "spell": 1271761,
+     "src": 3
+    },
+    {
+     "spell": 3583,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p6",
+   "name": "Blazeroar",
+   "loot": [
+    {
+     "item": 276745,
+     "src": 2
+    },
+    {
+     "item": 276746,
+     "src": 2
+    },
+    {
+     "item": 276744,
+     "src": 2
+    },
+    {
+     "item": 276890,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 255707,
+   "members": [
+    255702
+   ],
+   "displayID": 139053,
+   "abilities": [
+    {
+     "spell": 12466,
+     "src": 3
+    },
+    {
+     "spell": 18399,
+     "src": 3
+    },
+    {
+     "spell": 1275847,
+     "src": 3
+    },
+    {
+     "spell": 9573,
+     "src": 3
+    },
+    {
+     "spell": 1271593,
+     "src": 3
+    },
+    {
+     "spell": 1271604,
+     "src": 3
+    },
+    {
+     "spell": 3391,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p7",
+   "name": "The Questioner",
+   "loot": [
+    {
+     "item": 276741,
+     "src": 2
+    },
+    {
+     "item": 276742,
+     "src": 2
+    },
+    {
+     "item": 276743,
+     "src": 2
+    },
+    {
+     "item": 274029,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 256236,
+   "displayID": 140092,
+   "abilities": [
+    {
+     "spell": 17620,
+     "src": 3
+    },
+    {
+     "spell": 12054,
+     "src": 3
+    }
+   ]
+  }
+ ],
+ "quests": [
+  {
+   "id": 96337,
+   "name": "More Valuable Than Gold",
+   "level": 53,
+   "req": 48,
+   "side": "both",
+   "src": 2,
+   "items": [
+    274077
+   ]
+  },
+  {
+   "id": 96379,
+   "name": "State Secrets (Neutral)",
+   "level": 53,
+   "req": 48,
+   "side": "both",
+   "src": 2,
+   "giver": 214954
+  },
+  {
+   "id": 96335,
+   "name": "The Man in the Iron Chains",
+   "level": 53,
+   "req": 48,
+   "side": "both",
+   "src": 2,
+   "items": [
+    274029
+   ]
+  },
+  {
+   "id": 96772,
+   "name": "The Dragon's Journal",
+   "side": "alliance",
+   "req": 46,
+   "giver": 20735,
+   "src": 3
+  },
+  {
+   "id": 96381,
+   "name": "A Bit of Wet Work",
+   "side": "alliance",
+   "req": 48,
+   "giver": 260271,
+   "src": 3
+  },
+  {
+   "id": 95262,
+   "name": "The Secret Prison",
+   "side": "alliance",
+   "req": 48,
+   "giver": 260271,
+   "src": 3
+  },
+  {
+   "id": 95309,
+   "name": "No Orc Left Behind",
+   "side": "horde",
+   "req": 48,
+   "giver": 260383,
+   "src": 3
+  },
+  {
+   "id": 96332,
+   "name": "A Little Payback",
+   "side": "horde",
+   "req": 48,
+   "giver": 260383,
+   "src": 3
+  },
+  {
+   "id": 96334,
+   "name": "Blood Red Bandanas",
+   "side": "horde",
+   "req": 48,
+   "giver": 260383,
+   "src": 3
+  }
+ ]
+}

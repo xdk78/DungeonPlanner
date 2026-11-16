@@ -1,0 +1,4 @@
+# Accepted UI lint findings (wowui.lint): one "<view> | <key>" per line, each under a "#" line that says why it is
+# accepted. Only findings that come from the offline measurement and not from the layout belong here (CI measures
+# with the bundled Alegreya Sans widened to Friz Quadrata's average, not with the game's fonts); fix everything else.
+# None at the moment: every view is clean in English and Polish, with the bundled font and with the game's fonts.

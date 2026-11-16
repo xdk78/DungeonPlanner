@@ -1,0 +1,815 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "wailing-caverns",
+ "name": "Wailing Caverns",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  15,
+  24
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 43,
+ "maps": [
+  {
+   "uiMapID": 279,
+   "floor": 1,
+   "name": "Wailing Caverns",
+   "instanceMapID": 43
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/wailing-caverns",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.46,
+   "y": 0.565,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl in the central cavern."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Lady Anacondra",
+   "npcID": 3671,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.306,
+   "y": 0.4303,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Lord Cobrahn",
+   "npcID": 3669,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1667,
+   "y": 0.5676,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Lord Pythas",
+   "npcID": 3670,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1913,
+   "y": 0.3955,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Kresh",
+   "npcID": 3653,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3852,
+   "y": 0.3607,
+   "approx": false,
+   "source": 5,
+   "note": "Sits in the pool in the northern channel."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Verdan the Everliving",
+   "npcID": 5775,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5546,
+   "y": 0.4652,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Lord Serpentis",
+   "npcID": 3673,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6161,
+   "y": 0.5389,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Skum",
+   "npcID": 3674,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.623,
+   "y": 0.7439,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Mutanus the Devourer",
+   "npcID": 3654,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3456,
+   "y": 0.1373,
+   "approx": false,
+   "source": 5,
+   "note": "Spawns at Naralex after the escort event; also the position of Naralex."
+  },
+  {
+   "id": "p10",
+   "kind": "rare",
+   "name": "Deviate Faerie Dragon",
+   "npcID": 5912,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Wandering rare; no stable position."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_npc",
+   "name": "Naralex (and the Disciple's destination)",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3456,
+   "y": 0.1573,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Naralex sleeps in the north chamber where Mutanus appears."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_npc",
+   "name": "Disciple of Naralex (escort start)",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.45,
+   "y": 0.6,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: the Disciple waits in the central cavern; Method says the escort starts at the entrance."
+  },
+  {
+   "id": "p13",
+   "kind": "quest_item",
+   "name": "Gem of Anacondra",
+   "itemID": 9739,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.306,
+   "y": 0.4303,
+   "approx": false,
+   "source": 5,
+   "note": "Quest item dropped by this Druid of the Fang boss (Leaders of the Fang)."
+  },
+  {
+   "id": "p14",
+   "kind": "quest_item",
+   "name": "Gem of Cobrahn",
+   "itemID": 9738,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1667,
+   "y": 0.5676,
+   "approx": false,
+   "source": 5,
+   "note": "Quest item dropped by this Druid of the Fang boss (Leaders of the Fang)."
+  },
+  {
+   "id": "p15",
+   "kind": "quest_item",
+   "name": "Gem of Pythas",
+   "itemID": 9740,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1913,
+   "y": 0.3955,
+   "approx": false,
+   "source": 5,
+   "note": "Quest item dropped by this Druid of the Fang boss (Leaders of the Fang)."
+  },
+  {
+   "id": "p16",
+   "kind": "quest_item",
+   "name": "Gem of Serpentis",
+   "itemID": 9741,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6161,
+   "y": 0.5389,
+   "approx": false,
+   "source": 5,
+   "note": "Quest item dropped by this Druid of the Fang boss (Leaders of the Fang)."
+  },
+  {
+   "id": "p17",
+   "kind": "quest_item",
+   "name": "Deviate Hide",
+   "itemID": 6443,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3852,
+   "y": 0.3607,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by Kresh (Deviate Hides)."
+  },
+  {
+   "id": "p18",
+   "kind": "quest_item",
+   "name": "The Glowing Shard",
+   "itemID": 10441,
+   "idSource": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3456,
+   "y": 0.1373,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by Mutanus; turn in to Sputtervalve in Ratchet."
+  },
+  {
+   "id": "p19",
+   "kind": "pack",
+   "name": "Druids of the Fang and vipers near Anacondra",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.36,
+   "y": 0.46,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Druids (Slumber, Healing Touch) with Deviate beasts; interrupt Slumber."
+  },
+  {
+   "id": "p20",
+   "kind": "pack",
+   "name": "Deviate Dreadfangs and Ravagers in the east caves",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.58,
+   "y": 0.5,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Dreadfang (fear, breath) is the dangerous mob here."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.46,
+   "y": 0.565,
+   "note": "Enter",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.306,
+   "y": 0.4303,
+   "note": "Northwest to Lady Anacondra",
+   "point": "p2",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1667,
+   "y": 0.5676,
+   "note": "West then south to Lord Cobrahn",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1913,
+   "y": 0.3955,
+   "note": "North-west chamber, Lord Pythas",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3852,
+   "y": 0.3607,
+   "note": "Kresh in the northern pool (optional but quick)",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5546,
+   "y": 0.4652,
+   "note": "East along the channel to Verdan",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6161,
+   "y": 0.5389,
+   "note": "Lord Serpentis",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.623,
+   "y": 0.7439,
+   "note": "South room, Skum",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.45,
+   "y": 0.6,
+   "note": "Back to the Disciple of Naralex, start the escort",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3456,
+   "y": 0.1373,
+   "note": "Follow the escort to Naralex; Mutanus spawns after two add waves",
+   "point": "p9",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p19",
+    "p2"
+   ],
+   "note": "Anacondra with her druid escort; edge of her patrol only."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p20",
+    "p6",
+    "p7"
+   ],
+   "note": "East caves: Verdan then Serpentis (kill the druid adds first)."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3195,
+   "y": 0.4422,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3005,
+   "y": 0.4548,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.363,
+   "y": 0.4563,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3201,
+   "y": 0.4825,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1795,
+   "y": 0.555,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1907,
+   "y": 0.5748,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1968,
+   "y": 0.5127,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.2198,
+   "y": 0.5574,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1888,
+   "y": 0.4133,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1678,
+   "y": 0.4043,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.2006,
+   "y": 0.4574,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.1552,
+   "y": 0.4358,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3675,
+   "y": 0.3639,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3695,
+   "y": 0.3412,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3293,
+   "y": 0.389,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3356,
+   "y": 0.3391,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5393,
+   "y": 0.4557,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5559,
+   "y": 0.4402,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.4941,
+   "y": 0.449,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5321,
+   "y": 0.416,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6046,
+   "y": 0.5251,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6253,
+   "y": 0.5156,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.5638,
+   "y": 0.5044,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6103,
+   "y": 0.4851,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6224,
+   "y": 0.7259,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6446,
+   "y": 0.7312,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.603,
+   "y": 0.6845,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.6515,
+   "y": 0.6979,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3496,
+   "y": 0.1549,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3268,
+   "y": 0.1538,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3764,
+   "y": 0.1919,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 279,
+   "floor": 1,
+   "x": 0.3262,
+   "y": 0.1878,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Lightning Bolt on the tank, self Healing Touch, Sleep and Thorns. Pull from the edge of her patrol so the pack does not overwhelm the tank; kill druids before her."
+  },
+  {
+   "boss": "p3",
+   "text": "Python adds die fast. Interrupt Druid's Slumber before the Healing Touch; at low health he shifts into serpent form and hits harder."
+  },
+  {
+   "boss": "p4",
+   "text": "Same druid kit plus a Thunderclap. Stun and kill the adds first."
+  },
+  {
+   "boss": "p5",
+   "text": "Plain tank and spank with a strong bite; high armour, so casters do better."
+  },
+  {
+   "boss": "p6",
+   "text": "Hits very hard and roots the whole group with Grasping Vines. Healers focus the tank."
+  },
+  {
+   "boss": "p7",
+   "text": "Final Druid of the Fang: two druid adds first, then him. Standard druid kit."
+  },
+  {
+   "boss": "p8",
+   "text": "Only Chained Bolt; spread out to avoid extra damage."
+  },
+  {
+   "boss": "p9",
+   "text": "Escort the Disciple (clear trash first). Two add waves, then Mutanus: Thundercrack stun, Terrify fear, Naralex's Nightmare (mind control or sleep). Keep a trinket or fear ward ready."
+  },
+  {
+   "boss": "p10",
+   "text": "Harmless on its own; kill its druid escort first and watch for Slumber."
+  }
+ ],
+ "notes": "uiMapID 279 is the retail 'Wailing Caverns' dungeon map; the table also lists 11 (micro) and 825. Verify in game with C_Map.GetBestMapForUnit. Mutanus is only reachable through Naralex's event; Method is unclear on exactly what unlocks the Disciple of Naralex (the four Druid bosses are the usual condition). Route order is a common clockwise clear, not the only valid one. The Deviate Faerie Dragon wanders and has no position here."
+}

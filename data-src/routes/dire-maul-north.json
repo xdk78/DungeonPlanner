@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "dire-maul-north",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles DireMaul\\DireMaul1_"},
+  "overrides": {"1": {"open_paths": [{"points": [[0.318, 0.4], [0.319, 0.3]], "width": 8}], "open_polys": [[[0.32, 0.195], [0.35, 0.21], [0.36, 0.25], [0.35, 0.29], [0.32, 0.31], [0.29, 0.29], [0.28, 0.25], [0.29, 0.21]]], "open_rects": [[0.625, 0.72, 0.765, 0.84]]}},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default:full' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p2", "floor": 1, "at": [0.7186, 0.9052], "approx": true, "name": "Entrance (inside)"}
+    ],
+    "add": [
+    ],
+    "side": [
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.2971, 0.627], "to": [0.2834, 0.6272], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2987, 0.4906], "to": [0.3014, 0.4775], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.7186, 0.9052], "to": [0.6954, 0.7602], "bends": [[0.7163, 0.8929], [0.697, 0.8817], [0.6927, 0.8713]], "import": "fdr"},
+    {"floor": 1, "from": [0.6954, 0.7602], "to": [0.612, 0.6926], "bends": [[0.6946, 0.712], [0.6924, 0.6963], [0.6879, 0.6896], [0.6589, 0.681], [0.6138, 0.6808]], "import": "fdr"},
+    {"floor": 1, "from": [0.612, 0.6926], "to": [0.4945, 0.7807], "bends": [[0.6069, 0.683], [0.5808, 0.7082], [0.5725, 0.7199], [0.5659, 0.7426], [0.5631, 0.7777], [0.5497, 0.7792], [0.5261, 0.7741], [0.4944, 0.778]], "import": "fdr"},
+    {"floor": 1, "from": [0.4945, 0.7807], "to": [0.2664, 0.5717], "bends": [[0.4944, 0.778], [0.3804, 0.7825], [0.3318, 0.7801], [0.3093, 0.7767], [0.2901, 0.7672], [0.2818, 0.7577], [0.2752, 0.7406], [0.2712, 0.7044], [0.2669, 0.5981], [0.2637, 0.5718], [0.264, 0.5683]], "import": "fdr"},
+    {"floor": 1, "from": [0.2664, 0.5717], "to": [0.3183, 0.5061], "bends": [[0.2801, 0.6115], [0.2853, 0.6477], [0.2964, 0.6522], [0.3159, 0.6501], [0.3191, 0.6413], [0.3204, 0.6234], [0.3214, 0.5729]], "import": "fdr"},
+    {"floor": 1, "from": [0.3183, 0.5061], "to": [0.3195, 0.3037], "bends": [[0.3124, 0.3595], [0.315, 0.3026]], "import": "fdr"},
+    {"floor": 1, "from": [0.3195, 0.3037], "to": [0.3195, 0.2295], "bends": [[0.315, 0.3026]], "import": "fdr"}
+  ]
+}

@@ -1,0 +1,602 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "gnomeregan",
+ "name": "Gnomeregan",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Grubbis",
+   "npcID": 7361,
+   "displayID": 6533,
+   "class": "elite",
+   "level": [
+    32,
+    32
+   ],
+   "loot": [
+    {
+     "item": 9445,
+     "src": 1
+    },
+    {
+     "item": 274043,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 274042,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Viscous Fallout",
+   "npcID": 7079,
+   "displayID": 5497,
+   "class": "elite",
+   "level": [
+    30,
+    30
+   ],
+   "abilities": [
+    {
+     "spell": 21687,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Poison volley on the group; cleanse it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 9454,
+     "src": 1
+    },
+    {
+     "item": 9452,
+     "src": 1
+    },
+    {
+     "item": 9453,
+     "src": 1
+    },
+    {
+     "item": 9485,
+     "src": 1
+    },
+    {
+     "item": 9509,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Electrocutioner 6000",
+   "npcID": 6235,
+   "displayID": 6915,
+   "class": "elite",
+   "level": [
+    32,
+    32
+   ],
+   "abilities": [
+    {
+     "spell": 11085,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ],
+     "note": "Chain lightning that jumps between players; interrupt it."
+    },
+    {
+     "spell": 11082,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 11084,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 9447,
+     "src": 1
+    },
+    {
+     "item": 9446,
+     "src": 1
+    },
+    {
+     "item": 9510,
+     "src": 1
+    },
+    {
+     "item": 9448,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Crowd Pummeler 9-60",
+   "npcID": 6229,
+   "displayID": 6774,
+   "class": "elite",
+   "level": [
+    32,
+    32
+   ],
+   "abilities": [
+    {
+     "spell": 8374,
+     "src": 2,
+     "note": "Sweeping blow in front of it; do not stand there."
+    },
+    {
+     "spell": 10887,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 5568,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 9449,
+     "src": 1
+    },
+    {
+     "item": 9450,
+     "src": 1
+    },
+    {
+     "item": 4716,
+     "src": 1
+    },
+    {
+     "item": 274068,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Mekgineer Thermaplugg",
+   "npcID": 7800,
+   "displayID": 6980,
+   "class": "elite",
+   "level": [
+    34,
+    34
+   ],
+   "abilities": [
+    {
+     "spell": 10101,
+     "src": 1,
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 11130,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Knocks back everyone close to it; stay at range if you can."
+    },
+    {
+     "spell": 11518,
+     "src": 1
+    },
+    {
+     "spell": 11521,
+     "src": 1
+    },
+    {
+     "spell": 11524,
+     "src": 1
+    },
+    {
+     "spell": 11526,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 9461,
+     "src": 1
+    },
+    {
+     "item": 9458,
+     "src": 1
+    },
+    {
+     "item": 9459,
+     "src": 1
+    },
+    {
+     "item": 9492,
+     "src": 1
+    },
+    {
+     "item": 9485,
+     "src": 1
+    },
+    {
+     "item": 4415,
+     "src": 1
+    },
+    {
+     "item": 6672,
+     "src": 1
+    },
+    {
+     "item": 4411,
+     "src": 1
+    },
+    {
+     "item": 4413,
+     "src": 1
+    },
+    {
+     "item": 7192,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Mechanical Menagerie",
+   "npcID": 218245,
+   "abilities": [
+    {
+     "spell": 436825,
+     "src": 2
+    },
+    {
+     "spell": 436741,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 440073,
+     "src": 2
+    },
+    {
+     "spell": 436837,
+     "src": 2
+    },
+    {
+     "spell": 436828,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 436831,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    }
+   ],
+   "src": {
+    "npcID": 2
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 2841,
+   "name": "Rig Wars",
+   "level": 35,
+   "req": 25,
+   "side": "horde",
+   "src": 1,
+   "giver": 3412
+  },
+  {
+   "id": 2842,
+   "name": "Chief Engineer Scooty",
+   "level": 35,
+   "req": 20,
+   "side": "horde",
+   "src": 1,
+   "giver": 3413
+  },
+  {
+   "id": 2843,
+   "name": "Gnomer-gooooone!",
+   "level": 35,
+   "req": 20,
+   "side": "horde",
+   "src": 1,
+   "giver": 7853
+  },
+  {
+   "id": 2904,
+   "name": "A Fine Mess",
+   "level": 30,
+   "req": 20,
+   "side": "both",
+   "src": 1,
+   "giver": 7850
+  },
+  {
+   "id": 2922,
+   "name": "Save Techbot's Brain!",
+   "level": 26,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7944
+  },
+  {
+   "id": 2923,
+   "name": "Tinkmaster Overspark",
+   "level": 26,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7917
+  },
+  {
+   "id": 2924,
+   "name": "Essential Artificials",
+   "level": 30,
+   "req": 24,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6169
+  },
+  {
+   "id": 2925,
+   "name": "Klockmort's Essentials",
+   "level": 30,
+   "req": 24,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6142
+  },
+  {
+   "id": 2926,
+   "name": "Gnogaine",
+   "level": 27,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1268
+  },
+  {
+   "id": 2927,
+   "name": "The Day After",
+   "level": 27,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6569
+  },
+  {
+   "id": 2928,
+   "name": "Gyrodrillmatic Excavationators",
+   "level": 30,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 6579
+  },
+  {
+   "id": 2929,
+   "name": "The Grand Betrayal",
+   "level": 35,
+   "req": 25,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7937
+  },
+  {
+   "id": 2930,
+   "name": "Data Rescue",
+   "level": 30,
+   "req": 25,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7950
+  },
+  {
+   "id": 2931,
+   "name": "Castpipe's Task",
+   "level": 28,
+   "req": 25,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4077
+  },
+  {
+   "id": 2945,
+   "name": "Grime-Encrusted Ring",
+   "level": 34,
+   "req": 28,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2947,
+   "name": "Return of the Ring",
+   "level": 34,
+   "req": 28,
+   "side": "alliance",
+   "src": 1
+  },
+  {
+   "id": 2949,
+   "name": "Return of the Ring",
+   "level": 34,
+   "req": 28,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 2951,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2952,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2953,
+   "name": "More Sparklematic Action",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 2962,
+   "name": "The Only Cure is More Green Glow",
+   "level": 30,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 1268
+  },
+  {
+   "id": 2971,
+   "name": "<UNUSED>",
+   "level": 32,
+   "req": 23,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4601,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4602,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4603,
+   "name": "More Sparklematic Action",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4604,
+   "name": "More Sparklematic Action",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4605,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 4606,
+   "name": "The Sparklematic 5200!",
+   "level": 30,
+   "req": 25,
+   "side": "both",
+   "src": 1
+  }
+ ]
+}

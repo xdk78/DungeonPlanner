@@ -1,0 +1,981 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "lower-blackrock-spire",
+ "name": "Lower Blackrock Spire",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "War Master Voone",
+   "npcID": 9237,
+   "displayID": 9733,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 10966,
+     "src": 1
+    },
+    {
+     "spell": 15618,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 15708,
+     "src": 1,
+     "note": "Cuts healing on the tank; plan extra healing or swap."
+    },
+    {
+     "spell": 15754,
+     "src": 1
+    },
+    {
+     "spell": 16075,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 13173,
+     "src": 1
+    },
+    {
+     "item": 13179,
+     "src": 1
+    },
+    {
+     "item": 16676,
+     "src": 1
+    },
+    {
+     "item": 13177,
+     "src": 1
+    },
+    {
+     "item": 12582,
+     "src": 1
+    },
+    {
+     "item": 22231,
+     "src": 1
+    },
+    {
+     "item": 12335,
+     "src": 1
+    },
+    {
+     "item": 21524,
+     "src": 1
+    },
+    {
+     "item": 13175,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Shadow Hunter Vosh'gajin",
+   "npcID": 9236,
+   "displayID": 9732,
+   "class": "elite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 16098,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ],
+     "note": "Raises physical damage taken; dispel it."
+    },
+    {
+     "spell": 16097,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Turns players into frogs; dispel or wait."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13255,
+     "src": 1
+    },
+    {
+     "item": 12654,
+     "src": 1
+    },
+    {
+     "item": 12626,
+     "src": 1
+    },
+    {
+     "item": 16712,
+     "src": 1
+    },
+    {
+     "item": 13257,
+     "src": 1
+    },
+    {
+     "item": 12651,
+     "src": 1
+    },
+    {
+     "item": 12653,
+     "src": 1
+    },
+    {
+     "item": 12685,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Mother Smolderweb",
+   "npcID": 10596,
+   "displayID": 9929,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 16104,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 16468,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 16103,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13244,
+     "src": 1
+    },
+    {
+     "item": 16715,
+     "src": 1
+    },
+    {
+     "item": 13213,
+     "src": 1
+    },
+    {
+     "item": 13183,
+     "src": 1
+    },
+    {
+     "item": 10374,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Highlord Omokk",
+   "npcID": 9196,
+   "displayID": 11565,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 10101,
+     "src": 2,
+     "tags": [
+      "tank"
+     ],
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 156861,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13167,
+     "src": 1
+    },
+    {
+     "item": 13170,
+     "src": 1
+    },
+    {
+     "item": 13169,
+     "src": 1
+    },
+    {
+     "item": 13168,
+     "src": 1
+    },
+    {
+     "item": 13166,
+     "src": 1
+    },
+    {
+     "item": 16670,
+     "src": 1
+    },
+    {
+     "item": 12336,
+     "src": 1
+    },
+    {
+     "item": 10226,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p12",
+   "name": "Urok Doomhowl",
+   "npcID": 10584,
+   "displayID": 11583,
+   "class": "rareelite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 16508,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Mass fear; use tremor or fear ward and spread."
+    }
+   ],
+   "loot": [
+    {
+     "item": 13258,
+     "src": 1
+    },
+    {
+     "item": 13259,
+     "src": 1
+    },
+    {
+     "item": 18784,
+     "src": 1
+    },
+    {
+     "item": 22232,
+     "src": 1
+    },
+    {
+     "item": 13178,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p13",
+   "name": "Quartermaster Zigris",
+   "npcID": 9736,
+   "displayID": 9738,
+   "class": "rareelite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 15504,
+     "src": 2
+    },
+    {
+     "spell": 15609,
+     "src": 2
+    },
+    {
+     "spell": 16497,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 13252,
+     "src": 1
+    },
+    {
+     "item": 13253,
+     "src": 1
+    },
+    {
+     "item": 12835,
+     "src": 1
+    },
+    {
+     "item": 16713,
+     "src": 1
+    },
+    {
+     "item": 16735,
+     "src": 1
+    },
+    {
+     "item": 16703,
+     "src": 1
+    },
+    {
+     "item": 16673,
+     "src": 1
+    },
+    {
+     "item": 16696,
+     "src": 1
+    },
+    {
+     "item": 16680,
+     "src": 1
+    },
+    {
+     "item": 16683,
+     "src": 1
+    },
+    {
+     "item": 16716,
+     "src": 1
+    },
+    {
+     "item": 16717,
+     "src": 1
+    },
+    {
+     "item": 13247,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p14",
+   "name": "Halycon",
+   "npcID": 10220,
+   "displayID": 9567,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "loot": [
+    {
+     "item": 13212,
+     "src": 1
+    },
+    {
+     "item": 13211,
+     "src": 1
+    },
+    {
+     "item": 13210,
+     "src": 1
+    },
+    {
+     "item": 22313,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p15",
+   "name": "Gizrul the Slavener",
+   "npcID": 10268,
+   "displayID": 9564,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 8269,
+     "src": 2,
+     "tags": [
+      "enrage"
+     ],
+     "inferred": true,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 7938,
+     "src": 2
+    },
+    {
+     "spell": 16128,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 13206,
+     "src": 1
+    },
+    {
+     "item": 13205,
+     "src": 1
+    },
+    {
+     "item": 13208,
+     "src": 1
+    },
+    {
+     "item": 16718,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p17",
+   "name": "Overlord Wyrmthalak",
+   "npcID": 9568,
+   "displayID": 8711,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 15284,
+     "src": 2
+    },
+    {
+     "spell": 16244,
+     "src": 2
+    },
+    {
+     "spell": 12887,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 13143,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16679,
+     "src": 1
+    },
+    {
+     "item": 13161,
+     "src": 1
+    },
+    {
+     "item": 13163,
+     "src": 1
+    },
+    {
+     "item": 13162,
+     "src": 1
+    },
+    {
+     "item": 22321,
+     "src": 1
+    },
+    {
+     "item": 13164,
+     "src": 1
+    },
+    {
+     "item": 13148,
+     "src": 1
+    },
+    {
+     "item": 12337,
+     "src": 1
+    },
+    {
+     "item": 10256,
+     "src": 1
+    },
+    {
+     "item": 10226,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 4701,
+   "name": "Put Her Down",
+   "level": 59,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9562,
+   "shared": true
+  },
+  {
+   "id": 4724,
+   "name": "The Pack Mistress",
+   "level": 59,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 9081,
+   "shared": true
+  },
+  {
+   "id": 4729,
+   "name": "Kibler's Exotic Pets",
+   "level": 59,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10260,
+   "shared": true
+  },
+  {
+   "id": 4734,
+   "name": "Egg Freezing",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10267,
+   "shared": true
+  },
+  {
+   "id": 4735,
+   "name": "Egg Collection",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10267,
+   "shared": true
+  },
+  {
+   "id": 4742,
+   "name": "Seal of Ascension",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10299,
+   "shared": true
+  },
+  {
+   "id": 4743,
+   "name": "Seal of Ascension",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10299,
+   "shared": true
+  },
+  {
+   "id": 4764,
+   "name": "Doomrigger's Clasp",
+   "level": 60,
+   "req": 57,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9565,
+   "shared": true
+  },
+  {
+   "id": 4765,
+   "name": "Delivery to Ridgewell",
+   "level": 60,
+   "req": 57,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9565,
+   "shared": true
+  },
+  {
+   "id": 4766,
+   "name": "Mayara Brightwing",
+   "level": 60,
+   "req": 57,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2285,
+   "shared": true
+  },
+  {
+   "id": 4768,
+   "name": "The Darkstone Tablet",
+   "level": 60,
+   "req": 57,
+   "side": "horde",
+   "src": 1,
+   "giver": 9078,
+   "shared": true
+  },
+  {
+   "id": 4769,
+   "name": "Vivian Lagrave and the Darkstone Tablet",
+   "level": 60,
+   "req": 57,
+   "side": "horde",
+   "src": 1,
+   "giver": 5204,
+   "shared": true
+  },
+  {
+   "id": 4788,
+   "name": "The Final Tablets",
+   "level": 58,
+   "req": 40,
+   "side": "both",
+   "src": 1,
+   "giver": 10460,
+   "shared": true
+  },
+  {
+   "id": 4862,
+   "name": "En-Ay-Es-Tee-Why",
+   "level": 59,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10260,
+   "shared": true
+  },
+  {
+   "id": 4866,
+   "name": "Mother's Milk",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 9563,
+   "shared": true
+  },
+  {
+   "id": 4867,
+   "name": "Urok Doomhowl",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10799,
+   "shared": true
+  },
+  {
+   "id": 4903,
+   "name": "Warlord's Command",
+   "level": 60,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 4907,
+   "name": "Tinkee Steamboil",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10468,
+   "shared": true
+  },
+  {
+   "id": 4974,
+   "name": "For The Horde!",
+   "level": 60,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 4949,
+   "shared": true
+  },
+  {
+   "id": 4981,
+   "name": "Operative Bijou",
+   "level": 59,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 9080,
+   "shared": true
+  },
+  {
+   "id": 4982,
+   "name": "Bijou's Belongings",
+   "level": 59,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 10257,
+   "shared": true
+  },
+  {
+   "id": 4983,
+   "name": "Bijou's Reconnaissance Report",
+   "level": 59,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 10257,
+   "shared": true
+  },
+  {
+   "id": 5001,
+   "name": "Bijou's Belongings",
+   "level": 59,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "giver": 10257,
+   "shared": true
+  },
+  {
+   "id": 5002,
+   "name": "Message to Maxwell",
+   "level": 59,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "giver": 10257,
+   "shared": true
+  },
+  {
+   "id": 5047,
+   "name": "Pip Quickwit, At Your Service!",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10776,
+   "shared": true
+  },
+  {
+   "id": 5081,
+   "name": "Maxwell's Mission",
+   "level": 60,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9560,
+   "shared": true
+  },
+  {
+   "id": 5089,
+   "name": "General Drakkisath's Command",
+   "level": 60,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5102,
+   "name": "General Drakkisath's Demise",
+   "level": 60,
+   "req": 55,
+   "side": "alliance",
+   "src": 1,
+   "giver": 9560,
+   "shared": true
+  },
+  {
+   "id": 5127,
+   "name": "The Demon Forge",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "giver": 10918,
+   "shared": true
+  },
+  {
+   "id": 5160,
+   "name": "The Matron Protectorate",
+   "level": 60,
+   "req": 57,
+   "side": "both",
+   "src": 1,
+   "giver": 10740,
+   "shared": true
+  },
+  {
+   "id": 6502,
+   "name": "Drakefire Amulet",
+   "level": 60,
+   "req": 50,
+   "side": "alliance",
+   "src": 1,
+   "giver": 10929,
+   "shared": true
+  },
+  {
+   "id": 6569,
+   "name": "Oculus Illusions",
+   "level": 60,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 11872,
+   "shared": true
+  },
+  {
+   "id": 6602,
+   "name": "Blood of the Black Dragon Champion",
+   "level": 60,
+   "req": 55,
+   "side": "horde",
+   "src": 1,
+   "giver": 10182,
+   "shared": true
+  },
+  {
+   "id": 7761,
+   "name": "Blackhand's Command",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 8966,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8989,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8995,
+   "name": "Mea Culpa, Lord Valthalak",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  }
+ ]
+}

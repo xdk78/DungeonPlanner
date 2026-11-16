@@ -1,0 +1,26 @@
+<!-- Key bindings: Options > Keybindings > AddOns > Dungeon Planner. No default keys are assigned.
+     Each binding calls one non-secure function (Core/Actions.lua); none of them is protected, so they work in and out
+     of combat, and anything heavy waits until combat ends. Names are localized via BINDING_* globals (Locales). -->
+<Bindings>
+	<Binding name="DUNGEONPLANNER_TOGGLE" header="DUNGEONPLANNER" category="ADDONS">
+		DungeonPlanner_Binding("toggle")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_MAP" category="ADDONS">
+		DungeonPlanner_Binding("map")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_NEXT_PULL" category="ADDONS">
+		DungeonPlanner_Binding("nextPull")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_PREVIOUS_PULL" category="ADDONS">
+		DungeonPlanner_Binding("previousPull")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_RUN_MODE" category="ADDONS">
+		DungeonPlanner_Binding("runMode")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_BOSS_KILLED" category="ADDONS">
+		DungeonPlanner_Binding("bossKilled")
+	</Binding>
+	<Binding name="DUNGEONPLANNER_SHARE_GROUP" category="ADDONS">
+		DungeonPlanner_Binding("shareGroup")
+	</Binding>
+</Bindings>

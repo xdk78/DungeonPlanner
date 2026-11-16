@@ -1,0 +1,880 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "dire-maul-north",
+ "name": "Dire Maul: North",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Guard Mol'dar",
+   "npcID": 14326,
+   "displayID": 11561,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 11972,
+     "src": 2
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18494,
+     "src": 1
+    },
+    {
+     "item": 18493,
+     "src": 1
+    },
+    {
+     "item": 18496,
+     "src": 1
+    },
+    {
+     "item": 18498,
+     "src": 1
+    },
+    {
+     "item": 18497,
+     "src": 1
+    },
+    {
+     "item": 18450,
+     "src": 1
+    },
+    {
+     "item": 18459,
+     "src": 1
+    },
+    {
+     "item": 18464,
+     "src": 1
+    },
+    {
+     "item": 18458,
+     "src": 1
+    },
+    {
+     "item": 18460,
+     "src": 1
+    },
+    {
+     "item": 18462,
+     "src": 1
+    },
+    {
+     "item": 18463,
+     "src": 1
+    },
+    {
+     "item": 18451,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Stomper Kreeg",
+   "npcID": 14322,
+   "displayID": 11545,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 8269,
+     "src": 1,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    },
+    {
+     "spell": 15577,
+     "src": 1
+    },
+    {
+     "spell": 16740,
+     "src": 1,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22833,
+     "src": 1
+    },
+    {
+     "spell": 22835,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18425,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Guard Fengus",
+   "npcID": 14321,
+   "displayID": 11561,
+   "class": "elite",
+   "level": [
+    58,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 22817,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18360,
+     "src": 1
+    },
+    {
+     "item": 18364,
+     "src": 1
+    },
+    {
+     "item": 18359,
+     "src": 1
+    },
+    {
+     "item": 18462,
+     "src": 1
+    },
+    {
+     "item": 18464,
+     "src": 1
+    },
+    {
+     "item": 18450,
+     "src": 1
+    },
+    {
+     "item": 18459,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Guard Slip'kik",
+   "npcID": 14323,
+   "displayID": 11561,
+   "class": "elite",
+   "level": [
+    59,
+    59
+   ],
+   "abilities": [
+    {
+     "spell": 11972,
+     "src": 2
+    },
+    {
+     "spell": 8269,
+     "src": 2,
+     "note": "Hits harder and faster at low health; save cooldowns and burn it down."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18498,
+     "src": 1
+    },
+    {
+     "item": 18494,
+     "src": 1
+    },
+    {
+     "item": 18496,
+     "src": 1
+    },
+    {
+     "item": 18497,
+     "src": 1
+    },
+    {
+     "item": 18493,
+     "src": 1
+    },
+    {
+     "item": 18364,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Captain Kromcrush",
+   "npcID": 14325,
+   "displayID": 11564,
+   "class": "elite",
+   "level": [
+    61,
+    61
+   ],
+   "abilities": [
+    {
+     "spell": 8599,
+     "src": 1,
+     "note": "Hits harder and faster for a while; heal through it."
+    },
+    {
+     "spell": 22857,
+     "src": 1
+    },
+    {
+     "spell": 22859,
+     "src": 1
+    },
+    {
+     "spell": 22860,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 18503,
+     "src": 1
+    },
+    {
+     "item": 18507,
+     "src": 1
+    },
+    {
+     "item": 18505,
+     "src": 1
+    },
+    {
+     "item": 18502,
+     "src": 1
+    },
+    {
+     "item": 18360,
+     "src": 1
+    },
+    {
+     "item": 14811,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Cho'Rush the Observer",
+   "npcID": 14324,
+   "displayID": 11537,
+   "class": "elite",
+   "level": [
+    60,
+    60
+   ],
+   "abilities": [
+    {
+     "spell": 15531,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18538,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18500,
+     "src": 1
+    },
+    {
+     "item": 18529,
+     "src": 1
+    },
+    {
+     "item": 18528,
+     "src": 1
+    },
+    {
+     "item": 18530,
+     "src": 1
+    },
+    {
+     "item": 18531,
+     "src": 1
+    },
+    {
+     "item": 18532,
+     "src": 1
+    },
+    {
+     "item": 18499,
+     "src": 1
+    },
+    {
+     "item": 18534,
+     "src": 1
+    },
+    {
+     "item": 18533,
+     "src": 1
+    },
+    {
+     "item": 18537,
+     "src": 1
+    },
+    {
+     "item": 18495,
+     "src": 1
+    },
+    {
+     "item": 18484,
+     "src": 1
+    },
+    {
+     "item": 18483,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "King Gordok",
+   "npcID": 11501,
+   "displayID": 11583,
+   "class": "elite",
+   "level": [
+    62,
+    62
+   ],
+   "abilities": [
+    {
+     "spell": 22886,
+     "src": 2,
+     "note": "Charges a random player and throws them up; be ready to heal."
+    },
+    {
+     "spell": 16856,
+     "src": 2,
+     "tags": [
+      "healer"
+     ],
+     "note": "Cuts healing on the tank; plan extra healing or swap."
+    },
+    {
+     "spell": 15572,
+     "src": 2,
+     "note": "Strips the tank's armor; expect more damage."
+    },
+    {
+     "spell": 16727,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Stuns players near the boss; keep ranged away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18521,
+     "src": 1
+    },
+    {
+     "item": 18524,
+     "src": 1
+    },
+    {
+     "item": 18523,
+     "src": 1
+    },
+    {
+     "item": 18527,
+     "src": 1
+    },
+    {
+     "item": 18525,
+     "src": 1
+    },
+    {
+     "item": 18520,
+     "src": 1
+    },
+    {
+     "item": 18526,
+     "src": 1
+    },
+    {
+     "item": 18522,
+     "src": 1
+    },
+    {
+     "item": 18780,
+     "src": 1
+    },
+    {
+     "item": 19258,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1193,
+   "name": "A Broken Trap",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 1318,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5518,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5519,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5525,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5528,
+   "name": "The Gordok Taste Test",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14322,
+   "shared": true
+  },
+  {
+   "id": 7429,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 7441,
+   "name": "Pusillin and the Elder Azj'Tordin",
+   "level": 58,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14355,
+   "shared": true
+  },
+  {
+   "id": 7461,
+   "name": "The Madness Within",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 7462,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7463,
+   "name": "Arcane Refreshment",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7481,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 14373,
+   "shared": true
+  },
+  {
+   "id": 7482,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 14374,
+   "shared": true
+  },
+  {
+   "id": 7483,
+   "name": "Libram of Rapidity",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7484,
+   "name": "Libram of Focus",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7485,
+   "name": "Libram of Protection",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7488,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7877,
+   "shared": true
+  },
+  {
+   "id": 7489,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 7776,
+   "shared": true
+  },
+  {
+   "id": 7492,
+   "name": "Camp Mojache",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 10879,
+   "shared": true
+  },
+  {
+   "id": 7494,
+   "name": "Feathermoon Stronghold",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2198,
+   "shared": true
+  },
+  {
+   "id": 7498,
+   "name": "Garona: A Study on Stealth and Treachery",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7499,
+   "name": "Codex of Defense",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7500,
+   "name": "The Arcanist's Cookbook",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7501,
+   "name": "The Light and How To Swing It",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7502,
+   "name": "Harnessing Shadows",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7503,
+   "name": "The Greatest Race of Hunters",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7504,
+   "name": "Holy Bologna: What the Light Won't Tell You",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7505,
+   "name": "Frost Shock and You",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7506,
+   "name": "The Emerald Dream...",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7507,
+   "name": "Nostro's Compendium",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7508,
+   "name": "The Forging of Quel'Serrar",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7703,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14325,
+   "shared": true
+  },
+  {
+   "id": 7877,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 8948,
+   "name": "Anthion's Old Friend",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16016,
+   "shared": true
+  },
+  {
+   "id": 8949,
+   "name": "Falrin's Vendetta",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8950,
+   "name": "The Instigator's Enchantment",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8967,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8990,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 9030,
+   "name": "Anthion's Parting Words",
+   "level": 15,
+   "req": 15,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  }
+ ]
+}

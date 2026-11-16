@@ -1,0 +1,760 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "uldaman",
+ "name": "Uldaman",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  41,
+  51
+ ],
+ "ejInstanceID": 239,
+ "instanceMapID": 70,
+ "maps": [
+  {
+   "uiMapID": 230,
+   "floor": 1,
+   "name": "Hall of the Keepers"
+  },
+  {
+   "uiMapID": 231,
+   "floor": 2,
+   "name": "Khaz'Goroth's Seat",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Uldaman (outside portal)",
+   "uiMapID": 1418,
+   "floor": 0,
+   "x": 0.64,
+   "y": 0.44,
+   "approx": true,
+   "source": 4,
+   "note": "Front entrance in the Badlands (ATT 64, 44)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Uldaman (outside portal)",
+   "uiMapID": 1418,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Back (north-west) entrance in the Badlands; position not sourced"
+  },
+  {
+   "id": "p3",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Revelosh",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5342,
+   "y": 0.7254,
+   "approx": false,
+   "source": 1,
+   "note": "First boss, east/south-centre. Drops the Shaft of Tsol (needed for the Staff of Prehistoria)."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "The Lost Dwarves",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5847,
+   "y": 0.9201,
+   "approx": false,
+   "source": 1,
+   "note": "Baelog, Eric and Olaf in the far south room; kill them together in the room."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Ironaya",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.373,
+   "y": 0.7398,
+   "approx": false,
+   "source": 1,
+   "note": "Behind the door that needs the Staff of Prehistoria (Shaft of Tsol + Gni'kiv Medallion)."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Obsidian Sentinel",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2894,
+   "y": 0.5974,
+   "approx": false,
+   "source": 1,
+   "note": "Boss-like elite in the west part of the hall."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Ancient Stone Keeper",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4754,
+   "y": 0.4406,
+   "approx": false,
+   "source": 1,
+   "note": "Centre of the floor; stone golem with a stun/knock."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Galgann Firehammer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2678,
+   "y": 0.3279,
+   "approx": false,
+   "source": 1,
+   "note": "North-west dwarf boss with ranged Dark Iron help; kill him BEFORE looting the objects nearby."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Grimlok",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2199,
+   "y": 0.2561,
+   "approx": false,
+   "source": 1,
+   "note": "Stonevault leader in the far north-west."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Archaedas",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5533,
+   "y": 0.5041,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss on the second floor; he wakes stone guardians as the fight goes on."
+  },
+  {
+   "id": "p12",
+   "kind": "interactive",
+   "name": "The Discs of Norgannon",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.55,
+   "y": 0.46,
+   "approx": true,
+   "source": 4,
+   "note": "After Archaedas: right-click the Discs to start the quest (object ID 131474 per AllTheThings). Position estimated next to the boss."
+  },
+  {
+   "id": "p13",
+   "kind": "chest",
+   "name": "Archaedas treasure chest (Hall of the Crafters)",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.56,
+   "y": 0.52,
+   "approx": true,
+   "source": 4,
+   "note": "Appears after Archaedas dies; 2-3 items (object ID 141979 per AllTheThings). Position estimated next to the boss."
+  },
+  {
+   "id": "p14",
+   "kind": "interactive",
+   "name": "Gni'kiv Medallion source (object)",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 4,
+   "note": "Object 123329 gives the Gni'kiv Medallion; combine with the Shaft of Tsol to make the Staff of Prehistoria for Ironaya (AllTheThings description). Position not sourced."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5342,
+   "y": 0.7254,
+   "note": "Kill Revelosh",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5847,
+   "y": 0.9201,
+   "note": "Kill The Lost Dwarves",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.373,
+   "y": 0.7398,
+   "note": "Kill Ironaya",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2894,
+   "y": 0.5974,
+   "note": "Kill Obsidian Sentinel",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4754,
+   "y": 0.4406,
+   "note": "Kill Ancient Stone Keeper",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2678,
+   "y": 0.3279,
+   "note": "Kill Galgann Firehammer",
+   "point": "p9",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2199,
+   "y": 0.2561,
+   "note": "Kill Grimlok",
+   "point": "p10",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 230,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Stairs up past the Hall of the Crafters to Khaz'Goroth's Seat",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": 231,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Arrive on floor 2",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5533,
+   "y": 0.5041,
+   "note": "Kill Archaedas",
+   "point": "p11",
+   "approx": false
+  },
+  {
+   "step": 12,
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.55,
+   "y": 0.46,
+   "note": "The Discs of Norgannon",
+   "point": "p12",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 5,
+   "points": [
+    "p8"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 6,
+   "points": [
+    "p9"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 7,
+   "points": [
+    "p10"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 8,
+   "points": [
+    "p11"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5342,
+   "y": 0.7454,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5592,
+   "y": 0.7254,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5042,
+   "y": 0.7654,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5542,
+   "y": 0.7854,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5797,
+   "y": 0.9007,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.6089,
+   "y": 0.9138,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.5456,
+   "y": 0.8889,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.589,
+   "y": 0.857,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.3882,
+   "y": 0.7528,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.3568,
+   "y": 0.7588,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4229,
+   "y": 0.7429,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4057,
+   "y": 0.7939,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2995,
+   "y": 0.6146,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2678,
+   "y": 0.6101,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.3355,
+   "y": 0.6167,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.3025,
+   "y": 0.6593,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4601,
+   "y": 0.4535,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4593,
+   "y": 0.4215,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4642,
+   "y": 0.4893,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.4166,
+   "y": 0.464,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2854,
+   "y": 0.3374,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2559,
+   "y": 0.3499,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.3173,
+   "y": 0.3206,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.311,
+   "y": 0.3741,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p10",
+   "role": "tank",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.231,
+   "y": 0.2727,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p10",
+   "role": "melee",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.1991,
+   "y": 0.27,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p10",
+   "role": "ranged",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2671,
+   "y": 0.2727,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p10",
+   "role": "healer",
+   "uiMapID": 230,
+   "floor": 1,
+   "x": 0.2366,
+   "y": 0.3171,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p11",
+   "role": "tank",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5533,
+   "y": 0.5241,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p11",
+   "role": "melee",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5783,
+   "y": 0.5041,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p11",
+   "role": "ranged",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5233,
+   "y": 0.5441,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p11",
+   "role": "healer",
+   "uiMapID": 231,
+   "floor": 2,
+   "x": 0.5733,
+   "y": 0.5641,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p4",
+   "text": "Lightning-based caster boss; keep the group close so heals stay efficient and move out of his chain effects."
+  },
+  {
+   "boss": "p5",
+   "text": "Three brothers: focus one at a time and keep the tank on the main one while the others are tanked or CC'd."
+  },
+  {
+   "boss": "p6",
+   "text": "Stuns/knocks nearby players with a stomp; melee should not stack and the healer should stay out of range."
+  },
+  {
+   "boss": "p9",
+   "text": "His Dark Iron adds bring fire damage; kill the casters first, and do not loot nearby objects until he is dead."
+  },
+  {
+   "boss": "p11",
+   "text": "Clear the area so no stone guards are awake first. He wakes minions in waves; focus the guards when they stun."
+  }
+ ],
+ "notes": "Floor names from OpenMap DungeonMaps. Route order is my own typical clear, not measured. uiMapID 230 from AllTheThings (a source), 231 inferred. Object IDs from AllTheThings (cross-check only). Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

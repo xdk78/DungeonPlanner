@@ -1,0 +1,880 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "dire-maul-east",
+ "name": "Dire Maul: East",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Pusillin",
+   "npcID": 14354,
+   "displayID": 7552,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 17145,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 14145,
+     "src": 2
+    },
+    {
+     "spell": 15242,
+     "src": 2
+    },
+    {
+     "spell": 55095,
+     "src": 2
+    },
+    {
+     "spell": 22735,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14507,
+     "src": 1
+    },
+    {
+     "item": 18267,
+     "src": 1
+    },
+    {
+     "item": 12662,
+     "src": 1
+    },
+    {
+     "item": 14930,
+     "src": 1
+    },
+    {
+     "item": 14297,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Zevrim Thornhoof",
+   "npcID": 11490,
+   "displayID": 11335,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 22478,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 22651,
+     "src": 2,
+     "tags": [
+      "deadly"
+     ],
+     "note": "Pulls a player to his altar and drains them; free them quickly."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18313,
+     "src": 1
+    },
+    {
+     "item": 18323,
+     "src": 1
+    },
+    {
+     "item": 18319,
+     "src": 1
+    },
+    {
+     "item": 18359,
+     "src": 1
+    },
+    {
+     "item": 18306,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Hydrospawn",
+   "npcID": 13280,
+   "displayID": 5489,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 22419,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22420,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 22421,
+     "src": 2,
+     "tags": [
+      "aoe",
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22714,
+     "src": 2,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 22715,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 18322,
+     "src": 1
+    },
+    {
+     "item": 18317,
+     "src": 1
+    },
+    {
+     "item": 18324,
+     "src": 1
+    },
+    {
+     "item": 19268,
+     "src": 1
+    },
+    {
+     "item": 18359,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Lethtendris",
+   "npcID": 14327,
+   "displayID": 14378,
+   "class": "elite",
+   "level": [
+    57,
+    57
+   ],
+   "abilities": [
+    {
+     "spell": 22709,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 14887,
+     "src": 2,
+     "tags": [
+      "interrupt",
+      "healer"
+     ]
+    },
+    {
+     "spell": 20787,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 13338,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "healer"
+     ],
+     "note": "Slows casting; dispel it or avoid casting for a moment."
+    },
+    {
+     "spell": 16247,
+     "src": 2,
+     "tags": [
+      "dispel",
+      "interrupt",
+      "healer"
+     ]
+    },
+    {
+     "spell": 22710,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 18325,
+     "src": 1
+    },
+    {
+     "item": 18311,
+     "src": 1
+    },
+    {
+     "item": 18302,
+     "src": 1
+    },
+    {
+     "item": 18301,
+     "src": 1
+    },
+    {
+     "item": 14930,
+     "src": 1
+    },
+    {
+     "item": 14297,
+     "src": 1
+    },
+    {
+     "item": 15985,
+     "src": 1
+    },
+    {
+     "item": 13518,
+     "src": 1
+    },
+    {
+     "item": 14287,
+     "src": 1
+    },
+    {
+     "item": 15657,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Alzzin the Wildshaper",
+   "npcID": 11492,
+   "displayID": 14416,
+   "class": "elite",
+   "level": [
+    58,
+    58
+   ],
+   "abilities": [
+    {
+     "spell": 22661,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 22662,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 22128,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 22691,
+     "src": 2,
+     "tags": [
+      "tank"
+     ]
+    },
+    {
+     "spell": 10101,
+     "src": 2,
+     "tags": [
+      "tank"
+     ],
+     "note": "Throws its target back; tank with a wall behind you."
+    },
+    {
+     "spell": 7948,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    }
+   ],
+   "loot": [
+    {
+     "item": 18310,
+     "src": 1
+    },
+    {
+     "item": 18314,
+     "src": 1
+    },
+    {
+     "item": 18321,
+     "src": 1
+    },
+    {
+     "item": 18315,
+     "src": 1
+    },
+    {
+     "item": 18328,
+     "src": 1
+    },
+    {
+     "item": 18309,
+     "src": 1
+    },
+    {
+     "item": 18312,
+     "src": 1
+    },
+    {
+     "item": 18326,
+     "src": 1
+    },
+    {
+     "item": 18327,
+     "src": 1
+    },
+    {
+     "item": 18318,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Isalien",
+   "npcID": 16097,
+   "displayID": 16000,
+   "class": "elite",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 14443,
+     "src": 2
+    },
+    {
+     "spell": 12024,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 27637,
+     "src": 2
+    },
+    {
+     "spell": 27636,
+     "src": 2
+    },
+    {
+     "spell": 25164,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 22314,
+     "src": 1
+    },
+    {
+     "item": 22304,
+     "src": 1
+    },
+    {
+     "item": 22472,
+     "src": 1
+    },
+    {
+     "item": 22315,
+     "src": 1
+    },
+    {
+     "item": 22401,
+     "src": 1
+    },
+    {
+     "item": 22345,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 1193,
+   "name": "A Broken Trap",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 1318,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 5518,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5519,
+   "name": "The Gordok Ogre Suit",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5525,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 5528,
+   "name": "The Gordok Taste Test",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14322,
+   "shared": true
+  },
+  {
+   "id": 7429,
+   "name": "Free Knot!",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14338,
+   "shared": true
+  },
+  {
+   "id": 7441,
+   "name": "Pusillin and the Elder Azj'Tordin",
+   "level": 58,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14355,
+   "shared": true
+  },
+  {
+   "id": 7461,
+   "name": "The Madness Within",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 7462,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7463,
+   "name": "Arcane Refreshment",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7481,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 14373,
+   "shared": true
+  },
+  {
+   "id": 7482,
+   "name": "Elven Legends",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 14374,
+   "shared": true
+  },
+  {
+   "id": 7483,
+   "name": "Libram of Rapidity",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7484,
+   "name": "Libram of Focus",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7485,
+   "name": "Libram of Protection",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "giver": 14368,
+   "shared": true
+  },
+  {
+   "id": 7488,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 7877,
+   "shared": true
+  },
+  {
+   "id": 7489,
+   "name": "Lethtendris's Web",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 7776,
+   "shared": true
+  },
+  {
+   "id": 7492,
+   "name": "Camp Mojache",
+   "level": 57,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "giver": 10879,
+   "shared": true
+  },
+  {
+   "id": 7494,
+   "name": "Feathermoon Stronghold",
+   "level": 57,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2198,
+   "shared": true
+  },
+  {
+   "id": 7498,
+   "name": "Garona: A Study on Stealth and Treachery",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7499,
+   "name": "Codex of Defense",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7500,
+   "name": "The Arcanist's Cookbook",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7501,
+   "name": "The Light and How To Swing It",
+   "level": 60,
+   "req": 54,
+   "side": "alliance",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7502,
+   "name": "Harnessing Shadows",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7503,
+   "name": "The Greatest Race of Hunters",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7504,
+   "name": "Holy Bologna: What the Light Won't Tell You",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7505,
+   "name": "Frost Shock and You",
+   "level": 60,
+   "req": 54,
+   "side": "horde",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7506,
+   "name": "The Emerald Dream...",
+   "level": 60,
+   "req": 54,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7507,
+   "name": "Nostro's Compendium",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7508,
+   "name": "The Forging of Quel'Serrar",
+   "level": 60,
+   "req": 60,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  },
+  {
+   "id": 7703,
+   "name": "Unfinished Gordok Business",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14325,
+   "shared": true
+  },
+  {
+   "id": 7877,
+   "name": "The Treasure of the Shen'dralar",
+   "level": 60,
+   "req": 56,
+   "side": "both",
+   "src": 1,
+   "giver": 14358,
+   "shared": true
+  },
+  {
+   "id": 8948,
+   "name": "Anthion's Old Friend",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16016,
+   "shared": true
+  },
+  {
+   "id": 8949,
+   "name": "Falrin's Vendetta",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8950,
+   "name": "The Instigator's Enchantment",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16032,
+   "shared": true
+  },
+  {
+   "id": 8967,
+   "name": "The Left Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 8990,
+   "name": "The Right Piece of Lord Valthalak's Amulet",
+   "level": 60,
+   "req": 58,
+   "side": "both",
+   "src": 1,
+   "giver": 16033,
+   "shared": true
+  },
+  {
+   "id": 9030,
+   "name": "Anthion's Parting Words",
+   "level": 15,
+   "req": 15,
+   "side": "both",
+   "src": 1,
+   "shared": true
+  }
+ ]
+}

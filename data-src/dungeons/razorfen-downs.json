@@ -1,0 +1,420 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "razorfen-downs",
+ "name": "Razorfen Downs",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  37,
+  46
+ ],
+ "ejInstanceID": 233,
+ "instanceMapID": 129,
+ "maps": [
+  {
+   "uiMapID": 300,
+   "floor": 1,
+   "name": "Razorfen Downs"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Razorfen Downs (outside portal)",
+   "uiMapID": 1413,
+   "floor": 0,
+   "x": 0.5,
+   "y": 0.92,
+   "approx": true,
+   "source": 2,
+   "note": "Barrens: the Downs entrance south of Razorfen Kraul."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Tuten'kash",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.5943,
+   "y": 0.3402,
+   "approx": false,
+   "source": 1,
+   "note": "Spider boss in the north-centre of the dungeon; triggered by an object in his web chamber (Classic)."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Mordresh Fire Eye",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8607,
+   "y": 0.4672,
+   "approx": false,
+   "source": 1,
+   "note": "East side, behind the long ramp."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Glutton",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3429,
+   "y": 0.668,
+   "approx": false,
+   "source": 1,
+   "note": "West/south-west, in the flesh-pit room."
+  },
+  {
+   "id": "p6",
+   "kind": "rare",
+   "name": "Ragglesnout",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Rare, south of the middle area."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Amnennar the Coldbringer",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4454,
+   "y": 0.6045,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss on the central/south-west icy ledge."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.5943,
+   "y": 0.3402,
+   "note": "Kill Tuten'kash",
+   "point": "p3",
+   "approx": false
+  },
+  {
+   "step": 3,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8607,
+   "y": 0.4672,
+   "note": "Kill Mordresh Fire Eye",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3429,
+   "y": 0.668,
+   "note": "Kill Glutton",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 5,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Optional rare",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4454,
+   "y": 0.6045,
+   "note": "Kill Amnennar the Coldbringer",
+   "point": "p7",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p3"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.5943,
+   "y": 0.3602,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.6193,
+   "y": 0.3402,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.5643,
+   "y": 0.3802,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.6143,
+   "y": 0.4002,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8426,
+   "y": 0.4586,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8715,
+   "y": 0.4446,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8117,
+   "y": 0.4771,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.8151,
+   "y": 0.4233,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3615,
+   "y": 0.6608,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3519,
+   "y": 0.6913,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3693,
+   "y": 0.6256,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4061,
+   "y": 0.665,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4284,
+   "y": 0.615,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4322,
+   "y": 0.5832,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.4272,
+   "y": 0.6511,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 300,
+   "floor": 1,
+   "x": 0.3839,
+   "y": 0.6191,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Breaks into adds from the web hatching; keep the group on one spot and kill spiders as they spawn."
+  },
+  {
+   "boss": "p4",
+   "text": "Fire-based caster; the tank takes him into the corner while casters stay out of the fire aura and interrupt where possible."
+  },
+  {
+   "boss": "p5",
+   "text": "Heavy slow melee boss with a disease cloud; swap to the healer-friendly ledge and burn him."
+  },
+  {
+   "boss": "p7",
+   "text": "Frost-based boss that calls frost adds at certain health marks; kill the adds fast, keep dispels and heals flowing, and avoid his freeze."
+  }
+ ],
+ "notes": "Route order is a common one (Tuten'kash, Mordresh, Glutton, Amnennar); Plaguemaw the Rotting is a mini-boss/rare in the journal list with no sourced position. Belnistrasz escort quest (Extinguishing the Idol) starts near the entrance in Classic - not placed. Level range per client table. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

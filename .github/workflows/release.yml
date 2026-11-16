@@ -1,0 +1,30 @@
+# Packages and uploads a release when a version tag (v1.2.3) is pushed. The CurseForge project ID (1808067) is read
+# from ## X-Curse-Project-ID in DungeonPlanner.toc; the packager maps ## Interface: 16xxx to the "forever" game type.
+# Uploading to CurseForge needs the repository secret CF_API_KEY (a CurseForge API token); without it the packager
+# builds the zip and the GitHub release and skips CurseForge.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1.5"
+      - name: Offline tests
+        run: lua tests/run.lua
+      - uses: BigWigsMods/packager@v2

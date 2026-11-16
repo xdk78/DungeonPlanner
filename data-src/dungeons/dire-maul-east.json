@@ -1,0 +1,462 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "dire-maul-east",
+ "name": "Dire Maul: East",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  54,
+  60
+ ],
+ "ejInstanceID": 230,
+ "instanceMapID": 429,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Warpwood Quarter"
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "The Shrine of Eldretharr"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Dire Maul: East (outside portal)",
+   "uiMapID": 1444,
+   "floor": 0,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Dire Maul east entrance in Feralas."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Pusillin",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Imp in the library area; chase him to drop the Crescent Key."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Zevrim Thornhoof",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4385,
+   "y": 0.4816,
+   "approx": false,
+   "source": 1,
+   "note": "OpenMap lists these coordinates under Lethtendris; the name was corrected to Zevrim after cross-checking against NeedRoll (name/coordinate assignment only)."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Hydrospawn",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5751,
+   "y": 0.7439,
+   "approx": false,
+   "source": 1,
+   "note": "Lower floor. Cross-checked name swap (OpenMap gives these to Zevrim)."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Lethtendris",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5369,
+   "y": 0.7152,
+   "approx": false,
+   "source": 1,
+   "note": "Lower floor, with Pimgib. Name swap cross-checked."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Alzzin the Wildshaper",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5669,
+   "y": 0.2889,
+   "approx": false,
+   "source": 1,
+   "note": "Final boss north on the lower floor."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Isalien",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Appears near Alzzin."
+  },
+  {
+   "id": "p9",
+   "kind": "quest_item",
+   "name": "Crescent Key",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Drops from Pusillin; opens West and North entries."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Pusillin",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4385,
+   "y": 0.4816,
+   "note": "Kill Zevrim Thornhoof",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Take the stairs down",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5751,
+   "y": 0.7439,
+   "note": "Kill Hydrospawn",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5369,
+   "y": 0.7152,
+   "note": "Kill Lethtendris",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5669,
+   "y": 0.2889,
+   "note": "Kill Alzzin the Wildshaper",
+   "point": "p7",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p4"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p5"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p6"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  },
+  {
+   "n": 4,
+   "points": [
+    "p7"
+   ],
+   "note": "Boss pull. Clear the trash between the previous stop and the boss first."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4385,
+   "y": 0.5016,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4635,
+   "y": 0.4816,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4085,
+   "y": 0.5216,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4585,
+   "y": 0.5416,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5751,
+   "y": 0.7639,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.6001,
+   "y": 0.7439,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5451,
+   "y": 0.7839,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5951,
+   "y": 0.8039,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5529,
+   "y": 0.7272,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5219,
+   "y": 0.7352,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5869,
+   "y": 0.7152,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5729,
+   "y": 0.7672,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5655,
+   "y": 0.3089,
+   "approx": true,
+   "note": "Hold the boss on the approach side so the group stays behind you."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.542,
+   "y": 0.2871,
+   "approx": true,
+   "note": "Beside or behind the boss, out of frontal cleaves."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.594,
+   "y": 0.3309,
+   "approx": true,
+   "note": "A few steps back toward the entrance side, spread from the healer."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.5427,
+   "y": 0.3473,
+   "approx": true,
+   "note": "Furthest back with line of sight to the tank."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Chase the imp through the library, he teleports and casts Fireblast; stay on him and kill the dogs around."
+  },
+  {
+   "boss": "p4",
+   "text": "Hits the group with area damage; one tank hold, healer stay behind a pillar."
+  },
+  {
+   "boss": "p5",
+   "text": "Splits into water elementals; kill them first."
+  },
+  {
+   "boss": "p6",
+   "text": "Caster boss, interrupt where possible and kill Pimgib quickly."
+  },
+  {
+   "boss": "p7",
+   "text": "Shapeshifts between forms and fears; kill adds and keep the tank alive in wolf form."
+  }
+ ],
+ "notes": "OpenMap's DM East boss names are rotated against its coordinates; the names were corrected after cross-checking against NeedRoll (name/coordinate pairing only, no NeedRoll values copied). Wing-local floors: 1 Warpwood Quarter, 2 The Shrine of Eldretharr (OpenMap floors 5, 6). uiMapIDs unknown (ATT lists Dire Maul top map 234, floor order unknown). Route is typical. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

@@ -1,0 +1,282 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "ragefire-chasm",
+ "name": "Ragefire Chasm",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Oggleflint",
+   "npcID": 11517,
+   "displayID": 11611,
+   "class": "elite",
+   "level": [
+    16,
+    16
+   ],
+   "abilities": [
+    {
+     "spell": 40505,
+     "src": 2
+    },
+    {
+     "spell": 5532,
+     "src": 1
+    }
+   ],
+   "loot": [
+    {
+     "item": 14723,
+     "src": 1
+    },
+    {
+     "item": 272999,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 272998,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 272996,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 68194,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Taragaman the Hungerer",
+   "npcID": 11520,
+   "displayID": 7970,
+   "class": "elite",
+   "level": [
+    16,
+    16
+   ],
+   "abilities": [
+    {
+     "spell": 18072,
+     "src": 2
+    },
+    {
+     "spell": 11970,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 14149,
+     "src": 1
+    },
+    {
+     "item": 14148,
+     "src": 1
+    },
+    {
+     "item": 14145,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Jergosh the Invoker",
+   "npcID": 11518,
+   "displayID": 11429,
+   "class": "elite",
+   "level": [
+    16,
+    16
+   ],
+   "abilities": [
+    {
+     "spell": 189992,
+     "src": 2
+    },
+    {
+     "spell": 183582,
+     "src": 2
+    },
+    {
+     "spell": 189990,
+     "src": 2
+    },
+    {
+     "spell": 189991,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14150,
+     "src": 1
+    },
+    {
+     "item": 14147,
+     "src": 1
+    },
+    {
+     "item": 14151,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Bazzalan",
+   "npcID": 11519,
+   "displayID": 2007,
+   "class": "elite",
+   "level": [
+    16,
+    16
+   ],
+   "abilities": [
+    {
+     "spell": 744,
+     "src": 2
+    },
+    {
+     "spell": 14873,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 14723,
+     "src": 1
+    },
+    {
+     "item": 273007,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273005,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 273003,
+     "src": 2,
+     "forever": true
+    },
+    {
+     "item": 68195,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 5722,
+   "name": "Searching for the Lost Satchel",
+   "level": 16,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 11833
+  },
+  {
+   "id": 5723,
+   "name": "Testing an Enemy's Strength",
+   "level": 15,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 11833
+  },
+  {
+   "id": 5724,
+   "name": "Returning the Lost Satchel",
+   "level": 16,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 11834
+  },
+  {
+   "id": 5725,
+   "name": "The Power to Destroy...",
+   "level": 16,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 2425
+  },
+  {
+   "id": 5728,
+   "name": "Hidden Enemies",
+   "level": 16,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 4949
+  },
+  {
+   "id": 5761,
+   "name": "Slaying the Beast",
+   "level": 16,
+   "req": 9,
+   "side": "horde",
+   "src": 1,
+   "giver": 3216
+  }
+ ]
+}

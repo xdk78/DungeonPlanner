@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "slug": "the-stockade",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"1": "game map tiles TheStockade\\TheStockade1_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p1", "floor": 1, "at": [0.4987, 0.8014], "approx": true, "name": "Stairs in"},
+      {"point": "p2", "floor": 1, "at": [0.5021, 0.2075], "approx": true, "name": "Targorr the Dread"},
+      {"point": "p3", "floor": 1, "at": [0.2192, 0.2552], "approx": true, "name": "Dextren Ward"},
+      {"point": "p5", "floor": 1, "at": [0.6922, 0.2984], "approx": true, "name": "Kam Deepfury"},
+      {"point": "p6", "floor": 1, "at": [0.7828, 0.4582], "approx": true, "name": "Hamhock"},
+      {"point": "p7", "floor": 1, "at": [0.8545, 0.5123], "approx": true, "name": "Bazil Thredd"}
+    ],
+    "add": [
+    ],
+    "side": [
+      {"floor": 1, "name": "Side path: Targorr the Dread", "points": [[0.4986, 0.353], [0.5032, 0.2383], [0.5021, 0.2075]]},
+      {"floor": 1, "name": "Side path: Dextren Ward", "points": [[0.4986, 0.353], [0.4513, 0.3502], [0.4411, 0.3465], [0.3355, 0.3339], [0.2192, 0.2552]]},
+      {"floor": 1, "name": "Side path: Kam Deepfury", "points": [[0.6802, 0.3696], [0.6922, 0.2984]]}
+    ]
+  },
+  "moves": [
+    {"floor": 1, "from": [0.478, 0.222], "to": [0.482, 0.2216], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.47, 0.255], "to": [0.483, 0.2545], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2759, 0.2317], "to": [0.2535, 0.2485], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.2696, 0.2816], "to": [0.2675, 0.2934], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.7174, 0.4388], "to": [0.7236, 0.4237], "kind": "position", "generated": true},
+    {"floor": 1, "from": [0.7463, 0.3977], "to": [0.7395, 0.4087], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 1, "from": [0.4987, 0.8014], "to": [0.5021, 0.2075], "bends": [[0.5, 0.2171]], "generated": true},
+    {"floor": 1, "from": [0.2192, 0.2552], "to": [0.6922, 0.2984], "bends": [[0.2395, 0.2844], [0.2924, 0.3234], [0.3573, 0.3533], [0.4022, 0.3608], [0.6058, 0.3623], [0.6727, 0.3772]], "generated": true},
+    {"floor": 1, "from": [0.5021, 0.2075], "to": [0.2192, 0.2552], "bends": [[0.5032, 0.2383], [0.4986, 0.353], [0.4513, 0.3502], [0.4411, 0.3465], [0.3355, 0.3339]], "import": "fdr"},
+    {"floor": 1, "from": [0.6922, 0.2984], "to": [0.7828, 0.4582], "bends": [[0.6793, 0.372], [0.7523, 0.4288]], "import": "fdr"},
+    {"floor": 1, "from": [0.7828, 0.4582], "to": [0.8545, 0.5123], "bends": [], "import": "fdr"}
+  ]
+}

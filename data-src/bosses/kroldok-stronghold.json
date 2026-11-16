@@ -1,0 +1,366 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "kroldok-stronghold",
+ "name": "Krol'dok Stronghold",
+ "kind": "dungeon",
+ "origin": "forever",
+ "sources": [
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 3,
+   "name": "Wowhead Forever",
+   "url": "https://www.wowhead.com/forever",
+   "licence": "web; facts only (IDs, flags, drop lists); no text or images copied",
+   "what": "Dungeon Journal pages (boss NPC IDs, ability spell IDs with their flags, drop lists, quest IDs, levels and sides) and the dungeon guide pages (creature display IDs, quest givers and objective items, drop tables)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Slavecrusher Grox",
+   "loot": [
+    {
+     "item": 274996,
+     "src": 2
+    },
+    {
+     "item": 274997,
+     "src": 2
+    },
+    {
+     "item": 274995,
+     "src": 2
+    },
+    {
+     "item": 273101,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258966,
+   "displayID": 141217,
+   "abilities": [
+    {
+     "spell": 21049,
+     "src": 3
+    },
+    {
+     "spell": 11428,
+     "src": 3
+    },
+    {
+     "spell": 1280085,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p4",
+   "name": "Twilight Commander Zarmok",
+   "loot": [
+    {
+     "item": 274999,
+     "src": 2
+    },
+    {
+     "item": 275000,
+     "src": 2
+    },
+    {
+     "item": 274998,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258972,
+   "displayID": 141219,
+   "abilities": [
+    {
+     "spell": 12057,
+     "src": 3
+    },
+    {
+     "spell": 1280011,
+     "src": 3
+    },
+    {
+     "spell": 8599,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p5",
+   "name": "War Handler Ashka",
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 259281,
+   "displayID": 141443,
+   "abilities": [
+    {
+     "spell": 12057,
+     "src": 3
+    },
+    {
+     "spell": 1282076,
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 275002,
+     "src": 3
+    },
+    {
+     "item": 275003,
+     "src": 3
+    },
+    {
+     "item": 275001,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p6",
+   "name": "Tunk",
+   "npcID": 259256,
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "displayID": 144671
+  },
+  {
+   "point": "p7",
+   "name": "Zalfan Moonshadow",
+   "gap": "no source had data for this boss",
+   "src": {}
+  },
+  {
+   "point": "p8",
+   "name": "Nar'gurk",
+   "loot": [
+    {
+     "item": 275006,
+     "src": 2
+    },
+    {
+     "item": 275005,
+     "src": 2
+    },
+    {
+     "item": 275004,
+     "src": 2
+    },
+    {
+     "item": 267104,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258964,
+   "displayID": 141215,
+   "abilities": [
+    {
+     "spell": 1280356,
+     "src": 3
+    },
+    {
+     "spell": 1280259,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p9",
+   "name": "Bossman Toof",
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 264773,
+   "displayID": 14424,
+   "abilities": [
+    {
+     "spell": 16856,
+     "src": 3
+    },
+    {
+     "spell": 15548,
+     "src": 3
+    },
+    {
+     "spell": 16244,
+     "src": 3
+    }
+   ],
+   "loot": [
+    {
+     "item": 286429,
+     "src": 3
+    },
+    {
+     "item": 286428,
+     "src": 3
+    },
+    {
+     "item": 286430,
+     "src": 3
+    }
+   ]
+  },
+  {
+   "point": "p10",
+   "name": "Overlord Mugg",
+   "loot": [
+    {
+     "item": 275010,
+     "src": 2
+    },
+    {
+     "item": 275008,
+     "src": 2
+    },
+    {
+     "item": 275007,
+     "src": 2
+    },
+    {
+     "item": 275009,
+     "src": 2
+    },
+    {
+     "item": 271721,
+     "src": 2
+    },
+    {
+     "item": 267086,
+     "src": 2
+    }
+   ],
+   "src": {
+    "npcID": 3,
+    "displayID": 3
+   },
+   "npcID": 258968,
+   "displayID": 141218,
+   "abilities": [
+    {
+     "spell": 1282397,
+     "src": 3
+    },
+    {
+     "spell": 1282387,
+     "src": 3
+    },
+    {
+     "spell": 1282393,
+     "src": 3
+    },
+    {
+     "spell": 1282394,
+     "src": 3
+    }
+   ]
+  }
+ ],
+ "quests": [
+  {
+   "id": 94997,
+   "name": "Lingering Essence",
+   "level": 42,
+   "req": 38,
+   "side": "both",
+   "src": 2
+  },
+  {
+   "id": 96771,
+   "name": "Vengeance of the Highborne",
+   "side": "alliance",
+   "req": 37,
+   "giver": 268425,
+   "src": 3
+  },
+  {
+   "id": 94983,
+   "name": "Twilight Mementos",
+   "side": "alliance",
+   "req": 38,
+   "giver": 258023,
+   "src": 3
+  },
+  {
+   "id": 94982,
+   "name": "Eye of Mugg",
+   "side": "alliance",
+   "req": 40,
+   "giver": 257558,
+   "src": 3
+  },
+  {
+   "id": 94984,
+   "name": "Tome of Twilight",
+   "side": "alliance",
+   "req": 39,
+   "giver": 257591,
+   "src": 3
+  },
+  {
+   "id": 94980,
+   "name": "Krol'dok Moulding",
+   "side": "alliance",
+   "req": 38,
+   "src": 3
+  },
+  {
+   "id": 94975,
+   "name": "A Token of Vengeance",
+   "side": "horde",
+   "req": 38,
+   "giver": 258570,
+   "src": 3
+  },
+  {
+   "id": 94972,
+   "name": "Tome of Twilight",
+   "side": "horde",
+   "req": 38,
+   "giver": 256710,
+   "src": 3
+  },
+  {
+   "id": 94968,
+   "name": "Eye of Mugg",
+   "side": "horde",
+   "req": 38,
+   "giver": 256418,
+   "src": 3
+  },
+  {
+   "id": 94973,
+   "name": "Krol'dok Moulding",
+   "side": "horde",
+   "req": 38,
+   "src": 3
+  }
+ ]
+}

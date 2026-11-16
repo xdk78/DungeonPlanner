@@ -1,0 +1,388 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "shapers-terrace",
+ "name": "Shaper's Terrace",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  58,
+  60
+ ],
+ "ejInstanceID": 3001,
+ "instanceMapID": 3001,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Shaper's Terrace"
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 10,
+   "url": "https://www.warcrafttavern.com/forever/guides/shapers-terrace/",
+   "what": "boss locations, panels, route",
+   "forever": true
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Shaper's Terrace (outside portal)",
+   "uiMapID": 1449,
+   "floor": 0,
+   "x": 0.481,
+   "y": 0.061,
+   "approx": true,
+   "source": 2,
+   "note": "Hill overlooking Marshal's Refuge in Un'Goro Crater (client tables 48.1, 6.1; guide agrees)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Cinder",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Summoned at the Red Archival Panel at the top of the mountain path west of the crater; fire elementals nearby."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Snowtalon",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Summoned at the Blue Archival Panel in the cave behind the left waterfall north of Titanosaur."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Titanosaur",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Giant devilsaur patrolling the paved road through the middle; clear adds first."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Izha'Rel and Tor'Rel",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Fire and ice raptor pair patrolling the dirt path east of the road; kill Tor'Rel first. Ravasaur Stalkers join when low."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Vitrix",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Summoned at the Green Archival Panel in the cave behind a mountain gate near the raptors; the guide says it can be skipped."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Direhorn Matriarch",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "East edge of the crater; stay out of the tail sweep behind her."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Thunderhoof",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Southern rim, a little west of centre by a lake squeeze."
+  },
+  {
+   "id": "p10",
+   "kind": "boss",
+   "name": "Venomridge",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "South of the Achromatic Crystal in the tar pits; poison heavy."
+  },
+  {
+   "id": "p11",
+   "kind": "boss",
+   "name": "Bolt",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Summoned at the Yellow Archival Panel directly behind Venomridge."
+  },
+  {
+   "id": "p12",
+   "kind": "boss",
+   "name": "Nanaya",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Final boss summoned at the Titan Panel on the Pillar of Assimilation after all four panels are done."
+  },
+  {
+   "id": "p13",
+   "kind": "interactive",
+   "name": "Red / Blue / Green / Yellow Archival Panels",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Each needs 15 Power Crystals of the matching color carried at once."
+  },
+  {
+   "id": "p14",
+   "kind": "interactive",
+   "name": "Titan Panel (Pillar of Assimilation)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Summons Nanaya."
+  },
+  {
+   "id": "p15",
+   "kind": "quest_item",
+   "name": "Achromatic Crystal (tar pits)",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 10,
+   "note": "Horde quest The Dark Crystal."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Cinder",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Snowtalon",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Titanosaur",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Izha'Rel and Tor'Rel",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Vitrix",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Direhorn Matriarch",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Thunderhoof",
+   "point": "p9",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Venomridge",
+   "point": "p10",
+   "approx": true
+  },
+  {
+   "step": 10,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Bolt",
+   "point": "p11",
+   "approx": true
+  },
+  {
+   "step": 11,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Titan Panel (Pillar of Assimilation)",
+   "point": "p14",
+   "approx": true
+  },
+  {
+   "step": 12,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Nanaya",
+   "point": "p12",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p6",
+   "text": "Kill Tor'Rel first, then Izha'Rel; the Ravasaur Stalker adds arrive near the end."
+  },
+  {
+   "boss": "p7",
+   "text": "Can one-shot an under-geared group; skip it if you are not ready."
+  },
+  {
+   "boss": "p8",
+   "text": "Do not stand behind her; the tail hits all around."
+  }
+ ],
+ "notes": "Boss order and spots are only verbally described by the Warcraft Tavern guide, so boss x/y are null. Five of ten bosses are required to finish. The guide suggests one clockwise loop; actual order is free. Quest NPCs are in Mulgore / Undercity / Ironforge, not placed here. uiMapID unknown. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

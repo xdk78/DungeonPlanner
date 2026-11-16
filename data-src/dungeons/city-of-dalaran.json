@@ -1,0 +1,462 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "city-of-dalaran",
+ "name": "City of Dalaran",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  28,
+  35
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 2959,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "City of Dalaran",
+   "instanceMapID": 2959
+  },
+  {
+   "uiMapID": null,
+   "floor": 2,
+   "name": "The Underbelly",
+   "instanceMapID": 2959
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/city-of-dalaran",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Sewer portal",
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.18,
+   "y": 0.85,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the lower left of the Underbelly map (the Cantrips & Crows side)."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Atrexis the Grave Knight",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). First boss, patrolling with three Kirin Tor Necromancers."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Lyn the Ignored",
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Secret boss, needs the Tome of Dalaran."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Arcane Anomaly",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.53,
+   "y": 0.85,
+   "approx": true,
+   "source": 3,
+   "note": "Krasus Landing, the plaza at the south end."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Arcanic Enigma",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Southern bank, garden, with two Mana Phantoms."
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Unstable Sentinel",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Trade district."
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Fel Ancient",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.55,
+   "y": 0.5,
+   "approx": true,
+   "source": 3,
+   "note": "City centre (Runeweaver Square). Needs Grindle Firespark to remove the barriers first."
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Mana Devourer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.35,
+   "y": 0.8,
+   "approx": true,
+   "source": 3,
+   "note": "Near the Violet Hold; clear the room first."
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Shade of the Archmage",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.52,
+   "y": 0.18,
+   "approx": true,
+   "source": 3,
+   "note": "Final boss, behind a portal opened by Archmage Modera; Violet Citadel."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 2,
+   "x": 0.18,
+   "y": 0.85,
+   "note": "Enter the sewers",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Atrexis the Grave Knight",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 2,
+   "x": null,
+   "y": null,
+   "note": "Lyn the Ignored (optional secret boss)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.53,
+   "y": 0.85,
+   "note": "Up into the city: Arcane Anomaly at Krasus Landing",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Arcanic Enigma, southern bank",
+   "point": "p5",
+   "approx": true
+  },
+  {
+   "step": 6,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Unstable Sentinel, trade district",
+   "point": "p6",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.55,
+   "y": 0.5,
+   "note": "Fel Ancient (talk to Grindle Firespark first)",
+   "point": "p7",
+   "approx": true
+  },
+  {
+   "step": 8,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.35,
+   "y": 0.8,
+   "note": "Mana Devourer near the Violet Hold",
+   "point": "p8",
+   "approx": true
+  },
+  {
+   "step": 9,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.52,
+   "y": 0.18,
+   "note": "Shade of the Archmage, final boss",
+   "point": "p9",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.53,
+   "y": 0.868,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.508,
+   "y": 0.862,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.548,
+   "y": 0.91,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5,
+   "y": 0.895,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.549,
+   "y": 0.518,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5274,
+   "y": 0.5107,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5645,
+   "y": 0.5609,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5175,
+   "y": 0.5432,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.36,
+   "y": 0.785,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.375,
+   "y": 0.8022,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3683,
+   "y": 0.7401,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3999,
+   "y": 0.7792,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5152,
+   "y": 0.1974,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4956,
+   "y": 0.1858,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5215,
+   "y": 0.2426,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4792,
+   "y": 0.2155,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Disarms the tank, raises dead adds and hits hard (Thrash, Strike). Kill a couple of the necromancers first, then focus the boss."
+  },
+  {
+   "boss": "p3",
+   "text": "Raises the dead, Shadow Bolt Volley on everyone and Curse of Thorns on the tank (it hurts whenever you deal damage); decurse it."
+  },
+  {
+   "boss": "p4",
+   "text": "About 500 arcane damage on the tank and a channelled Focal Blast beam that sweeps one way for 3 s: step out of the beam."
+  },
+  {
+   "boss": "p5",
+   "text": "Kill the two Mana Phantoms quickly and interrupt their Mana Burn. Dispel Manamorph; Silence AoE is avoidable for ranged."
+  },
+  {
+   "boss": "p6",
+   "text": "Frontal cleave and a pulsing Malfunction AoE: face him away and keep ranged beyond 25 yards. A stun before the cast stops it."
+  },
+  {
+   "boss": "p7",
+   "text": "Entangle roots with damage (Blessing of Freedom removes it); leave the green pools left by Fel Timbers at once."
+  },
+  {
+   "boss": "p8",
+   "text": "Clear the whole room first. Drain Vitality on the tank, Debilitate hits everyone and drains 200 mana: kill it before mana runs out."
+  },
+  {
+   "boss": "p9",
+   "text": "Similar to Shade of Aran: heavy Arcane Bolt on the tank, move the Shade off any Bounding Mana, stay outside the 20-yard Arcane Explosion. At 0 mana he casts Mass Polymorph and Evocation, then the fight resets."
+  }
+ ],
+ "notes": "Forever-only dungeon in Alterac: no uiMapID, use instanceMapID 2959 and the floor names. Level range is the client table (28-35); Method says 28-35 and 26-33 in different places. Four bosses are estimates from the map labels (Krasus Landing, Runeweaver Square, the Violet Hold, the Violet Citadel); Atrexis, Lyn, the Arcanic Enigma and the Unstable Sentinel have no position. No NPC IDs (no open source). NeedRoll was used only as a cross-check. Needs the Dalaran Sewers Key (Alliance: two quests at Southshore Town Hall; Horde: Magus Wordeen Voidglare at Tarren Mill). Lyn the Ignored is secret: summoned with the Tome of Dalaran (crafted at the Ambermill ley line from a Black Tome found in Arugal's room in Shadowfang Keep). Quest NPCs inside the city: Grindle Firespark (removes the barriers before the Fel Ancient), Archmage Modera (opens the Shade's portal), Rexxie Copperclutch (Opportunistic Education); none has a position. Quest drop: Arcane Mote from the Shade."
+}

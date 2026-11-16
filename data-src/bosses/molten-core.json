@@ -1,0 +1,1209 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "molten-core",
+ "name": "Molten Core",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Lucifron",
+   "npcID": 12118,
+   "displayID": 13031,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19702,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Delayed shadow blast on the group; heal through it."
+    },
+    {
+     "spell": 19703,
+     "src": 2,
+     "note": "Curse that makes spells cost more; remove it."
+    },
+    {
+     "spell": 20605,
+     "src": 2
+    },
+    {
+     "spell": 20604,
+     "src": 2,
+     "note": "Takes over a player for a few seconds; hold your damage on them."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16805,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16863,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16800,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17109,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16829,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16859,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16837,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18878,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19146,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18872,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18875,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18879,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19145,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17077,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Magmadar",
+   "npcID": 11982,
+   "displayID": 10193,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19450,
+     "src": 2
+    },
+    {
+     "spell": 19451,
+     "src": 2,
+     "note": "Frenzy; use a tranquilizing shot if you have one."
+    },
+    {
+     "spell": 19272,
+     "src": 2
+    },
+    {
+     "spell": 19408,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true,
+     "note": "Mass fear; use tremor or fear ward."
+    },
+    {
+     "spell": 19411,
+     "src": 2,
+     "note": "Bomb on a player; run away from the group."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16796,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17069,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18203,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17073,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16835,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17065,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16867,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16810,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16814,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16822,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16847,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16855,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16843,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18821,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p5",
+   "name": "Gehennas",
+   "npcID": 12259,
+   "displayID": 13030,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19728,
+     "src": 2
+    },
+    {
+     "spell": 19717,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire zone on the ground; move out of it."
+    },
+    {
+     "spell": 19716,
+     "src": 2,
+     "note": "Curse that lowers healing; remove it."
+    },
+    {
+     "spell": 20277,
+     "src": 2,
+     "tags": [
+      "control"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 15502,
+     "src": 2,
+     "note": "Strips armor from those in melee; tank should hold the boss."
+    }
+   ],
+   "loot": [
+    {
+     "item": 16826,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16812,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16862,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16849,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16860,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16839,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18875,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17077,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18872,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18878,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19145,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19146,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19147,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18861,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Garr",
+   "npcID": 12057,
+   "displayID": 12110,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19492,
+     "src": 2,
+     "note": "Strips buffs from the group; reapply after."
+    },
+    {
+     "spell": 19496,
+     "src": 2
+    },
+    {
+     "spell": 20294,
+     "src": 2
+    },
+    {
+     "spell": 19497,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 18564,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17105,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17066,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16821,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17071,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18832,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16808,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16866,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16795,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16813,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16846,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16834,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16854,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16842,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Shazzrah",
+   "npcID": 12264,
+   "displayID": 13032,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19712,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 19713,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Curse that raises magic damage taken; remove it."
+    },
+    {
+     "spell": 19714,
+     "src": 2
+    },
+    {
+     "spell": 19715,
+     "src": 2
+    },
+    {
+     "spell": 21655,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 16852,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16801,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16831,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16803,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16824,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16811,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17077,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18872,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18879,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19145,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18861,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18875,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18878,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19146,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Baron Geddon",
+   "npcID": 12056,
+   "displayID": 12129,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19695,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire pulses around the boss; everyone out of melee range."
+    },
+    {
+     "spell": 19659,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Burns mana on everyone; healers watch their mana."
+    },
+    {
+     "spell": 20475,
+     "src": 2,
+     "note": "A bomb on a player; run out of the group before it blows."
+    },
+    {
+     "spell": 20478,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Big blast around the boss at low health; get away from it."
+    }
+   ],
+   "loot": [
+    {
+     "item": 18563,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17110,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16807,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16797,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16836,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16856,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16844,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18823,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18820,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18822,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18821,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19136,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19142,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19143,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Sulfuron Harbinger",
+   "npcID": 12098,
+   "displayID": 13030,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19778,
+     "src": 2
+    },
+    {
+     "spell": 19779,
+     "src": 2
+    },
+    {
+     "spell": 19780,
+     "src": 2,
+     "tags": [
+      "control",
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 19781,
+     "src": 2
+    },
+    {
+     "spell": 19775,
+     "src": 2
+    },
+    {
+     "spell": 19776,
+     "src": 2
+    },
+    {
+     "spell": 20294,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 17074,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16868,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16848,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16816,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16823,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17109,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18878,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17077,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18872,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18875,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18879,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19145,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19146,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19147,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p10",
+   "name": "Golemagg the Incinerator",
+   "npcID": 11988,
+   "displayID": 11986,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 20553,
+     "src": 2
+    },
+    {
+     "spell": 13880,
+     "src": 2
+    },
+    {
+     "spell": 20228,
+     "src": 2
+    },
+    {
+     "spell": 19798,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 19820,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 17203,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16798,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17103,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18842,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16820,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16845,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16809,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16865,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17072,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16815,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16833,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16853,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16841,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18822,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p11",
+   "name": "Majordomo Executus",
+   "npcID": 12018,
+   "displayID": 12029,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 20620,
+     "src": 2
+    },
+    {
+     "spell": 21075,
+     "src": 2
+    },
+    {
+     "spell": 20619,
+     "src": 2,
+     "note": "Reflects spells; do not cast on him until it ends."
+    },
+    {
+     "spell": 20534,
+     "src": 2
+    },
+    {
+     "spell": 20623,
+     "src": 2
+    },
+    {
+     "spell": 20229,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 20603,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true
+    },
+    {
+     "spell": 15285,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 18646,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18703,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18808,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19140,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18806,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18810,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18805,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18803,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18809,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18811,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18812,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19139,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17203,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 14343,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p12",
+   "name": "Ragnaros",
+   "npcID": 11502,
+   "displayID": 11121,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 19773,
+     "src": 1
+    },
+    {
+     "spell": 19774,
+     "src": 1
+    },
+    {
+     "spell": 20564,
+     "src": 1
+    },
+    {
+     "spell": 20565,
+     "src": 1
+    },
+    {
+     "spell": 20566,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Knocks the tank back; expect a moment without threat."
+    }
+   ],
+   "loot": [
+    {
+     "item": 17204,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19017,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18815,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16901,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16915,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17102,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18814,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16930,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17107,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17063,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 19138,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16922,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16962,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16909,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 7487,
+   "name": "Attunement to the Core",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1
+  },
+  {
+   "id": 7848,
+   "name": "Attunement to the Core",
+   "level": 60,
+   "req": 55,
+   "side": "both",
+   "src": 1
+  }
+ ]
+}

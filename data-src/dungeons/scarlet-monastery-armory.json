@@ -1,0 +1,131 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "scarlet-monastery-armory",
+ "name": "Scarlet Monastery: Armory",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  36,
+  44
+ ],
+ "ejInstanceID": 316,
+ "instanceMapID": 189,
+ "maps": [
+  {
+   "uiMapID": 437,
+   "floor": 1,
+   "name": "Armory",
+   "uiMapIDInferred": true
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua",
+   "what": "boss positions on the floor picture (Blizzard dungeon journal data via OpenMap, MIT)",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "local: OpenMap/Data/Forever/Places.lua",
+   "what": "instance IDs, Group Finder level ranges, Forever-only dungeon entrances (MIT)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll (GPL-3.0)",
+   "what": "cross-check only; no coordinates or IDs copied from it",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "local: AllTheThings/db/Camelot/Categories/Instances.lua",
+   "what": "journal instance IDs, first-floor uiMapIDs, outdoor entrance spots (cross-check)",
+   "forever": true
+  },
+  {
+   "id": 5,
+   "url": "author estimate",
+   "what": "order/route from knowledge of the Classic layout; position not measured or not known",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Scarlet Monastery: Armory (outside portal)",
+   "uiMapID": 1420,
+   "floor": 0,
+   "x": 0.826,
+   "y": 0.324,
+   "approx": true,
+   "source": 4,
+   "note": "Scarlet Monastery gate in north-east Tirisfal Glades (ATT 82.6, 32.4)."
+  },
+  {
+   "id": "p2",
+   "kind": "entrance",
+   "name": "Entrance (inside)",
+   "uiMapID": 437,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Entrance spot not sourced."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Herod",
+   "uiMapID": 437,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 5,
+   "note": "Herod, the Scarlet Champion, in the north-east of the Armory floor (position not sourced)."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 437,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Entrance",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 437,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Kill Herod",
+   "point": "p3",
+   "approx": true
+  }
+ ],
+ "pulls": [],
+ "positions": [],
+ "strategies": [
+  {
+   "boss": "p3",
+   "text": "Whirlwind spins hurt anyone in melee range, so melee should step out during it and the tank should not drag him through other packs. Pull the Scarlet guards in the room away from him first, as they join the fight."
+  }
+ ],
+ "notes": "One boss wing. No sourced coordinates. Pulls: the Entry Hall and Armory patrols are Scarlet Myrmidons/Defenders; positions not sourced. uiMapID 437 inferred (435 + wing index) - verify in game. Coordinates come from OpenMap (MIT), AllTheThings or web guides only; spots those lack are null. NeedRoll (GPL-3.0) was used only to cross-check; no values were copied."
+}

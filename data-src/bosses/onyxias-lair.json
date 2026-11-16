@@ -1,0 +1,151 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "onyxias-lair",
+ "name": "Onyxia's Lair",
+ "kind": "raid",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p3",
+   "name": "Onyxia",
+   "npcID": 10184,
+   "displayID": 8570,
+   "class": "worldboss",
+   "level": "??",
+   "abilities": [
+    {
+     "spell": 15847,
+     "src": 1,
+     "note": "Hits whoever is behind the boss; do not stand there."
+    },
+    {
+     "spell": 17086,
+     "src": 1
+    },
+    {
+     "spell": 18351,
+     "src": 1
+    },
+    {
+     "spell": 18392,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Fire on a spot; move out of the marker."
+    },
+    {
+     "spell": 18431,
+     "src": 1,
+     "note": "Mass fear; use tremor or fear ward and spread."
+    },
+    {
+     "spell": 18435,
+     "src": 1
+    },
+    {
+     "spell": 18500,
+     "src": 1,
+     "note": "Cone in front of the boss; stay behind it."
+    },
+    {
+     "spell": 20279,
+     "src": 1,
+     "tags": [
+      "adds"
+     ],
+     "inferred": true
+    }
+   ],
+   "loot": [
+    {
+     "item": 18423,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18705,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18422,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17067,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18205,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 18813,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 17078,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16929,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16914,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16963,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16908,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16900,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16921,
+     "src": 1,
+     "notable": true
+    },
+    {
+     "item": 16939,
+     "src": 1,
+     "notable": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ]
+}

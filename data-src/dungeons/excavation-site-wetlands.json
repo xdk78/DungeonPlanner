@@ -1,0 +1,339 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "excavation-site-wetlands",
+ "name": "Excavation Site: Wetlands",
+ "kind": "dungeon",
+ "origin": "forever",
+ "originSource": 90,
+ "levelRange": [
+  26,
+  33
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 2998,
+ "maps": [
+  {
+   "uiMapID": null,
+   "floor": 1,
+   "name": "Excavation Site: Wetlands",
+   "instanceMapID": 2998
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/excavation-site-wetlands",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "low",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.08,
+   "y": 0.6,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the west edge; a road leads east."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Saltspine",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.5,
+   "approx": true,
+   "source": 3,
+   "note": "Patrols the crocolisk lake edge."
+  },
+  {
+   "id": "p3",
+   "kind": "boss",
+   "name": "Shadetooth",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.56,
+   "y": 0.47,
+   "approx": true,
+   "source": 3,
+   "note": "Patrols the raptor road east of the lake with two Thicket Hunters; a path, not a single spot."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Highland Horror",
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Alliance quest boss, surrounded by slimes; no loot except the quest item."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Relic Guardian",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.65,
+   "y": 0.22,
+   "approx": true,
+   "source": 3,
+   "note": "Circular titan site in the north-east; level 31."
+  },
+  {
+   "id": "p6",
+   "kind": "interactive",
+   "name": "Titan Control Panel",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.65,
+   "y": 0.22,
+   "approx": true,
+   "source": 2,
+   "note": "Next to the Relic Guardian; activates the fight."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.08,
+   "y": 0.6,
+   "note": "Enter and follow the road east",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.5,
+   "note": "Saltspine at the lake",
+   "point": "p2",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.56,
+   "y": 0.47,
+   "note": "Shadetooth on the raptor road (clear the grass packs first)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 4,
+   "uiMapID": null,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Highland Horror (Alliance quest boss only)",
+   "point": "p4",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.65,
+   "y": 0.22,
+   "note": "Relic Guardian: use the Titan Control Panel to start",
+   "point": "p5",
+   "approx": true
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p2"
+   ],
+   "note": "Saltspine alone; do not pull with the lake crocolisks."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p3"
+   ],
+   "note": "Clear the hidden Thicket packs in the grass before pulling Shadetooth."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3828,
+   "y": 0.5054,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.382,
+   "y": 0.4826,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3481,
+   "y": 0.5351,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.3481,
+   "y": 0.4848,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p3",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5423,
+   "y": 0.4733,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p3",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5442,
+   "y": 0.4506,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p3",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5043,
+   "y": 0.4987,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p3",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.5102,
+   "y": 0.4488,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6439,
+   "y": 0.2369,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6252,
+   "y": 0.2238,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6466,
+   "y": 0.2826,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": null,
+   "floor": 1,
+   "x": 0.6065,
+   "y": 0.2522,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Dust Storm cuts the hit chance of everyone within 10 yards, so casters stay out of melee range; Tendon Rip slows the tank. Clear the nearby mobs first."
+  },
+  {
+   "boss": "p3",
+   "text": "Terrifying Roar can fear players into grass packs: use a Tremor Totem or Fear Ward on the tank, or clear the grass first. Heavy bleed on the tank and an enrage at 20% health."
+  },
+  {
+   "boss": "p4",
+   "text": "Entangling Roots and a self-heal. Avoid pulling the surrounding slimes and kill him fast."
+  },
+  {
+   "boss": "p5",
+   "text": "Level 31, so more misses and dodges. Thunderclap slows attack speed, Arcing Smash is a frontal cleave, Knockaway cuts threat, War Stomp is an AoE knockback and stun (ranged stay away). It can be slowed and kited."
+  }
+ ],
+ "notes": "Forever-only, single open floor: no uiMapID, use instanceMapID 2998. Level range is the client table (26-33; NeedRoll 24-29). Saltspine (lake), Shadetooth (raptor road) and the Relic Guardian (circular titan site) are estimates read off the map picture; Highland Horror has no position. No NPC or item IDs (no open source). NeedRoll was used only as a cross-check. Method: Highland Horror is Alliance-quest only (drops Horrible Rootcore); the Relic Guardian is level 31 and starts only after using the Titan Control Panel beside it; Titan Relic is its quest drop. Quest NPCs inside: the Relic Guardian itself (Lost Relic Carry for Alliance, Elder Knowledge for Horde)."
+}

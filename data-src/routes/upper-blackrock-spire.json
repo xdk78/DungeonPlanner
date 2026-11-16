@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "slug": "upper-blackrock-spire",
+  "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
+  "map": {"6": "game map tiles BlackrockSpire\\BlackrockSpire6_"},
+  "overrides": {},
+  "import": {
+    "from": "Forever Dungeon Routes 1.2.4, route 'default' (aetherflask.com (via eintr.net))",
+    "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+    "licence": "MIT, Copyright (c) 2026 Checkov23 (docs/licenses/ForeverDungeonRoutes-LICENSE.txt)",
+    "note": "Route: Forever Dungeon Routes (MIT), by Checkov23.",
+    "traced": "its credits say this route was traced from the aetherflask.com walkthrough maps (mirrored at eintr.net)",
+    "check": {"rerouted": 0, "legs_ours": 0, "sides_left_out": 0, "flagged": 0},
+    "fill": [
+      {"point": "p2", "floor": 6, "at": [0.3013, 0.178], "approx": true, "name": "Entrance (inside)"},
+      {"point": "p4", "floor": 6, "at": [0.3844, 0.3747], "approx": true, "name": "Solakar Flamewreath"}
+    ],
+    "add": [
+    ],
+    "side": [
+      {"floor": 5, "name": "Way through this floor", "points": [[0.371, 0.2978], [0.3709, 0.2914], [0.3689, 0.2843], [0.3685, 0.2585], [0.3666, 0.2488], [0.3669, 0.2366], [0.3656, 0.2272], [0.3646, 0.1956], [0.3634, 0.1868], [0.3599, 0.1737], [0.3618, 0.1685], [0.3594, 0.1711], [0.3568, 0.171], [0.3512, 0.1681], [0.3424, 0.1665], [0.3369, 0.1619], [0.3348, 0.1563], [0.3348, 0.1417], [0.3367, 0.1367], [0.3417, 0.1343], [0.3373, 0.1335], [0.3313, 0.1277], [0.3194, 0.1263], [0.3059, 0.1295], [0.3031, 0.1438]]}
+    ]
+  },
+  "moves": [
+    {"floor": 6, "from": [0.2733, 0.3064], "to": [0.2834, 0.2904], "kind": "position", "generated": true},
+    {"floor": 6, "from": [0.3233, 0.3264], "to": [0.3273, 0.3353], "kind": "position", "generated": true}
+  ],
+  "legs": [
+    {"floor": 6, "from": [0.3013, 0.178], "to": [0.3033, 0.2664], "bends": [[0.3, 0.2665]], "import": "fdr"},
+    {"floor": 6, "from": [0.3033, 0.2664], "to": [0.3844, 0.3747], "bends": [[0.3, 0.2665], [0.302, 0.3014], [0.3109, 0.3603], [0.3662, 0.3663]], "import": "fdr"}
+  ]
+}

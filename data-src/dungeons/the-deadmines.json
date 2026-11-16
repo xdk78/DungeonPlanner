@@ -1,0 +1,725 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "the-deadmines",
+ "name": "The Deadmines",
+ "kind": "dungeon",
+ "origin": "classic",
+ "originSource": 90,
+ "levelRange": [
+  17,
+  26
+ ],
+ "ejInstanceID": null,
+ "instanceMapID": 36,
+ "maps": [
+  {
+   "uiMapID": 291,
+   "floor": 1,
+   "name": "The Deadmines",
+   "instanceMapID": 36
+  },
+  {
+   "uiMapID": 292,
+   "floor": 2,
+   "name": "Ironclad Cove",
+   "instanceMapID": 36
+  }
+ ],
+ "sources": [
+  {
+   "id": 1,
+   "url": "local: OpenMap/Data/Forever/Places.lua + DungeonMaps.lua (MIT)",
+   "what": "Group Finder level ranges, instance map IDs, floor names",
+   "forever": true
+  },
+  {
+   "id": 2,
+   "url": "https://www.method.gg/wow-forever/dungeons/the-deadmines",
+   "what": "Forever guide: boss order, mechanics, trash, quest items, quest NPCs (paraphrased in own words)",
+   "forever": true
+  },
+  {
+   "id": 3,
+   "url": "local: NeedRoll/Media/Maps (map pictures, viewed only; no data copied)",
+   "what": "portal marker, tinted boss rooms, room labels and corridor layout read off the dungeon map picture; every point from here is an estimate",
+   "forever": true
+  },
+  {
+   "id": 4,
+   "url": "https://warcraft.wiki.gg/wiki/UiMapID",
+   "what": "uiMapIDs of the dungeon floors (retail table; not verified against the Forever client)",
+   "forever": false
+  },
+  {
+   "id": 5,
+   "url": "local: OpenMap/Data/Forever/DungeonBosses.lua (MIT)",
+   "what": "boss positions on the floor picture (Blizzard Encounter Journal data via OpenMap)",
+   "forever": false
+  },
+  {
+   "id": 6,
+   "url": "https://www.wowhead.com/classic/npc=644/rhahkzor",
+   "what": "NPC and item IDs: each ID was opened on Wowhead Classic (npc=<id> / item=<id>) and its page title matched the name. Wowhead gives no coordinates for instance NPCs.",
+   "forever": false
+  },
+  {
+   "id": 90,
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "what": "instance origin: the dungeon and raid list marks each instance new in WoW: Forever or from the original game; the nine new dungeons confirmed by Warcraft Tavern's Forever dungeon announcement, the instance map IDs (2959-3065) by the client's DungeonEncounter table",
+   "forever": true
+  }
+ ],
+ "confidence": "medium",
+ "points": [
+  {
+   "id": "p1",
+   "kind": "entrance",
+   "name": "Portal in",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3,
+   "y": 0.12,
+   "approx": true,
+   "source": 3,
+   "note": "Portal swirl at the top-left of the first map."
+  },
+  {
+   "id": "p2",
+   "kind": "boss",
+   "name": "Rhahk'Zor",
+   "npcID": 644,
+   "idSource": 6,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3653,
+   "y": 0.6123,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p3",
+   "kind": "rare",
+   "name": "Miner Johnson",
+   "npcID": 3586,
+   "idSource": 6,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "approx": true,
+   "source": 2,
+   "note": "Position unknown (no measured source). Rare spawn on the mine path; may not be up."
+  },
+  {
+   "id": "p4",
+   "kind": "boss",
+   "name": "Sneed's Shredder / Sneed",
+   "npcID": 642,
+   "idSource": 6,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.502,
+   "y": 0.8683,
+   "approx": false,
+   "source": 5,
+   "note": "Fight starts with Sneed's Shredder (npc 642); Sneed (npc 643) climbs out when it dies."
+  },
+  {
+   "id": "p5",
+   "kind": "boss",
+   "name": "Gilnid",
+   "npcID": 1763,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.1248,
+   "y": 0.759,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p6",
+   "kind": "boss",
+   "name": "Mr. Smite",
+   "npcID": 646,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5518,
+   "y": 0.2536,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p7",
+   "kind": "boss",
+   "name": "Cookie",
+   "npcID": 645,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6763,
+   "y": 0.4017,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p8",
+   "kind": "boss",
+   "name": "Captain Greenskin",
+   "npcID": 647,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.3748,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p9",
+   "kind": "boss",
+   "name": "Edwin VanCleef",
+   "npcID": 639,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.4489,
+   "approx": false,
+   "source": 5
+  },
+  {
+   "id": "p10",
+   "kind": "quest_item",
+   "name": "Gnoam Sprecklesprocket",
+   "itemID": 7365,
+   "idSource": 6,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.502,
+   "y": 0.8683,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by Sneed's Shredder."
+  },
+  {
+   "id": "p11",
+   "kind": "quest_item",
+   "name": "An Unsent Letter",
+   "itemID": 2874,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.4489,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by VanCleef; starts the Stockade chain."
+  },
+  {
+   "id": "p12",
+   "kind": "quest_item",
+   "name": "Head of VanCleef",
+   "itemID": 3637,
+   "idSource": 6,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.4489,
+   "approx": false,
+   "source": 5,
+   "note": "Dropped by VanCleef."
+  },
+  {
+   "id": "p13",
+   "kind": "pack",
+   "name": "Defias Watchmen with Rhahk'Zor",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.4,
+   "y": 0.58,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: Rhahk'Zor can come with two Watchmen; CC one."
+  },
+  {
+   "id": "p14",
+   "kind": "pack",
+   "name": "Foundry goblins (Craftsmen, Woodcarvers, Engineers)",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.12,
+   "y": 0.7,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: goblin workers around Gilnid; Engineers summon golems."
+  },
+  {
+   "id": "p15",
+   "kind": "pack",
+   "name": "Defias Evokers and Overseers on the Cove walkway",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.42,
+   "y": 0.45,
+   "approx": true,
+   "source": 3,
+   "note": "Estimate: tight packs on the plank walkway toward the ship; interrupt Evokers."
+  }
+ ],
+ "route": [
+  {
+   "step": 1,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3,
+   "y": 0.12,
+   "note": "Enter the mine",
+   "point": "p1",
+   "approx": true
+  },
+  {
+   "step": 2,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3,
+   "y": 0.38,
+   "note": "Follow the mine down to the Mast Room junction",
+   "approx": true
+  },
+  {
+   "step": 3,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3653,
+   "y": 0.6123,
+   "note": "Rhahk'Zor in the yellow room",
+   "point": "p2",
+   "approx": false
+  },
+  {
+   "step": 4,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": null,
+   "y": null,
+   "note": "Miner Johnson if up (rare)",
+   "point": "p3",
+   "approx": true
+  },
+  {
+   "step": 5,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.502,
+   "y": 0.8683,
+   "note": "Sneed's Shredder, then Sneed",
+   "point": "p4",
+   "approx": false
+  },
+  {
+   "step": 6,
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.6,
+   "y": 0.62,
+   "note": "Through the Goblin Foundry to the lower level (transition point is an estimate)",
+   "approx": true
+  },
+  {
+   "step": 7,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.1248,
+   "y": 0.759,
+   "note": "Gilnid in the foundry",
+   "point": "p5",
+   "approx": false
+  },
+  {
+   "step": 8,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5518,
+   "y": 0.2536,
+   "note": "Mr. Smite after the walkway",
+   "point": "p6",
+   "approx": false
+  },
+  {
+   "step": 9,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6763,
+   "y": 0.4017,
+   "note": "Cookie on the ship",
+   "point": "p7",
+   "approx": false
+  },
+  {
+   "step": 10,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.3748,
+   "note": "Captain Greenskin",
+   "point": "p8",
+   "approx": false
+  },
+  {
+   "step": 11,
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.4489,
+   "note": "Edwin VanCleef, final boss",
+   "point": "p9",
+   "approx": false
+  }
+ ],
+ "pulls": [
+  {
+   "n": 1,
+   "points": [
+    "p13",
+    "p2"
+   ],
+   "note": "Rhahk'Zor; use CC on one Watchman if both come."
+  },
+  {
+   "n": 2,
+   "points": [
+    "p14",
+    "p5"
+   ],
+   "note": "Foundry goblins, then Gilnid."
+  },
+  {
+   "n": 3,
+   "points": [
+    "p15",
+    "p6"
+   ],
+   "note": "Walkway packs then Mr. Smite."
+  }
+ ],
+ "positions": [
+  {
+   "boss": "p2",
+   "role": "tank",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3604,
+   "y": 0.595,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p2",
+   "role": "melee",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3832,
+   "y": 0.5948,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p2",
+   "role": "healer",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.3317,
+   "y": 0.5594,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p2",
+   "role": "ranged",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.382,
+   "y": 0.5609,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p4",
+   "role": "tank",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.4935,
+   "y": 0.8524,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p4",
+   "role": "melee",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.5158,
+   "y": 0.8474,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p4",
+   "role": "healer",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.4579,
+   "y": 0.8239,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p4",
+   "role": "ranged",
+   "uiMapID": 291,
+   "floor": 1,
+   "x": 0.5073,
+   "y": 0.8145,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p5",
+   "role": "tank",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.1248,
+   "y": 0.777,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p5",
+   "role": "melee",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.1028,
+   "y": 0.771,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p5",
+   "role": "healer",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.1428,
+   "y": 0.819,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p5",
+   "role": "ranged",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.0948,
+   "y": 0.804,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p6",
+   "role": "tank",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5402,
+   "y": 0.2673,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p6",
+   "role": "melee",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5273,
+   "y": 0.2486,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p6",
+   "role": "healer",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5268,
+   "y": 0.311,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p6",
+   "role": "ranged",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.4998,
+   "y": 0.2686,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p7",
+   "role": "tank",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6647,
+   "y": 0.3879,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p7",
+   "role": "melee",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6854,
+   "y": 0.3784,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p7",
+   "role": "healer",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6239,
+   "y": 0.3674,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p7",
+   "role": "ranged",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6703,
+   "y": 0.3479,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p8",
+   "role": "tank",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6244,
+   "y": 0.3814,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p8",
+   "role": "melee",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6108,
+   "y": 0.3997,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p8",
+   "role": "healer",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.67,
+   "y": 0.3799,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p8",
+   "role": "ranged",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6386,
+   "y": 0.4191,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  },
+  {
+   "boss": "p9",
+   "role": "tank",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6076,
+   "y": 0.4309,
+   "approx": true,
+   "note": "Tank holds the boss between itself and the group, on the side the party arrives from."
+  },
+  {
+   "boss": "p9",
+   "role": "melee",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6296,
+   "y": 0.4369,
+   "approx": true,
+   "note": "Melee beside the boss, off the tank's flank."
+  },
+  {
+   "boss": "p9",
+   "role": "healer",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.5896,
+   "y": 0.3889,
+   "approx": true,
+   "note": "Healer back toward the entry side, in range of the tank but clear of the boss."
+  },
+  {
+   "boss": "p9",
+   "role": "ranged",
+   "uiMapID": 292,
+   "floor": 2,
+   "x": 0.6376,
+   "y": 0.4039,
+   "approx": true,
+   "note": "Ranged back toward the entry side, off the boss's front."
+  }
+ ],
+ "strategies": [
+  {
+   "boss": "p2",
+   "text": "Slam stun and moderate melee. Pull alone if possible; two Watchmen can join, so crowd-control one."
+  },
+  {
+   "boss": "p3",
+   "text": "Only Pierce Armor on the tank. Kill the boss before the miners around him."
+  },
+  {
+   "boss": "p4",
+   "text": "Clear the room first (Sneed fears). Kill the Shredder first; Sneed then emerges and disarms whoever holds threat."
+  },
+  {
+   "boss": "p5",
+   "text": "Molten Metal slows by half; Blessing of Freedom removes it. Kill Gilnid, then the goblin workers."
+  },
+  {
+   "boss": "p6",
+   "text": "Stuns twice while swapping weapons and uses Thrash. Kill the two Blackguard adds first; a stun with them alive can kill a player."
+  },
+  {
+   "boss": "p7",
+   "text": "Nature DoT on the tank and a self heal. Avoid pulling with extra trash."
+  },
+  {
+   "boss": "p8",
+   "text": "Cleave plus Poisoned Harpoon on the tank. Kill the companion, then the boss, then the two remaining adds."
+  },
+  {
+   "boss": "p9",
+   "text": "No real abilities beyond Thrash. Kill the first two Blackguards quickly. At 50% he summons two more unless he is stunned as he crosses the threshold."
+  }
+ ],
+ "notes": "Boss NPC IDs match the list in Wowhead's Deadmines guide (644, 3586, 642, 1763, 646, 647, 639, 645) and each page was opened. All seven boss positions are OpenMap (Encounter Journal) data; Miner Johnson (rare) has no position. Floor 1 -> floor 2 transition is not marked on the map art; the route step is an estimate. Forever added loot (Ogre Loincloth, Bandsaw Wristbands, Goblin Hammer, Lookie's Spyglass, First Mate Band, Dull Sawblade) but no layout change was reported. Quest givers (Gryan Stoutmantle, Scout Riell, Wilder Thistlenettle, Shoni) are outside."
+}

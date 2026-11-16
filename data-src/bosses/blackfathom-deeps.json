@@ -1,0 +1,502 @@
+{
+ "schema": 1,
+ "updated": "2026-11-16",
+ "slug": "blackfathom-deeps",
+ "name": "Blackfathom Deeps",
+ "kind": "dungeon",
+ "origin": "classic",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Wowhead Classic",
+   "url": "https://www.wowhead.com/classic",
+   "licence": "facts only (IDs, levels, drop lists)",
+   "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 2,
+   "name": "warcraft.wiki.gg",
+   "url": "https://warcraft.wiki.gg",
+   "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  }
+ ],
+ "bosses": [
+  {
+   "point": "p2",
+   "name": "Ghamoo-ra",
+   "npcID": 4887,
+   "displayID": 5027,
+   "class": "elite",
+   "level": [
+    25,
+    25
+   ],
+   "abilities": [
+    {
+     "spell": 5568,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Hits everyone next to the boss; keep ranged and healers away."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6907,
+     "src": 1
+    },
+    {
+     "item": 3415,
+     "src": 1
+    },
+    {
+     "item": 1486,
+     "src": 1
+    },
+    {
+     "item": 2271,
+     "src": 1
+    },
+    {
+     "item": 2567,
+     "src": 1
+    },
+    {
+     "item": 3413,
+     "src": 1
+    },
+    {
+     "item": 6908,
+     "src": 1
+    },
+    {
+     "item": 273839,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p3",
+   "name": "Lady Sarevess",
+   "npcID": 4831,
+   "displayID": 4979,
+   "class": "elite",
+   "level": [
+    25,
+    25
+   ],
+   "abilities": [
+    {
+     "spell": 8435,
+     "src": 2,
+     "tags": [
+      "interrupt"
+     ]
+    },
+    {
+     "spell": 246,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ]
+    },
+    {
+     "spell": 865,
+     "src": 2,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 888,
+     "src": 1
+    },
+    {
+     "item": 11121,
+     "src": 1
+    },
+    {
+     "item": 3078,
+     "src": 1
+    },
+    {
+     "item": 14163,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p4",
+   "name": "Gelihast",
+   "npcID": 6243,
+   "displayID": 1773,
+   "class": "elite",
+   "level": [
+    26,
+    26
+   ],
+   "abilities": [
+    {
+     "spell": 6533,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 6906,
+     "src": 1
+    },
+    {
+     "item": 1491,
+     "src": 1
+    },
+    {
+     "item": 1454,
+     "src": 1
+    },
+    {
+     "item": 6905,
+     "src": 1
+    },
+    {
+     "item": 14163,
+     "src": 1
+    },
+    {
+     "item": 273840,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p6",
+   "name": "Baron Aquanis",
+   "npcID": 12876,
+   "displayID": 110,
+   "class": "elite",
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 15043,
+     "src": 2
+    },
+    {
+     "spell": 15541,
+     "src": 2,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Roots nearby players; dispel or kill it from range."
+    }
+   ],
+   "loot": [
+    {
+     "item": 2271,
+     "src": 1
+    },
+    {
+     "item": 16782,
+     "src": 1
+    },
+    {
+     "item": 15128,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p7",
+   "name": "Twilight Lord Kelris",
+   "npcID": 4832,
+   "displayID": 4939,
+   "class": "elite",
+   "level": [
+    27,
+    27
+   ],
+   "abilities": [
+    {
+     "spell": 15587,
+     "src": 2
+    },
+    {
+     "spell": 8399,
+     "src": 2,
+     "tags": [
+      "dispel"
+     ],
+     "note": "Sleeps the nearby group; spread and cleanse."
+    }
+   ],
+   "loot": [
+    {
+     "item": 1155,
+     "src": 1
+    },
+    {
+     "item": 3413,
+     "src": 1
+    },
+    {
+     "item": 6903,
+     "src": 1
+    },
+    {
+     "item": 273846,
+     "src": 2,
+     "forever": true
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p8",
+   "name": "Old Serra'kis",
+   "npcID": 4830,
+   "displayID": 1816,
+   "class": "elite",
+   "level": [
+    26,
+    26
+   ],
+   "abilities": [
+    {
+     "spell": 8433,
+     "src": 2
+    }
+   ],
+   "loot": [
+    {
+     "item": 6901,
+     "src": 1
+    },
+    {
+     "item": 6904,
+     "src": 1
+    },
+    {
+     "item": 1454,
+     "src": 1
+    },
+    {
+     "item": 6902,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  },
+  {
+   "point": "p9",
+   "name": "Aku'mai",
+   "npcID": 4829,
+   "displayID": 2837,
+   "class": "elite",
+   "level": [
+    28,
+    28
+   ],
+   "abilities": [
+    {
+     "spell": 3490,
+     "src": 1
+    },
+    {
+     "spell": 3815,
+     "src": 1,
+     "tags": [
+      "aoe"
+     ],
+     "inferred": true,
+     "note": "Poison cloud on the floor; move out and cleanse."
+    }
+   ],
+   "loot": [
+    {
+     "item": 6911,
+     "src": 1
+    },
+    {
+     "item": 6910,
+     "src": 1
+    },
+    {
+     "item": 6909,
+     "src": 1
+    },
+    {
+     "item": 14399,
+     "src": 1
+    },
+    {
+     "item": 14178,
+     "src": 1
+    },
+    {
+     "item": 14184,
+     "src": 1
+    },
+    {
+     "item": 15524,
+     "src": 1
+    },
+    {
+     "item": 14758,
+     "src": 1
+    },
+    {
+     "item": 15129,
+     "src": 1
+    }
+   ],
+   "src": {
+    "npcID": 1,
+    "displayID": 1,
+    "class": 1,
+    "level": 1
+   }
+  }
+ ],
+ "quests": [
+  {
+   "id": 971,
+   "name": "Knowledge in the Deeps",
+   "level": 23,
+   "req": 10,
+   "side": "alliance",
+   "src": 1,
+   "giver": 2786
+  },
+  {
+   "id": 1198,
+   "name": "In Search of Thaelrid",
+   "level": 24,
+   "req": 18,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4786
+  },
+  {
+   "id": 1199,
+   "name": "Twilight Falls",
+   "level": 25,
+   "req": 20,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4784
+  },
+  {
+   "id": 1200,
+   "name": "Blackfathom Villainy",
+   "level": 27,
+   "req": 18,
+   "side": "alliance",
+   "src": 1,
+   "giver": 4787
+  },
+  {
+   "id": 1275,
+   "name": "Researching the Corruption",
+   "level": 24,
+   "req": 18,
+   "side": "alliance",
+   "src": 1,
+   "giver": 8997
+  },
+  {
+   "id": 6561,
+   "name": "Blackfathom Villainy",
+   "level": 27,
+   "req": 18,
+   "side": "horde",
+   "src": 1,
+   "giver": 4787
+  },
+  {
+   "id": 6562,
+   "name": "Trouble in the Deeps",
+   "level": 22,
+   "req": 17,
+   "side": "horde",
+   "src": 1,
+   "giver": 11862
+  },
+  {
+   "id": 6563,
+   "name": "The Essence of Aku'Mai",
+   "level": 22,
+   "req": 17,
+   "side": "horde",
+   "src": 1,
+   "giver": 12736
+  },
+  {
+   "id": 6564,
+   "name": "Allegiance to the Old Gods",
+   "level": 22,
+   "req": 17,
+   "side": "horde",
+   "src": 1
+  },
+  {
+   "id": 6565,
+   "name": "Allegiance to the Old Gods",
+   "level": 26,
+   "req": 17,
+   "side": "horde",
+   "src": 1,
+   "giver": 12736
+  },
+  {
+   "id": 6921,
+   "name": "Amongst the Ruins",
+   "level": 27,
+   "req": 21,
+   "side": "horde",
+   "src": 1,
+   "giver": 12736
+  }
+ ]
+}
