@@ -34,7 +34,7 @@ game's own maps, follow them while you play, and share them with your group. The
   portraits show a skull, and the Gear section lists only the plan's own gear, unless Dungeon Journal provides them.
 - **Run recorder limits.** It sees combat segments, enemy nameplates (counts, levels, elite or rare), boss kills and
   wipes. It cannot tell which pack a pull was or whether two packs came as one, so pulls are compared with the plan by
-  order between boss kills, and "step ≈ 6" is an estimate. Names the game hides are not stored; deaths may show as
+  order between boss kills, and "step ~ 6" is an estimate. Names the game hides are not stored; deaths may show as
   "not available".
 - **What needs other addons.** Maps of Forever's new dungeons, boss portraits and loot lists: Dungeon Journal (or
   OpenMap / Forever Dungeon Routes for maps). Another addon's route layer: Forever Dungeon Routes. "Open in NeedRoll":
@@ -88,7 +88,7 @@ Do these in order, out of combat unless the step says otherwise. Each line: what
     step, the next pull and boss, a mini map framing the step; after `/reload` it is where you left it. Escape does not
     close it.
 19. **Switch on Record my runs, enter a dungeon and kill a pack and a boss.** Run mode shows "Recording" with the pull
-    count and "On plan · step ≈ n"; the boss kill moves past the boss's step; the Runs section lists the run.
+    count and "On plan · step ~ n"; the boss kill moves past the boss's step; the Runs section lists the run.
 20. **With a second player in the group, Share > Send in game; the other player accepts.** They get a prompt (it waits
     for the end of combat), the plan arrives as a new plan, and Share shows "Has this plan: 1 of 1".
 21. **On the receiving side, press Alt+Z while the prompt is open, then Alt+Z again, then Escape.** The prompt survives

@@ -41,6 +41,7 @@ Compat.CHECKS = {
 	{ "Secret values", "issecretvalue", "nothing (pre-Midnight client)" },
 	{ "Pixel util", "PixelUtil.GetNearestPixelSize", "exact 1 px lines" },
 	{ "Item info", "C_Item.GetItemInfo", "item names in gear lists" },
+	{ "Item loading", "C_Item.RequestLoadItemDataByID", "item names that are not cached yet (else the item mixin)" },
 	{ "Group roles", "UnitGroupRolesAssigned", "roles in the roster" },
 	{ "Group leader", "UnitIsGroupLeader", "sending raid pages (nobody counts as leader)" },
 	{ "Raid assistant", "UnitIsGroupAssistant", "raid assistants sending pages" },

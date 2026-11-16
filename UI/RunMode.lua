@@ -532,7 +532,7 @@ function RunMode.DriftText(plan)
 	end
 	local text = L["On plan"]
 	if d.step then
-		text = text .. " · " .. string.format(L["step ≈ %d"], d.step)
+		text = text .. " · " .. string.format(L["step ~ %d"], d.step)
 	end
 	return text, false, lines, d
 end
@@ -657,6 +657,11 @@ end
 
 function RunMode.Init()
 	ns:On("STEP_CHANGED", RunMode, RunMode.Refresh)
+	ns:On("ITEMS_READY", RunMode, function()
+		if RunMode.IsShown() then
+			RunMode.Refresh()
+		end
+	end)
 	-- Cheap: only the recorder line, and only while the window is open.
 	ns:On("RECORDER_CHANGED", RunMode, function()
 		if frame and frame:IsShown() then

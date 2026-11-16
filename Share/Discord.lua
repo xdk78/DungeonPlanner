@@ -221,7 +221,8 @@ local function blocks(plan, opts)
 		if #plan.gear > 0 then
 			local lines = { "### " .. L["Gear"] }
 			for _, g in ipairs(ns.Plan.FilterGear(plan, {})) do
-				local label = g.label ~= "" and g.label or ("item " .. tostring(g.itemID))
+				local label = g.label ~= "" and g.label or (g.itemID and Names and Names.Item(g.itemID))
+					or ("item " .. tostring(g.itemID))
 				local line = "- " .. esc(label)
 				if g.itemID then
 					line = line .. " (`" .. g.itemID .. "`)"

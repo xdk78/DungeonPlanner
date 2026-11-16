@@ -683,6 +683,12 @@ local function build()
 			UI.RefreshPage()
 		end
 	end)
+	-- Item names that arrived from the client (Names.RequestItem): the open page redraws once with them.
+	ns:On("ITEMS_READY", UI, function()
+		if frame:IsShown() then
+			UI.RefreshPage()
+		end
+	end)
 	ns:On("STEP_CHANGED", UI, function()
 		if frame:IsShown() and ns.db.ui.view == "instance" then
 			frame.instancePage:RefreshSteps()

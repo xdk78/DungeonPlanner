@@ -816,7 +816,7 @@ ns.Locales.plPL = {
 	["Progress against the plan"] = "Postęp na tle planu",
 	["Pulls: %d of %d planned"] = "Pulle: %d z %d planowanych",
 	["Since the last boss: %d, planned %d before %s"] = "Od ostatniego bossa: %d, w planie %d przed: %s",
-	["step ≈ %d"] = "krok ≈ %d",
+	["step ~ %d"] = "krok ~ %d",
 	-- Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 	["A recommended plan's pages can be shown and sent, not changed."] = "Strony polecanego planu można pokazać i wysłać, ale nie zmienić.",
 	["Accept pages from"] = "Przyjmuj strony od",

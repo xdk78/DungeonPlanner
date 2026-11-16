@@ -166,6 +166,7 @@ function Slash.Debug()
 	if ns.Widgets and ns.Widgets.ShowDialog then
 		ns.Widgets.ShowDialog({
 			title = L["Polish letters test:"],
+			width = 560, -- wide enough that the face's name is not split over two lines
 			-- Drawn in the bundled face even when no face loads, so the eye can check what the probe says.
 			sample = { text = lower .. "  " .. upper, font = polishKind == "game" and S.BUNDLED_FACE or polishFile },
 			text = string.format(L["A Polish UI would use: %s (%s)"], polishName, yesNo(S.CanLoadFont(polishFile)))

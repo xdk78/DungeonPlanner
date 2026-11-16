@@ -40,6 +40,12 @@ local function fontValues()
 	return values
 end
 
+local scaleValues, scaleSorting = {}, {}
+for pct = 70, 140, 5 do
+	scaleValues[tostring(pct)] = pct .. "%"
+	scaleSorting[#scaleSorting + 1] = tostring(pct)
+end
+
 local function options()
 	return {
 		type = "group",
@@ -89,18 +95,19 @@ local function options()
 							ns.Style.Repaint()
 						end,
 					},
+					-- A list of steps rather than a slider: the slider's value box sat on its track in the game's skin.
 					scale = {
-						type = "range",
+						type = "select",
 						order = 4,
 						name = L["Window scale"],
-						min = 0.7,
-						max = 1.4,
-						step = 0.05,
+						values = scaleValues,
+						sorting = scaleSorting,
 						get = function()
-							return ns.db.settings.scale
+							local pct = math.floor((ns.db.settings.scale or 1) * 100 / 5 + 0.5) * 5
+							return tostring(math.max(70, math.min(140, pct)))
 						end,
 						set = function(_, v)
-							ns.db.settings.scale = v
+							ns.db.settings.scale = (tonumber(v) or 100) / 100
 							UI.ApplyScale()
 						end,
 					},
@@ -158,6 +165,7 @@ local function options()
 					confirm = {
 						type = "toggle",
 						order = 7,
+						width = "double",
 						name = L["Confirm before deleting plans"],
 						get = function()
 							return get({ "confirmDelete" })

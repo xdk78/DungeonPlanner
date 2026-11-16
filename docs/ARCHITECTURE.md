@@ -97,6 +97,9 @@ keyboard; inputs show their border; the primary action first.
   place (the rows, the boss header, the map pins and the side panel's boss steps change without a rebuild) and
   `PORTRAITS_READY` fires. Later requests in the wait get one more timer; with nothing loading no timer runs.
   Finished portraits are pooled per creature.
+- Item names: an item the client has not cached has no name; the first lookup (`Names.Item`) asks the client to load it
+  (`C_Item.RequestLoadItemDataByID`, else `Item:ContinueOnItemLoad`), once per item. Arrivals (`GET_ITEM_INFO_RECEIVED`)
+  within 0.2 s go out as one `ITEMS_READY` message; the open window and run mode redraw once with the names.
 - Map content colours (pulls, routes, party roles) are strong enough to read on parchment.
 
 ## Window and navigation
@@ -259,7 +262,7 @@ Drift       live, on the current run: trash pulls done / planned, pulls since th
 ```
 
 What drift cannot know on Forever: where the group is, which pack it pulled, whether two packs came as one. The step is
-an estimate that assumes the plan's order; run mode shows it ("On plan · step ≈ 6") and goes there on a click, but never
+an estimate that assumes the plan's order; run mode shows it ("On plan · step ~ 6") and goes there on a click, but never
 moves the step by itself (only a boss kill does, as before).
 
 The Runs section's "Show" dropdown picks This run (splits against best and previous), Against the plan (the overlay),

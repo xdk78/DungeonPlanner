@@ -482,8 +482,8 @@ function Style.TextColor(fontString, role)
 	end
 end
 
--- An estimated spot (Util.SplitApprox): a small muted "≈" after the text instead of the words "(approx.)".
-Style.APPROX = "\226\137\136" -- U+2248; Friz Quadrata's Polish cut and Alegreya Sans have it
+-- An estimated spot (Util.SplitApprox): a small muted "~" after the text instead of the words "(approx.)".
+Style.APPROX = "~" -- plain ASCII: every face has it; U+2248 read as "=" at caption size in game
 function Style.ApproxMark()
 	local r, g, b = Style.Color("muted")
 	return string.format("|cff%02x%02x%02x%s|r", math.floor(r * 255 + 0.5), math.floor(g * 255 + 0.5),
@@ -498,7 +498,8 @@ function Style.WithApprox(text, approx)
 	if text == nil or text == "" then
 		return Style.ApproxMark()
 	end
-	return text .. " " .. Style.ApproxMark()
+	-- A no-break space, so the mark never wraps onto a line of its own.
+	return text .. "94p" .. Style.ApproxMark()
 end
 
 -- Level range text coloured like the game colours quest difficulty (GetQuestDifficultyColor, guarded; OpenMap uses

@@ -161,7 +161,7 @@ ring, and the instance's name.
 | * Recording · 4 pulls · plan: 9 |
 | STEP 3                      |
 | Taragaman the Hungerer      |
-| Boss · Taragaman on his ... ≈ |
+| Boss · Taragaman on his ... ~ |
 | +-------------------------+ |
 | | mini map: step + neighbours | |
 | +-------------------------+ |
@@ -180,7 +180,7 @@ pull" / "Previous pull" key bindings while it is open; "Toggle run mode" is a ke
 key). A boss kill the tracker reports moves past that boss's step (matched by encounter ID, else by name; a kill that
 matches no boss of the plan, inside its instance, completes the next boss step). The line under the plan's name is the run recorder: a red dot and "Recording" with the live pull count against
   the plan's pulls, or how to start it; a click switches recording (docs/ARCHITECTURE.md, Run recorder). While a run of
-  the plan's instance is recorded, a line under it shows the progress against the plan: "On plan · step ≈ 6" in muted
+  the plan's instance is recorded, a line under it shows the progress against the plan: "On plan · step ~ 6" in muted
   text, or a warning in orange ("! 1 pull more than planned before Magmatus", "Plunder killed before Magmatus"); its
   tooltip has the counts and says what the estimate cannot know, and a click goes to the estimated step. The step
   block moves down under it, and the next boss's tips give up the line. It is a plain, non-secure frame, so it
@@ -199,8 +199,8 @@ to the next, the choice is saved (`ui.run.drawings`), and it shows only when the
 carries the pull's marks (tags, CDs, Lust) and the planned forces so far ("Forces 34%": the last pull up to this step
 with a planned progress); the next pull's text starts with its marks. Run mode keeps its size: nothing else was added.
 
-Spots a recommended plan only estimates ("(approx.)" in its notes) show a small muted "≈" after the text in run mode,
-the side panel and the marker details, and a line "≈ Approximate: an estimate, check it in game" in map tooltips,
+Spots a recommended plan only estimates ("(approx.)" in its notes) show a small muted "~" after the text in run mode,
+the side panel and the marker details, and a line "~ Approximate: an estimate, check it in game" in map tooltips,
 instead of the words.
 
 ### Runs
@@ -508,7 +508,7 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 - The party strip's role glyphs (`groupfinder-icon-role-micro-*` or the `LFGRole` sheet) on their bronze-ringed
   plates; "Open" under empty seats.
 - Run mode on a dungeon with a provider map: the framing at each step, the ring on the step, the step counter between
-  Prev and Next, the "≈" mark (Friz Quadrata's own cut should have it; boxes would mean it does not).
+  Prev and Next, the "~" mark (plain ASCII: every face has it).
 - Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner.
 - Routes: the outlined line, the chevrons' size, spacing and direction at several zooms and icon sizes, the joints at
   bends, the focused segment brighter than the rest, stop numbers readable over the line. `Media/Chevron.tga` is a new

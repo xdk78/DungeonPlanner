@@ -428,6 +428,7 @@ function W.ShowDialog(spec)
 		return
 	end
 	dialog.spec = spec
+	dialog:SetWidth(spec.width or 400) -- before the text is measured: its height depends on the width
 	dialog.title:SetText(spec.title or "")
 	dialog.text:SetText(spec.text or "")
 	local sampleHeight = 0

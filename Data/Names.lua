@@ -106,10 +106,81 @@ local function itemCall(fn, id)
 	return ok and ns.Util.Plain(value) or nil
 end
 
+-- An item the client has not cached has no name yet. The first lookup asks the client to load it (once per item); when
+-- GET_ITEM_INFO_RECEIVED (or the item mixin's callback) says it arrived, the arrivals of the next 0.2 s go out as one
+-- ITEMS_READY message, so open lists redraw once with the names in place of "Item 12345".
+local ITEM_BATCH = 0.2
+local itemAsked = {} -- [itemID] = true while the client was asked and has not answered, false once it did
+local itemArrived, itemTimer = {}, false
+local itemEventHooked = false
+
+local function flushItems()
+	itemTimer = false
+	local any = false
+	for id in pairs(itemArrived) do
+		itemArrived[id] = nil
+		if Names.Item(id) then
+			any = true
+		end
+	end
+	if any and ns.Fire then
+		ns:Fire("ITEMS_READY")
+	end
+end
+
+function Names.ItemArrived(itemID, success)
+	if itemAsked[itemID] ~= true then
+		return
+	end
+	itemAsked[itemID] = false
+	if success == false then
+		return
+	end
+	itemArrived[itemID] = true
+	if not itemTimer and C_Timer and C_Timer.After then
+		itemTimer = true
+		C_Timer.After(ITEM_BATCH, function()
+			ns.SafeCall(flushItems)
+		end)
+	end
+end
+
+-- Ask the client to load an item's data (guarded: either API may be missing). Asked once per item.
+function Names.RequestItem(itemID)
+	if not Util.IsInteger(itemID) or itemAsked[itemID] ~= nil then
+		return
+	end
+	itemAsked[itemID] = true
+	if not itemEventHooked then
+		itemEventHooked = true
+		ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, id, success)
+			Names.ItemArrived(Util.Plain(id), Util.Plain(success))
+		end)
+	end
+	local items = rawget(_G, "C_Item")
+	if items and type(items.RequestLoadItemDataByID) == "function" then
+		pcall(items.RequestLoadItemDataByID, itemID)
+		return
+	end
+	local mixin = rawget(_G, "Item")
+	if mixin and type(mixin.CreateFromItemID) == "function" then
+		local ok, item = pcall(mixin.CreateFromItemID, mixin, itemID)
+		if ok and item and type(item.ContinueOnItemLoad) == "function" then
+			pcall(item.ContinueOnItemLoad, item, function()
+				Names.ItemArrived(itemID, true)
+			end)
+		end
+	end
+end
+
 function Names.Item(itemID)
 	local get = C_Item and C_Item.GetItemNameByID
 	local name = itemCall(get, itemID)
-	return type(name) == "string" and name ~= "" and name or nil
+	if type(name) == "string" and name ~= "" then
+		return name
+	end
+	Names.RequestItem(itemID)
+	return nil
 end
 
 -- name, quality (0-7 or nil), icon (file ID or nil) for a gear entry { itemID?, label }.

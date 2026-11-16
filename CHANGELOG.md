@@ -17,7 +17,7 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
   My plans and Shared (plans sent to you or imported) in the same place.
 - **43 recommended plans** for the classic dungeons and raids and Forever's new dungeons: boss order, routes with
   numbered stops along the corridors, pulls, strategies and party positions. They are read-only; **Make an editable
-  copy** to change one. Estimated spots carry a small "≈". Sources and credits in docs/DATA-SOURCES.md.
+  copy** to change one. Estimated spots carry a small "~". Sources and credits in docs/DATA-SOURCES.md.
 - **Map planning** on the game's dungeon maps (the old dungeon map tiles; another addon's map or a parchment grid
   where the game has none): markers of 17 kinds, pulls in colour, routes with stops and direction chevrons, party
   positions per boss or pull, layers you can hide, labels, icon size, zoom and pan, undo and redo (50 steps).
@@ -75,6 +75,11 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- Item names in gear lists, boss drops, run mode and the Discord text no longer stay "Item 12345" while the client has
+  not cached the item: it is asked to load it and the open lists update when the names arrive.
+- The estimate mark is a plain "~" (the old "≈" drew as "=" in the game's font); it never wraps onto a line alone.
+- Settings: the long checkbox label is no longer cut off, and the window scale is a list of steps (the slider's value
+  box sat on its track). The `/dp debug` dialog is wide enough that a font's name is not split over two lines.
 - Marker details no longer say a name three times: a boss marker's pane has its portrait and name once; any other
   marker's name is its heading, with its kind under it.
 - Map and side-panel pictures: loading-screen art, boss portraits that load in place, Polish letters in every font,
