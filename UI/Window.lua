@@ -370,7 +370,8 @@ end
 -- Dialogs ----------------------------------------------------------------------------------------------------------------------
 -- One dialog at a time, queued. buttons = { { text, fn, primary } } (the game's red panel buttons). Optional input field
 -- (opts.input = { value, placeholder }) whose text is passed to the button callbacks. Primary first, at the start of
--- the line.
+-- the line. spec.body: a frame of the caller's shown under the text (as tall as it is), hidden with the dialog; /dp
+-- debug puts its font test there, so the two tests are one dialog.
 
 local dialog
 local dialogQueue = {}
@@ -406,6 +407,10 @@ local function buildDialog()
 	d:SetScript("OnHide", function(self)
 		if not W.Hidden(self) then
 			return -- the whole UI was hidden (Alt+Z): the question stays, unanswered, until it is back
+		end
+		if self.body then
+			self.body:Hide()
+			self.body = nil
 		end
 		if self.onDismiss then
 			local fn = self.onDismiss
@@ -457,10 +462,23 @@ function W.ShowDialog(spec)
 		return SP.xl + th + SP.md + sh + math.ceil(dialog.text:GetStringHeight() or 0) + SP.lg
 	end
 	local y = math.max(contentHeight(), SP.xl + 18 + SP.md + sampleHeight + SP.lg)
+	if dialog.body and dialog.body ~= spec.body then
+		dialog.body:Hide()
+	end
+	dialog.body = spec.body
+	if spec.body then
+		local body = spec.body
+		body:SetParent(dialog)
+		body:ClearAllPoints()
+		body:SetPoint("TOPLEFT", dialog.text, "BOTTOMLEFT", 0, -SP.lg)
+		body:SetPoint("RIGHT", -SP.xl, 0)
+		body:Show()
+		y = y + math.ceil(body:GetHeight() or 0) + SP.lg
+	end
 	if spec.input then
 		dialog.input:Show()
 		dialog.input:ClearAllPoints()
-		dialog.input:SetPoint("TOPLEFT", dialog.text, "BOTTOMLEFT", 0, -SP.md)
+		dialog.input:SetPoint("TOPLEFT", spec.body or dialog.text, "BOTTOMLEFT", 0, -SP.md)
 		dialog.input:SetPoint("RIGHT", -SP.xl, 0)
 		dialog.input:SetValue(spec.input.value or "")
 		y = y + SZ.control + SP.md

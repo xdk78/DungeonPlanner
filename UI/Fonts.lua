@@ -582,48 +582,52 @@ end
 
 -- The visible part of /dp debug's test: each face of the chain drawn twice, set directly on the line (left) and through
 -- our Font object (right), so the eye sees what the numbers say (boxes = the face did not apply). Drawing the faces
--- also makes the client load them, before the second look.
+-- also makes the client load them, before the second look. It is part of the /dp debug dialog (its body, under the
+-- Polish letters test), never a second window over it; on its own it opens in a dialog of its own.
 local panel
 local SAMPLE_TEXT = "Za\197\188\195\179\197\130\196\135 g\196\153\197\155l\196\133 ja\197\186\197\132"
 
+local PANEL_W = 512 -- the /dp debug dialog's width (560) inside its margins
+
 local function buildPanel()
 	local W, SP = ns.Widgets, Style.SPACE
-	local p = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
-	p:SetFrameStrata("DIALOG")
-	p:SetToplevel(true)
-	p:SetClampedToScreen(true)
-	p:EnableMouse(true)
-	p:SetWidth(400)
-	Style.Backdrop(p, "window", "page", "border")
+	local p = CreateFrame("Frame", nil, UIParent)
+	p:SetWidth(PANEL_W)
+	p:Hide()
 	p.title = W.Text(p, "title", "gold")
-	p.title:SetPoint("TOPLEFT", SP.xl, -SP.lg)
+	p.title:SetPoint("TOPLEFT")
 	p.title:SetText(L["Font test"])
+	p.rule = Style.Hairline(p)
+	p.rule:SetPoint("TOPLEFT", 0, SP.sm)
+	p.rule:SetPoint("TOPRIGHT", 0, SP.sm)
 	p.rows = {}
-	local y = SP.lg + 18 + SP.sm
+	local y = 18 + SP.sm
 	for i = 1, #Style.POLISH_FACES do
 		local row = {}
 		row.label = W.Text(p, "caption", "gold")
-		row.label:SetPoint("TOPLEFT", SP.xl, -y)
-		row.label:SetPoint("RIGHT", -SP.xl, 0)
+		row.label:SetPoint("TOPLEFT", 0, -y)
+		row.label:SetPoint("RIGHT")
 		row.direct = p:CreateFontString(nil, "OVERLAY")
 		row.direct:SetFontObject(Style.fonts.body)
-		row.direct:SetPoint("TOPLEFT", SP.xl, -(y + 14))
+		row.direct:SetPoint("TOPLEFT", 0, -(y + 14))
 		row.object = p:CreateFontString(nil, "OVERLAY")
 		row.object:SetFontObject(Style.fonts.body)
-		row.object:SetPoint("TOPLEFT", 200, -(y + 14))
+		row.object:SetPoint("TOPLEFT", math.floor(PANEL_W / 2), -(y + 14))
 		p.rows[i] = row
 		y = y + 14 + 22 + SP.xs
 	end
 	p.note = W.Paragraph(p, "caption", "ink")
-	p.note:SetPoint("TOPLEFT", SP.xl, -y)
-	p.note:SetPoint("RIGHT", -SP.xl, 0)
+	p.note:SetPoint("TOPLEFT", 0, -y)
+	p.note:SetPoint("RIGHT")
 	p.note:SetText(L["Left: the face set on the line itself; right: through a font object. Boxes mean that face did not apply."])
-	p.close = W.Button(p, L["Close"], "red", function()
-		p:Hide()
-	end)
-	p.close:SetPoint("BOTTOMRIGHT", -SP.xl, SP.lg)
-	p:SetHeight(y + math.ceil(p.note:GetStringHeight()) + SP.md + Style.SIZE.control + SP.lg + SP.lg)
+	p:SetHeight(y + math.ceil(p.note:GetStringHeight() or 24))
 	return p
+end
+
+-- The test's frame, to put in a dialog (W.ShowDialog's body).
+function Style.FontTestPanel()
+	panel = panel or buildPanel()
+	return panel
 end
 
 local function rowLabel(f, status)
@@ -640,18 +644,13 @@ function Style.ShowFontTest(test)
 	end
 	panel = panel or buildPanel()
 	local dialog = rawget(_G, "DungeonPlannerDialog")
-	panel:ClearAllPoints()
-	if dialog and dialog:IsShown() then
-		panel:SetPoint("TOP", dialog, "BOTTOM", 0, -Style.SPACE.sm)
-		-- It belongs to the debug dialog: closing that (Escape included) closes the test too.
-		if not panel.dpHooked and dialog.HookScript then
-			panel.dpHooked = true
-			dialog:HookScript("OnHide", function()
-				panel:Hide()
-			end)
-		end
-	else
-		panel:SetPoint("CENTER", 0, -120)
+	-- Not in the open /dp debug dialog: a dialog of its own (one at a time: it waits for the one that is open).
+	local inDebug = dialog and dialog:IsShown() and dialog.spec and dialog.spec.body == panel
+	-- Its own heading under the Polish letters test; on its own, the dialog's title says it.
+	panel.title:SetShown(inDebug and true or false)
+	panel.rule:SetShown(inDebug and true or false)
+	if not inDebug then
+		ns.Widgets.ShowDialog({ title = L["Font test"], width = 560, body = panel, buttons = { { L["Close"] } } })
 	end
 	for i, f in ipairs(test.faces) do
 		local row = panel.rows[i]
@@ -665,7 +664,6 @@ function Style.ShowFontTest(test)
 			row.object:SetText(SAMPLE_TEXT)
 		end
 	end
-	panel:Show()
 	return panel
 end
 

@@ -346,7 +346,8 @@ again 3 seconds later and switches to a face that loads. `DPSans.ttf` is a clean
 no layout tables, no hinting, one format-4 cmap; `Media/Fonts/FONTLOG.txt`). It sits beside the original, so a problem
 with the file can be told apart from a problem with the folder.
 
-`/dp debug` shows a font test panel under its dialog. The panel draws every face of the chain twice: set on the line
+`/dp debug` shows a font test in its dialog, under the Polish letters test (one dialog, not a second panel over the
+first). The test draws every face of the chain twice: set on the line
 itself, and through our Font object. A few seconds later, it prints a second look and a verdict to chat. `/dp scan`
 saves the same data in `diagnostics.fontTest`: the session's first probe, the probe now and the probe 2 seconds later.
 For each probe it records SetFont's return, `GetFont()`, and the Polish and plain widths, both directly and through

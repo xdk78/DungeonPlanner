@@ -166,7 +166,9 @@ function Slash.Debug()
 		print("    " .. note)
 	end
 	if ns.Widgets and ns.Widgets.ShowDialog then
+		-- One dialog: the font test (UI/Fonts.lua) is its body, under the Polish letters test.
 		ns.Widgets.ShowDialog({
+			body = S.FontTestPanel and S.FontTestPanel() or nil,
 			title = L["Polish letters test:"],
 			width = 560, -- wide enough that the face's name is not split over two lines
 			-- Drawn in the bundled face even when no face loads, so the eye can check what the probe says.

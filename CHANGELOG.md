@@ -88,6 +88,8 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- `/dp debug`: the font test is part of the dialog, under the Polish letters test, instead of a second panel that
+  stacked under it over the window.
 - Notes window: the page label sits between the page arrows ("1 of 3", "No pages" when there is none, where two dark
   squares stood alone), and the arrows have the game's size (32 px).
 - Run mode: no gap between a one-line step and the mini map; the map takes that room.
