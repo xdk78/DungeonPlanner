@@ -265,11 +265,17 @@ end
 -- rows, the boss header and the map pins on screen change from the skull to the face without being rebuilt; then
 -- PORTRAITS_READY fires. A portrait asked for later in the wait gets one more timer for the rest; with nothing
 -- loading, no timer runs.
+--
+-- A creature loads once: a second texture for a creature that is still loading shares the first one's wait, and one
+-- for a creature already loaded is ready at once. Art.PrefetchPortraits starts the wait before anything shows the
+-- creature (a plan is chosen, the player enters an instance), so the rows and pins drawn a moment later get the face
+-- sooner, or at once.
 local PORTRAIT_LOAD = 2.5
 Art.PORTRAIT_LOAD = PORTRAIT_LOAD
 local staging
 local portraitPool = {} -- [displayID] = { texture, ... }
 local loading = {} -- textures whose creature is still loading, in the order they were asked for
+local loaded = {} -- [displayID] = true once a texture of that creature finished its wait
 local batchTimer = false -- a timer is pending
 
 local function now()
@@ -340,6 +346,7 @@ local function flushPortraits()
 	for _, model in ipairs(loading) do
 		if (model.dpReadyAt or 0) <= t + 0.01 then
 			model.dpReady = true
+			loaded[model.dpDisplayID] = true
 			done = done + 1
 			-- Drawn again while still parked: the creature has loaded, so the picture is complete this time.
 			pcall(SetPortraitTextureFromCreatureDisplayID, model, model.dpDisplayID)
@@ -374,6 +381,12 @@ scheduleBatch = function()
 	end)
 end
 
+-- For tests: forget which creatures have loaded and the free textures, as at the start of a session (textures on a
+-- host stay there).
+function Art.ResetPortraitCache()
+	portraitPool, loaded = {}, {}
+end
+
 -- For tests and /dp debug: how many portraits are loading, and whether a timer waits for them.
 function Art.PortraitsLoading()
 	return #loading, batchTimer
@@ -388,9 +401,43 @@ function Art.PortraitShown(host)
 	return nil
 end
 
+local function canDrawPortraits()
+	return type(SetPortraitTextureFromCreatureDisplayID) == "function" and CreateFrame ~= nil
+end
+
+-- A new parked texture for creature `displayID`, added to its pool: ready at once when the creature has loaded
+-- before, else waiting (with the creature's earlier textures still loading, until they are ready). Nil when the client
+-- cannot draw it.
+local function newModel(displayID)
+	local list = portraitPool[displayID] or {}
+	portraitPool[displayID] = list
+	local model = stagingFrame():CreateTexture(nil, "ARTWORK")
+	park(model)
+	if not pcall(SetPortraitTextureFromCreatureDisplayID, model, displayID) then
+		model:Hide()
+		return nil
+	end
+	model.dpDisplayID = displayID
+	list[#list + 1] = model
+	if loaded[displayID] or not (C_Timer and C_Timer.After) then
+		model.dpReady = true -- loaded already, or no timers on this client: nothing to wait for
+		return model
+	end
+	local readyAt = now() + PORTRAIT_LOAD
+	for _, other in ipairs(loading) do
+		if other.dpDisplayID == displayID then
+			readyAt = math.min(readyAt, other.dpReadyAt or readyAt)
+		end
+	end
+	model.dpReadyAt = readyAt
+	loading[#loading + 1] = model
+	scheduleBatch()
+	return model
+end
+
 -- Show creature `displayID` on `host`. Returns false when the client cannot draw it.
 local function acquirePortrait(host, displayID)
-	if type(SetPortraitTextureFromCreatureDisplayID) ~= "function" or not CreateFrame then
+	if not canDrawPortraits() then
 		return false
 	end
 	if host.dpModel and host.dpModel.dpDisplayID == displayID then
@@ -398,35 +445,36 @@ local function acquirePortrait(host, displayID)
 		return true
 	end
 	Art.ReleasePortrait(host)
-	local list = portraitPool[displayID] or {}
-	portraitPool[displayID] = list
 	local model
-	for _, candidate in ipairs(list) do
+	for _, candidate in ipairs(portraitPool[displayID] or {}) do
 		if not candidate.dpHost then
 			model = candidate
 			break
 		end
 	end
+	model = model or newModel(displayID)
 	if not model then
-		model = stagingFrame():CreateTexture(nil, "ARTWORK")
-		park(model)
-		if not pcall(SetPortraitTextureFromCreatureDisplayID, model, displayID) then
-			model:Hide()
-			return false
-		end
-		model.dpDisplayID = displayID
-		list[#list + 1] = model
-		if C_Timer and C_Timer.After then
-			model.dpReadyAt = now() + PORTRAIT_LOAD
-			loading[#loading + 1] = model
-			scheduleBatch()
-		else
-			model.dpReady = true -- no timers on this client: nothing to wait with
-		end
+		return false
 	end
 	model.dpHost, host.dpModel = host, model
 	placePortrait(host, model) -- only when ready; otherwise the batch timer places it
 	return true
+end
+
+-- Start loading creatures before anything shows them: one parked texture per creature not asked for yet (the first
+-- view that shows it takes that texture; more views of it share its wait). Nothing else happens: no frame, no
+-- timer beyond the batch's. displayIDs: a list (repeats are skipped). Returns how many started loading.
+function Art.PrefetchPortraits(displayIDs)
+	if type(displayIDs) ~= "table" or not canDrawPortraits() then
+		return 0
+	end
+	local started = 0
+	for _, id in ipairs(displayIDs) do
+		if type(id) == "number" and not (portraitPool[id] and #portraitPool[id] > 0) and newModel(id) then
+			started = started + 1
+		end
+	end
+	return started
 end
 
 -- A boss portrait from the client: the creature's model portrait (the journal's display ID, loaded off screen as

@@ -133,6 +133,10 @@ local function before()
 		plan = ui.selectedPlan,
 		instance = ui.instance,
 	}
+	-- The walk reaches these plans within seconds: their bosses' portraits start loading now, so the shots show faces.
+	for _, key in ipairs({ FOREVER, CLASSIC, RAID }) do
+		ns.UI.PrefetchPortraits(ns.DB.GetPlan(bundledID(key)))
+	end
 end
 
 local function after(manifest)

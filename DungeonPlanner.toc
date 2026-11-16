@@ -228,6 +228,7 @@ UI\MapDraw.lua
 UI\MapCanvas.lua
 UI\MapInput.lua
 UI\MainFrame.lua
+UI\Portraits.lua
 UI\Home.lua
 UI\PlanActions.lua
 UI\InstancePicker.lua

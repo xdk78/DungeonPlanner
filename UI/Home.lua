@@ -379,6 +379,8 @@ function Home.Create(parent, ctx, actionBar)
 		ns.db.ui.homeSelected = entry and entry.key or nil
 		f.list:Refresh()
 		f.preview:ShowEntry(entry, nil)
+		-- Opening it is likely next: the plan it opens with starts loading its bosses' portraits (UI/Portraits.lua).
+		UI.PrefetchPortraits(entry and UI.DefaultPlanFor(entry))
 	end
 
 	f.list = W.List(content, {
@@ -512,14 +514,7 @@ function Home.Create(parent, ctx, actionBar)
 	f.newPlan:SetPoint("LEFT")
 	W.SetTooltip(f.newPlan, L["New plan"], L["A plan for the instance or zone you are in."])
 	f.here = W.Button(actions, L["Current location"], "outline", function()
-		local cur = ns.Instances.Current()
-		local entry = cur.ejInstanceID and ns.Instances.Get("ej:" .. cur.ejInstanceID)
-		if not entry then
-			local info = { name = cur.name or "", kind = cur.kind, ejInstanceID = cur.ejInstanceID, uiMapID = cur.uiMapID }
-			entry = { key = ns.DB.InstanceKey(info), name = info.name, kind = info.kind, ejInstanceID = info.ejInstanceID,
-				uiMapID = info.uiMapID }
-		end
-		UI.OpenInstance(entry)
+		UI.OpenInstance((UI.CurrentEntry()))
 	end)
 	f.here:SetPoint("LEFT", f.newPlan, "RIGHT", SP.sm, 0)
 	W.SetTooltip(f.here, L["Current location"], L["Opens the instance or zone you are in."])

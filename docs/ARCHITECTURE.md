@@ -96,7 +96,11 @@ keyboard; inputs show their border; the primary action first.
   loading waits for one shared timer; when it fires, each ready portrait is drawn again and moved onto its host in
   place (the rows, the boss header, the map pins and the side panel's boss steps change without a rebuild) and
   `PORTRAITS_READY` fires. Later requests in the wait get one more timer; with nothing loading no timer runs.
-  Finished portraits are pooled per creature.
+  Finished portraits are pooled per creature; a creature loads once: a second texture for it shares the first one's
+  wait, and one for a creature already loaded is ready at once. `UI/Portraits.lua` starts the wait early
+  (`Art.PrefetchPortraits`, the display IDs from `Journal.PlanPortraits`): when a plan is chosen (before its page
+  draws), when an instance is selected on the home table, when `/dp shots` starts, and on entering a dungeon or raid
+  (the plan that instance opens with).
 - Item names: an item the client has not cached has no name; the first lookup (`Names.Item`) asks the client to load it
   (`C_Item.RequestLoadItemDataByID`, else `Item:ContinueOnItemLoad`). The client answers that request with
   `ITEM_DATA_LOAD_RESULT` (`GET_ITEM_INFO_RECEIVED` counts too, but the request alone does not fire it). Arrivals within

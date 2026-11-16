@@ -92,6 +92,75 @@ T.case("Boss portraits: the skull first, then the portrait on the same row textu
 	ns:Off("PORTRAITS_READY", owner)
 end)
 
+T.case("Boss portraits: choosing Molten Core starts its bosses loading; after the timer every step and pin has its face", function()
+	boot()
+	settle()
+	Art.ResetPortraitCache()
+	local savedBossData = ns.BossData.enabled
+	ns.BossData.enabled = true -- the bundled display IDs, as in game (provider tests switch them off)
+	ns.Journal.epoch = (ns.Journal.epoch or 0) + 1 -- forget portraits cached while they were off
+	ns.UI.SelectPlan("b:molten-core")
+	-- Chosen: every boss's creature is loading before the page has drawn anything (UI/Portraits.lua).
+	local ids = ns.Journal.PlanPortraits(ns.DB.GetPlan("b:molten-core"))
+	T.ok(#ids >= 8, "Molten Core's bosses have bundled portraits: " .. #ids)
+	local loading = Art.PortraitsLoading()
+	T.ok(loading >= #ids, "loading from the choice on: " .. loading)
+	T.eq(Art.PrefetchPortraits(ids), 0, "asked again: nothing new starts")
+
+	ns.UI.SelectTab("map")
+	local page = _G.DungeonPlannerMainFrame.instancePage
+	local map = page.panels.map
+	map:RefreshNow()
+	local function bossHosts()
+		local hosts = {}
+		for _, row in ipairs(page.side.list.rows) do
+			if row:IsShown() and row.item and row.item.kind == "boss" then
+				hosts[#hosts + 1] = { "step " .. tostring(row.item.encounter), row.badge.icon }
+			end
+		end
+		local plan = ns.DB.GetPlan("b:molten-core")
+		for _, b in ipairs(map.canvas.pools.pins) do
+			local m = b:IsShown() and b.markerId and ns.Util.FindById(plan.markers, b.markerId)
+			if m and m.kind == "boss" then
+				hosts[#hosts + 1] = { "pin " .. tostring(m.label), b.icon }
+			end
+		end
+		return hosts
+	end
+	local hosts = bossHosts()
+	local steps, pins = 0, 0
+	for _, h in ipairs(hosts) do
+		if h[1]:find("^step") then
+			steps = steps + 1
+		else
+			pins = pins + 1
+		end
+	end
+	T.ok(steps >= 5 and pins >= 8, "boss steps and pins on screen: " .. steps .. ", " .. pins)
+	-- First render: the skull (the creatures are still loading), on one timer for all of them.
+	for _, h in ipairs(hosts) do
+		T.eq(Art.PortraitShown(h[2]), nil, h[1] .. " waits")
+	end
+	local _, waiting = Art.PortraitsLoading()
+	T.ok(waiting, "one batch timer waits")
+
+	-- The timer: each step row and map pin shows its creature in place, without the view being drawn again.
+	mock.Advance(Art.PORTRAIT_LOAD + 0.1)
+	for _, h in ipairs(hosts) do
+		T.ok(Art.PortraitShown(h[2]) ~= nil, h[1] .. " shows its portrait")
+	end
+	T.eq((Art.PortraitsLoading()), 0, "nothing left loading")
+	-- Drawn again (a redraw re-pools the pins): faces at once, no new wait.
+	map.canvas:DrawContent()
+	page.side.list:Refresh()
+	for _, h in ipairs(bossHosts()) do
+		T.ok(Art.PortraitShown(h[2]) ~= nil, h[1] .. " at once after a redraw")
+	end
+	T.eq((Art.PortraitsLoading()), 0, "a loaded creature never waits again")
+	ns.BossData.enabled = savedBossData
+	ns.Journal.epoch = ns.Journal.epoch + 1
+end)
+
 T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll'", function()
 	boot()
 	local plan

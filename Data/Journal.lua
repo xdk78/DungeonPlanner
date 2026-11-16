@@ -439,6 +439,21 @@ function Journal.BossArt(plan, enc)
 	return art or nil
 end
 
+-- The creatures whose portraits a plan shows (its bosses, in the side panel's steps, on the map's pins and in the
+-- Bosses section): their display IDs, each once, in the plan's order. For loading them early (Art.PrefetchPortraits).
+function Journal.PlanPortraits(plan)
+	local out, seen = {}, {}
+	for _, enc in ipairs(type(plan) == "table" and plan.encounters or {}) do
+		local art = Journal.BossArt(plan, enc)
+		local id = art and art.displayInfo
+		if id and not seen[id] then
+			seen[id] = true
+			out[#out + 1] = id
+		end
+	end
+	return out
+end
+
 function bossArtNow(plan, enc)
 	local j = Journal.EncounterFor(plan, enc)
 	if j and (j.displayInfo or j.icon) then

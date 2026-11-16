@@ -348,8 +348,7 @@ function UI.OpenInstance(entry)
 	ns.db.ui.homeSelected = entry.key
 	local current = ctx:Plan()
 	if not (current and ns.Bundled.SameInstance(current.instance, entry)) then
-		local own = ns.DB.PlansFor(entry)
-		local pick = ns.DB.RememberedPlan(entry) or own[1] or ns.Bundled.ForInstance(entry)[1]
+		local pick = UI.DefaultPlanFor(entry) -- UI/Portraits.lua
 		UI.SelectPlan(pick and pick.id or nil, true)
 	end
 	setView("instance")
@@ -398,6 +397,8 @@ function UI.SelectPlan(id, stayOnPage)
 	local plan = ns.DB.GetPlan(id)
 	if plan then
 		ns.DB.RememberPlan(UI.EntryForPlan(plan).key, plan.id)
+		-- Before the page draws its steps and pins: the bosses' portraits start loading now (UI/Portraits.lua).
+		UI.PrefetchPortraits(plan)
 	end
 	if stayOnPage then
 		return
