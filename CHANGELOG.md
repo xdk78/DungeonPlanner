@@ -93,6 +93,21 @@ Since the test builds:
 - Item names now really fill in while the Bosses and Gear pages are open (they listened for the wrong answer from the
   client, so only a later visit showed them); an item that does not arrive is asked again a few times, and hovering it
   asks once more.
+- Boss portraits in raids and classic dungeons no longer show skulls for the first seconds: a plan's portraits start
+  loading as soon as the plan is chosen (also when an instance is selected on the home table, and when you enter a
+  dungeon or raid), the map pins and the steps take them over in place, and a boss seen once shows its face at once
+  everywhere else.
+- Map: the map fills its section and is centred, the legend floats over its edge instead of squeezing it (it never
+  covers the plan's markers); "Map by Santiago Reyes" is a small chip in the map's own corner instead of a dark band
+  above it; Labels and Icon size sit inside the frame, clear of its border.
+- Home: the "Forever" chip sits beside the levels instead of under the name (it looked like an underline under
+  "Wetlands"). Level ranges far above your level are orange, not red, and the Levels heading explains the colours.
+- Pulls: a wider list with names on two lines; a recommended plan's pull says where it comes in the run. Party: the
+  party box takes half the section, with larger rows and a hint on filling it. Notes: boss names in Progress are no
+  longer cut ("Durgen..."), and the notes say spots are marked "~", in Polish too.
+- The Notes window opens at a readable size (380 x 400, still resizable and saved) with the game's page arrows.
+- Run mode: the mini map keeps a margin around the step (painted names and the route are not cut at its top), the
+  next pull's name gets two lines, and Prev on the first step has the game's normal disabled look.
 - Estimated steps no longer show a box and "94p" before the "~" mark (in the steps list, run mode and step captions).
 - The estimate mark is a plain "~" (the old "≈" drew as "=" in the game's font); it never wraps onto a line alone.
 - Settings: the long checkbox label is no longer cut off, and the window scale is a list of steps (the slider's value

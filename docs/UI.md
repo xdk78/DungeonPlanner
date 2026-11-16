@@ -146,7 +146,14 @@ The current step is the side panel's one highlight and is saved per profile (`ui
 A table, not a card grid: name with a small picture, level range (coloured by the game's quest difficulty colours),
 plan count and bosses killed; one click selects and fills the preview, a double click or **Open plan** opens the war
 table. My plans uses the same table and preview for your plans; Shared lists received and imported plans with the
-import box in place of the preview.
+import box in place of the preview. Selecting an instance starts loading the bosses' portraits of the plan it opens
+with (`UI/Portraits.lua`), so its page shows faces sooner.
+
+**Level colours (decided).** Level ranges keep the quest log's difficulty colours for the player's level (grey
+trivial, green easy, yellow even, orange hard), but never its red: anything five or more levels above shows in the
+orange of "very difficult" (`Style.LevelColor` probes at most four levels above the player). A column of red ranges
+read as a warning or an error, when it only means "later"; the orange still says "not yet", and the Levels heading's
+tooltip explains the colours. The picker uses the same colours.
 
 Where the game has no picture of an instance (`/dp scan`: Forever's new dungeons, Stratholme, Onyxia's Lair and the
 Ahn'Qiraj and Hyjal raids), the preview draws a **plate**: slate stone, the game's dungeon or raid mark in a bronze
@@ -167,7 +174,8 @@ ring, and the instance's name.
 | +-------------------------+ |
 |        Map: Dungeon Journal |
 | NEXT PULL                   |
-| Pull 3: Searing Blade ...   |
+| Pull 3: Searing Blade      |
+| Enforcers (on two lines)    |
 | NEXT BOSS                   |
 | Jergosh the Invoker         |
 | The strongest of the pair...|
@@ -188,10 +196,13 @@ works in combat; it is movable, and its position and whether it was open are sav
 it.
 
 The mini map is the map canvas in compact mode: it frames the current step with the steps before and after it on the
-same floor (`view:FrameSteps`; neighbours far away are left out, and the box is never smaller than about a fifth of
-the map), draws a steel-blue ring on the step, shows only that step's party positions, and draws no labels and no
-numbered route stops (the ring already marks the step). The map's source is a caption under the map, not on
-the art. Prev and Next have one width and the step counter sits between them.
+same floor (`view:FrameSteps`; neighbours far away are left out, the box has a margin of a tenth of the map around them and
+is never smaller than about three tenths of it, so the step, its route and the names painted on the map near it are not
+cut at the frame's edge), draws a steel-blue ring on the step, shows only that step's party positions, and draws no
+labels and no numbered route stops (the ring already marks the step). The map's source is a caption under the map,
+not on the art. The next pull's name wraps onto a second line before it is cut (after a whole word), and that block
+takes the height its lines need. Prev and Next have one width and the step counter sits between them; both are the
+game's panel buttons, so Prev on the first step has the game's own disabled look.
 
 Under the mini map, on the left, a small caption switch for the plan's drawings: "Drawings: this step" (the default:
 those tied to the current pull or boss and those tied to no step), "Drawings: all", "Drawings: hidden"; one click moves
@@ -224,15 +235,19 @@ a table with the columns A (the selected run), B and A - B, differences that are
 The Party section has a switch over its left column, Assignments | Pages; the raid groups stay on the right, so names
 are at hand while writing. Pages: Add page (the red button, first) and the page picker with a delete "x"; the title and
 the boss the page belongs to; the text in a multi-line field; a two-line keyword help; Send to group, Show and Post to
-chat at the bottom. Recommended plans have no pages (a muted line says to make a copy).
+chat at the bottom. Recommended plans have no pages (a muted line says to make a copy). The groups column takes about
+two fifths of the section (300 to 440 px; a dungeon's party half of it, so its box does not sit far off beside an
+empty column), with the party's rows at the larger size (34 px) and a line under the box on how its seats fill.
+Without assignments, a recommended plan's left column says to make a copy to add some.
 
 ```
-+ Notes ---------------- X +      the run mode window's frame, resizable (220 x 150 at least), movable,
-| Lucifron                 |      position and size saved (ui.notes); not closed by Escape
++ Notes ---------------- X +      the run mode window's frame, 380 x 400 by default, resizable (220 x 150 at
+| Lucifron                 |      least), movable, position and size saved (ui.notes); not closed by Escape
 | From Lead · Lucifron     |      the source: a sender, or the plan and its boss
 | (skull) Lucifron: (tank) |      raid icons, role and class icons inline; names in class colour
 | > Decurse: Aldra, Tester |      the player's own lines start with a gold ">"
-| <  >  1 of 2             |      received pages first (newest first), then the plan's
+| (<)  1 of 2  (>)         |      the game's page arrows (the spell book's), the count between them; received
+|                          |      pages first (newest first), then the plan's
 +--------------------------+
 ```
 
@@ -288,6 +303,7 @@ this API family and is guarded.
 | Emblem, plate marks | `INV_Misc_Map_01`; the `Dungeon` atlas (else a portal icon) or the `Raid` atlas (else a dragon head) | | `Dungeon` seen, `Raid` inferred, guarded |
 | Step rings, boss portraits | `Interface\Minimap\MiniMap-TrackingBorder` (the map-pin ring; its ring is centred at (20, 19) of the 64 px file, so it is drawn from the 38 px square around that point), the Adventure Guide's boss ring (centred in its crop); both placed by `Art.PlaceRing`, centre on centre | | Seen (Dungeon Journal, NeedRoll) |
 | Run mode button | `Ability_Rogue_Sprint` | | Classic icon |
+| Page arrows (the Notes window) | `Interface\Buttons\UI-SpellbookIcon-PrevPage-*` / `-NextPage-*` (up, down, disabled), the highlight `UI-Common-MouseHilight` | drawn "<" and ">" buttons | Seen (Dungeon Journal, OpenMap, NeedRoll, Leatrix Plus) |
 | Enemies layer | our `Circle`/`Ring` textures tinted, the game's raid skull for bosses | | Drawn |
 
 Libraries: the game's own templates and mixins above do the work (nine-slice layouts, `ScrollUtil`, the scroll bar, the
@@ -310,15 +326,20 @@ centre: `LEFT` on one frame and `RIGHT` on another at a different height gives i
 
 The map section's toolbar holds the tools (own plans): Select, Marker, Position, Pull, Route, Draw, Erase, with the
 kind, role or pull picker of the active tool; on the right Legend, Fit, Focus and Floor (Focus gives way on a narrow window).
-Labels and the icon-size stepper sit in the map's bottom-left corner. The **legend** floats over the top-right corner:
+Labels and the icon-size stepper sit in the map's bottom-left corner, inside the gold frame with a margin of their own
+(as the legend in the other corner). The **legend** floats over the top-right corner:
 layer switches with icons and counts, the tool's help while editing, the routes on this floor when there are any, and
 the marker editor (`UI/Panels/MapEditor.lua`) whenever a marker is selected. Alone it is compact (204 px wide, as
 tall as its content); the editor takes 248 px and the full height. It shows by itself the first time the map opens and
-stays off after that until the Legend button turns it on (the button's choice is saved). Fit, and centring on a step,
-keep the map's content clear of it. Fit on a map without art frames the plan's markers and route points
-(`MapLayout.FitView`) instead of the empty grid. Where another addon provides the map (Data/Providers.lua), its name
-shows in the map's top-left corner as a chip on a dark plate ("Map: Dungeon Journal") and its boss pins say where
-they come from.
+stays off after that until the Legend button turns it on (the button's choice is saved). The whole map (zoom 1,
+`MapLayout.MapFit`) is as large as the section allows and centred in it, with the legend floating over the map's edge
+rather than leaving an empty band above and below a map squeezed beside it; only while the plan's rightmost point
+(and a pull disc beside it) would be under the legend does the map slide left, then shrink, never below the size
+that fits beside the legend. Centring on a step also keeps it clear of the legend. Fit on a map without art frames
+the plan's markers and route points (`MapLayout.FitView`) instead of the empty grid. The map's credit ("Map by
+Santiago Reyes", or "Map: Dungeon Journal" where another addon provides the map, Data/Providers.lua) is a chip on a
+dark plate in the map's own top-left corner, on the picture (in the frame's corner while that corner is scrolled
+away), and the provider's boss pins say where they come from.
 
 Map labels sit on a dark plate (a few pixels of margin), so they stay readable over a map's own painted names; label
 placement (`MapLayout.Labels`) counts the plate, so labels still avoid each other, the pins and the floating legend,
@@ -393,7 +414,8 @@ plans and off for your own until you switch it. The dots pass clicks and drags t
 
 An instance new in WoW: Forever (its recommended plan's `instance.origin`, docs/DATA-SOURCES.md) carries a small chip,
 "Forever", bronze-gold caption text on a dark pill with a bronze edge, in the instance picker's rows (left of the
-level) and in the home table (after the tag line); hovering it says "New in WoW: Forever". The chip takes the mouse for
+level) and in the home table (centred on the row at the end of the name column, left of the levels: on the tag line
+its edge touched the name above it and read as an underline); hovering it says "New in WoW: Forever". The chip takes the mouse for
 hovering only, so a click still opens the row. The picker's search matches "forever" (from three letters on).
 
 ### Another addon's route
@@ -421,6 +443,10 @@ text labels on the same dark plate as map labels; the legend's "Drawings" row sw
 combat ("Drawing is not available in combat.").
 
 ### Pull marks
+
+The pull list takes nearly half the Pulls section (280 to 440 px) and its rows are two lines high, so a pull's name
+wraps instead of being cut ("Dark Iron Summoner patrol (Magmatus)"); a recommended plan's pull shows under its
+name, note and markers where it comes in the run ("Step 4 of 8, before Magmatus").
 
 The Pulls editor has, under the name and colour, toggles for the tags (Interrupt, Crowd control, Line of sight, Pull
 with next, Skip, Careful) and the planned Cooldowns and Bloodlust / Heroism, wrapping to the editor's width, then
@@ -489,7 +515,12 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 - The section tabs under the window: their spacing, the selected one, Polish names, and that a window near the bottom
   of the screen keeps them on screen; the home screen's Dungeons / Raids / My plans / Shared in the same place.
 - Boss portraits on the first visit to Bosses, the side panel's boss steps and the map pins: the skull for about 2.5 s,
-  then the face in place, without leaving the view (and no black squares).
+  then the face in place, without leaving the view (and no black squares). The wait starts when the plan is chosen
+  (and when an instance is selected on the home table, or on entering it), so a raid's or classic dungeon's pins
+  should rarely show the skull at all; a second view of the same boss shows the face at once.
+- The Notes window's page arrows (the spell book's) and its default size; the Forever chip on the home table's rows;
+  the orange (not red) level ranges and the Levels heading's tooltip; the Pulls list's two-line rows; the Party
+  section's columns; the Notes section's boss rows (name over "not tracked").
 - Gear: the item tooltip next to the item's name, the comparison tooltip beside it, not over "Open in NeedRoll" near
   the bottom of the screen.
 - Header widths: back, instance and plan pickers, plan menu and Undo at the window's minimum width (880).
