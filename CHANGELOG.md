@@ -3,7 +3,7 @@
 All notable changes to Dungeon Planner. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 follow [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-16
 
 The first public version, for WoW: Forever. Highlights, known limitations and the test checklist:
 `docs/RELEASE-NOTES-0.1.0.md` in the source repository.
