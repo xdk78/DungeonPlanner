@@ -104,7 +104,8 @@ writeTGA(out .. "Chevron.tga", 32, 32, function(x, y)
 	return v, v, v, math.floor(edge * 255 + 0.5)
 end)
 
--- Icon: a soft-grey rounded tile with an ink route (three stops joined by a line). The launcher prefers the game's map icon.
+-- Icon: a soft-grey rounded tile with an ink route (three stops joined by a line). The launcher shows Media/LogoIcon.tga
+-- (tools/render_logo.py); this is only the fallback for the game's map icon (settings.gameIcon) on a client without it.
 local stops = { { 16, 46 }, { 30, 22 }, { 48, 40 } }
 writeTGA(out .. "Icon.tga", 64, 64, function(x, y)
 	local tile = coverage(x, y, roundedRect(64, 10))

@@ -43,6 +43,18 @@ T.case("Addon boots: database, settings, slash, launcher", function()
 	T.ok(_G.BINDING_HEADER_DUNGEONPLANNER, "binding header")
 	T.eq(_G.BINDING_NAME_DUNGEONPLANNER_NEXT_PULL, "Next pull")
 	T.ok(ns.Integrations.status.launcher, "LDB launcher registered")
+	-- The launcher shows our logo; the setting switches it to the game's map icon and back.
+	local logo = "Interface\\AddOns\\DungeonPlanner\\Media\\LogoIcon"
+	T.eq(ns.Integrations.LauncherIcon(), logo, "our logo by default")
+	local object = LibStub("LibDataBroker-1.1"):GetDataObjectByName(ns.name)
+	ns.db.settings.gameIcon = true
+	ns.Integrations.RefreshLauncherIcon()
+	T.eq(ns.Art.SPECS.launcher, ns.Art.SPECS.launcherGame, "the game's map icon when picked")
+	T.eq(object.icon, ns.Integrations.LauncherIcon(), "the minimap button follows")
+	T.ok(object.icon ~= logo, "no longer the logo")
+	ns.db.settings.gameIcon = false
+	ns.Integrations.RefreshLauncherIcon()
+	T.eq(object.icon, logo, "back to the logo")
 	T.ok(type(_G.DungeonPlanner.API.GetActivePlan) == "function", "public API")
 	T.ok(ns.Style.fonts.body, "font objects")
 end)

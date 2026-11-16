@@ -50,7 +50,7 @@ Do these in order, out of combat unless the step says otherwise. Each line: what
 
 1. **Log in with only Dungeon Planner enabled and type `/dp debug`.** A dialog lists the client, the APIs and "Window
    parts from the game: n of m"; the self-tests pass and the Polish letters (ą ć ę ł ń ó ś ź ż) are not boxes.
-2. **Type `/dp`.** The window opens in the game's framed look with the map icon in the portrait ring; the close button
+2. **Type `/dp`.** The window opens in the game's framed look with the addon's logo in the portrait ring; the close button
    and the size grip in the corners are fully visible, not under the metal border.
 3. **Click the Dungeons, Raids, My plans and Shared tabs under the window, then hide and show the window twice.** Each
    tab keeps its width and padding; the table shows level ranges, plan counts and loading-screen pictures (a drawn

@@ -12,6 +12,7 @@ Defaults.settings = {
 	showCoordinates = true,
 	confirmDelete = true,
 	colorblind = false, -- colour-blind friendly colours for pulls, routes, drawings and roles (UI/Style.lua)
+	gameIcon = false, -- the minimap button and the window show the game's map icon instead of our logo (UI/Art.lua)
 	tracker = {
 		enabled = true,
 		announceKills = false, -- print a line when a planned boss dies

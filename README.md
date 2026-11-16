@@ -161,7 +161,8 @@ The repository is the addon folder (libraries are vendored in `Libs/`); `/reload
 MIT ([LICENSE](LICENSE)). Embedded libraries keep their licences ([docs/LIBRARIES.md](docs/LIBRARIES.md),
 [Libs/THIRD-PARTY-NOTICES.md](Libs/THIRD-PARTY-NOTICES.md): Ace3 and LibDBIcon BSD-style, LibSerialize MIT, LibDeflate
 zlib, LibSharedMedia LGPL-2.1, LibStub/ChatThrottleLib public domain, LibDataBroker without a stated licence). The bundled font Alegreya Sans and DP Sans, a cut-down copy of it, are under the SIL Open Font License
-(`Media/Fonts/OFL.txt`, changes in `Media/Fonts/FONTLOG.txt`). Community plans
+(`Media/Fonts/OFL.txt`, changes in `Media/Fonts/FONTLOG.txt`). The logo (`Media/Logo/`, drawn for the project) is
+under the project's MIT licence ([docs/LIBRARIES.md](docs/LIBRARIES.md#logo)). Community plans
 are CC0-1.0 or CC-BY-4.0. The recommended plans' imported routes come from Forever Dungeon Routes under its MIT licence; its notice and those of OpenMap and ForeverPlusPlus (MIT,
 data used by the recommended plans and the map tile names) are in [docs/licenses/](docs/licenses/). World of Warcraft
 art is never shipped; maps are drawn by your client.

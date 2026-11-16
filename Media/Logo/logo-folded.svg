@@ -1,0 +1,96 @@
+<!-- Dungeon Planner logo, alternative: a folded map with a route to a boss pin. Part of Dungeon Planner, MIT licence (LICENSE). The numbers and letters are outlines of Cinzel (SIL Open Font License 1.1). PNG and TGA renders: tools/render_logo.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+    <stop offset="0" stop-color="#3d2a18"/>
+    <stop offset="0.55" stop-color="#231710"/>
+    <stop offset="1" stop-color="#0f0a06"/>
+  </radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0" stop-color="#f7d98a"/>
+    <stop offset="0.45" stop-color="#e3b04b"/>
+    <stop offset="1" stop-color="#8c6631"/>
+  </linearGradient>
+  <clipPath id="tile"><rect width="512" height="512" rx="88"/></clipPath>
+  <filter id="wood" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.004 0.085" numOctaves="3" seed="11"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1.6 0 -0.62"/>
+  </filter>
+  <filter id="grain" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 0.9  0 0 0 0 0.7  0 1.3 0 0 -0.72"/>
+  </filter>
+  <filter id="parchTex" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="5"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.27  0 0 0 0 0.08  1.4 0 0 0 -0.64"/>
+  </filter>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+    <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+  </filter>
+  <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
+    <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.5"/>
+  </filter>
+  <radialGradient id="redDisc" cx="40%" cy="35%" r="70%">
+    <stop offset="0" stop-color="#f0563f"/>
+    <stop offset="0.6" stop-color="#d93a2b"/>
+    <stop offset="1" stop-color="#a5251a"/>
+  </radialGradient>
+
+  <linearGradient id="p1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dcc08a"/><stop offset="1" stop-color="#ecd9ab"/></linearGradient>
+  <linearGradient id="p2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a27a43"/><stop offset="1" stop-color="#c9a466"/></linearGradient>
+  <linearGradient id="p3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dcc08a"/><stop offset="1" stop-color="#ecd9ab"/></linearGradient>
+  <clipPath id="mapClip"><path d="M60 190 L174 156 L288 190 L402 156 L402 424 L288 458 L174 424 L60 458 Z"/></clipPath>
+  <radialGradient id="pinRed" cx="38%" cy="30%" r="80%">
+    <stop offset="0" stop-color="#f0563f"/><stop offset="0.55" stop-color="#d93a2b"/><stop offset="1" stop-color="#9d2117"/>
+  </radialGradient>
+
+</defs>
+
+  <g clip-path="url(#tile)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <rect width="512" height="512" filter="url(#wood)" opacity="0.75"/>
+    <rect width="512" height="512" filter="url(#grain)" opacity="0.35"/>
+  </g>
+  <rect x="7" y="7" width="498" height="498" rx="81" fill="none" stroke="url(#rim)" stroke-width="10"/>
+  <rect x="17" y="17" width="478" height="478" rx="71" fill="none" stroke="#000" stroke-opacity="0.45" stroke-width="3"/>
+
+  <g filter="url(#shadow)">
+    <path d="M60 190 L174 156 L288 190 L402 156 L402 424 L288 458 L174 424 L60 458 Z" fill="#ecd9ab"/>
+  </g>
+  <path d="M60 190 L174 156 L174 424 L60 458 Z" fill="url(#p1)"/>
+  <path d="M174 156 L288 190 L288 458 L174 424 Z" fill="url(#p2)"/>
+  <path d="M288 190 L402 156 L402 424 L288 458 Z" fill="url(#p3)"/>
+  <g clip-path="url(#mapClip)"><rect x="70" y="140" width="330" height="330" filter="url(#parchTex)"/></g>
+  <path d="M174 156 V424 M288 190 V458" stroke="#2e1d0f" stroke-opacity="0.35" stroke-width="3"/>
+  <path d="M60 190 L174 156 L288 190 L402 156 L402 424 L288 458 L174 424 L60 458 Z" fill="none" stroke="#2e1d0f" stroke-opacity="0.55" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#mapClip)">
+    <path d="M118 396 Q 132 326 206 306 Q 268 284 332 298.1" fill="none" stroke="#d93a2b" stroke-width="19" stroke-linecap="round" stroke-dasharray="17 27"/>
+  </g>
+  <ellipse cx="340" cy="302.1" rx="22" ry="8" fill="#000" opacity="0.3"/>
+  <g>
+    <circle cx="118" cy="396" r="28" fill="#2e1d0f" stroke="#ecd9ab" stroke-width="4"/>
+    <path fill="#f7d98a" d="M124.22 409.16V408.79H123.45Q122.63 408.79 122.02 408.22Q121.41 407.64 121.41 406.83V382.77H121.05Q120.13 383.37 118.87 383.79Q117.62 384.22 116.27 384.49Q114.93 384.76 113.74 384.92Q112.56 385.08 111.79 385.14V385.51H112.6Q113.66 385.51 114.27 386.04Q114.89 386.58 114.89 387.91V406.8Q114.89 407.61 114.3 408.2Q113.71 408.79 112.86 408.79H112.08L112.05 409.16Z"/>
+  </g>
+  <g>
+    <circle cx="206" cy="306" r="28" fill="#2e1d0f" stroke="#ecd9ab" stroke-width="4"/>
+    <path fill="#f7d98a" d="M197.78 301.73 195.66 295.56Q196.69 294.65 198.17 294.04Q199.65 293.43 201.36 293.1Q203.08 292.77 204.74 292.77Q207.62 292.77 209.91 293.67Q212.2 294.57 213.51 296.25Q214.82 297.92 214.82 300.3Q214.82 302.09 214.05 303.72Q213.28 305.35 212.04 306.79Q210.79 308.22 209.33 309.46Q207.87 310.71 206.45 311.72Q205.03 312.74 203.92 313.53H211.23Q212.34 313.53 213.21 313.13Q214.08 312.73 214.8 311.91Q215.52 311.08 216.15 309.79H216.52L214.16 319.16H195.73V318.79Q197.26 316.98 198.94 315.07Q200.61 313.16 202.2 311.21Q203.79 309.26 205.08 307.3Q206.36 305.34 207.13 303.43Q207.89 301.52 207.89 299.7Q207.89 297.18 206.59 295.75Q205.28 294.31 203.04 294.47Q200.67 294.63 199.4 296.46Q198.14 298.3 198.15 301.73Z"/>
+  </g>
+  <g filter="url(#softShadow)">
+    <path d="M340 300.1 C310.4 253.3 262 210.4 262 148 A78 78 0 1 1 418 148 C418 210.4 369.6 253.3 340 300.1 Z" fill="url(#pinRed)" stroke="#7c1a10" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+  <circle cx="340" cy="148" r="69" fill="none" stroke="#e3b04b" stroke-width="4"/>
+  <g transform="translate(340 152) scale(0.74)"><g transform="rotate(-42)">
+      <path fill="#f4ead2" stroke="#7c1a10" stroke-width="3" stroke-linejoin="round" d="M-8 22 L-8 -60 L0 -76 L8 -60 L8 22 Z"/>
+      <path stroke="#b9ab8c" stroke-width="3" d="M0 -62 V16"/>
+      <rect x="-24" y="20" width="48" height="11" rx="4" fill="#e3b04b" stroke="#7c1a10" stroke-width="3"/>
+      <rect x="-5" y="31" width="10" height="20" fill="#2e1d0f"/>
+      <circle cy="56" r="8" fill="#e3b04b" stroke="#7c1a10" stroke-width="3"/>
+    </g><g transform="rotate(42)">
+      <path fill="#f4ead2" stroke="#7c1a10" stroke-width="3" stroke-linejoin="round" d="M-8 22 L-8 -60 L0 -76 L8 -60 L8 22 Z"/>
+      <path stroke="#b9ab8c" stroke-width="3" d="M0 -62 V16"/>
+      <rect x="-24" y="20" width="48" height="11" rx="4" fill="#e3b04b" stroke="#7c1a10" stroke-width="3"/>
+      <rect x="-5" y="31" width="10" height="20" fill="#2e1d0f"/>
+      <circle cy="56" r="8" fill="#e3b04b" stroke="#7c1a10" stroke-width="3"/>
+    </g></g>
+
+</svg>

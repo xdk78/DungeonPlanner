@@ -122,6 +122,19 @@ local function options()
 							ns.Integrations.SetMinimapShown(v)
 						end,
 					},
+					gameIcon = {
+						type = "toggle",
+						order = 5.5,
+						name = L["Game map icon"],
+						desc = L["The minimap button and the planner's window show the game's map icon instead of Dungeon Planner's own. The window changes after /reload."],
+						get = function()
+							return get({ "gameIcon" })
+						end,
+						set = function(_, v)
+							set({ "gameIcon" }, v)
+							ns.Integrations.RefreshLauncherIcon()
+						end,
+					},
 					coords = {
 						type = "toggle",
 						order = 6,

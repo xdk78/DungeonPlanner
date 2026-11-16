@@ -47,7 +47,7 @@ differently:
 ```
 
 - **Header** (`UI/Window.lua`, `UI/MainFrame.lua`, `UI/InstancePage.lua`): the game's title bar with the title and
-  the close button, the map icon in the portrait ring; under the title bar, right of the ring, the header row: on an
+  the close button, the addon's logo in the portrait ring; under the title bar, right of the ring, the header row: on an
   instance page a back button, the **instance picker** (below) and the **plan picker** (recommended plans marked
   with the raid star), the plan menu ("...") and Undo; on the right the settings button (options and language). The
   header's tooltips open below their control, never over the next one.
@@ -273,7 +273,7 @@ this API family and is guarded.
 
 | Piece | The game's part | Drawn fallback | Status |
 |---|---|---|---|
-| Window | `ButtonFrameTemplate`: the metal nine-slice frame (`PortraitFrameTemplate` layout) with the portrait ring (the map icon, `SetPortraitToAsset`), the title bar, the dark rock `Bg` (tinted `page`), the red close button (our handler); its inset and button bar hidden (`ButtonFrameTemplate_HideButtonBar`) | stone in the metal dialog edge tinted gold-bronze, a dark header strip with the emblem in a gold ring, `UIPanelCloseButton` | Template and helpers seen (NeedRoll, DBM, Baganator; `PortraitFrameTemplate` GearQuest Forever) |
+| Window | `ButtonFrameTemplate`: the metal nine-slice frame (`PortraitFrameTemplate` layout) with the portrait ring (the addon's logo, `SetPortraitToAsset`), the title bar, the dark rock `Bg` (tinted `page`), the red close button (our handler); its inset and button bar hidden (`ButtonFrameTemplate_HideButtonBar`) | stone in the metal dialog edge tinted gold-bronze, a dark header strip with the emblem in a gold ring, `UIPanelCloseButton` | Template and helpers seen (NeedRoll, DBM, Baganator; `PortraitFrameTemplate` GearQuest Forever) |
 | Run mode window | the same template without the portrait (`ButtonFrameTemplate_HidePortrait`, layout `ButtonFrameTemplateNoPortrait`) | as above | Seen (Baganator, OpenMap, DBM) |
 | Inset panels (`W.Panel`) | the `InsetFrameTemplate` nine-slice layout (its dark bevel and inner shadow) on a child at the panel's level (`NineSlicePanelTemplate`, following the panel's level) over the inset's marble `Interface\FrameGeneral\UI-Background-Marble`, tiled and warmed | a dark fill with `Interface\Tooltips\UI-Tooltip-Border` tinted gold-bronze | Layout seen (Auctionator; `InsetFrameTemplate` in WhatsTraining's Forever pages); marble inferred, guarded |
 | Section headers (`W.SectionHeader`, `W.Heading(..., band)`, Gear's list headers) | a band of `Interface\QuestFrame\UI-QuestLogTitleHighlight` (the quest log's header glow), added and tinted gold, under a gold heading, with a gold rule | the heading and the rule | File seen (GearQuest Forever, NeedRoll, DBM) |
@@ -479,7 +479,7 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 - Notes on a narrow window: the objectives under the bosses, the run buttons on two lines; the header bands behind
   Plan, Progress, Bosses, Objectives, Runs, Party and the Share sections, each on its heading's line.
 
-- The window: the game's frame with the map icon in the portrait ring, the title in the title bar, the header row
+- The window: the game's frame with the addon's logo in the portrait ring, the title in the title bar, the header row
   beside the ring (nothing under the ring), the close button; the rock warmed by the `page` tint; the inset panels'
   bevel and marble (too light or too dark?); the header band behind "Steps", "Party" and the Gear list's sections; the
   red panel buttons (Make an editable copy, dialogs); the minimal scroll bars in lists; the list hover and selection

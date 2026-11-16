@@ -34,6 +34,7 @@ uv run --script tools/minimap_art.py --game <client folder> --work <scratch> [--
 luacheck .                                 # lint, must be clean (CI)
 lua tests/ui_dump.lua --out <work dir>      # UI views as JSON + layout lint (CI; "Seeing the UI" below)
 lua tools/gen_textures.lua                 # regenerate Media/*.tga
+uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga from Media/Logo/*.svg
 ```
 
 ## Changes

@@ -65,6 +65,9 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
   strategy notes were corrected against those guides.
 - Polish interface (automatic with WoW Po Polsku, or chosen in the settings) and English; a colour-blind setting;
   minimap button, Addon Compartment, key bindings (none set for you), options in the game's Settings panel, profiles.
+- **Its own logo**: a scroll map with a numbered route to a boss, drawn for the addon. It is the icon in the addon
+  list, the Addon Compartment, the minimap button and the window's portrait ring; Settings > Game map icon brings
+  back the game's map icon for the minimap button and the window.
 - `/dp debug` (what this client provides, self-tests), `/dp scan` (diagnostics for bug reports) and a public API for
   other addons (docs/API.md).
 

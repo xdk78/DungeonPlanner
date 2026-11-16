@@ -133,7 +133,7 @@ end
 --
 -- The game's own window where the client has it (ButtonFrameTemplate: the metal nine-slice frame with the round
 -- portrait ring, the textured title bar with the title in Friz Quadrata gold, the dark rock background, the red close
--- button; its inset and button bar are not used), with the map icon in the portrait ring. Without it: the drawn
+-- button; its inset and button bar are not used), with the launcher icon in the portrait ring. Without it: the drawn
 -- window, the stone inside the game's metal dialog edge tinted gold-bronze, a dark header strip with the emblem (the
 -- map icon in a gold ring) and the title, the game's close button.
 --
@@ -174,7 +174,8 @@ local function nativeChrome(f, title, compact)
 			pcall(hidePortrait, f)
 		end
 	else
-		-- The map icon in the portrait ring (PortraitFrameMixin; else the game's round-portrait function).
+		-- The launcher icon (our logo, or the game's map icon: Art.ApplyLauncher) in the portrait ring
+		-- (PortraitFrameMixin; else the game's round-portrait function).
 		local portrait = type(f.PortraitContainer) == "table" and f.PortraitContainer.portrait or f.portrait
 		local icon = Art.SPECS.launcher.file
 		if type(f.SetPortraitToAsset) == "function" then
@@ -231,7 +232,7 @@ local function drawnChrome(f, header, title)
 	header.line = S.Hairline(header)
 	header.line:SetPoint("BOTTOMLEFT")
 	header.line:SetPoint("BOTTOMRIGHT")
-	-- Emblem: the map icon in a gold ring.
+	-- Emblem: the launcher icon in a gold ring.
 	f.emblem = CreateFrame("Frame", nil, header)
 	f.emblem:SetSize(SZ.header - 12, SZ.header - 12)
 	f.emblem:SetPoint("LEFT", SP.sm, 0)

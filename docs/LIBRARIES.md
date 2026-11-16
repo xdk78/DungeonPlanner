@@ -53,3 +53,21 @@ nothing), HereBeDragons (no world-map pins).
 |---|---|---|---|
 | `Media/Fonts/AlegreyaSans-Medium.ttf` (Alegreya Sans 2.004, static Medium) | [google/fonts `ofl/alegreyasans`](https://github.com/google/fonts/tree/main/ofl/alegreyasans), upstream [huertatipografica/Alegreya-Sans](https://github.com/huertatipografica/Alegreya-Sans) | SIL Open Font License 1.1 (`Media/Fonts/OFL.txt`) | The Polish UI's face when WoW Po Polsku's Friz Quadrata with Polish letters cannot be loaded (the game's own Friz Quadrata has no a/c/e/n/s/z with Polish diacritics). English text keeps the game's font. Checked before bundling: every Polish letter is in the font (fontTools) |
 | `Media/Fonts/DPSans.ttf` ("DP Sans Medium") | Made from `AlegreyaSans-Medium.ttf` above with fontTools: Latin subset, no layout tables, no hinting, one format-4 cmap, renamed (`Media/Fonts/FONTLOG.txt`) | SIL Open Font License 1.1, a Modified Version (`Media/Fonts/OFL.txt`) | The same face in plain TrueType, tried after the full file; it tells a problem with the file apart from one with the folder (docs/COMPATIBILITY.md, "Fonts on this client") |
+
+## Logo
+
+Dungeon Planner's logo is drawn for the project, as vector art, and is part of it under the project's **MIT licence**
+(`LICENSE`). It uses no game art, no game logo and no icon from the game: a parchment scroll, a dashed route in the
+map's route red between numbered stops, and a boss marker (a skull on a red disc), on a dark wood tile with a gold rim.
+
+| File | What | Ships in the addon |
+|---|---|---|
+| `Media/Logo/logo.svg` | The logo (source); `logo-400.png` and `logo-1024.png` are its renders for the CurseForge page | No |
+| `Media/Logo/logo-wordmark.svg` | The logo with the name, for banners (`logo-wordmark.png`, 1600 x 400) | No |
+| `Media/Logo/logo-icon.svg` | The in-game cut: the scroll full bleed, without numbers, so it reads at 16-64 px | No |
+| `Media/Logo/logo-folded.svg`, `logo-compass.svg` | Two alternatives that were not chosen (a folded map with a boss pin; a compass bezel around a map) | No |
+| `Media/LogoIcon.tga` | `logo-icon.svg` at 64 x 64: the TOC's `IconTexture`, the minimap button, the window's emblem (`UI/Art.lua`, `launcher`) | Yes |
+
+The numbers on the stops and the letters of the wordmark are outlines of [Cinzel](https://github.com/NDISCOVER/Cinzel)
+(SIL Open Font License 1.1); no font file is included. `uv run --script tools/render_logo.py` renders the PNGs and the
+TGA from the SVGs (`Media/Logo/` stays out of the release zip, `.pkgmeta`).

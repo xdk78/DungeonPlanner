@@ -218,13 +218,25 @@ end
 
 -- Launcher and minimap button ---------------------------------------------------------------------------------------------
 
--- The game's map icon (game-native, like the other buttons on the minimap); our own icon if the client lacks it.
+-- Our logo (Media/LogoIcon.tga, shipped with the addon), or the game's map icon when the player picks it
+-- (settings.gameIcon); the drawn route icon if the client lacks the game's.
 function Integrations.LauncherIcon()
-	local path = ns.Art and ns.Art.SPECS.launcher.file
-	if not path or ns.Art.FileExists(path) == false then
+	local spec = ns.Art and ns.Art.SPECS.launcher
+	local path = spec and spec.file
+	if not path or (spec ~= ns.Art.SPECS.launcherLogo and ns.Art.FileExists(path) == false) then
 		return ns.Style.MEDIA .. "Icon"
 	end
 	return path
+end
+
+-- After the setting changes: the minimap button takes the new icon at once (LibDBIcon follows the data object).
+function Integrations.RefreshLauncherIcon()
+	ns.Art.ApplyLauncher(ns.db.settings)
+	local LDB = LibStub and LibStub("LibDataBroker-1.1", true)
+	local object = LDB and LDB:GetDataObjectByName(ns.name)
+	if object then
+		object.icon = Integrations.LauncherIcon()
+	end
 end
 
 local function tooltip(tt)
@@ -319,6 +331,7 @@ function Integrations.Init()
 	Integrations.status.dungeonJournal = Integrations.HasDungeonJournal()
 	Integrations.status.polish = Integrations.PolishTranslationLoaded()
 	ns:On("PROFILE_CHANGED", Integrations, function()
+		Integrations.RefreshLauncherIcon()
 		local icon = LibStub and LibStub("LibDBIcon-1.0", true)
 		if icon and icon.Refresh then
 			pcall(icon.Refresh, icon, ns.name, ns.db.minimap)

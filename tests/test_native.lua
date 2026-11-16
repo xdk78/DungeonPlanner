@@ -137,7 +137,7 @@ T.case("Native window: the game's framed window, insets, tabs under the window, 
 	T.eq(frame.title:GetText(), ns.title, "the title in the title bar")
 	T.eq(frame.title:GetFontObject(), S.fonts.title, "in our font (Polish letters)")
 	T.ok(frame._buttonBarHidden and not frame.Inset:IsShown(), "no button bar, no template inset")
-	T.eq(frame.emblem:GetTexture(), Art.SPECS.launcher.file, "the map icon in the portrait ring")
+	T.eq(frame.emblem:GetTexture(), Art.SPECS.launcher.file, "the addon's logo in the portrait ring")
 	T.ok(frame.insets.top > 40 and frame.insets.left < 10, "content under the header row, inside the edge")
 	-- The close button is ours (the template's would go through the game's panel code).
 	frame.close:GetScript("OnClick")(frame.close)

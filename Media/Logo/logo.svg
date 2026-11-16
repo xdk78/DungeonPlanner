@@ -1,0 +1,95 @@
+<!-- Dungeon Planner logo: a scroll map with a numbered route to a boss. Part of Dungeon Planner, MIT licence (LICENSE). The numbers and letters are outlines of Cinzel (SIL Open Font License 1.1). PNG and TGA renders: tools/render_logo.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+    <stop offset="0" stop-color="#3d2a18"/>
+    <stop offset="0.55" stop-color="#231710"/>
+    <stop offset="1" stop-color="#0f0a06"/>
+  </radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0" stop-color="#f7d98a"/>
+    <stop offset="0.45" stop-color="#e3b04b"/>
+    <stop offset="1" stop-color="#8c6631"/>
+  </linearGradient>
+  <clipPath id="tile"><rect width="512" height="512" rx="88"/></clipPath>
+  <filter id="wood" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.004 0.085" numOctaves="3" seed="11"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1.6 0 -0.62"/>
+  </filter>
+  <filter id="grain" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 0.9  0 0 0 0 0.7  0 1.3 0 0 -0.72"/>
+  </filter>
+  <filter id="parchTex" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="5"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.27  0 0 0 0 0.08  1.4 0 0 0 -0.64"/>
+  </filter>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+    <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+  </filter>
+  <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
+    <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.5"/>
+  </filter>
+  <radialGradient id="redDisc" cx="40%" cy="35%" r="70%">
+    <stop offset="0" stop-color="#f0563f"/>
+    <stop offset="0.6" stop-color="#d93a2b"/>
+    <stop offset="1" stop-color="#a5251a"/>
+  </radialGradient>
+
+  <linearGradient id="roll" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#b38d52"/>
+    <stop offset="0.45" stop-color="#ecd9ab"/>
+    <stop offset="1" stop-color="#9c7740"/>
+  </linearGradient>
+  <linearGradient id="sheet" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ecd9ab"/>
+    <stop offset="1" stop-color="#dcc08a"/>
+  </linearGradient>
+  <clipPath id="sheetClip"><path d="M96 128 C196 114 316 140 416 126 L416 386 C316 400 196 372 96 386 Z"/></clipPath>
+
+</defs>
+
+  <g clip-path="url(#tile)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <rect width="512" height="512" filter="url(#wood)" opacity="0.75"/>
+    <rect width="512" height="512" filter="url(#grain)" opacity="0.35"/>
+  </g>
+  <rect x="7" y="7" width="498" height="498" rx="81" fill="none" stroke="url(#rim)" stroke-width="10"/>
+  <rect x="17" y="17" width="478" height="478" rx="71" fill="none" stroke="#000" stroke-opacity="0.45" stroke-width="3"/>
+
+  <g filter="url(#shadow)">
+    <path d="M96 128 C196 114 316 140 416 126 L416 386 C316 400 196 372 96 386 Z" fill="url(#sheet)" stroke="#a5824a" stroke-width="4"/>
+  </g>
+  <g clip-path="url(#sheetClip)">
+    <rect x="80" y="100" width="352" height="310" filter="url(#parchTex)"/>
+  </g>
+  <g filter="url(#softShadow)">
+    <rect x="62" y="104" width="54" height="304" rx="27" fill="url(#roll)"/>
+    <rect x="396" y="104" width="54" height="304" rx="27" fill="url(#roll)"/>
+  </g>
+  <path d="M89 110 V402 M423 110 V402" stroke="#000" stroke-opacity="0.12" stroke-width="2"/>
+  <rect x="75" y="78" width="28" height="28" rx="7" fill="#8c6631" stroke="#2e1d0f" stroke-width="3"/>
+  <rect x="75" y="406" width="28" height="28" rx="7" fill="#8c6631" stroke="#2e1d0f" stroke-width="3"/>
+  <rect x="409" y="78" width="28" height="28" rx="7" fill="#8c6631" stroke="#2e1d0f" stroke-width="3"/>
+  <rect x="409" y="406" width="28" height="28" rx="7" fill="#8c6631" stroke="#2e1d0f" stroke-width="3"/>
+  <path d="M156 338 Q 160 270 222 230 Q 286 236 300 322 Q 352 290 350 184" fill="none" stroke="#d93a2b" stroke-width="19" stroke-linecap="round" stroke-dasharray="17 27"/>
+  <g>
+    <circle cx="156" cy="338" r="28" fill="#2e1d0f" stroke="#ecd9ab" stroke-width="4"/>
+    <path fill="#f7d98a" d="M162.22 351.16V350.79H161.45Q160.63 350.79 160.02 350.22Q159.41 349.64 159.41 348.83V324.77H159.05Q158.13 325.37 156.87 325.79Q155.62 326.22 154.27 326.49Q152.93 326.76 151.74 326.92Q150.56 327.08 149.79 327.14V327.51H150.6Q151.66 327.51 152.27 328.04Q152.89 328.58 152.89 329.91V348.8Q152.89 349.61 152.3 350.2Q151.71 350.79 150.86 350.79H150.08L150.05 351.16Z"/>
+  </g><g>
+    <circle cx="222" cy="230" r="28" fill="#2e1d0f" stroke="#ecd9ab" stroke-width="4"/>
+    <path fill="#f7d98a" d="M213.78 225.73 211.66 219.56Q212.69 218.65 214.17 218.04Q215.65 217.43 217.36 217.1Q219.08 216.77 220.74 216.77Q223.62 216.77 225.91 217.67Q228.2 218.57 229.51 220.25Q230.82 221.92 230.82 224.3Q230.82 226.09 230.05 227.72Q229.28 229.35 228.04 230.79Q226.79 232.22 225.33 233.46Q223.87 234.71 222.45 235.72Q221.03 236.74 219.92 237.53H227.23Q228.34 237.53 229.21 237.13Q230.08 236.73 230.8 235.91Q231.52 235.08 232.15 233.79H232.52L230.16 243.16H211.73V242.79Q213.26 240.98 214.94 239.07Q216.61 237.16 218.2 235.21Q219.79 233.26 221.08 231.3Q222.36 229.34 223.13 227.43Q223.89 225.52 223.89 223.7Q223.89 221.18 222.59 219.75Q221.28 218.31 219.04 218.47Q216.67 218.63 215.4 220.46Q214.14 222.3 214.15 225.73Z"/>
+  </g><g>
+    <circle cx="300" cy="322" r="28" fill="#2e1d0f" stroke="#ecd9ab" stroke-width="4"/>
+    <path fill="#f7d98a" d="M299.09 308.84Q301.91 308.82 303.9 309.57Q305.9 310.32 306.98 311.7Q308.06 313.08 308.06 315.03Q308.06 316.54 307.46 317.67Q306.85 318.8 305.86 319.51Q304.88 320.22 303.73 320.46Q302.58 320.7 301.52 320.41Q302.65 320.41 303.94 320.78Q305.24 321.14 306.41 321.98Q307.57 322.81 308.32 324.21Q309.06 325.6 309.06 327.65Q309.06 330.07 307.95 331.97Q306.85 333.86 304.96 335.13Q303.08 336.4 300.7 336.99Q298.33 337.58 295.77 337.44Q293.22 337.31 290.82 336.34L290.89 335.97Q293.17 336.01 295.19 335.41Q297.21 334.81 298.77 333.64Q300.33 332.48 301.23 330.83Q302.13 329.18 302.13 327.15Q302.13 324.93 301.09 323.58Q300.05 322.23 298.46 321.6Q296.86 320.97 295.15 320.97L295.22 320.6Q296.92 320.63 298.39 319.81Q299.86 319 300.71 317.55Q301.56 316.1 301.39 314.28Q301.3 312.96 300.66 312.1Q300.03 311.24 299.05 310.85Q298.07 310.46 296.88 310.55Q294.64 310.7 293.65 312.38Q292.66 314.06 292.75 317.28H292.38L290.56 311.47Q291.86 310.32 294.06 309.59Q296.25 308.87 299.09 308.84Z"/>
+  </g>
+  <circle cx="350" cy="184" r="60" fill="url(#redDisc)" stroke="#7c1a10" stroke-width="6" filter="url(#softShadow)"/>
+  <g transform="translate(350 185) scale(0.9)">
+    <path fill="#f4ead2" d="M-40 6 C-40 -33 -22 -50 0 -50 C22 -50 40 -33 40 6 C40 18 35 25 27 28 L27 41 C27 45 24 47 20 47 L-20 47 C-24 47 -27 45 -27 41 L-27 28 C-35 25 -40 18 -40 6 Z"/>
+    <path fill="#3a120c" d="M-27 2 C-27 -9 -18 -12 -9 -10 C-4 -9 -3 -4 -4 2 C-5 10 -11 14 -18 14 C-24 14 -27 9 -27 2 Z"/>
+    <path fill="#3a120c" d="M27 2 C27 -9 18 -12 9 -10 C4 -9 3 -4 4 2 C5 10 11 14 18 14 C24 14 27 9 27 2 Z"/>
+    <path fill="#3a120c" d="M0 15 L-6 27 L6 27 Z"/>
+    <path stroke="#3a120c" stroke-width="4" stroke-linecap="round" d="M-11 35 V46 M0 35 V47 M11 35 V46"/>
+  </g>
+
+</svg>

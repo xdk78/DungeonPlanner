@@ -105,8 +105,12 @@ Art.SPECS = {
 		coords = { 20 / 64, 39 / 64, 1 / 64, 20 / 64 } },
 	partyDisc_DAMAGER = { atlas = "UI-LFG-RoleIcon-DPS", file = LFG_ROLES,
 		coords = { 20 / 64, 39 / 64, 22 / 64, 41 / 64 } },
-	-- Launcher (minimap button, compartment) and the window's emblem
-	launcher = { file = ICONS .. "INV_Misc_Map_01", round = true },
+	-- Launcher (minimap button, run mode's open button) and the window's emblem: Dungeon Planner's own logo
+	-- (Media/LogoIcon.tga, rendered from Media/Logo/logo-icon.svg by tools/render_logo.py; the TOC's IconTexture too),
+	-- or the game's map icon with the setting "Game map icon" (settings.gameIcon, Art.ApplyLauncher).
+	launcher = { file = "Interface\\AddOns\\DungeonPlanner\\Media\\LogoIcon" },
+	launcherLogo = { file = "Interface\\AddOns\\DungeonPlanner\\Media\\LogoIcon" },
+	launcherGame = { file = ICONS .. "INV_Misc_Map_01", round = true }, -- classic
 	-- Run mode, and the emblems on the plate drawn where the game has no picture of an instance
 	runMode = { file = ICONS .. "Ability_Rogue_Sprint", round = true },
 	emblemDungeon = { atlas = "Dungeon", file = ICONS .. "Spell_Arcane_PortalStormWind", round = true }, -- OM
@@ -127,6 +131,14 @@ Art.SPECS = {
 	listSelected = { atlas = "Options_List_Active" },
 	headerStrip = { file = "Interface\\QuestFrame\\UI-QuestLogTitleHighlight" }, -- GearQuest Forever, NR, DBM
 }
+
+-- Which icon the launcher shows: our logo, or the game's map icon when the player picks it (settings.gameIcon). Every
+-- user of the "launcher" key reads it from here; the window and run mode take a change on their next build (/reload).
+function Art.ApplyLauncher(settings)
+	local game = type(settings) == "table" and settings.gameIcon == true
+	Art.SPECS.launcher = game and Art.SPECS.launcherGame or Art.SPECS.launcherLogo
+	return Art.SPECS.launcher
+end
 
 local atlasCache = {}
 
