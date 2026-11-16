@@ -136,9 +136,9 @@ function MapCanvas.Create(parent, cb)
 	view.noArt:Hide()
 
 	-- Who drew the map: "Map by Santiago Reyes" on his bundled maps (Data/ReyesMaps.lua), or the addon a map and its
-	-- boss pins come from (Data/Providers.lua): a small chip
-	-- in the corner, on a dark plate so the art under it does not show through. A compact map (run mode) leaves it to
-	-- the window around it (view.creditText).
+	-- boss pins come from (Data/Providers.lua): a small chip in the map's top-left corner (view:PlaceCredit), on a
+	-- dark plate so the art under it does not show through. A compact map (run mode) leaves it to the window around it
+	-- (view.creditText).
 	view.credit = W.Text(edge, "caption", "ink")
 	view.credit:SetPoint("TOPLEFT", FRAME_INSET + SP.sm, -FRAME_INSET - SP.sm)
 	view.credit:Hide()
@@ -182,14 +182,54 @@ function MapCanvas.Install(view)
 		return GRID_W, GRID_H
 	end
 
+	-- The plan's points on this floor in map space (0..1 of the drawn picture): floating panels must not cover them.
+	-- Cached per plan revision, floor and map alignment.
+	function view:ContentMapPoints()
+		local plan = self.cb.getPlan and self.cb.getPlan()
+		if not plan then
+			return {}
+		end
+		local key = tostring(plan.id) .. ":" .. tostring(ns.DB and ns.DB.Revision(plan) or 0) .. ":"
+			.. tostring(self.cb.getFloor()) .. ":" .. tostring(self.xf)
+		if self.contentKey ~= key then
+			local pts = {}
+			for _, p in ipairs(self:ContentPoints()) do
+				local x, y = self:ToMap(p[1], p[2])
+				if type(x) == "number" and type(y) == "number" then
+					pts[#pts + 1] = { x, y }
+				end
+			end
+			self.contentKey, self.contentPts = key, pts
+		end
+		return self.contentPts
+	end
+
+	-- The whole map at zoom 1 (MapLayout.MapFit): as large as the frame allows, centred, the floating panels (the
+	-- legend, the map's controls: view.fitAvoid() gives their boxes) over its edges but clear of the plan. Cached per
+	-- size, panels and plan.
+	function view:FitBox()
+		local w, h = self:BaseSize()
+		local reserve = self.reserveRight or 0
+		local avoid = self.fitAvoid and self.fitAvoid() or nil
+		local parts = { w, h, self:GetWidth(), self:GetHeight(), reserve }
+		for _, r in ipairs(avoid or {}) do
+			parts[#parts + 1] = table.concat(r, ",")
+		end
+		local pts = avoid and self:ContentMapPoints() or nil
+		parts[#parts + 1] = tostring(self.contentKey)
+		local key = table.concat(parts, ":")
+		if self.fitKey ~= key then
+			self.fitKey = key
+			self.fitBox = ns.MapLayout.MapFit({ viewW = self:GetWidth(), viewH = self:GetHeight(), baseW = w, baseH = h,
+				inset = FRAME_INSET, reserveRight = reserve, avoid = avoid, points = pts })
+		end
+		return self.fitBox
+	end
+
 	-- Scale that fits the whole map inside the frame.
 	function view:FitScale()
-		local w, h = self:BaseSize()
-		local vw, vh = self:GetWidth() - 2 * FRAME_INSET - (self.reserveRight or 0), self:GetHeight() - 2 * FRAME_INSET
-		if vw <= 0 or vh <= 0 then
-			return 1
-		end
-		return math.min(vw / w, vh / h)
+		local box = self:FitBox()
+		return box and box.scale > 0 and box.scale or 1
 	end
 
 	function view:Scale()
@@ -207,8 +247,13 @@ function MapCanvas.Install(view)
 		local s = self:Scale()
 		local cw, ch = w * s, h * s
 		local vw, vh = self:GetWidth(), self:GetHeight()
-		-- Narrower than the room left of the legend: centred there. Wider: where Fit or the pointer put it, kept in
-		-- reach (re-centring it on the whole view would slide it under the legend).
+		-- The whole map (zoom 1): where the fit puts it (centred, clear of the legend). Zoomed in and narrower than the
+		-- room left of the legend: centred there. Wider: where the pointer put it, kept in reach.
+		local box = math.abs((self.zoom or 1) - 1) < 1e-6 and self:FitBox() or nil
+		if box then
+			self.ox, self.oy = box.ox, box.oy
+			return
+		end
 		if cw <= vw - (self.reserveRight or 0) then
 			self.ox = (vw - (self.reserveRight or 0) - cw) / 2
 		else
@@ -227,10 +272,31 @@ function MapCanvas.Install(view)
 		self:ClampPan()
 		canvas:ClearAllPoints()
 		canvas:SetPoint("TOPLEFT", self, "TOPLEFT", self.ox, -self.oy)
+		self:PlaceCredit()
+	end
+
+	-- The credit chip sits in the map's own top-left corner (inside the picture, not on the frame's empty band above
+	-- it), or in the frame's corner when that corner of the map is scrolled out of view.
+	function view:PlaceCredit()
+		local x = math.max(FRAME_INSET, self.ox or 0) + SP.sm
+		local y = math.max(FRAME_INSET, self.oy or 0) + SP.sm
+		self.credit:ClearAllPoints()
+		self.credit:SetPoint("TOPLEFT", self, "TOPLEFT", math.floor(x + 0.5), -math.floor(y + 0.5))
+	end
+
+	-- Fit the whole map again when the panels or the plan moved its fit (zoom 1 only). Returns true when it laid out
+	-- (and drew) the map.
+	function view:Refit()
+		if math.abs((self.zoom or 1) - 1) >= 1e-6 or self:FitBox() == self.laidFit then
+			return false
+		end
+		self:Layout()
+		return true
 	end
 
 	function view:Layout()
 		self:MoveCanvas()
+		self.laidFit = math.abs((self.zoom or 1) - 1) < 1e-6 and self.fitBox or nil
 		local w, h = self:BaseSize()
 		local s = self:Scale()
 		canvas:SetSize(math.max(1, w * s), math.max(1, h * s))

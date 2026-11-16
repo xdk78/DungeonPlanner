@@ -446,6 +446,55 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	ns.db.ui.showLegend = nil
 end)
 
+T.case("MapLayout.MapFit: the whole map as large as the view allows, centred, the legend and controls clear of the plan", function()
+	local M = ns.MapLayout
+	-- The legend (top right, 219 wide with its margin, 300 tall) and the controls (bottom left) of a 1000 x 700 view.
+	local legend = { 1000 - 219, 15, 1000 - 15, 315 }
+	local controls = { 15, 700 - 15 - 80, 15 + 120, 700 - 15 }
+	local function o(points, extra)
+		local t = { viewW = 1000, viewH = 700, baseW = 1002, baseH = 668, inset = 7, reserveRight = 219,
+			avoid = { legend, controls }, points = points }
+		for k, v in pairs(extra or {}) do
+			t[k] = v
+		end
+		return t
+	end
+	local function clear(fit, points)
+		for _, p in ipairs(points) do
+			local x, y = fit.ox + p[1] * 1002 * fit.scale, fit.oy + p[2] * 668 * fit.scale
+			for _, r in ipairs({ legend, controls }) do
+				if x > r[1] - 30 + 1e-6 and x < r[3] + 30 - 1e-6 and y > r[2] - 30 + 1e-6 and y < r[4] + 30 - 1e-6 then
+					return false
+				end
+			end
+		end
+		return true
+	end
+	-- No legend, no points: as wide as the view (the map is wider than the view's shape), centred.
+	local fit = M.MapFit({ viewW = 1000, viewH = 700, baseW = 1002, baseH = 668, inset = 7 })
+	T.ok(math.abs(fit.scale - (986 / 1002)) < 1e-6, "fills the width")
+	T.ok(math.abs(fit.ox - 7) < 1e-6 and math.abs(fit.oy - (7 + (686 - 668 * fit.scale) / 2)) < 1e-6, "centred")
+	-- The plan away from the panels: the same size and place; the legend floats over the map's edge.
+	local away = { { 0.5, 0.5 }, { 0.3, 0.2 }, { 0.6, 0.9 } }
+	local over = M.MapFit(o(away))
+	T.eq(over.scale, fit.scale, "no band above and below for the legend")
+	T.eq(over.ox, fit.ox)
+	-- A point under the legend, one level with the controls: smaller, until both are clear.
+	local near = { { 0.8, 0.1 }, { 0.1, 0.97 }, { 0.5, 0.5 } }
+	local shrunk = M.MapFit(o(near))
+	T.ok(shrunk.scale < fit.scale, "smaller only as needed")
+	T.ok(clear(shrunk, near), "no point under a panel")
+	-- A point below the legend (not level with it) does not count.
+	local below = M.MapFit(o({ { 0.97, 0.8 } }))
+	T.eq(below.scale, fit.scale, "below the legend: the full size")
+	-- Nothing clears it: the size beside the legend, centred in the room it leaves.
+	local least = M.MapFit(o({ { 1, 0 }, { 0, 1 } }, { viewW = 600, avoid = { { 600 - 219, 15, 585, 315 }, controls } }))
+	local room = 600 - 14 - 219
+	T.ok(math.abs(least.scale - math.min(room / 1002, 686 / 668)) < 1e-6, "the size beside the legend")
+	T.ok(math.abs(least.ox - (7 + (room - 1002 * least.scale) / 2)) < 1e-6, "centred beside the legend")
+	T.eq(M.MapFit({ viewW = 0, viewH = 1, baseW = 1, baseH = 1 }), nil)
+end)
+
 T.case("MapLayout.FitView frames points inside the free part of the view", function()
 	local fit = ns.MapLayout.FitView({ { 0.4, 0.4 }, { 0.5, 0.5 } },
 		{ viewW = 800, viewH = 600, baseW = 1000, baseH = 667, fitScale = 0.8, inset = 8, reserveRight = 200 })

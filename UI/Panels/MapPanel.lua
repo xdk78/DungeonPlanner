@@ -14,6 +14,7 @@ local SP, SZ = S.SPACE, S.SIZE
 
 local RAIL = 248 -- the marker editor's width
 local LEGEND_W = 204 -- the legend alone: compact, so it covers little of the map
+local RAIL_INSET = 7 + 8 -- the legend inside the map's gold frame (MapCanvas.FRAME_INSET) with a margin (SP.sm)
 local TOOLS = { "select", "marker", "position", "pull", "route", "draw", "erase" }
 local TOOL_TEXT = {
 	select = "Select",
@@ -383,9 +384,9 @@ function Panel.Create(parent, ctx)
 	-- The drawing tools' line under the toolbar, and the canvas's drawing callbacks (UI/Panels/DrawBar.lua).
 	ns.DrawBar.Build(f, ctx, bar, canvas)
 
-	-- Map controls in the bottom-left corner: labels and icon size.
+	-- Map controls in the bottom-left corner: labels and icon size, inside the gold frame with a margin of their own.
 	local controls = CreateFrame("Frame", nil, canvas.edge)
-	controls:SetPoint("BOTTOMLEFT", 12, 12)
+	controls:SetPoint("BOTTOMLEFT", ns.MapCanvas.FRAME_INSET + SP.sm, ns.MapCanvas.FRAME_INSET + SP.sm)
 	controls:SetSize(120, 80)
 	f.labels = W.Check(controls, L["Labels"], function(on)
 		ctx.showLabels = on
@@ -412,15 +413,34 @@ function Panel.Create(parent, ctx)
 		end,
 	})
 	f.iconSize:SetPoint("TOPLEFT", labelsBox, "BOTTOMLEFT", 0, -SP.xs)
+	f.controls = controls
 
 	-- Legend panel, floating over the map's top-right corner ------------------------------------------------------------
 	local rail = W.Panel(f, "surface", "border")
-	rail:SetPoint("TOPRIGHT", canvas, "TOPRIGHT", -12, -12)
+	rail:SetPoint("TOPRIGHT", canvas, "TOPRIGHT", -RAIL_INSET, -RAIL_INSET)
 	rail:SetWidth(LEGEND_W)
 	rail:SetHeight(200)
 	rail:SetFrameLevel(canvas.edge:GetFrameLevel() + 10)
 	rail:EnableMouse(true)
 	f.rail = rail
+	-- The whole map is fitted so that neither the legend nor the controls cover the plan's points (MapLayout.MapFit):
+	-- their boxes in the map view's pixels (top left origin).
+	canvas.fitAvoid = function()
+		local vw, vh = canvas:GetWidth() or 0, canvas:GetHeight() or 0
+		local inset = ns.MapCanvas.FRAME_INSET + SP.sm
+		local cw, ch = controls:GetWidth() or 0, controls:GetHeight() or 0
+		local rects = { { inset, vh - inset - ch, inset + cw, vh - inset } }
+		if rail:IsShown() and (canvas.reserveRight or 0) > 0 then
+			local rw, rh = rail:GetWidth() or 0, rail:GetHeight() or 0
+			rects[#rects + 1] = { vw - RAIL_INSET - rw, RAIL_INSET, vw - RAIL_INSET, RAIL_INSET + rh }
+		end
+		for _, r in ipairs(rects) do
+			for i = 1, 4 do
+				r[i] = math.floor(r[i] + 0.5)
+			end
+		end
+		return rects
+	end
 
 	-- Legend and layers.
 	local legend = CreateFrame("Frame", nil, rail)
@@ -628,7 +648,7 @@ function Panel.Create(parent, ctx)
 		-- Fitting keeps the map's content clear of the floating legend.
 		local sel = selected()
 		local railShown = sel ~= nil or legendShown()
-		self.canvas.reserveRight = railShown and ((sel and RAIL or LEGEND_W) + 12) or 0
+		self.canvas.reserveRight = railShown and ((sel and RAIL or LEGEND_W) + RAIL_INSET) or 0
 		self:LoadFloor()
 		for tool, b in pairs(self.toolButtons) do
 			b:SetShown(not ro)
@@ -766,11 +786,11 @@ function Panel.Create(parent, ctx)
 		self.routes:SetPoint("TOPLEFT", self.help:IsShown() and self.help or self.legend, "BOTTOMLEFT", 0, -SP.md)
 		self.routes:SetPoint("BOTTOMRIGHT", -SP.md, SP.md)
 		self.rail:ClearAllPoints()
-		self.rail:SetPoint("TOPRIGHT", self.canvas, "TOPRIGHT", -12, -12)
+		self.rail:SetPoint("TOPRIGHT", self.canvas, "TOPRIGHT", -RAIL_INSET, -RAIL_INSET)
 		self.canvas.avoidFrame = self.rail
 		if m then
 			self.rail:SetWidth(RAIL)
-			self.rail:SetPoint("BOTTOM", self.canvas, "BOTTOM", 0, 12)
+			self.rail:SetPoint("BOTTOM", self.canvas, "BOTTOM", 0, RAIL_INSET)
 			ed:ShowMarker(p, m, ro)
 		else
 			self.rail:SetWidth(LEGEND_W)
@@ -778,7 +798,10 @@ function Panel.Create(parent, ctx)
 			self.rail:SetHeight(maxH > 80 and math.min(h, maxH) or h)
 			self.routes.list:SetItems(list)
 		end
-		self.canvas:DrawContent()
+		-- The legend's final size: a whole map (zoom 1) is fitted again around it when that moves the map.
+		if not self.canvas:Refit() then
+			self.canvas:DrawContent()
+		end
 	end
 
 	f:SetScript("OnShow", function(self)
