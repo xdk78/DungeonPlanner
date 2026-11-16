@@ -88,6 +88,8 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- Pulls: a name on two lines has room between its lines ("Dirgehammer" touched the line above), the list sits in an
+  inset, and a recommended plan's pull (marks, note, markers, where it comes in the run) is a card as tall as its text.
 - The Party section no longer leaves its text on the left, a box on the right and an empty half below. A dungeon's party
   is a card of five seats with their role icons, centred at the top, with the assignments under it across the section;
   a raid's eight groups fill their column beside the assignments or pages. Empty lists say so in the middle of their

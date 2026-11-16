@@ -455,9 +455,11 @@ combat ("Drawing is not available in combat.").
 
 ### Pull marks
 
-The pull list takes nearly half the Pulls section (280 to 440 px) and its rows are two lines high, so a pull's name
-wraps instead of being cut ("Dark Iron Summoner patrol (Magmatus)"); a recommended plan's pull shows under its
-name, note and markers where it comes in the run ("Step 4 of 8, before Magmatus").
+The pull list takes nearly half the Pulls section (280 to 440 px), in an inset, and its rows are two lines high with
+3 px between the lines, so a pull's name wraps instead of being cut ("Dark Iron Summoner patrol (Magmatus)") and its
+second line does not touch the first; a recommended plan's pull shows in a card beside the list, as tall as its text:
+the name, the marks, the note, its markers and where it comes in the run ("Step 4 of 8, before Magmatus"), then Show on
+map.
 
 The Pulls editor has, under the name and colour, toggles for the tags (Interrupt, Crowd control, Line of sight, Pull
 with next, Skip, Careful) and the planned Cooldowns and Bloodlust / Heroism, wrapping to the editor's width, then

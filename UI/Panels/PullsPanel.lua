@@ -1,7 +1,8 @@
 -- Pulls tab: the ordered pull list on the left, the selected pull's editor on the right (name, colour, tags, planned
 -- cooldowns and Bloodlust, planned progress, note). Markers join pulls on the Map
 -- tab (Pull tool or the marker editor); "Show on map" highlights a pull there. A read-only plan (a recommended one)
--- shows the pull as formatted text instead of the editor.
+-- shows the pull as formatted text in a card sized to it instead of the editor. The list sits in an inset; its rows
+-- are two lines high with line spacing, so a name that wraps does not touch the line above.
 
 local _, ns = ...
 local S, W, L = ns.Style, ns.Widgets, ns.L
@@ -61,7 +62,9 @@ function Panel.Create(parent, ctx)
 	f.down:SetPoint("LEFT", f.up, "RIGHT", SP.sm, 0)
 
 	-- Rows of two lines: a pull's name ("Dark Iron Summoner patrol (Magmatus)") wraps instead of being cut.
-	f.list = W.List(f, {
+	local box = W.Panel(f)
+	f.listBox = box
+	f.list = W.List(box, {
 		rowHeight = SZ.row2,
 		empty = L["No pulls yet. Add one here, or use the Pull tool on the map."],
 		create = function(row)
@@ -76,6 +79,7 @@ function Panel.Create(parent, ctx)
 			row.text:SetPoint("LEFT", row.swatch, "RIGHT", SP.sm, 0)
 			row.text:SetPoint("RIGHT", row.count, "LEFT", -SP.sm, 0)
 			row.text:SetWordWrap(true)
+			row.text:SetSpacing(3) -- the two lines apart, as in paragraphs
 			if row.text.SetMaxLines then
 				row.text:SetMaxLines(2)
 			end
@@ -112,13 +116,15 @@ function Panel.Create(parent, ctx)
 			f:Refresh()
 		end,
 	})
-	f.list:SetPoint("TOPLEFT", f.add, "BOTTOMLEFT", 0, -SP.md)
-	f.list:SetPoint("BOTTOMLEFT")
-	f.list:SetWidth(LIST_MIN)
+	f.list:SetPoint("TOPLEFT", SP.xs, -SP.xs)
+	f.list:SetPoint("BOTTOMRIGHT", -SP.xs, SP.xs)
+	box:SetPoint("TOPLEFT", f.add, "BOTTOMLEFT", 0, -SP.md)
+	box:SetPoint("BOTTOMLEFT")
+	box:SetWidth(LIST_MIN)
 	function f:SizeList()
 		local w = math.floor(math.max(LIST_MIN, math.min(LIST_MAX, (self:GetWidth() or 0) * LIST_SHARE)))
-		if math.abs((self.list:GetWidth() or 0) - w) >= 1 then
-			self.list:SetWidth(w)
+		if math.abs((box:GetWidth() or 0) - w) >= 1 then
+			box:SetWidth(w)
 			return true
 		end
 		return false
@@ -126,12 +132,14 @@ function Panel.Create(parent, ctx)
 	f:SetScript("OnSizeChanged", function(self)
 		if self:SizeList() and self:IsShown() then
 			self:Refresh() -- the names fit again at the new width
+		elseif self.FitCard then
+			self:FitCard()
 		end
 	end)
 
 	-- Editor.
 	local ed = CreateFrame("Frame", nil, f)
-	ed:SetPoint("TOPLEFT", f.list, "TOPRIGHT", SP.xl, 0)
+	ed:SetPoint("TOPLEFT", box, "TOPRIGHT", SP.xl, 0)
 	ed:SetPoint("BOTTOMRIGHT")
 	f.editor = ed
 
@@ -304,11 +312,27 @@ function Panel.Create(parent, ctx)
 	ed.delete.dpGround = "surface"
 	W.SetTooltip(ed.clearFocus, L["Show all pulls"], L["The map stops highlighting one pull."])
 
-	-- Read-only view: the pull as text, with the same map buttons.
-	local doc = W.Document(f)
-	doc:SetPoint("TOPLEFT", f.list, "TOPRIGHT", SP.xl, 0)
-	doc:SetPoint("BOTTOMRIGHT")
+	-- Read-only view: the pull as text in a card as tall as it (up to the section's height), with the same map buttons.
+	local card = W.Panel(f)
+	card:SetPoint("TOPLEFT", box, "TOPRIGHT", SP.xl, 0)
+	card:SetPoint("RIGHT")
+	card:SetHeight(200)
+	f.card = card
+	local doc = W.Document(card)
+	doc:SetPoint("TOPLEFT", SP.lg, -SP.md)
+	doc:SetPoint("BOTTOMRIGHT", -SP.sm, SP.xs)
 	f.doc = doc
+	function f:FitCard()
+		if not card:IsShown() then
+			return
+		end
+		local want = math.ceil(doc.content:GetHeight() or 0) + SP.md + SP.xs
+		local room = math.max(80, (self:GetHeight() or 0))
+		local h = math.min(want, room)
+		if math.abs((card:GetHeight() or 0) - h) >= 1 then
+			card:SetHeight(h)
+		end
+	end
 	local actions = CreateFrame("Frame", nil, doc.content)
 	actions:SetSize(300, SZ.control)
 	actions.show = W.Button(actions, L["Show on map"], "outline", function()
@@ -365,6 +389,7 @@ function Panel.Create(parent, ctx)
 		actions.all:SetShown(ctx.focusPull ~= nil)
 		doc:Place(actions, SZ.control)
 		doc:Finish()
+		f:FitCard()
 	end
 
 	function f:Refresh()
@@ -387,16 +412,16 @@ function Panel.Create(parent, ctx)
 		self.down:SetShown(not ro)
 		self.up:SetDisabled(not selectedId)
 		self.down:SetDisabled(not selectedId)
-		self.list:ClearAllPoints()
+		box:ClearAllPoints()
 		if ro then
-			self.list:SetPoint("TOPLEFT")
+			box:SetPoint("TOPLEFT")
 		else
-			self.list:SetPoint("TOPLEFT", self.add, "BOTTOMLEFT", 0, -SP.md)
+			box:SetPoint("TOPLEFT", self.add, "BOTTOMLEFT", 0, -SP.md)
 		end
-		self.list:SetPoint("BOTTOMLEFT")
+		box:SetPoint("BOTTOMLEFT")
 		local pull = selected()
 		ed:SetShown(pull ~= nil and not ro)
-		doc:SetShown(pull ~= nil and ro)
+		card:SetShown(pull ~= nil and ro)
 		if pull and ro then
 			showDocument(p, pull, select(2, Util.FindById(p.pulls, pull.id)))
 			return
