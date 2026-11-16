@@ -498,6 +498,14 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
+- The map centred in its frame on every classic and drawn map (equal bands left and right, the table's parchment in
+  them); the legend's caret (right when folded, down when open), its folded box, and that it starts folded on Molten
+  Core (its painted title shows).
+- The Party section: the dungeon's party card (seat plates, role glyphs, "+", the right-click menu), the raid groups
+  filling their column, the empty messages centred in their boxes, at the minimum width in Polish.
+- Pulls: the two-line names' spacing, the pull's card. Run mode: no gap above the mini map on a one-line step. The
+  Notes window: the page label between the 32 px arrows. `/dp debug`: one dialog with the font test in it.
+
 - Raid pages: the braces of keywords in the editor's font; the inline raid, role and class icons in the Notes window
   (size, baseline); class colours; the ">" on the player's own lines; the window opening on a boss pull and closing at
   its end; Send to group as leader, assistant and member; pages arriving after a boss fight's lock; Post to chat
