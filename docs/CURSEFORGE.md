@@ -35,9 +35,10 @@ it: its floor, its stretch of the route, the pull or boss, and where each role s
 
 - WoW: Forever does not tell addons where you or any creature are inside an instance, so nothing is placed on the map
   from what happens in game; the run recorder works from combat, nameplates and boss kills.
-- The Adventure Guide is disabled on Forever. Dungeon Planner uses the dungeon maps and pictures the client still has;
-  Forever's new dungeons get a map, boss portraits and loot lists when Dungeon Journal (or OpenMap / Forever Dungeon
-  Routes for maps) is installed.
+- The Adventure Guide is disabled on Forever. Dungeon Planner brings its own boss data (portraits, abilities, loot,
+  levels, dungeon quests) and draws every dungeon from the game's own files, including Forever's new dungeons, so no
+  other addon is needed. If Dungeon Journal or Forever Dungeon Routes is installed, their drawn maps and extra details
+  are used too.
 - Plans stay on your computer; sharing sends only the plan you choose.
 
 ### Commands
