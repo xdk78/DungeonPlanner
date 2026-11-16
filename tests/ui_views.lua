@@ -297,6 +297,26 @@ local function notesWindow()
 	}
 end
 
+-- The Notes window with nothing to show: the page label "No pages" between the arrows, both disabled.
+local function notesEmpty()
+	return {
+		name = "notes-empty",
+		setup = function()
+			closeAll()
+			ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+			ns.NotesFrame.Open()
+			window():Hide()
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerNotesFrame")
+		end,
+		teardown = function()
+			ns.NotesFrame.Close()
+			window():Show()
+		end,
+	}
+end
+
 -- Run mode while recording: Faldrim down, two trash pulls before Magmatus where the plan has one (the drift warning).
 local function runModeDrift()
 	return {
@@ -611,6 +631,7 @@ V.views = {
 	pagesView("party-pages"),
 	pagesView("party-pages-min", 880, 560),
 	notesWindow(),
+	notesEmpty(),
 	shareTracking(),
 	{
 		name = "debug",

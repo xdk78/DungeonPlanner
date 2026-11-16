@@ -20,6 +20,7 @@ local SP = S.SPACE
 local Pages, Util = ns.Pages, ns.Util
 
 local MIN_W, MIN_H = 220, 150
+local PAGE_BUTTON = 32 -- the page arrows' size
 local CHAT_LINES, CHAT_BYTES = 20, 250
 
 local frame
@@ -289,23 +290,24 @@ local function build()
 	f.source:SetPoint("TOPLEFT", f.pageTitle, "BOTTOMLEFT", 0, -SP.xxs)
 	f.source:SetPoint("RIGHT", -SP.sm, 0)
 
-	-- The game's page arrows (the spell book's), the counter between them, as the game's paged frames show it.
+	-- The game's page arrows (the spell book's, 32 px as in the game's PagingControls templates), the page label between
+	-- them ("1 of 3", or "No pages"), as wide as it is.
 	f.prev = W.PageButton(inner, "prev", L["Previous page"], function()
 		NotesFrame.Step(-1)
-	end)
-	f.prev:SetPoint("BOTTOMLEFT", 0, -2)
-	f.counter = W.Text(inner, "caption", "muted")
-	f.counter:SetPoint("LEFT", f.prev, "RIGHT", SP.xs, 0)
+	end, PAGE_BUTTON)
+	f.prev:SetPoint("BOTTOMLEFT", -SP.xs, -SP.xs)
+	f.counter = W.Text(inner, "caption", "ink")
+	f.counter:SetPoint("LEFT", f.prev, "RIGHT", SP.xxs, 0)
 	f.counter:SetJustifyH("CENTER")
 	f.counter:SetWidth(64)
 	f.next = W.PageButton(inner, "next", L["Next page"], function()
 		NotesFrame.Step(1)
-	end)
-	f.next:SetPoint("LEFT", f.counter, "RIGHT", SP.xs, 0)
+	end, PAGE_BUTTON)
+	f.next:SetPoint("LEFT", f.counter, "RIGHT", SP.xxs, 0)
 
 	f.doc = W.Document(inner)
 	f.doc:SetPoint("TOPLEFT", f.source, "BOTTOMLEFT", 0, -SP.sm)
-	f.doc:SetPoint("BOTTOMRIGHT", 0, 26 + SP.sm)
+	f.doc:SetPoint("BOTTOMRIGHT", 0, PAGE_BUTTON)
 	f:Hide()
 	frame = f
 end
@@ -339,7 +341,8 @@ function NotesFrame.Refresh()
 		doc:Add("text", text ~= "" and text or " ")
 	end
 	doc:Finish()
-	frame.counter:SetText(#entries > 0 and string.format(L["%d of %d"], index, #entries) or "")
+	frame.counter:SetText(#entries > 0 and string.format(L["%d of %d"], index, #entries) or L["No pages"])
+	frame.counter:SetWidth(math.max(48, math.ceil(frame.counter:GetStringWidth() or 0) + SP.md))
 	frame.prev:SetDisabled(index <= 1)
 	frame.next:SetDisabled(index >= #entries)
 end

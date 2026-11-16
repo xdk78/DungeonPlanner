@@ -195,6 +195,8 @@ matches no boss of the plan, inside its instance, completes the next boss step).
 works in combat; it is movable, and its position and whether it was open are saved (`ui.run`). Escape does not close
 it.
 
+The step block is as tall as its lines (at most a label, the title and two lines of text); the mini map under it
+takes the rest of that room, so a one-line step leaves no gap above the map and the blocks below keep their place.
 The mini map is the map canvas in compact mode: it frames the current step with the steps before and after it on the
 same floor (`view:FrameSteps`; neighbours far away are left out, the box has a margin of a tenth of the map around them and
 is never smaller than about three tenths of it, so the step, its route and the names painted on the map near it are not
@@ -308,7 +310,7 @@ this API family and is guarded.
 | Emblem, plate marks | `INV_Misc_Map_01`; the `Dungeon` atlas (else a portal icon) or the `Raid` atlas (else a dragon head) | | `Dungeon` seen, `Raid` inferred, guarded |
 | Step rings, boss portraits | `Interface\Minimap\MiniMap-TrackingBorder` (the map-pin ring; its ring is centred at (20, 19) of the 64 px file, so it is drawn from the 38 px square around that point), the Adventure Guide's boss ring (centred in its crop); both placed by `Art.PlaceRing`, centre on centre | | Seen (Dungeon Journal, NeedRoll) |
 | Run mode button | `Ability_Rogue_Sprint` | | Classic icon |
-| Page arrows (the Notes window) | `Interface\Buttons\UI-SpellbookIcon-PrevPage-*` / `-NextPage-*` (up, down, disabled), the highlight `UI-Common-MouseHilight` | drawn "<" and ">" buttons | Seen (Dungeon Journal, OpenMap, NeedRoll, Leatrix Plus) |
+| Page arrows (the Notes window) | `Interface\Buttons\UI-SpellbookIcon-PrevPage-*` / `-NextPage-*` (up, down, disabled), the highlight `UI-Common-MouseHilight` (added), 32 px, as the game's `PagingControlsPrevPageButtonTemplate` and `PagedList.xml` have them; the page label ("1 of 3", "No pages") between them | drawn "<" and ">" buttons | Seen (Dungeon Journal, OpenMap, NeedRoll, Leatrix Plus) |
 | Enemies layer | our `Circle`/`Ring` textures tinted, the game's raid skull for bosses | | Drawn |
 
 Libraries: the game's own templates and mixins above do the work (nine-slice layouts, `ScrollUtil`, the scroll bar, the

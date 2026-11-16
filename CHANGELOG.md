@@ -88,6 +88,8 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 
 ### Fixed
 Since the test builds:
+- Notes window: the page label sits between the page arrows ("1 of 3", "No pages" when there is none, where two dark
+  squares stood alone), and the arrows have the game's size (32 px).
 - Run mode: no gap between a one-line step and the mini map; the map takes that room.
 - Pulls: a name on two lines has room between its lines ("Dirgehammer" touched the line above), the list sits in an
   inset, and a recommended plan's pull (marks, note, markers, where it comes in the run) is a card as tall as its text.
