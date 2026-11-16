@@ -22,3 +22,5 @@ SOFTWARE.
 
 Embedded libraries in Libs/ keep their own licences (docs/LIBRARIES.md).
 Community plans in community-plans/ are CC0-1.0 or CC-BY-4.0, as stated in each file.
+The dungeon map pictures in Media/Maps/Reyes/ are (c) Santiago Reyes, used with his permission, and are
+not covered by this licence (docs/licenses/SantiagoReyes-maps.md).

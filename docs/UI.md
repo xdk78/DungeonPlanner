@@ -327,8 +327,10 @@ it up or down, and a side where it would be cut is not used. A boss's label, whi
 it covers least and is moved all the way inside. Pins count their ring: the minimap ring stands out past its art.
 
 **One map family.** The classic dungeons draw on the game's old map tiles: a drawn map on sepia parchment in a scroll
-frame. Forever's new dungeons use Dungeon Journal's or Forever Dungeon Routes' drawn parchment map when one is
-installed (Settings, "Prefer drawn maps", on by default). Without them they are composed from the game's minimap
+frame. Forever's new dungeons use Santiago Reyes' hand-drawn parchment maps, which ship with the addon by his
+permission (`Data/ReyesMaps.lua`; "Map by Santiago Reyes" in the map's corner, its tooltip naming his site and where
+to support him), shown exactly as he drew them (Settings, "Prefer drawn maps", on by default). With that setting off,
+or on a floor he has not drawn, they are composed from the game's minimap
 pictures, which are dark 3D art (on a flat grey where nothing is) or full-colour terrain; by default
 (Settings, "Map colours: parchment") they are drawn into the same family (`MapCanvas.ArtStyle`): the quest-log
 parchment under them, each picture in grey tinted to the parchment's ochre (`SEPIA`, 90% opaque, so the parchment's

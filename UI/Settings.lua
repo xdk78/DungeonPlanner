@@ -146,11 +146,28 @@ local function options()
 							set({ "showCoordinates" }, v)
 						end,
 					},
+					-- Forever's new dungeons (Data/MinimapArt.lua Choose): drawn maps (Santiago Reyes' bundled ones,
+					-- another addon's) or the game's own minimap pictures first.
+					preferProviderMaps = {
+						type = "toggle",
+						order = 6.1,
+						width = "full",
+						name = L["Prefer drawn maps over the game's minimap pictures"],
+						desc = L["Forever's new dungeons: Santiago Reyes' maps (they come with the addon), else another addon's. Off: the game's minimap pictures first."],
+						get = function()
+							return ns.MinimapArt.PreferProviders()
+						end,
+						set = function(_, v)
+							ns.db.settings.preferProviderMaps = v and true or false
+							ns.Providers.epoch = ns.Providers.epoch + 1
+							ns:Fire("PROVIDERS_CHANGED", "maps")
+						end,
+					},
 					mapColors = {
 						type = "select",
 						order = 6.2,
 						name = L["Map colours"],
-						desc = L["Forever's new dungeons without another addon's map: in parchment colours like the classic maps, or the minimap's own."],
+						desc = L["Floors drawn from the game's minimap pictures: parchment colours like the classic maps, or the minimap's own."],
 						values = { parchment = L["Parchment"], game = L["Game minimap colours"] },
 						sorting = { "parchment", "game" },
 						get = function()
@@ -160,6 +177,13 @@ local function options()
 							ns.db.settings.mapColors = v == "game" and "game" or "parchment"
 							UI.ApplyColors()
 						end,
+					},
+					reyesCredit = {
+						type = "description",
+						order = 6.3,
+						width = "full",
+						name = string.format(L["Maps of Forever's new dungeons by Santiago Reyes (%s), used with his permission. Like them? Support the artist: %s"],
+							ns.ReyesMaps.SITE, ns.ReyesMaps.DONATE),
 					},
 					colorblind = {
 						type = "toggle",
@@ -301,23 +325,6 @@ local function options()
 								lines[#lines + 1] = string.format("%s: %s", a.title, BENEFITS[a.id] or "")
 							end
 							return table.concat(lines, "\n")
-						end,
-					}
-					-- Floors drawn from the game's minimap pictures (Data/MinimapArt.lua) can show another addon's drawn
-					-- map instead.
-					args.preferProviderMaps = {
-						type = "toggle",
-						order = #ns.Providers.list + 1,
-						width = "full",
-						name = L["Prefer drawn maps from Dungeon Journal / Forever Dungeon Routes when installed"],
-						desc = L["Without this, floors that have no map in the game are drawn from the game's own minimap pictures."],
-						get = function()
-							return ns.db.settings.preferProviderMaps == true
-						end,
-						set = function(_, v)
-							ns.db.settings.preferProviderMaps = v and true or false
-							ns.Providers.epoch = ns.Providers.epoch + 1
-							ns:Fire("PROVIDERS_CHANGED", "maps")
 						end,
 					}
 					return args

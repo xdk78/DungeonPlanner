@@ -9,6 +9,15 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 `docs/RELEASE-NOTES-0.1.0.md` in the source repository.
 
 ### Added
+- **Santiago Reyes' maps of Forever's new dungeons come with the addon**, with his permission: hand-drawn parchment
+  maps of every floor he has drawn (The Hall of Thanes, Ruins of Lordaeron, Excavation Site, City of Dalaran and its
+  Underbelly, The Drowned City and Atal'Byzal, Krol'dok Stronghold, both units of Alcaz Prison, all six levels of
+  Blackmaw Hold, Shaper's Terrace and the Prismatic Talus), shown as he drew them, signature included. They are the
+  first map for those floors, no other addon needed; the recommended routes and markers sit on them exactly as on
+  Dungeon Journal's map, and Dungeon Journal's boss pins and Forever Dungeon Routes' route layer show on them when
+  installed. Each map says "Map by Santiago Reyes" in its corner; hover it for his site and his donation page. The maps
+  are his, not under the MIT licence (docs/licenses/SantiagoReyes-maps.md). "Prefer drawn maps" now chooses between
+  drawn maps and the game's minimap pictures, and "Map colours" applies only to the minimap pictures.
 - **Settings, "Data from other addons"** lists the supported addons you do not have, with what each would add.
 - **The war table**: a window in the game's own look (framed window, inset panels, window tabs) with the dungeon map
   filling it, the plan's steps (entrance, pulls, bosses, quest givers, objectives) and your party beside it, and the
@@ -27,9 +36,9 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
   Lordaeron, Excavation Site, City of Dalaran, The Drowned City, Krol'dok Stronghold, Alcaz Prison, all six floors of
   Blackmaw Hold, Shaper's Terrace and Scholomance's old floors. The recommended plans' routes and markers are placed
   on them through a transform per floor, in the same parchment colours as the classic dungeon maps (Settings, "Map
-  colours": parchment or the game's minimap colours). With Dungeon Journal or Forever Dungeon Routes installed, their
-  drawn maps are used first, as before (Settings, "Prefer drawn maps ..."); `/dp debug` and `/dp scan` say where each
-  floor's map comes from.
+  colours": parchment or the game's minimap colours). Drawn maps (Santiago Reyes' bundled maps, above, else another
+  addon's) come first unless you switch "Prefer drawn maps" off; `/dp debug` and `/dp scan` say where each floor's map
+  comes from.
 - **Map drawing** on your own plans: pen, line, arrow, circle, box, text, eraser and move, eight colours, three widths;
   drawings can belong to a boss or a pull and travel with the plan.
 - **Enemies layer**: where bosses and some packs stand, from the plans' research.

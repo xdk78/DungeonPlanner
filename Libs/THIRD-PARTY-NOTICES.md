@@ -15,3 +15,10 @@ Each library keeps its own licence. Versions and sources: `docs/LIBRARIES.md` in
 | LibUIShots-1.0 | MIT | `LibUIShots-1.0/LICENSE.txt` |
 
 All files are unmodified copies of the upstream releases (line endings normalised to LF).
+
+## Bundled assets outside this folder
+
+| Asset | Owner and terms | Notice |
+|---|---|---|
+| Dungeon maps in `Media/Maps/Reyes/` (WoW: Forever's new dungeons) | (c) Santiago Reyes (https://sreyesmaps.com), all rights reserved, used with his permission; **not** under the addon's MIT licence | `docs/licenses/SantiagoReyes-maps.md` |
+| Fonts in `Media/Fonts/` (Alegreya Sans, DP Sans) | SIL Open Font License 1.1 | `Media/Fonts/OFL.txt` |

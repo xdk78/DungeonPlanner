@@ -6,12 +6,13 @@
 --
 -- Which art a plan floor gets (MinimapArt.Choose), first that applies:
 --   1. the game's map art for the floor's uiMap (Instances.MapArt);
---   2. the old dungeon map tiles (GameFiles.FloorArt);
---   3. another addon's drawn map (Providers.FloorArt: Dungeon Journal, Forever Dungeon Routes), when one is installed
---      and the player has not switched "Prefer drawn maps" off (the default is on);
---   4. the minimap pictures (this module), drawn in the parchment colours unless the player chose the game's
+--   2. the old dungeon map tiles (GameFiles.FloorArt; the classic dungeons);
+--   3. Santiago Reyes' bundled map of a Forever floor (Data/ReyesMaps.lua);
+--   4. another addon's drawn map (Providers.FloorArt: Dungeon Journal, Forever Dungeon Routes, OpenMap);
+--   5. the minimap pictures (this module), drawn in the parchment colours unless the player chose the game's
 --      (UI/MapCanvas.lua ArtStyle);
---   5. none: the parchment grid.
+--   6. none: the parchment grid.
+-- With "Prefer drawn maps" switched off (it is on by default), the minimap pictures come before 3 and 4.
 
 local _, ns = ...
 local MinimapArt = ns:NewModule("MinimapArt")
@@ -115,14 +116,14 @@ function MinimapArt.FloorArt(plan, index)
 	return cache[key] or nil
 end
 
--- Does the player want another addon's drawn map over the minimap pictures? (settings.preferProviderMaps, on by
--- default: players who have one of those addons keep the map they know.)
+-- Does the player want drawn maps (Santiago Reyes' bundled maps, another addon's) over the minimap pictures?
+-- (settings.preferProviderMaps, on by default.)
 function MinimapArt.PreferProviders()
 	return not (ns.db ~= nil and ns.db.settings.preferProviderMaps == false)
 end
 
 -- The art to draw for floor `index` of a plan whose map is uiMapID (MinimapArt's header has the order). Returns art
--- (nil for the grid) and its source: "map", "tiles", "minimap", "provider" or "grid".
+-- (nil for the grid) and its source: "map", "tiles", "reyes", "provider", "minimap" or "grid".
 function MinimapArt.Choose(plan, index, uiMapID, preferProviders)
 	if ns.Instances.MapArt(uiMapID) then
 		return nil, "map"
@@ -137,6 +138,10 @@ function MinimapArt.Choose(plan, index, uiMapID, preferProviders)
 	end
 	if mini and not preferProviders then
 		return mini, "minimap"
+	end
+	art = ns.ReyesMaps.FloorArt(plan, index)
+	if art then
+		return art, "reyes"
 	end
 	art = ns.Providers.FloorArt(plan, index)
 	if art then
@@ -163,10 +168,10 @@ function MinimapArt.Reset()
 	cache = {}
 end
 
--- Every recommended plan's floors by art source, for /dp debug: counts { map = n, tiles = n, minimap = n, provider =
--- n, grid = n } and the floors on the grid ({ "Hyjal Summit 1", ... }).
+-- Every recommended plan's floors by art source, for /dp debug: counts { map = n, tiles = n, reyes = n, minimap = n,
+-- provider = n, grid = n } and the floors on the grid ({ "Hyjal Summit 1", ... }).
 function MinimapArt.Summary()
-	local counts, grid = { map = 0, tiles = 0, minimap = 0, provider = 0, grid = 0 }, {}
+	local counts, grid = { map = 0, tiles = 0, reyes = 0, minimap = 0, provider = 0, grid = 0 }, {}
 	for _, plan in ipairs(ns.Bundled.All()) do
 		for i, source in ipairs(MinimapArt.Sources(plan)) do
 			local f = plan.floors[i]

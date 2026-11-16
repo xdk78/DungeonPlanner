@@ -406,7 +406,8 @@ function Providers.Routes(plan, floor, art)
 	if not Providers.PlanKey(plan) or type(floor) ~= "number" or type(art) ~= "table" then
 		return nil
 	end
-	local cacheKey = plan.id .. ":" .. floor .. ":" .. tostring(art.provider or art.source)
+	local cacheKey = plan.id .. ":" .. floor .. ":" .. tostring(art.provider or art.source) .. ":"
+		.. tostring(art.textures and art.textures[1] or art.fdr)
 	local stamp = plan.updated or 0
 	local cached = routesCache[cacheKey]
 	if cached and cached.stamp == stamp then

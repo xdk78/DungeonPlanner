@@ -10,7 +10,7 @@ local L = ns.L
 
 local KEY = "DungeonPlanner"
 
--- Representative plans: a Forever dungeon on a provider's map, a classic dungeon on the game's map tiles, a raid.
+-- Representative plans: a Forever dungeon on its drawn map (Santiago Reyes'), a classic dungeon on the game's map tiles, a raid.
 local FOREVER, CLASSIC, RAID = "hall-of-thanes", "the-deadmines", "molten-core"
 
 local function lib()

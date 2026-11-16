@@ -49,7 +49,8 @@ end
 -- pictures (Data/MinimapArt.lua) are dark 3D art or full-colour terrain; by default (settings.mapColors =
 -- "parchment") they join that family: the parchment under them (where a building floor has no picture), each picture
 -- in grey tinted to the parchment's brown, a little of the parchment showing through, and darkened edges. "game"
--- draws them as the minimap does. Other art (the old tiles, a provider's drawn map) is never touched.
+-- draws them as the minimap does. Other art (the old tiles, a drawn map: Santiago Reyes' bundled
+-- maps, another addon's) is never touched.
 -- Returns { name, paper, desaturate, tint = { r, g, b, a }, lift = the added copy's colour or nil, vignette } (pure).
 local SEPIA = { 1, 0.8, 0.5, 0.9 }
 local LIFT = { 0.62, 0.48, 0.24, 1 }
@@ -134,7 +135,8 @@ function MapCanvas.Create(parent, cb)
 	view.noArt:SetText(ns.L["No map art for this map. Markers and routes still work on the parchment grid."])
 	view.noArt:Hide()
 
-	-- Where the map and its boss pins come from when another addon provides them (Data/Providers.lua): a small chip
+	-- Who drew the map: "Map by Santiago Reyes" on his bundled maps (Data/ReyesMaps.lua), or the addon a map and its
+	-- boss pins come from (Data/Providers.lua): a small chip
 	-- in the corner, on a dark plate so the art under it does not show through. A compact map (run mode) leaves it to
 	-- the window around it (view.creditText).
 	view.credit = W.Text(edge, "caption", "ink")
@@ -145,6 +147,15 @@ function MapCanvas.Create(parent, cb)
 	view.creditPlate:SetPoint("TOPLEFT", view.credit, "TOPLEFT", -SP.xs, SP.xxs + 1)
 	view.creditPlate:SetPoint("BOTTOMRIGHT", view.credit, "BOTTOMRIGHT", SP.xs, -(SP.xxs + 1))
 	view.creditPlate:Hide()
+	-- Hover target over the chip of a bundled map (Data/ReyesMaps.lua): the artist, his site and his donation page.
+	view.creditHit = CreateFrame("Frame", nil, edge)
+	view.creditHit:SetPoint("TOPLEFT", view.creditPlate, "TOPLEFT")
+	view.creditHit:SetPoint("BOTTOMRIGHT", view.creditPlate, "BOTTOMRIGHT")
+	view.creditHit:EnableMouse(true)
+	W.SetTooltip(view.creditHit, string.format(ns.L["Map by %s"], ns.ReyesMaps.ARTIST),
+		string.format(ns.L["From his Atlas de Azeroth: Forever (%s), used with his permission. Like his maps? Support the artist: %s"],
+			ns.ReyesMaps.SITE, ns.ReyesMaps.DONATE))
+	view.creditHit:Hide()
 
 	view.coords = W.Text(edge, "caption", "white")
 	view.coords:SetPoint("BOTTOMRIGHT", -FRAME_INSET - SP.sm, FRAME_INSET + SP.sm)
@@ -296,13 +307,18 @@ function MapCanvas.Install(view)
 		end
 		self:PaintArt()
 		self.noArt:SetShown(info == nil)
-		-- A provider's map: name it, and draw the plan through the alignment found for it (Providers.Align).
-		local provided = info and info.source == "provider" and info or nil
+		-- A drawn map: Santiago Reyes' bundled map (Data/ReyesMaps.lua) or another addon's. Name it, and draw the plan
+		-- through the alignment found for it (Providers.Align; a bundled map takes it, and the boss pins, from an addon
+		-- that draws the same picture).
+		local reyes = info and info.source == "reyes"
+		local provided = info and (info.source == "provider" or reyes) and info or nil
 		self.provided = provided
 		-- A minimap floor (Data/MinimapArt.lua) is drawn north up: the plan goes through that floor's own transform.
 		local align = (provided and provided.align) or (info and info.source == "minimap" and info.align) or nil
 		self.xf = align and align.mode == "fit" and align or nil
-		if provided then
+		if reyes then
+			self.credit:SetText(string.format(L["Map by %s"], provided.artist or ns.ReyesMaps.ARTIST))
+		elseif provided then
 			local credit = string.format(L["Map: %s"], provided.credit or "")
 			if provided.artist then
 				credit = credit .. " (" .. provided.artist .. ")"
@@ -313,6 +329,8 @@ function MapCanvas.Install(view)
 		local showCredit = provided ~= nil and not (self.cb.compact and self.cb.compact())
 		self.credit:SetShown(showCredit)
 		self.creditPlate:SetShown(showCredit)
+		-- The bundled map's chip names the artist's site and where to support him (a tooltip: the client opens no links).
+		self.creditHit:SetShown(showCredit and reyes or false)
 		self.zoom, self.ox, self.oy = 1, 0, 0
 		self:Layout()
 		if not info then
@@ -739,7 +757,7 @@ function MapCanvas.Install(view)
 					local size = BOSS_SIZE * scale
 					resetPin(b, size)
 					styleRound(b, size, "kind_boss", "bossRing")
-					b.name, b.source = pin.name, provided.credit
+					b.name, b.source = pin.name, provided.pinsCredit or provided.credit
 					b.label:SetText(compact and "" or pin.name)
 					S.TextColor(b.label, "gold")
 					b:SetAlpha(0.9)

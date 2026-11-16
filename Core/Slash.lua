@@ -9,16 +9,18 @@ local function line(ok, text)
 	return (ok and "|cff3fb27fOK|r " or "|cffe5534bmissing|r ") .. text
 end
 
--- One line: how many recommended plan floors draw the game's map art, the old map tiles, the minimap pictures,
--- another addon's map or the grid, and which are on the grid. /dp scan records every floor (mapSources).
+-- One line: how many recommended plan floors draw the game's map art, the old map tiles, Santiago Reyes' bundled maps,
+-- another addon's map, the minimap pictures or the grid, and which are on the grid. /dp scan records every floor
+-- (mapSources).
 function Slash.MapSources()
 	local ok, counts, grid = pcall(ns.MinimapArt.Summary)
 	if not ok then
 		print("    " .. line(false, "maps: " .. tostring(counts)))
 		return
 	end
-	print("  " .. string.format(L["Floor maps: %d game map, %d old map tiles, %d minimap pictures, %d other addons, %d grid."],
-		counts.map, counts.tiles, counts.minimap, counts.provider, counts.grid)
+	print("  " .. string.format(
+		L["Floor maps: %d game map, %d old map tiles, %d Santiago Reyes maps, %d other addons, %d minimap pictures, %d grid."],
+		counts.map, counts.tiles, counts.reyes, counts.provider, counts.minimap, counts.grid)
 		.. (#grid > 0 and (" " .. L["Grid:"] .. " " .. table.concat(grid, ", ")) or ""))
 end
 

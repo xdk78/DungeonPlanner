@@ -21,8 +21,8 @@ Screenshots: in-game screenshots will be in [docs/screenshots/](docs/screenshots
 - **Run recorder** (opt-in): pulls, boss kills and wipes of your runs; a run against the plan (extra and skipped pulls,
   boss order), two runs side by side, splits against your best and previous run, a run summary for Discord.
 - **Map planning** on the game's own dungeon maps (the old dungeon map tiles the client still has; multi-floor; for
-  Forever's new dungeons Dungeon Journal's or Forever Dungeon Routes' drawn map when installed, else the game's own
-  minimap pictures composed per floor in the same parchment colours). Markers of 17 kinds (bosses, rares, packs, patrols, loot,
+  Forever's new dungeons the hand-drawn maps by Santiago Reyes that come with the addon, used with his permission;
+  the game's own minimap pictures, composed per floor in the same parchment colours, if you prefer them). Markers of 17 kinds (bosses, rares, packs, patrols, loot,
   chests, quest items and givers, NPCs, objects, entrances, exits, shortcuts, stairs, hazards, party positions, notes);
   raid marks; labels and notes per marker; drag to move; zoom and pan; layers you can hide; an Enemies layer showing
   where the plans' research placed creatures. Undo and redo (50 steps) for every change.
@@ -48,14 +48,15 @@ Screenshots: in-game screenshots will be in [docs/screenshots/](docs/screenshots
   game's Settings panel, a public API for other addons and WeakAuras.
 - **Data from other addons** you have installed, read in your game only (nothing is copied) and switchable under
   Settings > Data from other addons; each source is named where its data shows:
-  - **Dungeon Journal**: maps of Forever's new dungeons, boss pins, boss portraits and loot per boss (Gear), and a
+  - **Dungeon Journal**: boss pins on the maps of Forever's new dungeons, boss portraits and loot per boss (Gear), and a
     button to open it;
-  - **Forever Dungeon Routes**: its routes as an extra map layer, and its maps where no other map exists;
+  - **Forever Dungeon Routes**: its routes as an extra map layer (also on the bundled maps);
   - **OpenMap**: drawn dungeon maps and boss pins (and your plans on its dungeon card);
   - **NeedRoll**: "Open in NeedRoll" in Gear; **Questie**: the dungeon's quests in Runs;
   - **DBM** or **BigWigs**: boss kills as a backup to the game's own events.
 
-The addon's code ships **no game data**: instances, bosses and maps come from your client. It does include
+The addon's code ships **no game data**: instances, bosses and maps come from your client. The maps of Forever's new
+dungeons are Santiago Reyes' artwork, bundled with his permission (credits below). It does include
 **recommended plans** for 43 Classic and Forever dungeons and raids, researched by the community (boss order, routes,
 pulls, strategies and party positions; positions are approximate, and each plan states its confidence). Sources and
 credits: [docs/DATA-SOURCES.md](docs/DATA-SOURCES.md).
@@ -68,15 +69,15 @@ other addons). Settings lists the ones you do not have, with what they would add
 
 | Addon | What it adds to Dungeon Planner | |
 |---|---|---|
-| **[DungeonJournal](https://www.curseforge.com/wow/addons/dungeonjournal)** (Dungeon Journal) | **Recommended.** Drawn parchment maps for Forever's new dungeons, boss pins and portraits, each boss's loot (Gear), its level and description, and a button on the Bosses page that opens it | Maps, portraits, loot |
-| **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)** | **Recommended.** Its routes as an extra map layer (off until you tick it in the legend; not shown in run mode), and its drawn maps of Forever's new dungeons where the game and Dungeon Journal have none | Maps, routes |
+| **[DungeonJournal](https://www.curseforge.com/wow/addons/dungeonjournal)** (Dungeon Journal) | **Recommended.** Boss pins on the maps of Forever's new dungeons, boss portraits, each boss's loot (Gear), its level and description, and a button on the Bosses page that opens it | Pins, portraits, loot |
+| **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)** | **Recommended.** Its routes as an extra map layer (off until you tick it in the legend; not shown in run mode), on the bundled maps of Forever's new dungeons too | Routes |
 | [OpenMap](https://www.curseforge.com/wow/addons/openmap) | Drawn maps and boss pins as a further map source (used after the two above), your plans listed on its dungeon cards, and a Dungeon Planner switch in its menu | Maps, plans on its cards |
 | [NeedRoll](https://www.curseforge.com/wow/addons/needroll) | An "Open in NeedRoll" button in Gear that opens its loot page for the boss you picked | Loot |
 | [QuestieDB](https://www.curseforge.com/wow/addons/questiedb) (the data part of [Questie](https://www.curseforge.com/wow/addons/questie)) | The dungeon's quests, with level and quest giver, in Runs | Quests |
 | [DBM](https://www.curseforge.com/wow/addons/deadly-boss-mods) or [BigWigs](https://www.curseforge.com/wow/addons/big-wigs) | A backup boss-kill signal for progress tracking when the game's own encounter events are missed | Kills |
 | [WoW Po Polsku Forever](https://www.curseforge.com/wow/addons/forever-wowpopolsku-2-0) | Dungeon Planner switches to Polish automatically when you chose Polish in it, and follows its fonts | Polish UI |
 
-Without any of them, Forever's new dungeons are drawn from the game's own minimap pictures, and boss data, portraits and
+Without any of them, Forever's new dungeons are drawn on Santiago Reyes' bundled maps, and boss data, portraits and
 loot come from Dungeon Planner's bundled facts.
 
 ## Install
@@ -119,7 +120,8 @@ stay open until you close them.
 Options are in the game's Settings panel (`/dp settings`) and the settings button in the window's header:
 
 - **Appearance**: language (Automatic, English, Polski), font, window scale, minimap button, map coordinates,
-  colour-blind friendly colours, confirm before deleting plans, reset window position.
+  prefer drawn maps (Santiago Reyes' maps, else another addon's) over the game's minimap pictures, map colours of the
+  minimap pictures, colour-blind friendly colours, confirm before deleting plans, reset window position.
 - **Progress tracking**: track boss kills and runs, a chat line when a planned boss dies (only you see it), record my
   runs, clear all recorded runs.
 - **Data from other addons**: each provider on or off.
@@ -184,14 +186,20 @@ zlib, LibSharedMedia LGPL-2.1, LibStub/ChatThrottleLib public domain, LibDataBro
 under the project's MIT licence ([docs/LIBRARIES.md](docs/LIBRARIES.md#logo)). Community plans
 are CC0-1.0 or CC-BY-4.0. The recommended plans' imported routes come from Forever Dungeon Routes under its MIT licence; its notice and those of OpenMap and ForeverPlusPlus (MIT,
 data used by the recommended plans and the map tile names) are in [docs/licenses/](docs/licenses/). World of Warcraft
-art is never shipped; maps are drawn by your client.
+art is never shipped; maps are drawn by your client. **The maps of Forever's new dungeons** (`Media/Maps/Reyes/`) are
+(c) Santiago Reyes, used with his permission, and **not** under the MIT licence
+([docs/licenses/SantiagoReyes-maps.md](docs/licenses/SantiagoReyes-maps.md)).
 
 ## Credits
+
+**Maps of Forever's new dungeons: Santiago Reyes** ([sreyesmaps.com](https://sreyesmaps.com)), from his "Atlas de
+Azeroth: Forever", bundled with his permission and shown with his signature; each map says "Map by Santiago Reyes" in
+its corner. Like his maps? Support the artist: [sreyesmaps.com/donaciones](https://sreyesmaps.com/donaciones).
 
 Boss positions, level ranges and instance data come from OpenMap (MIT). The routes of the classic dungeons, the raids
 and Forever's new dungeons (paths, side paths and stops) come from
 [Forever Dungeon Routes](https://github.com/Checkov23/ForeverDungeonRoutes) by Checkov23 (MIT), which states that its
-classic routes were traced from the aetherflask.com walkthrough maps; its pictures by Santiago Reyes are not used. Dungeon order and strategies are paraphrased from the
+classic routes were traced from the aetherflask.com walkthrough maps; its copies of Santiago Reyes' pictures are not used (ours come from his own published files). Dungeon order and strategies are paraphrased from the
 Warcraft Tavern and Method Forever dungeon guides; NPC and item IDs were checked on Wowhead
 Classic. The bundled boss facts (creature displays, levels, ability and drop IDs, dungeon quest IDs) are IDs and numbers
 taken from Wowhead Classic and the Warcraft Wiki (CC BY-SA); every ability note is written by us. The map's enemy positions are the same research (bosses from OpenMap, estimated trash packs); no openly

@@ -26,7 +26,7 @@ Defaults.settings = {
 		acceptFrom = "leaders", -- pages pushed by: "leaders" (leader, raid assistants) | "group" | "nobody"
 	},
 	providers = {}, -- [adapter id] = false when switched off (Data/Providers.lua); every adapter is on by default
-	preferProviderMaps = true, -- another addon's drawn map before the game's minimap pictures (Data/MinimapArt.lua)
+	preferProviderMaps = true, -- drawn maps (Data/ReyesMaps.lua, other addons') before the game's minimap pictures
 	mapColors = "parchment", -- minimap floors: "parchment" (tinted like the old map tiles) | "game" (UI/MapCanvas.lua)
 	share = {
 		acceptFrom = "groupGuild", -- "nobody" | "group" | "groupGuild" | "anyone"

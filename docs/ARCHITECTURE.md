@@ -323,12 +323,14 @@ Providers.Report()              -- /dp debug: id, title, active, internals, vers
 
 Matching is by instance name (`Providers.Key`: `GameFiles.Key` plus its aliases) and boss name (`Match.StripArticle`).
 Order of map art for a floor (`MinimapArt.Choose`): the game's own map (`C_Map`), the old dungeon tiles
-(`Data/GameFiles.lua`), a same-named map with art, then the providers in registration order (Dungeon Journal, Forever
-Dungeon Routes, OpenMap) while "Prefer drawn maps" is on (the default), then the game's minimap pictures
-(`Data/MinimapArt.lua`, drawn in the parchment colours: `MapCanvas.ArtStyle`), then a provider after all when the
-setting is off and there are no minimap pictures, then the parchment grid; a provider's
-floor is picked by the plan floor's name (`Providers.PickFloor`). A provider map is credited on the
-canvas ("Map: Dungeon Journal") and its boss pins in their tooltips. **Alignment** (`Providers.Align`): the plan's boss
+(`Data/GameFiles.lua`), a same-named map with art, then Santiago Reyes' bundled map of a Forever floor
+(`Data/ReyesMaps.lua`, source "reyes"), then the providers in registration order (Dungeon Journal, Forever Dungeon
+Routes, OpenMap) while "Prefer drawn maps" is on (the default), then the game's minimap pictures (`Data/MinimapArt.lua`,
+drawn in the parchment colours: `MapCanvas.ArtStyle`); with the setting off the minimap pictures come before the drawn
+maps; then the parchment grid. A bundled or provider floor is picked by the plan floor's name (`Providers.PickFloor`).
+A bundled map is credited on the canvas ("Map by Santiago Reyes", its tooltip naming his site and donation page); when
+Dungeon Journal or Forever Dungeon Routes draws the same picture, its boss pins, alignment and routes are used on the
+bundled map. A provider map is credited on the canvas ("Map: Dungeon Journal") and its boss pins in their tooltips. **Alignment** (`Providers.Align`): the plan's boss
 markers are paired with the provider's pins by name; "same" draws as stored, "fit" draws through a per-axis scale and
 offset (`MapCanvas` `ToMap` / `FromMap`, input inverted so edits stay in plan space), "pins" hides the plan's boss
 markers and shows the provider's pins. **Provider routes** (`Providers.Routes`): Forever Dungeon Routes' own route on

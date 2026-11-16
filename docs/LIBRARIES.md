@@ -54,6 +54,12 @@ nothing), HereBeDragons (no world-map pins).
 | `Media/Fonts/AlegreyaSans-Medium.ttf` (Alegreya Sans 2.004, static Medium) | [google/fonts `ofl/alegreyasans`](https://github.com/google/fonts/tree/main/ofl/alegreyasans), upstream [huertatipografica/Alegreya-Sans](https://github.com/huertatipografica/Alegreya-Sans) | SIL Open Font License 1.1 (`Media/Fonts/OFL.txt`) | The Polish UI's face when WoW Po Polsku's Friz Quadrata with Polish letters cannot be loaded (the game's own Friz Quadrata has no a/c/e/n/s/z with Polish diacritics). English text keeps the game's font. Checked before bundling: every Polish letter is in the font (fontTools) |
 | `Media/Fonts/DPSans.ttf` ("DP Sans Medium") | Made from `AlegreyaSans-Medium.ttf` above with fontTools: Latin subset, no layout tables, no hinting, one format-4 cmap, renamed (`Media/Fonts/FONTLOG.txt`) | SIL Open Font License 1.1, a Modified Version (`Media/Fonts/OFL.txt`) | The same face in plain TrueType, tried after the full file; it tells a problem with the file apart from one with the folder (docs/COMPATIBILITY.md, "Fonts on this client") |
 
+## Bundled maps (assets)
+
+| Files | Source | Terms | Used for |
+|---|---|---|---|
+| `Media/Maps/Reyes/*.blp` (18 maps, 54 strips, 6.8 MiB) | Santiago Reyes, "Atlas de Azeroth: Forever", his published files (<https://sreyesmaps.com>), converted by `tools/reyes_maps.py` | (c) Santiago Reyes, used with his permission (2026-11-16); **not** under the MIT licence ([licenses/SantiagoReyes-maps.md](licenses/SantiagoReyes-maps.md)) | The maps of Forever's new dungeons (`Data/ReyesMaps.lua`), credited "Map by Santiago Reyes" on the map. Support the artist: <https://sreyesmaps.com/donaciones> |
+
 ## Logo
 
 Dungeon Planner's logo is drawn for the project, as vector art, and is part of it under the project's **MIT licence**

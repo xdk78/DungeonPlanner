@@ -181,6 +181,8 @@ T.case("Map canvas: a minimap floor draws its pieces and the plan through its tr
 	if not ns.UI.IsShown() then
 		ns.UI.Toggle()
 	end
+	-- Drawn maps not preferred: the minimap pictures before Santiago Reyes' bundled map.
+	ns.db.settings.preferProviderMaps = false
 	ns.UI.SelectPlan("b:hall-of-thanes")
 	ns.UI.SelectTab("map")
 	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
@@ -188,7 +190,7 @@ T.case("Map canvas: a minimap floor draws its pieces and the plan through its tr
 	canvas.loadedKey = nil
 	map:Refresh()
 	local art = canvas.artInfo
-	T.eq(art and art.source, "minimap", "Hall of Thanes without other addons: the minimap pictures")
+	T.eq(art and art.source, "minimap", "Hall of Thanes, drawn maps not preferred: the minimap pictures")
 	T.eq(canvas.provided, nil, "not another addon's map")
 	T.ok(canvas.xf and canvas.xf.kx ~= nil, "the floor's transform")
 	-- The default map colours: the classic maps' parchment family (UI/MapCanvas.lua ArtStyle).
@@ -230,6 +232,8 @@ T.case("Map canvas: a minimap floor draws its pieces and the plan through its tr
 		clamped = clamped + (p.clamp and 1 or 0)
 	end
 	T.ok(clamped > 0, "turned building pictures clamp their corners")
+	ns.db.settings.preferProviderMaps = nil
+	M.Reset()
 end)
 
 T.case("/dp debug and /dp scan name each floor's map source", function()
@@ -241,7 +245,10 @@ T.case("/dp debug and /dp scan name each floor's map source", function()
 	end
 	ns.GameFiles.Reset()
 	local counts, grid = M.Summary()
-	T.ok(counts.minimap >= 18, "minimap floors: " .. counts.minimap)
+	-- Forever's new dungeons on Santiago Reyes' bundled maps (15 plan floors), Scholomance's old layout on the
+	-- minimap pictures.
+	T.eq(counts.reyes, 15, "Santiago Reyes' maps")
+	T.ok(counts.minimap >= 4, "minimap floors: " .. counts.minimap)
 	local onGrid = table.concat(grid, ",")
 	for _, name in ipairs({ "Thanes", "Lordaeron", "Excavation", "Drowned", "Krol", "Alcaz", "Blackmaw", "Shaper",
 		"Scholomance" }) do
@@ -249,9 +256,9 @@ T.case("/dp debug and /dp scan name each floor's map source", function()
 	end
 	T.ok(counts.tiles >= 2, "the classic dungeons keep their tiles")
 	local sources = M.Sources(ns.Bundled.Get("b:hall-of-thanes"))
-	T.eq(sources[1], "minimap")
+	T.eq(sources[1], "reyes")
 	local out = ns.Diagnostics.Collect()
-	T.eq(out.mapSources["b:hall-of-thanes"], "minimap", "recorded by /dp scan")
+	T.eq(out.mapSources["b:hall-of-thanes"], "reyes", "recorded by /dp scan")
 	T.ok(out.mapSources["b:the-deadmines"]:find("tiles", 1, true), "classic: tiles")
 	local printed = {}
 	local realPrint = _G.print
@@ -261,7 +268,7 @@ T.case("/dp debug and /dp scan name each floor's map source", function()
 	local ok, err = pcall(ns.Slash.MapSources)
 	_G.print = realPrint
 	assert(ok, err)
-	T.ok(printed[1] and printed[1]:find("minimap pictures", 1, true), "the debug line: " .. tostring(printed[1]))
+	T.ok(printed[1] and printed[1]:find("Santiago Reyes maps", 1, true), "the debug line: " .. tostring(printed[1]))
 	mock.files = {}
 	ns.GameFiles.Reset()
 end)

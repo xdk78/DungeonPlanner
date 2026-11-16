@@ -215,8 +215,11 @@ debug` lists each one as active or inactive with counts.
 | `questie` | QuestieDB 1.1.1 (GPL-3.0) | Quests filed under the dungeon's area, with level and quest giver (Runs section) | `LibQuestieDB` contract 4: `RequireContract`, `Enum.zoneIDs`, `Quest.GetAllIds/zoneOrSort/name/questLevel/startedBy`, `Npc.name` | **Yes** (its data contract) | Same. Scans all quest IDs once per dungeon in slices of 400 per frame, on demand. Its instance NPCs have no coordinates inside dungeons, so nothing goes on the map |
 
 **Map priority** for a plan floor: the game's own map art (a UiMap's art, else the old dungeon map tiles, Data/GameFiles.lua),
-then the first adapter that has a picture, in the order they load: Dungeon Journal, Forever Dungeon Routes, OpenMap;
-else the parchment grid. A picture floor is picked by the plan floor's name (`Providers.PickFloor`: the label, else the
+then Santiago Reyes' bundled map of a Forever floor (`Data/ReyesMaps.lua`, with his permission), then the first adapter
+that has a picture, in the order they load: Dungeon Journal, Forever Dungeon Routes, OpenMap; then the game's minimap
+pictures (section 9); else the parchment grid. The bundled maps are the same pictures as Dungeon Journal's and Forever
+Dungeon Routes' (same crop), so when one of them is installed its boss pins, alignment and routes are drawn on the
+bundled map. A picture floor is picked by the plan floor's name (`Providers.PickFloor`: the label, else the
 most words of the name in the label or, unlabelled, the file name, else the position).
 
 Other installed addons with dungeon data were looked at and are not read: DBM-Party-Forever (encounter IDs of the
@@ -296,7 +299,7 @@ on Forever**. What Dungeon Planner uses instead:
 | Need | Source now | Status |
 |---|---|---|
 | Card and header pictures | The instance's loading screen (`Interface\Glues\LoadingScreens\LoadScreen<Name>`, names and file IDs as the Dungeon Journal addon shows them on this client, others by the same pattern, and the files the client's own `LoadingScreens` table gives the instance maps whose names differ, below), checked with `GetFileIDFromPath`; else the Group Finder's background (`GetLFGDungeonInfo`); else an installed addon's own picture (Dungeon Journal's card art, credited); else a drawn plate (slate stone, the game's dungeon or raid mark in a bronze ring, the name) | Verified by `/dp scan` (below): 30 of the 43 recommended plans' instances have one; 8 more found offline in the client's tables (2026-11-16), to confirm in game |
-| Dungeon maps | The original dungeon map tiles (`Interface\WorldMap\<Dir>\<Name><floor>_1..12`, 4 x 3 tiles, 1002 x 668, the classic art layer's layout), per plan floor; for Forever's new dungeons and Scholomance's old layout, which have no map art, the game's own minimap pictures composed per floor (`Data/MinimapArt.lua`, below); the parchment grid where neither exists | Tile names verified by ForeverPlusPlus in game (enUS); some languages lack the textures (OpenMap and Leatrix Maps ship copies for esMX, ruRU, itIT): then the grid |
+| Dungeon maps | The original dungeon map tiles (`Interface\WorldMap\<Dir>\<Name><floor>_1..12`, 4 x 3 tiles, 1002 x 668, the classic art layer's layout), per plan floor; for Forever's new dungeons, Santiago Reyes' maps bundled with his permission (`Data/ReyesMaps.lua`, below); for Scholomance's old layout and floors he has not drawn, the game's own minimap pictures composed per floor (`Data/MinimapArt.lua`, below); the parchment grid where none exists | Tile names verified by ForeverPlusPlus in game (enUS); some languages lack the textures (OpenMap and Leatrix Maps ship copies for esMX, ruRU, itIT): then the grid |
 | Boss portraits | None in the client without the journal: a skull icon in the journal's ring instead of its "?" face. The Dungeon Journal addon uses its own table of creature display IDs and pictures it took in game; we ship neither | Fallback only |
 | Loot | None in the client: the Gear page says so and shows the plan's own gear list | Verified by the empty scan |
 | Level ranges | The Group Finder's browse list (`C_LFGList`) when it gives two different levels; the dungeon finder list gives one level per dungeon on Forever, so a plan's own range comes before it (`GameFiles.ResolveRange`) | Verified by `/dp scan` (below) |
@@ -407,14 +410,16 @@ routes run down the corridors on every floor checked (`tools/minimap_art.py`'s p
 Drawn with `Texture:SetTexture(fileID)` and the eight-value `SetTexCoord`; a building turned by an angle that is not a
 quarter (Dalaran 75 degrees, Blackmaw's Festering Grotto 5.5, Scholomance 1) uses `"CLAMPTOBLACKADDITIVE"` wrapping so
 the corners of each piece's box stay empty. **In game untested**: the clamp mode, and that the client streams these
-pictures to the UI like other textures. Another addon's drawn map comes first when one is installed ("Prefer drawn maps
-from Dungeon Journal / Forever Dungeon Routes when installed", on by default; profiles saved while it was off by
-default are set on once, `DB.ProviderMapsFirst`). `/dp debug` counts each source, `/dp scan` records every plan
+pictures to the UI like other textures. Since 2026-11-16 Santiago Reyes' maps ship with the addon and a drawn map (his,
+else another addon's) comes first ("Prefer drawn maps over the game's minimap pictures", on by default; profiles saved
+while it was off by default are set on once, `DB.ProviderMapsFirst`). `/dp debug` counts each source, `/dp scan` records every plan
 floor's (`mapSources`).
 
 Map order per plan floor (`MinimapArt.Choose`): the game's own map art (`C_Map`), the old dungeon map tiles
-(classic dungeons), another addon's drawn map (Dungeon Journal, Forever Dungeon Routes, OpenMap) unless the player
-switched that setting off, the minimap pictures, then the parchment grid. The minimap pictures are drawn in the
+(classic dungeons), Santiago Reyes' bundled map, another addon's drawn map (Dungeon Journal, Forever Dungeon Routes,
+OpenMap), the minimap pictures, then the parchment grid; with "Prefer drawn maps" off, the minimap pictures come before
+the drawn maps. The bundled maps are BLP2 files with DXT1 blocks, three 1024 x 256 strips per map, no mipmaps (the
+canvas draws with linear filtering). **In game untested**: that the client draws these files from the addon folder. The minimap pictures are drawn in the
 parchment colours by default (`MapCanvas.ArtStyle`: `SetDesaturated`, a warm vertex colour, the same picture added on
 top with `SetBlendMode("ADD")` to lift its mid greys, the parchment under it and a darkened edge,
 `Media/Vignette.tga`); "Map colours: game minimap colours" draws them untouched. **In game untested**: `SetDesaturated`

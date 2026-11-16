@@ -25,7 +25,7 @@ Treat everything as a starting point: check it in game and adjust it in an edita
 | [Wowhead Classic](https://www.wowhead.com/classic) NPC and item pages | web | NPC and item IDs: each ID was opened and its page title matched the name (they have no coordinates for instance NPCs) |
 | [Warcraft Wiki](https://warcraft.wiki.gg/wiki/UiMapID) `UiMapID` table | web | Map IDs of Classic dungeon floors |
 | [Warcraft Wiki: World of Warcraft: Forever](https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever) | web | Which instances are new in WoW: Forever (`origin`, shown as the "Forever" tag): the page marks the nine new dungeons (The Hall of Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, Shaper's Terrace) and the raids Hyjal Summit and Barrow Deeps as new, the others as old, and describes no reworked classic dungeon. Checked against [Warcraft Tavern's announcement of the nine dungeons](https://www.warcrafttavern.com/news/nine-new-dungeons-coming-to-world-of-warcraft-forever/) and the game's own data: those nine have instance map IDs 2959-3065 in the client's encounter table (as Forever Dungeon Routes exports it) and the Group Finder (`/dp scan`), where every classic instance is 533 or below. Barrow Deeps has no plan here |
-| Dungeon map pictures (the game's map art; community-made art for the Forever-only dungeons) | not copied | Viewed to read where rooms and portals are; every position read this way is an estimate marked "(approx.)". No picture or data file is shipped |
+| Dungeon map pictures (the game's map art; community-made art for the Forever-only dungeons) | not copied | Viewed to read where rooms and portals are; every position read this way is an estimate marked "(approx.)". No picture or data file of them is shipped (Santiago Reyes' maps ship separately, by his permission: section "Bundled maps" below) |
 | The same pictures, analysed by `tools/route_paths.py` on a local install (the game's dungeon map tiles; the Dungeon Journal and OpenMap addons' maps of the Forever-only dungeons) | not copied | Route bends that keep each route on the floor, and estimated spots moved off walls (`data-src/routes/`). Only coordinates ship; no picture, mask or grid derived from them |
 | [Forever Dungeon Routes](https://github.com/Checkov23/ForeverDungeonRoutes), an addon by Checkov23 | MIT ([copy](licenses/ForeverDungeonRoutes-LICENSE.txt)) | The routes of 41 plans: the classic dungeons, the 7 raids and the 9 new Forever dungeons. Main paths (route bends), side paths (optional routes), its stops as positions for our unplaced or estimated bosses and as added stops (`tools/import_routes.py`, section below). It states that its classic dungeon routes were traced from the aetherflask.com walkthrough maps; the project includes them. Its pictures are not used |
 
@@ -111,12 +111,37 @@ it is copied into this repository, the generated plans or the spawn data; the ex
 - **aetherflask.com** walkthrough maps (offline since 2022, mirrored at eintr.net): not used directly. Forever Dungeon
   Routes states that its classic dungeon routes were traced from them; those routes are included as part of Forever
   Dungeon Routes' MIT data (section "Imported routes" below).
-- **Santiago Reyes' maps** (in Forever Dungeon Routes, not under its MIT licence): never copied; read locally only to
-  check which picture a route was drawn on.
+- **Santiago Reyes' maps as other addons ship them** (Forever Dungeon Routes, Dungeon Journal): not taken; read locally
+  only to check which picture a route was drawn on. The maps Dungeon Planner bundles come from his own published files
+  with his permission ("Bundled maps" below).
 - Anything without a source, unless the research marks it as an estimate.
 - Points without coordinates never become map markers. They stay in the plan as encounters (boss order), as lines in the
   plan note ("Not on the map"), or in the order list.
 - Researcher remarks about sources, licences and unsure data are removed from the text that ships.
+
+## Bundled maps: Santiago Reyes
+
+The maps of WoW: Forever's nine new dungeons in `Media/Maps/Reyes/` (18 floors) are **Santiago Reyes'** artwork, from
+his "Atlas de Azeroth: Forever" (<https://sreyesmaps.com>), bundled **with his permission** (given on 2026-11-16 by
+direct message). They are (c) Santiago Reyes and **not** under the project's MIT licence:
+[licenses/SantiagoReyes-maps.md](licenses/SantiagoReyes-maps.md) records the permission, what was done to the files
+and the full list. Like his maps? Support the artist: <https://sreyesmaps.com/donaciones>.
+
+| Source | Terms | Used for |
+|---|---|---|
+| His published files on sreyesmaps.com (3000 x 2000 JPEG, the current version of each map on 2026-11-16) | (c) Santiago Reyes, used with his permission; not MIT | The map of every Forever floor he has drawn: Hall of Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran (city, Underbelly), The Drowned City (city, Atal'Byzal), Krol'dok Stronghold, Alcaz Prison (main and maximum security units), Blackmaw Hold (six levels), Shaper's Terrace (terrace, Prismatic Talus) |
+
+`tools/reyes_maps.py` converts them without changing the pictures: scaled to 1024 x 683 (the size and crop the Dungeon
+Journal and Forever Dungeon Routes addons use for the same pictures, checked: the same geometry, no offset), cut into
+three 1024 x 256 strips, stored as BLP2 with DXT1 compression (6.8 MiB in all). No recolouring, nothing cut away; his
+titles and signature stay. The plans' coordinates are in that picture's space already, so routes and markers land
+where they do on those addons' maps. The map credits him in its corner ("Map by Santiago Reyes"); the README, the
+addon's page and the settings credit him too.
+
+```sh
+uv run --script tools/reyes_maps.py --work <scratch folder>            # Media/Maps/Reyes/*.blp
+uv run --script tools/reyes_maps.py --work <scratch folder> --check    # exit 1 when a file would change
+```
 
 ## Imported routes: Forever Dungeon Routes
 
@@ -131,7 +156,7 @@ with "Route: Forever Dungeon Routes (MIT), by Checkov23.", and each routes file 
 | File in its repository | What it is | Status here |
 |---|---|---|
 | `LICENSE` | MIT, "Copyright (c) 2026 Checkov23", for "this software and associated documentation files"; no exclusion in it | Applies to everything below except the pictures |
-| `README.md`, "License" and "Credits"; `ForeverDungeonRoutes/maps/CREDITS.txt` | The one exclusion: the 16 map pictures in `ForeverDungeonRoutes/maps/` (`*.blp`) are by Santiago Reyes, used with his permission, not under the MIT licence. The credits also say its standard routes of the classic dungeons were traced from the aetherflask.com walkthrough maps (mirrored at eintr.net) | Pictures: never copied (read locally only to check they are the same pictures the Dungeon Journal addon draws). Classic routes: included, see below |
+| `README.md`, "License" and "Credits"; `ForeverDungeonRoutes/maps/CREDITS.txt` | The one exclusion: the 16 map pictures in `ForeverDungeonRoutes/maps/` (`*.blp`) are by Santiago Reyes, used with his permission, not under the MIT licence. The credits also say its standard routes of the classic dungeons were traced from the aetherflask.com walkthrough maps (mirrored at eintr.net) | Pictures: not taken from it (read locally only to check they are the same pictures the Dungeon Journal addon draws; the maps Dungeon Planner bundles come from his own site, with his own permission: "Bundled maps" below). Classic routes: included, see below |
 | `ForeverDungeonRoutes/ForeverDungeonRoutes.toc` | `X-License: MIT`, `X-Copyright: Copyright (c) 2026 Checkov23` | Agrees |
 | `ForeverDungeonRoutes/Data/DefaultRoutes.lua` | The routes: per dungeon `paths` (main and side, 0..1 on a floor), `stops`, `notes`, `links`, and a `source` per route | MIT. **Imported**, every route: the raids ("WoW dungeon journal (boss positions), paths over the walkable floors in the game's files"; Zul'Gurub "Boss areas of the game (AreaTable) and the skulls of its map"), the 9 new Forever dungeons ("Route from several guides and addons", "Rough route from a video guide"; places only, the paths drawn over the floors), and the 25 classic dungeons, whose `source` is "aetherflask.com (via eintr.net)": the file's header says their geometry was traced from the aetherflask.com walkthrough maps, which state no licence of their own. The project chose to include these routes; each of those plans' routes file records it (`"traced"` in its import block). Of a dungeon with several routes, the one whose stops name the most of the plan's bosses (Stratholme's living and undead sides), else the "Full clear". Scholomance is not imported: its routes are drawn on the client's later Scholomance map, which our plan does not use |
 | `ForeverDungeonRoutes/Data/Floors.lua` | The game's map tables (UiMap names, the art's tile file IDs) | Facts of the game; read to match its floors to ours by tile file ID, not copied |

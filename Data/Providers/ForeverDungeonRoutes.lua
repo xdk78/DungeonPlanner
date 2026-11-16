@@ -15,8 +15,10 @@
 --
 -- What it gives: its routes on a plan floor as an extra map layer ("Routes: Forever Dungeon Routes", off until the
 -- player ticks it), and its maps of Forever's new dungeons (Santiago Reyes' pictures, shipped with that addon) where the
--- game has no map. Map priority (docs/COMPATIBILITY.md section 6): the game's own map art, then Dungeon Journal's
--- pictures, then this addon's (the same pictures, the same crop), then OpenMap's drawings, then the parchment grid.
+-- game has no map. Map priority (docs/COMPATIBILITY.md section 6): the game's own map art, then the same pictures
+-- bundled with Dungeon Planner (Data/ReyesMaps.lua, by Santiago Reyes' permission; its routes are drawn on them too),
+-- then Dungeon Journal's pictures, then this addon's (the same pictures, the same crop), then OpenMap's drawings, then
+-- the game's minimap pictures, then the parchment grid.
 
 local _, ns = ...
 local Providers = ns.Providers
@@ -171,8 +173,8 @@ end
 
 -- Its route on a plan floor, in the coordinates of that floor's art: { name, lines = { { points = { {x, y}, ... },
 -- side = bool, title? } }, stops = { { name, kind, x, y } } }, or nil. `art` is the map the canvas draws (its source):
--- the coordinates fit the game's own map art for a classic floor, and Dungeon Journal's or this addon's pictures for a
--- picture floor; on any other map (OpenMap's drawings, the grid) nothing is given.
+-- the coordinates fit the game's own map art for a classic floor, and the bundled, Dungeon Journal's or this addon's
+-- pictures for a picture floor; on any other map (OpenMap's drawings, the minimap pictures, the grid) nothing is given.
 function A.Routes(root, plan, floor, art)
 	local id = A.FloorOf(root, plan, floor)
 	local f = id and floorInfo(root, id)
@@ -180,10 +182,12 @@ function A.Routes(root, plan, floor, art)
 		return nil
 	end
 	if picture(f) then
-		if art.source ~= "provider" or (art.provider ~= "dungeonJournal" and art.provider ~= A.id) then
+		-- Santiago Reyes' bundled map of the same floor (Data/ReyesMaps.lua) is the same picture, same crop.
+		local same = art.source == "reyes" and art.fdr ~= nil and art.fdr == ns.ReyesMaps.BaseName(picture(f).file)
+		if not same and (art.source ~= "provider" or (art.provider ~= "dungeonJournal" and art.provider ~= A.id)) then
 			return nil
 		end
-	elseif art.source == "provider" then
+	elseif art.source == "provider" or art.source == "reyes" then
 		return nil
 	end
 	local route = routeOf(root, plan, dungeonOf(root, plan))

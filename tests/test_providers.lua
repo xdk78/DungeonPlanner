@@ -393,8 +393,19 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
 	map:Refresh()
 	local canvas = map.canvas
-	T.ok(canvas.provided, "the canvas uses the provider's map")
+	T.ok(canvas.provided, "the canvas uses a drawn map")
+	T.eq(canvas.artInfo.source, "reyes", "Santiago Reyes' bundled map comes first")
+	T.ok(canvas.credit:IsShown() and canvas.credit:GetText():find("Santiago Reyes", 1, true), "credited to the artist")
+	-- Without the bundled map: the provider's, credited.
+	local bundled = ns.ReyesMaps.DUNGEONS.hallofthanes
+	ns.ReyesMaps.DUNGEONS.hallofthanes = nil
+	ns.ReyesMaps.Reset()
+	canvas.loadedKey = nil
+	map:Refresh()
+	T.eq(canvas.artInfo.source, "provider", "then the provider's map")
 	T.ok(canvas.credit:IsShown() and canvas.credit:GetText():find("Dungeon Journal", 1, true), "credited")
+	ns.ReyesMaps.DUNGEONS.hallofthanes = bundled
+	ns.ReyesMaps.Reset()
 	-- Legend: compact (not the full height), and reserved when fitting.
 	if map.rail:IsShown() then
 		T.ok(map.rail:GetWidth() < 248, "the legend alone is narrower than the editor")
@@ -403,22 +414,28 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	-- Without a provider: the parchment grid, and Fit frames the plan's markers instead of the empty grid.
 	mock.RemoveProviders()
 	preferProviders(false)
+	ns.db.settings.preferProviderMaps = false
 	fresh()
 	canvas.loadedKey = nil
 	map:Refresh()
 	T.eq(canvas.provided, nil)
-	T.eq(canvas.artInfo and canvas.artInfo.source, "minimap", "no other addon: the game's minimap pictures")
-	-- Neither: the grid.
+	T.eq(canvas.artInfo and canvas.artInfo.source, "minimap", "drawn maps not preferred: the game's minimap pictures")
+	-- Neither (no minimap pictures, no bundled map): the grid.
 	local data = ns.MinimapArtData
 	ns.MinimapArtData = {}
+	ns.ReyesMaps.DUNGEONS.hallofthanes = nil
 	ns.MinimapArt.Reset()
+	ns.ReyesMaps.Reset()
 	canvas.loadedKey = nil
 	map:Refresh()
 	T.eq(canvas.artInfo, nil, "no art: the grid")
 	canvas:ResetView()
 	T.ok(canvas.zoom > 1, "Fit zooms onto the markers")
 	ns.MinimapArtData = data
+	ns.ReyesMaps.DUNGEONS.hallofthanes = bundled
+	ns.db.settings.preferProviderMaps = nil
 	ns.MinimapArt.Reset()
+	ns.ReyesMaps.Reset()
 	canvas.loadedKey = nil
 	-- A later session: the legend stays off until the button turns it on.
 	ns.db.ui.showLegend = nil
@@ -487,9 +504,9 @@ T.case("Run mode on Hall of Thanes: next pull from step 1, a compact mini map, t
 	ns.UI.FocusStep(#steps, { stay = true })
 	ns.RunMode.Refresh()
 	local map = f.map
-	T.ok(map.provided, "the provider's map")
+	T.ok(map.provided, "a drawn map")
 	T.ok(not map.credit:IsShown() and not map.creditPlate:IsShown(), "no caption over the art")
-	T.ok(f.mapCredit:GetText():find("Dungeon Journal", 1, true), "the credit under the map")
+	T.ok(f.mapCredit:GetText():find("Santiago Reyes", 1, true), "the credit under the map")
 	map:DrawContent()
 	local positions = 0
 	for i = 1, map.counts.pins do

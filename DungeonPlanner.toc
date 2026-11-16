@@ -65,6 +65,7 @@ Data\Providers\ForeverDungeonRoutes.lua
 Data\Providers\OpenMap.lua
 Data\Providers\NeedRoll.lua
 Data\Providers\Questie.lua
+Data\ReyesMaps.lua
 Data\BossData.lua
 Data\BossInfo.lua
 Data\Templates.lua

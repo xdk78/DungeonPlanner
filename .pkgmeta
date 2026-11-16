@@ -2,7 +2,10 @@
 # Libraries are vendored in Libs/ (pinned copies, see docs/LIBRARIES.md), so there are no externals: the zip contains
 # exactly what the repository runs in game and what the offline tests load. Refresh them with tools/fetch_libs.sh.
 # Left out: everything for development (tests with the vendored test harness, tools, research data, the community
-# plan repository, CI, contributor docs). docs/licenses/ ships: the licence notices of imported data.
+# plan repository, CI, contributor docs). docs/licenses/ ships: the licence notices of imported data and of the
+# bundled maps (Media/Maps/Reyes/, docs/licenses/SantiagoReyes-maps.md). The packager matches these entries as shell
+# patterns, where "*" also matches "/", so the developer docs are listed one by one ("docs/*.md" would also drop
+# docs/licenses/*.md); tests/test_reyesmaps.lua checks it.
 package-as: DungeonPlanner
 
 enable-nolib-creation: no
@@ -11,7 +14,16 @@ ignore:
   - tests
   - tools
   - data-src
-  - docs/*.md
+  - docs/API.md
+  - docs/ARCHITECTURE.md
+  - docs/COMMUNITY-PLANS.md
+  - docs/COMPATIBILITY.md
+  - docs/CURSEFORGE.md
+  - docs/DATA-SOURCES.md
+  - docs/LIBRARIES.md
+  - docs/RELEASE-NOTES-*.md
+  - docs/SHARING-FORMAT.md
+  - docs/UI.md
   - docs/research
   - docs/screenshots
   - Media/Logo

@@ -1,5 +1,5 @@
 -- The views tests/ui_dump.lua dumps (wow-ui-harness, wowui.runner): the window's home (every tab), the instance
--- picker and other dropdown lists, every section of a Forever dungeon on a provider's map (Share with Advanced open),
+-- picker and other dropdown lists, every section of a Forever dungeon on Santiago Reyes' bundled map (Share with Advanced open),
 -- a raid's party, a classic dungeon and a raid on the game's old map tiles, an own plan with the drawing tools and
 -- drawings (also at the window's minimum size, 880 x 560, and a large one), run mode at its first, a middle and its
 -- last step, the /dp debug dialog and a confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the
@@ -34,8 +34,9 @@ local function closeAll()
 	end
 end
 
--- The views show the new dungeons on a provider's map (installed below), as players with one of those addons and the
--- setting see them; map-minimap shows the default, the game's own minimap pictures (Data/MinimapArt.lua).
+-- The views show the new dungeons on Santiago Reyes' bundled maps (Data/ReyesMaps.lua; the provider addons installed
+-- below add their boss pins and routes); map-minimap shows the game's own minimap pictures (Data/MinimapArt.lua), as
+-- players who switch "Prefer drawn maps" off see them.
 local function openPlan(id, section, minimap)
 	closeAll()
 	ns.db.settings.preferProviderMaps = not minimap
@@ -459,6 +460,23 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- Santiago Reyes' bundled map (Data/ReyesMaps.lua) with no other addon installed: the map, the plan on it and the
+	-- "Map by Santiago Reyes" chip.
+	{
+		name = "map-reyes",
+		setup = function()
+			mock.RemoveProviders()
+			ns.Providers.Reset()
+			ns.Providers.ResetCaches()
+			ns.ReyesMaps.Reset()
+			openPlan("hall-of-thanes", "map")
+		end,
+		window = window,
+		teardown = function()
+			V.installProviders()
+			ns.ReyesMaps.Reset()
+		end,
+	},
 	-- One map family: a classic dungeon on its old tiles (Ragefire Chasm: every kind of step in the side panel, a label
 	-- at the map's edge), an outdoor minimap floor (Ruins of Lordaeron) and a building floor (Blackmaw Hold, floor 2).
 	{
@@ -573,6 +591,18 @@ V.views = {
 }
 
 -- The client: the mock's API, set up like WoW: Forever.
+-- The made-up installed addons (tests/wowmock.lua), with the provider's real picture path (the made-up data's is not a
+-- usable one).
+function V.installProviders()
+	mock.InstallProviders()
+	local maps = _G.ForeverDungeonJournal_NS.DUNGEON_MAPS
+	maps["Hall of Thanes"].floors[1].texture = "Interface\\AddOns\\ForeverDungeonJournal\\Media\\HallOfThanesMap"
+	if ns.Providers then
+		ns.Providers.Reset()
+		ns.Providers.ResetCaches()
+	end
+end
+
 function V.install(ctx)
 	mock = ctx.mock
 	local locale = "enUS"
@@ -586,16 +616,13 @@ function V.install(ctx)
 	-- WoW: Forever: the Adventure Guide has no instances (docs/COMPATIBILITY.md section 9).
 	mock.journal.tiers = {}
 	mock.gameRules = { [77] = true }
-	mock.InstallProviders()
+	V.installProviders()
 	-- Made-up item names for the made-up drops (the mock's own are "Item <id>").
 	local names = { [900101] = "Test Choker", [900102] = "Test Boots", [900103] = "Test Blade", [900150] = "Test Summoning Stone",
 		[14540] = "Taragaman the Hungerer's Heart" } -- Ragefire Chasm's quest item, by its plan's label
 	_G.C_Item.GetItemNameByID = function(id)
 		return names[id] or ("Item " .. id)
 	end
-	-- The provider's real picture path (the made-up data's path is not a usable one).
-	local maps = _G.ForeverDungeonJournal_NS.DUNGEON_MAPS
-	maps["Hall of Thanes"].floors[1].texture = "Interface\\AddOns\\ForeverDungeonJournal\\Media\\HallOfThanesMap"
 	-- Map names: the client's own (unknown here: the plans' names show, as for instances the client does not list).
 	_G.C_Map.GetMapInfo = function(id)
 		return { mapID = id }
