@@ -81,6 +81,10 @@ The first public version, for WoW: Forever. Highlights, known limitations and th
 Since the test builds:
 - Item names in gear lists, boss drops, run mode and the Discord text no longer stay "Item 12345" while the client has
   not cached the item: it is asked to load it and the open lists update when the names arrive.
+- Item names now really fill in while the Bosses and Gear pages are open (they listened for the wrong answer from the
+  client, so only a later visit showed them); an item that does not arrive is asked again a few times, and hovering it
+  asks once more.
+- Estimated steps no longer show a box and "94p" before the "~" mark (in the steps list, run mode and step captions).
 - The estimate mark is a plain "~" (the old "≈" drew as "=" in the game's font); it never wraps onto a line alone.
 - Settings: the long checkbox label is no longer cut off, and the window scale is a list of steps (the slider's value
   box sat on its track). The `/dp debug` dialog is wide enough that a font's name is not split over two lines.

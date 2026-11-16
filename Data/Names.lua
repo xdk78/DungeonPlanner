@@ -106,57 +106,89 @@ local function itemCall(fn, id)
 	return ok and ns.Util.Plain(value) or nil
 end
 
--- An item the client has not cached has no name yet. The first lookup asks the client to load it (once per item); when
--- GET_ITEM_INFO_RECEIVED (or the item mixin's callback) says it arrived, the arrivals of the next 0.2 s go out as one
--- ITEMS_READY message, so open lists redraw once with the names in place of "Item 12345".
-local ITEM_BATCH = 0.2
-local itemAsked = {} -- [itemID] = true while the client was asked and has not answered, false once it did
-local itemArrived, itemTimer = {}, false
-local itemEventHooked = false
+-- An item the client has not cached has no name yet. Names.Item asks the client to load it
+-- (C_Item.RequestLoadItemDataByID, else the item mixin) and listens for ITEM_DATA_LOAD_RESULT, the event that request
+-- answers with (the client's own ItemEventListener waits for the same one). GET_ITEM_INFO_RECEIVED counts too (a
+-- tooltip's or another addon's load), but the request alone does not fire it: listening only to that event left every
+-- row on "Item 12345" until its page happened to be built again.
+-- Arrivals within ITEM_BATCH seconds go out as one ITEMS_READY message; the open window and run mode redraw once.
+-- An item still nameless ITEM_RETRY seconds after it was asked for (no answer, a failed one, or an answer before the
+-- name) is checked and asked again, at most ITEM_TRIES times a session. After that it keeps its "Item 12345" label;
+-- hovering it (its tooltip loads the item) asks once more. The sweep timer runs only while an item waits.
+local ITEM_BATCH, ITEM_RETRY, ITEM_TRIES, ITEM_MAX = 0.2, 4, 3, 2000
+local itemState, itemCount = {}, 0 -- [itemID] = { tries = asks so far, at = GetTime() of the last ask, done = named }
+local itemArrived, batchTimer, sweepTimer = {}, false, false
+local itemEventsHooked = false
 
-local function flushItems()
-	itemTimer = false
+local function clock()
+	return type(GetTime) == "function" and GetTime() or 0
+end
+
+local function clientItemName(itemID)
+	local name = itemCall(C_Item and C_Item.GetItemNameByID, itemID)
+	return type(name) == "string" and name ~= "" and name or nil
+end
+
+-- Mark the items of `ids` (a set) that have their name now; true when any did.
+local function settleItems(ids)
 	local any = false
-	for id in pairs(itemArrived) do
-		itemArrived[id] = nil
-		if Names.Item(id) then
+	for id in pairs(ids) do
+		local s = itemState[id]
+		if s and not s.done and clientItemName(id) then
+			s.done = true
 			any = true
 		end
 	end
-	if any and ns.Fire then
+	return any
+end
+
+local function itemsReady()
+	if ns.Fire then
 		ns:Fire("ITEMS_READY")
 	end
 end
 
-function Names.ItemArrived(itemID, success)
-	if itemAsked[itemID] ~= true then
-		return
+local function flushItems()
+	batchTimer = false
+	local ids = itemArrived
+	itemArrived = {}
+	if settleItems(ids) then
+		itemsReady()
 	end
-	itemAsked[itemID] = false
-	if success == false then
-		return
+end
+
+local askItem, scheduleSweep
+
+local function sweepItems()
+	sweepTimer = false
+	local named = settleItems(itemState)
+	local t = clock()
+	for id, s in pairs(itemState) do
+		if not s.done then
+			if t - s.at < ITEM_RETRY - 0.05 then -- this sweep's own asks are due now, not one interval later
+				scheduleSweep()
+			elseif s.tries < ITEM_TRIES then
+				askItem(id, s)
+			end
+		end
 	end
-	itemArrived[itemID] = true
-	if not itemTimer and C_Timer and C_Timer.After then
-		itemTimer = true
-		C_Timer.After(ITEM_BATCH, function()
-			ns.SafeCall(flushItems)
+	if named then
+		itemsReady()
+	end
+end
+
+function scheduleSweep()
+	if not sweepTimer and C_Timer and C_Timer.After then
+		sweepTimer = true
+		C_Timer.After(ITEM_RETRY, function()
+			ns.SafeCall(sweepItems)
 		end)
 	end
 end
 
--- Ask the client to load an item's data (guarded: either API may be missing). Asked once per item.
-function Names.RequestItem(itemID)
-	if not Util.IsInteger(itemID) or itemAsked[itemID] ~= nil then
-		return
-	end
-	itemAsked[itemID] = true
-	if not itemEventHooked then
-		itemEventHooked = true
-		ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, id, success)
-			Names.ItemArrived(Util.Plain(id), Util.Plain(success))
-		end)
-	end
+function askItem(itemID, s)
+	s.tries, s.at = s.tries + 1, clock()
+	scheduleSweep()
 	local items = rawget(_G, "C_Item")
 	if items and type(items.RequestLoadItemDataByID) == "function" then
 		pcall(items.RequestLoadItemDataByID, itemID)
@@ -166,17 +198,81 @@ function Names.RequestItem(itemID)
 	if mixin and type(mixin.CreateFromItemID) == "function" then
 		local ok, item = pcall(mixin.CreateFromItemID, mixin, itemID)
 		if ok and item and type(item.ContinueOnItemLoad) == "function" then
-			pcall(item.ContinueOnItemLoad, item, function()
-				Names.ItemArrived(itemID, true)
+			pcall(item.ContinueOnItemLoad, item, function(_, success)
+				Names.ItemArrived(itemID, success ~= false)
 			end)
 		end
 	end
 end
 
+-- The client says an item's data arrived (or that it could not load it: success false; the sweep asks again later).
+function Names.ItemArrived(itemID, success)
+	local s = itemState[itemID]
+	if not s or s.done or success == false then
+		return
+	end
+	itemArrived[itemID] = true
+	if not batchTimer and C_Timer and C_Timer.After then
+		batchTimer = true
+		C_Timer.After(ITEM_BATCH, function()
+			ns.SafeCall(flushItems)
+		end)
+	end
+end
+
+local function hookItemEvents()
+	if itemEventsHooked then
+		return
+	end
+	itemEventsHooked = true
+	local function arrived(_, id, success)
+		Names.ItemArrived(Util.Plain(id), Util.Plain(success))
+	end
+	ns:RegisterEvent("ITEM_DATA_LOAD_RESULT", arrived)
+	ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", arrived)
+end
+
+-- Ask the client to load an item's data (guarded: either API may be missing): not while an ask is in flight, at most
+-- ITEM_TRIES times, or once more with `again` (a hover, also no sooner than ITEM_RETRY after the last ask).
+function Names.RequestItem(itemID, again)
+	if not Util.IsInteger(itemID) then
+		return
+	end
+	local s = itemState[itemID]
+	if not s then
+		if itemCount >= ITEM_MAX then
+			return
+		end
+		itemCount = itemCount + 1
+		s = { tries = 0, at = 0 }
+		itemState[itemID] = s
+		hookItemEvents()
+	end
+	s.done = false
+	if s.tries > 0 and clock() - s.at < ITEM_RETRY then
+		return
+	end
+	if s.tries >= ITEM_TRIES and not again then
+		return
+	end
+	askItem(itemID, s)
+end
+
+-- A row showing an item is hovered: its tooltip loads the item; ask once more when it has no name yet.
+function Names.ItemHovered(itemID)
+	if itemID and not clientItemName(itemID) then
+		Names.RequestItem(itemID, true)
+	end
+end
+
+-- For tests: forget every item asked for.
+function Names.ResetItems()
+	itemState, itemCount, itemArrived = {}, 0, {}
+end
+
 function Names.Item(itemID)
-	local get = C_Item and C_Item.GetItemNameByID
-	local name = itemCall(get, itemID)
-	if type(name) == "string" and name ~= "" then
+	local name = clientItemName(itemID)
+	if name then
 		return name
 	end
 	Names.RequestItem(itemID)

@@ -741,6 +741,12 @@ T.case("Approximate spots: '(approx.)' becomes a small mark in step text and too
 	T.eq(U.SplitApprox(nil), nil)
 	T.ok(ns.Style.WithApprox("Boss", true):find(ns.Style.APPROX, 1, true))
 	T.eq(ns.Style.WithApprox("Boss", false), "Boss")
+	-- Only the text, a no-break space and the mark: no control bytes (a mangled escape once drew a box and "94p").
+	local marked = ns.Style.WithApprox("Boss", true)
+	T.eq(marked, "Boss\194\160" .. ns.Style.ApproxMark())
+	local plain = marked:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+	T.eq(plain, "Boss\194\160" .. ns.Style.APPROX)
+	T.ok(not plain:find("[%z\1-\31\127]"), "no control characters")
 	-- Hall of Thanes: the quest giver's step and a boss step.
 	local plan = ns.Bundled.Get("b:hall-of-thanes")
 	local steps = ns.Steps.Build(plan)

@@ -98,8 +98,12 @@ keyboard; inputs show their border; the primary action first.
   `PORTRAITS_READY` fires. Later requests in the wait get one more timer; with nothing loading no timer runs.
   Finished portraits are pooled per creature.
 - Item names: an item the client has not cached has no name; the first lookup (`Names.Item`) asks the client to load it
-  (`C_Item.RequestLoadItemDataByID`, else `Item:ContinueOnItemLoad`), once per item. Arrivals (`GET_ITEM_INFO_RECEIVED`)
-  within 0.2 s go out as one `ITEMS_READY` message; the open window and run mode redraw once with the names.
+  (`C_Item.RequestLoadItemDataByID`, else `Item:ContinueOnItemLoad`). The client answers that request with
+  `ITEM_DATA_LOAD_RESULT` (`GET_ITEM_INFO_RECEIVED` counts too, but the request alone does not fire it). Arrivals within
+  0.2 s go out as one `ITEMS_READY` message; the open window and run mode redraw once with the names. An item still
+  nameless 4 s after it was asked for (no answer, a failed one, a name that lands without an event) is checked and asked
+  again, at most three times a session; then it keeps "Item 12345" and hovering it asks once more (its tooltip loads it).
+  The check timer runs only while an item waits. The Gear page asks for every listed item, not only the rows in view.
 - Map content colours (pulls, routes, party roles) are strong enough to read on parchment.
 
 ## Window and navigation

@@ -3,7 +3,7 @@
 -- show the game's names, quality colours, icons and tooltips; Shift-click links one in chat. Editable plans add their
 -- own entries (an item ID, a dragged item or a label) with the form at the bottom, or recommend a drop with a
 -- right-click. Dungeon Planner ships no item database: names and icons come from the client (C_Item) at runtime, and
--- uncached items fill in when GET_ITEM_INFO_RECEIVED or EJ_LOOT_DATA_RECIEVED arrives.
+-- uncached items fill in when they arrive (Names.Item, ITEMS_READY) or EJ_LOOT_DATA_RECIEVED says the loot did.
 
 local _, ns = ...
 local S, W, L = ns.Style, ns.Widgets, ns.L
@@ -248,6 +248,7 @@ function Panel.Create(parent, ctx)
 		-- Beside the item's name, top-aligned with it (W.AnchorBeside): the game's comparison tooltips line up with
 		-- this one, so they sit next to the item and cover the rows below, never the filters above the list.
 		W.AnchorBeside(GameTooltip, row, row.title)
+		ns.Names.ItemHovered(itemID) -- an item still without its name asks for it again
 		local ok = false
 		if link and GameTooltip.SetHyperlink then
 			ok = pcall(GameTooltip.SetHyperlink, GameTooltip, link)
@@ -576,6 +577,13 @@ function Panel.Create(parent, ctx)
 			self.status:SetText(L["Loading items..."])
 		else
 			self.status:SetText(L["Shift-click an item to link it in chat."])
+		end
+		-- The list draws only the rows in view; ask for every listed item now, so rows scrolled to later have names.
+		for _, it in ipairs(items) do
+			local id = it.gear and it.gear.itemID or it.loot and it.loot.itemID
+			if id then
+				ns.Names.Item(id)
+			end
 		end
 		self.list:SetItems(items)
 	end

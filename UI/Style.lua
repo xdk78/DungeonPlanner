@@ -499,7 +499,7 @@ function Style.WithApprox(text, approx)
 		return Style.ApproxMark()
 	end
 	-- A no-break space, so the mark never wraps onto a line of its own.
-	return text .. "94p" .. Style.ApproxMark()
+	return text .. "\194\160" .. Style.ApproxMark()
 end
 
 -- Level range text coloured like the game colours quest difficulty (GetQuestDifficultyColor, guarded; OpenMap uses

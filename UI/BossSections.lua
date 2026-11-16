@@ -57,6 +57,7 @@ local function showTooltip(row)
 		return
 	end
 	W.TipBeside(tt, row)
+	ns.Names.ItemHovered(id) -- a drop still without its name asks for it again
 	local ok = false
 	local link = itemLink(id)
 	if link and tt.SetHyperlink then
