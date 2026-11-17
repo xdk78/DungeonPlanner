@@ -12,6 +12,9 @@ Screenshots: in-game screenshots will be in [docs/screenshots/](docs/screenshots
 
 ## Features
 
+Dungeon Planner works on its own: maps, boss portraits, abilities, loot, levels and dungeon quests are built in. Other
+addons add extras when installed (see "Recommended companion addons").
+
 - **A war table**: the map fills the window; the plan's steps (entrance, packs, bosses, objectives) and the party sit
   beside it, and clicking a step shows it on the map. Pick the instance and the plan from the header.
 - **Run mode**: a small window to keep open while playing: the current step, the next pull, tips for the next boss and
@@ -32,7 +35,8 @@ Screenshots: in-game screenshots will be in [docs/screenshots/](docs/screenshots
   next, Skip, Careful), planned cooldowns and Bloodlust, and the forces after each pull; a Pull tool to click packs into
   pulls.
 - **Routes**: draw paths, build a route through your pulls, or let "Suggest order" find a short path.
-- **Encounters**: bosses from the game's Adventure Guide (or your own), strategy text and phases with triggers.
+- **Encounters**: every boss of the recommended plans with a portrait, level, key abilities (names and tooltips from
+  the game) and loot from the addon's own boss data (or your own bosses), strategy text and phases with triggers.
 - **Assignments**: per boss and phase, for a player, a role, a raid group or everyone; raid groups 1-8; post them to
   group chat.
 - **Raid pages**: free-text assignment pages per boss with keywords (`{star}`, `{tank}`, `{group 2}`, `{mage}`), names
