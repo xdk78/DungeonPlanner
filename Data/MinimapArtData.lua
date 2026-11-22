@@ -10,7 +10,7 @@ local _, ns = ...
 ns.MinimapArtData = {
 	alcazprison = {
 		[1] = { w = 237.6, h = 229.6, source = "terrain",
-			-- terrain 2994; plan via Dungeon Journal AlcazPrisonMap (none, r=0.999) + its frame
+			-- terrain 2994; plan via Dungeon Journal AlcazPrisonMap (same, r=0.999) + its frame
 			xf = { 0.0133509, -0.905487, 0.857971, 1.34, 0.0340148, -0.1009 },
 			pieces = {
 				{ 7250238, 0, 0, 237.6, 229.6, 0.336, 0.3284, 0.336, 0.7589, 0.7815, 0.3284, 0.7815, 0.7589 },
@@ -275,7 +275,7 @@ ns.MinimapArtData = {
 	},
 	shapersterrace = {
 		[1] = { w = 1424.9, h = 1032, source = "terrain",
-			-- terrain 3001; plan via Dungeon Journal ShapersTerraceMap (none, r=0.998) + its frame
+			-- terrain 3001; plan via Dungeon Journal ShapersTerraceMap (pins, r=0.998) + its frame
 			xf = { 0.905081, 0.0208549, 0.0370572, 0.0510499, 0.846724, 0.0511312 },
 			pieces = {
 				{ 7352814, 0, 97.03, 489.27, 533.33, 0.0826, 0, 0.0826, 1, 1, 0, 1, 1 },

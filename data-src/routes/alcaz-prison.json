@@ -2,7 +2,7 @@
   "schema": 1,
   "slug": "alcaz-prison",
   "about": "Route bends through walkable space between consecutive stops (tools/route_paths.py). Moves and legs marked generated are redone by the tool; the others and the overrides are kept. The import block and the legs marked import come from an imported route (tools/import_routes.py); this tool computes only the legs that route does not cover.",
-  "map": {"1": "Dungeon Journal AlcazPrisonMap (none)"},
+  "map": {"1": "Dungeon Journal AlcazPrisonMap (same)"},
   "overrides": {},
   "import": {
     "from": "Forever Dungeon Routes 1.2.4, route 'default' (Rough route from a video guide (the minimap during each fight, matched with the game's own minimap), stops approximate)",
