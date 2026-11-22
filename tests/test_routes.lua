@@ -482,3 +482,194 @@ T.case("Route arrows wait while a route point is dragged or the window is resize
 	T.eq(calls, 2, "placed once the resize ends")
 	RA.Place = place
 end)
+
+-- Plan point (x, y) of the map shown, as the pointer's screen position.
+local function pointAt(view, x, y)
+	local c = view.canvas
+	local s = c:GetEffectiveScale()
+	return (c:GetLeft() + x * c:GetWidth()) * s, (c:GetTop() - y * c:GetHeight()) * s
+end
+
+T.case("Route arrows: a real route point drag hides them; the drop places them in its own redraw", function()
+	boot()
+	local copy = ns.UI.CopyPlan(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns"))
+	ns.UI.SelectTab("map")
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	ns.UI.ctx.tool, ns.UI.ctx.floor = "select", 1
+	ns.db.ui.snapRoutes = false
+	map:RefreshNow()
+	local canvas = map.canvas
+	T.ok(canvas.counts.arrows > 0, "arrows to begin with")
+	local pin
+	for _, p in ipairs(canvas.pools.points) do
+		if p:IsShown() and p.routeId then
+			pin = p
+			break
+		end
+	end
+	T.ok(pin, "a numbered stop's pin")
+	local pt = ns.Util.FindById(copy.routes, pin.routeId).points[pin.pointIndex]
+	local real = _G.GetCursorPosition
+	local tx, ty = pt[1] + 0.01, pt[2]
+	_G.GetCursorPosition = function()
+		return pointAt(canvas, tx, ty)
+	end
+	pin:GetScript("OnDragStart")(pin)
+	mock.Advance(0.016) -- one frame: OnDragUpdate moves the point and redraws the map
+	T.ok(canvas.drag.mode == "point" and canvas.drag.moved, "dragging the point")
+	T.eq(canvas.counts.arrows, 0, "no arrows while it moves")
+	T.ok(not canvas.pools.arrows[1]:IsShown(), "hidden")
+	pin:GetScript("OnDragStop")(pin)
+	T.eq(canvas.drag.mode, "idle")
+	T.ok(canvas.counts.arrows > 0, "placed by the drop's redraw, before any timer: " .. canvas.counts.arrows)
+	T.ok(canvas.pools.arrows[1]:IsShown(), "shown")
+	_G.GetCursorPosition = real
+	ns.DB.DeletePlan(copy.id)
+end)
+
+T.case("Route arrows: the size grip holds them until its release, the window hides, or no button is held", function()
+	boot()
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "wailing-caverns")
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+	local f = _G.DungeonPlannerMainFrame
+	local canvas = f.instancePage.panels.map.canvas
+	local grip = f.grip
+	local before = canvas.counts.arrows
+	T.ok(before > 0, "arrows to begin with")
+	local place, calls = RA.Place, 0
+	RA.Place = function(...)
+		calls = calls + 1
+		return place(...)
+	end
+	local realDown = rawget(_G, "IsMouseButtonDown")
+	local ok, err = pcall(function()
+		-- Pressed and released.
+		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		T.eq(ns.sizingWindow, f, "resizing")
+		canvas:DrawContent()
+		T.eq(canvas.counts.arrows, 0, "none while resizing")
+		mock.Advance(0.2)
+		T.eq(calls, 0, "the timer waits")
+		grip:GetScript("OnMouseUp")(grip, "LeftButton")
+		T.eq(ns.sizingWindow, nil, "released")
+		mock.Advance(0.2)
+		T.eq(calls, 1, "placed once")
+		T.eq(canvas.counts.arrows, before, "all back")
+		-- The window hidden mid-resize (Escape): its grip gets no release.
+		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		canvas:DrawContent()
+		f:Hide()
+		T.eq(ns.sizingWindow, nil, "the resize ends with the window")
+		f:Show()
+		canvas:DrawContent()
+		mock.Advance(0.2)
+		T.ok(canvas.counts.arrows > 0, "arrows when it is back")
+		-- The release lost: once no mouse button is held, the timer stops waiting.
+		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		canvas:DrawContent()
+		local held = true
+		_G.IsMouseButtonDown = function()
+			return held
+		end
+		calls = 0
+		mock.Advance(0.2)
+		T.eq(calls, 0, "a button still held: waiting")
+		held = false
+		mock.Advance(0.2)
+		T.eq(calls, 1, "no button held: placed")
+		T.eq(ns.sizingWindow, nil, "and the resize counts as over")
+		T.eq(canvas.counts.arrows, before)
+	end)
+	_G.IsMouseButtonDown = realDown
+	ns.sizingWindow = nil
+	RA.Place = place
+	if not ok then
+		error(err, 0)
+	end
+end)
+
+T.case("Route arrows: placed a view's size beyond the visible map too, so a pan shows them on what it reveals", function()
+	boot()
+	local plan = ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns")
+	ns.UI.SelectPlan(plan.id)
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+	local canvas = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	-- Zoomed in on the route's middle stop.
+	local route = plan.routes[1]
+	local mid = route.points[math.floor(#route.points / 2)]
+	local vw, vh = canvas:GetWidth(), canvas:GetHeight()
+	canvas.zoom = 4
+	local w, h = canvas:BaseSize()
+	local s = canvas:Scale()
+	canvas.ox, canvas.oy = vw / 2 - mid[1] * w * s, vh / 2 - mid[2] * h * s
+	canvas:Layout()
+	-- The visible map in canvas offsets (y up) and the arrows placed outside it.
+	local x1, x2, y1, y2 = -canvas.ox, vw - canvas.ox, canvas.oy - vh, canvas.oy
+	local beyond, inside, far = 0, 0, 0
+	for _, m in ipairs(canvas.routeMarks or {}) do
+		local dx = math.max(x1 - m.x, m.x - x2, 0)
+		local dy = math.max(y1 - m.y, m.y - y2, 0)
+		if dx > 60 or dy > 60 then
+			beyond = beyond + 1
+		elseif dx == 0 and dy == 0 then
+			inside = inside + 1
+		end
+		if dx > vw + 60 or dy > vh + 60 then
+			far = far + 1
+		end
+	end
+	T.ok(inside > 0, "arrows on the visible map: " .. inside)
+	T.ok(beyond > 0, "and on the map a pan would reveal: " .. beyond)
+	T.eq(far, 0, "none farther than a view's size")
+	canvas:ResetView()
+end)
+
+T.case("Map labels keep clear of the coordinate readout above the floor switcher on a map with floors", function()
+	boot()
+	ns.db.settings.showCoordinates = true
+	ns.UI.SelectPlan("b:the-deadmines")
+	ns.UI.SelectTab("map")
+	ns.UI.GoToFloor(1)
+	ns.UI.RefreshPage()
+	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+	local canvas = map.canvas
+	T.ok(map.floorBar:IsShown(), "the floor switcher is shown")
+	local c, inner = canvas.coords, canvas.canvas
+	local above = false
+	for _, p in ipairs(c._points or {}) do
+		above = above or (p[1] == "BOTTOMRIGHT" and p[2] == map.floorBar and p[3] == "TOPRIGHT")
+	end
+	T.ok(above, "the floor switcher moves the readout above itself")
+	-- Where the client puts them (the offline mock resolves no anchors): the map's canvas with its top left at
+	-- (100, 700), the readout's bottom right at (580, 236), just above the switcher, far from the map's bottom corner.
+	c.GetRight, c.GetBottom = function()
+		return 580
+	end, function()
+		return 236
+	end
+	inner.GetLeft, inner.GetTop = function()
+		return 100
+	end, function()
+		return 700
+	end
+	local ok, err = pcall(function()
+		canvas:DrawContent()
+		local box, xs = canvas.coordsBox, ns.Style.SPACE.xs
+		T.ok(box, "a keep-out box for the readout")
+		-- In canvas units (y down): right edge 480, bottom 464.
+		local function near(a, b)
+			return math.abs(a - b) < 1e-6
+		end
+		T.ok(near(box[3], 480 + xs) and near(box[4], 464 + xs), "at the readout's right and bottom edges: " .. box[3]
+			.. ", " .. box[4])
+		T.ok(near(box[1], 480 - canvas.coordsW - xs) and near(box[2], 464 - canvas.coordsH - xs),
+			"with the room of its widest text: " .. box[1] .. ", " .. box[2])
+	end)
+	c.GetRight, c.GetBottom, inner.GetLeft, inner.GetTop = nil, nil, nil, nil
+	canvas:DrawContent()
+	if not ok then
+		error(err, 0)
+	end
+end)

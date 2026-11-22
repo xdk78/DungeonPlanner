@@ -484,8 +484,10 @@ function MapCanvas.Install(view)
 		if bounds[3] - bounds[1] < 40 or bounds[4] - bounds[2] < 40 then
 			bounds = nil -- not laid out yet
 		end
-		-- And the coordinate readout in the bottom-right corner (shown while the pointer is over the map): the room its
-		-- widest text takes, measured once per font.
+		-- And the coordinate readout (shown while the pointer is over the map) where it is anchored: the bottom-right
+		-- corner, or above the floor switcher (UI/Panels/FloorBar.lua). Its right and bottom edges from its anchor, the
+		-- room its widest text takes measured once per font. view.coordsBox: that rectangle in canvas units.
+		view.coordsBox = nil
 		if bounds and view.cb.showCoordinates and view.cb.showCoordinates() then
 			local c = view.coords
 			local font = c:GetFont()
@@ -495,9 +497,15 @@ function MapCanvas.Install(view)
 				view.coordsFont, view.coordsW, view.coordsH = font, c:GetStringWidth() or 0, c:GetStringHeight() or 0
 				c:SetText(text or "")
 			end
-			local right, bottom = bounds[3] - SP.sm, bounds[4] - SP.sm
-			avoid = avoid or {}
-			avoid[#avoid + 1] = { right - view.coordsW - SP.xs, bottom - view.coordsH - SP.xs, right, bottom }
+			local r, b, cl, ct = c:GetRight(), c:GetBottom(), canvas:GetLeft(), canvas:GetTop()
+			if r and b and cl and ct then
+				local k = (c:GetParent():GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
+				local right, bottom = r * k - cl, ct - b * k
+				view.coordsBox = { right - (view.coordsW + SP.xs) * k, bottom - (view.coordsH + SP.xs) * k, right + SP.xs * k,
+					bottom + SP.xs * k }
+				avoid = avoid or {}
+				avoid[#avoid + 1] = view.coordsBox
+			end
 		end
 		MapPins.ApplyLayout(list, canvas, avoid, bounds)
 		return bounds
@@ -755,9 +763,12 @@ function MapCanvas.Install(view)
 			end
 			local shown = applyLayout(layout)
 			if pathsDrawn then
-				-- Arrows clear of the pins and labels, only on the visible map and a margin (canvas offsets, y up).
+				-- Arrows clear of the pins and labels, only on the visible map and a margin of one view size on every
+				-- side (canvas offsets, y up), so a pan (which moves the canvas without a redraw) shows arrows on the
+				-- map it reveals; beyond that they come with the redraw on release.
 				local obstacles = ns.RouteArrows.Obstacles(layout, true)
-				obstacles.bounds = shown and { shown[1] - 40, -shown[4] - 40, shown[3] + 40, -shown[2] + 40 }
+				local mw, mh = shown and shown[3] - shown[1], shown and shown[4] - shown[2]
+				obstacles.bounds = shown and { shown[1] - mw, -shown[4] - mh, shown[3] + mw, -shown[2] + mh }
 				nArrows = self:PlaceRouteArrows(obstacles)
 			end
 		end

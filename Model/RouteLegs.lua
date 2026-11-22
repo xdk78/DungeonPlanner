@@ -2,7 +2,7 @@
 -- highlight, and two-lane drawing for corridors walked out and back. Pure geometry in screen units, used once per
 -- redraw (Lanes) or per pointer move while hovering the map (Hit), never per frame otherwise.
 --
---   RouteLegs.Lanes(pts, o)            a path with each out-and-back stretch shifted to its own right (two lanes).
+--   RouteLegs.Lanes(pts, o)            a path with each out-and-back stretch drawn as two lanes, moved apart.
 --   RouteLegs.Hit(paths, x, y, tol)    the path and segment nearest a point, within tol.
 --   RouteLegs.Leg(pts, seg)            the stop-to-stop leg that holds segment seg: from, to (point indices).
 --   RouteLegs.StepOf(list, route, seg) the step (Model/Steps.lua) whose leg holds segment seg of a route, and the
@@ -17,7 +17,8 @@ local sqrt, max, min = math.sqrt, math.max, math.min
 local G = ns.RouteArrows -- the grid and the point-to-segment distance
 
 local ANTI = 0.9 -- cosine: two segments whose directions are this close to opposite run out and back
-local U_TURN = -0.5 -- cosine between the right sides of two shifted segments: below it, the path turns back
+local U_TURN = -0.5 -- cosine between the lane sides of two shifted segments: below it, the path turns back
+local COLLINEAR = 0.5 -- two partners less than this apart (screen units) lie on one line
 
 -- The shortest distance between segments a and b ({ ax, ay, bx, by }), when they do not cross.
 local function segSegDist(a, b)
@@ -33,14 +34,29 @@ local function overlap(a, b)
 	return min(a.len, max(p, q)) - max(0, min(p, q))
 end
 
--- o: { shift (how far each lane moves to its right), near (segments closer than this, running opposite ways, are an
+-- The side segment s moves to, away from its partner t (+1: s's right, -1: its left): measured from the middle of the
+-- stretch they share; when they lie on one line, each takes its own right (they run opposite ways, so they part).
+local function sideFrom(s, t, lo, hi)
+	local m = (lo + hi) / 2
+	local px, py = s.ax + s.ux * m, s.ay + s.uy * m
+	local c = max(0, min(t.len, (px - t.ax) * t.ux + (py - t.ay) * t.uy))
+	local d = (t.ax + t.ux * c - px) * s.rx + (t.ay + t.uy * c - py) * s.ry
+	return d > COLLINEAR and -1 or 1
+end
+
+-- o: { shift (how far each lane moves aside), near (segments closer than this, running opposite ways, are an
 -- out-and-back stretch), yUp (true when y grows upwards, as in canvas offsets: decides which side is right) }.
--- Returns a new list of points { x, y, stop, i (the original point), seg (the original segment ending here) } and
--- whether any segment moved. Where the path turns back on a shifted stretch, the turning point is doubled: once at the
--- end of the way in, once at the start of the way back; the short link between them belongs to the segment arriving.
+-- Returns a new list of points { x, y, stop, i (the original point; nil for a point added inside a segment), seg (the
+-- original segment ending here) } and whether any segment moved. Each segment of such a stretch moves away from its
+-- partner (the opposite segment it runs alongside the longest), to its own right when the two lie on one line. Only
+-- the part a segment shares with its partner moves: a long segment with a short way back is split, with a short
+-- slant to the lane where the shared part begins and back where it ends. Where the path turns back on a shifted
+-- stretch, the turning point is doubled: once at the end of the way in, once at the start of the way back; the short
+-- link between them belongs to the segment arriving.
 function RouteLegs.Lanes(pts, o)
 	o = o or {}
 	local shift, near = o.shift or 3, o.near or 6
+	local ramp = 2 * shift -- the slant between the middle line and a lane, along the segment
 	local n = #pts
 	local segs = {}
 	local grid = G.NewGrid(max(16, near * 2))
@@ -65,39 +81,71 @@ function RouteLegs.Lanes(pts, o)
 	for i = 2, n do
 		local s = segs[i]
 		if s then
-			s.lane = G.GridAny(grid, min(s.ax, s.bx), min(s.ay, s.by), max(s.ax, s.bx), max(s.ay, s.by), function(t)
-				return t ~= s and s.ux * t.ux + s.uy * t.uy < -ANTI and overlap(s, t) > min(near, s.len / 3)
-					and segSegDist(s, t) < near
-			end) or nil
-			moved = moved or s.lane == true
+			local partner, shared = nil, 0
+			G.GridAny(grid, min(s.ax, s.bx), min(s.ay, s.by), max(s.ax, s.bx), max(s.ay, s.by), function(t)
+				if t ~= s and s.ux * t.ux + s.uy * t.uy < -ANTI then
+					local ov = overlap(s, t)
+					if ov > shared and ov > min(near, s.len / 3) and segSegDist(s, t) < near then
+						partner, shared = t, ov
+					end
+				end
+				return false
+			end)
+			if partner then
+				-- The part of s alongside its partner, from lo to hi along s; a short rest at either end moves too.
+				local p = (partner.ax - s.ax) * s.ux + (partner.ay - s.ay) * s.uy
+				local q = (partner.bx - s.ax) * s.ux + (partner.by - s.ay) * s.uy
+				local lo, hi = max(0, min(p, q)), min(s.len, max(p, q))
+				local side = sideFrom(s, partner, lo, hi)
+				s.lo = lo > ramp and lo or 0
+				s.hi = s.len - hi > ramp and hi or s.len
+				s.sx, s.sy = s.rx * side, s.ry * side -- the unit step towards its lane
+				moved = true
+			end
 		end
 	end
 	local out = {}
 	local function add(x, y, i, seg)
 		out[#out + 1] = { x, y, stop = pts[i].stop, i = i, seg = seg }
 	end
+	-- A point inside segment s, `along` from its start, in its lane (k = shift) or on the middle line (k = 0).
+	local function inner(s, along, k)
+		out[#out + 1] = { s.ax + s.ux * along + s.sx * k, s.ay + s.uy * along + s.sy * k, seg = s.i }
+	end
 	for v = 1, n do
 		local p = pts[v]
 		local sIn, sOut = segs[v], segs[v + 1]
-		local inLane, outLane = sIn and sIn.lane, sOut and sOut.lane
+		local inLane = sIn and sIn.sx and sIn.hi >= sIn.len
+		local outLane = sOut and sOut.sx and sOut.lo <= 0
 		if inLane and outLane then
-			local dot = sIn.rx * sOut.rx + sIn.ry * sOut.ry
+			local dot = sIn.sx * sOut.sx + sIn.sy * sOut.sy
 			if dot < U_TURN then
-				add(p[1] + sIn.rx * shift, p[2] + sIn.ry * shift, v, v)
-				add(p[1] + sOut.rx * shift, p[2] + sOut.ry * shift, v, v)
+				add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v)
+				add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v)
 			else
 				-- A mitred corner keeps both lanes at the same distance from the middle line.
-				local mx, my = sIn.rx + sOut.rx, sIn.ry + sOut.ry
+				local mx, my = sIn.sx + sOut.sx, sIn.sy + sOut.sy
 				local m = sqrt(mx * mx + my * my)
-				local k = shift / max(0.5, (mx * sIn.rx + my * sIn.ry) / m) / m
+				local k = shift / max(0.5, (mx * sIn.sx + my * sIn.sy) / m) / m
 				add(p[1] + mx * k, p[2] + my * k, v, v)
 			end
 		elseif inLane then
-			add(p[1] + sIn.rx * shift, p[2] + sIn.ry * shift, v, v)
+			add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v)
 		elseif outLane then
-			add(p[1] + sOut.rx * shift, p[2] + sOut.ry * shift, v, v)
+			add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v)
 		else
 			add(p[1], p[2], v, v)
+		end
+		-- The next segment's own split points: onto its lane where the shared part begins, off it where it ends.
+		if sOut and sOut.sx then
+			if sOut.lo > 0 then
+				inner(sOut, sOut.lo - ramp, 0)
+				inner(sOut, sOut.lo, shift)
+			end
+			if sOut.hi < sOut.len then
+				inner(sOut, sOut.hi, shift)
+				inner(sOut, sOut.hi + ramp, 0)
+			end
 		end
 	end
 	return out, moved

@@ -54,6 +54,51 @@ T.case("Route lanes: out and back along one corridor becomes two lanes, each on 
 	T.ok(math.abs(b[2][1] - 104) < 1e-6 and math.abs(b[2][2] + 4) < 1e-6, "the corner's lane point: " .. b[2][1] .. "," .. b[2][2])
 end)
 
+T.case("Route lanes: each side moves away from its partner, so a way back just to the right never crosses", function()
+	-- y up: east along y = 0, a 4 px step south, back west along y = -4 (on the way in's right). A thick line: each lane
+	-- moves 6, more than half the distance between them. Moving each to its own right would swap them over.
+	local pts = { { 0, 0, stop = true }, { 200, 0 }, { 200, -4 }, { 0, -4, stop = true } }
+	local lanes, moved = RL.Lanes(pts, { shift = 6, near = 14, yUp = true })
+	T.ok(moved, "shifted")
+	local inY, backY
+	for k = 2, #lanes do
+		local a, c = lanes[k - 1], lanes[k]
+		if c.seg == 2 and a[2] == c[2] then
+			inY = c[2]
+		elseif c.seg == 4 and a[2] == c[2] then
+			backY = c[2]
+		end
+	end
+	T.ok(inY and backY, "both ways drawn straight")
+	T.eq(inY, 6, "the way in moves north, away from the way back")
+	T.eq(backY, -10, "the way back moves south, away from the way in")
+	-- Mirrored (the way back on the way in's left): still apart, each away from the other.
+	local left = RL.Lanes({ { 0, 0, stop = true }, { 200, 0 }, { 200, 4 }, { 0, 4, stop = true } },
+		{ shift = 6, near = 14, yUp = true })
+	T.ok(left[1][2] < left[#left][2] - 12, "in " .. left[1][2] .. ", back " .. left[#left][2])
+end)
+
+T.case("Route lanes: a long segment with a short way back moves only along the part they share", function()
+	-- y up: east 400 along y = 0, back west 100 on the same line, then north. Only x 300..400 of the long segment runs
+	-- alongside the way back.
+	local pts = { { 0, 0, stop = true }, { 400, 0 }, { 300, 0 }, { 300, 100, stop = true } }
+	local lanes = RL.Lanes(pts, { shift = 4, near = 8, yUp = true })
+	local function at(k, x, y, what)
+		local p = lanes[k]
+		T.ok(p and math.abs(p[1] - x) < 1e-6 and math.abs(p[2] - y) < 1e-6,
+			what .. ": " .. (p and (p[1] .. "," .. p[2]) or "none") .. ", not " .. x .. "," .. y)
+	end
+	T.eq(#lanes, 7, "two points added inside the long segment, the turning point doubled")
+	at(1, 0, 0, "the start stays on the middle line")
+	at(2, 292, 0, "so does the long segment up to a short slant before the shared part")
+	T.ok(lanes[2].i == nil and lanes[2].seg == 2 and lanes[3].seg == 2, "the added points belong to segment 2")
+	at(3, 300, -4, "the shared part on the way in's lane (its right)")
+	at(4, 400, -4, "up to the turning point")
+	at(5, 400, 4, "the way back on its own lane")
+	at(6, 300, 4, "all of its short length")
+	at(7, 300, 100, "the next segment runs alone again")
+end)
+
 T.case("Route legs: hit testing with a tolerance; the leg and the steps a segment belongs to", function()
 	local lanes = RL.Lanes({ { 0, 0, stop = true }, { 100, 0 }, { 100, 100, stop = true }, { 200, 100, stop = true } },
 		{ shift = 4, near = 8, yUp = true })
@@ -232,4 +277,172 @@ T.case("Route hover: pointing at a step in the list highlights the leg that lead
 	end
 	T.ok(top > 0, "the current step's leg above the rest: " .. top)
 	ns.RunMode.Hide()
+end)
+
+-- The alpha of every route line drawn now.
+local function lineAlphas(canvas)
+	local out = {}
+	for i = 1, canvas.routeCounts.lines do
+		local _, _, _, a = canvas.pools.lines[i]:GetVertexColor()
+		out[i] = a
+	end
+	return out
+end
+
+-- The steps list's row showing the first step that passes `want(step)`, scrolled into view.
+local function listRow(want)
+	local list = _G.DungeonPlannerMainFrame.instancePage.side.list
+	for index, step in ipairs(list.items) do
+		if want(step) then
+			list:ScrollTo(index)
+			for _, r in ipairs(list.rows) do
+				if r.index == index then
+					return r, list
+				end
+			end
+		end
+	end
+	return nil, list
+end
+
+T.case("Route hover: a step on another floor highlights nothing and dims nothing", function()
+	boot()
+	ns.db.settings.routes.hover = true
+	local plan = ns.Bundled.Get("b:the-deadmines")
+	ns.UI.SelectPlan(plan.id)
+	ns.UI.SelectTab("map")
+	ns.UI.GoToFloor(1)
+	ns.UI.RefreshPage()
+	local canvas = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	local before = lineAlphas(canvas)
+	T.ok(#before > 0, "floor 1 has route lines")
+	local function onFloor(floor)
+		return function(step)
+			local route = step.stop and step.route and ns.Util.FindById(plan.routes, step.route)
+			return route and route.floor == floor and step.from and true or false
+		end
+	end
+	local row = listRow(onFloor(2))
+	T.ok(row, "a stop step on floor 2 in the list")
+	row:GetScript("OnEnter")(row)
+	T.eq(canvas.routeHover, nil, "no highlight for a leg the map does not show")
+	local after = lineAlphas(canvas)
+	for i, a in ipairs(before) do
+		T.eq(after[i], a, "line " .. i .. " keeps its alpha")
+	end
+	row:GetScript("OnLeave")(row)
+	-- The map itself ignores a highlight whose route it does not draw.
+	local other = row.item
+	canvas:SetRouteHover({ route = other.route, from = other.from, to = other.to }, "map")
+	after = lineAlphas(canvas)
+	for i, a in ipairs(before) do
+		T.eq(after[i], a, "line " .. i .. " not dimmed by a route on another floor")
+	end
+	T.eq(canvas.routeJobs.hl, nil, "nothing to highlight")
+	canvas:SetRouteHover(nil)
+	-- A step on the floor shown still highlights its leg.
+	row = listRow(onFloor(1))
+	row:GetScript("OnEnter")(row)
+	T.ok(canvas.routeHover and canvas.routeHover.route == row.item.route, "a step on floor 1")
+	row:GetScript("OnLeave")(row)
+end)
+
+T.case("Route hover: with the Route layer off, a hovered step draws no route line", function()
+	local canvas = wailingMap()
+	ns.db.ui.mapLayers.route = false
+	ns.UI.RefreshPage()
+	local function shownLines()
+		local n = 0
+		for _, l in ipairs(canvas.pools.lines) do
+			if l:IsShown() then
+				n = n + 1
+			end
+		end
+		return n
+	end
+	T.eq(shownLines(), 0, "no route lines with the layer off")
+	local row = listRow(function(step)
+		return step.stop and step.route and step.from and true or false
+	end)
+	row:GetScript("OnEnter")(row)
+	T.eq(shownLines(), 0, "still none while the step is hovered")
+	T.eq(canvas.counts.arrows, 0, "and no arrows")
+	row:GetScript("OnLeave")(row)
+	T.eq(shownLines(), 0, "none after it")
+	ns.db.ui.mapLayers.route = nil
+	ns.UI.RefreshPage()
+	T.ok(shownLines() > 0, "back with the layer")
+end)
+
+T.case("Route hover: the list's highlight follows the row under a still pointer when the list scrolls or empties", function()
+	local canvas = wailingMap()
+	local list = _G.DungeonPlannerMainFrame.instancePage.side.list
+	list.offset = 0
+	list:Refresh()
+	local row
+	for _, r in ipairs(list.rows) do
+		if r.item and r.item.stop and r.item.route and r.item.from then
+			row = r
+			break
+		end
+	end
+	row:GetScript("OnEnter")(row)
+	local h = canvas.routeHover
+	T.ok(h and h.from == row.item.from, "the row's leg")
+	-- Scrolled by the wheel: the pointer is now over another step, whose leg (or none) shows.
+	list:GetScript("OnMouseWheel")(list, -1)
+	local now = row.item
+	T.ok(now ~= nil, "the row shows another step")
+	local want = now.stop and now.route and now.from and now.from or nil
+	T.eq(canvas.routeHover and canvas.routeHover.from or nil, want, "the highlight follows the row's new step")
+	T.eq(canvas.routeHover and canvas.routeHoverSource or "list", "list")
+	-- The list empties under the pointer: the highlight ends.
+	list:GetScript("OnMouseWheel")(list, 1)
+	T.ok(canvas.routeHover, "a stop step's leg again")
+	list:SetItems({})
+	T.eq(canvas.routeHover, nil, "nothing left under the pointer")
+	-- Leaving a row that has no item still ends a highlight it left behind.
+	canvas:SetRouteHover(h, "list")
+	row:GetScript("OnLeave")(row)
+	T.eq(canvas.routeHover, nil, "onLeave runs without an item")
+	ns.UI.RefreshPage()
+end)
+
+T.case("Route hover: a still pointer over an unchanged map costs nothing per tick", function()
+	local canvas = wailingMap()
+	local list = ns.UI.ctx:Steps()
+	local x, y = legPoint(canvas, list)
+	local s = canvas:GetEffectiveScale()
+	local realGet = _G.GetCursorPosition
+	local dx = 0
+	_G.GetCursorPosition = function()
+		return (canvas.canvas:GetLeft() + x + dx) * s, (canvas.canvas:GetTop() + y) * s
+	end
+	local hit, calls = RL.Hit, 0
+	RL.Hit = function(...)
+		calls = calls + 1
+		return hit(...)
+	end
+	canvas:GetScript("OnEnter")(canvas)
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	T.eq(calls, 1, "the first tick looks")
+	T.ok(canvas.routeHover, "a leg under the pointer")
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	T.eq(calls, 1, "still pointer: no more hit tests")
+	dx = 1
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	T.eq(calls, 2, "a move looks again")
+	-- A redraw under the still pointer (a zoom, an edit) is looked at again.
+	ns.UI.RefreshPage()
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	T.eq(calls, 3, "after a redraw")
+	-- Leaving and coming back to the same spot looks again.
+	canvas:GetScript("OnLeave")(canvas)
+	canvas:GetScript("OnEnter")(canvas)
+	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	T.eq(calls, 4, "after entering again")
+	canvas:GetScript("OnLeave")(canvas)
+	RL.Hit = hit
+	_G.GetCursorPosition = realGet
 end)

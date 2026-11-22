@@ -195,10 +195,13 @@ function SidePanel.Create(parent, ctx)
 		end,
 		onEnter = function(step, row)
 			local plan = ctx:Plan()
-			-- The leg of the route that leads to this step stands out on the map, as one under the pointer does.
+			-- The leg of the route that leads to this step stands out on the map, as one under the pointer does: only
+			-- when that route is on the floor shown.
 			local canvas = mapCanvas()
 			local focus = ns.Steps.Focus(step)
-			if canvas and focus.route and focus.from and ns.db.settings.routes.hover ~= false then
+			local route = plan and focus.route and ns.Util.FindById(plan.routes, focus.route)
+			if canvas and route and focus.from and route.floor == canvas.cb.getFloor()
+				and ns.db.settings.routes.hover ~= false then
 				canvas:SetRouteHover({ route = focus.route, from = focus.from, to = focus.to }, "list")
 			end
 			local title, caption, _, note = UI.StepText(plan, step)

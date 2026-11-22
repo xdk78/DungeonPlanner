@@ -483,9 +483,13 @@ they keep the same density at any zoom. `RouteArrows.Place` (`Model/RouteArrows.
 bends, pins, labels and each other, and leaves none where another part of the route (or another route) crosses the
 line; a corridor walked out and back keeps its arrows an arrow's length apart. A leg between two stops that is left
 without any arrow gets one near its middle, a little smaller if that is all that fits. The arrows are placed once per
-map redraw, after the pins and labels are laid out, only on the visible part of the map and a margin (at most 200 per
-route and 400 in all), never per frame. While a marker or route point is dragged or a window is resized the arrows
-hide, and they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip). Every
+map redraw, after the pins and labels are laid out, only on the visible part of the map and a margin of one view size
+on every side (at most 200 per route and 400 in all), never per frame. A pan moves the canvas without a redraw, so the
+margin's arrows show on the map it reveals; past that margin they come with the redraw on release. The margin costs
+up to a fifth more per redraw than the visible part alone (measured with the instruction count of `tests/test_perf.lua`
+on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide, and
+they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its
+release, when the window hides, or when the timer finds no mouse button held). Every
 part of a route takes its colour from `MapRoutes.Color`: lines, arrows, stop rings and bend discs. While a step
 is in focus its leg is brighter and wider and the rest of the path dims. Numbered stops are dark discs with a ring in
 the route's colour, drawn above the path. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
@@ -498,20 +502,26 @@ arrowheads at stops, arrows only on the focused step's leg, and the hover highli
 (`settings.routes`); the arrows' own options are greyed out while arrows are off.
 
 **Two lanes.** A corridor walked out and back (two parts of a route running close together in opposite directions)
-draws as two lanes: each direction moves a little to its own right (`RouteLegs.Lanes`, a share of the outlined line's
-width), and its arrows follow its lane, so the way in and the way back read apart instead of as one doubled line.
+draws as two lanes: each direction moves a little away from the other (`RouteLegs.Lanes`, a share of the outlined
+line's width; to its own right when the two lie on one line), and its arrows follow its lane, so the way in and the
+way back read apart instead of as one doubled line. Only the part two segments share moves: a long segment with a
+short way back keeps the rest of its length on the middle line, with a short slant onto the lane.
 
 **Hover highlight.** With the pointer over a route line (hit test against the drawn segments, a few pixels of
 tolerance), the leg under it, the stretch between the two numbered stops it joins, is drawn above the other lines,
 a little brighter and wider, with its arrows at the normal density even where the settings show fewer (but not when
 arrows are off), and the rest of the routes dim to 35 %. A tooltip names the two steps as the steps list does
 ("Step 3 to step 4", "From Lady Anacondra to Lord Cobrahn"). Pointing at a step in the steps list highlights the leg
-that leads to it the same way, and run mode draws its current step's leg so. One highlight at a time, shared by the
-pointer and the list. It follows the coordinate readout's hover check (at most 20 times a second, only while the
-pointer is over the map) and changes only when the leg changes: the lines are restyled and the placed arrows reused.
+that leads to it the same way when that step's route is on the floor shown (a step elsewhere, or a hidden Route layer,
+changes nothing), and scrolling the list under a still pointer follows the step now under it; run mode draws its
+current step's leg so. One highlight at a time, shared by the pointer and the list. It follows the coordinate
+readout's hover check (at most 20 times a second, only while the pointer is over the map, and nothing while the pointer
+and the drawn routes stay the same) and changes only when the leg changes: the lines are restyled and the placed
+arrows reused.
 None while dragging or with a drawing tool, and none over a pin.
 
-Labels at the map's edge keep clear of the coordinate readout in its bottom-right corner.
+Labels at the map's edge keep clear of the coordinate readout where it is drawn: the bottom-right corner, or above
+the floor switcher on a map with several floors (its rectangle is measured, with the room of its widest text).
 
 **Snap to corridors.** With the switch on, a click with the Route tool adds a numbered stop and its leg from the
 route's last point follows the corridors; Shift-click keeps the leg straight, and a stop dropped with the Route tool

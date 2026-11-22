@@ -366,6 +366,24 @@ function W.List(parent, opts)
 		return math.max(0, #list.items - visibleCount())
 	end
 
+	-- The pointer leaves `item` on a row (or the item leaves the row under the pointer): its tooltip hides and onLeave
+	-- ends what onEnter started, also when the row has no item any more.
+	local function leave(row, item)
+		for _, tt in ipairs({ GameTooltip, W.Tip() }) do
+			if tt and tt:IsOwned(row) then
+				tt:Hide()
+			end
+		end
+		if opts.onLeave then
+			ns.SafeCall(opts.onLeave, item, row)
+		end
+	end
+	local function enter(row)
+		if opts.onEnter and row.item then
+			ns.SafeCall(opts.onEnter, row.item, row)
+		end
+	end
+
 	local function makeRow(i)
 		local row = Art.CreateFrame("Button", nil, list, "BackdropTemplate")
 		row:SetHeight(rh - gap)
@@ -391,20 +409,14 @@ function W.List(parent, opts)
 		row.accent:Hide()
 		row.paint = paintRow
 		S.Register(row, paintRow)
+		-- row.dpHovered: the pointer is over the row (Refresh tells the callbacks when the item under it changes).
 		row:SetScript("OnEnter", function(self)
-			if opts.onEnter and self.item then
-				ns.SafeCall(opts.onEnter, self.item, self)
-			end
+			self.dpHovered = true
+			enter(self)
 		end)
 		row:SetScript("OnLeave", function(self)
-			for _, tt in ipairs({ GameTooltip, W.Tip() }) do
-				if tt and tt:IsOwned(self) then
-					tt:Hide()
-				end
-			end
-			if opts.onLeave and self.item then
-				ns.SafeCall(opts.onLeave, self.item, self)
-			end
+			self.dpHovered = nil
+			leave(self, self.item)
 		end)
 		row:SetScript("OnClick", function(self, mouse)
 			W.CommitFocus()
@@ -435,6 +447,7 @@ function W.List(parent, opts)
 		for i, row in ipairs(self.rows) do
 			local index = self.offset + i
 			local item = self.items[index]
+			local was = row.item
 			if item and i <= n then
 				row.item, row.index = item, index
 				row.dpSelected = opts.isSelected and opts.isSelected(item) or false
@@ -444,6 +457,13 @@ function W.List(parent, opts)
 			else
 				row.item, row.index = nil, nil
 				row:Hide()
+			end
+			-- Scrolled or changed under a still pointer: the row now shows another item (or none), so leave the old one
+			-- and enter the new one, as moving the pointer would.
+			if row.dpHovered and was ~= row.item then
+				leave(row, was)
+				row.dpHovered = row.item and true or nil -- a hidden row is under no pointer
+				enter(row)
 			end
 		end
 		self.emptyText:SetShown(#self.items == 0)

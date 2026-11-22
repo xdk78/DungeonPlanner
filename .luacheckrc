@@ -102,6 +102,7 @@ read_globals = {
 	"IsInGroup",
 	"IsInGuild",
 	"IsInInstance",
+	"IsMouseButtonDown",
 	"IsInRaid",
 	"issecretvalue",
 	"IsShiftKeyDown",

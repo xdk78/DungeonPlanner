@@ -117,13 +117,14 @@ follow [Semantic Versioning](https://semver.org/).
 - **Route settings**: a new Routes group in Settings sets the line width, opacity, outline and colour (each route's own
   or one colour for all) and the arrows' density (off, few, normal, many), size, arrowheads at stops, and arrows only
   on the focused step's leg. Changes show at once on the map and in run mode.
-- Map labels keep clear of the "No map art" note on a map without art, and of the coordinate readout.
+- Map labels keep clear of the "No map art" note on a map without art, and of the coordinate readout wherever it
+  sits (above the floor switcher on a map with several floors).
 - **Follow a route by pointing at it.** The leg under the pointer (between two numbered stops) stands out above the
   rest with its arrows while the other routes dim, and a tooltip names the two steps it joins. Pointing at a step in
   the steps list does the same for the leg that leads to it, and run mode highlights its current step's leg. A setting
   in the Routes group turns it off.
 - **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, each
-  direction draws slightly to its own right, so the two read as lanes with their own arrows.
+  direction draws slightly apart from the other, so the two read as lanes with their own arrows.
 
 ### Fixed
 - **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or

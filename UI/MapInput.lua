@@ -453,14 +453,28 @@ function MapCanvas.InstallInput(view)
 		end
 	end
 
-	-- While the pointer is over the map, the coordinate readout and the route hover update at most 20 times a second.
+	-- While the pointer is over the map, the coordinate readout and the route hover update at most 20 times a second,
+	-- and only when something changed: a still pointer over the same drawn routes does nothing (as OnDragUpdate does);
+	-- a redraw under it (new routeJobs: a zoom, an edit) is looked at again. view.hoverAt: the pointer and routes last
+	-- looked at, forgotten when the pointer enters or a drag ends.
 	local sinceCoords = 0
 	local function hoverUpdate(v, elapsed)
 		sinceCoords = sinceCoords + (elapsed or 0)
 		if sinceCoords >= 0.05 then
 			sinceCoords = 0
+			local x, y = GetCursorPosition()
+			local at = v.hoverAt
+			if at and at.x == x and at.y == y and at.jobs == v.routeJobs then
+				return
+			end
+			if not at then
+				at = {}
+				v.hoverAt = at
+			end
+			at.x, at.y = x, y
 			v:UpdateCoords()
 			v:RouteHoverUpdate()
+			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapPins.lua SetRouteHover)
 		end
 	end
 	local function wantsHover(v)
@@ -470,11 +484,13 @@ function MapCanvas.InstallInput(view)
 	-- over the map.
 	function view:Idle()
 		self.drag = { mode = "idle" }
+		self.hoverAt = nil
 		local hover = self:IsVisible() and self:IsMouseOver() and wantsHover(self)
 		self:SetScript("OnUpdate", hover and hoverUpdate or nil)
 	end
 	view:SetScript("OnEnter", function(self)
 		if self.drag.mode == "idle" and wantsHover(self) then
+			self.hoverAt = nil
 			self:SetScript("OnUpdate", hoverUpdate)
 		end
 	end)

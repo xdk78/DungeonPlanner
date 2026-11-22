@@ -426,21 +426,19 @@ function MapRoutes.Install(view)
 	-- hover highlight: run mode's current step), activeRoute, extra (more routes in the map's own coordinates: another
 	-- addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows (the caller places the
 	-- arrows with PlaceRouteArrows once its pins are laid out), restyle (a hover change: same paths, new looks) }.
-	-- view.routeHover, the leg under the pointer or a hovered step (SetRouteHover), wins over o.highlight. Returns the
-	-- counts drawn.
+	-- view.routeHover, the leg under the pointer or a hovered step (SetRouteHover), wins over o.highlight; either counts
+	-- only when its route is among the routes drawn. Returns the counts drawn.
 	function view:DrawRoutePaths(plan, floor, px, py, o)
 		o = o or {}
-		if o.deferArrows and not o.restyle then
-			self.routeArgs = { plan, floor, px, py, o }
+		if not o.restyle then
+			-- What a hover change draws again (SetRouteHover): only the map's own draw, never a stale one.
+			self.routeArgs = o.deferArrows and { plan, floor, px, py, o } or nil
 		end
 		local canvas = self.canvas
 		local n = { lines = 0, outlines = 0, joints = 0, arrows = 0 }
 		local u = math.max(0.75, o.scale or 1)
 		local look = MapRoutes.Look(u)
 		local seg = o.seg
-		local hl = self.routeHover or o.highlight
-		local jobs = { paths = {}, styles = {}, routes = {}, raw = {}, ranges = {}, look = look, u = u, counts = n, hl = hl }
-		self.routeJobs = jobs
 		local all = {}
 		for _, route in ipairs(plan and plan.routes or {}) do
 			all[#all + 1] = { route = route, own = true }
@@ -448,9 +446,24 @@ function MapRoutes.Install(view)
 		for _, route in ipairs(o.extra or {}) do
 			all[#all + 1] = { route = route }
 		end
+		local function drawn(route)
+			return route.floor == floor and #route.points >= 2
+		end
+		-- A highlight whose route is not drawn here (another floor, a hidden layer) changes nothing.
+		local function shown(leg)
+			for _, entry in ipairs(leg and all or {}) do
+				if entry.route.id == leg.route and drawn(entry.route) then
+					return leg
+				end
+			end
+			return nil
+		end
+		local hl = shown(self.routeHover) or shown(o.highlight)
+		local jobs = { paths = {}, styles = {}, routes = {}, raw = {}, ranges = {}, look = look, u = u, counts = n, hl = hl }
+		self.routeJobs = jobs
 		for _, entry in ipairs(all) do
 			local route = entry.route
-			if route.floor == floor and #route.points >= 2 then
+			if drawn(route) then
 				local r, g, b = MapRoutes.Color(route, entry.own)
 				local alpha = (route.optional and 0.55 or 1) * look.opacity
 				local thickness = look.width + (route.id == o.activeRoute and u or 0)
@@ -462,7 +475,7 @@ function MapRoutes.Install(view)
 				for i, pt in ipairs(route.points) do
 					raw[i] = { fx(pt[1], pt[2]), fy(pt[2], pt[1]), stop = pt.step ~= nil }
 				end
-				-- A corridor walked out and back draws as two lanes, each direction on its own right
+				-- A corridor walked out and back draws as two lanes, the two directions moved apart
 				-- (Model/RouteLegs.lua); lanes[k].seg is the route's own segment for drawn segment k.
 				local wide = thickness + look.outline
 				local lanes = ns.RouteLegs.Lanes(raw, { shift = wide * S.ROUTE.lane, near = wide * 1.2, yUp = true })
@@ -680,6 +693,10 @@ function MapRoutes.Install(view)
 	-- the arrows hide then and are placed once the drag or resize ends (a short timer checks; a stale tick does nothing).
 	local function busy(v)
 		local mode = v.drag and v.drag.mode
+		-- No button held any more: the size grip's release was lost, so the resize is over (UI/Window.lua).
+		if ns.sizingWindow and IsMouseButtonDown and not IsMouseButtonDown() then
+			ns.sizingWindow = nil
+		end
 		return mode == "marker" or mode == "point" or ns.sizingWindow ~= nil
 	end
 	local function settle()
