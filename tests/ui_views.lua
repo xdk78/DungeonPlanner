@@ -1411,5 +1411,9 @@ V.lintIgnore = { "^outside%-window | [%w_.]*PortraitContainer" }
 V.fallbackFont = "Media/Fonts/AlegreyaSans-Medium.ttf"
 V.fallbackScale = 1.22
 V.fontRoots = { { "Interface\\AddOns\\DungeonPlanner\\", "." } }
+-- The game's answers the layout depends on, recorded from a local install (file IDs and sizes only, no pixels; AGENTS.md
+-- "Seeing the UI"): which files the client has (GetFileIDFromPath), atlas sizes, and the size a texture given none takes.
+-- CI has no game, so with these the dump takes the branches it takes in game.
+V.sizes = "tests/ui-sizes.json"
 
 return V

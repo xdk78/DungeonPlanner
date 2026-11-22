@@ -175,6 +175,16 @@ CI runs both and fails on lint findings not in `tests/ui_lint_baseline.txt` (tru
 overlapping buttons, things outside the window). Without the game's fonts, text is measured with the bundled Alegreya
 Sans widened to Friz Quadrata's average (`tests/ui_views.lua`); the baseline is for that measurement.
 
+Without the game, the dump answers the questions the layout asks the client (does `GetFileIDFromPath` know a file, an
+atlas's size, the pixel size of a texture given none) from `tests/ui-sizes.json` (`V.sizes`; file IDs and sizes only,
+no pixels), recorded from a local install. Refresh it after a game patch or when the addon uses other game files or
+atlases (`H`, `G`, `W` as below; review the diff, and fix a new lint finding rather than accept it):
+
+```sh
+lua tests/ui_dump.lua --out $W/dump --all-files     # writes files-asked.txt and atlases-asked.txt
+uv run --script $H/python/wowui.py files --game "$G" --dump $W/dump --sizes tests/ui-sizes.json --addon DungeonPlanner=.
+```
+
 For pictures, with a harness checkout and a local game install (read only; keep `<work>` outside the repository or
 in the ignored `.ui-work/`, it holds game files):
 
