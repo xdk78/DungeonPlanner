@@ -286,12 +286,18 @@ Forever bosses, but its mods load on demand and DBM is all rights reserved; kill
 (excluded, docs/DATA-SOURCES.md).
 
 **Alignment.** The recommended plans of Forever's new dungeons were placed without a map in the client. Under a
-provider's map, the plan's boss markers are paired by name with the provider's boss pins (`Providers.Align`): if they
-agree within 0.035 of the map they are drawn as they are (the Hall of Thanes plan matches Dungeon Journal's pins
-within about 0.02); if a per-axis scale and offset fitted over three or more bosses brings them within that, the plan
-is drawn through it (and input goes through its inverse, so edits stay in the plan's space); otherwise the provider's
-boss pins are shown for every boss and the plan's boss markers are hidden, while its other markers and steps stay.
-A provider map without boss pins (OpenMap has none for Hall of Thanes) cannot be checked: the plan is drawn as it is.
+provider's map, the plan's boss markers are paired by name with the provider's boss pins (`Providers.Align`). The
+mode it picks decides how the plan is drawn on that map:
+
+| Mode | When | How the plan is drawn |
+|---|---|---|
+| `same` | the pairs agree within 0.035 of the map (the Hall of Thanes plan matches Dungeon Journal's pins within about 0.02) | as stored |
+| `fit` | a per-axis scale and offset, fitted over three or more bosses, brings them within 0.035 | through that transform (input goes through its inverse, so edits stay in the plan's space) |
+| `pins` | they match by name but neither of the above (Shaper's Terrace on Dungeon Journal 2.1.2 and later) | as stored, its boss markers included: the route was made against them |
+| `none` | no boss pairs (OpenMap has no pins for Hall of Thanes): nothing to check | as stored |
+
+In every mode the provider's own boss pins are shown only for the bosses the plan does not place, so a boss is never
+drawn twice and the plan's stops and its boss markers always agree.
 
 Hygiene: one global table, binding strings and frame names only; no hooks of Blizzard functions; no SetCVar /
 SetBinding; no secure frames; nothing protected in combat; every integration behind an existence check and `pcall`.

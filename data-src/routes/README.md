@@ -39,6 +39,26 @@ uv run --script tools/route_paths.py --game ... --work ... --check   # exit 1 wh
 `--game` is the client folder that holds `Interface\AddOns` (`World of Warcraft\_forever_`); the storage is found
 next to it. Re-running is stable: the tool undoes its own earlier moves before it starts.
 
+### When to run the `--check`s
+
+CI cannot run this tool (it needs a local game install), so a routes file can fall behind its inputs without a failing
+build. Its inputs outside the repository are the client's map tiles and the installed ForeverDungeonJournal and
+OpenMap: their floor pictures, and their boss pins, which decide the alignment recorded in `map` (`none` when no pin
+matches a plan boss, else `same`, `fit` or `pins` as in `Providers.Align`). `tools/minimap_art.py` records the same
+alignment in `Data/MinimapArtData.lua` and also reads the installed Forever Dungeon Routes. Run `--check` here together
+with the other checks that need the game (`tools/walk_grids.py`, `tools/minimap_art.py`, `tools/reyes_maps.py`):
+
+- after a client patch, or after updating ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install;
+- before every release (AGENTS.md, "Changes").
+
+`route_paths.py` and `minimap_art.py` pin their Python dependencies to the versions the shipped files were last checked
+with (a newer filter or resampling can move a bend), as `walk_grids.py` does; raise a pin only together with a full
+`--check` run. When one reports a change, find which input moved before regenerating, and name in the pull request the provider
+versions the files were computed with. Last full run: 2026-11-22, with ForeverDungeonJournal 2.1.3, OpenMap v0.8.13
+and Forever Dungeon Routes 1.3.8 installed. It changed only the alignment label of Alcaz Prison and Shaper's Terrace
+(`none` before), here and in `Data/MinimapArtData.lua`: ForeverDungeonJournal 2.0.9 and 2.1.2 added boss pins to those
+two maps. The alignment stays the identity and every leg there is imported, so no bend, move or transform changed.
+
 ## File format (schema 1)
 
 ```json

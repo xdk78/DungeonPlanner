@@ -46,6 +46,10 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 - Work on a branch and open a pull request; `main` is protected by CI (lint + tests + locale + plans).
 - After a pull request is merged, delete its branch and remove any worktree and work folder used for it.
 - Every change that players can see gets a line under `## [Unreleased]` in `CHANGELOG.md`.
+- The checks that need a local game install do not run in CI: `tools/route_paths.py`, `tools/walk_grids.py`,
+  `tools/minimap_art.py` and `tools/reyes_maps.py` with `--check` (commands above). Run them before every release and
+  after a client patch or an update of ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install; fix a
+  drift in its own pull request (`data-src/routes/README.md`, "When to run the `--check`s").
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails

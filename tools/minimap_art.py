@@ -1,7 +1,8 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["numpy", "pillow", "scipy", "scikit-image", "pycryptodome"]
+# dependencies = ["numpy==2.5.5", "pillow==13.0.0", "scipy==1.18.1", "scikit-image==0.26.0", "pycryptodome==4.6.0"]
 # ///
+# (The versions Data/MinimapArtData.lua was last checked with.)
 """Dungeon maps from the game's own minimap pictures: the table Data/MinimapArtData.lua.
 
 WoW: Forever's new dungeons have no dungeon map in the client, but the client has their minimap pictures (the ones the

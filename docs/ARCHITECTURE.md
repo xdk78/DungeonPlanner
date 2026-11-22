@@ -447,8 +447,9 @@ A bundled map is credited on the canvas ("Map by Santiago Reyes", its tooltip na
 Dungeon Journal or Forever Dungeon Routes draws the same picture, its boss pins, alignment and routes are used on the
 bundled map. A provider map is credited on the canvas ("Map: Dungeon Journal") and its boss pins in their tooltips. **Alignment** (`Providers.Align`): the plan's boss
 markers are paired with the provider's pins by name; "same" draws as stored, "fit" draws through a per-axis scale and
-offset (`MapCanvas` `ToMap` / `FromMap`, input inverted so edits stay in plan space), "pins" hides the plan's boss
-markers and shows the provider's pins. **Provider routes** (`Providers.Routes`): Forever Dungeon Routes' own route on
+offset (`MapCanvas` `ToMap` / `FromMap`, input inverted so edits stay in plan space), "pins" (they match by name but
+neither agree nor fit) draws as stored, the plan's boss markers included; in every mode the provider's pins show only
+for bosses the plan does not place. **Provider routes** (`Providers.Routes`): Forever Dungeon Routes' own route on
 the floor, in the drawn art's coordinates and only on art they fit, drawn by `MapRoutes` as an extra layer (teal, off
 until ticked in the legend, `ui.mapLayers.providerRoutes`). Adapters that read internals (Dungeon Journal, Forever
 Dungeon Routes, OpenMap) isolate every table access behind shape checks, so an update of that addon can only switch the
