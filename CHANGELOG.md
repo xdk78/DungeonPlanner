@@ -23,6 +23,9 @@ follow [Semantic Versioning](https://semver.org/).
 - **The map follows you to another floor** inside an instance, where the game says which floor you are on (not yet
   confirmed on WoW: Forever; `/dp scan` inside a dungeon records what the client gives). Run mode's mini map then says
   which floor you are on.
+- **Out-of-date warning on recommended plans**: a plan researched before the game build you run says "may be out of
+  date" in orange beside its steps, and its Notes give the data date, the build's date and the source, so you know to
+  check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
 
 ## [Unreleased]
 

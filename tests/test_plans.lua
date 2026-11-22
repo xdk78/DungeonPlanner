@@ -297,3 +297,33 @@ T.case("Recommended plans: no source, licence or researcher remark in any shippe
 		end
 	end
 end)
+
+-- Stale routes (feature research: data accuracy is the most commented issue type of dungeon route tools): a
+-- recommended plan researched before the game build the player runs says so, with its source and dates.
+T.case("Recommended plans say when their research is older than the game build", function()
+	local B = ns.Bundled
+	local nov16 = os.time({ year = 2026, month = 11, day = 16, hour = 12 })
+	local stale, build = B.Stale(nov16, "Nov 20 2026")
+	T.eq(stale, true, "researched on the 16th, build of the 20th")
+	T.eq(build, "2026-11-20")
+	T.eq((B.Stale(nov16, "Nov 16 2026")), false, "the same day: not stale")
+	T.eq((B.Stale(nov16, "Oct 1 2026")), false, "an older build")
+	T.eq(B.Stale(nov16, "1.0.0"), nil, "no date: unknown")
+	T.eq(B.Stale(nil, "Nov 20 2026"), nil)
+	local mock = T.mock
+	local saved = mock.buildInfo
+	mock.buildInfo = { saved[1], saved[2], "Dec 24 2030", saved[4] }
+	local ok, err = pcall(function()
+		local plan = B.Get(B.PREFIX .. "hall-of-thanes")
+		local _, lines = ns.UI.PlanSource(plan)
+		local found = false
+		for _, l in ipairs(lines) do
+			found = found or l:find("2030-12-24", 1, true) ~= nil
+		end
+		T.ok(found, "the Notes section's source lines name the build")
+		-- (The side panel's orange line: tests/test_wartable.lua, once the window is built.)
+	end)
+	mock.buildInfo = saved
+	assert(ok, err)
+	T.eq(ns.UI.StaleLine(B.Get(B.PREFIX .. "hall-of-thanes")), nil, "an old build (the mock's): nothing")
+end)

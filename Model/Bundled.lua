@@ -129,3 +129,27 @@ function Bundled.ForInstance(entry)
 	end
 	return out
 end
+
+-- Is a recommended plan's research older than the game build the player runs? Routes are the part of a dungeon guide
+-- that goes stale first (MDT's most commented issues are about data accuracy). `dataTime`: the plan's data date
+-- (plan.updated, seconds); `buildDate`: GetBuildInfo's third value ("Nov 20 2026"). Returns stale (true / false) and
+-- the build's day as "YYYY-MM-DD", or nil when either is unknown. Pure.
+local MONTHS = { jan = 1, feb = 2, mar = 3, apr = 4, may = 5, jun = 6, jul = 7, aug = 8, sep = 9, oct = 10, nov = 11, dec = 12 }
+function Bundled.Stale(dataTime, buildDate)
+	if type(dataTime) ~= "number" or dataTime <= 0 or type(buildDate) ~= "string" then
+		return nil
+	end
+	local mon, d, y = buildDate:match("^%s*(%a%a%a)%a*%s+(%d+)%s+(%d%d%d%d)")
+	local m = mon and MONTHS[mon:lower()]
+	if not m then
+		return nil
+	end
+	local build = string.format("%04d-%02d-%02d", tonumber(y), m, tonumber(d))
+	-- The data's day in UTC, compared as text (no time zones in a date string).
+	local fmt = rawget(_G, "date") or (rawget(_G, "os") and os.date) -- the client has date(), plain Lua os.date
+	if type(fmt) ~= "function" then
+		return nil
+	end
+	local data = fmt("!%Y-%m-%d", dataTime)
+	return data < build, build
+end

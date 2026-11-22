@@ -257,6 +257,18 @@ local function routeCredit(plan)
 	return nil
 end
 
+-- A recommended plan researched before the game build the player runs (Bundled.Stale): one orange line that says so,
+-- with the data's and the build's dates; nil otherwise (or when the client gives no build date).
+function UI.StaleLine(plan)
+	local info = ns.Compat.ClientInfo()
+	local stale, build = ns.Bundled.Stale(plan and plan.updated, info.date)
+	if not stale then
+		return nil
+	end
+	return "|cffff9933" .. string.format(L["Researched before this game build (%s): the route and pulls may have changed. Check them in game."],
+		build) .. "|r"
+end
+
 function UI.PlanSource(plan)
 	if not plan then
 		return nil
@@ -283,6 +295,10 @@ function UI.PlanSource(plan)
 		if credit then
 			lines[#lines + 1] = credit
 		end
+		local stale = UI.StaleLine(plan)
+		if stale then
+			lines[#lines + 1] = stale
+		end
 		lines[#lines + 1] = L["Read-only: make an editable copy to change it."]
 	elseif plan.origin and plan.origin.bundled then
 		local base = ns.Bundled.Get("b:" .. plan.origin.bundled)
@@ -296,6 +312,10 @@ function UI.PlanSource(plan)
 			end
 			if (base.rev or 1) > rev then
 				lines[#lines + 1] = string.format(L["A newer revision (%d) of it ships with this version."], base.rev)
+			end
+			local stale = UI.StaleLine(base)
+			if stale then
+				lines[#lines + 1] = stale
 			end
 		end
 		lines[#lines + 1] = string.format(L["Copied at revision %d."], rev)

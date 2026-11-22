@@ -467,6 +467,23 @@ T.case("Home: an instance table with a preview; a plate where the game has no pi
 	ns.UI.GoHome("dungeons")
 end)
 
+-- A recommended plan researched before the game build (Bundled.Stale) says so in the side panel, in orange.
+T.case("Side panel: a recommended plan older than the game build says it may be out of date", function()
+	boot()
+	local saved = mock.buildInfo
+	mock.buildInfo = { saved[1], saved[2], "Dec 24 2030", saved[4] }
+	local ok, err = pcall(function()
+		ns.UI.SelectPlan("b:hall-of-thanes")
+		local side = _G.DungeonPlannerMainFrame.instancePage.side
+		side:Refresh()
+		T.ok(side.state:GetText():find(ns.L["Recommended plan • may be out of date"], 1, true), side.state:GetText())
+	end)
+	mock.buildInfo = saved
+	assert(ok, err)
+	_G.DungeonPlannerMainFrame.instancePage.side:Refresh()
+	T.eq(_G.DungeonPlannerMainFrame.instancePage.side.state:GetText(), ns.L["Recommended plan • read-only"], "an old build")
+end)
+
 -- In game (0.1.0): short lists stood over half-empty pages: Pulls' list box ran to the bottom beside a short card,
 -- Notes put the objectives at the bottom far under the bosses (or in a column beside them over an empty half), and
 -- the home preview's actions sat at its bottom, far from the plan they open.
