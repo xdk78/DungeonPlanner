@@ -17,6 +17,11 @@ local function boot()
 	end
 end
 
+-- An own (editable) plan: the first one there is, or an own copy of a recommended plan when this file runs alone.
+local function ownPlan()
+	return ns.DB.Plans()[1] or ns.UI.CopyPlan(ns.DB.GetPlan("b:hall-of-thanes"))
+end
+
 -- Run every pending timer (other tests leave some), so a case starts with none of its own.
 local function settle()
 	for _ = 1, 5 do
@@ -163,11 +168,8 @@ end)
 
 T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll'", function()
 	boot()
-	local plan
-	for _, p in ipairs(ns.DB.Plans()) do
-		plan = plan or p
-	end
-	T.ok(plan, "an own plan from the earlier cases")
+	local plan = ownPlan()
+	T.ok(plan, "an own plan")
 	ns.UI.SelectPlan(plan.id)
 	ns.Plan.AddGear(plan, { itemID = 19019, priority = 2 })
 	ns.UI.SelectTab("gear")
@@ -269,7 +271,7 @@ T.case("Native window: the game's framed window, insets, tabs under the window, 
 	ns.UI.Toggle()
 	T.ok(frame:IsShown(), "open again")
 
-	local plan = ns.DB.Plans()[1]
+	local plan = ownPlan()
 	ns.UI.SelectPlan(plan.id)
 	local page = frame.instancePage
 	-- Header controls on the window's bar.

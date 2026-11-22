@@ -62,28 +62,34 @@ T.case("Plans are grouped by instance key", function()
 end)
 
 T.case("Polish locale covers every key and is chosen with WoW Po Polsku", function()
-	local en = ns.SetLocale("auto")
+	-- Once logged in, whether the translation is loaded is decided once; here it is asked again each time.
+	local function auto()
+		ns.Integrations.ForgetPolishTranslation()
+		return ns.SetLocale("auto")
+	end
+	local en = auto()
 	T.eq(en, "enUS", "plain English client")
 	T.eq(ns.L["Map"], "Map")
 	T.mock.loadedAddons = { WoWPoPolskuForever = true }
 	-- Installed but no language picked in its chooser: it translates nothing, so neither do we.
 	_G.WoWPoPolskuForeverDB = nil
-	T.eq(ns.SetLocale("auto"), "enUS", "translation addon installed, never configured")
+	T.eq(auto(), "enUS", "translation addon installed, never configured")
 	_G.WoWPoPolskuForeverDB = { wlaczony = true, wersjaInstalki = 1 }
-	T.eq(ns.SetLocale("auto"), "enUS", "translation addon without a chosen language")
+	T.eq(auto(), "enUS", "translation addon without a chosen language")
 	_G.WoWPoPolskuForeverDB = { jezyk = "plPL" }
-	T.eq(ns.SetLocale("auto"), "enUS", "language saved before the chooser existed is ignored, as the addon does")
+	T.eq(auto(), "enUS", "language saved before the chooser existed is ignored, as the addon does")
 	_G.WoWPoPolskuForeverDB = { jezyk = "plPL", wyborJezyka = 1 }
-	T.eq(ns.SetLocale("auto"), "plPL", "translation addon set to Polish")
+	T.eq(auto(), "plPL", "translation addon set to Polish")
 	T.eq(ns.L["Map"], "Mapa")
 	T.eq(ns.L["boss"], "Boss")
 	-- The translation set to another language does not switch us to Polish.
 	_G.WoWPoPolskuForeverDB = { jezyk = "csCZ", wyborJezyka = 1 }
-	T.eq(ns.SetLocale("auto"), "enUS")
+	T.eq(auto(), "enUS")
 	_G.WoWPoPolskuForeverDB = { jezyk = "plPL", wyborJezyka = 1, wlaczony = false }
-	T.eq(ns.SetLocale("auto"), "enUS", "translation switched off")
+	T.eq(auto(), "enUS", "translation switched off")
 	_G.WoWPoPolskuForeverDB = nil
 	T.mock.loadedAddons = nil
+	ns.Integrations.ForgetPolishTranslation()
 	T.eq(ns.SetLocale("plPL"), "plPL", "forced Polish")
 	T.eq(ns.L["missing key stays"], "missing key stays")
 	ns.SetLocale("enUS")

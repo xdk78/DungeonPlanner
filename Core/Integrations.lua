@@ -108,6 +108,11 @@ function Integrations.PolishTranslationLoaded()
 	return found
 end
 
+-- For tests: forget the answer kept since the login.
+function Integrations.ForgetPolishTranslation()
+	polish = nil
+end
+
 -- Dungeon Journal ---------------------------------------------------------------------------------------------------------
 
 function Integrations.HasDungeonJournal()

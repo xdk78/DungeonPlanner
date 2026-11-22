@@ -20,12 +20,11 @@ local function findCard(home, name)
 	return nil
 end
 
-local booted = false
+-- The addon initializes once per run (AceAddon), so a file that runs after another one's boot uses that boot.
 local function boot()
-	if booted then
+	if ns.loggedIn then
 		return
 	end
-	booted = true
 	_G.DungeonPlannerDB = nil
 	mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 	mock.loggedIn = true
@@ -85,6 +84,11 @@ end)
 
 T.case("Window opens on the home grid; tabs switch; an instance page builds every section", function()
 	boot()
+	-- Closed, with a fresh profile's view (an earlier file may have left the window open on a page).
+	if ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.db.ui.view, ns.db.ui.homeTab, ns.db.ui.instance = "home", "dungeons", nil
 	ns.UI.Toggle()
 	T.ok(ns.UI.IsShown(), "shown")
 	local frame = _G.DungeonPlannerMainFrame
@@ -110,7 +114,12 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 	home:Refresh()
 	T.eq(#home.grid.items, 0, "search hides the card")
 	ns.UI.ctx.search = ""
+	-- No own plan for it yet (earlier files may have made some).
+	for _, p in ipairs(ns.DB.PlansFor(card.entry)) do
+		ns.DB.DeletePlan(p.id)
+	end
 	home:Refresh()
+	card = findCard(home, "Test Dungeon")
 
 	-- Open the instance: no plan yet, so the page offers to create one.
 	mock.FireScript(card, "OnDoubleClick", "LeftButton")
@@ -349,12 +358,15 @@ T.case("Boss kills from ENCOUNTER_END are tracked once", function()
 	ns.API.RegisterCallback(seen, "DUNGEONPLANNER_BOSS_KILLED", function()
 		seen.n = seen.n + 1
 	end)
+	-- Counted from what is there already (other files record kills of these encounters too).
+	local kills = ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID)
 	mock.FireEvent("ENCOUNTER_END", enc.dungeonEncounterID, "Boss 1", 1, 5, 1)
 	mock.FireEvent("BOSS_KILL", enc.dungeonEncounterID, "Boss 1")
-	T.eq(ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID), 1, "deduplicated")
+	T.eq(ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID), kills + 1, "deduplicated")
 	T.ok(ns.Progress.IsKilledInRun(ns.char.progress, enc.dungeonEncounterID))
+	local wiped = ns.Progress.KillsOf(ns.char.progress, 999)
 	mock.FireEvent("ENCOUNTER_END", 999, "Wipe", 1, 5, 0)
-	T.eq(ns.Progress.KillsOf(ns.char.progress, 999), 0, "a wipe is not a kill")
+	T.eq(ns.Progress.KillsOf(ns.char.progress, 999), wiped, "a wipe is not a kill")
 end)
 
 T.case("Sharing over AceComm: offer, accept, payload, import", function()

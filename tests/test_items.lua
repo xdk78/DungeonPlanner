@@ -2,6 +2,11 @@
 local T = ...
 local ns, mock = T.ns, T.mock
 
+-- The cases that count ITEMS_READY messages fake the client for their own items (IDs from OWN up) only: every other
+-- item keeps the mock's name. A page another file left open asks for the items it shows (the mock redraws hidden
+-- pages too), and those asks, arrivals and give-ups would add messages of their own.
+local OWN = 910000
+
 local function settle()
 	for _ = 1, 5 do
 		mock.Advance(10)
@@ -14,6 +19,9 @@ T.case("Item names: a miss asks the client once, the arrival fires one batched m
 	local savedName, savedRequest = items.GetItemNameByID, items.RequestLoadItemDataByID
 	local cache, requests = {}, {}
 	items.GetItemNameByID = function(id)
+		if id < OWN then
+			return savedName(id)
+		end
 		return cache[id]
 	end
 	items.RequestLoadItemDataByID = function(id)
@@ -74,6 +82,9 @@ T.case("Item names: without C_Item.RequestLoadItemDataByID the item mixin's call
 	local savedName, savedRequest, savedItem = items.GetItemNameByID, items.RequestLoadItemDataByID, _G.Item
 	local cache, callbacks = {}, {}
 	items.GetItemNameByID = function(id)
+		if id < OWN then
+			return savedName(id)
+		end
 		return cache[id]
 	end
 	items.RequestLoadItemDataByID = nil
@@ -114,6 +125,9 @@ T.case("Item names: an arrival while the window is open fires its message once",
 	local savedName = items.GetItemNameByID
 	local cache = {}
 	items.GetItemNameByID = function(id)
+		if id < OWN then
+			return savedName(id)
+		end
 		return cache[id]
 	end
 	local fired = 0

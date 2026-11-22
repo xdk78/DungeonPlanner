@@ -88,6 +88,9 @@ T.case("Last plan per instance: a recommended plan is remembered over a newer ow
 	local mine = addPlan(other, "Gamma plan", 1000)
 	local copy = ns.Plan.Duplicate(rec, "My Hall copy")
 	copy.updated = 5000
+	for _, p in ipairs(ns.DB.Plans()) do -- newer than any own plan earlier files made
+		copy.updated = math.max(copy.updated, p.updated + 1)
+	end
 	ns.DB.AddPlan(copy)
 	ns.UI.SelectPlan(rec.id, true)
 	T.eq(ns.db.ui.lastPlans[H.key], rec.id, "remembered under the instance's key")

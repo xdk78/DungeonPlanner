@@ -23,6 +23,8 @@ Guide for contributors and coding agents. Dungeon Planner is a World of Warcraft
 ```sh
 lua tests/run.lua                          # all offline tests; must pass
 lua tests/run.lua Discord                  # only tests whose name contains "Discord"
+lua tests/run.lua --file native            # one test file alone (comma-separated: several, in that order)
+lua tests/run.lua --reverse                # files in reverse order (or --shuffle <seed>): finds order dependence
 lua tools/locale_keys.lua --all             # every UI string translated in every locale (names what is missing)
 lua tools/validate_plans.lua               # community plans
 lua tools/gen_plans.lua [--check|--report] # regenerate Data/Plans from data-src (docs/DATA-SOURCES.md)
