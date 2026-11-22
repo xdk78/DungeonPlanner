@@ -602,7 +602,6 @@ ns.Locales.plPL = {
 	["Unticks every objective of this plan for this character."] = "Odznacza wszystkie cele tego planu dla tej postaci.",
 	["available"] = "dostępny",
 	["dev build"] = "wersja deweloperska",
-	["empty"] = "puste",
 	["not available"] = "niedostępny",
 	["Scanned: %d journal instances, %d Group Finder entries, %d maps. Wait 3 s, then /reload to save (/dp scan clear removes)."] = "Przeskanowano: instancje z przewodnika %d, wpisy wyszukiwarki grup %d, mapy %d. Odczekaj 3 s i wpisz /reload, aby zapisać (/dp scan clear usuwa).",
 	["The game's Adventure Guide has no loot lists on this client. Add the items you want to this plan's list."] = "Przewodnik przygód w tej wersji gry nie ma list łupów. Dodaj potrzebne przedmioty do listy tego planu.",

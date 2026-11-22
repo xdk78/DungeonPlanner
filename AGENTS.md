@@ -13,7 +13,7 @@ Guide for contributors and coding agents. Dungeon Planner is a World of Warcraft
 - `Config/` defaults and AceDB with migrations. `Data/` runtime game data access (no bundled IDs). `Tracker/` kills.
 - `UI/` style tokens and materials, art names, widget kit (incl. the window), home table, war-table page (side panel, sections), map canvas and
   layers, run mode, prompts, settings.
-  `Locales/` enUS (keys) and plPL.
+  `Locales/` enUS (keys, plural rules, language list), deDE esES frFR plPL ruRU (`Locales/README.md`).
 - `Libs/` vendored libraries (pinned, `docs/LIBRARIES.md`, refresh with `tools/fetch_libs.sh`; never edit them).
 - `tests/` offline harness (`run.lua`, mock client `wowmock.lua`). `tools/` dev scripts. `data-src/` research data; `Data/Plans/` plans generated from it. `community-plans/` the
   community database. `docs/` compatibility, architecture, formats, API.
@@ -23,7 +23,7 @@ Guide for contributors and coding agents. Dungeon Planner is a World of Warcraft
 ```sh
 lua tests/run.lua                          # all offline tests; must pass
 lua tests/run.lua Discord                  # only tests whose name contains "Discord"
-lua tools/locale_keys.lua Locales/plPL.lua # every UI string translated
+lua tools/locale_keys.lua --all             # every UI string translated in every locale (names what is missing)
 lua tools/validate_plans.lua               # community plans
 lua tools/gen_plans.lua [--check|--report] # regenerate Data/Plans from data-src (docs/DATA-SOURCES.md)
 lua tools/gen_spawns.lua [--check|--report] # regenerate Data/Spawns (after gen_plans; data-src/spawns/README.md)
@@ -45,7 +45,7 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   release is tagged, `## [0.1.0] - Unreleased`; then a new `## [Unreleased]` above it).
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
-- New UI strings: write English in `L["..."]`, add the Polish line to `Locales/plPL.lua` (the locale check fails
+- New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
   otherwise). Format strings must keep the same `%s`/`%d` order (a test checks).
 - New saved fields or format changes: bump `DB.SCHEMA` with a migration (+ test), or the export header `!DP1!` and
   `docs/SHARING-FORMAT.md`, or `ns.PROTOCOL_VERSION`.

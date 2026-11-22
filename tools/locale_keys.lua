@@ -1,7 +1,10 @@
 -- Lists every localization key used in the addon's code (L["..."] with a literal string), and checks a locale file
--- for missing and unused keys. Run from the repo root:
---   lua tools/locale_keys.lua                 -- print all keys
---   lua tools/locale_keys.lua Locales/plPL.lua  -- report keys missing from (or unused in) that file
+-- for missing and unused keys and for format specifiers that differ from the English. Run from the repo root:
+--   lua tools/locale_keys.lua                   -- print all keys
+--   lua tools/locale_keys.lua Locales/plPL.lua  -- report keys missing from, unused in or malformed in that file
+--   lua tools/locale_keys.lua --all             -- the same for every file in Locales/ but enUS (CI); exit 1 if any fails
+--   lua tools/locale_keys.lua --template deDE   -- print a skeleton for a new locale (English text as the values)
+--   lua tools/locale_keys.lua --missing-lines Locales/deDE.lua -- print the lines that file lacks, English as the value
 -- Keys built at runtime (L[kind], L["slot:" .. slot], L[t.title], ...) are listed in DYNAMIC below.
 
 local FILES = {}
@@ -117,36 +120,159 @@ for _, path in ipairs(FILES) do
 end
 table.sort(keys)
 
-local target = arg[1]
-if not target then
+-- English text of each key: enUS.lua holds internal names ("boss" = "Boss"); every other key is its own English text.
+local enNs = { Locales = {} }
+assert(loadfile("Locales/enUS.lua"))("DungeonPlanner", enNs)
+local english = enNs.Locales.enUS
+
+local function specs(s)
+	local out = {}
+	for spec in s:gmatch("%%[%d%.]*[sdf]") do
+		out[#out + 1] = spec
+	end
+	return table.concat(out, ",")
+end
+
+local function lq(s)
+	return '"' .. s:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n") .. '"'
+end
+
+-- Prints a skeleton for a new locale: every key with its English text as the value, ready to translate.
+local function template(code)
+	print("-- " .. code .. ": machine-assisted first pass. Native speakers: please improve it (see Locales/README.md).")
+	print("")
+	print("local _, ns = ...")
+	print("ns.Locales = ns.Locales or {}")
+	print("")
+	print("ns.Locales." .. code .. " = {")
+	for _, k in ipairs(keys) do
+		print("\t[" .. lq(k) .. "] = " .. lq(english[k] or k) .. ",")
+	end
+	local bindings = {}
+	for k in pairs(english) do
+		if k:match("^BINDING_") then
+			bindings[#bindings + 1] = k
+		end
+	end
+	table.sort(bindings)
+	for _, k in ipairs(bindings) do
+		print("\t" .. k .. " = " .. lq(english[k]) .. ",")
+	end
+	print("}")
+end
+
+-- Checks one locale file. Prints the missing, unused and mismatched keys by name. Returns true when it is clean.
+local function check(target)
+	local ns = { Locales = {} }
+	local chunk = assert(loadfile(target))
+	chunk("DungeonPlanner", ns)
+	local _, tbl = next(ns.Locales)
+	local missing, unused, badFormat = {}, {}, {}
+	for _, k in ipairs(keys) do
+		if tbl[k] == nil then
+			missing[#missing + 1] = k
+		end
+	end
+	for k, v in pairs(tbl) do
+		if not seen[k] and not k:match("^BINDING_") then
+			unused[#unused + 1] = k
+		end
+		if type(v) ~= "string" or v == "" then
+			badFormat[#badFormat + 1] = k .. " (not a non-empty string)"
+		elseif k:find("|", 1, true) then
+			local want = specs(k:match("^[^|]*"))
+			for form in v:gmatch("[^|]+") do
+				if specs(form) ~= want then
+					badFormat[#badFormat + 1] = k
+					break
+				end
+			end
+		elseif k:find("%", 1, true) and specs(v) ~= specs(k) then
+			badFormat[#badFormat + 1] = k
+		end
+	end
+	for k in pairs(english) do
+		if k:match("^BINDING_") and tbl[k] == nil then
+			missing[#missing + 1] = k
+		end
+	end
+	table.sort(missing)
+	table.sort(unused)
+	table.sort(badFormat)
+	print(string.format("%s: %d keys used, %d missing, %d unused, %d with wrong format specifiers", target, #keys,
+		#missing, #unused, #badFormat))
+	for _, k in ipairs(missing) do
+		print("  missing: " .. k)
+	end
+	for _, k in ipairs(unused) do
+		print("  unused:  " .. k)
+	end
+	for _, k in ipairs(badFormat) do
+		print("  format:  " .. k)
+	end
+	return #missing == 0 and #unused == 0 and #badFormat == 0
+end
+
+-- Every locale file in Locales/ except enUS, each of which must also be listed in the TOC.
+local function allLocaleFiles()
+	local files = {}
+	local p = io.popen('find Locales -name "*.lua"')
+	for path in p:lines() do
+		if not path:match("enUS%.lua$") then
+			files[#files + 1] = path
+		end
+	end
+	p:close()
+	table.sort(files)
+	local f = assert(io.open("DungeonPlanner.toc", "rb"))
+	local toc = f:read("*a")
+	f:close()
+	for _, path in ipairs(files) do
+		if not toc:find((path:gsub("/", "\\")), 1, true) then
+			print("  not in DungeonPlanner.toc: " .. path)
+			files.bad = true
+		end
+	end
+	return files
+end
+
+local first = arg[1]
+if not first then
 	for _, k in ipairs(keys) do
 		print(k)
 	end
 	return
 end
+if first == "--template" then
+	assert(arg[2], "usage: lua tools/locale_keys.lua --template <localeCode>")
+	template(arg[2])
+	return
+end
 
--- Load the locale file with a fake ns and compare.
-local ns = { Locales = {} }
-local chunk = assert(loadfile(target))
-chunk("DungeonPlanner", ns)
-local _, tbl = next(ns.Locales)
-local missing, unused = {}, {}
-for _, k in ipairs(keys) do
-	if tbl[k] == nil then
-		missing[#missing + 1] = k
+if first == "--missing-lines" then
+	-- The lines a locale still needs, English as the value, ready to paste into the file and translate.
+	local ns = { Locales = {} }
+	assert(loadfile(assert(arg[2], "usage: lua tools/locale_keys.lua --missing-lines Locales/<code>.lua")))("DungeonPlanner", ns)
+	local _, tbl = next(ns.Locales)
+	for _, k in ipairs(keys) do
+		if tbl[k] == nil then
+			print("\t[" .. lq(k) .. "] = " .. lq(english[k] or k) .. ",")
+		end
 	end
-end
-for k in pairs(tbl) do
-	if not seen[k] and not k:match("^BINDING_") then
-		unused[#unused + 1] = k
+	for k, v in pairs(english) do
+		if k:match("^BINDING_") and tbl[k] == nil then
+			print("\t" .. k .. " = " .. lq(v) .. ",")
+		end
 	end
+	return
 end
-table.sort(unused)
-print(string.format("%d keys used, %d missing in %s, %d unused", #keys, #missing, target, #unused))
-for _, k in ipairs(missing) do
-	print("  missing: " .. k)
+
+local targets = arg
+if first == "--all" then
+	targets = allLocaleFiles()
 end
-for _, k in ipairs(unused) do
-	print("  unused:  " .. k)
+local ok = not targets.bad
+for _, target in ipairs(targets) do
+	ok = check(target) and ok
 end
-os.exit(#missing == 0 and 0 or 1)
+os.exit(ok and 0 or 1)

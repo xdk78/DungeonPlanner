@@ -506,6 +506,42 @@ T.case("A Polish UI puts our font objects on every text, with a Polish-capable f
 	S.SetupFonts()
 end)
 
+T.case("A Russian UI gets a face with Cyrillic on a client that is not Russian; German, French and Spanish keep the game face", function()
+	boot()
+	local S = ns.Style
+	local wasLocale = ns.activeLocale
+	local CYRILLIC = "Fonts\\FRIZQT___CYR.TTF"
+	for _, code in ipairs({ "deDE", "frFR", "esES" }) do
+		ns.SetLocale(code)
+		S.ForgetFontProbes()
+		S.SetupFonts()
+		T.eq(S.fontFile, "Fonts\\FRIZQT__.TTF", code .. ": Latin-1 letters are in the game's face")
+	end
+	ns.SetLocale("ruRU")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, CYRILLIC, "the game's Cyrillic cut when this client has it")
+	mock.missingFonts = { [CYRILLIC] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, S.BUNDLED_FACE, "the bundled Alegreya Sans (it has Cyrillic) when the client has no Cyrillic cut")
+	mock.missingFonts = { [CYRILLIC] = true, [S.BUNDLED_FACE] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, "Fonts\\FRIZQT__.TTF", "the game face last")
+	-- A Russian client keeps its own cut whatever the UI language.
+	mock.missingFonts = nil
+	mock.locale = "ruRU"
+	ns.SetLocale("enUS")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, CYRILLIC, "Russian client, English UI")
+	mock.locale = "enUS"
+	ns.SetLocale(wasLocale or "enUS")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+end)
+
 T.case("Route names generated in English show the UI's word", function()
 	boot()
 	T.eq(ns.Names.Route({ name = "Route" }), ns.L["Route"])

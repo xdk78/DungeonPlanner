@@ -1,7 +1,8 @@
 -- Localization. English text is the key itself, so a missing translation shows English, never a blank.
--- Other languages add a table to ns.Locales (Locales/plPL.lua). AceLocale-3.0 is not used on purpose: it picks the
--- language from GetLocale() once at load, and WoW has no Polish client - WoW Po Polsku runs on an English client - so
--- Polish has to be chosen at runtime (settings: Automatic / English / Polski). tools/locale_keys.lua checks coverage.
+-- Other languages add a table to ns.Locales (Locales/<code>.lua, Locales/README.md). AceLocale-3.0 is not used on
+-- purpose: it picks the language from GetLocale() once at load, and WoW has no Polish client - WoW Po Polsku runs on an
+-- English client - so the language has to be chosen at runtime (settings: Automatic or a language of ns.LOCALE_LIST).
+-- tools/locale_keys.lua checks coverage.
 
 local _, ns = ...
 
@@ -118,29 +119,58 @@ ns.L = setmetatable({}, {
 	end,
 })
 
--- Plurals. A plural string lists its forms separated by "|": English has two ("%d plan|%d plans": 1, other), Polish
--- three ("%d plan|%d plany|%d planów": 1; 2-4 except 12-14; everything else, 0 included). Use it as
+-- The languages the picker offers (Settings, the window's gear menu): code, the language's own name. Spanish has one
+-- translation, shared by esES and esMX clients (LOCALE_ALIAS). "Русский" is followed by its English name because a
+-- Latin-only game face draws Cyrillic as boxes, and the menu must still be readable then.
+ns.LOCALE_LIST = {
+	{ "enUS", "English" },
+	{ "deDE", "Deutsch" },
+	{ "esES", "Español" },
+	{ "frFR", "Français" },
+	{ "plPL", "Polski" },
+	{ "ruRU", "Русский (Russian)" },
+}
+local LOCALE_ALIAS = { enGB = "enUS", esMX = "esES" }
+
+-- Plurals. A plural string lists its forms separated by "|". English, German and Spanish have two ("%d plan|%d plans":
+-- 1, other); French has two too, but 0 is singular as well (0 plan, 1 plan, 2 plans). Polish and Russian have three
+-- ("%d plan|%d plany|%d planów": 1; 2-4 except 12-14; everything else, 0 included). Russian differs from Polish in its
+-- first form, which is also used for 21, 31, ... (not 11). Use it as
 --   ns.Plural(n, L["%d plan|%d plans"])
 -- so tools/locale_keys.lua sees the key. Extra arguments follow the count in string.format. Missing forms fall back to
 -- the last one given.
+local function oneOrOther(n)
+	return n == 1 and 1 or 2
+end
+local function fewForms(n, oneForm)
+	if oneForm then
+		return 1
+	end
+	local last, lastTwo = n % 10, n % 100
+	if last >= 2 and last <= 4 and (lastTwo < 12 or lastTwo > 14) then
+		return 2
+	end
+	return 3
+end
 local PLURAL_RULES = {
-	enUS = function(n)
-		return n == 1 and 1 or 2
+	enUS = oneOrOther,
+	deDE = oneOrOther,
+	esES = oneOrOther,
+	frFR = function(n)
+		return n <= 1 and 1 or 2
 	end,
 	plPL = function(n)
-		if n == 1 then
-			return 1
-		end
-		local last, lastTwo = n % 10, n % 100
-		if last >= 2 and last <= 4 and (lastTwo < 12 or lastTwo > 14) then
-			return 2
-		end
-		return 3
+		return fewForms(n, n == 1)
+	end,
+	ruRU = function(n)
+		return fewForms(n, n % 10 == 1 and n % 100 ~= 11)
 	end,
 }
+ns.PLURAL_RULES = PLURAL_RULES
 
 function ns.PluralForm(n, code)
-	local rule = PLURAL_RULES[code or ns.activeLocale or "enUS"] or PLURAL_RULES.enUS
+	code = code or ns.activeLocale or "enUS"
+	local rule = PLURAL_RULES[LOCALE_ALIAS[code] or code] or PLURAL_RULES.enUS
 	return rule(math.abs(math.floor(tonumber(n) or 0)))
 end
 
@@ -156,9 +186,9 @@ function ns.Plural(n, forms, ...)
 	return text
 end
 
--- Choose the language. `code` is "auto" or a locale code ("enUS", "plPL"). "auto" follows the client, except that a
--- loaded WoW Po Polsku (set to Polish) means Polish, because that translation runs on an English client.
--- A player without the translation addon gets English (or their client's language when we add it): no side effects.
+-- Choose the language. `code` is "auto" or a locale code of ns.LOCALE_LIST. "auto" follows the client's GetLocale()
+-- when we have that language (enGB is English, esMX is Spanish), except that a loaded WoW Po Polsku (set to Polish)
+-- means Polish, because that translation runs on an English client. Any other client language gets English.
 function ns.SetLocale(code)
 	if code == nil or code == "auto" then
 		code = (GetLocale and GetLocale()) or "enUS"
@@ -166,9 +196,7 @@ function ns.SetLocale(code)
 			code = "plPL"
 		end
 	end
-	if code == "enGB" then
-		code = "enUS"
-	end
+	code = LOCALE_ALIAS[code] or code
 	active = ns.Locales[code] or ns.Locales.enUS
 	ns.activeLocale = ns.Locales[code] and code or "enUS"
 	return ns.activeLocale

@@ -252,6 +252,14 @@ function Style.WantsPolish()
 	return chosen == "plPL"
 end
 
+-- Russian text on screen: the active UI language, or the one just chosen (applied after /reload).
+function Style.WantsCyrillic()
+	if ns.activeLocale == "ruRU" then
+		return true
+	end
+	return (ns.db and ns.db.settings.locale) == "ruRU"
+end
+
 -- The chain's faces that may be tried now (WoW Po Polsku's only while that addon is enabled).
 local function candidates()
 	local list = {}
@@ -294,6 +302,16 @@ function Style.FontFile()
 		if file then
 			Style.polishFace = file
 			return file, 0
+		end
+	end
+	-- A Russian UI on a client that is not Russian: the game's Cyrillic cut if this client has it, else the bundled
+	-- Alegreya Sans (it has Cyrillic; DPSans.ttf has not). German, French and Spanish need no face of their own: the
+	-- client's Friz Quadrata covers Latin-1 (ä ö ü ß é è ê ç ñ ¿ ¡), as those clients use it themselves.
+	if Style.WantsCyrillic() and (mode == "game" or mode == "follow") and alphabet == "roman" then
+		for _, file in ipairs({ GAME_FACE.russian, Style.BUNDLED_FACE }) do
+			if Style.CanLoadFont(file) ~= false then
+				return file, 0
+			end
 		end
 	end
 	-- "lsm:<name>": a font registered in LibSharedMedia-3.0 by any addon (fonts with full Polish glyphs, ElvUI's, ...).

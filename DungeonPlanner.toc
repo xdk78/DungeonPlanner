@@ -2,6 +2,11 @@
 ## Title: Dungeon Planner
 ## Notes: Plan dungeon and raid runs: map markers, pulls, routes, boss strategies, assignments, gear lists, progress and sharing.
 ## Notes-plPL: Planowanie lochów i rajdów: znaczniki na mapie, pulle, trasy, strategie na bossów, przydziały, ekwipunek, postępy i udostępnianie.
+## Notes-deDE: Dungeons und Schlachtzüge planen: Kartenmarkierungen, Pulls, Routen, Bosstaktiken, Zuweisungen, Ausrüstungslisten, Fortschritt und Teilen.
+## Notes-esES: Planifica mazmorras y bandas: marcadores en el mapa, pulls, rutas, estrategias de jefes, asignaciones, listas de equipo, progreso y compartición.
+## Notes-esMX: Planifica mazmorras y bandas: marcadores en el mapa, pulls, rutas, estrategias de jefes, asignaciones, listas de equipo, progreso y compartición.
+## Notes-frFR: Planifiez donjons et raids : marqueurs sur la carte, pulls, itinéraires, stratégies de boss, assignations, listes d'équipement, progression et partage.
+## Notes-ruRU: Планирование подземелий и рейдов: метки на карте, пулы, маршруты, тактики боссов, назначения, списки снаряжения, прогресс и обмен планами.
 ## Author: xdk78
 ## Version: @project-version@
 ## IconTexture: Interface\AddOns\DungeonPlanner\Media\LogoIcon
@@ -21,6 +26,10 @@ Core\Util.lua
 Core\Integrations.lua
 Locales\enUS.lua
 Locales\plPL.lua
+Locales\deDE.lua
+Locales\esES.lua
+Locales\frFR.lua
+Locales\ruRU.lua
 Core\Compat.lua
 
 Model\Schema.lua
