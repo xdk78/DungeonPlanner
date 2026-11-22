@@ -308,23 +308,28 @@ MapPins.LayoutItem, MapPins.ApplyLayout, MapPins.Style = layoutItem, applyLayout
 -- Route paths ------------------------------------------------------------------------------------------------------------
 -- The route's path on a map view (UI/MapCanvas.lua draws the numbered stops and calls this first, under them).
 --
--- A route must read on busy map art (parchment, painted names, rocks): each segment is a thick line in the route's
--- colour over a dark outline line; each bend gets a joint (a disc in the line's colour over a dark disc), so a path
--- with many bends (routes that follow corridors) turns smoothly; and direction chevrons (Media/Chevron.tga, white with a
--- dark edge baked in, tinted a lighter shade of the route) sit along the path every ~72 screen units, scaled with the
--- icon-size setting, so they stay as dense at any zoom (Model/MapLayout.lua RouteMarks: clear of stops and bends, at
--- least one on a segment with room, none on short ones). While a step is in focus its segment is brighter and thicker
--- and the rest of the path dims.
+-- A route must read on busy map art (parchment, painted names, rocks) and stay calm where it bends, doubles back or
+-- crosses itself. Each segment is a line in the route's colour over a dark outline line; each bend gets a joint (a disc
+-- in the line's colour over a dark disc), so a path with many bends turns smoothly. Direction arrows
+-- (Media/RouteArrowEdge.tga, a small solid arrowhead with a thin dark edge baked in; Media/RouteArrow.tga without the
+-- edge) in a lighter tone of the line sit on it, a little wider than the line: one just before each numbered stop and
+-- at the route's end, and others spaced by distance on screen (Model/RouteArrows.lua: clear of stops, sharp bends, pins,
+-- labels, each other and other parts of the line, so crossings and paths that double back stay clean). The Routes
+-- settings (settings.routes, UI/Settings.lua) choose the lines' width, opacity, outline and colour and the arrows'
+-- density and size. While a step is in focus its leg is brighter and wider and the rest of the path dims.
 --
 -- Everything comes from pools on the view (outlines, lines, joints, arrows) and is redrawn only when the map redraws
--- (plan, view, focus or setting changes), never per frame.
+-- (plan, view, focus or setting changes), never per frame. The map places the arrows after its pins and labels
+-- (DrawRouteArrows), so they keep clear of them; a draw without them places the arrows at once.
 
 local MapRoutes = ns:NewModule("MapRoutes")
 
-MapRoutes.SPACING = 72 -- screen units of path between chevrons at icon scale 1
-MapRoutes.ARROW = 22 -- chevron size at icon scale 1
-MapRoutes.MAX_ARROWS = 300 -- bound per redraw
-local CHEVRON, ARROW_FALLBACK = S.MEDIA .. "Chevron", S.MEDIA .. "Arrow"
+MapRoutes.MAX_ARROWS = 400 -- bound per redraw, all routes together (each route: RouteArrows.LIMIT)
+local ARROW_FILE, ARROW_EDGE_FILE = S.MEDIA .. "RouteArrow", S.MEDIA .. "RouteArrowEdge"
+-- A file added while the game runs cannot be opened until a restart (docs/COMPATIBILITY.md section 9): then the older
+-- shapes stand in (SetTexture's success flag, where the client gives one).
+local FALLBACK_FILES = { S.MEDIA .. "Chevron", S.MEDIA .. "Arrow" }
+MapRoutes.ARROW_FILE, MapRoutes.ARROW_EDGE_FILE = ARROW_FILE, ARROW_EDGE_FILE
 
 -- A colour mixed towards white by k (0..1).
 local function lighten(r, g, b, k)
@@ -332,12 +337,35 @@ local function lighten(r, g, b, k)
 end
 MapRoutes.Lighten = lighten
 
+-- The Routes settings (settings.routes) as sizes in screen units (UI/Style.lua ROUTE); u: the icon size.
+function MapRoutes.Look(u)
+	local R = S.ROUTE
+	local s = ns.db and ns.db.settings and ns.db.settings.routes
+	s = type(s) == "table" and s or {}
+	u = u or 1
+	local spacing = R.spacing[s.arrows]
+	if spacing == nil then
+		spacing = R.spacing.normal
+	end
+	local color = tonumber(s.color) or 0
+	return {
+		width = (R.width[s.width] or R.width.medium) * u,
+		outline = s.outline ~= false and R.outline * u or 0,
+		spacing = spacing and spacing * u or nil,
+		arrow = R.arrow[s.arrowSize] or R.arrow.medium,
+		heads = spacing and s.heads ~= false or false,
+		opacity = math.max(0.4, math.min(1, tonumber(s.opacity) or 1)),
+		color = color >= 1 and color <= #S.Palette() and math.floor(color) or nil,
+		focusOnly = s.focusArrows == true,
+	}
+end
+
 function MapRoutes.Install(view)
 	local overlay = view.overlay
 	local pools = view.pools
 	pools.outlines, pools.joints, pools.jointOutlines = pools.outlines or {}, pools.joints or {}, pools.jointOutlines or {}
 
-	-- Draw layers on the overlay: outlines (0) under lines and joints (1) under chevrons (3); stops and pins are frames
+	-- Draw layers on the overlay: outlines (0) under lines and joints (1) under arrows (3); stops and pins are frames
 	-- above the overlay's textures.
 	local function line(list, i, sublevel)
 		local l = list[i]
@@ -357,16 +385,21 @@ function MapRoutes.Install(view)
 		end
 		return t
 	end
-	local function arrow(i)
+	local function arrow(i, file)
 		local a = pools.arrows[i]
 		if not a then
 			a = overlay:CreateTexture(nil, "ARTWORK", nil, 3)
-			-- A file added while the game runs cannot be opened until a restart (docs/COMPATIBILITY.md section 9): then
-			-- the older arrow shape stands in (SetTexture's success flag, where the client gives one).
-			if a:SetTexture(CHEVRON, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE") == false then
-				a:SetTexture(ARROW_FALLBACK, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
-			end
 			pools.arrows[i] = a
+		end
+		if a.dpFile ~= file then
+			a.dpFile = file
+			if a:SetTexture(file, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE") == false then
+				for _, f in ipairs(FALLBACK_FILES) do
+					if a:SetTexture(f, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE") ~= false then
+						break
+					end
+				end
+			end
 		end
 		return a
 	end
@@ -378,26 +411,30 @@ function MapRoutes.Install(view)
 
 	-- Draw every route path on `floor`. px, py: plan coordinates to canvas offsets (py negative downwards). o = { scale
 	-- (icon size), seg (the focused step's { route, from, to } or nil), activeRoute, extra (more routes in the map's own
-	-- coordinates: another addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets) }. Returns
-	-- the counts drawn.
+	-- coordinates: another addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows
+	-- (the caller places the arrows with DrawRouteArrows once its pins are laid out) }. Returns the counts drawn.
 	function view:DrawRoutePaths(plan, floor, px, py, o)
 		o = o or {}
 		local canvas = self.canvas
 		local n = { lines = 0, outlines = 0, joints = 0, arrows = 0 }
 		local u = math.max(0.75, o.scale or 1)
+		local look = MapRoutes.Look(u)
 		local seg = o.seg
+		local jobs = { paths = {}, styles = {}, look = look, u = u, counts = n }
+		self.routeJobs = jobs
 		local all = {}
 		for _, route in ipairs(plan and plan.routes or {}) do
-			all[#all + 1] = route
+			all[#all + 1] = { route = route, own = true }
 		end
 		for _, route in ipairs(o.extra or {}) do
-			all[#all + 1] = route
+			all[#all + 1] = { route = route }
 		end
-		for _, route in ipairs(all) do
+		for _, entry in ipairs(all) do
+			local route = entry.route
 			if route.floor == floor and #route.points >= 2 then
-				local r, g, b = S.PaletteColor(route.color)
-				local alpha = route.optional and 0.55 or 1
-				local thickness = (route.id == o.activeRoute and 5 or 4) * u
+				local r, g, b = S.PaletteColor(entry.own and look.color or route.color)
+				local alpha = (route.optional and 0.55 or 1) * look.opacity
+				local thickness = look.width + (route.id == o.activeRoute and u or 0)
 				local fx, fy = px, py
 				if route.mapSpace then
 					fx, fy = o.mx or px, o.my or py
@@ -408,10 +445,10 @@ function MapRoutes.Install(view)
 				end
 				local focusHere = seg and seg.route == route.id
 				-- Segment i joins points i - 1 and i: its colour, alpha and width.
-				local function look(i)
+				local function segLook(i)
 					if focusHere and i > seg.from and i <= seg.to then
 						local lr, lg, lb = lighten(r, g, b, 0.25)
-						return lr, lg, lb, alpha, thickness + 2 * u, true
+						return lr, lg, lb, alpha, thickness + S.ROUTE.focusWidth * u, true
 					elseif seg then
 						return r, g, b, alpha * 0.45, thickness, false
 					end
@@ -419,63 +456,59 @@ function MapRoutes.Install(view)
 				end
 				for i = 2, #pts do
 					local a, c = pts[i - 1], pts[i]
-					local cr, cg, cb, ca, th = look(i)
-					local ol = line(pools.outlines, n.outlines + 1, 0)
+					local cr, cg, cb, ca, th = segLook(i)
 					local l = line(pools.lines, n.lines + 1, 1)
-					if ol and l then
-						n.outlines, n.lines = n.outlines + 1, n.lines + 1
-						place(ol, a[1], a[2], c[1], c[2], canvas)
-						ol:SetThickness(th + 3 * u)
-						ol:SetVertexColor(0.05, 0.03, 0.02, ca * 0.8)
-						ol:Show()
+					if l then
+						n.lines = n.lines + 1
 						place(l, a[1], a[2], c[1], c[2], canvas)
 						l:SetThickness(th)
 						l:SetVertexColor(cr, cg, cb, ca)
 						l:Show()
+						local ol = look.outline > 0 and line(pools.outlines, n.outlines + 1, 0)
+						if ol then
+							n.outlines = n.outlines + 1
+							place(ol, a[1], a[2], c[1], c[2], canvas)
+							ol:SetThickness(th + look.outline)
+							ol:SetVertexColor(0.05, 0.03, 0.02, ca * 0.8)
+							ol:Show()
+						end
 					end
 				end
-				local marks, joints = ns.MapLayout.RouteMarks(pts, {
-					spacing = MapRoutes.SPACING * u,
-					size = MapRoutes.ARROW * u,
-					stopGap = 18 * u, -- a boss portrait at a stop is 34 at icon scale 1
-					bendGap = 3 * u,
-					limit = MapRoutes.MAX_ARROWS - n.arrows,
-				})
 				-- A joint takes the look of the segment that arrives at the bend.
-				for _, i in ipairs(joints) do
-					local cr, cg, cb, ca, th = look(i)
+				for _, i in ipairs(ns.RouteArrows.Joints(pts)) do
+					local cr, cg, cb, ca, th = segLook(i)
 					local p = pts[i]
 					n.joints = n.joints + 1
 					local outer, inner = disc(pools.jointOutlines, n.joints, 0), disc(pools.joints, n.joints, 1)
 					outer:ClearAllPoints()
 					outer:SetPoint("CENTER", canvas, "TOPLEFT", p[1], p[2])
-					outer:SetSize(th + 3 * u, th + 3 * u)
+					outer:SetSize(th + look.outline, th + look.outline)
 					outer:SetVertexColor(0.05, 0.03, 0.02, ca * 0.8)
-					outer:Show()
+					if look.outline > 0 then
+						outer:Show()
+					else
+						outer:Hide()
+					end
 					inner:ClearAllPoints()
 					inner:SetPoint("CENTER", canvas, "TOPLEFT", p[1], p[2])
 					inner:SetSize(th, th)
 					inner:SetVertexColor(cr, cg, cb, ca)
 					inner:Show()
 				end
-				for _, m in ipairs(marks) do
-					local cr, cg, cb, ca, _, bright = look(m.seg)
-					n.arrows = n.arrows + 1
-					local a = arrow(n.arrows)
-					local size = MapRoutes.ARROW * u * (bright and 1.15 or 1)
-					a:SetSize(size, size)
-					a:ClearAllPoints()
-					a:SetPoint("CENTER", canvas, "TOPLEFT", m.x, m.y)
-					local ar, ag, ab = lighten(cr, cg, cb, 0.55)
-					a:SetVertexColor(ar, ag, ab, math.min(1, ca + 0.1))
-					-- m.angle: the segment's direction in canvas offsets (y up); the chevron points up unturned.
-					local tc = MapPins.TurnedCoords(m.angle - math.pi / 2)
-					a:SetTexCoord(tc[1], tc[2], tc[3], tc[4], tc[5], tc[6], tc[7], tc[8])
-					a:Show()
+				-- Arrows keep clear of the whole outlined line, of this route and the others.
+				local path = { pts = pts, half = (thickness + look.outline) / 2 }
+				if look.focusOnly and seg then
+					if focusHere then
+						path.range = { from = seg.from, to = seg.to }
+					else
+						path.arrows = false
+					end
 				end
+				jobs.paths[#jobs.paths + 1] = path
+				jobs.styles[#jobs.paths] = segLook
 			end
 		end
-		for key, list in pairs({ lines = pools.lines, outlines = pools.outlines, arrows = pools.arrows }) do
+		for key, list in pairs({ lines = pools.lines, outlines = pools.outlines }) do
 			for i = n[key] + 1, #list do
 				list[i]:Hide()
 			end
@@ -484,6 +517,54 @@ function MapRoutes.Install(view)
 			pools.joints[i]:Hide()
 			pools.jointOutlines[i]:Hide()
 		end
+		if not o.deferArrows then
+			self:DrawRouteArrows()
+		end
 		return n
+	end
+
+	-- Place and draw the direction arrows of the paths DrawRoutePaths drew last, clear of `obstacles` (pins and labels
+	-- in the paths' canvas offsets: RouteArrows.Obstacles). Returns how many it drew.
+	function view:DrawRouteArrows(obstacles)
+		local jobs = self.routeJobs
+		local count = 0
+		local look = jobs and jobs.look
+		if look and look.spacing and #jobs.paths > 0 then
+			local u, R = jobs.u, S.ROUTE
+			local size = (look.width + R.outline * u) * look.arrow
+			local marks = ns.RouteArrows.Place(jobs.paths, {
+				spacing = look.spacing,
+				size = size,
+				headSize = look.heads and size * R.head or nil,
+				stopGap = 12 * u, -- a numbered stop's disc is 20 across at icon scale 1
+				bendGap = 2 * u,
+				gap = 2 * u,
+				pins = obstacles and obstacles.pins,
+				boxes = obstacles and obstacles.boxes,
+				total = MapRoutes.MAX_ARROWS,
+			})
+			local file = look.outline > 0 and ARROW_EDGE_FILE or ARROW_FILE
+			local canvas = self.canvas
+			for _, m in ipairs(marks) do
+				local cr, cg, cb, ca, _, bright = jobs.styles[m.path](m.seg)
+				count = count + 1
+				local a = arrow(count, file)
+				local sz = m.size * (bright and 1.15 or 1)
+				a:SetSize(sz, sz)
+				a:ClearAllPoints()
+				a:SetPoint("CENTER", canvas, "TOPLEFT", m.x, m.y)
+				local ar, ag, ab = lighten(cr, cg, cb, R.tone)
+				a:SetVertexColor(ar, ag, ab, ca)
+				-- m.angle: the segment's direction in canvas offsets (y up); the arrow points up unturned.
+				local tc = MapPins.TurnedCoords(m.angle - math.pi / 2)
+				a:SetTexCoord(tc[1], tc[2], tc[3], tc[4], tc[5], tc[6], tc[7], tc[8])
+				a:Show()
+			end
+			jobs.counts.arrows = count
+		end
+		for i = count + 1, #pools.arrows do
+			pools.arrows[i]:Hide()
+		end
+		return count
 	end
 end

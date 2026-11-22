@@ -44,6 +44,7 @@ Model\Pages.lua
 Model\Bundled.lua
 Model\Match.lua
 Model\MapLayout.lua
+Model\RouteArrows.lua
 Model\Route.lua
 Model\Walk.lua
 Model\Steps.lua

@@ -104,6 +104,37 @@ writeTGA(out .. "Chevron.tga", 32, 32, function(x, y)
 	return v, v, v, math.floor(edge * 255 + 0.5)
 end)
 
+-- RouteArrow: a small solid arrowhead pointing up (a triangle with a shallow notch in its base), for the direction
+-- arrows on route lines (rotated at runtime); RouteArrowEdge: the same with a thin dark edge baked in, which stays dark
+-- under any tint. Everything lies within 15 px of the centre, so turned texture coordinates never cut it.
+local function inArrowhead(px, py)
+	local function side(ax, ay, bx, by)
+		return (bx - ax) * (py - ay) - (by - ay) * (px - ax)
+	end
+	local inTri = side(16, 3, 26, 24) >= 0 and side(26, 24, 6, 24) >= 0 and side(6, 24, 16, 3) >= 0
+	local inNotch = side(16, 19, 27, 25) >= 0 and side(27, 25, 5, 25) >= 0 and side(5, 25, 16, 19) >= 0
+	return inTri and not inNotch
+end
+local function arrowheadDist(px, py)
+	if inArrowhead(px, py) then
+		return 0
+	end
+	return math.min(segDist(px, py, 16, 3, 26, 24), segDist(px, py, 26, 24, 16, 19), segDist(px, py, 16, 19, 6, 24),
+		segDist(px, py, 6, 24, 16, 3))
+end
+writeTGA(out .. "RouteArrow.tga", 32, 32, white(inArrowhead))
+writeTGA(out .. "RouteArrowEdge.tga", 32, 32, function(x, y)
+	local body = coverage(x, y, inArrowhead)
+	local edge = coverage(x, y, function(px, py)
+		return arrowheadDist(px, py) <= 2.4
+	end)
+	if edge <= 0 then
+		return 0, 0, 0, 0
+	end
+	local v = math.floor(20 + 235 * body / edge + 0.5)
+	return v, v, v, math.floor(edge * 255 + 0.5)
+end)
+
 -- Icon: a soft-grey rounded tile with an ink route (three stops joined by a line). The launcher shows Media/LogoIcon.tga
 -- (tools/render_logo.py); this is only the fallback for the game's map icon (settings.gameIcon) on a client without it.
 local stops = { { 16, 46 }, { 30, 22 }, { 48, 40 } }

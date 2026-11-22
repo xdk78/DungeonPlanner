@@ -856,6 +856,43 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- Wailing Caverns' recommended plan: a long route that bends, doubles back and crosses itself (the loops around
+	-- Lord Pythas and Lord Serpentis), at the default and the smallest window size, and on run mode's mini map.
+	{
+		name = "map-wailing",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+		end,
+		window = window,
+	},
+	{
+		name = "map-wailing-min",
+		setup = function()
+			resize(880, 560)
+			openPlan("wailing-caverns", "map")
+		end,
+		window = window,
+		teardown = function()
+			resize()
+		end,
+	},
+	{
+		name = "runmode-wailing",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+			ns.UI.FocusStep(math.floor((#ns.UI.ctx:Steps() + 1) / 2), { stay = true })
+			ns.RunMode.Show()
+			ns.RunMode.Refresh()
+			window():Hide()
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerRunFrame")
+		end,
+		teardown = function()
+			closeAll()
+			window():Show()
+		end,
+	},
 	{
 		name = "map-outdoor",
 		setup = function()

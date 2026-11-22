@@ -458,16 +458,19 @@ function MapCanvas.Install(view)
 		return b
 	end
 
-	-- Labels keep clear of what floats over the map (the legend: view.avoidFrame, set by the map section).
+	-- Labels keep clear of what floats over the map (the legend: view.avoidFrame, set by the map section; the note shown
+	-- when a map has no art).
 	local function applyLayout(list)
 		local avoid
-		local over = view.avoidFrame
-		if over and over:IsShown() then
-			local l, t, r, b = over:GetLeft(), over:GetTop(), over:GetRight(), over:GetBottom()
-			local cl, ct = canvas:GetLeft(), canvas:GetTop()
-			if l and t and r and b and cl and ct then
-				local k = (over:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
-				avoid = { { l * k - cl, ct - t * k, r * k - cl, ct - b * k } }
+		for _, over in ipairs({ view.avoidFrame or false, view.noArt }) do
+			if over and over:IsShown() then
+				local l, t, r, b = over:GetLeft(), over:GetTop(), over:GetRight(), over:GetBottom()
+				local cl, ct = canvas:GetLeft(), canvas:GetTop()
+				if l and t and r and b and cl and ct then
+					local k = (over:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
+					avoid = avoid or {}
+					avoid[#avoid + 1] = { l * k - cl, ct - t * k, r * k - cl, ct - b * k }
+				end
 			end
 		end
 		-- And the names painted on the map (a bundled map's keepOut, in the picture's 0..1), where another side is free.
@@ -549,16 +552,16 @@ function MapCanvas.Install(view)
 			local spawns = self.cb.spawnsShown and self.cb.spawnsShown()
 			nSpawns = self:DrawSpawns(spawns and plan or nil, floor, px, py, scale)
 
-			-- Routes under the pins: the paths (outlined lines, joints at bends, direction chevrons: MapRoutes in
-			-- UI/MapPins.lua), then the stops.
+			-- Routes under the pins: the paths (outlined lines, joints at bends: MapRoutes in UI/MapPins.lua), then the
+			-- stops; the direction arrows once the pins and labels are laid out (below), so they keep clear of them.
 			-- Another addon's route as an extra layer (Data/Providers.lua Routes), in the map's own coordinates.
 			local extra = not compact and self.cb.providerRoutesShown and self.cb.providerRoutesShown()
 				and MapCanvas.ProviderRoutes(plan, floor, self.artInfo) or nil
 			if layerShown("route") or extra then
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
-					extra = extra, mx = mx, my = my })
-				nLines, nArrows, pathsDrawn = drawn.lines, drawn.arrows, true
+					extra = extra, mx = mx, my = my, deferArrows = true })
+				nLines, pathsDrawn = drawn.lines, true
 				self.routeCounts = drawn
 				for _, route in ipairs(own and plan.routes or {}) do
 					if route.floor == floor then
@@ -730,6 +733,9 @@ function MapCanvas.Install(view)
 				self.focusRing:Hide()
 			end
 			applyLayout(layout)
+			if pathsDrawn then
+				nArrows = self:DrawRouteArrows(ns.RouteArrows.Obstacles(layout, true))
+			end
 		end
 		for i = nPins + 1, #pools.pins do
 			pools.pins[i]:Hide()

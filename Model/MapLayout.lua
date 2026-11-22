@@ -10,7 +10,7 @@
 --                           label below or above its pin slides sideways to fit, one beside it slides up or down
 --                           (it.dx, it.dy), and a side where it cannot fit is not used.
 -- items: { x, y, r (pin radius), kind ("boss" | "disc" | "stop" | "pin"), w, h (label size; w = 0: no label), prio }.
---   MapLayout.RouteMarks(pts, o) direction chevrons and bend joints along a route (below).
+-- Direction arrows along routes are placed by Model/RouteArrows.lua, clear of these pins and labels.
 
 local _, ns = ...
 local MapLayout = ns:NewModule("MapLayout")
@@ -405,90 +405,4 @@ function MapLayout.FitView(points, o)
 	local s = o.fitScale * zoom
 	local cx, cy = (x0 + x1) / 2 * o.baseW * s, (y0 + y1) / 2 * o.baseH * s
 	return { zoom = zoom, ox = inset + availW / 2 - cx, oy = inset + availH / 2 - cy }
-end
-
--- Direction marks along a route as drawn on screen, so the route reads at any zoom: chevrons spaced by on-screen
--- distance along the path (more of them when zoomed in, never denser), kept clear of stops and bends, and a joint at
--- each bend so a path with many bends (routes that follow corridors) turns smoothly.
---   pts: { { x, y, stop = true? }, ... } in screen units. The first and last points count as stops.
---   o:   { spacing (path length between marks), size (a mark's size), stopGap and bendGap (kept clear around a stop or a
---        bend, besides half a mark), limit (most marks returned) }
--- Returns arrows { { x, y, angle, seg } } (seg i joins pts[i - 1] and pts[i]; angle = atan2 of that segment's dy, dx)
--- and joints { i, ... } (inner points where the direction changes). Rules: a segment with room gets marks every
--- `spacing` along the path, and at least one at its middle unless the last mark is under half a spacing back; segments
--- too short for a mark get none; a leg (stop to stop) whose bends are all too short for one gets one at its middle.
-function MapLayout.RouteMarks(pts, o)
-	o = o or {}
-	local spacing, size = o.spacing or 72, o.size or 16
-	local stopGap, bendGap, limit = o.stopGap or 14, o.bendGap or 4, o.limit or 400
-	local arrows, joints = {}, {}
-	local n = type(pts) == "table" and #pts or 0
-	if n < 2 then
-		return arrows, joints
-	end
-	local function isStop(i)
-		return i == 1 or i == n or pts[i].stop == true
-	end
-	local function add(i, t, len, dx, dy)
-		if #arrows < limit then
-			local a = pts[i - 1]
-			arrows[#arrows + 1] = { x = a[1] + dx * t / len, y = a[2] + dy * t / len, angle = math.atan2(dy, dx), seg = i }
-		end
-	end
-	local since = spacing / 2 -- path length since the last mark: the first comes about half a spacing in
-	local legStart, legMarks, legLen = 2, 0, 0
-	for i = 2, n do
-		local a, b = pts[i - 1], pts[i]
-		local dx, dy = b[1] - a[1], b[2] - a[2]
-		local len = math.sqrt(dx * dx + dy * dy)
-		if len > 0 then
-			local lo = (isStop(i - 1) and stopGap or bendGap) + size / 2
-			local hi = len - (isStop(i) and stopGap or bendGap) - size / 2
-			local last
-			if hi >= lo then
-				local t = math.max(lo, spacing - since)
-				while t <= hi do
-					add(i, t, len, dx, dy)
-					legMarks, last = legMarks + 1, t
-					t = t + spacing
-				end
-				local mid = (lo + hi) / 2
-				if not last and since + mid >= spacing / 2 then
-					add(i, mid, len, dx, dy)
-					legMarks, last = legMarks + 1, mid
-				end
-			end
-			since = last and (len - last) or (since + len)
-			legLen = legLen + len
-		end
-		if i < n and not isStop(i) then
-			-- A joint where the path turns (more than about 3 degrees).
-			local c = pts[i + 1]
-			local ex, ey = c[1] - b[1], c[2] - b[2]
-			local cross, dot = dx * ey - dy * ex, dx * ex + dy * ey
-			if math.abs(math.atan2(cross, dot)) > 0.05 then
-				joints[#joints + 1] = i
-			end
-		end
-		if isStop(i) then
-			-- The leg ends here: one with no mark gets one at its middle (on whichever segment holds that point), if the
-			-- leg is long enough to show one clear of its two stops.
-			if legMarks == 0 and legLen >= 2 * stopGap + 2 * size then
-				local want, walked = legLen / 2, 0
-				for j = legStart, i do
-					local p, q = pts[j - 1], pts[j]
-					local ex, ey = q[1] - p[1], q[2] - p[2]
-					local l = math.sqrt(ex * ex + ey * ey)
-					if l > 0 and walked + l >= want then
-						add(j, want - walked, l, ex, ey)
-						since = l - (want - walked)
-						break
-					end
-					walked = walked + l
-				end
-			end
-			legStart, legMarks, legLen = i + 1, 0, 0
-		end
-	end
-	return arrows, joints
 end

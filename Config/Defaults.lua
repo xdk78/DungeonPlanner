@@ -29,6 +29,17 @@ Defaults.settings = {
 	providers = {}, -- [adapter id] = false when switched off (Data/Providers.lua); every adapter is on by default
 	preferProviderMaps = true, -- drawn maps (Data/ReyesMaps.lua, other addons') before the game's minimap pictures
 	mapColors = "parchment", -- minimap floors: "parchment" (tinted like the old map tiles) | "game" (UI/MapCanvas.lua)
+	-- How routes look on the map (UI/MapPins.lua MapRoutes; sizes in UI/Style.lua ROUTE).
+	routes = {
+		width = "medium", -- "thin" | "medium" | "thick"
+		arrows = "normal", -- direction arrows: "off" | "few" | "normal" | "many"
+		arrowSize = "medium", -- "small" | "medium" | "large"
+		heads = true, -- an arrowhead just before each numbered stop and at the route's end
+		opacity = 1, -- the lines' opacity, 0.4 .. 1
+		outline = true, -- a dark edge around lines and arrows
+		color = 0, -- 0: each route's own colour; 1 .. 8: every plan route in that palette colour
+		focusArrows = false, -- while a step is in focus, arrows only on the leg that leads to it
+	},
 	share = {
 		acceptFrom = "groupGuild", -- "nobody" | "group" | "groupGuild" | "anyone"
 		announce = true, -- send a hello to the group so others see who runs Dungeon Planner
