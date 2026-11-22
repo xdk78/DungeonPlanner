@@ -211,8 +211,22 @@ end
 
 -- The sync line ------------------------------------------------------------------------------------------------------------
 
--- What the line says: text, dot status, button label and action; nil when there is nothing to show.
+local lineState
+
+-- What the line says: text, dot status, button label and action; nil when there is nothing to show. While the game
+-- holds or refuses addon messages on the group's channel, the line says so instead (the button stays; the tooltip
+-- still lists the members).
 function RunSync.LineState(plan)
+	local st = lineState(plan)
+	local channel = st and ns.Comm.GroupChannel()
+	local problem = channel and ns.Comm.ProblemText(channel)
+	if problem then
+		st.text, st.dot = problem, "warning"
+	end
+	return st
+end
+
+function lineState(plan)
 	local s = RunSync.state
 	if s.mode == "leading" then
 		local sum = RunSync.Summary(plan) or Sync.Summary(s, ns.Comm.GroupMembers())
@@ -364,6 +378,10 @@ function RunSync.Init()
 	end)
 	ns:On("PLAN_IMPORTED", RunSync, rematch)
 	ns:On("PLANS_CHANGED", RunSync, rematch)
+	-- The game started or stopped holding or refusing addon messages: run mode redraws the line (LineState).
+	ns:On("COMM_STATE", RunSync, function()
+		ns:Fire("SYNC_CHANGED")
+	end)
 	-- Roster reads (every unit's name and rank) only when a lead is known or this player leads; idle, only whether the
 	-- player is in a group (to ask who leads while run mode is open).
 	ns:RegisterEvent("GROUP_ROSTER_UPDATE", function()

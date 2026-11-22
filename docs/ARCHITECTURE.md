@@ -443,7 +443,7 @@ Order of map art for a floor (`MinimapArt.Choose`): the game's own map (`C_Map`)
 Routes, OpenMap) while "Prefer drawn maps" is on (the default), then the game's minimap pictures (`Data/MinimapArt.lua`,
 drawn in the parchment colours: `MapCanvas.ArtStyle`); with the setting off the minimap pictures come before the drawn
 maps; then the parchment grid. A bundled or provider floor is picked by the plan floor's name (`Providers.PickFloor`).
-A bundled map is credited on the canvas ("Map by Santiago Reyes", its tooltip naming his site and donation page); when
+A bundled map is credited on the canvas ("Map by Santiago Reyes", its tooltip naming his site; no donation request in the game, see AGENTS.md); when
 Dungeon Journal or Forever Dungeon Routes draws the same picture, its boss pins, alignment and routes are used on the
 bundled map. A provider map is credited on the canvas ("Map: Dungeon Journal") and its boss pins in their tooltips. **Alignment** (`Providers.Align`): the plan's boss
 markers are paired with the provider's pins by name; "same" draws as stored, "fit" draws through a per-axis scale and
@@ -524,6 +524,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
 | Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
 | Share/Roster.lua | the group's units and members, a sender's rank by its whole name (surnames on Forever), whisper targets as names arrived |
+| Share/SendStats.lua | what became of the addon messages sent: parts sent and refused per distribution, the last refusal's code, refusals in a row (`Comm.Problem` and `Comm.ProblemText` turn it and the game's lockdown answers into the line sharing and group sync show) |
 | Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua | raid pages: data, validation, keywords, permissions, the Notes window's state machine; the Party section's editor; the Notes window, sending and chat posting |
 | UI/Panels/ | sections (map + legend, marker editor and menus, plan, bosses, pulls, assignments, gear, runs, notes, progress, share) |
 | UI/Prompts.lua, UI/Settings.lua | share prompts, options page |

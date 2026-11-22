@@ -33,7 +33,9 @@ Compat.CHECKS = {
 	{ "Instance info", "GetInstanceInfo", "run tracking" },
 	{ "Addon messages", "C_ChatInfo.SendAddonMessage", "in-game sharing (export strings still work)" },
 	{ "Addon prefix", "C_ChatInfo.RegisterAddonMessagePrefix", "in-game sharing" },
-	{ "Messaging lockdown check", "C_ChatInfo.InChatMessagingLockdown", "lockdown detection (falls back to send results)" },
+	{ "Messaging lockdown check", "C_ChatInfo.InChatMessagingLockdown", "lockdown detection (refused sends are still counted)" },
+	{ "Outgoing addon message restriction check", "C_ChatInfo.AreOutgoingAddonChatMessagesRestricted",
+		"restriction detection (refused sends are still counted)" },
 	{ "Send result codes", "Enum.SendAddonMessageResult", "throttle detection" },
 	{ "Settings panel", "Settings.RegisterCanvasLayoutCategory", "options in the game's AddOns settings" },
 	{ "Context menus", "MenuUtil.CreateContextMenu", "right-click menus and the plan menu" },
@@ -196,6 +198,7 @@ Compat.FILES = {
 	{ "UI/OpenMapOverlay.lua", "OpenMapOverlay", "the experimental plan on OpenMap's dungeon map" },
 	{ "UI/FontTest.lua", "Style.RunFontTest", "the font test in /dp debug and /dp scan" },
 	{ "UI/RunLines.lua", "RunMode.RecorderText", "run mode's recorder, drift and prep lines" },
+	{ "Share/SendStats.lua", "SendStats", "counting refused addon messages (sharing and group sync do not say so)" },
 }
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a

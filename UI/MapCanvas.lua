@@ -143,14 +143,14 @@ function MapCanvas.Create(parent, cb)
 	view.creditPlate:SetPoint("TOPLEFT", view.credit, "TOPLEFT", -SP.xs, SP.xxs + 1)
 	view.creditPlate:SetPoint("BOTTOMRIGHT", view.credit, "BOTTOMRIGHT", SP.xs, -(SP.xxs + 1))
 	view.creditPlate:Hide()
-	-- Hover target over the chip of a bundled map (Data/ReyesMaps.lua): the artist, his site and his donation page.
+	-- Hover target over the chip of a bundled map (Data/ReyesMaps.lua): the artist and his site. Nothing that asks
+	-- for money: Blizzard's add-on policy keeps that out of the game (AGENTS.md, "Game API rules").
 	view.creditHit = CreateFrame("Frame", nil, edge)
 	view.creditHit:SetPoint("TOPLEFT", view.creditPlate, "TOPLEFT")
 	view.creditHit:SetPoint("BOTTOMRIGHT", view.creditPlate, "BOTTOMRIGHT")
 	view.creditHit:EnableMouse(true)
 	W.SetTooltip(view.creditHit, string.format(ns.L["Map by %s"], ns.ReyesMaps.ARTIST),
-		string.format(ns.L["From his Atlas de Azeroth: Forever (%s), used with his permission. Like his maps? Support the artist: %s"],
-			ns.ReyesMaps.SITE, ns.ReyesMaps.DONATE))
+		string.format(ns.L["From his Atlas de Azeroth: Forever (%s), used with his permission."], ns.ReyesMaps.SITE))
 	view.creditHit:Hide()
 
 	view.coords = W.Text(edge, "caption", "white")

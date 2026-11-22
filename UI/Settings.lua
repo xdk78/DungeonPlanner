@@ -340,8 +340,8 @@ local function options()
 						type = "description",
 						order = 6.3,
 						width = "full",
-						name = string.format(L["Maps of Forever's new dungeons by Santiago Reyes (%s), used with his permission. Like them? Support the artist: %s"],
-							ns.ReyesMaps.SITE, ns.ReyesMaps.DONATE),
+						name = string.format(L["Maps of Forever's new dungeons by Santiago Reyes (%s), used with his permission."],
+							ns.ReyesMaps.SITE),
 					},
 					colorblind = {
 						type = "toggle",

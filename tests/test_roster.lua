@@ -229,3 +229,171 @@ T.case("Comm: a plan whispered to a typed first name is acked by the whole name 
 	Comm.AcksStore().plans = {}
 	ns.DB.DeletePlan(plan.id)
 end)
+
+-- Refused and held addon messages (Share/SendStats.lua, Comm.Problem): WoW: Forever 1.60.1 was reported to answer
+-- AreOutgoingAddonChatMessagesRestricted() = true and to refuse some sends with result 7 (InvalidChannel).
+
+T.case("SendStats: outcomes per distribution, refusals in a row, a success resets them, one line", function()
+	local S = ns.SendStats
+	local st = S.New()
+	T.eq(S.Record(st, "PARTY", true, 1), true)
+	T.eq(S.Record(st, "PARTY", 0, 2), true, "result code Success")
+	T.eq(S.Record(st, "PARTY", nil, 3), nil, "an older library that says nothing: not counted")
+	T.eq(st.by.PARTY.sent, 2)
+	local ok, code = S.Record(st, "PARTY", 7, 4)
+	T.eq(ok, false)
+	T.eq(code, 7)
+	S.Record(st, "PARTY", false, 5)
+	T.eq(S.Refusing(st, "PARTY"), nil, "two in a row are not yet a pattern")
+	S.Record(st, "PARTY", false, 6)
+	T.ok(S.Refusing(st, "PARTY"), "three in a row")
+	T.ok(S.Refusing(st), "on any distribution")
+	T.eq(S.Refusing(st, "WHISPER"), nil, "only that distribution")
+	T.eq(st.by.PARTY.code, nil, "the last refusal came without a code")
+	T.eq(S.Describe(st), "PARTY 2 sent, 3 refused (last code not given, 3 in a row)")
+	S.Record(st, "PARTY", true, 7)
+	T.eq(S.Refusing(st), nil, "a success ends the streak")
+	-- Bounded: unknown distributions share one entry.
+	S.Record(st, "CHANNEL", 7, 8)
+	S.Record(st, "SAY", 7, 9)
+	T.eq(st.by.OTHER.refused, 2)
+	T.eq(st.by.CHANNEL, nil)
+	T.eq(S.Describe(S.New()), "nothing sent yet")
+end)
+
+T.case("Comm: no message goes to a custom channel; every distribution used is a group, guild or whisper one", function()
+	for _, path in ipairs({ "Share/Comm.lua", "UI/RunSync.lua", "UI/NotesFrame.lua", "UI/Panels/SharePanel.lua",
+		"UI/Panels/AssignmentsPanel.lua", "Core/Actions.lua" }) do
+		local h = assert(io.open(path, "rb"))
+		local text = h:read("*a")
+		h:close()
+		T.ok(not text:find('"CHANNEL"', 1, true), path)
+	end
+end)
+
+T.case("Comm: sends the game refuses (result 7) are counted, fail their transfer, and sharing and sync say so", function()
+	boot()
+	local Comm = ns.Comm
+	local realSendAddon = _G.C_ChatInfo.SendAddonMessage
+	local stats = Comm.sendStats
+	Comm.sendStats = ns.SendStats.New()
+	mock.inGroup, mock.units = true, { party1 = { name = "Anna" } }
+	local states = {}
+	ns:On("COMM_STATE", states, function(problem)
+		states[#states + 1] = problem or "ok"
+	end)
+	local leaderFn = _G.UnitIsGroupLeader
+	_G.UnitIsGroupLeader = function(unit)
+		return unit == "player"
+	end
+	-- The real AceComm and ChatThrottleLib on the mock client (ChatThrottleLib sends from its OnUpdate, so time moves
+	-- after each send); the game answers InvalidChannel.
+	local calls = 0
+	_G.C_ChatInfo.SendAddonMessage = function()
+		calls = calls + 1
+		return 7
+	end
+	local function settle()
+		mock.Advance(2, 0.1)
+	end
+	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Refused", instance = { name = "Test Keep", kind = "dungeon" } }))
+	local t = assert(Comm.SharePlan(plan, "GROUP"))
+	settle()
+	T.eq(t.state, "failed", "the offer was refused: no waiting for answers that cannot come")
+	T.eq(t.reason, "refused")
+	-- The group's channel (the mock's group reads as an instance group: INSTANCE_CHAT).
+	local ch = Comm.GroupChannel()
+	local e = Comm.sendStats.by[ch]
+	T.eq(e and e.refused, 1)
+	-- AceComm-3.0 (minor 14) passes only "not sent", not the code: recorded without one.
+	T.eq(e.code, nil)
+	T.eq(Comm.Problem(ch), nil, "one refusal is not yet a pattern")
+	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), ch)
+	settle()
+	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), ch)
+	settle()
+	-- At least these three (run mode left open by an earlier test may send on the same channel).
+	T.ok(e.refused >= 3, tostring(e.refused))
+	-- Refused once each, never sent again (no retry loop).
+	T.eq(#Comm.outbox, 0)
+	local before = calls
+	mock.Advance(10, 0.5)
+	T.eq(calls, before, "nothing retried")
+	T.eq(Comm.Problem(ch), "refused")
+	T.eq(Comm.Problem("GUILD"), nil, "only the distribution that refuses")
+	T.eq(states[#states], "refused", "COMM_STATE told the UI")
+	T.eq(Comm.ProblemText(ch), "The game refused the last addon messages: other players may not receive them.")
+	-- Group sync's line (the leader's "Lead this run") and the debug line say so.
+	local st = ns.RunSync.LineState(plan)
+	T.eq(st and st.text, Comm.ProblemText(ch))
+	T.eq(st and st.dot, "warning")
+	T.eq(st and st.action, "lead", "the button stays")
+	T.ok(Comm.DebugLine():find(string.format("%s 0 sent, %d refused (last code not given, %d in a row)", ch, e.refused,
+		e.streak), 1, true), Comm.DebugLine())
+	-- A library that passes the code has it recorded.
+	local realSend = ns.addon.SendCommMessage
+	ns.addon.SendCommMessage = function(_, _, text, _, _, _, callback)
+		callback(nil, #text, #text, 7)
+	end
+	Comm.SendSync("x", ch)
+	T.eq(e.code, 7)
+	ns.addon.SendCommMessage = realSend
+	-- The game takes messages again: the streak ends and the line goes.
+	_G.C_ChatInfo.SendAddonMessage = realSendAddon
+	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), ch)
+	settle()
+	T.eq(e.streak, 0)
+	T.ok(e.sent >= 1)
+	T.eq(Comm.Problem(), nil)
+	T.eq(states[#states], "ok")
+	T.eq(ns.RunSync.LineState(plan).text, ns.L["Lead the group's run mode"])
+	ns:Off("COMM_STATE", states)
+	_G.UnitIsGroupLeader = leaderFn
+	Comm.sendStats = stats
+	mock.inGroup, mock.units = false, {}
+	ns.DB.DeletePlan(plan.id)
+end)
+
+T.case("Comm: while outgoing addon messages are restricted they wait, and sharing says so", function()
+	boot()
+	local Comm = ns.Comm
+	local sent = #mock.sent
+	mock.inGroup = true
+	local restricted = true
+	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = function()
+		return restricted
+	end
+	T.eq(Comm.Problem(), "blocked")
+	T.eq(Comm.ProblemText(), "Addon messages are blocked by the game right now: they wait and go out when it allows them.")
+	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), "PARTY", nil, "query")
+	T.eq(#Comm.outbox, 1, "it waits")
+	T.eq(#mock.sent, sent, "nothing went out")
+	T.ok(Comm.DebugLine():find("lockdown no, outgoing restricted yes, waiting 1", 1, true), Comm.DebugLine())
+	-- The share section's status starts with the line.
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("share")
+	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.share.inner
+	panel:RefreshStatus()
+	T.eq(panel.content.status:GetText():match("^[^\n]*"), Comm.ProblemText())
+	restricted = false
+	mock.Advance(2, 0.1)
+	T.eq(#Comm.outbox, 0)
+	T.eq(#mock.sent, sent + 1, "sent once the game allows it")
+	T.eq(Comm.Problem(), nil)
+	T.ok(Comm.DebugLine():find("outgoing restricted no", 1, true))
+	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = nil
+	T.ok(Comm.DebugLine():find("outgoing restricted n/a", 1, true), "a client without the function")
+	mock.inGroup = false
+end)
+
+T.case("Compat: /dp debug checks both addon message restriction functions", function()
+	local paths = {}
+	for _, row in ipairs(ns.Compat.Report()) do
+		paths[row.path] = true
+	end
+	T.ok(paths["C_ChatInfo.InChatMessagingLockdown"])
+	T.ok(paths["C_ChatInfo.AreOutgoingAddonChatMessagesRestricted"])
+end)

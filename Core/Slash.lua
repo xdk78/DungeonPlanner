@@ -56,6 +56,8 @@ function Slash.Debug()
 	print("  " .. string.format("Integrations: launcher %s, OpenMap %s, Dungeon Journal %s, WoW Po Polsku %s, DBM %s, BigWigs %s",
 		tostring(s.launcher), tostring(s.openMap), tostring(s.dungeonJournal), tostring(s.polish),
 		tostring(ns.Tracker.sources.dbm), tostring(ns.Tracker.sources.bigwigs)))
+	-- Addon messages (Share/Comm.lua): the game's lockdown and restriction answers, what was sent and refused.
+	print("  " .. ns.Comm.DebugLine())
 	-- The experimental plan overlay on OpenMap's dungeon map (UI/OpenMapOverlay.lua): its phase, or why it draws nothing.
 	if ns.OpenMapOverlay then
 		print("  " .. ns.OpenMapOverlay.Status())
