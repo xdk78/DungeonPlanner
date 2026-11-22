@@ -37,7 +37,7 @@ Corridors.stats = stats
 function Corridors.KeyFor(plan, index)
 	local view = type(plan) == "table" and ns.Floors.View(plan)
 	local floor = view and type(view.floors) == "table" and view.floors[index]
-	if type(floor) ~= "table" or ((floor.name or "") == "" and floor.uiMapID) then
+	if type(floor) ~= "table" or ns.Floors.IsOutside(floor) then
 		return nil
 	end
 	local data = ns.WalkData or {}
@@ -226,7 +226,7 @@ function Corridors.Summary()
 	local with, without = 0, {}
 	for _, plan in ipairs(ns.Bundled.All()) do
 		for i, f in ipairs(plan.floors) do
-			if not ((f.name or "") == "" and f.uiMapID) then
+			if not ns.Floors.IsOutside(f) then
 				if Corridors.Has(plan, i) then
 					with = with + 1
 				else

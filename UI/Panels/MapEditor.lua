@@ -203,7 +203,7 @@ function MapEditor.Build(f, ctx, rail, h)
 			local out = { { text = L["Nowhere"], value = false } }
 			local p = plan()
 			for i, floor in ipairs(p and p.floors or {}) do
-				out[#out + 1] = { text = ns.Names.Floor(floor, i), value = i }
+				out[#out + 1] = { text = ns.Names.Floor(floor, i, p), value = i }
 			end
 			return out
 		end,

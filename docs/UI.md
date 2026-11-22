@@ -583,6 +583,13 @@ first, in their order, then the old map tiles, Santiago Reyes' maps and the mini
 a floor as plain map art; in an own plan, putting something on it makes it the plan's (`Floors.Ensure`). The home
 table's Floors count is the same list.
 
+A new plan starts with the floors of the instance's recommended plan (`Floors.Initial`), so a new plan and a copy
+number their floors alike; without one, the client's floors when it names them, else one floor per map art floor,
+else one floor named after the instance. A floor is the zone outside (labelled with the zone's name, or "Outside")
+only when it has no name and its map is an entrance zone in the travel data (`Floors.IsOutside`): WoW: Forever's
+client names no classic dungeon map, so an unnamed floor on the dungeon's own map (what older versions saved for a
+new plan) is the dungeon's floor, takes the map art at its position and the name the recommended plan gives it.
+
 The floor switcher (`UI/Panels/FloorBar.lua`) sits in the map's bottom-right corner inside the frame (left of the marker
 editor while that takes the map's height; the coordinates move over it), hidden on a one-floor map:
 

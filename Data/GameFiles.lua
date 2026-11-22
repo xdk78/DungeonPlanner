@@ -315,7 +315,7 @@ function GameFiles.FloorArt(plan, index)
 	if not tiles or not tiles[pos] then
 		return nil
 	end
-	if (floor.name or "") == "" and floor.uiMapID then
+	if ns.Floors.IsOutside(floor) then
 		return nil
 	end
 	return GameFiles.TileArt(tiles[pos])

@@ -28,7 +28,7 @@ local function createPlan(templateId, name, entry)
 		name = name,
 		author = author,
 		instance = info,
-		floors = ns.Instances.Floors(info.uiMapID),
+		floors = ns.Floors.Initial(info),
 	})
 	ns.Templates.Get(templateId).apply(plan)
 	if info.ejInstanceID then

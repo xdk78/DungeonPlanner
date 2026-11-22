@@ -678,7 +678,7 @@ function MapCanvas.Install(view)
 						end
 						-- Stairs and portals say where they lead, labels on or off.
 						if not compact and m.toFloor and plan.floors[m.toFloor] then
-							local to = string.format(L["to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor))
+							local to = string.format(L["to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor, plan))
 							local text = b.label:GetText() or ""
 							b.label:SetText(text ~= "" and (text .. "  \226\128\162  " .. to) or to)
 							S.TextColor(b.label, "goldBright")

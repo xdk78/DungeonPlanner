@@ -491,12 +491,12 @@ function RunMode.Refresh()
 	frame.mapCredit:SetText(frame.map.creditText or "")
 	local floors = ns.Floors.For(plan)
 	local several = #floors > 1 and floors[frame.floor] ~= nil
-	local floorText = several and ns.Names.Floor(floors[frame.floor], frame.floor) or ""
+	local floorText = several and ns.Names.Floor(floors[frame.floor], frame.floor, plan) or ""
 	-- Where the player is, when the client says (Floors.PlayerFloor; unverified on Forever) and it is another floor.
 	local playerFloor = several and ns.Floors.PlayerFloor(plan) or nil
 	frame.playerFloor = playerFloor -- what the zone events compare with
 	if playerFloor and playerFloor ~= frame.floor and floors[playerFloor] then
-		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[playerFloor], playerFloor))
+		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[playerFloor], playerFloor, plan))
 	end
 	frame.mapFloor:SetText(floorText)
 	frame.mapFloor:SetShown(several)

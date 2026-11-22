@@ -118,7 +118,7 @@ function Spawns.For(plan, floorIndex)
 	if type(floor) ~= "table" then
 		return EMPTY
 	end
-	if (floor.name or "") == "" and floor.uiMapID then
+	if ns.Floors.IsOutside(floor) then
 		return EMPTY -- the zone outside, not a dungeon floor
 	end
 	return floorEntries(key, floorIndex)

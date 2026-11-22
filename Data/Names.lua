@@ -82,7 +82,9 @@ function Names.Instance(inst)
 	return inst.name or ""
 end
 
-function Names.Floor(floor, index)
+-- `plan` (optional) names an unnamed dungeon floor: the name the instance's map art has at the floor's position
+-- (Floors.Art: Santiago Reyes' or the recommended plan's), else the instance's name when the map has one floor.
+function Names.Floor(floor, index, plan)
 	if floor and floor.uiMapID then
 		local name = ns.Instances.MapName(floor.uiMapID)
 		if name and name ~= "" then
@@ -92,9 +94,21 @@ function Names.Floor(floor, index)
 	if floor and floor.name and floor.name ~= "" then
 		return floor.name
 	end
-	-- The zone outside (an unnamed floor with its own map) whose map has no name on this client.
-	if floor and floor.uiMapID then
+	-- The zone outside (Floors.IsOutside) whose map has no name on this client.
+	if ns.Floors.IsOutside(floor) then
 		return ns.L["Outside"]
+	end
+	if type(plan) == "table" and type(plan.instance) == "table" then
+		local art = ns.Floors.Art(plan.instance.name)[floor and floor.art or index or 1]
+		if art and art.label then
+			return art.label
+		end
+		if #ns.Floors.For(plan) == 1 then
+			local name = Names.Instance(plan.instance)
+			if name ~= "" then
+				return name
+			end
+		end
 	end
 	return string.format(ns.L["Floor %d"], index or 1)
 end
