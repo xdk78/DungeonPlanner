@@ -125,10 +125,9 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 		ns.Plan.AddMarker(plan, 1, (i % 10) / 10, math.floor(i / 10) / 7, "pack")
 	end
 	ns.UI.ctx:Changed("markers")
-	local realGet, cx = _G.GetCursorPosition, 100
-	_G.GetCursorPosition = function()
-		return cx, 100
-	end
+	local cx = 100
+	mock.SetCursor(cx, 100)
+	mock.SetMouseButtonDown("LeftButton", true)
 	local layouts, draws, realLayout, realDraw = 0, 0, view.Layout, view.DrawContent
 	view.Layout = function(...)
 		layouts = layouts + 1
@@ -138,20 +137,22 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 		draws = draws + 1
 		return realDraw(...)
 	end
-	view:GetScript("OnMouseDown")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
 	local c = cost(function()
 		for _ = 1, 100 do
 			cx = cx + 2
-			view:GetScript("OnUpdate")(view, 0.016)
+			mock.SetCursor(cx, 100)
+			mock.FireScript(view, "OnUpdate", 0.016)
 		end
 	end)
 	T.eq(draws + layouts, 0, "100 pointer moves, no layout")
 	-- Counted 151k: about 1.5k a move, where one layout of this map costs about 740k.
 	T.ok(c < 250, string.format("100 pan moves: %dk instructions", c))
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.SetMouseButtonDown("LeftButton", false)
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(layouts, 1, "one layout on release")
 	view.Layout, view.DrawContent = realLayout, realDraw
-	_G.GetCursorPosition = realGet
+	mock.ResetInput()
 	ns.DB.DeletePlan(plan.id)
 end)
 

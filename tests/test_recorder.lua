@@ -223,7 +223,7 @@ T.case("Runs section: before the first run, the Run pane says whether recording 
 	T.ok(says(off), "off: how to turn it on")
 	-- Ticking "Record my runs" redraws the pane (RECORDER_CHANGED), with no run recorded yet.
 	lines = {}
-	panel.record:GetScript("OnClick")(panel.record, "LeftButton")
+	mock.Click(panel.record)
 	T.eq(R.Enabled(), true, "the check box turns recording on")
 	T.ok(R.Current() == nil or R.Current().k ~= ns.Recorder.KeyForPlan(ns.UI.ctx:Plan()), "no run of this instance yet")
 	T.ok(says(on), "on: the next run will appear here")

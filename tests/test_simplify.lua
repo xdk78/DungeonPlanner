@@ -27,7 +27,7 @@ local function closeDialogs()
 end
 
 local function click(button)
-	button:GetScript("OnClick")(button, "LeftButton")
+	mock.Click(button)
 end
 
 T.case("Recommended plans name their source, revision and data date; copies say what they are based on", function()

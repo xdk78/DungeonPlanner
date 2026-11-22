@@ -71,7 +71,7 @@ end
 
 -- A control's click, as the game runs it.
 local function click(b)
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 end
 
 -- The window at a size (the minimum, 880 x 560, or a large one); views after it get the default back.
@@ -750,7 +750,7 @@ V.views = {
 			openOwn("assignments", "select")
 			local list = page().panels.assignments.inner.list
 			if list.rows[1] and list.rows[1]:GetScript("OnClick") then
-				list.rows[1]:GetScript("OnClick")(list.rows[1], "LeftButton")
+				mock.Click(list.rows[1])
 			end
 			ns.UI.RefreshPage()
 		end,
@@ -1295,7 +1295,7 @@ local function pickerSequence()
 			end
 			local edit = rawget(_G, "DungeonPlannerPopup").search.edit
 			edit:SetText(query)
-			edit:GetScript("OnTextChanged")(edit, true)
+			mock.FireScript(edit, "OnTextChanged", true)
 		end
 	end
 	return sequence("picker", steps, function()

@@ -240,11 +240,11 @@ case("OpenMap overlay: floor changes through its arrows and its floor list follo
 	-- Zoom: the page's size changes, the drawing follows.
 	local before = O.Drawn().key
 	view.page:SetSize(2004, 1336)
-	view.page:GetScript("OnSizeChanged")(view.page)
+	mock.FireScript(view.page, "OnSizeChanged")
 	T.ok(O.Drawn().key ~= before, "redrawn for the new size")
 	-- Nothing changed: no redraw (the same drawing).
 	local same = O.Drawn()
-	view.page:GetScript("OnSizeChanged")(view.page)
+	mock.FireScript(view.page, "OnSizeChanged")
 	T.eq(O.Drawn(), same, "unchanged: not drawn again")
 end)
 
@@ -409,7 +409,7 @@ case("OpenMap overlay: the alignment carries the drawing on the view", function(
 		view.bossPins[#view.bossPins + 1] = pin
 	end
 	view.page:SetSize(1000, 668)
-	view.page:GetScript("OnSizeChanged")(view.page)
+	mock.FireScript(view.page, "OnSizeChanged")
 	T.eq(O.Drawn().counts.markers, withBosses - 5, "the five boss markers left to OpenMap's pins")
 	T.ok(frame:IsShown())
 end)
@@ -435,7 +435,7 @@ case("OpenMap overlay: what does not fit degrades with a reason in /dp debug, ne
 	T.eq(O.Drawn(), nil)
 	T.ok(O.Status():find("no floor list", 1, true), O.Status())
 	view.floors, view.floor = root.MapDungeonMaps[36], nil
-	view.page:GetScript("OnSizeChanged")(view.page)
+	mock.FireScript(view.page, "OnSizeChanged")
 	T.eq(O.Drawn(), nil, "no floor shown yet")
 	T.ok(O.Status():find("no floor shown", 1, true), O.Status())
 	-- The debug command prints the line.

@@ -42,7 +42,7 @@ local function closeDialogs()
 end
 
 local function click(button)
-	button:GetScript("OnClick")(button, "LeftButton")
+	mock.Click(button)
 end
 
 T.case("Drawing UI: the Draw tool shows its bar; strokes, shapes and text become drawings with one undo each", function()
@@ -148,7 +148,7 @@ T.case("Drawing UI: move, restyle, erase, the menu, the legend switch and cleari
 	end
 	T.ok(row and row:IsShown(), "a Drawings row in the legend")
 	T.eq(row.count:GetText(), "1")
-	row.check:GetScript("OnClick")(row.check)
+	mock.Click(row.check)
 	T.eq(ns.db.ui.mapLayers.drawings, false)
 	canvas:DrawContent()
 	T.eq(canvas.counts.shapes, 0, "hidden")
@@ -373,9 +373,9 @@ T.case("Drawing UI: nothing in combat, no tools on a recommended plan, run mode 
 	T.ok(not canvas:DrawBegin(0.1, 0.1), "the press is left to the map")
 	T.ok(canvas.drag.mode ~= "draw", "no stroke starts in combat")
 	-- The left button pans instead.
-	canvas:GetScript("OnMouseDown")(canvas, "LeftButton")
+	mock.FireScript(canvas, "OnMouseDown", "LeftButton")
 	T.eq(canvas.drag.mode, "pan", "the map pans with the Draw tool in combat")
-	canvas:GetScript("OnMouseUp")(canvas, "LeftButton")
+	mock.FireScript(canvas, "OnMouseUp", "LeftButton")
 	T.eq(canvas.drag.mode, "idle")
 	mock.inCombat = false
 	-- A stroke under way is dropped when combat starts.
@@ -406,15 +406,15 @@ T.case("Drawing UI: nothing in combat, no tools on a recommended plan, run mode 
 	ctx.focusPull = nil
 	ns.RunMode.Refresh()
 	T.ok(f.drawings:IsShown(), "the switch shows when the plan has drawings")
-	f.drawings:GetScript("OnClick")(f.drawings)
+	mock.Click(f.drawings)
 	T.eq(ns.RunMode.DrawingsMode(), "all")
 	f.map:DrawContent()
 	T.eq(f.map.counts.shapes, 2)
-	f.drawings:GetScript("OnClick")(f.drawings)
+	mock.Click(f.drawings)
 	T.eq(ns.RunMode.DrawingsMode(), "off", "one click hides them")
 	f.map:DrawContent()
 	T.eq(f.map.counts.shapes, 0)
-	f.drawings:GetScript("OnClick")(f.drawings)
+	mock.Click(f.drawings)
 	T.eq(ns.RunMode.DrawingsMode(), "step")
 	ns.RunMode.Hide()
 	-- A recommended plan: no Draw tool, presses pan the map.
@@ -456,7 +456,7 @@ T.case("Pull tags: the Pulls editor switches them; steps, run mode and Discord s
 	T.ok(kick.dpActive, "the toggle shows it")
 	-- Progress: typed and committed.
 	ed.progress.edit:SetText("45")
-	ed.progress.edit:GetScript("OnEditFocusLost")(ed.progress.edit)
+	mock.FireScript(ed.progress.edit, "OnEditFocusLost")
 	T.eq(pull.progress, 45)
 	-- Undo takes back the progress.
 	ctx:Undo()

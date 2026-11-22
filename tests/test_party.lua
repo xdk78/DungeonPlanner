@@ -296,14 +296,14 @@ T.case("Party strip UI: the group fills the recommended plan's open seats; roste
 		local r, g = tank.name:GetTextColor()
 		T.ok(math.abs(r - 0.78) < 0.01 and math.abs(g - 0.61) < 0.01, "class colour")
 		T.eq(tank.seat.member.id, "Aldra Vey", "the whole name for the tooltip")
-		tank:GetScript("OnEnter")(tank)
+		mock.Hover(tank)
 		T.ok(tipLines():find("Aldra Vey", 1, true), "the tooltip names the whole name")
 		-- An open seat shows the strip's own tooltip.
 		local open = side.party.slots[2]
-		open:GetScript("OnEnter")(open)
+		mock.Hover(open)
 		T.ok(ns.Widgets.Tip():IsOwned(open), "an open seat has a tooltip")
 		T.ok(tipLines():find(ns.L["Who plays which role. Click to edit the party and the assignments."], 1, true))
-		open:GetScript("OnLeave")(open)
+		mock.Leave(open)
 		-- Resizes and redraws do not read the roster again until a group event.
 		local reads, realMembers = 0, ns.PartyInfo.Members
 		ns.PartyInfo.Members = function(...)
@@ -401,10 +401,10 @@ T.case("Party strip UI: a plan with first names matches a Forever group; no dupl
 		T.ok(side.party.slots[1].seat.member and side.party.slots[3].seat.member, "matched by first name")
 		T.eq(side.party.heading.count:GetText(), "", "nobody extra")
 		local slot = side.party.slots[1]
-		slot:GetScript("OnEnter")(slot)
+		mock.Hover(slot)
 		T.ok(not tipLines():find(ns.L["Not in your group."], 1, true), "Aldra is here")
 		slot = side.party.slots[4]
-		slot:GetScript("OnEnter")(slot)
+		mock.Hover(slot)
 		T.ok(tipLines():find(ns.L["Not in your group."], 1, true), "Bram is not")
 		ns.DB.DeletePlan(own.id)
 	end)

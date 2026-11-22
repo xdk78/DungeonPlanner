@@ -37,9 +37,7 @@ local function routeMap()
 end
 
 local function shift(down)
-	_G.IsShiftKeyDown = function()
-		return down
-	end
+	mock.SetKeyDown("SHIFT", down)
 end
 
 -- Frames until the preparation in progress is done.
@@ -118,31 +116,24 @@ end
 -- The map panel's tool button clicked.
 local function chooseTool(map, tool)
 	local b = map.toolButtons[tool]
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 end
 
 -- Route point `index` dragged with the pointer to plan point (x, y) and dropped: the drag a point pin's OnDragStart
 -- starts (UI/MapCanvas.lua), a frame of the map's OnUpdate (OnDragUpdate reads GetCursorPosition), then the release.
 -- Returns where the drag noted the point was (fromX, fromY), or nil.
 local function dragPoint(view, route, index, x, y)
-	local real = _G.GetCursorPosition
-	_G.GetCursorPosition = function()
-		local c = view.canvas
-		local s = c:GetEffectiveScale()
-		return (c:GetLeft() + x * c:GetWidth()) * s, (c:GetTop() - y * c:GetHeight()) * s
-	end
+	local c = view.canvas
+	local s = c:GetEffectiveScale()
+	local cursor = { (c:GetLeft() + x * c:GetWidth()) * s, (c:GetTop() - y * c:GetHeight()) * s }
 	local from
-	local ok, err = pcall(function()
+	mock.WithInput({ cursor = cursor, buttons = { "LeftButton" } }, function()
 		view.drag = { mode = "point", routeId = route.id, index = index }
 		view:SetScript("OnUpdate", view.OnDragUpdate)
 		mock.Advance(0.016)
 		from = view.drag.fromX and { view.drag.fromX, view.drag.fromY }
 		view:EndDrag()
 	end)
-	_G.GetCursorPosition = real
-	if not ok then
-		error(err, 0)
-	end
 	return from
 end
 
@@ -233,7 +224,7 @@ T.case("Snap UI: Shift-click gives a straight leg; with the switch off a click a
 	T.eq(#route.points, 2, "Shift: no bends")
 	T.eq(route.points[2].step, 2, "but a stop")
 	-- Off: the old behaviour (a click is a bend, Shift-click a stop).
-	map.snap:GetScript("OnClick")(map.snap, "LeftButton")
+	mock.Click(map.snap)
 	T.eq(ns.db.ui.snapRoutes, false, "the switch is saved")
 	T.ok(not ns.RouteSnap.Active(plan, 1))
 	T.ok(not map.help:GetText():find("corridors", 1, true), "the old help")
