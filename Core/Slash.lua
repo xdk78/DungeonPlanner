@@ -140,6 +140,18 @@ function Slash.Debug()
 		end
 		print("    " .. line(false, problem))
 	end
+	-- Own plans and the bundled instance each one is (Data/InstanceIdentity.lua): a plan saved under a name no bundled
+	-- instance has and without an instance ID (made in another language by an older version), or for a wing that
+	-- cannot be told apart, gets no bundled maps, enemies or travel facts.
+	if ns.db then
+		local placed, total, unknown, unclear = ns.Instances.IdentityReport(ns.DB.Plans())
+		print("  " .. string.format(L["Own plans matched to an instance's bundled data: %d of %d."], placed, total))
+		for _, row in ipairs({ { L["Not matched:"], unknown }, { L["Wing unclear:"], unclear } }) do
+			if #row[2] > 0 then
+				print("    " .. row[1] .. " " .. table.concat(row[2], ", ", 1, math.min(#row[2], 10)))
+			end
+		end
+	end
 	if ns.db and #ns.db.quarantine > 0 then
 		print("  " .. ns.Plural(#ns.db.quarantine,
 			L["%d unreadable plan kept in DungeonPlannerDB.global.quarantine.|%d unreadable plans kept in DungeonPlannerDB.global.quarantine."]))

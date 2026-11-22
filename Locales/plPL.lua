@@ -1175,4 +1175,7 @@ ns.Locales.plPL = {
 	["To %s"] = "Do: %s",
 	["Show plan on OpenMap's dungeon map (experimental)"] = "Pokaż plan na mapie lochu w OpenMap (eksperymentalne)",
 	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Rysuje trasę, przystanki i znaczniki twojego planu na mapie lochu w OpenMap. Korzysta z niepublicznych części OpenMap: aktualizacja może to wyłączyć.",
+	["Own plans matched to an instance's bundled data: %d of %d."] = "Własne plany dopasowane do dołączonych danych instancji: %d z %d.",
+	["Not matched:"] = "Niedopasowane:",
+	["Wing unclear:"] = "Niejasne skrzydło:",
 }

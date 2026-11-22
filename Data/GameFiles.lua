@@ -194,7 +194,7 @@ end
 
 -- The file ID of a plan floor's first map tile (nil without tiles or without the client's answer).
 function GameFiles.FloorTileID(plan, index)
-	local tiles = type(plan) == "table" and plan.instance and GameFiles.MapTiles(plan.instance.name)
+	local tiles = type(plan) == "table" and plan.instance and GameFiles.MapTiles(ns.Instances.CanonicalName(plan))
 	local base = tiles and tiles[index]
 	return base and GameFiles.FileID(WORLDMAP .. base .. "1") or nil
 end
@@ -237,7 +237,8 @@ local function providerEpoch()
 	return ns.Providers and ns.Providers.epoch or 0
 end
 function GameFiles.InstancePictures(inst)
-	local name = type(inst) == "table" and inst.name or nil
+	-- By the instance's English name (Instances.CanonicalName), else the stored one.
+	local name = type(inst) == "table" and ns.Instances.CanonicalName(inst) or nil
 	local k = key(name)
 	if not k then
 		return {}
@@ -311,7 +312,7 @@ function GameFiles.FloorArt(plan, index)
 		return nil
 	end
 	local pos = floor.art or index
-	local tiles = GameFiles.MapTiles(plan.instance and plan.instance.name)
+	local tiles = plan.instance and GameFiles.MapTiles(ns.Instances.CanonicalName(plan))
 	if not tiles or not tiles[pos] then
 		return nil
 	end
@@ -457,6 +458,25 @@ end
 
 -- The Group Finder's entry for an instance name: the same name (without "The"), else the one entry whose name
 -- contains this one or is contained in it ("The Stockade" / "Stormwind Stockades"). nil when none or ambiguous.
+-- The Group Finder's entry for an instance map ID when every entry it lists for that map is one instance (one name;
+-- the dungeon finder and the browse list may both list it), else nil: several parts of one instance (Blackrock
+-- Depths, Maraudon, a wing) do not pick the first.
+function GameFiles.FinderByMap(mapID)
+	local f = GameFiles.Finder()
+	local name
+	for _, e in ipairs(f.list) do
+		if e.mapID == mapID then
+			local known = GameFiles.INSTANCES[e.key]
+			local k = known and known.alias or e.key -- "Sunken Temple" is The Temple of Atal'Hakkar
+			if name and k ~= name then
+				return nil
+			end
+			name = k
+		end
+	end
+	return name and f.byMap[mapID] or nil
+end
+
 function GameFiles.FinderFor(name, mapID)
 	local f = GameFiles.Finder()
 	if mapID and f.byMap[mapID] then

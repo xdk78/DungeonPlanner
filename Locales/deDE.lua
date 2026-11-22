@@ -1149,4 +1149,7 @@ ns.Locales.deDE = {
 	["To %s"] = "Bis %s",
 	["Show plan on OpenMap's dungeon map (experimental)"] = "Plan auf OpenMaps Dungeonkarte zeigen (experimentell)",
 	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Zeichnet Route, Halte und Markierungen deines Plans auf OpenMaps Dungeonkarte. Das nutzt nicht öffentliche Teile von OpenMap: ein Update kann es anhalten.",
+	["Own plans matched to an instance's bundled data: %d of %d."] = "Eigene Pläne, den mitgelieferten Daten einer Instanz zugeordnet: %d von %d.",
+	["Not matched:"] = "Nicht zugeordnet:",
+	["Wing unclear:"] = "Flügel unklar:",
 }

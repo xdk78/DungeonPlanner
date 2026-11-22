@@ -87,6 +87,9 @@ Compat.CHECKS = {
 	{ "Dungeon finder order", "GetLFDChoiceOrder", "the dungeon finder's list (a bounded ID scan instead)" },
 	{ "Group Finder activities", "C_LFGList.GetAvailableActivities", "level ranges of Forever's new dungeons" },
 	{ "Group Finder activity info", "C_LFGList.GetActivityInfoTable", "level ranges of Forever's new dungeons" },
+	-- Only that the function is present: whether it answers for an instance ID is an in-game check (docs/UI.md).
+	{ "Instance names by ID (present)", "GetRealZoneText",
+		"plans saved with a localized instance name and no instance ID (matched by the Group Finder's names only)" },
 	{ "Game rules", "C_GameRules.IsGameRuleActive", "/dp scan's journal check" },
 	{ "Load on demand", "C_AddOns.LoadAddOn", "/dp scan's journal check" },
 	{ "Journal open notice", "C_EncounterJournal.OnOpen", "/dp scan's journal check" },

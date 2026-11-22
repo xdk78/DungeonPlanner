@@ -26,6 +26,11 @@ Rules:
 - **Validate at every border.** `Validate.Plan` runs on plans created, loaded from SavedVariables, imported and
   received. Invalid stored plans go to a quarantine list, never deleted.
 - **IDs are truth, names are display.** Plans store the client's IDs; `Data/Names.lua` resolves names at display time.
+  The bundled data is keyed by English instance names, so every lookup from a plan goes through
+  `Instances.CanonicalName` / `Providers.PlanKey` (`Data/InstanceIdentity.lua`): the exact English name (unless the
+  instance map ID rules it out), the instance map ID, then for dungeons and raids the instance's and floors' map IDs,
+  the floor names and the client's own names, the stored name last. A plan of a bundled instance opens on that
+  instance's home card (`UI.EntryForPlan`), and plans are grouped for it by `Bundled.SameInstance`, not by key.
 - **Explicit state machines** for phased behaviour: transfers (`Share/Transfer.lua`: state + `Step*(state, event, now)`
   returning effects), group sync for run mode (`Share/Sync.lua`: `Sync.Step(state, event, now)`) and map dragging
   (`MapCanvas` `view.drag`: idle / pan / marker / point / draw). Timers are events.
@@ -286,7 +291,10 @@ Every value read from the game goes through `Util.Plain` (a secret becomes nil a
 summaries, best splits per boss (`RunLog.Best`, `Splits`), and `RunLog.PlanFromRun`, a draft plan (pulls in order with
 their make-up in the note, bosses in kill order with their encounter IDs, no markers) that goes through
 `Validate.Plan` and `DB.AddPlan`. The Runs section (`UI/Panels/RunsPanel.lua`) shows the runs of the plan's instance,
-found by the Group Finder's instance map ID for its name (`Recorder.KeyForPlan`); Run mode shows the live pull count.
+found by its instance map ID (`Recorder.KeyForPlan`: the plan's stored `instanceMapID`, else its bundled instance's
+through `Instances.InstanceMapID`, else the Group Finder's for its name, else a run recorded under the same name). Runs
+are stored under `GetInstanceInfo`'s instance ID, which the wings of one instance share, so a wing's plan lists every
+wing's runs (the client does not say which wing a run was in). Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
 
@@ -333,7 +341,7 @@ Data/PrepInfo.lua     the game: faction, level, C_QuestLog, item counts, the gro
                       to the watchers (PrepInfo.Watch): the Prep section, run mode (its prep line only), the Getting
                       there window, each while shown
 Data/BossData.lua     Quests(plan), Keys(plan): bundled (data-src/bosses)
-Data/Travel.lua       TravelData (data-src/travel) by instance name; the entrance on its bundled zone map (uiMapID,
+Data/Travel.lua       TravelData (data-src/travel) by instance (Instances.CanonicalKey); the entrance on its bundled zone map (uiMapID,
                       not the zone's name) and in the world (C_Map world <-> map, cached per session); zone and
                       continent names from the client's maps; the player outdoors (nil inside); Distance
 Data/Navigation.lua   the game's pin, the navigation providers (Polestar, Shortest Path Forever, TomTom) best first;
@@ -426,7 +434,9 @@ Providers.LootLinks()           -- adapters with OpenLoot (NeedRoll's public API
 Providers.Report()              -- /dp debug: id, title, active, internals, version, counts, failure
 ```
 
-Matching is by instance name (`Providers.Key`: `GameFiles.Key` plus its aliases) and boss name (`Match.StripArticle`).
+Matching is by instance name (`Providers.Key`: `GameFiles.Key` plus its aliases; a plan's through `Providers.PlanKey`,
+its English name by `Instances.CanonicalName`, so a plan saved under a localized name matches too) and boss name
+(`Match.StripArticle`).
 Order of map art for a floor (`MinimapArt.Choose`): the game's own map (`C_Map`), the old dungeon tiles
 (`Data/GameFiles.lua`), a same-named map with art, then Santiago Reyes' bundled map of a Forever floor
 (`Data/ReyesMaps.lua`, source "reyes"), then the providers in registration order (Dungeon Journal, Forever Dungeon
@@ -482,6 +492,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Share/ | checksum, bounded inflate, export strings, transfer state machines, AceComm glue, Discord text |
 | Config/ | defaults, AceDB, migrations |
 | Data/Instances.lua | maps (names, floors, art, name search), the player's location, dungeon-finder level ranges |
+| Data/InstanceIdentity.lua | which bundled instance (and wing) a plan is, in any client language: `Instances.Resolve`, `CanonicalName`, `CanonicalKey`, `InstanceMapID`; `/dp debug`'s list of plans it cannot place |
 | Data/Journal.lua | the Adventure Guide resolver: scan (tiers, instances, pictures, maps), bosses with portraits, matching plans to the journal (Model/Match.lua), floor maps, boss pins, IDs for editable copies, `/dp scan` diagnostics |
 | Data/Loot.lua | journal loot per boss with class, role and slot filters (guarded; the plan's own list otherwise) |
 | Data/BossData.lua, Data/Bosses/ | bundled boss facts: display, level, abilities, drops, dungeon quests (generated by tools/gen_bosses.lua; interface above) |

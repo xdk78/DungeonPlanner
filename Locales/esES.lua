@@ -1149,4 +1149,7 @@ ns.Locales.esES = {
 	["To %s"] = "Hasta %s",
 	["Show plan on OpenMap's dungeon map (experimental)"] = "Mostrar el plan en el mapa de mazmorra de OpenMap (experimental)",
 	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Dibuja la ruta, las paradas y los marcadores de tu plan en el mapa de mazmorra de OpenMap. Usa partes de OpenMap que no son públicas: una actualización puede detenerlo.",
+	["Own plans matched to an instance's bundled data: %d of %d."] = "Planes propios asociados a los datos incluidos de una instancia: %d de %d.",
+	["Not matched:"] = "Sin asociar:",
+	["Wing unclear:"] = "Ala sin determinar:",
 }

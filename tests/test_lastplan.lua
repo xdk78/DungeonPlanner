@@ -102,6 +102,50 @@ T.case("Last plan per instance: a recommended plan is remembered over a newer ow
 	T.eq(ns.db.ui.selectedPlan, copy.id, "no memory: the newest own plan")
 end)
 
+T.case("Last plan per instance: a localized plan and a plan made inside belong to the recommended plan's card", function()
+	boot()
+	local rec = ns.DB.GetPlan("b:the-deadmines")
+	local card = ns.UI.EntryForPlan(rec)
+	T.eq(card.key, "map:291", "the card is keyed by the recommended plan's map")
+	local other = entryOf(88131, "Remember Delta")
+	local mine = addPlan(other, "Delta plan", 1000)
+	-- Made inside on a German client: the name in German, the instance's ID, the recommended plan's floors.
+	local german = ns.Plan.New({ name = "Mein Plan", instance = { name = "Die Todesminen", kind = "dungeon",
+		instanceMapID = 36 }, floors = ns.Floors.Initial({ name = "Die Todesminen", kind = "dungeon" }, 36) })
+	german.updated = 1000
+	ns.DB.AddPlan(german)
+	-- Made inside on an English client: no map ID (none inside on WoW: Forever), so a "name:" key of its own.
+	local english = ns.Plan.New({ name = "My plan", instance = { name = "The Deadmines", kind = "dungeon" } })
+	english.updated = 2000
+	ns.DB.AddPlan(english)
+	T.eq(ns.DB.InstanceKey(english.instance), "name:the deadmines")
+	T.eq(ns.UI.EntryForPlan(german).key, card.key, "the German plan's page is the card's")
+	T.eq(ns.UI.EntryForPlan(english).key, card.key, "and the English one's")
+	-- Choosing the German plan remembers it for the card and keeps the home selection there.
+	ns.UI.SelectPlan(german.id)
+	T.eq(ns.db.ui.homeSelected, card.key, "the home selection stays on the card")
+	T.eq(ns.db.ui.lastPlans[card.key], german.id, "remembered under the card's key")
+	ns.UI.OpenInstance(other)
+	T.eq(ns.db.ui.selectedPlan, mine.id)
+	ns.UI.OpenInstance(card)
+	T.eq(ns.db.ui.selectedPlan, german.id, "back on the card: the German plan")
+	-- Remembered by an earlier version under the plan's own key: still found for the card.
+	ns.db.ui.lastPlans[card.key] = nil
+	ns.db.ui.lastPlans["name:the deadmines"] = english.id
+	ns.UI.OpenInstance(other)
+	ns.UI.OpenInstance(card)
+	T.eq(ns.db.ui.selectedPlan, english.id, "a plan remembered under its old key")
+	-- "Export all plans of this instance" takes both, whatever key or language they were saved under.
+	local ids = {}
+	for _, p in ipairs(ns.DB.PlansFor(ns.UI.EntryForPlan(german))) do
+		ids[p.id] = true
+	end
+	T.ok(ids[german.id] and ids[english.id] and not ids[mine.id], "both plans of the instance, not the other")
+	ns.db.ui.lastPlans["name:the deadmines"] = nil
+	ns.DB.DeletePlan(german.id)
+	ns.DB.DeletePlan(english.id)
+end)
+
 -- Header, list and tooltip fixes from the same round ------------------------------------------------------------------
 
 T.case("Plan list: sized to its rows, no scroll bar while they all fit; scrolls past 12 rows", function()

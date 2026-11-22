@@ -96,7 +96,7 @@ function MinimapArt.FloorArt(plan, index)
 	if type(floor) ~= "table" or ns.Floors.IsOutside(floor) then
 		return nil
 	end
-	local name = plan.instance and plan.instance.name
+	local name = plan.instance and ns.Instances.CanonicalName(plan)
 	local pos = floor.art or index -- a floor with `art` (Data/Floors.lua): that position in the instance's art
 	local key = tostring(ns.GameFiles.Key(name or "")) .. ":" .. tostring(pos)
 	if cache[key] == nil then

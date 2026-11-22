@@ -41,7 +41,7 @@ function Corridors.KeyFor(plan, index)
 		return nil
 	end
 	local data = ns.WalkData or {}
-	local name = plan.instance and plan.instance.name
+	local name = plan.instance and ns.Instances.CanonicalName(plan)
 	local pos = floor.art or index
 	local tiles = ns.GameFiles.MapTiles(name)
 	if tiles and tiles[pos] then

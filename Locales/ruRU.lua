@@ -1149,4 +1149,7 @@ ns.Locales.ruRU = {
 	["To %s"] = "До %s",
 	["Show plan on OpenMap's dungeon map (experimental)"] = "Показывать план на карте подземелья OpenMap (экспериментально)",
 	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Рисует маршрут, остановки и метки вашего плана на карте подземелья OpenMap. Использует закрытые части OpenMap: обновление может это отключить.",
+	["Own plans matched to an instance's bundled data: %d of %d."] = "Свои планы, сопоставленные со встроенными данными подземелья: %d из %d.",
+	["Not matched:"] = "Не сопоставлены:",
+	["Wing unclear:"] = "Крыло не определено:",
 }

@@ -352,16 +352,16 @@ function M.Install()
 			{
 				name = "Classic",
 				dungeons = {
-					{ id = 63, name = "Test Dungeon", areaMap = 100, mapID = 389, art = { 0, 0, 0, 0 } },
+					{ id = 63, name = "Test Dungeon", areaMap = 100, mapID = 9389, art = { 0, 0, 0, 0 } },
 				},
 				raids = {
-					{ id = 70, name = "Test Raid", areaMap = 0, mapID = 409, art = { 2001, 2002, 2003, 2004 } },
+					{ id = 70, name = "Test Raid", areaMap = 0, mapID = 9409, art = { 2001, 2002, 2003, 2004 } },
 				},
 			},
 			{
 				name = "Forever",
 				dungeons = {
-					{ id = 900, name = "The Hall of Tests", areaMap = 300, mapID = 3065, art = { 3101, 3102, 3103, 3104 } },
+					{ id = 900, name = "The Hall of Tests", areaMap = 300, mapID = 9065, art = { 3101, 3102, 3103, 3104 } },
 				},
 				raids = {},
 			},
@@ -461,7 +461,7 @@ function M.Install()
 		if inst and id ~= 63 then
 			return inst.name, "", inst.art[4], inst.art[1], inst.art[3], inst.art[2], inst.areaMap, "", false, inst.mapID
 		end
-		return "Journal instance " .. id, "", 1001, 1002, 1003, 1004, 100, "", false, 389
+		return "Journal instance " .. id, "", 1001, 1002, 1003, 1004, 100, "", false, 9389
 	end
 	-- id, name, description, displayInfo, iconImage, uiModelSceneID
 	_G.EJ_GetCreatureInfo = function(index, encounterID)
@@ -567,11 +567,12 @@ function M.Install()
 	_G.GetItemInfoInstant = itemInfoInstant
 	_G.C_Item = _G.C_Item or {}
 	_G.C_Item.GetItemInfoInstant = itemInfoInstant
-	-- Dungeon finder: one entry (id 5) for the test dungeon's instance map 389, levels 13-18.
+	-- Dungeon finder: one entry (id 5) for the test dungeon's instance map 9389, levels 13-18. The test instances' map
+	-- IDs are made up (no bundled instance has them), so they stay custom instances.
 	_G.GetLFGDungeonInfo = function(id)
 		if id == 5 then
 			return "Test Dungeon", 1, 0, 10, 20, 15, 13, 18, 0, 0, "", 1, 5, "", false, 0, 1, false, "Test Dungeon", 0,
-				false, 389
+				false, 9389
 		end
 		return nil
 	end

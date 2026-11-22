@@ -1149,4 +1149,7 @@ ns.Locales.frFR = {
 	["To %s"] = "Jusqu'à %s",
 	["Show plan on OpenMap's dungeon map (experimental)"] = "Afficher le plan sur la carte de donjon d'OpenMap (expérimental)",
 	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Dessine l'itinéraire, les arrêts et les marqueurs de votre plan sur la carte de donjon d'OpenMap. Cela utilise des parties non publiques d'OpenMap : une mise à jour peut l'arrêter.",
+	["Own plans matched to an instance's bundled data: %d of %d."] = "Plans personnels associés aux données fournies d'une instance\194\160: %d sur %d.",
+	["Not matched:"] = "Non associés\194\160:",
+	["Wing unclear:"] = "Aile incertaine\194\160:",
 }

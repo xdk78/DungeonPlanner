@@ -61,6 +61,12 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
 - **The plan on OpenMap's dungeon map is experimental** (off by default). It relies on the private parts of OpenMap 0.8.12 and 0.8.13 in its
   dungeon view, not on its public API, so it may stop working after an OpenMap update; `/dp debug` then says why
   ("OpenMap overlay: ...").
+- **Wings of one instance** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) share one instance ID. A plan
+  made inside one of them in another game language cannot tell which wing it is; it keeps the parchment instead of
+  showing another wing's map, and `/dp debug` lists it. A plan for a wing made from the instance list, or copied from
+  a recommended plan, knows its wing. Recorded runs are stored by instance ID, so a wing's Runs section lists the
+  runs of every wing of that instance, and run mode counts a boss kill in any wing unless the client says which wing
+  you are in.
 - The limits listed for 0.1.0 still apply ([RELEASE-NOTES-0.1.0.md](RELEASE-NOTES-0.1.0.md#known-limitations-on-wow-forever)).
 
 ## Test checklist
@@ -146,5 +152,10 @@ what to look for.
     the plan's other floor shows each time. Open it once inside a dungeon too. In combat, open, zoom and close the map:
     no Lua error or blocked action. `/dp debug` has an "OpenMap overlay:" line. With the gamepad interface style on,
     nothing is drawn and the switch is not in OpenMap's menu.
-25. **Type `/dp shots` and wait about half a minute.** Every view is captured; put the useful screenshots in
+25. **A plan made in another game language.** On a German (or Spanish, French, Russian) client, stand inside the
+    Deadmines and Hall of Thanes and make a New plan from the window: the map, the Enemies layer, the Bosses facts,
+    Prep and Getting there are the recommended plan's, and the home table shows one card per instance. In Scarlet
+    Monastery the new plan stays on the parchment (the client does not say which wing). `/dp debug` has an "Own plans
+    matched" line and lists "Instance names by ID (present)" when `GetRealZoneText` is missing.
+26. **Type `/dp shots` and wait about half a minute.** Every view is captured; put the useful screenshots in
     `docs/screenshots/`.

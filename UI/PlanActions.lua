@@ -18,12 +18,19 @@ local function createPlan(templateId, name, entry)
 			kind = entry.kind or "other",
 			ejInstanceID = entry.ejInstanceID,
 			uiMapID = entry.uiMapID,
+			-- Which bundled instance (wing) the entry is, for the floors below; not stored (Validate keeps known fields).
+			canonicalKey = entry.canonicalKey,
 		}
 		instanceID = entry.instanceMapID
 	else
 		local cur = ns.Instances.Current()
 		info = { name = cur.name or "", kind = cur.kind, ejInstanceID = cur.ejInstanceID, uiMapID = cur.uiMapID }
 		instanceID = cur.inInstance and cur.instanceID or nil
+	end
+	-- The instance's map ID is the same in every client language: stored, the bundled data finds the plan whatever
+	-- language its name is in (Data/InstanceIdentity.lua). Zones and other places get none.
+	if info.kind ~= "other" then
+		info.instanceMapID = instanceID or ns.Instances.InstanceMapID(info)
 	end
 	local author = UnitName and ns.Util.Plain(UnitName("player")) or ""
 	local plan = ns.Plan.New({
@@ -348,13 +355,17 @@ function Home.AllEntries()
 			end
 		end
 	end
+	local entryKeys = {} -- [entry] = its canonical key, worked out once for all the plans compared with it
 	local function addFromPlan(plan)
 		local key = ns.DB.InstanceKey(plan.instance)
 		if seen[key] or key == "other" then
 			return
 		end
 		for _, e in ipairs(out) do
-			if ns.Bundled.SameInstance(plan.instance, e) then
+			if entryKeys[e] == nil then
+				entryKeys[e] = ns.Bundled.EntryKey(e)
+			end
+			if ns.Bundled.SameInstance(plan, e, entryKeys[e]) then
 				return
 			end
 		end

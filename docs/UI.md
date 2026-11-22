@@ -755,6 +755,11 @@ Since 0.1.0:
   look at `position.bestMap` / `mapGroup` in the saved diagnostics (does the client give a map there?).
 - Gear: items three to a line at the default size, two at the minimum width (880); hover, Shift-click and right-click
   on each cell; the item tooltip beside the name.
+- Plans in another game language: on a German (or Spanish, French, Russian) client, whether `GetRealZoneText(id)`
+  answers with the instance's own name for an ID it is given (`/run print(GetRealZoneText(36))` outside the Deadmines
+  should print its German name, not the current zone; `/dp debug` only says the function is present), and whether
+  the Group Finder's activity names match `GetInstanceInfo`'s. A New plan made inside the Deadmines shows its map,
+  enemies and recommended plan, and stays on the Deadmines' home card.
 - Bosses: an ability with a one-line note (no gap under it); Hall of Thanes' labels beside Reliquary of Kings, Dark
   Iron Ingress and Anvilmar's Rest, the denser plates.
 - Notes: the objectives right under the bosses; a raid (Molten Core) side by side. Pulls of a recommended plan: the

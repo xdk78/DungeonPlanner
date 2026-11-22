@@ -169,12 +169,23 @@ function UI.EntryForPlan(plan)
 	if resolved and score >= 75 then
 		return resolved
 	end
+	-- An own plan of a bundled instance (its floors tell a wing; IDs a localized name) belongs on that instance's card:
+	-- the entry of its first recommended plan, the card the home table merges it into (Home.AllEntries), so the plan is
+	-- remembered there (ui.lastPlans) and the home selection stays on that card. That also joins an English plan made
+	-- inside the instance (no uiMapID: a "name:" key) with a card keyed by its map ("map:").
+	local canonical = ns.Instances.ResolvedKey(plan)
+	local rec = canonical and not plan.bundled and ns.Instances.RecommendedFor(canonical)
+	if rec then
+		return UI.EntryForPlan(rec)
+	end
 	return {
 		key = key,
 		name = ns.Names.Instance(inst),
 		kind = inst.kind,
 		ejInstanceID = inst.ejInstanceID,
 		uiMapID = inst.uiMapID,
+		instanceMapID = ns.Instances.InstanceMapID(plan),
+		canonicalKey = canonical,
 		levelMin = inst.levelMin,
 		levelMax = inst.levelMax,
 	}
@@ -327,12 +338,14 @@ function UI.OpenInstance(entry)
 		kind = entry.kind,
 		ejInstanceID = entry.ejInstanceID,
 		uiMapID = entry.uiMapID,
+		instanceMapID = entry.instanceMapID,
+		canonicalKey = entry.canonicalKey,
 		levelMin = entry.levelMin,
 		levelMax = entry.levelMax,
 	}
 	ns.db.ui.homeSelected = entry.key
 	local current = ctx:Plan()
-	if not (current and ns.Bundled.SameInstance(current.instance, entry)) then
+	if not (current and ns.Bundled.SameInstance(current, entry)) then
 		local pick = UI.DefaultPlanFor(entry) -- UI/Portraits.lua
 		UI.SelectPlan(pick and pick.id or nil, true)
 	end

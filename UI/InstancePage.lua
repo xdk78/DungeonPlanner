@@ -56,7 +56,7 @@ local function buildChrome(f, ctx, window)
 	-- The plan on the table when it belongs to the open instance (as f:Refresh checks), else the instance itself.
 	local function locationTarget()
 		local entry, plan = ctx:Instance(), ctx:Plan()
-		if plan and entry and ns.Bundled.SameInstance(plan.instance, entry) then
+		if plan and entry and ns.Bundled.SameInstance(plan, entry) then
 			return plan
 		end
 		return entry
@@ -313,7 +313,7 @@ function InstancePage.Create(parent, ctx, window)
 		self.instancePick:Refresh()
 		self.location:Update()
 		local plan = ctx:Plan()
-		if plan and not ns.Bundled.SameInstance(plan.instance, entry) then
+		if plan and not ns.Bundled.SameInstance(plan, entry) then
 			plan = nil
 		end
 		self.planPick:Refresh()

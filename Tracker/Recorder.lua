@@ -216,10 +216,15 @@ function Recorder.ClearHistory(key)
 	end
 end
 
--- The instance key of a plan for the recorder: the Group Finder's instance map ID for its name (the key the recorder
--- stores runs under is GetInstanceInfo's instance ID), else nil.
+-- The instance key of a plan for the recorder (the key the recorder stores runs under is GetInstanceInfo's instance
+-- ID): the plan's instance map ID (stored, else its bundled instance's: Instances.InstanceMapID), else the Group
+-- Finder's for its name, else nil.
 function Recorder.KeyForPlan(plan)
 	local name = type(plan) == "table" and plan.instance and plan.instance.name
+	local iid = name and ns.Instances.InstanceMapID(plan)
+	if iid then
+		return tostring(iid)
+	end
 	local hit = name and ns.GameFiles.FinderFor(name)
 	if hit and hit.mapID then
 		return tostring(hit.mapID)
@@ -245,6 +250,8 @@ function Recorder.CreatePlan(run, basePlan)
 	local L = ns.L
 	local instance = basePlan and ns.Util.DeepCopy(basePlan.instance) or { name = run.n, kind = "dungeon" }
 	instance.ejInstanceID = nil
+	-- The run's key is the instance's map ID (GetInstanceInfo's eighth return): the same in every client language.
+	instance.instanceMapID = instance.instanceMapID or tonumber(run.k)
 	local raw = RunLog.PlanFromRun(run, instance, {
 		L = L,
 		plural = ns.Plural,
