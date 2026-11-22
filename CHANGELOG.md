@@ -5,41 +5,49 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-23
+
+Upgrade notes, known limitations and the in-game test checklist: `docs/RELEASE-NOTES-0.2.1.md`.
+
+**Restart the game after updating** (a `/reload` is not enough): this version adds files that WoW loads only when the
+client starts; until then run mode shows no recorder, drift or prep line, refused addon messages are not reported, and
+`/dp debug` says to restart.
+
+### Added
+- **Addon message status in `/dp debug` and `/dp report`**: whether the game holds or restricts addon messages right
+  now, and how many messages were sent and refused per channel.
+
 ### Changed
+- **Recorded runs are kept per wing** in Scarlet Monastery, Dire Maul, Stratholme and Blackrock Spire. Before, a
+  wing's Runs section listed the runs of every wing (the Library's plan showed Armory runs). A run takes its wing when
+  the game tells which one it is: the map names the wing, or you kill a boss only that wing has; a run in which you
+  kill bosses of two wings goes back to "wing unknown". A wing's best time, boss splits and "previous run" come from
+  its own runs and those without a known wing. Runs recorded before this version, and runs whose wing is not known,
+  show in every wing's Runs section, marked "wing unknown". Clear history on a wing removes only that wing's runs,
+  unless you tick "Also clear runs without a known wing".
 - **Santiago Reyes' map credit**: the tooltip of "Map by Santiago Reyes" and the credit in the map settings name him
-  and his site only. Blizzard's UI Add-On Development Policy does not allow donation requests in the game, so the link
-  to support him is now on the addon's README and CurseForge page.
+  and his site only. Blizzard's UI Add-On Development Policy does not allow donation requests in the game; the link to
+  support him is on the addon's README and CurseForge page.
 
 ### Fixed
-- **Shaper's Terrace with Dungeon Journal 2.1.2 or later installed**: the map showed Dungeon Journal's boss pins in
-  place of the plan's bosses, some well away from the route's stops. The plan's bosses stay where the route expects
-  them again; another addon's pins show only for bosses the plan does not place.
-- **Sharing and group sync no longer fail silently when the game blocks or refuses addon messages.** While the game
-  holds them, the Share section and run mode's group sync line say "Addon messages are blocked by the game right now";
-  when it refuses several in a row, they say so too, and a plan offer the game refused shows "failed: the game refused
-  the message" instead of waiting for answers that cannot come. Refused messages are not sent again. `/dp debug` and
-  `/dp report` show the game's lockdown and restriction answers and how many messages were sent and refused per
-  channel.
-- **Addon messages are held only during a boss fight's lockdown.** When the game merely reports outgoing addon
-  messages as restricted (WoW: Forever 1.60.1 was reported to do so outside encounters), Dungeon Planner now sends
-  them instead of holding every message indefinitely; if the game refuses them, sharing and group sync say so.
-- **Recorded runs of instances with wings** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire): a wing's Runs
-  section listed the runs of every wing, so the Library's plan showed Armory runs. A run is now recorded for its wing
-  when the game tells which wing it is: its map names the wing, or you kill a boss only that wing has. Until then the
-  run stays with the whole instance; the plan you have open never decides it. A run in which you kill bosses of two
-  wings goes back to "wing unknown". Runs recorded before this version, and runs whose wing was not known, still show
-  in every wing's Runs section, marked "wing unknown"; a plan whose wing is unclear names each run's wing.
-- **Best times per wing**: where the wing is known, a wing's best time, boss splits and "previous run" come from that
-  wing's runs (and those without a known wing), not from the other wings'.
-- **Clear history on a wing** removes only that wing's runs; runs without a known wing stay unless you tick "Also
-  clear runs without a known wing".
-- **Run history of many instances**: once runs were kept for 60 instance keys (each known wing counts as its own key),
-  a run in a new one was not kept. Now the key played longest ago makes room.
+- **Bosses on another addon's map**: on Shaper's Terrace with Dungeon Journal 2.1.2 or later, the map showed Dungeon
+  Journal's boss pins in place of the plan's bosses, some well away from the route's stops. Where another addon's pins
+  do not line up with the plan, the plan's bosses now stay at the route's stops; that addon's pins show only for
+  bosses the plan does not place.
+- **Sharing and group sync no longer fail silently when the game blocks or refuses addon messages.** During a boss
+  fight's lockdown, the Share section and run mode's group sync line say "Addon messages are blocked by the game right
+  now", and the messages go out when it ends. When the game refuses several in a row they say so too, and a plan offer
+  the game refused shows "failed: the game refused the message" instead of waiting for answers that cannot come.
+  Refused messages are not sent again.
+- **Addon messages are no longer held outside a boss fight.** When the game only reports outgoing addon messages as
+  restricted (WoW: Forever 1.60.1 was reported to do so outside encounters), Dungeon Planner held every message
+  indefinitely. It now sends them, and says so if the game refuses them.
+- **Run history of many instances**: once runs were kept for 60 instances (each known wing counts as one), a run in a
+  new one was not kept. Now the one played longest ago makes room.
 - **Boss kills outside the run's instance** (an outdoor boss after leaving a dungeon) were added to the dungeon's run.
   Only kills inside its instance count now.
-- **"Open in NeedRoll" for plans saved in another game language**: the button passed the instance's name in that
-  language. It now passes the English name first and falls back to the plan's own name, without opening NeedRoll
-  twice.
+- **"Open in NeedRoll" for plans saved in another game language** passed the instance's name in that language. It now
+  passes the English name first and falls back to the plan's own name, without opening NeedRoll twice.
 
 ## [0.2.0] - 2026-11-22
 

@@ -5,10 +5,10 @@ own maps, group them into pulls, draw routes, write boss strategies by phase, as
 kills and objectives, get ready and find the way to the entrance, follow the plan with your group, and share plans in
 game, as text, or on Discord.
 
-> Status: **beta** (0.2.0), not yet tested broadly in game. Everything below is implemented and covered by offline
+> Status: **beta** (0.2.1), not yet tested broadly in game. Everything below is implemented and covered by offline
 > tests; expect rough edges in the client and please report them (`/dp report`); see [What is verified](#what-is-verified)
-> and the [release notes](docs/RELEASE-NOTES-0.2.0.md) (what's new, upgrade notes, known limitations on Forever, the
-> test checklist).
+> and the release notes of [0.2.1](docs/RELEASE-NOTES-0.2.1.md) and [0.2.0](docs/RELEASE-NOTES-0.2.0.md) (what's new,
+> upgrade notes, known limitations on Forever, the test checklists).
 
 ## See it
 
@@ -184,7 +184,8 @@ and `luac -p` are clean.
 
 Checked in the game, not offline: real map tiles, fonts and non-English letters, dropdown menus, drag and drop, addon messages
 between two players (and during a boss lockdown), Settings panel, minimap button, the other addons' data. The
-ordered checklist is in the [release notes](docs/RELEASE-NOTES-0.2.0.md#test-checklist). `/dp debug` reports what the
+ordered checklists are in the release notes of [0.2.0](docs/RELEASE-NOTES-0.2.0.md#test-checklist) and
+[0.2.1](docs/RELEASE-NOTES-0.2.1.md#test-checklist) (its changes). `/dp debug` reports what the
 client provides. Details: [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 Known limitations on WoW: Forever: the client gives no positions inside instances (no live mob or player positions on
