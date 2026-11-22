@@ -229,7 +229,7 @@ plain points, so the plan format and export strings are unchanged.
 ### Drawings (Model/Drawing.lua, UI/MapDraw.lua, UI/Panels/DrawBar.lua)
 
 The Draw tool opens a second toolbar line (`DrawBar`): pen, line, arrow, circle, box, text, eraser and move, the eight
-palette colours and three widths, Clear floor and Clear all (each behind `W.Confirm`). The data model is pure
+palette colours and three widths, and a menu with Clear floor and Clear all (each behind `W.Confirm`). The data model is pure
 (`Model/Drawing.lua`, format in docs/SHARING-FORMAT.md): normalized points per floor, freehand strokes simplified with
 Ramer-Douglas-Peucker (the tolerance is 1.5 screen pixels at the zoom the stroke was drawn at, growing until the stroke
 fits 40 points) and quantized to 3 decimals; caps of 50 shapes per floor and 150 per plan keep strings small.
@@ -500,7 +500,8 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Data/Floors.lua, UI/Panels/FloorBar.lua | every floor an instance has map art for, merged with the plan's (no duplicates); the map's floor switcher |
 | UI/InstancePage.lua, UI/SidePanel.lua | the war table: header pickers, section bar; steps and party |
 | Model/Picker.lua, UI/InstancePicker.lua | the instance picker: sections, level bands, search and cursor (pure); its rows and popup |
-| UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line and the drawings' menu |
+| UI/Panels/MapToolbar.lua | the map's edit tools (a picture and a name each) and the toolbar line's layout: what gives way on a narrow table |
+| UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line (picture buttons, their glyphs, the clear menu) and the drawings' menu |
 | UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
 | UI/RunMode.lua | the run window (with the recorder line, the drift line and the prep line) |
 | Model/Prep.lua, Data/PrepInfo.lua, Data/Travel.lua, Data/TravelData.lua, Data/Navigation.lua, Data/Providers/TomTom.lua, Polestar.lua, ShortestPathForever.lua | Prep: quests, keys, group, the way there, navigation hand-off (section above) |

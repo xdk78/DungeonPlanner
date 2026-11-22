@@ -161,21 +161,209 @@ T.case("Drawing UI: move, restyle, erase, the menu, the legend switch and cleari
 	T.eq(#ns.Drawing.Shapes(plan), 0, "erased")
 	ctx:Undo()
 	T.eq(#ns.Drawing.Shapes(plan), 1, "undo brings it back")
-	-- Clear floor asks first: nothing goes until the player confirms; Cancel keeps everything.
+	-- The clear button opens a menu (the game's context menu, captured here): Clear floor and Clear all.
 	closeDialogs()
 	map:Refresh()
-	click(map.drawBar.clearFloor)
+	local menu
+	local fakeMenuUtil = {
+		CreateContextMenu = function(owner, generate)
+			menu = { owner = owner, buttons = {} }
+			generate(owner, {
+				CreateTitle = function(_, text)
+					menu.title = text
+				end,
+				CreateDivider = function() end,
+				CreateButton = function(_, text, fn)
+					local desc = { text = text, fn = fn, enabled = true }
+					function desc:SetEnabled(on)
+						self.enabled = on
+					end
+					menu.buttons[#menu.buttons + 1] = desc
+					return desc
+				end,
+			})
+		end,
+	}
+	-- MenuUtil's elements take a boolean or a predicate; W.Menu passes a predicate.
+	local function enabled(desc)
+		if type(desc.enabled) == "function" then
+			return desc.enabled(desc)
+		end
+		return desc.enabled
+	end
+	_G.MenuUtil = fakeMenuUtil
+	T.ok(map.drawBar.clear:IsEnabled(), "the clear button with drawings on the plan")
+	click(map.drawBar.clear)
+	_G.MenuUtil = nil
+	T.ok(menu and menu.owner == map.drawBar.clear, "a menu at the clear button")
+	T.eq(menu.title, ns.L["Clear drawings"])
+	T.eq(menu.buttons[1].text, ns.L["Clear floor"])
+	T.eq(menu.buttons[2].text, ns.L["Clear all"])
+	T.ok(enabled(menu.buttons[1]) and enabled(menu.buttons[2]), "both enabled with a drawing on this floor")
+	-- Without MenuUtil the same actions open in the addon's own popup list.
+	click(map.drawBar.clear)
+	local popup = ns.Widgets.ActivePopup()
+	T.ok(popup and popup.owner == map.drawBar.clear, "the popup list at the clear button")
+	T.eq(#popup.rows, 2, "Clear floor and Clear all")
+	T.eq(popup.rows[1].text, ns.L["Clear floor"])
+	popup:Choose(1)
+	T.ok(not ns.Widgets.ActivePopup(), "closed on a choice")
+	T.ok(_G.DungeonPlannerDialog:IsShown(), "the choice asks first, as from the game's menu")
+	closeDialogs()
+	-- Clear floor asks first: nothing goes until the player confirms; Cancel keeps everything.
+	menu.buttons[1].fn()
 	local dialog = _G.DungeonPlannerDialog
 	T.ok(dialog:IsShown(), "a confirmation")
 	T.eq(#ns.Drawing.Shapes(plan), 1, "nothing removed yet")
 	click(dialog.buttons[2])
 	T.eq(#ns.Drawing.Shapes(plan), 1, "cancelled")
-	click(map.drawBar.clearAll)
+	menu.buttons[2].fn()
 	T.ok(dialog:IsShown(), "clear all asks too")
 	click(dialog.buttons[1])
 	T.eq(#ns.Drawing.Shapes(plan), 0, "cleared after the confirmation")
+	T.ok(not map.drawBar.clear:IsEnabled(), "nothing left to clear: the button is disabled")
 	ctx:Undo()
 	T.eq(#ns.Drawing.Shapes(plan), 1, "and undo brings it back")
+	-- On another floor only Clear all has something to clear.
+	ctx.floor = 2
+	local items = map.drawBar:ClearItems()
+	T.ok(items[2].disabled, "Clear floor greyed out on an empty floor")
+	T.ok(not items[3].disabled, "Clear all still offered")
+	_G.MenuUtil = fakeMenuUtil
+	click(map.drawBar.clear)
+	_G.MenuUtil = nil
+	T.eq(enabled(menu.buttons[1]), false, "the game's menu greys it out")
+	T.eq(enabled(menu.buttons[2]), true)
+	click(map.drawBar.clear)
+	T.eq(#ns.Widgets.ActivePopup().rows, 1, "our popup list leaves it out")
+	ns.Widgets.ClosePopup()
+	ctx.floor = 1
+end)
+
+-- The draw line and the tools' line: pictures with tooltips, the same tools behind them, fallbacks without the art.
+T.case("Map toolbar: tool pictures, their fallbacks, tooltips and the lines' fit", function()
+	local _, map, _, ctx = drawMap()
+	-- The mock client lacks the toolbar's atlases: the tools show their names, the drawing tools their glyphs.
+	for _, tool in ipairs(ns.MapToolbar.TOOLS) do
+		local b = map.toolButtons[tool]
+		T.ok(not b.icon:IsShown(), tool .. ": no picture without the atlas")
+		T.ok(b.label:IsShown() and b.label:GetText() ~= "", tool .. ": its name instead")
+		T.ok(b.dpTooltipTitle and b.dpTooltipText, tool .. ": a tooltip")
+		click(b)
+		T.eq(ctx.tool, tool, tool .. ": a click chooses it")
+		T.ok(b.dpActive, tool .. ": lit")
+		for other, ob in pairs(map.toolButtons) do
+			if other ~= tool then
+				T.ok(not ob.dpActive, "one tool lit at a time")
+			end
+		end
+	end
+	click(map.toolButtons.draw)
+	local db = map.drawBar
+	for _, tool in ipairs(ns.MapDraw.TOOLS) do
+		local b = db.tools[tool]
+		T.eq(b:GetWidth(), ns.Style.SIZE.control, tool .. ": a square button")
+		T.ok(b.glyph and b.glyph:IsShown() and #b.glyph.parts > 0, tool .. ": its glyph")
+		T.ok(not b.label:IsShown(), tool .. ": no words on the button")
+		T.eq(b.dpTooltipTitle, ns.L["draw:" .. tool], tool .. ": named in the tooltip")
+		T.ok(b.dpTooltipText, tool .. ": with a hint")
+		click(b)
+		T.eq(ctx.drawTool, tool, tool .. ": a click chooses it")
+		T.ok(b.dpActive, tool .. ": lit")
+	end
+	for i, b in ipairs(db.widths) do
+		T.eq(b:GetWidth(), ns.Style.SIZE.control, "width " .. i .. ": square")
+		T.eq(b.dpTooltipTitle, ns.L["width:" .. i])
+		click(b)
+		T.eq(ctx.drawWidth, i)
+	end
+	T.ok(db.clear.glyph:IsShown(), "the clear button's bin glyph")
+	-- One line: tools, colours, widths and the clear button.
+	db:SetWidth(600)
+	db:Flow()
+	T.eq(db:GetHeight(), ns.Style.SIZE.control, "the drawing tools fit one line 600 px wide")
+	local _, _, _, x = db.clear:GetPoint(1)
+	T.ok(x + db.clear:GetWidth() <= 600, "the clear button at the line's end")
+	-- A disabled button keeps its glyph, greyed.
+	db.clear:SetDisabled(true)
+	local r, g, bl = db.clear.glyph.parts[1]:GetVertexColor()
+	T.eq(string.format("%.2f %.2f %.2f", r, g, bl), string.format("%.2f %.2f %.2f", ns.Style.Color("dim")))
+	db.clear:SetDisabled(false)
+	-- With the atlases the pictures show: the game's art for the tools and for Eraser and Move.
+	for _, key in ipairs({ "tool_select", "tool_marker", "tool_position", "tool_pull", "tool_route", "tool_draw",
+		"tool_erase", "draw_erase", "draw_move", "draw_clear" }) do
+		mock.atlases[ns.Art.SPECS[key].atlas] = true
+	end
+	ns.Art.ForgetFiles()
+	local b = ns.Widgets.Button(map, "Select", "outline")
+	T.ok(b:SetIcon("tool_select"), "the atlas is used")
+	T.ok(b.icon:IsShown() and b.label:IsShown(), "picture and name")
+	local wide = b:GetWidth()
+	b:SetCompact(true)
+	T.eq(b:GetWidth(), ns.Style.SIZE.control, "compact: the picture alone")
+	T.ok(not b.label:IsShown())
+	b:SetCompact(false)
+	T.eq(b:GetWidth(), wide, "and back")
+	local t = ns.Widgets.ToolButton(map, "draw_move", ns.DrawBar.GLYPHS.move, "Move", "hint")
+	T.ok(t.icon:IsShown() and not t.glyph:IsShown(), "the game's picture over the glyph")
+	-- A picture that is not square keeps its shape in the square slot (the atlas's size from GetAtlasInfo).
+	mock.atlases[ns.Art.SPECS.tool_position.atlas] = { 29, 26 }
+	ns.Art.ForgetFiles()
+	local pos = ns.Widgets.Button(map, "Position", "outline")
+	pos:SetIcon("tool_position")
+	T.eq(pos.icon:GetWidth(), 18, "as wide as the slot")
+	T.eq(string.format("%.2f", pos.icon:GetHeight()), string.format("%.2f", 18 * 26 / 29), "and shorter")
+	mock.atlases[ns.Art.SPECS.tool_position.atlas] = true
+	ns.Art.ForgetFiles()
+	-- Built again with the atlases, the tools' line shows pictures; the names give way on a narrow table.
+	local f = ns.Panels.map.Create(_G.DungeonPlannerMainFrame, ctx)
+	f:SetSize(1000, 600)
+	f.bar:SetWidth(1000)
+	ctx.tool = "select"
+	f.kind:Hide()
+	f.role:Hide()
+	f.pull:Hide()
+	ns.MapToolbar.Layout(f, f.bar, false)
+	T.ok(f.toolButtons.select.icon:IsShown(), "a picture on the tool")
+	T.ok(f.toolButtons.select.label:IsShown(), "and its name on a wide table")
+	-- Narrowing step by step (the bar's OnSizeChanged lays it out again): each level hides one more thing, nothing
+	-- comes back; widening brings everything back in the reverse order, the names included.
+	local resized = f.bar:GetScript("OnSizeChanged")
+	local function levelAt(w)
+		f.bar:SetWidth(w)
+		resized(f.bar)
+		local named = f.toolButtons.select.label:IsShown()
+		local level = (f.focus:IsShown() and 1) or (named and 2) or (f.fit:IsShown() and 3) or 4
+		local spec = ns.MapToolbar.LEVELS[level]
+		T.eq(f.focus:IsShown(), spec.focus, w .. " px: Focus")
+		T.eq(f.fit:IsShown(), spec.fit, w .. " px: Fit")
+		for _, tool in ipairs(ns.MapToolbar.TOOLS) do
+			local tb = f.toolButtons[tool]
+			T.eq(tb.label:IsShown(), spec.names, w .. " px: " .. tool .. "'s name")
+			T.eq(tb:GetWidth(), tb:WidthFor(not spec.names), w .. " px: " .. tool .. "'s width")
+		end
+		return level
+	end
+	local seen, last = {}, 1
+	for w = 1000, 200, -2 do
+		local level = levelAt(w)
+		T.ok(level >= last, w .. " px: narrowing never brings anything back")
+		seen[level], last = true, level
+	end
+	T.ok(seen[1] and seen[2] and seen[3] and seen[4], "every level on the way down")
+	for w = 200, 1000, 2 do
+		local level = levelAt(w)
+		T.ok(level <= last, w .. " px: widening never hides anything")
+		last = level
+	end
+	T.eq(last, 1, "everything back on a wide table")
+	T.ok(f.toolButtons.select.label:IsShown(), "the names included")
+	for _, key in ipairs({ "tool_select", "tool_marker", "tool_position", "tool_pull", "tool_route", "tool_draw",
+		"tool_erase", "draw_erase", "draw_move", "draw_clear" }) do
+		mock.atlases[ns.Art.SPECS[key].atlas] = nil
+	end
+	ns.Art.ForgetFiles()
+	f:Hide()
 end)
 
 T.case("Drawing UI: nothing in combat, no tools on a recommended plan, run mode shows a step's drawings", function()

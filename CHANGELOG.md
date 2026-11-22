@@ -87,6 +87,12 @@ follow [Semantic Versioning](https://semver.org/).
   pulls instead of an empty frame down to the bottom.
 - **Home**: the preview's Open plan follows its content instead of sitting at the bottom; a plan's preview lists its
   bosses in order; My plans explains double-click and the right-click menu under a short list.
+- **Map toolbar with icons.** The map tools show the game's own pictures beside their names (the pointer for Select, a
+  map pin, a group, crossed swords, a directions scroll, a palette, a red X); on a narrow window the names give way to
+  the pictures and stay in the tooltips. The drawing tools, colours and line widths fit one line of square picture
+  buttons (a glyph of each shape, the game's broom and move cursors, a line of each width), named in their tooltips;
+  Clear floor and Clear all move into one menu button at the line's end. A picture the game lacks falls back to the
+  tool's name or a drawn glyph, and `/dp debug` lists it.
 
 ### Fixed
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my

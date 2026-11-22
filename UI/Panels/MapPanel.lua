@@ -2,9 +2,9 @@
 -- its bottom-left corner and a floating legend in its top-right corner (the "Legend" button shows or hides it): the
 -- layer switch (each layer with its icon, count and a check box, plus "Enemies" where spawn data exists), the routes
 -- on this floor, and the editor of the selected marker, which opens there whenever a marker is selected.
--- Your own plans get the edit tools above the map: Select (drag to move), Marker, Position (party role), Pull (click
--- markers into the current pull), Route (click adds a bend, Shift-click a numbered stop, right-click ends), Draw (the
--- drawing tools' own line, UI/Panels/DrawBar.lua) and Erase.
+-- Your own plans get the edit tools above the map (UI/Panels/MapToolbar.lua): Select (drag to move), Marker,
+-- Position (party role), Pull (click markers into the current pull), Route (click adds a bend, Shift-click a numbered
+-- stop, right-click ends), Draw (the drawing tools' own line, UI/Panels/DrawBar.lua) and Erase.
 -- A recommended plan is read-only: no tools, and the rail shows the marker's details instead of an editor.
 
 local _, ns = ...
@@ -15,33 +15,7 @@ local SP, SZ = S.SPACE, S.SIZE
 local RAIL = 248 -- the marker editor's width
 local LEGEND_W = 204 -- the legend alone: compact, so it covers little of the map
 local RAIL_INSET = 7 + 8 -- the legend inside the map's gold frame (MapCanvas.FRAME_INSET) with a margin (SP.sm)
-local TOOLS = { "select", "marker", "position", "pull", "route", "draw", "erase" }
-local TOOL_TEXT = {
-	select = "Select",
-	marker = "Marker",
-	position = "Position",
-	pull = "Pull",
-	route = "Route",
-	draw = "Draw",
-	erase = "Erase",
-}
-local TOOL_HELP = {
-	select = "Click a marker to edit it; drag to move it. Drag the map to pan, scroll to zoom.",
-	marker = "Click the map to place a marker of the chosen kind.",
-	position = "Click the map to place a party position for the chosen role. With a boss or pull in focus, it belongs to it.",
-	pull = "Click markers to add them to the current pull, or to take them out.",
-	route = "Click to add route points, Shift-click for a numbered stop. Right-click to finish the route.",
-	routeSnap = "Click to add numbered stops: the path between them follows the corridors. Shift-click for a straight leg. Right-click to finish the route.",
-	erase = "Click a marker or route point to delete it.",
-	draw = "Pick a tool, colour and width above. Drawings made while a boss or pull is in focus belong to it. Right-click one for more.",
-	readOnly = "A recommended plan. Hover markers for notes; make an editable copy to change it.",
-}
--- A tool button's tooltip where it differs from the tool's help (the Route tool's covers both modes).
-local TOOL_TIP = {
-	route = "Click to add route points, Shift-click for a numbered stop. With Snap to corridors on (where the floor has "
-		.. "corridor data), a click adds a numbered stop whose path follows the corridors and Shift-click gives a straight "
-		.. "leg. Right-click to finish the route.",
-}
+local TOOL_HELP = ns.MapToolbar.HELP
 
 local Panel = {}
 ns.Panels.map = Panel
@@ -69,25 +43,8 @@ function Panel.Create(parent, ctx)
 	bar:SetHeight(SZ.control)
 	f.bar = bar
 
-	f.toolButtons = {}
-	local x = 0
-	for _, tool in ipairs(TOOLS) do
-		local b = W.Button(bar, L[TOOL_TEXT[tool]], "outline", function()
-			ctx.tool = tool
-			if tool ~= "route" then
-				ctx.activeRoute = nil
-			end
-			if tool ~= "draw" then
-				ctx.selectedShape = nil
-			end
-			f:Refresh()
-		end)
-		b:SetPoint("LEFT", x, 0)
-		W.SetTooltip(b, L[TOOL_TEXT[tool]], L[TOOL_TIP[tool] or TOOL_HELP[tool]])
-		x = x + b:GetWidth() + SP.xs
-		f.toolButtons[tool] = b
-	end
-	local optionsX = x + SP.sm
+	-- The tools (UI/Panels/MapToolbar.lua); the chosen tool's picker (kind, role, pull) after the last of them.
+	local lastTool = ns.MapToolbar.Build(f, ctx, bar)
 
 	local function kindOptions()
 		local out = {}
@@ -116,7 +73,7 @@ function Panel.Create(parent, ctx)
 			ctx.kind = v
 		end,
 	})
-	f.kind:SetPoint("LEFT", optionsX, 0)
+	f.kind:SetPoint("LEFT", lastTool, "RIGHT", SP.md, 0)
 
 	f.role = W.Dropdown(bar, {
 		width = 120,
@@ -128,7 +85,7 @@ function Panel.Create(parent, ctx)
 			ctx.role = v
 		end,
 	})
-	f.role:SetPoint("LEFT", optionsX, 0)
+	f.role:SetPoint("LEFT", lastTool, "RIGHT", SP.md, 0)
 
 	f.pull = W.Dropdown(bar, {
 		width = 150,
@@ -161,7 +118,7 @@ function Panel.Create(parent, ctx)
 			f:Refresh()
 		end,
 	})
-	f.pull:SetPoint("LEFT", optionsX, 0)
+	f.pull:SetPoint("LEFT", lastTool, "RIGHT", SP.md, 0)
 
 	-- Every floor the map can show (Data/Floors.lua). Going to one clears what belonged to the last.
 	function f:GoToFloor(v)
@@ -652,36 +609,8 @@ function Panel.Create(parent, ctx)
 		local many = #ctx:Floors() > ns.FloorBar.TABS
 		self.floor:SetShown(many)
 		self.floorBar:Refresh()
-		self.focus:ClearAllPoints()
-		if many then
-			self.focus:SetPoint("RIGHT", self.floor, "LEFT", -SP.sm, 0)
-		else
-			self.focus:SetPoint("RIGHT", bar, "RIGHT", 0, 0)
-		end
-		-- Narrow tables: the tools take the line, so the focus picker and Fit give way.
-		local toolsW = 0
-		for _, b in pairs(self.toolButtons) do
-			if b:IsShown() then
-				toolsW = toolsW + b:GetWidth() + SP.xs
-			end
-		end
-		local optW = (self.kind:IsShown() or self.role:IsShown() or self.pull:IsShown()) and 160 or 0
-		local rightW = (many and 158 or 0) + 178 + self.fit:GetWidth() + self.legendButton:GetWidth() + 3 * SP.sm
-		local roomy = bar:GetWidth() <= 0 or toolsW + optW + rightW <= bar:GetWidth()
-		self.focus:SetShown(roomy)
-		self.fit:ClearAllPoints()
-		self.fit:SetPoint("RIGHT", roomy and self.focus or (many and self.floor or bar), roomy and "LEFT" or
-			(many and "LEFT" or "RIGHT"), roomy and -SP.sm or (many and -SP.sm or 0), 0)
-		-- Still too narrow (long tool names, a floor picker): Fit gives way too, the Legend button takes its place.
-		local fitRoom = roomy or toolsW + optW + rightW - 178 - SP.sm <= bar:GetWidth()
-		self.fit:SetShown(fitRoom)
-		self.legendButton:ClearAllPoints()
-		if fitRoom then
-			self.legendButton:SetPoint("RIGHT", self.fit, "LEFT", -SP.sm, 0)
-		else
-			self.legendButton:SetPoint("RIGHT", many and self.floor or bar, many and "LEFT" or "RIGHT",
-				many and -SP.sm or 0, 0)
-		end
+		-- Narrow tables: Focus, the tools' names and Fit give way (UI/Panels/MapToolbar.lua).
+		ns.MapToolbar.Layout(self, bar, many)
 		self.help:SetText(L[ro and TOOL_HELP.readOnly or (ctx.tool == "route" and snapping and TOOL_HELP.routeSnap)
 			or TOOL_HELP[ctx.tool]])
 		self.labels:SetChecked(ctx.showLabels)

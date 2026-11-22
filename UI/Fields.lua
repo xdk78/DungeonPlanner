@@ -415,7 +415,9 @@ function W.Dropdown(parent, opts)
 	return b
 end
 
--- A menu of actions at the cursor: items = { { text, fn } | "-" | { title = text } }.
+-- A menu of actions at the cursor: items = { { text, fn, disabled = bool } | "-" | { title = text } }; a disabled
+-- action shows greyed out (the element's SetEnabled with a predicate, the form other Forever addons use; not yet
+-- verified in game, docs/COMPATIBILITY.md). Returns false without MenuUtil: callers then use W.ActionList or a default.
 function W.Menu(owner, items)
 	if MenuUtil and MenuUtil.CreateContextMenu then
 		MenuUtil.CreateContextMenu(owner, function(_, root)
@@ -425,13 +427,49 @@ function W.Menu(owner, items)
 				elseif item.title then
 					menuFont(root:CreateTitle(item.title))
 				else
-					menuFont(root:CreateButton(item[1], function()
+					local desc = menuFont(root:CreateButton(item[1], function()
 						ns.SafeCall(item[2])
 					end))
+					if item.disabled and type(desc) == "table" and desc.SetEnabled then
+						pcall(desc.SetEnabled, desc, function()
+							return false
+						end)
+					end
 				end
 			end
 		end)
 		return true
 	end
 	return false
+end
+
+-- The same actions in our own popup list under `owner` (UI/Popup.lua), for a client without MenuUtil: the enabled
+-- actions only (titles and dividers are left out). Returns whether it opened.
+function W.ActionList(owner, items)
+	local rows = {}
+	for _, item in ipairs(items) do
+		if type(item) == "table" and not item.title and not item.disabled then
+			rows[#rows + 1] = { kind = "item", text = item[1], fn = item[2] }
+		end
+	end
+	if #rows == 0 then
+		return false
+	end
+	W.OpenPopup(owner, {
+		style = "menu",
+		rowHeight = MENU_ROW,
+		maxHeight = 12 * MENU_ROW + 2 * SP.sm,
+		rows = function()
+			return rows
+		end,
+		isCurrent = function()
+			return false
+		end,
+		createItem = menuItemCreate,
+		updateItem = menuItemUpdate,
+		onChoose = function(row)
+			ns.SafeCall(row.fn)
+		end,
+	})
+	return true
 end

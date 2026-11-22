@@ -268,6 +268,7 @@ UI\InstancePage.lua
 UI\GettingThere.lua
 UI\TravelMap.lua
 UI\Panels\MapEditor.lua
+UI\Panels\MapToolbar.lua
 UI\Panels\DrawBar.lua
 UI\Panels\FloorBar.lua
 UI\Panels\MapControls.lua
