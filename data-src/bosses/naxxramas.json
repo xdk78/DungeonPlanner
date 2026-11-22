@@ -1434,6 +1434,10 @@
  "keys": [
   {
    "quest": 9121,
+   "alt": [
+    9122,
+    9123
+   ],
    "name": "The Dread Citadel - Naxxramas",
    "kind": "attunement",
    "required": true,

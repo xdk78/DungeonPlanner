@@ -119,9 +119,9 @@ ns.BossData.Add({
 		{ id = 8995, name = "Mea Culpa, Lord Valthalak", lv = 60, req = 58, giver = 16033 },
 	},
 	keys = {
-		{ item = 12344, name = "Seal of Ascension", kind = "key", req = true, quests = { 4743 }, fv = true,
+		{ item = 12344, name = "Seal of Ascension", kind = "key", req = true, quests = { 4743 }, group = "seal", fv = true,
 			note = "One group member opens the door from Lower Spire with it." },
-		{ quest = 4742, name = "Seal of Ascension", kind = "attunement", req = true, fv = true,
+		{ quest = 4742, name = "Seal of Ascension", kind = "attunement", req = true, group = "seal", fv = true,
 			note = "First part: three gemstones for the unadorned seal." },
 	},
 })

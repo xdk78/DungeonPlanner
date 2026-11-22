@@ -75,7 +75,22 @@ function Prep.Quests(quests, env)
 	return rows, counts
 end
 
--- keys: BossData.Keys rows ({ itemID? | questID?, name, kind, required, side?, quests?, note?, forever? }).
+-- A quest key is done when its quest or one of its other IDs (alt: the same quest at another reputation, say) is.
+local function questDone(k, completed)
+	local have = completed(k.questID)
+	for _, id in ipairs(k.alt or {}) do
+		if have == true then
+			break
+		end
+		local other = completed(id)
+		if other ~= nil then
+			have = other
+		end
+	end
+	return have
+end
+
+-- keys: BossData.Keys rows ({ itemID? | questID?, name, kind, required, side?, quests?, alt?, group?, note?, forever? }).
 -- env: { faction?, count(itemID) -> n | nil, completed(questID) -> bool | nil }. Rows keep the order (required first);
 -- have = true / false, or nil when the client cannot tell.
 function Prep.Keys(keys, env)
@@ -90,9 +105,9 @@ function Prep.Keys(keys, env)
 					have = n > 0
 				end
 			elseif k.questID and env.completed then
-				have = env.completed(k.questID)
+				have = questDone(k, env.completed)
 			end
-			rows[#rows + 1] = { itemID = k.itemID, questID = k.questID, name = k.name, kind = k.kind,
+			rows[#rows + 1] = { itemID = k.itemID, questID = k.questID, name = k.name, kind = k.kind, group = k.group,
 				required = k.required and true or false, note = k.note, forever = k.forever, have = have }
 		end
 	end
@@ -197,12 +212,30 @@ function Prep.Crossings(transports, fromC, toC, faction)
 	return out
 end
 
--- Run mode's prep line: quests still to pick up and required keys missing; nil when there is nothing to do.
+-- Run mode's prep line: quests still to pick up and required keys missing; nil when there is nothing to do. Rows of
+-- one group are one key (an item and the quests toward it): carrying the item settles it; otherwise it is missing
+-- once one of its required rows is.
 function Prep.Summary(counts, keyRows)
 	local quests = counts and counts.available or 0
-	local keys = 0
-	for _, k in ipairs(keyRows or {}) do
+	local groups, order = {}, {}
+	for i, k in ipairs(keyRows or {}) do
+		local id = k.group or i
+		local g = groups[id]
+		if not g then
+			g = { missing = false, carried = false }
+			groups[id] = g
+			order[#order + 1] = g
+		end
+		if k.itemID and k.have == true then
+			g.carried = true
+		end
 		if k.required and k.have == false then
+			g.missing = true
+		end
+	end
+	local keys = 0
+	for _, g in ipairs(order) do
+		if g.missing and not g.carried then
 			keys = keys + 1
 		end
 	end

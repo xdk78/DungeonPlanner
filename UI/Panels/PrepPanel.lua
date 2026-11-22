@@ -55,7 +55,7 @@ function Panel.QuestLines(rows, counts, questie)
 			parts[#parts + 1] = string.format("%s %d", STATUS[k][1](), counts[k])
 		end
 	end
-	add("muted", table.concat(parts, "  ·  "))
+	add("muted", table.concat(parts, "  •  "))
 	for _, q in ipairs(rows) do
 		local st = STATUS[q.status]
 		local head = GT.Color(st[2], st[1]()) .. "  " .. (q.level and ("[" .. q.level .. "] ") or "") .. q.name
@@ -77,7 +77,7 @@ function Panel.QuestLines(rows, counts, questie)
 			details[#details + 1] = string.format(L["Bring: %s"], table.concat(names, ", "))
 		end
 		if #details > 0 then
-			add("muted", table.concat(details, "  ·  "))
+			add("muted", table.concat(details, "  •  "))
 		end
 	end
 	if not questie then
@@ -128,7 +128,7 @@ function Panel.GroupLines(group, lo, hi, kind)
 	end
 	local head = kind == "raid" and string.format(L["Raid: %d players"], group.size)
 		or string.format(L["Party: %d of 5"], group.size)
-	out[#out + 1] = { "text", head .. "  ·  " .. table.concat(roleParts, "  ·  ") }
+	out[#out + 1] = { "text", head .. "  •  " .. table.concat(roleParts, "  •  ") }
 	if group.missing then
 		local miss = {}
 		for _, r in ipairs({ "TANK", "HEALER", "DAMAGER" }) do
@@ -147,7 +147,7 @@ function Panel.GroupLines(group, lo, hi, kind)
 		elseif m.fit == "high" then
 			lv = GT.Color("muted", lv)
 		end
-		out[#out + 1] = { "muted", m.name .. "  ·  " .. lv .. "  ·  " .. ROLE[m.role]() }
+		out[#out + 1] = { "muted", m.name .. "  •  " .. lv .. "  •  " .. ROLE[m.role]() }
 	end
 	return out
 end
@@ -240,8 +240,13 @@ function Panel.Create(parent, ctx)
 		self.notes:SetShown(not ro)
 		self.notesText:SetShown(ro)
 		if ro then
+			-- The plan's own notes, read-only (a received copy, data from a newer version); the hint when it has none.
 			self.notesText:Begin()
-			self.notesText:Add("muted", L["Your own notes (consumables, reminders) go here in an editable copy of the plan."])
+			if p.prep and p.prep ~= "" then
+				self.notesText:Add("text", p.prep)
+			else
+				self.notesText:Add("muted", L["Your own notes (consumables, reminders) go here in an editable copy of the plan."])
+			end
 			self.notesText:Finish()
 		else
 			self.notes:SetValue(p.prep or "")

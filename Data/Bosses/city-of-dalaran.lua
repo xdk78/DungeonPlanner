@@ -105,11 +105,11 @@ ns.BossData.Add({
 		{ id = 96986, name = "The Grave Knight", lv = 33, req = 24, side = "h", giver = 2278 },
 	},
 	keys = {
-		{ item = 277507, name = "Dalaran Sewer Key", kind = "key", req = true, quests = { 92458, 96984 }, fv = true,
+		{ item = 277507, name = "Dalaran Sewer Key", kind = "key", req = true, quests = { 92458, 96984 }, group = "sewer", fv = true,
 			note = "One party member needs it to pass the wards at the entrance." },
-		{ quest = 92458, name = "Heart of Disruption", kind = "attunement", req = true, side = "a", fv = true,
+		{ quest = 92458, name = "Heart of Disruption", kind = "attunement", req = true, side = "a", group = "sewer", fv = true,
 			note = "Gives the key." },
-		{ quest = 96984, name = "Heart of Disruption", kind = "attunement", req = true, side = "h", fv = true,
+		{ quest = 96984, name = "Heart of Disruption", kind = "attunement", req = true, side = "h", group = "sewer", fv = true,
 			note = "Gives the key." },
 	},
 })

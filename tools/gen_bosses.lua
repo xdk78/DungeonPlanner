@@ -193,24 +193,8 @@ function M.Validate(doc, file, plan)
 		end
 		src(q.src, at)
 	end
-	-- The outdoor entrance: a world position on a continent ({ continent, x, y } in yards) or a spot on a zone's map
-	-- ({ map = uiMapID, x, y } in 0..1).
-	local e = doc.entrance
-	if e ~= nil then
-		local fine = type(e) == "table" and type(e.x) == "number" and type(e.y) == "number"
-		if fine and e.map ~= nil then
-			fine = isInt(e.map) and e.continent == nil and e.x >= 0 and e.x <= 1 and e.y >= 0 and e.y <= 1
-		elseif fine then
-			fine = type(e.continent) == "number" and e.continent >= 0 and e.continent == math.floor(e.continent)
-				and math.abs(e.x) < 100000 and math.abs(e.y) < 100000
-		end
-		if not fine then
-			err("entrance must be { continent, x, y } or { map, x, y } (0..1)")
-		else
-			src(e.src, "entrance")
-		end
-	end
-	-- Keys and attunements: an item (its count is checked) or a quest (completed or not).
+	-- Keys and attunements: an item (its count is checked) or a quest (completed or not; `alt` lists other IDs of the
+	-- same quest, any of which counts). Rows with the same `group` are one key (an item and the quests toward it).
 	local keys = type(doc.keys) == "table" and doc.keys or {}
 	if #keys > M.MAX_KEYS then
 		err("more than %d keys", M.MAX_KEYS)
@@ -236,6 +220,18 @@ function M.Validate(doc, file, plan)
 			if not isInt(id) then
 				err("%s: quests must be integers", at)
 			end
+		end
+		if k.alt ~= nil then
+			local fine = k.quest ~= nil and type(k.alt) == "table" and #k.alt > 0 and #k.alt <= 4
+			for _, id in ipairs(type(k.alt) == "table" and k.alt or {}) do
+				fine = fine and isInt(id) and id ~= k.quest
+			end
+			if not fine then
+				err("%s: alt must list 1-4 other quest IDs of a quest key", at)
+			end
+		end
+		if k.group ~= nil and not (type(k.group) == "string" and k.group:match("^[a-z]+$") and #k.group <= 16) then
+			err("%s: group must be a short lower-case word", at)
 		end
 		if k.note ~= nil and (type(k.note) ~= "string" or #k.note > M.MAX_NOTE or k.note:find("[|%c]")) then
 			err("%s: bad note", at)
@@ -346,20 +342,6 @@ local function renderQuest(x)
 	return "\t\t{ " .. table.concat(f, ", ") .. " },\n"
 end
 
-local function num(v)
-	if v == math.floor(v) then
-		return string.format("%d", v)
-	end
-	return (string.format("%.4f", v):gsub("0+$", ""))
-end
-
-local function renderEntrance(e)
-	if e.map then
-		return string.format("\tentrance = { map = %d, x = %s, y = %s },", e.map, num(e.x), num(e.y))
-	end
-	return string.format("\tentrance = { c = %d, x = %s, y = %s },", e.continent, num(e.x), num(e.y))
-end
-
 local function renderKey(k)
 	local f = { k.item and string.format("item = %d", k.item) or string.format("quest = %d", k.quest),
 		"name = " .. q(k.name), "kind = " .. q(k.kind) }
@@ -371,6 +353,12 @@ local function renderKey(k)
 	end
 	if k.quests and #k.quests > 0 then
 		f[#f + 1] = "quests = " .. ints(k.quests)
+	end
+	if k.alt then
+		f[#f + 1] = "alt = " .. ints(k.alt)
+	end
+	if k.group then
+		f[#f + 1] = "group = " .. q(k.group)
 	end
 	if k.forever then
 		f[#f + 1] = "fv = true"
@@ -410,9 +398,6 @@ function M.Render(doc, file)
 			out[#out + 1] = (renderQuest(x):gsub("\n$", ""))
 		end
 		out[#out + 1] = "\t},"
-	end
-	if doc.entrance then
-		out[#out + 1] = renderEntrance(doc.entrance)
 	end
 	if doc.keys and #doc.keys > 0 then
 		out[#out + 1] = "\tkeys = {"
@@ -465,7 +450,7 @@ local function main(args)
 		os.exit(1)
 	end
 	local differs, tocLines, bytes, wanted = {}, {}, 0, {}
-	local cov = { bosses = 0, npc = 0, disp = 0, level = 0, ab = 0, loot = 0, quests = 0, entrances = 0, keys = 0 }
+	local cov = { bosses = 0, npc = 0, disp = 0, level = 0, ab = 0, loot = 0, quests = 0, keys = 0 }
 	for _, d in ipairs(docs) do
 		local slug = d.doc.slug
 		local text = M.Render(d.doc, d.file)
@@ -482,7 +467,6 @@ local function main(args)
 			cov.loot = cov.loot + ((b.loot and #b.loot > 0) and 1 or 0)
 		end
 		cov.quests = cov.quests + #(d.doc.quests or {})
-		cov.entrances = cov.entrances + (d.doc.entrance and 1 or 0)
 		cov.keys = cov.keys + #(d.doc.keys or {})
 		if readFile(path) ~= text then
 			differs[#differs + 1] = path
@@ -524,9 +508,9 @@ local function main(args)
 		end
 	end
 	if report then
-		print(string.format("bosses %d, npc %d, display %d, level %d, abilities %d, loot %d, quests %d, entrances %d, "
+		print(string.format("bosses %d, npc %d, display %d, level %d, abilities %d, loot %d, quests %d, "
 			.. "keys %d, bytes %d", cov.bosses, cov.npc, cov.disp, cov.level, cov.ab, cov.loot, cov.quests,
-			cov.entrances, cov.keys, bytes))
+			cov.keys, bytes))
 	end
 	if check then
 		if #differs > 0 then

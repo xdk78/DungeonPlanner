@@ -160,6 +160,7 @@
    "item": 16309,
    "name": "Drakefire Amulet",
    "kind": "attunement",
+   "group": "amulet",
    "required": true,
    "quests": [
     6502,
@@ -173,6 +174,7 @@
    "quest": 4182,
    "name": "Dragonkin Menace",
    "kind": "attunement",
+   "group": "amulet",
    "required": true,
    "side": "alliance",
    "note": "Starts the Alliance chain to the amulet.",
@@ -183,6 +185,7 @@
    "quest": 4903,
    "name": "Warlord's Command",
    "kind": "attunement",
+   "group": "amulet",
    "required": true,
    "side": "horde",
    "note": "Starts the Horde chain to the amulet.",

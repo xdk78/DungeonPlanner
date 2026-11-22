@@ -884,6 +884,7 @@
    "item": 12344,
    "name": "Seal of Ascension",
    "kind": "key",
+   "group": "seal",
    "required": true,
    "quests": [
     4743
@@ -896,6 +897,7 @@
    "quest": 4742,
    "name": "Seal of Ascension",
    "kind": "attunement",
+   "group": "seal",
    "required": true,
    "note": "First part: three gemstones for the unadorned seal.",
    "forever": true,

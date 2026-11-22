@@ -167,7 +167,7 @@ ns.BossData.Add({
 		{ id = 7848, name = "Attunement to the Core", lv = 60, req = 55 },
 	},
 	keys = {
-		{ quest = 7487, name = "Attunement to the Core", kind = "attunement",
+		{ quest = 7487, name = "Attunement to the Core", kind = "attunement", alt = { 7848 },
 			note = "Lets Lothos Riftwaker port you to the raid's entrance." },
 		{ item = 22754, name = "Eternal Quintessence", kind = "summon",
 			note = "Douses the runes so Majordomo Executus appears." },

@@ -621,7 +621,7 @@ function RunMode.DriftText(plan)
 	return text, false, lines, d
 end
 
--- The prep line before the first step (not started, or on step 1): "Prep: 3 quests to pick up · 1 key missing", nil
+-- The prep line before the first step (not started, or on step 1): "Prep: 3 quests to pick up • 1 key missing", nil
 -- when there is nothing left to do.
 function RunMode.PrepText(plan)
 	local index = ctx():StepIndex()
@@ -639,7 +639,7 @@ function RunMode.PrepText(plan)
 	if sum.keys > 0 then
 		parts[#parts + 1] = ns.Plural(sum.keys, L["%d key missing|%d keys missing"])
 	end
-	return string.format(L["Prep: %s"], table.concat(parts, "  ·  "))
+	return string.format(L["Prep: %s"], table.concat(parts, "  •  "))
 end
 
 -- Go to the step the run is probably at (the drift line's click).
@@ -665,6 +665,23 @@ function RunMode.RefreshSync(plan)
 	frame:SetHeight(HEIGHT + (h > 0 and (h + SP.xs) or 0))
 end
 
+-- The prep line alone (under the drift line, which hides it): redrawn on PREP_CHANGED, and by RefreshRecorder.
+function RunMode.RefreshPrep(plan)
+	if not frame then
+		return
+	end
+	local drift = frame.drift:IsShown()
+	local prepText = not drift and RunMode.PrepText(plan) or nil
+	frame.prep:SetShown(prepText ~= nil)
+	if prepText then
+		W.FitText(frame.prep.text, prepText)
+	end
+	frame.step:ClearAllPoints()
+	frame.step:SetPoint("TOPLEFT", (drift and frame.drift) or (prepText and frame.prep) or frame.rec, "BOTTOMLEFT", 0,
+		-SP.sm)
+	frame.step:SetPoint("RIGHT")
+end
+
 function RunMode.RefreshRecorder(plan)
 	if not frame then
 		return
@@ -676,15 +693,7 @@ function RunMode.RefreshRecorder(plan)
 		W.FitText(frame.drift.text, (warns and "! " or "") .. driftText)
 		S.TextColor(frame.drift.text, warns and "warning" or "muted")
 	end
-	local prepText = not driftText and RunMode.PrepText(plan) or nil
-	frame.prep:SetShown(prepText ~= nil)
-	if prepText then
-		W.FitText(frame.prep.text, prepText)
-	end
-	frame.step:ClearAllPoints()
-	frame.step:SetPoint("TOPLEFT", (driftText and frame.drift) or (prepText and frame.prep) or frame.rec, "BOTTOMLEFT",
-		0, -SP.sm)
-	frame.step:SetPoint("RIGHT")
+	RunMode.RefreshPrep(plan)
 	local text, on = RunMode.RecorderText(plan)
 	frame.rec.text:SetText(text)
 	-- Red while recording, a dim dot when not: the line keeps its indent either way.
@@ -786,6 +795,16 @@ function RunMode.Init()
 	ns:On("ITEMS_READY", RunMode, function()
 		if RunMode.IsShown() then
 			RunMode.Refresh()
+		end
+	end)
+	-- The prep line follows the quest log, bags and group (Data/PrepInfo.lua): watched only while the window is open
+	-- before the second step, where the line can show; only that line is redrawn.
+	ns.PrepInfo.Watch(RunMode, function()
+		return frame ~= nil and frame:IsShown() and (ctx():StepIndex() or 1) <= 1
+	end)
+	ns:On("PREP_CHANGED", RunMode, function()
+		if frame and frame:IsShown() then
+			RunMode.RefreshPrep(ctx():Plan())
 		end
 	end)
 	-- Cheap: only the recorder line, and only while the window is open.

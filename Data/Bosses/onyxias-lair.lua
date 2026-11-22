@@ -29,11 +29,11 @@ ns.BossData.Add({
 		},
 	},
 	keys = {
-		{ item = 16309, name = "Drakefire Amulet", kind = "attunement", req = true, quests = { 6502, 6602 }, fv = true,
+		{ item = 16309, name = "Drakefire Amulet", kind = "attunement", req = true, quests = { 6502, 6602 }, group = "amulet", fv = true,
 			note = "Every raid member needs it to enter." },
-		{ quest = 4182, name = "Dragonkin Menace", kind = "attunement", req = true, side = "a", fv = true,
+		{ quest = 4182, name = "Dragonkin Menace", kind = "attunement", req = true, side = "a", group = "amulet", fv = true,
 			note = "Starts the Alliance chain to the amulet." },
-		{ quest = 4903, name = "Warlord's Command", kind = "attunement", req = true, side = "h", fv = true,
+		{ quest = 4903, name = "Warlord's Command", kind = "attunement", req = true, side = "h", group = "amulet", fv = true,
 			note = "Starts the Horde chain to the amulet." },
 	},
 })

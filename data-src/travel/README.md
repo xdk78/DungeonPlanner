@@ -16,33 +16,45 @@ tool reads them as data (an empty environment; they only assign tables) and keep
   dungeons, a spot on the zone's map (`{ map = uiMapID, x, y }`, 0..1). Hyjal Summit and Naxxramas have none.
 - `nodes`: the flight masters (`id`, `name`, `continent`, `x`, `y`, `factions`: 1 Alliance, 2 Horde, 3 both); class-only
   flight paths are left out.
-- `transports`: boats, zeppelins and airships (`kind`, `route`, the dock's `continent`, `x`, `y`, and `toContinent`).
+- `transports`: boats, zeppelins and airships (`kind`, `route`, the dock's `continent`, `x`, `y`, `toContinent`, and
+  the other dock's `toX`, `toY`).
 
 The plan slugs are matched to OpenMap's instance names (the Group Finder's) by the table `OPENMAP_SLUGS` in the tool.
+
+A transport leg's faction is derived when `Data/TravelData.lua` is written: a dock serves the factions of the flight
+masters within `DOCK_RADIUS` (1000) yards of it, and a leg is Alliance or Horde only when both its docks serve only
+that faction (Grom'gol, Orgrimmar and Undercity: Horde; Menethil, Theramore, Auberdine, Rut'theran, Feathermoon,
+Southshore, Stormwind: Alliance). Booty Bay and Ratchet serve both; a dock with no flight master that near (Forever's
+goblin ports, Zephras Isle's airships) leaves the leg open to both. Getting there offers a player only the legs of
+their faction or open to both.
 
 ## `places.json` (researched)
 
 ```json
-{ "schema": 1, "updated": "2026-11-22",
+{ "schema": 1, "updated": "YYYY-MM-DD",
   "sources": [ { "id": 1, "name": "...", "url": "...", "licence": "...", "what": "..." } ],
-  "places": { "the-deadmines": { "zone": "Westfall", "subzone": "Moonbrook", "zoneFaction": "alliance",
-    "approach": "cave", "stone": { "zone": "Wetlands", "x": 53.4, "y": 65.3 }, "hint": "...", "src": [1, 2] } } }
+  "places": { "the-deadmines": { "zone": "Westfall", "zoneMap": 1436, "subzone": "Moonbrook",
+    "zoneFaction": "alliance", "approach": "cave", "stone": { "zone": "Wetlands", "map": 1437, "x": 53.4, "y": 65.3 },
+    "hint": "...", "src": [1, 2, 4] } } }
 ```
 
-- `zone`: the outside zone (English; the UI shows the client's own name when the client places the entrance on a
-  zone map). `subzone`: the named area the entrance lies in or is reached through.
+- Every plan with an entrance in `openmap.json` needs a place (the generator checks).
+- `zone`: the outside zone in English (shown only when the client has no name for `zoneMap`). `zoneMap`: that zone's
+  uiMapID (OpenMap's map tables, source 4): the entrance is placed on this map and the card shows the map's name in
+  the client's language. Blackrock Mountain lies between Searing Gorge and Burning Steppes; its entrances use Burning
+  Steppes' map. `subzone`: the named area the entrance lies in or is reached through.
 - `zoneFaction`: the zone's control as the wiki's zone page states it: `alliance`, `horde`, `contested`, `neutral`.
   Left out where the page has no faction field (Ashenvale, Alterac Mountains, Badlands, Swamp of Sorrows, Stranglethorn
   Vale, both Plaguelands, Un'Goro Crater).
 - `approach`: how it is entered where a page says so: `cave`, `building`, `mountain`, `open`, `underwater`, `ship`,
   `tower`.
-- `stone`: a summoning or meeting stone with coordinates (0-100 on that zone's map), only where a Forever page states
+- `stone`: a summoning or meeting stone with its zone, that zone's `map` (uiMapID) and coordinates (0-100 on that
+  map), only where a Forever page states
   them (City of Dalaran, Excavation Site: Wetlands). Classic stones are listed on the wiki without coordinates, and
   the wiki says Classic meeting stones do not work, so none are recorded.
 - `hint`: at most 80 characters, written by us from the page's facts, never copied.
-- `src`: ids of `sources`. Sources: warcraft.wiki.gg only (the World of Warcraft: Forever page, instance pages, zone
-  pages; CC BY-SA 4.0, facts only). Wowhead refused automated fetches. AllTheThings, Questie, NeedRoll,
-  ForeverDungeonJournal and RXPGuides were not read.
+- `src`: ids of `sources`: warcraft.wiki.gg (the World of Warcraft: Forever page, instance pages, zone pages; CC BY-SA
+  4.0, facts only) and OpenMap's map tables (MIT) for the uiMapIDs.
 
 Known doubts (kept out or noted): Razorfen Downs is in the Barrens on the Classic page and the Forever table (Thousand
 Needles on the retail page); the Stockade's area is the Canals on its infobox (the Mage Quarter on the stone table); The

@@ -1,6 +1,7 @@
 -- What Prep reads from the game: the character's faction and level, quest state, item counts, the group, and the
 -- Questie givers when it is installed. Each call is guarded and every value passes Util.Plain; Model/Prep.lua does the
--- sorting and counting. Read on demand (when the Prep section or run mode's line draws), never on a timer.
+-- sorting and counting. Read on demand (when the Prep section, run mode's line or the Getting there window draws),
+-- never on a timer.
 --
 --   PrepInfo.Quests(plan, showAll) -> rows, counts      PrepInfo.Keys(plan) -> rows
 --   PrepInfo.Group(plan) -> Prep.Group result            PrepInfo.Summary(plan) -> Prep.Summary result
@@ -165,8 +166,9 @@ function PrepInfo.Group(plan)
 	return Prep.Group(PrepInfo.Members(), lo, hi, plan.instance and plan.instance.kind), lo, hi
 end
 
--- What the Prep section and run mode's prep line show changes with these; one PREP_CHANGED goes out a moment after the
--- last of a burst (a bag update fires many times), and only while something shows prep.
+-- What the Prep section, run mode's prep line and the Getting there window show changes with these; each registers a
+-- watcher (PrepInfo.Watch) and listens for PREP_CHANGED. One PREP_CHANGED goes out a moment after the first of a burst
+-- (a bag update fires many times), and only while a watcher says it shows prep.
 PrepInfo.EVENTS = { "QUEST_ACCEPTED", "QUEST_REMOVED", "QUEST_TURNED_IN", "QUEST_LOG_UPDATE", "BAG_UPDATE_DELAYED",
 	"GROUP_ROSTER_UPDATE", "PLAYER_LEVEL_UP", "PLAYER_ROLES_ASSIGNED", "ZONE_CHANGED_NEW_AREA", "PLAYER_ENTERING_WORLD" }
 PrepInfo.DELAY = 0.3

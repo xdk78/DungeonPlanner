@@ -80,25 +80,26 @@ function GT.Lines(target)
 		return out, f
 	end
 	-- Where.
-	-- The zone in the player's language when the client placed the entrance on a zone map; the researched (English)
-	-- name otherwise. The area inside it is the research's.
-	local where = (ent and ent.uiMapID and ns.Instances.MapName(ent.uiMapID)) or rec.zone
+	-- The zone in the player's language: the map the entrance is placed on, else the bundled zone map's name (the
+	-- English name only when the client has neither). The area inside it is the research's.
+	local map = (ent and ent.uiMapID) or rec.zm
+	local where = (ent and ent.uiMapID and ns.Instances.MapName(ent.uiMapID)) or ns.Travel.ZoneName(rec)
 	if rec.sub and rec.sub ~= rec.zone then
-		where = where .. "  ·  " .. rec.sub
+		where = where .. "  •  " .. rec.sub
 	end
-	local continent = ent and ent.continent and ns.Travel.ContinentName(ent.continent)
-	add("text", continent and (where .. "  ·  " .. continent) or where)
+	local continent = map and ns.Travel.ContinentName(map)
+	add("text", continent and (where .. "  •  " .. continent) or where)
 	if rec.fac then
 		local enemy = faction and ((rec.fac == "alliance" and faction == "horde") or (rec.fac == "horde"
 			and faction == "alliance"))
 		local text = word(FACTION, rec.fac)
-		add("muted", enemy and color("warning", text .. "  ·  " .. L["enemy territory for you"]) or text)
+		add("muted", enemy and color("warning", text .. "  •  " .. L["enemy territory for you"]) or text)
 	end
 	if ent and ent.x then
 		local line = string.format(L["Entrance: %s on the map of %s"], coords(ent.x, ent.y),
-			ns.Instances.MapName(ent.uiMapID) or rec.zone)
+			ns.Instances.MapName(ent.uiMapID) or ns.Travel.ZoneName(rec))
 		if rec.how then
-			line = line .. "  ·  " .. string.format(L["through %s"], word(APPROACH, rec.how))
+			line = line .. "  •  " .. string.format(L["through %s"], word(APPROACH, rec.how))
 		end
 		add("text", line)
 	elseif rec.how then
@@ -108,7 +109,7 @@ function GT.Lines(target)
 		add("muted", rec.hint)
 	end
 	if rec.stone then
-		add("text", string.format(L["Summoning stone: %s, %s"], rec.stone.zone,
+		add("text", string.format(L["Summoning stone: %s, %s"], ns.Travel.StoneZone(rec.stone),
 			string.format("%.1f, %.1f", rec.stone.x, rec.stone.y)))
 	end
 	-- Level and group.
@@ -120,9 +121,9 @@ function GT.Lines(target)
 			math.floor(b * 255 + 0.5))
 		local line = string.format(L["Levels %s"], hex .. range .. "|r")
 		if level then
-			line = line .. "  ·  " .. string.format(L["you are %d"], level)
+			line = line .. "  •  " .. string.format(L["you are %d"], level)
 		end
-		add("text", line .. "  ·  " .. (f.kind == "raid" and L["a raid group"] or L["a party of 5"]))
+		add("text", line .. "  •  " .. (f.kind == "raid" and L["a raid group"] or L["a party of 5"]))
 	end
 	-- How to get there: each faction's nearest flight master, the player's own first.
 	if ent and ent.wx then
@@ -272,8 +273,8 @@ function GT.Fill(doc, target, bar, heading)
 	return facts
 end
 
--- The small window (home table's "Getting there", the Prep card's Pop out). Not closed by Escape mid-travel? It is:
--- it is a reference, not a run tool.
+-- The small window (home table's "Getting there", the Prep card's Pop out). Escape closes it like the other windows.
+-- While shown it redraws on PREP_CHANGED (level, group, zone changes; Data/PrepInfo.lua).
 local window
 function GT.Open(target)
 	if not window then
@@ -286,6 +287,14 @@ function GT.Open(target)
 		window.doc:SetPoint("TOPLEFT", ins.left + SP.md, -(ins.top + SP.sm))
 		window.doc:SetPoint("BOTTOMRIGHT", -(ins.right + SP.sm), ins.bottom + SP.md)
 		window.bar = GT.Actions(window.doc.content)
+		ns.PrepInfo.Watch(window, function()
+			return window:IsShown()
+		end)
+		ns:On("PREP_CHANGED", window, function()
+			if window:IsShown() then
+				GT.Refresh()
+			end
+		end)
 	end
 	window.target = target
 	GT.Refresh()

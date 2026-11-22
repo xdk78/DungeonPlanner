@@ -41,11 +41,15 @@ Rules (docs/DATA-SOURCES.md has the credits):
 - `keys` (Prep's "Keys and attunements", at most 8): one of `item` (an item to carry; the client counts it) or `quest`
   (a quest to have done), its English `name` (the client's item name is shown when it has one), `kind` (`key` opens a
   door or entrance, `attunement` lets you in, `summon` calls or opens something optional), `required`, `side`,
-  `quests` (the quests that give the item), a `note` of our own (at most 160 characters), and `forever`: true only
+  `quests` (the quests that give the item), `alt` (a quest key's other IDs, any of which counts: Naxxramas' attunement
+  has one per Argent Dawn standing, 9121 Honored, 9122 Revered, 9123 Exalted; Molten Core's page gives 7487 in its
+  infobox and 7848 in its links, both neutral), `group` (rows that are one key, such as Onyxia's amulet and the quests
+  that start its chain: run mode counts a group once, and carrying its item settles it), a `note` of our own (at most
+  160 characters), and `forever`: true only
   where a Forever page confirms it (Onyxia's Drakefire Amulet and Upper Blackrock Spire's Seal of Ascension on the
   wiki's World of Warcraft: Forever page; the Dalaran Sewer Key and Krol'dok Compound Key on their item pages); the
   classic keys are classic facts, shown with "(classic fact; not checked on Forever)". Researched on warcraft.wiki.gg
-  item, quest and instance pages (2026-11-22); left out: Aqual Quintessence and Alcaz Prison's Overseer's Keyring (no
+  item, quest and instance pages; left out: Aqual Quintessence and Alcaz Prison's Overseer's Keyring (no
   ID on an allowed page), the Krol'dok Ogre Key (no known use), the Scarab Coffer keys (loot chests, not doors), the
   Scarlet Key for Stratholme (no longer needed).
 

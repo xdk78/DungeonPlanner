@@ -221,7 +221,7 @@ ns.BossData.Add({
 		{ id = 9120, name = "The Fall of Kel'Thuzad", lv = 60, req = 60 },
 	},
 	keys = {
-		{ quest = 9121, name = "The Dread Citadel - Naxxramas", kind = "attunement", req = true,
+		{ quest = 9121, name = "The Dread Citadel - Naxxramas", kind = "attunement", req = true, alt = { 9122, 9123 },
 			note = "Argent Dawn turn-in at Light's Hope Chapel." },
 	},
 })

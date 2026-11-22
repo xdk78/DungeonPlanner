@@ -20,6 +20,10 @@ local M = {}
 M.FACTIONS = { alliance = true, horde = true, contested = true, neutral = true }
 M.APPROACH = { cave = true, building = true, mountain = true, open = true, underwater = true, ship = true, tower = true }
 M.MAX_HINT = 80
+-- A dock belongs to the factions of the flight masters within this many yards of it; a boat or zeppelin leg is one
+-- faction's when both its docks are that faction's only (Grom'gol, Orgrimmar and Undercity: Horde; Menethil,
+-- Theramore, Auberdine: Alliance). A dock without a flight master that near says nothing, and the leg stays open to both.
+M.DOCK_RADIUS = 1000
 
 -- OpenMap's instance names (the Group Finder's) for each plan slug.
 M.OPENMAP_SLUGS = {
@@ -177,6 +181,34 @@ function M.FromOpenMap(folder)
 	}
 end
 
+-- The factions a dock serves, from the flight masters near it: { alliance = bool, horde = bool }, or nil when none is
+-- near. Flight master factions: 1 Alliance, 2 Horde, 3 both.
+local function dockFactions(nodes, continent, x, y)
+	local out
+	for _, nd in ipairs(nodes or {}) do
+		if nd.continent == continent and math.sqrt((nd.x - x) ^ 2 + (nd.y - y) ^ 2) <= M.DOCK_RADIUS then
+			out = out or { alliance = false, horde = false }
+			out.alliance = out.alliance or nd.factions ~= 2
+			out.horde = out.horde or nd.factions ~= 1
+		end
+	end
+	return out
+end
+
+-- A transport leg's faction ("alliance" | "horde") from both docks' flight masters, or nil (both, or unknown).
+function M.TransportFaction(t, nodes)
+	local from = dockFactions(nodes, t.continent, t.x, t.y)
+	local to = t.toX and dockFactions(nodes, t.toContinent, t.toX, t.toY)
+	if not (from and to) then
+		return nil
+	end
+	local alliance, horde = from.alliance and to.alliance, from.horde and to.horde
+	if alliance ~= horde then
+		return alliance and "alliance" or "horde"
+	end
+	return nil
+end
+
 -- Validation ----------------------------------------------------------------------------------------------------------
 
 local function num(v)
@@ -238,6 +270,9 @@ function M.Validate(openmap, placesDoc, slugs)
 		if type(p.zone) ~= "string" or p.zone == "" then
 			err("%s: zone missing", at)
 		end
+		if not (num(p.zoneMap) and p.zoneMap > 0 and p.zoneMap == math.floor(p.zoneMap)) then
+			err("%s: zoneMap (the zone's uiMapID) missing", at)
+		end
 		if p.zoneFaction ~= nil and not M.FACTIONS[p.zoneFaction] then
 			err("%s: unknown zoneFaction", at)
 		end
@@ -247,7 +282,8 @@ function M.Validate(openmap, placesDoc, slugs)
 		if p.hint ~= nil and (type(p.hint) ~= "string" or #p.hint > M.MAX_HINT or p.hint:find("[|%c]")) then
 			err("%s: bad hint", at)
 		end
-		if p.stone ~= nil and not (type(p.stone.zone) == "string" and num(p.stone.x) and num(p.stone.y)) then
+		if p.stone ~= nil and not (type(p.stone.zone) == "string" and num(p.stone.map) and p.stone.map > 0
+			and num(p.stone.x) and num(p.stone.y)) then
 			err("%s: bad stone", at)
 		end
 		for _, s in ipairs(p.src or {}) do
@@ -257,6 +293,12 @@ function M.Validate(openmap, placesDoc, slugs)
 		end
 		if not p.src or #p.src == 0 then
 			err("%s: no source", at)
+		end
+	end
+	-- An entrance needs its place: the zone the card names and the map it is drawn on.
+	for slug in pairs(openmap.entrances or {}) do
+		if slugs[slug] and not placesDoc.places[slug] then
+			err("places.json: %s has an entrance but no place", slug)
 		end
 	end
 	return errs
@@ -284,7 +326,8 @@ function M.Render(openmap, placesDoc, names)
 		"local _, ns = ...",
 		"ns.TravelData = {",
 		"\t-- [instance name] = { e = entrance { c, x, y } (world yards: x north, y west) or { map, x, y } (0..1),",
-		"\t--   zone, sub, fac (zone faction), how (approach), stone = { zone, x, y } (0-100), hint }",
+		"\t--   zone (English), zm (the zone's uiMapID), sub, fac (zone faction), how (approach),",
+		"\t--   stone = { map, zone, x, y } (0-100 on that map), hint }",
 		"\tinstances = {",
 	}
 	local slugs = {}
@@ -306,6 +349,7 @@ function M.Render(openmap, placesDoc, names)
 			end
 			if p then
 				f[#f + 1] = "zone = " .. q(p.zone)
+				f[#f + 1] = string.format("zm = %d", p.zoneMap)
 				if p.subzone then
 					f[#f + 1] = "sub = " .. q(p.subzone)
 				end
@@ -316,8 +360,8 @@ function M.Render(openmap, placesDoc, names)
 					f[#f + 1] = "how = " .. q(p.approach)
 				end
 				if p.stone then
-					f[#f + 1] = string.format("stone = { zone = %s, x = %s, y = %s }", q(p.stone.zone), n(p.stone.x),
-						n(p.stone.y))
+					f[#f + 1] = string.format("stone = { map = %d, zone = %s, x = %s, y = %s }", p.stone.map,
+						q(p.stone.zone), n(p.stone.x), n(p.stone.y))
 				end
 			end
 			if p and p.hint then
@@ -334,11 +378,13 @@ function M.Render(openmap, placesDoc, names)
 			nd.factions)
 	end
 	out[#out + 1] = "\t},"
-	out[#out + 1] = "\t-- boats, zeppelins, airships: { kind, route, continent, x, y, toContinent, faction? }"
+	out[#out + 1] = "\t-- boats, zeppelins, airships: { kind, route, continent, x, y, toContinent, faction? } (faction: both docks'"
+	out[#out + 1] = "\t-- flight masters serve only it; none: open to both or not known)"
 	out[#out + 1] = "\ttransports = {"
 	for _, t in ipairs(openmap.transports) do
+		local faction = t.faction and t.faction:lower() or M.TransportFaction(t, openmap.nodes)
 		out[#out + 1] = string.format("\t\t{ %s, %s, %d, %s, %s, %d%s },", q(t.kind), q(t.route), t.continent, n(t.x),
-			n(t.y), t.toContinent, t.faction and (", " .. q(t.faction)) or "")
+			n(t.y), t.toContinent, faction and (", " .. q(faction)) or "")
 	end
 	out[#out + 1] = "\t},"
 	out[#out + 1] = "}"

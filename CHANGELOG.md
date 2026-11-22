@@ -51,16 +51,18 @@ follow [Semantic Versioning](https://semver.org/).
   levels against the level range and the roles still missing, and your own prep notes in an editable copy.
 - **Getting there**, in Prep and from the home table's new "Getting there" button (no plan needed): the zone, the
   area the entrance lies in and whose territory it is, the entrance's coordinates, the nearest flight master for each
-  faction and the way from it, boats and zeppelins when you are on another continent, Forever's summoning stones, and
+  faction and the way from it, your faction's boats and zeppelins when you are on another continent, Forever's
+  summoning stones, and
   outdoors your distance and direction to the entrance. "Show on world map" sets the game's map pin; "Navigate" hands
   the entrance to Polestar, Shortest Path Forever or TomTom when installed (each can be switched off in Settings),
   else to the game's own pin. "Pop out" keeps it in a small window.
-- Run mode shows "Prep: 3 quests to pick up" before the first step; a click opens Prep.
-- The home table's preview names the instance's zone.
+- Run mode shows "Prep: 3 quests to pick up" before the first step and updates it as you pick up quests or keys; a
+  click opens Prep.
+- The home table's preview names the instance's zone, in your game's language.
 
 ### Changed
-- Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
-  Dungeon Planner opens it read-only instead of losing that on its next save.
+- Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the
+  plans' prep notes). An older Dungeon Planner opens it read-only instead of losing either on its next save.
 - The bug report form on GitHub is now an issue form.
 - **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
   instead of one narrow column.

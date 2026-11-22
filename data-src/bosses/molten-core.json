@@ -1209,6 +1209,9 @@
  "keys": [
   {
    "quest": 7487,
+   "alt": [
+    7848
+   ],
    "name": "Attunement to the Core",
    "kind": "attunement",
    "required": false,

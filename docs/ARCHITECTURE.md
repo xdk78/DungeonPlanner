@@ -291,10 +291,14 @@ Model/Prep.lua        pure: Quests(quests, env) -> rows, counts (status done / l
                       faction's counted apart), Keys(keys, env) (have: true / false / nil), Group(members, lo, hi, kind)
                       (roles, missing seats, levels below), Bearing / WorldBearing (yards, 8-point direction),
                       NearestNodes(nodes, continent, x, y, faction, n), Crossings(transports, from, to), Summary
+                      (one per key group: an item and the quests toward it; a quest key's alternative IDs count)
 Data/PrepInfo.lua     the game: faction, level, C_QuestLog, item counts, the group; Questie's givers; PREP_CHANGED
+                      to the watchers (PrepInfo.Watch): the Prep section, run mode (its prep line only), the Getting
+                      there window, each while shown
 Data/BossData.lua     Quests(plan), Keys(plan): bundled (data-src/bosses)
-Data/Travel.lua       TravelData (data-src/travel) by instance name; the entrance on its zone map and in the world
-                      (C_Map world <-> map, cached per session); the player outdoors (nil inside); Distance
+Data/Travel.lua       TravelData (data-src/travel) by instance name; the entrance on its bundled zone map (uiMapID,
+                      not the zone's name) and in the world (C_Map world <-> map, cached per session); zone and
+                      continent names from the client's maps; the player outdoors (nil inside); Distance
 Data/Navigation.lua   the game's pin, the navigation providers (Polestar, Shortest Path Forever, TomTom) best first;
                       nothing in combat or while dead; the world map only through C_Map.OpenWorldMap, never with the
                       gamepad style
@@ -303,7 +307,7 @@ UI/Panels/PrepPanel.lua the section; RunMode.PrepText the run window's line
 ```
 
 Prep notes are a plan field (`prep`, format 5, optional; `DB.SCHEMA` 6 only marks the data). Idle cost: event
-handlers that return at once unless Prep or run mode shows prep; no ticker.
+handlers that return at once unless a watcher shows prep; no ticker.
 
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 

@@ -267,9 +267,10 @@ zeppelins when the player is on another continent, and outdoors the distance and
 when installed). Inside an instance it says distances show outdoors: the client gives no position there. Under it
 Show on world map (the game's pin, then `C_Map.OpenWorldMap`), Navigate with the best target in its label and "..."
 for the others (`Data/Navigation.lua`). "Pop out" and the home preview's "Getting there" (bottom right, no plan needed)
-open the same card in a small movable window (`ui.travel`, DIALOG strata). Everything redraws on `PREP_CHANGED`
-(quest, bag, group, level and zone events, one message 0.3 s after a burst, sent only while Prep or run mode shows it)
-and `ITEMS_READY`.
+open the same card in a small movable window (`ui.travel`, DIALOG strata). The Prep section, run mode's prep line and
+that window each register a watcher and redraw on `PREP_CHANGED` (quest, bag, group, level and zone events; one
+message 0.3 s after the first of a burst, sent only while one of them is shown); run mode redraws only its prep line.
+The Prep section also redraws on `ITEMS_READY`.
 
 Run mode, before the first step (not started or on step 1), shows a gold line in the drift line's place: "Prep: 3
 quests to pick up · 1 key missing"; a click opens the Prep section. It hides once there is nothing left or the run

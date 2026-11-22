@@ -524,6 +524,7 @@
    "item": 277507,
    "name": "Dalaran Sewer Key",
    "kind": "key",
+   "group": "sewer",
    "required": true,
    "quests": [
     92458,
@@ -537,6 +538,7 @@
    "quest": 92458,
    "name": "Heart of Disruption",
    "kind": "attunement",
+   "group": "sewer",
    "required": true,
    "side": "alliance",
    "note": "Gives the key.",
@@ -547,6 +549,7 @@
    "quest": 96984,
    "name": "Heart of Disruption",
    "kind": "attunement",
+   "group": "sewer",
    "required": true,
    "side": "horde",
    "note": "Gives the key.",

@@ -292,7 +292,7 @@ T.case("PrepInfo: the Hall of Thanes for an Alliance player at level 12", functi
 	mock.questsDone, mock.questLog = {}, {}
 end)
 
-T.case("Prep notes: plan format 5, stored only when written, saved data moves to schema 5", function()
+T.case("Prep notes: plan format 5, stored only when written, saved data moves to schema 6", function()
 	boot()
 	local p = ns.Validate.Plan({ name = "P", prep = "Flasks\nFood" })
 	T.eq(p.prep, "Flasks\nFood")
@@ -301,6 +301,12 @@ T.case("Prep notes: plan format 5, stored only when written, saved data moves to
 	T.ok(ns.Plan.SetField(p, "prep", "Bandages"))
 	T.eq(p.prep, "Bandages")
 	T.eq(ns.Schema.PLAN_VERSION, 5)
+	T.eq(ns.DB.SCHEMA, 6)
+	-- The 5 -> 6 step: nothing to convert, the data is marked (an older version opens it read-only).
+	local five = { schema = 5, plans = { p1 = { id = "p1", name = "Five", prep = "y" } }, shareLinks = {} }
+	T.ok(ns.DB.Migrate(five, 6, ns.DB.migrations))
+	T.eq(five.schema, 6)
+	T.eq(five.plans.p1.prep, "y")
 	local global = { schema = 4, plans = { p1 = { id = "p1", name = "Old", prep = "x" } } }
 	local info = ns.DB.LoadGlobal(global)
 	T.eq(global.schema, ns.DB.SCHEMA)
@@ -350,12 +356,192 @@ T.case("Prep UI: the section, the Getting there window, run mode's prep line, th
 	ns.UI.FocusStep(3)
 	T.eq(ns.RunMode.PrepText(bundled("the-deadmines")), nil, "after the first step: no prep line")
 	ns.RunMode.Hide()
-	-- The home preview: the zone in its subtitle and the Getting there button.
+	-- The home preview: the zone (its map's name, in the client's language) in its subtitle and the Getting there button.
 	ns.UI.GoHome("dungeons")
+	mock.mapInfo[1436] = { name = "Westfalia" }
 	local preview = _G.DungeonPlannerMainFrame.home.preview
 	preview:ShowEntry({ key = "dm", name = "The Deadmines", kind = "dungeon" }, nil)
 	T.ok(preview.travel:IsShown())
-	T.ok(preview.sub:GetText():find("Westfall", 1, true))
+	T.ok(preview.sub:GetText():find("Westfalia", 1, true), preview.sub:GetText())
 	preview:ShowEntry({ key = "x", name = "Nowhere Keep", kind = "dungeon" }, nil)
 	T.ok(not preview.travel:IsShown(), "no button without travel facts")
+	mock.mapInfo = {}
+end)
+
+local function cardText(target)
+	local out = {}
+	for _, l in ipairs(ns.GettingThere.Lines(target)) do
+		out[#out + 1] = l[2]
+	end
+	return table.concat(out, "\n")
+end
+
+T.case("Travel: the entrance on its bundled zone map, names in the client's language, the continent by parents", function()
+	boot()
+	ns.Travel.Reset()
+	ns.Instances.ForgetMapNames()
+	local rec = ns.Travel.For(bundled("the-deadmines"))
+	T.eq(rec.zm, 1436, "the zone's uiMapID ships with the record")
+	-- A German client: the zone map's name is not "Westfall", so a name lookup would miss it; the bundled ID does not.
+	mock.mapBoxes[1436] = { 0, rec.e.x + 500, rec.e.y + 5000 }
+	mock.mapInfo[1436] = { name = "Westfalia", mapType = 3, parentMapID = 1415 }
+	mock.mapInfo[1415] = { name = "Oestliche Koenigreiche", mapType = 2, parentMapID = 947 }
+	mock.mapInfo[1416] = { name = "Alteracgebirge", mapType = 3, parentMapID = 1415 }
+	local ent = ns.Travel.Entrance(rec)
+	T.eq(ent.uiMapID, 1436, "placed on the zone's own map, not the client's best map")
+	T.ok(math.abs(ent.x - 0.5) < 0.001 and math.abs(ent.y - 0.5) < 0.001)
+	T.eq(ns.Travel.ZoneName(rec), "Westfalia")
+	T.eq(ns.Travel.ContinentName(1436), "Oestliche Koenigreiche", "up the parents to the continent map")
+	T.eq(ns.Travel.ContinentName(300), nil, "no continent above")
+	local text = cardText(bundled("the-deadmines"))
+	T.ok(text:find("Westfalia", 1, true) and text:find("Oestliche Koenigreiche", 1, true), text)
+	T.ok(not text:find("Westfall  ", 1, true))
+	-- The summoning stone by its map, also in the client's language.
+	T.ok(cardText(bundled("city-of-dalaran")):find("Alteracgebirge", 1, true))
+	mock.mapBoxes, mock.mapInfo = {}, {}
+	ns.Travel.Reset()
+	-- The generator: an entrance needs its place, a place its zone map, a stone its map.
+	local gen = dofile("tools/gen_travel.lua")
+	local errs = gen.Validate({ schema = 1, entrances = { ["the-deadmines"] = { continent = 0, x = 1, y = 2 },
+		uldaman = { continent = 0, x = 1, y = 2 } }, nodes = {}, transports = {} },
+		{ schema = 1, sources = { { id = 1, name = "s", url = "u", licence = "l" } },
+			places = { ["the-deadmines"] = { zone = "Westfall", stone = { zone = "Westfall", x = 1, y = 2 }, src = { 1 } } } },
+		{ ["the-deadmines"] = true, uldaman = true })
+	local all = table.concat(errs, "\n")
+	T.ok(all:find("uldaman has an entrance but no place", 1, true), all)
+	T.ok(all:find("zoneMap", 1, true), all)
+	T.ok(all:find("bad stone", 1, true), all)
+end)
+
+-- Required keys still missing for the bundled plan, as run mode counts them.
+local function keysMissing(slug)
+	local sum = ns.Prep.Summary({ available = 0 }, ns.PrepInfo.Keys(bundled(slug)))
+	return sum and sum.keys or 0
+end
+
+T.case("Keys with the bundled data: one per key group, any of a quest's IDs counts", function()
+	boot()
+	mock.questsDone, mock.itemCounts = {}, {}
+	-- Naxxramas: one attunement, three quest IDs (Honored, Revered, Exalted).
+	T.eq(keysMissing("naxxramas"), 1)
+	mock.questsDone = { [9123] = true }
+	T.eq(keysMissing("naxxramas"), 0, "the Exalted version counts")
+	T.eq(ns.PrepInfo.Keys(bundled("naxxramas"))[1].have, true)
+	-- Molten Core: optional; either ID of Attunement to the Core counts, for both factions.
+	mock.questsDone = { [7848] = true }
+	local mc = ns.PrepInfo.Keys(bundled("molten-core"))
+	T.eq(mc[1].have, true)
+	T.eq(keysMissing("molten-core"), 0)
+	-- Onyxia (an Alliance player): the amulet and its chain are one key.
+	mock.questsDone = {}
+	T.eq(keysMissing("onyxias-lair"), 1, "not 2: the amulet and the chain's first quest")
+	mock.questsDone = { [4182] = true }
+	T.eq(keysMissing("onyxias-lair"), 1, "the chain started, the amulet not yet")
+	mock.itemCounts = { [16309] = 1 }
+	mock.questsDone = {}
+	T.eq(keysMissing("onyxias-lair"), 0, "carrying the amulet settles it")
+	-- Upper Blackrock Spire: the seal and its first quest are one key.
+	mock.itemCounts = {}
+	T.eq(keysMissing("upper-blackrock-spire"), 1)
+	mock.itemCounts = { [12344] = 1 }
+	T.eq(keysMissing("upper-blackrock-spire"), 0)
+	mock.questsDone, mock.itemCounts = {}, {}
+	-- The generator checks the new fields.
+	local gen = dofile("tools/gen_bosses.lua")
+	local doc = { keys = { { quest = 1, alt = { 1 }, name = "Q", kind = "attunement", required = true, forever = false,
+		group = "Not ok" } } }
+	local all = table.concat(gen.Validate(doc, "x.json", nil), "\n")
+	T.ok(all:find("alt must", 1, true) and all:find("group must", 1, true), all)
+end)
+
+T.case("Boats and zeppelins: a leg is one faction's when both docks' flight masters are", function()
+	boot()
+	local function routes(faction)
+		local out = {}
+		for _, t in ipairs(ns.Prep.Crossings(ns.Travel.Transports(), 0, 1, faction)) do
+			out[t.route] = true
+		end
+		return out
+	end
+	local ally, horde = routes("alliance"), routes("horde")
+	T.ok(not ally["Grom'gol - Orgrimmar"] and not ally["Orgrimmar Zepplins"], "no Horde zeppelin for the Alliance")
+	T.ok(ally["Menethil Ships"] and ally["Booty Bay - Ratchet"])
+	T.ok(horde["Grom'gol - Orgrimmar"] and horde["Booty Bay - Ratchet"])
+	T.ok(not horde["Menethil Ships"], "no Alliance boat for the Horde")
+	local gen = dofile("tools/gen_travel.lua")
+	local nodes = { { id = 1, continent = 0, x = 0, y = 0, factions = 2 }, { id = 2, continent = 1, x = 0, y = 0, factions = 3 },
+		{ id = 3, continent = 1, x = 5000, y = 0, factions = 2 } }
+	T.eq(gen.TransportFaction({ continent = 0, x = 10, y = 0, toContinent = 1, toX = 5000, toY = 10 }, nodes), "horde")
+	T.eq(gen.TransportFaction({ continent = 0, x = 10, y = 0, toContinent = 1, toX = 0, toY = 10 }, nodes), "horde",
+		"a both-faction dock does not open a Horde-only one")
+	T.eq(gen.TransportFaction({ continent = 0, x = 3000, y = 0, toContinent = 1, toX = 0, toY = 0 }, nodes), nil,
+		"no flight master near one dock: open to both")
+end)
+
+T.case("Prep redraws: run mode's line and the Getting there window follow PREP_CHANGED while shown", function()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	local plan = bundled("the-deadmines")
+	ns.UI.SelectPlan(plan.id)
+	mock.questsDone, mock.questLog = {}, {}
+	ns.RunMode.Show()
+	ns.UI.FocusStep(1)
+	ns.RunMode.Refresh()
+	local run = _G.DungeonPlannerRunFrame
+	T.ok(run.prep:IsShown(), "quests to pick up")
+	local before = run.prep.text:GetText()
+	-- Pick up every quest of the instance: QUEST_ACCEPTED, then the message a moment later.
+	for _, q in ipairs(ns.BossData.Quests(plan) or {}) do
+		mock.questLog[q.questID] = true
+	end
+	mock.FireEvent("QUEST_ACCEPTED", 0)
+	mock.Advance(ns.PrepInfo.DELAY + 0.1)
+	T.ok(not run.prep:IsShown() or run.prep.text:GetText() ~= before, "the line changed: " .. tostring(before))
+	ns.RunMode.Hide()
+	mock.questLog = {}
+	-- The Getting there window redraws while shown, and not once hidden.
+	local refreshes, real = 0, ns.GettingThere.Refresh
+	ns.GettingThere.Refresh = function(...)
+		refreshes = refreshes + 1
+		return real(...)
+	end
+	local w = ns.GettingThere.Open(plan)
+	refreshes = 0
+	mock.FireEvent("PLAYER_LEVEL_UP", 16)
+	mock.Advance(ns.PrepInfo.DELAY + 0.1)
+	T.eq(refreshes, 1)
+	w:Hide()
+	mock.FireEvent("PLAYER_LEVEL_UP", 17)
+	mock.Advance(ns.PrepInfo.DELAY + 0.1)
+	T.eq(refreshes, 1, "hidden: no redraw")
+	ns.GettingThere.Refresh = real
+end)
+
+T.case("Prep notes: an own plan's notes show read-only in read-only mode", function()
+	boot()
+	local plan = bundled("the-deadmines")
+	local ro = true
+	local ctx = { Plan = function() return plan end, ReadOnly = function() return ro end }
+	local f = ns.Panels.prep.Create(_G.DungeonPlannerMainFrame.instancePage, ctx)
+	local texts = {}
+	local add = f.notesText.Add
+	f.notesText.Add = function(self, style, text)
+		texts[#texts + 1] = text
+		return add(self, style, text)
+	end
+	-- Without notes: the hint.
+	f:Refresh()
+	T.ok(texts[1] and texts[1]:find("editable copy", 1, true), tostring(texts[1]))
+	-- With notes (own plan opened read-only): the notes themselves.
+	plan = ns.Validate.Plan({ name = "Mine", prep = "Flasks and food" })
+	texts = {}
+	f:Refresh()
+	T.eq(texts[1], "Flasks and food")
+	T.ok(f.notesText:IsShown() and not f.notes:IsShown())
+	ro = false
+	f:Refresh()
+	T.ok(f.notes:IsShown(), "editable when not read-only")
+	f:Hide()
 end)

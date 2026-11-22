@@ -11,7 +11,8 @@
 --   BossData.Portrait(plan, enc)  -> { displayInfo = id } | nil
 --   BossData.Abilities(plan, enc, max?) -> { { spellID, tags = { "interrupt", ... }, note? }, ... } | nil
 --   BossData.Quests(plan)         -> { { questID, name, level?, req?, side?, giver?, items? }, ... } | nil
---   BossData.Keys(plan)           -> { { itemID? | questID?, name, kind, required, side, quests?, note?, forever }, ... }
+--   BossData.Keys(plan)           -> { { itemID? | questID?, name, kind, required, side, quests?, alt?, group?, note?,
+--                                      forever }, ... }
 --   BossData.Credit               the sources, for "Sources: ..." lines
 
 local _, ns = ...
@@ -190,7 +191,8 @@ function BossData.Keys(plan)
 	local out = {}
 	for _, k in ipairs(d.keys) do
 		out[#out + 1] = { itemID = k.item, questID = k.quest, name = k.name, kind = k.kind, required = k.req == true,
-			side = SIDE[k.side or "b"], quests = k.quests, note = k.note, forever = k.fv == true }
+			side = SIDE[k.side or "b"], quests = k.quests, alt = k.alt, group = k.group, note = k.note,
+			forever = k.fv == true }
 	end
 	return #out > 0 and out or nil
 end
