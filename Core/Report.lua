@@ -235,6 +235,7 @@ local function debugSummary()
 			or row.active and "active" or (row.enabled == false and "switched off") or (row.loaded == false and "not installed") or "no data"
 		lines[#lines + 1] = string.format("Source %s: %s%s", row.title, state, row.version and (" " .. row.version) or "")
 	end
+	lines[#lines + 1] = ns.Comm.DebugLine()
 	local rec = ns.Recorder
 	lines[#lines + 1] = "Run recorder: " .. (rec.Enabled() and "on" or "off")
 	local artMissing = 0

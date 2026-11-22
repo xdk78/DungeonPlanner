@@ -2,8 +2,10 @@
 -- messages and paces them through ChatThrottleLib; ChatThrottleLib v32 also retries the server's "throttled" answer).
 --
 -- What we add on top:
--- * Lockdowns: on Forever the game blocks addon messages at times (boss fights, restricted states). Messages wait in
---   our small outbox until C_ChatInfo says the lockdown is over, instead of being dropped.
+-- * Lockdowns: the game blocks addon messages in boss fights (C_ChatInfo.InChatMessagingLockdown). Messages wait in
+--   our small outbox until the lockdown is over, instead of being dropped. AreOutgoingAddonChatMessagesRestricted alone
+--   does not hold them (Forever 1.60.1 was reported to answer true outside encounters, which would block every
+--   message): they are sent, and a refusal is counted (Share/SendStats.lua) and shown.
 -- * Incoming offers are filtered by the sharing setting, rate-limited per sender, and prompted out of combat.
 -- * A timer runs only while something waits or a transfer is open; an idle addon has no timer.
 
@@ -35,21 +37,29 @@ function Comm.IsAvailable()
 		and C_ChatInfo.SendAddonMessage ~= nil
 end
 
--- True while the game blocks addon messages. Only a plain `true` counts; a check that errors does not.
+-- The game's two answers: is chat messaging in lockdown (a boss fight), are outgoing addon messages restricted? Each is
+-- true, false, or nil (no such function, or it errored). Only a plain `true` counts.
+local function ask(name)
+	local fn = C_ChatInfo and C_ChatInfo[name]
+	if type(fn) ~= "function" then
+		return nil
+	end
+	local ok, value = pcall(fn)
+	if not ok then
+		return nil
+	end
+	return Util.Plain(value) == true
+end
+
+function Comm.Blocks()
+	return ask("InChatMessagingLockdown"), ask("AreOutgoingAddonChatMessagesRestricted")
+end
+
+-- True while the game holds addon messages: the encounter lockdown only. The restriction answer alone does not count
+-- (docs/COMPATIBILITY.md, "Refused sends"): if Forever reports it permanently, holding on it would send nothing ever;
+-- the game refuses what it must, and Comm counts and shows the refusals.
 function Comm.IsLockedDown()
-	if not C_ChatInfo then
-		return false
-	end
-	for _, name in ipairs({ "InChatMessagingLockdown", "AreOutgoingAddonChatMessagesRestricted" }) do
-		local fn = C_ChatInfo[name]
-		if type(fn) == "function" then
-			local ok, restricted = pcall(fn)
-			if ok and restricted == true then
-				return true
-			end
-		end
-	end
-	return false
+	return (Comm.Blocks()) == true
 end
 
 function Comm.GroupChannel()
@@ -99,9 +109,30 @@ end
 
 -- Sending -----------------------------------------------------------------------------------------------------------------
 
--- prio: "ALERT" for short control messages, "BULK" for payloads (ChatThrottleLib priorities).
-local function send(msg, channel, target, prio, callback, arg)
-	ns.addon:SendCommMessage(ns.prefix, msg, channel, target, prio or "NORMAL", callback, arg)
+-- What became of the parts sent (Share/SendStats.lua; nil when an update added that file and the game has not been
+-- restarted since).
+Comm.sendStats = ns.SendStats and ns.SendStats.New()
+
+local abortTransfer, checkProblem
+
+-- prio: "ALERT" for short control messages, "BULK" for payloads (ChatThrottleLib priorities). Every part's outcome is
+-- recorded; a part the game refuses fails the transfer it belongs to (the others would wait for it in vain) and is not
+-- sent again. `callback(arg, sent, total)` runs for each part that was not refused.
+local function send(msg, channel, target, prio, callback, arg, transfer)
+	ns.addon:SendCommMessage(ns.prefix, msg, channel, target, prio or "NORMAL", function(_, sent, total, result)
+		local ok
+		if Comm.sendStats then
+			ok = ns.SendStats.Record(Comm.sendStats, channel, result, now())
+		end
+		if ok == false then
+			if transfer then
+				abortTransfer(transfer, "refused")
+			end
+		elseif callback then
+			callback(arg, sent, total)
+		end
+		checkProblem()
+	end)
 end
 
 -- The outbox: messages waiting for a lockdown to end, sent in order. Whatever waits goes out before any newer message,
@@ -117,14 +148,16 @@ local function flushOutbox()
 		local box = Comm.outbox
 		Comm.outbox = {}
 		for _, item in ipairs(box) do
-			send(unpack(item, 1, 6))
+			local msg, channel, target, prio, callback, arg = unpack(item, 1, 6)
+			send(msg, channel, target, prio, callback, arg, item.transfer)
 		end
 	end
 end
 
--- A transfer whose message cannot wait: its queued messages go, it ends as failed (the other side times out). One that
--- has already ended (cancelled by the player, done) keeps its state; only its waiting messages go.
-local function abortTransfer(t)
+-- A transfer whose message cannot wait ("outbox") or that the game refused ("refused"): its queued messages go, it
+-- ends as failed (the other side times out). One that has already ended (cancelled by the player, done) keeps its
+-- state; only its waiting messages go.
+function abortTransfer(t, reason)
 	for i = #Comm.outbox, 1, -1 do
 		if Comm.outbox[i].transfer == t then
 			table.remove(Comm.outbox, i)
@@ -133,8 +166,53 @@ local function abortTransfer(t)
 	if Transfer.IsFinished(t) then
 		return
 	end
-	t.state, t.reason = "failed", "outbox"
+	t.state, t.reason = "failed", reason
 	ns:Fire("SHARE_STATUS", t)
+end
+
+-- Why messages on `channel` (nil: any) do not get through right now: "blocked" during the encounter lockdown (they
+-- wait in the outbox), "refused" when the game refused the last few (SendStats.REFUSED_STREAK in a row), else nil.
+-- The restriction answer alone shows nothing: messages are sent, and only refusals say they did not go.
+function Comm.Problem(channel)
+	if Comm.IsLockedDown() then
+		return "blocked"
+	elseif Comm.sendStats and ns.SendStats.Refusing(Comm.sendStats, channel) then
+		return "refused"
+	end
+	return nil
+end
+
+-- The line sharing and group sync show for Comm.Problem(channel), or nil.
+function Comm.ProblemText(channel)
+	local problem = Comm.Problem(channel)
+	if problem == "blocked" then
+		return ns.L["Addon messages are blocked by the game right now: they wait and go out when it allows them."]
+	elseif problem == "refused" then
+		return ns.L["The game refused the last addon messages: other players may not receive them."]
+	end
+	return nil
+end
+
+-- COMM_STATE when Comm.Problem() changes (checked when a part is sent or refused, a message waits, the outbox ticks):
+-- the share section and run mode's sync line redraw. Nothing polls for it.
+local lastProblem
+function checkProblem()
+	local problem = Comm.Problem()
+	if problem ~= lastProblem then
+		lastProblem = problem
+		ns:Fire("COMM_STATE", problem)
+	end
+end
+
+-- For /dp debug and /dp report: the game's answers and what became of the parts sent, in plain English.
+function Comm.DebugLine()
+	local function word(v)
+		return v == nil and "n/a" or (v and "yes" or "no")
+	end
+	local lockdown, restricted = Comm.Blocks()
+	return string.format("Addon messages: lockdown %s, outgoing restricted %s, waiting %d; %s", word(lockdown),
+		word(restricted), #Comm.outbox,
+		Comm.sendStats and ns.SendStats.Describe(Comm.sendStats) or "send results not recorded (restart the game)")
 end
 
 local function makeRoom()
@@ -167,9 +245,10 @@ local function enqueue(msg, channel, target, prio, callback, arg, opts)
 	end
 	if not Comm.IsLockedDown() then
 		flushOutbox()
-		send(msg, channel, target, prio, callback, arg)
+		send(msg, channel, target, prio, callback, arg, opts.transfer)
 		return true
 	end
+	checkProblem()
 	local item = { msg, channel, target, prio, callback, arg, key = opts.key, kind = opts.kind, transfer = opts.transfer }
 	if opts.key then
 		for i, old in ipairs(Comm.outbox) do
@@ -180,7 +259,7 @@ local function enqueue(msg, channel, target, prio, callback, arg, opts)
 		end
 	elseif not makeRoom() then
 		if opts.transfer then
-			abortTransfer(opts.transfer)
+			abortTransfer(opts.transfer, "outbox")
 		end
 		return false
 	end
@@ -259,6 +338,7 @@ function Comm.OnTick()
 		end
 	end
 	flushOutbox()
+	checkProblem() -- a lockdown that ended while messages waited
 	stopTickerIfIdle()
 end
 

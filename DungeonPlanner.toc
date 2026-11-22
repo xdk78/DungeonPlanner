@@ -64,6 +64,7 @@ Share\Codec.lua
 Share\Transfer.lua
 Share\Acks.lua
 Share\Sync.lua
+Share\SendStats.lua
 
 Config\Defaults.lua
 Config\DB.lua

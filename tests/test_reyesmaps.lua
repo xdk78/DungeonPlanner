@@ -150,7 +150,7 @@ T.case("Reyes maps: map order and the Prefer drawn maps setting", function()
 	noProviders()
 end)
 
-T.case("Reyes maps: credited on the map, with his site and where to support him", function()
+T.case("Reyes maps: credited on the map with his site; no donation request in the game", function()
 	boot()
 	noProviders()
 	if not ns.UI.IsShown() then
@@ -170,7 +170,9 @@ T.case("Reyes maps: credited on the map, with his site and where to support him"
 	T.ok(canvas.creditHit:IsShown(), "the chip has a tooltip")
 	local text = canvas.creditHit.dpTooltipText or ""
 	T.ok(text:find("sreyesmaps.com", 1, true), "his site")
-	T.ok(text:find("sreyesmaps.com/donaciones", 1, true), "his donation page")
+	-- Blizzard's add-on policy: donation requests stay on the addon's pages, never in the game.
+	T.ok(not text:find("donac", 1, true) and not text:lower():find("support", 1, true), "no donation request")
+	T.eq(ns.ReyesMaps.DONATE, nil)
 	for i = 1, 3 do
 		T.ok(canvas.tiles[i]:IsShown(), "strip " .. i)
 		T.eq(canvas.tiles[i]:GetTexture(), "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\RuinsOfLordaeron" .. i)
@@ -179,6 +181,28 @@ T.case("Reyes maps: credited on the map, with his site and where to support him"
 	ns.UI.SelectPlan("b:the-deadmines")
 	map:Refresh()
 	T.eq(canvas.creditHit:IsShown(), false)
+end)
+
+-- Blizzard's UI Add-On Development Policy (rule 5): no donation requests in the game, only on the addon's pages
+-- (README, CurseForge). Every Lua file the TOC loads (code and translations) is free of donation words.
+T.case("No donation requests in any file the game loads", function()
+	local WORDS = { "donat", "donac", "ko%-fi", "patreon", "paypal", "buymeacoffee", "spende", "wesprzyj", "soutenez",
+		"apoya al", "поддержите" }
+	local files = 0
+	for line in io.lines("DungeonPlanner.toc") do
+		local path = line:match("^([^#%s].-%.lua)%s*$")
+		if path then
+			path = path:gsub("\\", "/")
+			local h = assert(io.open(path, "rb"), path)
+			local text = h:read("*a"):lower()
+			h:close()
+			files = files + 1
+			for _, w in ipairs(WORDS) do
+				T.ok(not text:find(w), path .. " mentions " .. w)
+			end
+		end
+	end
+	T.ok(files > 100, "read the TOC's files (" .. files .. ")")
 end)
 
 -- The packager's ignore list (.pkgmeta) uses shell pattern matching, where "*" also matches "/": the pictures and

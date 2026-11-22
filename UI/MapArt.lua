@@ -91,7 +91,7 @@ function MapCanvas.InstallArt(view)
 		local showCredit = provided ~= nil and not (self.cb.compact and self.cb.compact())
 		self.credit:SetShown(showCredit)
 		self.creditPlate:SetShown(showCredit)
-		-- The bundled map's chip names the artist's site and where to support him (a tooltip: the client opens no links).
+		-- The bundled map's chip names the artist and his site (a tooltip: the client opens no links).
 		self.creditHit:SetShown(showCredit and reyes or false)
 		self.zoom, self.ox, self.oy = 1, 0, 0
 		self:Layout()

@@ -8,8 +8,10 @@ walkability grids made from them (see "Walkability grids made from the maps" bel
 - Artist: Santiago Reyes (WoWMaps), <https://sreyesmaps.com>, on X as SR433_20 (<https://x.com/SR433_20>).
 - Work: his World of Warcraft maps. The ones used are from his "Atlas de Azeroth: Forever", maps of the new dungeons
   of World of Warcraft: Forever.
-- Credit in the addon: "Map by Santiago Reyes" on the map itself (with his site and donation page in its tooltip), the
-  map settings, the README and the addon's page.
+- Credit in the addon: "Map by Santiago Reyes" on the map itself (with his site in its tooltip) and in the map
+  settings; outside the game, in the README and on the addon's page. His donation page is linked only in the README,
+  on the addon's CurseForge page and in this file, never in the game: Blizzard's UI Add-On Development Policy does not
+  allow add-ons to ask for donations in game.
 
 ## Permission
 

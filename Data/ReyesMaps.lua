@@ -16,7 +16,6 @@ local ReyesMaps = ns:NewModule("ReyesMaps")
 
 ReyesMaps.ARTIST = "Santiago Reyes"
 ReyesMaps.SITE = "sreyesmaps.com"
-ReyesMaps.DONATE = "sreyesmaps.com/donaciones"
 ReyesMaps.FOLDER = "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\"
 ReyesMaps.WIDTH, ReyesMaps.HEIGHT, ReyesMaps.STRIP = 1024, 683, 256
 

@@ -469,8 +469,8 @@ it covers least and is moved all the way inside. Pins count their ring: the mini
 
 **One map family.** The classic dungeons draw on the game's old map tiles: a drawn map on sepia parchment in a scroll
 frame. Forever's new dungeons use Santiago Reyes' hand-drawn parchment maps, which ship with the addon by his
-permission (`Data/ReyesMaps.lua`; "Map by Santiago Reyes" in the map's corner, its tooltip naming his site and where
-to support him), shown exactly as he drew them (Settings, "Prefer drawn maps", on by default). With that setting off,
+permission (`Data/ReyesMaps.lua`; "Map by Santiago Reyes" in the map's corner, its tooltip naming his
+site), shown exactly as he drew them (Settings, "Prefer drawn maps", on by default). With that setting off,
 or on a floor he has not drawn, they are composed from the game's minimap
 pictures, which are dark 3D art (on a flat grey where nothing is) or full-colour terrain; by default
 (Settings, "Map colours: parchment") they are drawn into the same family (`MapCanvas.ArtStyle`): the quest-log
@@ -767,6 +767,15 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   class colours and the role guesses from the client's specializations, a member going offline; a member's death and
   return dimming and restoring their seat (`UNIT_FLAGS`; the player's own through `PLAYER_DEAD` / `PLAYER_ALIVE` /
   `PLAYER_UNGHOST`); a plan holding first names matched to "First Surname" members.
+- Addon messages on Forever 1.60.1 (docs/COMPATIBILITY.md, section 2, "Refused sends"): out of combat, in a party, a
+  raid and a guild, with a second account or a friend, `/dp debug`'s "Addon messages:" line (lockdown, outgoing
+  restricted, sent and refused per distribution) before and after sharing a plan, leading a run and a whisper share.
+  Is "outgoing restricted" `true` outside encounters? Messages are sent regardless (only the encounter lockdown holds
+  them): note whether they arrive on each distribution, or come back refused ("The game refused the last addon
+  messages" after three in a row, the share "failed: the game refused the message"), and whether a code shows. In a
+  boss fight, "Addon messages are blocked by the game right now" should show and the messages go out after the kill.
+- The map chip of a Santiago Reyes map (Hall of Thanes): its tooltip names him and his site only, with no donation
+  request; the same in the map settings' credit line.
 
 Since 0.1.0:
 

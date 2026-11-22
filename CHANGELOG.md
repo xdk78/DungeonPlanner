@@ -5,10 +5,24 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- **Santiago Reyes' map credit**: the tooltip of "Map by Santiago Reyes" and the credit in the map settings name him
+  and his site only. Blizzard's UI Add-On Development Policy does not allow donation requests in the game, so the link
+  to support him is now on the addon's README and CurseForge page.
+
 ### Fixed
 - **Shaper's Terrace with Dungeon Journal 2.1.2 or later installed**: the map showed Dungeon Journal's boss pins in
   place of the plan's bosses, some well away from the route's stops. The plan's bosses stay where the route expects
   them again; another addon's pins show only for bosses the plan does not place.
+- **Sharing and group sync no longer fail silently when the game blocks or refuses addon messages.** While the game
+  holds them, the Share section and run mode's group sync line say "Addon messages are blocked by the game right now";
+  when it refuses several in a row, they say so too, and a plan offer the game refused shows "failed: the game refused
+  the message" instead of waiting for answers that cannot come. Refused messages are not sent again. `/dp debug` and
+  `/dp report` show the game's lockdown and restriction answers and how many messages were sent and refused per
+  channel.
+- **Addon messages are held only during a boss fight's lockdown.** When the game merely reports outgoing addon
+  messages as restricted (WoW: Forever 1.60.1 was reported to do so outside encounters), Dungeon Planner now sends
+  them instead of holding every message indefinitely; if the game refuses them, sharing and group sync say so.
 
 ## [0.2.0] - 2026-11-22
 
