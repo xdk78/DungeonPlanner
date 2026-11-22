@@ -155,7 +155,7 @@ function Panel.Create(parent, ctx)
 		local body
 		if shared then
 			-- A wing clears only its own runs unless the box is ticked (Recorder.ClearForPlan).
-			text = text .. "\n" .. L["Runs recorded without a known wing are kept."]
+			text = text .. "\n" .. L["Runs recorded without a known wing are kept unless you tick the box below."]
 			body = clearOptions()
 		end
 		W.ShowDialog({
@@ -196,8 +196,11 @@ function Panel.Create(parent, ctx)
 		end,
 		update = function(row, run)
 			local s = RunLog.Summary(run)
-			row.text:SetText((run.done and "" or (L["Recording"] .. " • ")) .. when(run)
-				.. (Recorder.WingUnknown(run, plan()) and (" • " .. L["wing unknown"]) or ""))
+			-- A wing's plan marks the runs without a known wing; a plan whose wing is unclear names each run's wing.
+			local p = plan()
+			local note = Recorder.WingUnknown(run, p) and L["wing unknown"]
+				or (run.k ~= Recorder.KeyForPlan(p) and Recorder.WingName(run)) or nil
+			row.text:SetText((run.done and "" or (L["Recording"] .. " • ")) .. when(run) .. (note and (" • " .. note) or ""))
 			local best = RunLog.Best(store(), keys(), run)
 			local delta = best.total and run.done and (" " .. D(s.duration - best.total)) or ""
 			row.meta:SetText(T(s.duration) .. " • " .. ns.Plural(s.pulls, L["%d pull|%d pulls"]) .. " • "

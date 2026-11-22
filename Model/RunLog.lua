@@ -17,6 +17,7 @@
 --              dd = deaths, w = wipe, k = encounter killed during the pull }
 --   b boss kills: { i = encounterID, n = name, a = seconds after t, p = pull index }
 --   w wipes (count), dd deaths (count), dk = deaths could be read (else the deaths count is not available)
+--   wx = seen in two wings (kills of two wings' bosses): its wing stays unknown (Unwing)
 
 local _, ns = ...
 local Recorder = ns:NewModule("RunLog")
@@ -108,17 +109,30 @@ function Recorder.SplitKey(key)
 end
 
 -- Can a run recorded under `run.k` go on under `key`? The same instance and not two different wings. A run whose wing
--- was not known takes the wing `key` names.
+-- was not known takes the wing `key` names, unless it was seen in two wings (`wx`, Unwing): that run stays unknown.
 function Recorder.Adopt(run, key)
 	local iid, wing = Recorder.SplitKey(key)
 	local runIid, runWing = Recorder.SplitKey(run.k)
 	if not iid or iid ~= runIid or (wing and runWing and wing ~= runWing) then
 		return false
 	end
-	if wing and not runWing then
+	if wing and not runWing and not run.wx then
 		run.k = key
 	end
 	return true
+end
+
+-- A run that turned out to span two wings (a kill of another wing's boss, where the floor map cannot tell the wings
+-- apart: Dire Maul, Stratholme): back to the bare instance ID, "wing unknown" for good (`wx`), never another wing's.
+-- Returns true when the key changed.
+function Recorder.Unwing(run)
+	local iid, wing = Recorder.SplitKey(run.k)
+	run.wx = true
+	if wing then
+		run.k = iid
+		return true
+	end
+	return false
 end
 
 local function newRun(key, name, difficultyID, now)

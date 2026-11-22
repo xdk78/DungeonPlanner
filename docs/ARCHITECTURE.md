@@ -307,12 +307,16 @@ nothing about where the player is):
   (`Recorder.WingForKill`, `BossData.InstancesForEncounter`: the `enc` IDs in `Data/Bosses`, from warcraft.wiki.gg's
   classic list, data-src/bosses/README.md).
 
-Until then the run keeps the bare instance ID ("wing unknown"). A wing is only ever added to a run (`RunLog.Adopt`
-fills a missing wing, never replaces one): a pull is recorded whenever the instance ID matches, whatever the map says,
-and an encounter of another wing does not move a run. `RunLog.Enter` starts a new run for another wing only when the
-floor map names that other wing; a map of no wing, or none, continues the run. A wing's plan lists its wing's runs plus
+Until then the run keeps the bare instance ID ("wing unknown"). A wing is never changed to another wing
+(`RunLog.Adopt` fills a missing wing, never replaces one): a pull is recorded whenever the instance ID matches,
+whatever the map says. A kill of another wing's boss means the run spans two wings (Dire Maul's wings have no floor
+maps and Stratholme's share theirs, so walking on within the resume window keeps the run): `RunLog.Unwing` puts it back
+to the bare instance ID and marks it (`wx`), so it stays "wing unknown" and no later map or kill gives it a wing. Kills
+count only inside the run's instance (by its ID, like pulls). `RunLog.Enter` starts a new run for another wing only
+when the floor map names that other wing; a map of no wing, or none, continues the run. A wing's plan lists its wing's runs plus
 the bare-ID runs (`Recorder.KeysForPlan`; every run recorded before 0.2.1 is one), which the Runs section marks
-"wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of its instance.
+"wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of its instance,
+each row with a wing key naming it ("Library", `Recorder.WingName`).
 Best times, splits and the previous run compare over the same keys as the list (`RunLog.Best`, `RunCompare.Splits`
 take a key list), so a wing's best is its own runs' and the unknown-wing runs'. The Share section's run text prefers
 the newest run of the wing's own key and says "wing unknown" when it uses another. "Clear history" on a wing's plan

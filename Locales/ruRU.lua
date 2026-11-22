@@ -1160,6 +1160,6 @@ ns.Locales.ruRU = {
 	["failed: the game refused the message"] = "ошибка: игра отклонила сообщение",
 	["wing unknown"] = "крыло неизвестно",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Записан без сведений о крыле: возможно, это забег в другом крыле этого подземелья.",
-	["Runs recorded without a known wing are kept."] = "Забеги, записанные без известного крыла, сохраняются.",
+	["Runs recorded without a known wing are kept unless you tick the box below."] = "Забеги, записанные без известного крыла, сохраняются, если не отметить пункт ниже.",
 	["Also clear runs without a known wing"] = "Удалить и забеги без известного крыла",
 }

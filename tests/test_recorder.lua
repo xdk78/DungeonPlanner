@@ -421,7 +421,8 @@ T.case("Recorder: wings sharing an instance ID record their runs apart; older ru
 		end
 		mock.Click(panel.clear)
 		W.ShowDialog = show
-		T.ok(dialog and dialog.text:find(L["Runs recorded without a known wing are kept."], 1, true), "the dialog says so")
+		T.ok(dialog and dialog.text:find(L["Runs recorded without a known wing are kept unless you tick the box below."], 1,
+			true), "the dialog says so")
 		T.ok(dialog.body and dialog.body.check:GetChecked() == false, "'Also clear runs without a known wing' is off")
 		-- The Share section's run text: the newest run of the Library itself, before a newer one without a known wing.
 		ns.UI.SelectTab("share")
@@ -475,7 +476,7 @@ T.case("Recorder: wings sharing an instance ID record their runs apart; older ru
 	assert(ok, err)
 end)
 
-T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill), is never changed, drops no pull", function()
+T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill), never another wing's, drops no pull", function()
 	boot()
 	local R = ns.Recorder
 	R.SetEnabled(false)
@@ -525,9 +526,10 @@ T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill)
 		T.eq(#run.p, 1, "the pull is recorded")
 		T.eq(run.k, libKey, "the run is still the Library's")
 		T.ok(enter() == run and run.k == libKey, "entering again continues the Library's run")
-		-- An Armory boss's kill does not change a run whose wing is known.
+		-- An Armory boss's kill never moves the run to the Armory: it now spans two wings, so its wing is unknown.
 		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
-		T.eq(run.k, libKey, "a wing is never changed")
+		T.eq(run.k, shared, "never another wing: wing unknown")
+		T.eq(#run.p, 1, "no pull dropped")
 		ns.RunMode.Hide()
 		R.FinishRun()
 		mock.Advance(60)
@@ -548,7 +550,7 @@ T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill)
 		fight()
 		R.FinishRun()
 		T.eq(run.k, shared)
-		T.eq(#R.Store().runs[shared], 1, "filed under the instance ID")
+		T.eq(#R.Store().runs[shared], 2, "filed under the instance ID, with (a)'s run of two wings")
 		mock.Advance(60)
 		-- (d) The floor map flickers (another map, none): the run goes on; only the other wing's map splits it.
 		map = 303
@@ -563,6 +565,48 @@ T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill)
 		T.ok(other ~= run and other.k == armKey, "the Armory's map: a new run")
 		local libRuns = R.Store().runs[libKey]
 		T.eq(libRuns[#libRuns], run, "the Library's run is filed under the Library")
+		R.FinishRun()
+		map = nil
+		mock.Advance(60)
+		-- (e) A kill names the Armory, then a kill of the Library's Arcanist Doan: the run spans two wings (where the
+		-- floor map cannot tell, as in Dire Maul): back to "wing unknown" for good, never the Library's.
+		run = enter()
+		fight()
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(run.k, armKey)
+		mock.Advance(30)
+		mock.FireEvent("ENCOUNTER_END", 447, "Arcanist Doan", 1, 5, 1)
+		T.eq(run.k, shared, "another wing's boss: wing unknown")
+		T.eq(#run.b, 2, "both kills recorded")
+		mock.Advance(30)
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		map = 303
+		fight()
+		T.eq(run.k, shared, "no later kill or floor map gives it a wing again")
+		T.eq(#run.p, 2, "the pull is still recorded")
+		map = nil
+		local function listed(plan)
+			return ns.Util.IndexOf(R.RunsForPlan(plan), run) ~= nil and R.WingUnknown(run, plan)
+		end
+		T.ok(listed(library) and listed(armory), "listed in both wings, marked 'wing unknown'")
+		R.FinishRun()
+		mock.Advance(60)
+		-- (f) A run without a wing takes the floor map's wing at the next pull.
+		run = enter()
+		T.eq(run.k, shared)
+		map = 303
+		fight()
+		T.eq(run.k, libKey, "the pull's floor map names the Library")
+		T.eq(R.WingName(run), "Library", "its wing's short name")
+		T.eq(R.WingName({ k = shared }), nil)
+		map = nil
+		-- (g) Left the instance: a boss killed outdoors is not this run's.
+		local kills = #run.b
+		_G.GetInstanceInfo = function()
+			return "Tirisfal Glades", "none", 0, "", 0, 0, false, 0
+		end
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(#run.b, kills, "an outdoor kill is not recorded")
 		R.FinishRun()
 	end)
 	_G.GetInstanceInfo, _G.C_Map.GetBestMapForUnit = saved.info, saved.best

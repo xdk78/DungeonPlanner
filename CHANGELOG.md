@@ -26,14 +26,17 @@ follow [Semantic Versioning](https://semver.org/).
 - **Recorded runs of instances with wings** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire): a wing's Runs
   section listed the runs of every wing, so the Library's plan showed Armory runs. A run is now recorded for its wing
   when the game tells which wing it is: its map names the wing, or you kill a boss only that wing has. Until then the
-  run stays with the whole instance; the plan you have open never decides it. Runs recorded before this version, and
-  runs whose wing was not known, still show in every wing's Runs section, marked "wing unknown".
+  run stays with the whole instance; the plan you have open never decides it. A run in which you kill bosses of two
+  wings goes back to "wing unknown". Runs recorded before this version, and runs whose wing was not known, still show
+  in every wing's Runs section, marked "wing unknown"; a plan whose wing is unclear names each run's wing.
 - **Best times per wing**: where the wing is known, a wing's best time, boss splits and "previous run" come from that
   wing's runs (and those without a known wing), not from the other wings'.
 - **Clear history on a wing** removes only that wing's runs; runs without a known wing stay unless you tick "Also
   clear runs without a known wing".
-- **Run history of many instances**: once 60 instances had runs, a run in a new one was not kept. Now the instance
-  played longest ago makes room.
+- **Run history of many instances**: once runs were kept for 60 instance keys (each known wing counts as its own key),
+  a run in a new one was not kept. Now the key played longest ago makes room.
+- **Boss kills outside the run's instance** (an outdoor boss after leaving a dungeon) were added to the dungeon's run.
+  Only kills inside its instance count now.
 - **"Open in NeedRoll" for plans saved in another game language**: the button passed the instance's name in that
   language. It now passes the English name first and falls back to the plan's own name, without opening NeedRoll
   twice.
