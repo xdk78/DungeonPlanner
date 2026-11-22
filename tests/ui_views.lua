@@ -1170,21 +1170,13 @@ V.views = {
 	},
 }
 
--- Sequences: one interaction as several frames (`seq-<name>-NN`), each frame the state after the next step, for
--- tools/make_gifs.py (AGENTS.md, "Seeing the UI"). A step does what the click does (UI.FocusStep, RunMode.Step, the
--- model's route functions followed by DB.Changed); only the last frame tears down. The frame texts are
--- tools/gif_sequences.json's.
+-- Sequences (wowui.views): one interaction as several frames (`seq-<name>-NN`), each frame the state after the next
+-- step, for `wowui gif` (AGENTS.md, "Seeing the UI"). A step does what the click does (UI.FocusStep, RunMode.Step, the
+-- model's route functions followed by DB.Changed); `finish` runs after the last frame. The captions, crops and timing
+-- are in tools/gif_sequences.json.
+local Views = require("wowui.views")
 local function sequence(name, steps, windowFn, finish)
-	local views = {}
-	for i, step in ipairs(steps) do
-		views[i] = {
-			name = string.format("seq-%s-%02d", name, i),
-			setup = step,
-			window = windowFn or window,
-			teardown = i == #steps and finish or nil,
-		}
-	end
-	return views
+	return Views.Sequence(name, steps, { window = windowFn or window, finish = finish })
 end
 
 -- The plan the sequences show: a classic dungeon on the game's old map tiles, with few enough steps that the list needs no

@@ -1,7 +1,12 @@
-{
-  "steps": {
+[
+  {
+    "name": "steps",
     "crop": [10, 12, 1020, 734],
-    "delay": 1500,
+    "width": 720,
+    "minWidth": 480,
+    "ms": 1500,
+    "counter": true,
+    "maxBytes": "3MB",
     "captions": [
       "Click a step in the list: the entrance",
       "A boss: the view centres on it",
@@ -10,18 +15,28 @@
       "The last boss: one click per step"
     ]
   },
-  "runmode": {
+  {
+    "name": "runmode",
     "crop": [14, 12, 1405, 700],
-    "delay": 1700,
+    "width": 720,
+    "minWidth": 480,
+    "ms": 1700,
+    "counter": true,
+    "maxBytes": "3MB",
     "captions": [
       "Run mode follows your plan step by step",
       "Next: the next stretch of the route",
       "Next again: the map behind it moves on"
     ]
   },
-  "route": {
+  {
+    "name": "route",
     "crop": [10, 12, 1020, 734],
-    "delay": 1200,
+    "width": 720,
+    "minWidth": 480,
+    "ms": 1200,
+    "counter": true,
+    "maxBytes": "3MB",
     "captions": [
       "Your own copy: pick the Route tool",
       "Click the map to add a bend; Shift-click makes a numbered stop",
@@ -31,13 +46,18 @@
       "The route shows up as steps for run mode"
     ]
   },
-  "picker": {
+  {
+    "name": "picker",
     "crop": [90, 12, 760, 530],
-    "delay": 1700,
+    "width": 720,
+    "minWidth": 480,
+    "ms": 1700,
+    "counter": true,
+    "maxBytes": "3MB",
     "captions": [
       "Type \"forever\" to see Forever's new dungeons",
       "Or a few letters of a name",
       "Narrow it down to one dungeon"
     ]
   }
-}
+]

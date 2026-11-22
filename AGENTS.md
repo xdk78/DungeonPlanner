@@ -220,12 +220,14 @@ picker). Dump and render them like any view, then build the GIFs; keep `<work>` 
 ```sh
 # after the `lua tests/ui_dump.lua ... --files $W/files.txt` dump above:
 uv run --script $H/python/wowui.py render --game "$G" --dump $W/dump --out $W/png --addon DungeonPlanner=. --only seq-steps-01,seq-steps-02,...
-uv run --script tools/make_gifs.py --png $W/png --out docs/media     # --only steps,route; --width 720; --max-mb 3
+uv run --script $H/python/wowui.py gif --spec tools/gif_sequences.json --png $W/png --out docs/media  # --only steps,route
 ```
 
-`tools/make_gifs.py` (PEP 723, Pillow) crops, scales to about 720 px, captions (the bundled Alegreya Sans) and writes
-`docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops, delays and captions
-are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. Check
+The sequences are `wowui.views` sequences (`Views.Sequence` in `tests/ui_views.lua`): steps run on one state, and
+`--only seq-route-04` sets up the steps before it first. `wowui gif` crops, scales to 720 px, captions (in a band, with
+"n/total") and writes `docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops,
+timing and captions are in `tools/gif_sequences.json` (the harness's spec format); a new sequence needs its steps in
+`tests/ui_views.lua` and an entry there. Check
 every frame before committing: no renderer placeholders (grey loading-screen boxes, missing scroll bars, unrotated
 chevrons) and no layout lint findings. Stub the texture in the view's setup or leave the frame out. In-game screenshots
 (`/dp shots`) go in `docs/screenshots/`.
