@@ -1158,4 +1158,6 @@ ns.Locales.frFR = {
 	["Addon messages are blocked by the game right now: they wait and go out when it allows them."] = "Le jeu bloque les messages d'addons en ce moment\194\160: ils attendent et partent dès qu'il les autorise.",
 	["The game refused the last addon messages: other players may not receive them."] = "Le jeu a refusé les derniers messages d'addons\194\160: les autres joueurs risquent de ne pas les recevoir.",
 	["failed: the game refused the message"] = "échec\194\160: le jeu a refusé le message",
+	["wing unknown"] = "aile inconnue",
+	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Enregistrée sans connaître l'aile\194\160: ce peut être une run d'une autre aile de cette instance.",
 }

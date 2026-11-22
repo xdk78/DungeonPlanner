@@ -272,10 +272,10 @@ function Panel.Create(parent, ctx)
 	-- A recorded run against the plan: the run chosen in the Runs section, else this instance's latest.
 	function f:RunParts(p, opts)
 		local R = ns.Recorder
-		local key, st = R.KeyForPlan(p), R.Store()
+		local st = R.Store()
 		local run = ctx.selectedRun
-		if not (run and key and run.k == key) then
-			run = st and key and ((st.current and st.current.k == key and st.current) or ns.RunLog.Runs(st, key)[1])
+		if not R.RunMatchesPlan(run, p) then
+			run = R.RunsForPlan(p)[1]
 		end
 		if not run then
 			-- Like the Runs section's empty pane: the turn-on hint only while recording is off.

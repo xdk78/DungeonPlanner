@@ -7,6 +7,9 @@
 -- The store (DungeonPlannerDB.char[key].recorder), compact field names because it is saved:
 --   current   the run being recorded or nil
 --   runs      [instance key] = { run, ... } finished runs, oldest first, at most MAX_RUNS per instance
+-- An instance key is GetInstanceInfo's instance ID as a string ("189"), or, for one wing of an instance whose wings
+-- share that ID (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire), the ID and the wing's bundled key
+-- ("189:scarletmonasterylibrary"). A run whose wing was not known keeps the plain ID (runs saved before 0.2.1 all do).
 -- A run:
 --   k key, n instance name, d difficultyID, t start (wall time), e end (wall time), done = finished
 --   p pulls: { s = start (seconds after t), u = duration, c = enemies seen at once (peak), el = elites, r = rares,
@@ -85,17 +88,50 @@ function Recorder.Normalize(store)
 	return store
 end
 
+-- Instance keys ----------------------------------------------------------------------------------------------------------
+
+-- The key of one wing of an instance: "189:scarletmonasterylibrary".
+function Recorder.WingKey(instanceKey, wing)
+	return tostring(instanceKey) .. ":" .. wing
+end
+
+-- A key's instance part ("189") and its wing (nil for a key without one).
+function Recorder.SplitKey(key)
+	if type(key) ~= "string" then
+		return nil
+	end
+	local iid, wing = key:match("^([^:]+):(.+)$")
+	if iid then
+		return iid, wing
+	end
+	return key, nil
+end
+
+-- Can a run recorded under `run.k` go on under `key`? The same instance and not two different wings. A run whose wing
+-- was not known takes the wing `key` names.
+function Recorder.Adopt(run, key)
+	local iid, wing = Recorder.SplitKey(key)
+	local runIid, runWing = Recorder.SplitKey(run.k)
+	if not iid or iid ~= runIid or (wing and runWing and wing ~= runWing) then
+		return false
+	end
+	if wing and not runWing then
+		run.k = key
+	end
+	return true
+end
+
 local function newRun(key, name, difficultyID, now)
 	return { k = key, n = Util.CleanText(name or "", 64) or "", d = Util.IsInteger(difficultyID) and difficultyID or nil,
 		t = now, seen = now, p = {}, b = {}, w = 0, dd = 0 }
 end
 
--- Entering an instance: continue the current run when it is the same instance and recent, otherwise finish it and
--- start a new one. Returns the run and whether it is new.
+-- Entering an instance: continue the current run when it is the same instance (and not another wing of it) and recent,
+-- otherwise finish it and start a new one. Returns the run and whether it is new.
 function Recorder.Enter(store, key, name, difficultyID, now)
 	local run = store.current
-	if run and run.k == key and run.d == (Util.IsInteger(difficultyID) and difficultyID or nil)
-		and now - (run.seen or run.t) <= Recorder.RESUME then
+	if run and run.d == (Util.IsInteger(difficultyID) and difficultyID or nil)
+		and now - (run.seen or run.t) <= Recorder.RESUME and Recorder.Adopt(run, key) then
 		run.seen = now
 		return run, false
 	end
@@ -293,6 +329,20 @@ function Recorder.Runs(store, key)
 	for i = #list, 1, -1 do
 		out[#out + 1] = list[i]
 	end
+	return out
+end
+
+-- Runs under any of several keys (a wing's and its instance's), newest first.
+function Recorder.RunsOf(store, keys)
+	local out = {}
+	for _, key in ipairs(keys) do
+		for _, run in ipairs(store.runs[key] or {}) do
+			out[#out + 1] = run
+		end
+	end
+	table.sort(out, function(a, b)
+		return a.t > b.t
+	end)
 	return out
 end
 

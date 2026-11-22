@@ -367,6 +367,33 @@ T.case("NeedRoll adapter: public links only; Questie adapter: dungeon quests thr
 	fresh()
 end)
 
+T.case("NeedRoll adapter: a plan saved on a German client opens by the English name, the German one as a fallback", function()
+	boot()
+	mock.InstallProviders()
+	fresh()
+	local iid = ns.TravelData.instances["The Deadmines"].iid
+	local plan = ns.Validate.Plan({ name = "Mein Plan", instance = { name = "Die Todesminen", kind = "dungeon",
+		instanceMapID = iid }, encounters = { { id = "e1", name = "Edwin VanCleef" } } })
+	T.eq(ns.Instances.CanonicalName(plan), "The Deadmines", "the resolver knows the instance")
+	mock.needRollCalls = {}
+	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), true, "opened")
+	T.eq(#mock.needRollCalls, 1, "one call")
+	T.eq(mock.needRollCalls[1][1], "The Deadmines", "the English name, not the German one")
+	T.eq(mock.needRollCalls[1][2], "Edwin VanCleef")
+	-- A NeedRoll that does not know the English name: the name the plan shows next.
+	mock.needRollCalls, mock.needRollKnows = {}, { ["Die Todesminen"] = true }
+	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), true, "opened by the German name")
+	T.eq(#mock.needRollCalls, 2)
+	T.eq(mock.needRollCalls[2][1], "Die Todesminen")
+	-- Neither name: not opened, each name tried once.
+	mock.needRollCalls, mock.needRollKnows = {}, {}
+	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), false)
+	T.eq(#mock.needRollCalls, 2, "no name twice")
+	mock.needRollKnows = nil
+	mock.RemoveProviders()
+	fresh()
+end)
+
 T.case("Providers.Align: same, fitted, pins (neither) or none", function()
 	local same = P.Align({ { 0.5, 0.5, 0.51, 0.49 }, { 0.2, 0.3, 0.2, 0.31 } })
 	T.eq(same.mode, "same")

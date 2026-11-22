@@ -23,6 +23,13 @@ follow [Semantic Versioning](https://semver.org/).
 - **Addon messages are held only during a boss fight's lockdown.** When the game merely reports outgoing addon
   messages as restricted (WoW: Forever 1.60.1 was reported to do so outside encounters), Dungeon Planner now sends
   them instead of holding every message indefinitely; if the game refuses them, sharing and group sync say so.
+- **Recorded runs of instances with wings** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire): a wing's Runs
+  section listed the runs of every wing, so the Library's plan showed Armory runs. A run is now recorded for its wing
+  when the wing is known: from the plan open in run mode, or from the game's map when it names the wing. When neither
+  says, the run stays with the whole instance. Runs recorded before this version, and runs whose wing was not known,
+  still show in every wing's Runs section, marked "wing unknown".
+- **"Open in NeedRoll" for plans saved in another game language**: the button passed the instance's name in that
+  language. It now passes the English name first and falls back to the plan's own name.
 
 ## [0.2.0] - 2026-11-22
 
