@@ -974,7 +974,7 @@ ns.Locales.frFR = {
 	["Every floor on the map"] = "Tous les étages sur la carte",
 	["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] = "Un sélecteur d'étage dans le coin de la carte\194\160; Maj + molette change aussi d'étage.",
 	["Clearer routes"] = "Des trajets plus clairs",
-	["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."] = "«\194\160Suivre les couloirs\194\160», des flèches plus claires, le tronçon sous le pointeur mis en évidence et un groupe Trajets dans les réglages.",
+	["Snap to corridors, colour along the route, clearer arrows, the hovered leg highlighted, and a Routes group in Settings."] = "«\194\160Suivre les couloirs\194\160», couleur le long du trajet, des flèches plus claires, le tronçon sous le pointeur mis en évidence et un groupe Trajets dans les réglages.",
 	["Your group in the plan"] = "Votre groupe dans le plan",
 	["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] = "Les places se remplissent avec votre groupe, et les filtres d'Équipement par classe et emplacement changent la liste du butin.",
 	-- Prep and Getting there
@@ -1143,7 +1143,7 @@ ns.Locales.frFR = {
 	["Step %d to step %d"] = "De l'étape %d à l'étape %d",
 	["To step %d"] = "Jusqu'à l'étape %d",
 	["Colour along the route"] = "Couleur le long du trajet",
-	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "La couleur de la ligne change du début du trajet à sa fin, pour voir quelle partie vient d'abord. Désactivé : une seule couleur.",
+	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "La couleur de la ligne change du début du trajet à sa fin, pour voir quelle partie vient d'abord. Désactivé\194\160: une seule couleur.",
 	["From %s to %s"] = "De %s à %s",
 	["To %s"] = "Jusqu'à %s",
 }

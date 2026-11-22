@@ -11,7 +11,7 @@ Highlights, upgrade notes, known limitations and the in-game test checklist: `do
 source repository.
 
 **Restart the game after updating** (a `/reload` is not enough): this version adds files that WoW loads only when the
-client starts.
+client starts; until then the map draws no routes, and `/dp debug` says to restart.
 
 ### Added
 - **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" follows your
@@ -61,14 +61,14 @@ client starts.
   before follows the dungeon's corridors instead of cutting through walls. Shift-click for a straight line. It works on
   every classic floor and Forever's caves and buildings; open outdoor maps keep straight lines. Snapped routes are
   ordinary route points, so shared plans still work with older versions.
-- **Follow a route by pointing at it**: the leg under the pointer stands out with its arrows while the other routes
-  dim, and its tooltip names the two steps it joins. Pointing at a step in the steps list does the same for the leg
-  that leads to it, and run mode highlights its current leg.
+- **Follow a route by pointing at it**: the leg under the pointer stands out with its arrows while the rest of the
+  route dims to a greyer, still readable tone, and its tooltip names the two steps it joins. Pointing at a step in the
+  steps list does the same for the leg that leads to it, and run mode highlights its current leg.
 - **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, the two
-  directions are drawn slightly apart, each with its own arrows.
+  directions are drawn slightly apart, each with its own arrows, and the way back is dashed.
 - **Routes settings**: a new Routes group in Settings sets the line width, opacity, outline and colour (each route's
-  own, or one for all), the arrows' density, size and arrowheads at stops, arrows only on the focused step's leg, and
-  the highlight under the pointer. Changes show at once on the map and in run mode.
+  own, or one for all), "Colour along the route", the arrows' density, size and arrowheads at stops, arrows only on the
+  focused step's leg, and the highlight under the pointer. Changes show at once on the map and in run mode.
 - **The party strip fills from your group.** The side panel's party seats and the Party section's card show the people
   you are grouped with wherever the plan names nobody: each by the role chosen in the group finder, otherwise by class,
   marked as a guess when a class could fill more than one role. Names are in class colour with the level; offline and
@@ -96,6 +96,11 @@ client starts.
 - **Map toolbar with icons**: the map tools show the game's pictures beside their names; on a narrow window only the
   pictures show, and the names stay in the tooltips. The drawing tools, colours and line widths fit one line of square
   buttons, and Clear floor and Clear all share one menu button at its end.
+- **Routes that read in order**: lines are thinner, over a dark casing, and their colour shifts along the route from
+  its own colour to a partner colour (red runs through magenta to blue), so the earlier and later parts of a route that
+  doubles back read apart; numbered stops, the steps list's stop badges and the arrows take the colour at their place,
+  and the legend's swatch shows the colour the map draws. "Colour along the route" in the Routes settings turns the
+  shift off.
 - **Clearer route arrows**: smaller solid arrowheads in a lighter tone of the line with a thin dark edge, spaced
   evenly along the route, and a larger arrowhead into each numbered stop and the route's end. Arrows keep clear of
   stops, sharp bends, pins, labels and each other, so loops and paths that double back (Wailing Caverns) stay readable.
@@ -121,6 +126,8 @@ client starts.
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
 - **Bosses**: an ability with a short note no longer leaves empty lines under it.
+- **Map details panel**: a marker's long title no longer runs under the close button; it is cut after a word, with the
+  whole title in a tooltip. While a route is edited, a bend's handle under a pin or stop gives way to it.
 - **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron Ingress",
   "Anvilmar's Rest"), and their dark plates are denser.
 - **Russian**: the separators between items showed as a box in the game's Cyrillic font; they are a bullet now, in every

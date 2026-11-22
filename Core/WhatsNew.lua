@@ -38,7 +38,7 @@ local ENTRIES = {
 				{ L["Every floor on the map"],
 					L["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] },
 				{ L["Clearer routes"],
-					L["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."], "routes" },
+					L["Snap to corridors, colour along the route, clearer arrows, the hovered leg highlighted, and a Routes group in Settings."], "routes" },
 				{ L["Your group in the plan"],
 					L["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] },
 				{ L["Report a problem"],

@@ -19,8 +19,9 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
   plan and run mode, and entrances you use are learned. "Show location" in the header pins the entrance in one click.
 - **Every floor on the map**, with a floor switcher in the map's corner (Shift + mouse wheel changes floor too), and
   stairs and portals that say where they lead.
-- **Routes**: Snap to corridors in the route tool, clearer arrows, the leg under the pointer highlighted, two lanes
-  where a route doubles back, and a Routes group in Settings for line and arrow styles.
+- **Routes that read in order**: Snap to corridors in the route tool, a colour that shifts along each route, clearer
+  arrows, the leg under the pointer highlighted, two lanes with the way back dashed where a route doubles back, and a
+  Routes group in Settings for line and arrow styles.
 - **Your group in the plan**: the party seats fill from the people you are grouped with, by role or a guess from the
   class, without saving anything.
 - **Gear filters that filter**: a class or slot now narrows the drop list.
@@ -31,7 +32,7 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
 ## Upgrade notes
 
 - **Restart the game after updating**, not just `/reload`: 0.2.0 adds new files to the addon, and WoW reads an addon's
-  file list only when the client starts, so without a restart parts of the addon are missing.
+  file list only when the client starts, so without a restart parts of the addon are missing (the map draws no routes, and `/dp debug` says to restart).
 - **Your data carries over.** Plans, settings and recorded runs need nothing from you. On the first login the saved
   data moves to schema 6 (it remembers which plan a received copy came from, for group sync, and keeps prep notes).
 - **Going back to 0.1.0** after this update opens the newer data read-only, so the older version cannot lose what it
@@ -114,11 +115,16 @@ what to look for.
 17. **Map toolbar.** The tools show their pictures beside their names; on a narrow window only the pictures, names in
     the tooltips; the drawing line fits at the minimum width (880). In an own plan with no drawings, the clear menu's
     items are greyed out.
-18. **Route arrows, hover and lanes.** Wailing Caverns: arrows evenly spaced, none on stops, bends or labels; pointing
-    at a leg highlights it with a tooltip naming its two steps; pointing at a step highlights its leg; where the route
-    doubles back, two lanes with their own arrows. Run mode highlights its current leg.
-19. **Routes settings.** Settings > Routes: width, opacity, outline, colour and arrow options change the map and run
-    mode at once; "Highlight the route under the pointer" off stops the hover.
+18. **Route look, hover and lanes.** Wailing Caverns: thin lines over a dark casing whose colour shifts from the
+    route's colour at the entrance to its partner colour at the end (red through magenta to blue), stop numbers and
+    arrows in the colour at their place, the legend swatch matching; where the route doubles back, two lanes with the
+    way back dashed. Arrows evenly spaced, none on stops, bends or labels. Pointing at a leg highlights it while the rest
+    dims to grey, not pink, with a tooltip naming its two steps; pointing at a step highlights its leg; run mode
+    highlights its current leg. Check on parchment and on a dark minimap floor.
+19. **Routes settings and the details panel.** Settings > Routes: width, opacity, outline, colour, "Colour along the
+    route" (off: one colour) and the arrow options change the map and run mode at once; "Highlight the route under the
+    pointer" off stops the hover. Click a marker with a long name: the details title stops before the close button,
+    and hovering it shows the whole title.
 20. **What's new.** Update from 0.1.0 (or clear `news` in the saved data), restart the game and log in outside an instance: the card shows
     once, after combat if you log in fighting; "Open Settings" goes to Routes; `/dp new` shows it again. A first
     install shows the welcome instead.

@@ -974,7 +974,7 @@ ns.Locales.deDE = {
 	["Every floor on the map"] = "Alle Ebenen auf der Karte",
 	["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] = "Eine Ebenenauswahl in der Ecke der Karte; Umschalt + Mausrad wechselt ebenfalls die Ebene.",
 	["Clearer routes"] = "Klarere Routen",
-	["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."] = "„An Gängen ausrichten“, klarere Pfeile, der Abschnitt unter dem Mauszeiger hervorgehoben und „Routen“ in den Einstellungen.",
+	["Snap to corridors, colour along the route, clearer arrows, the hovered leg highlighted, and a Routes group in Settings."] = "„An Gängen ausrichten“, Farbverlauf entlang der Route, klarere Pfeile, der Abschnitt unter dem Mauszeiger hervorgehoben und „Routen“ in den Einstellungen.",
 	["Your group in the plan"] = "Deine Gruppe im Plan",
 	["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] = "Die Plätze füllen sich aus deiner Gruppe, und die Ausrüstungsfilter nach Klasse und Platz ändern jetzt die Beuteliste.",
 	-- Prep and Getting there

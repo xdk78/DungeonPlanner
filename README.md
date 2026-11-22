@@ -56,8 +56,9 @@ addons add extras when installed (see "Recommended companion addons").
   next, Skip, Careful), planned cooldowns and Bloodlust, and the forces after each pull; a Pull tool to click packs into
   pulls.
 - **Routes**: draw paths with Snap to corridors (lines follow the corridors instead of cutting through walls), build a
-  route through your pulls, or let "Suggest order" find a short path. Direction arrows, the leg under the pointer
-  highlighted, two lanes where a route doubles back, and a Routes group in Settings for line and arrow styles.
+  route through your pulls, or let "Suggest order" find a short path. A colour that shifts along each route so you can
+  tell which part comes first, direction arrows, the leg under the pointer highlighted, two lanes with the way back
+  dashed where a route doubles back, and a Routes group in Settings for line and arrow styles.
 - **Encounters**: every boss of the recommended plans with a portrait, level, key abilities (names and tooltips from
   the game) and loot from the addon's own boss data (or your own bosses), strategy text and phases with triggers.
 - **Party**: the seats fill from the people you are grouped with (by role, or a guess from the class) until you store
@@ -162,7 +163,7 @@ Options are in the game's Settings panel (`/dp settings`) and the settings butto
 - **Appearance**: language (Automatic or one of the six), font, window scale, minimap button, game map icon, map
   coordinates, prefer drawn maps (Santiago Reyes' maps, else another addon's) over the game's minimap pictures, map
   colours of the minimap pictures, colour-blind friendly colours, confirm before deleting plans, reset window position.
-- **Routes**: line width, opacity, outline and colour; direction arrows (off, few, normal, many), their size,
+- **Routes**: line width, opacity, outline and colour; colour along the route; direction arrows (off, few, normal, many), their size,
   arrowheads at stops, arrows only on the focused step's leg; highlight the route under the pointer.
 - **Progress tracking**: track boss kills and runs, a chat line when a planned boss dies (only you see it), record my
   runs, clear all recorded runs.

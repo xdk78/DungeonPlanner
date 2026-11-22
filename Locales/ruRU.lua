@@ -974,7 +974,7 @@ ns.Locales.ruRU = {
 	["Every floor on the map"] = "Все этажи на карте",
 	["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] = "Переключатель этажей в углу карты; Shift + колесо мыши тоже меняет этаж.",
 	["Clearer routes"] = "Понятнее пути",
-	["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."] = "«По коридорам», понятнее стрелки, выделенный отрезок под указателем и группа «Пути» в настройках.",
+	["Snap to corridors, colour along the route, clearer arrows, the hovered leg highlighted, and a Routes group in Settings."] = "«По коридорам», цвет вдоль пути, понятнее стрелки, выделенный отрезок под указателем и группа «Пути» в настройках.",
 	["Your group in the plan"] = "Ваша группа в плане",
 	["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] = "Места группы заполняются из вашей группы, а фильтры снаряжения по классу и ячейке теперь меняют список добычи.",
 	-- Prep and Getting there

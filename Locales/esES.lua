@@ -974,7 +974,7 @@ ns.Locales.esES = {
 	["Every floor on the map"] = "Todas las plantas en el mapa",
 	["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] = "Un selector de planta en la esquina del mapa; Mayús + rueda del ratón también cambia de planta.",
 	["Clearer routes"] = "Rutas más claras",
-	["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."] = "«Ajustar a pasillos», flechas más claras, el tramo bajo el puntero resaltado y un grupo Rutas en los ajustes.",
+	["Snap to corridors, colour along the route, clearer arrows, the hovered leg highlighted, and a Routes group in Settings."] = "«Ajustar a pasillos», color a lo largo de la ruta, flechas más claras, el tramo bajo el puntero resaltado y un grupo Rutas en los ajustes.",
 	["Your group in the plan"] = "Tu grupo en el plan",
 	["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] = "Los puestos del grupo se llenan con tu grupo, y los filtros de Equipo por clase y ranura ahora cambian la lista de botín.",
 	-- Prep and Getting there
