@@ -13,7 +13,7 @@
 local _, ns = ...
 local RouteLegs = ns:NewModule("RouteLegs")
 
-local sqrt, max, min = math.sqrt, math.max, math.min
+local sqrt, max, min, ceil = math.sqrt, math.max, math.min, math.ceil
 local G = ns.RouteArrows -- the grid and the point-to-segment distance
 
 local ANTI = 0.9 -- cosine: two segments whose directions are this close to opposite run out and back
@@ -61,7 +61,25 @@ function RouteLegs.Lanes(pts, o)
 	local ramp = 2 * shift -- the slant between the middle line and a lane, along the segment
 	local n = #pts
 	local segs = {}
-	local grid = G.NewGrid(max(16, near * 2))
+	-- The grid's cells are as large as an average segment (at least twice `near`), and a segment goes into the grid (and
+	-- is looked up) in pieces no longer than a cell, so a long diagonal does not fill its whole bounding box: the work
+	-- stays the same at any zoom.
+	local total = 0
+	for i = 2, n do
+		local dx, dy = pts[i][1] - pts[i - 1][1], pts[i][2] - pts[i - 1][2]
+		total = total + sqrt(dx * dx + dy * dy)
+	end
+	local cell = max(16, near * 2, n > 1 and total / (n - 1) or 0)
+	local grid = G.NewGrid(cell)
+	local function eachPiece(s, grow, fn)
+		local pieces = ceil(s.len / cell)
+		local dx, dy = s.bx - s.ax, s.by - s.ay
+		for k = 1, pieces do
+			local x0, y0 = s.ax + dx * (k - 1) / pieces, s.ay + dy * (k - 1) / pieces
+			local x1, y1 = s.ax + dx * k / pieces, s.ay + dy * k / pieces
+			fn(min(x0, x1) - grow, min(y0, y1) - grow, max(x0, x1) + grow, max(y0, y1) + grow)
+		end
+	end
 	for i = 2, n do
 		local a, b = pts[i - 1], pts[i]
 		local dx, dy = b[1] - a[1], b[2] - a[2]
@@ -75,23 +93,29 @@ function RouteLegs.Lanes(pts, o)
 			end
 			local s = { i = i, ax = a[1], ay = a[2], bx = b[1], by = b[2], len = len, ux = ux, uy = uy, rx = rx, ry = ry }
 			segs[i] = s
-			G.GridAdd(grid, s, min(a[1], b[1]) - near, min(a[2], b[2]) - near, max(a[1], b[1]) + near,
-				max(a[2], b[2]) + near)
+			eachPiece(s, near, function(x1, y1, x2, y2)
+				G.GridAdd(grid, s, x1, y1, x2, y2)
+			end)
 		end
 	end
 	local moved = false
 	for i = 2, n do
 		local s = segs[i]
 		if s then
-			-- partner: the opposite segment s runs alongside the longest; first: the earliest segment before s that runs
-			-- alongside it either way (the corridor's first pass).
+			-- partner: the opposite segment s runs alongside the longest (of two alike, the earlier); first: the earliest
+			-- segment before s that runs alongside it either way (the corridor's first pass). Each segment near s is
+			-- looked at once, however many cells they share.
 			local partner, shared, first = nil, 0, nil
-			G.GridAny(grid, min(s.ax, s.bx), min(s.ay, s.by), max(s.ax, s.bx), max(s.ay, s.by), function(t)
+			local function look(t)
+				if t.seen == s then
+					return false
+				end
+				t.seen = s
 				local dot = s.ux * t.ux + s.uy * t.uy
 				if t ~= s and (dot < -ANTI or (dot > ANTI and t.i < s.i)) then
 					local ov = overlap(s, t)
 					if ov > min(near, s.len / 3) and segSegDist(s, t) < near then
-						if dot < -ANTI and ov > shared then
+						if dot < -ANTI and (ov > shared or (ov == shared and t.i < partner.i)) then
 							partner, shared = t, ov
 						end
 						if t.i < s.i and (not first or t.i < first.i) then
@@ -100,6 +124,9 @@ function RouteLegs.Lanes(pts, o)
 					end
 				end
 				return false
+			end
+			eachPiece(s, 0, function(x1, y1, x2, y2)
+				G.GridAny(grid, x1, y1, x2, y2, look)
 			end)
 			if partner then
 				-- The part of s alongside its partner, from lo to hi along s; a short rest at either end moves too.

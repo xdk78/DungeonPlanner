@@ -152,6 +152,9 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
   language; plans saved earlier are matched by their floors or the client's own names. A wing of Scarlet Monastery,
   Dire Maul, Stratholme or Blackrock Spire is never guessed: when nothing tells which wing a plan is, it keeps the
   parchment, and `/dp debug` lists such plans.
+- **Map zoom no longer lags**: while the mouse wheel turns, the routes are drawn plain (no dashes or arrows) and their
+  full look comes once the zoom settles, a moment after the last tick; each tick costs about a fifth of what it did on
+  long routes such as Wailing Caverns'. The point under the pointer stays where it is.
 
 ### For contributors
 - `/dp scan` also records the client's floor and position answers inside an instance (`position.bestMap`,

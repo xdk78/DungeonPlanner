@@ -19,7 +19,8 @@
 -- Everything comes from pools on the view (casings, lines, joints, arrows) and is redrawn only when the map redraws
 -- (plan, view, focus or setting changes), never per frame; the pieces, dashes and colours are worked out in that
 -- redraw and bounded (ROUTE.ramp.pieces per route; ROUTE.maxDashes in all, only on the visible map and its margin).
--- While the map is busy (a drag or resize) the lines are drawn plain, and the full look comes when that ends. The map
+-- While the map is busy (a drag, a wheel zoom or a resize) the lines are drawn plain, and the full look comes when that
+-- ends; a route's lanes are worked out again only when its drawn points change (lanesFor). The map
 -- places the arrows after its pins and labels (DrawRouteArrows), so they keep clear of them; a draw without them places
 -- the arrows at once.
 
@@ -162,21 +163,63 @@ function MapRoutes.Install(view)
 	-- frames above all of these.
 	local OUTLINE, LINE, TOP_OUTLINE, TOP_LINE = 0, 1, 2, 3
 
-	-- While a marker or route point is dragged, or a window is being resized, the map redraws on every pointer move: the
-	-- paths are drawn plain then and the arrows wait (settle, below).
+	-- While a marker or route point is dragged, the wheel zooms (UI/MapInput.lua ZoomStep) or a window is being resized,
+	-- the map redraws on every pointer move or wheel tick: the paths are drawn plain then and the arrows wait (settle,
+	-- below).
 	local function busy(v)
 		local mode = v.drag and v.drag.mode
 		-- No button held any more: the size grip's release was lost, so the resize is over (UI/Window.lua).
 		if ns.sizingWindow and IsMouseButtonDown and not IsMouseButtonDown() then
 			ns.sizingWindow = nil
 		end
-		return mode == "marker" or mode == "point" or ns.sizingWindow ~= nil
+		return mode == "marker" or mode == "point" or mode == "zoom" or ns.sizingWindow ~= nil
+	end
+
+	-- A route's lanes (RouteLegs.Lanes, about half of a path's cost) for its drawn points `raw` (canvas offsets) at the
+	-- map's scale. Worked out again only when the drawn points or the line's width changed: a restyle (a hover change,
+	-- the end of a drag or zoom at the same scale) and a marker drag reuse them. While the map is busy (`scaled`: a
+	-- zoom or a resize), the route's last worked-out lanes are scaled to the new scale instead (the two lanes' spacing
+	-- grows or shrinks with the map for that moment); the exact lanes come with the full look when it settles.
+	local abs = math.abs
+	local function lanesFor(v, route, raw, wide, scale, scaled)
+		local cache = v.laneCache
+		if not cache then
+			cache = setmetatable({}, { __mode = "k" })
+			v.laneCache = cache
+		end
+		local c = cache[route]
+		local k = c and c.wide == wide and #c.raw == #raw and scale and c.scale and scale / c.scale
+		if k and (k == 1 or scaled) then
+			local same = true
+			for i, p in ipairs(raw) do
+				local q = c.raw[i]
+				local tol = k == 1 and 0 or 1e-6 * (abs(p[1]) + abs(p[2]) + 1)
+				if p.stop ~= q.stop or abs(p[1] - q[1] * k) > tol or abs(p[2] - q[2] * k) > tol then
+					same = false
+					break
+				end
+			end
+			if same and k == 1 then
+				return c.lanes
+			elseif same then
+				local out = {}
+				for i, p in ipairs(c.lanes) do
+					out[i] = { p[1] * k, p[2] * k, stop = p.stop, i = p.i, seg = p.seg, lane = p.lane, back = p.back }
+				end
+				return out
+			end
+		end
+		local R = S.ROUTE
+		local lanes = ns.RouteLegs.Lanes(raw, { shift = wide * R.lane, near = wide * 1.2, yUp = true })
+		cache[route] = { raw = raw, lanes = lanes, wide = wide, scale = scale }
+		return lanes
 	end
 
 	-- Draw every route path on `floor`. px, py: plan coordinates to canvas offsets (py negative downwards). o = { scale
 	-- (icon size), seg (the focused step's { route, from, to } or nil), highlight (a leg { route, from, to } drawn as the
 	-- hover highlight: run mode's current step), activeRoute, extra (more routes in the map's own coordinates: another
-	-- addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows (the caller places the
+	-- addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), mapScale (canvas pixels per map
+	-- unit: px, py and mx, my are linear in it; lanesFor above), deferArrows (the caller places the
 	-- arrows with PlaceRouteArrows once its pins are laid out), bounds (where dashes are made, canvas offsets y up: the
 	-- visible map and its margin; nil: everywhere), restyle (a hover change: same paths, new looks) }.
 	-- view.routeHover, the leg under the pointer or a hovered step (SetRouteHover), wins over o.highlight; either counts
@@ -239,7 +282,7 @@ function MapRoutes.Install(view)
 				entry.thickness = look.width + (route.id == o.activeRoute and u or 0)
 				entry.wide = entry.thickness + look.outline
 				entry.raw = raw
-				entry.lanes = ns.RouteLegs.Lanes(raw, { shift = entry.wide * R.lane, near = entry.wide * 1.2, yUp = true })
+				entry.lanes = lanesFor(self, route, raw, entry.wide, o.mapScale, lite)
 				if not lite then
 					-- A dash and its gap per period, and up to two more per segment of the way back (a dash cut where the
 					-- segment or the bounds begin and end): so the scale below keeps the count within maxDashes.
@@ -577,28 +620,33 @@ function MapRoutes.Install(view)
 		return v:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
 	end
 
-	-- While the map is busy (a drag or resize) its arrows hide and are placed once that ends (a short timer checks; a
-	-- stale tick does nothing), with the paths' full look when they were drawn plain meanwhile.
-	local function settle()
-		view.arrowTimer = nil
-		if not view.arrowsPending then
+	-- While the map is busy (a drag, a zoom or a resize) its arrows hide and are placed once that ends, with the paths'
+	-- full look when they were drawn plain meanwhile: at once when a zoom settles (UI/MapInput.lua ZoomEvent), else when
+	-- a short timer finds the map no longer busy (a stale tick does nothing). The pins and labels stay as the last
+	-- redraw laid them out.
+	function view:SettleRoutes()
+		if not self.arrowsPending or busy(self) then
 			return
 		end
-		if busy(view) then
+		self.arrowsPending = nil
+		if self:IsVisible() then
+			if self.routesLite and self.routeArgs then
+				self.routeCounts = redrawPaths(self)
+			end
+			local n = self:DrawRouteArrows(self.arrowObstacles)
+			if self.counts then
+				self.counts.arrows, self.counts.lines = n, self.routeCounts and self.routeCounts.lines or self.counts.lines
+			end
+		end
+	end
+	local function settle()
+		view.arrowTimer = nil
+		if view.arrowsPending and busy(view) then
 			view.arrowTimer = true
 			C_Timer.After(0.1, settle)
 			return
 		end
-		view.arrowsPending = nil
-		if view:IsVisible() then
-			if view.routesLite and view.routeArgs then
-				view.routeCounts = redrawPaths(view)
-			end
-			local n = view:DrawRouteArrows(view.arrowObstacles)
-			if view.counts then
-				view.counts.arrows = n
-			end
-		end
+		view:SettleRoutes()
 	end
 	-- The map's way to draw the arrows (UI/MapCanvas.lua DrawContent). Returns how many it drew now.
 	function view:PlaceRouteArrows(obstacles)

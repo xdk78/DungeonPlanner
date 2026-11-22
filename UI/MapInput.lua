@@ -1,8 +1,9 @@
 -- The map canvas, part 2: tooltips and input (UI/MapCanvas.lua draws). Hover a pin for its label, kind, pull, boss
 -- and note; click selects, right-click opens its menu, drag moves it (own plans, Select tool). The map itself pans by
 -- dragging and zooms with the wheel around the cursor; a click that did not pan places what the current tool places.
--- Dragging is an explicit state machine (view.drag: idle | pan | marker | point | draw, the last in UI/MapDraw.lua) and
--- runs OnUpdate only while the mouse is down; hovering updates the coordinate readout at most 20 times a second.
+-- Dragging is an explicit state machine (view.drag: idle | pan | marker | point | draw, the last in UI/MapDraw.lua,
+-- and zoom while the wheel turns) and runs OnUpdate only while the mouse is down; hovering updates the coordinate
+-- readout at most 20 times a second.
 
 local _, ns = ...
 local MapCanvas = ns.MapCanvas
@@ -11,6 +12,34 @@ local W = ns.Widgets
 
 local MIN_ZOOM, MAX_ZOOM = 1, 8
 local CLICK_SLOP = 4 -- pixels of movement before a press becomes a drag
+MapCanvas.ZOOM_SETTLE = 0.15 -- seconds without a wheel tick before a zoom has settled
+
+-- Wheel zoom as a mode of view.drag. Each tick redraws the map in its plain look (UI/MapRoutes.lua: no dashes, no
+-- arrows); the full look comes once, when no tick has come for ZOOM_SETTLE seconds. ZoomStep(d, event, now, id) ->
+-- the new state and its effects { zoom (zoom at the pointer now), wait (seconds until the timer event for this zoom),
+-- settle (back to idle: draw the full look) }. Events: "wheel"; "timer" with the zoom's id (one timer at a time; a
+-- timer of an earlier zoom changes nothing); "press" and "hide" (the zoom ends at once). A tick during another drag
+-- (a pan, a marker or point drag, a stroke) zooms and leaves that drag alone.
+local zoomIds = 0
+function MapCanvas.ZoomStep(d, event, now, id)
+	if event == "wheel" then
+		if d.mode == "zoom" then
+			return { mode = "zoom", id = d.id, ends = now + MapCanvas.ZOOM_SETTLE }, { zoom = true }
+		elseif d.mode == "idle" then
+			zoomIds = zoomIds + 1
+			return { mode = "zoom", id = zoomIds, ends = now + MapCanvas.ZOOM_SETTLE },
+				{ zoom = true, wait = MapCanvas.ZOOM_SETTLE }
+		end
+		return d, { zoom = true }
+	elseif d.mode ~= "zoom" or (event == "timer" and id ~= d.id) then
+		return d, {}
+	elseif event == "timer" and now < d.ends then
+		return d, { wait = d.ends - now }
+	elseif event == "timer" or event == "press" or event == "hide" then
+		return { mode = "idle" }, { settle = true }
+	end
+	return d, {}
+end
 
 -- A note in a tooltip: estimates ("(approx.)") lose those words and get a muted line saying so instead.
 local function addNote(tt, text)
@@ -133,9 +162,13 @@ function MapCanvas.InstallInput(view)
 		return self:FromMap(x, y)
 	end
 
+	local function nextZoom(v, delta)
+		return Util.Clamp(v.zoom * (delta > 0 and 1.25 or 0.8), MIN_ZOOM, MAX_ZOOM)
+	end
+
 	function view:ZoomAt(delta)
 		local old = self:Scale()
-		local newZoom = Util.Clamp(self.zoom * (delta > 0 and 1.25 or 0.8), MIN_ZOOM, MAX_ZOOM)
+		local newZoom = nextZoom(self, delta)
 		if newZoom == self.zoom then
 			return
 		end
@@ -147,6 +180,25 @@ function MapCanvas.InstallInput(view)
 		local new = self:Scale()
 		self.ox, self.oy = vx - mx * new, vy - my * new
 		self:Layout()
+	end
+
+	-- A wheel zoom's event (MapCanvas.ZoomStep) and its effects. delta: the wheel's, for "wheel".
+	function view:ZoomEvent(event, id, delta)
+		local d, fx = MapCanvas.ZoomStep(self.drag, event, GetTime(), id)
+		self.drag = d
+		if fx.wait and C_Timer and C_Timer.After then
+			local zid = d.id
+			C_Timer.After(fx.wait, function()
+				self:ZoomEvent("timer", zid)
+			end)
+		end
+		if fx.zoom then
+			self:ZoomAt(delta)
+		end
+		if fx.settle then
+			self:Idle()
+			self:SettleRoutes()
+		end
 	end
 
 	function view:ResetView()
@@ -340,6 +392,8 @@ function MapCanvas.InstallInput(view)
 	end
 
 	view:SetScript("OnMouseDown", function(self, mouse)
+		-- A press ends a zoom at once (its full look first).
+		self:ZoomEvent("press")
 		-- One drag at a time: a second button pressed during a stroke or a pan must not replace it (an eraser stroke
 		-- replaced by a pan would never report the shapes it removed).
 		if self.drag.mode ~= "idle" then
@@ -375,7 +429,9 @@ function MapCanvas.InstallInput(view)
 		end
 	end)
 	view:SetScript("OnMouseWheel", function(self, delta)
-		self:ZoomAt(delta)
+		if nextZoom(self, delta) ~= self.zoom then
+			self:ZoomEvent("wheel", nil, delta)
+		end
 	end)
 	-- Route hover: the leg under the pointer (a route's stretch between two numbered stops) is highlighted
 	-- (UI/MapRoutes.lua SetRouteHover) with a tooltip naming the steps it joins. Only while the map is idle, with no
@@ -424,6 +480,11 @@ function MapCanvas.InstallInput(view)
 	end
 	function view:RouteHoverUpdate()
 		local jobs = self.routeJobs
+		-- While the wheel zooms, the leg under the pointer stays (the zoom keeps that point still): looked at again once
+		-- the zoom has settled, so the settled map is not drawn twice.
+		if self.drag.mode == "zoom" then
+			return
+		end
 		if not (jobs and hoverEnabled() and self.drag.mode == "idle" and not (self.cb.drawTool and self.cb.drawTool())) then
 			self:ClearRouteHover("map")
 			return
@@ -506,6 +567,7 @@ function MapCanvas.InstallInput(view)
 		self:Layout()
 	end)
 	view:SetScript("OnHide", function(self)
+		self:ZoomEvent("hide")
 		if self.drag.mode == "pan" and self.drag.moved then
 			self:Layout()
 		elseif self.drag.mode == "marker" or self.drag.mode == "point" then
