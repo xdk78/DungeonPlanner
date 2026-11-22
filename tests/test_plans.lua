@@ -297,3 +297,60 @@ T.case("Recommended plans: no source, licence or researcher remark in any shippe
 		end
 	end
 end)
+
+-- Stale routes (feature research: data accuracy is the most commented issue type of dungeon route tools): a
+-- recommended plan researched well before the game build the player runs says so, with its source and dates.
+T.case("Recommended plans say when their research is older than the game build", function()
+	local B = ns.Bundled
+	T.eq(B.STALE_DAYS, 90)
+	local nov16 = 1794787200 -- 2026-11-16 00:00 UTC, the recommended plans' data date
+	for _, plan in ipairs(B.All()) do
+		T.ok(not B.Stale(plan.updated, "Nov 20 2026"), plan.id .. ": a build days after the research is not flagged")
+	end
+	T.eq((B.Stale(nov16, "Nov 20 2026")), false, "four days later: not stale")
+	T.eq((B.Stale(nov16, "Nov 16 2026")), false, "the same day")
+	T.eq((B.Stale(nov16, "Feb 14 2027")), false, "90 days later: not yet")
+	local stale, build = B.Stale(nov16, "Feb 15 2027")
+	T.eq(stale, true, "91 days later: stale")
+	T.eq(build, "2027-02-15")
+	T.eq((B.Stale(nov16 + 86399, "Feb 15 2027")), true, "the research's time of day does not matter")
+	T.eq((B.Stale(nov16 + 86400, "Feb 15 2027")), false, "a day later research: 90 days")
+	T.eq((B.Stale(1, "Apr 2 1970")), true, "the day count from 1970 (91 days to Apr 2)")
+	T.eq((B.Stale(1, "Apr 1 1970")), false, "90 days to Apr 1")
+	T.eq((B.Stale(1794787200 - 86400 * 365, "Nov 16 2026")), true, "a year")
+	T.eq((B.Stale(nov16, "Oct 1 2026")), false, "an older build")
+	T.eq(B.Stale(nov16, "1.0.0"), nil, "no date: unknown")
+	T.eq(B.Stale(nov16, "Nov 99 2026"), nil, "not a day")
+	T.eq(B.Stale(nil, "Nov 20 2026"), nil)
+	-- A client without a build date, or with one that is not a date: no notice, no error.
+	local mock = T.mock
+	local thanes = B.Get(B.PREFIX .. "hall-of-thanes")
+	local realBuild, realInfo = rawget(_G, "GetBuildInfo"), mock.buildInfo
+	local okInfo, errInfo = pcall(function()
+		for _, odd in ipairs({ "?", "", "2030-12-24", "Smarch 1 2030", "Dec 2030" }) do
+			mock.buildInfo = { realInfo[1], realInfo[2], odd, realInfo[4] }
+			T.eq(ns.UI.StaleLine(thanes), nil, "build date " .. odd .. ": no notice")
+		end
+		mock.buildInfo = { realInfo[1], realInfo[2], nil, realInfo[4] }
+		T.eq(ns.UI.StaleLine(thanes), nil, "no build date: no notice")
+		_G.GetBuildInfo = nil
+		T.eq(ns.UI.StaleLine(thanes), nil, "no GetBuildInfo: no notice")
+	end)
+	_G.GetBuildInfo, mock.buildInfo = realBuild, realInfo
+	assert(okInfo, errInfo)
+	local saved = mock.buildInfo
+	mock.buildInfo = { saved[1], saved[2], "Dec 24 2030", saved[4] }
+	local ok, err = pcall(function()
+		local plan = B.Get(B.PREFIX .. "hall-of-thanes")
+		local _, lines = ns.UI.PlanSource(plan)
+		local found = false
+		for _, l in ipairs(lines) do
+			found = found or l:find("2030-12-24", 1, true) ~= nil
+		end
+		T.ok(found, "the Notes section's source lines name the build")
+		-- (The side panel's line: tests/test_wartable.lua, once the window is built.)
+	end)
+	mock.buildInfo = saved
+	assert(ok, err)
+	T.eq(ns.UI.StaleLine(B.Get(B.PREFIX .. "hall-of-thanes")), nil, "an old build (the mock's): nothing")
+end)

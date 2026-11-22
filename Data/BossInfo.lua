@@ -9,7 +9,7 @@ local Util, L = ns.Util, ns.L
 
 local DEFAULT_DROPS = 8
 local DEFAULT_ABILITIES = 6
-local MIDDOT = " \194\183 "
+local MIDDOT = " \226\128\162 "
 
 -- Facts per plan revision and provider state: every redraw of the map and the pages asks again.
 local cache = setmetatable({}, { __mode = "k" }) -- [plan] = { stamp, by = { [key] = info or false } }
@@ -104,7 +104,7 @@ function BossInfo.LevelText(level)
 	return nil
 end
 
--- The line under a boss's name: "Level 16 · Rare", or nil when nothing is known.
+-- The line under a boss's name: "Level 16 • Rare", or nil when nothing is known.
 function BossInfo.Meta(info)
 	if type(info) ~= "table" then
 		return nil

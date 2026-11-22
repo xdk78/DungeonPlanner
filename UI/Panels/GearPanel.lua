@@ -42,6 +42,8 @@ local function slotText(slot)
 end
 
 local ROLE_TEXT = { TANK = "Tank", HEALER = "Healer", DAMAGER = "Damage" }
+-- Items side by side: as many columns as fit at CELL_MIN wide (an item's name and slot), at most COLS_MAX.
+local CELL_MIN, COLS_MAX = 250, 3
 
 function Panel.Create(parent, ctx)
 	local f = CreateFrame("Frame", nil, parent)
@@ -271,22 +273,144 @@ function Panel.Create(parent, ctx)
 		end
 	end
 
+	-- One entry (an own item or a drop) in a cell of a list line: the item's icon, name, slot and the like, a priority
+	-- badge for own items.
+	local function fillCell(cell, entry)
+		cell.entry = entry
+		if entry.gear then
+			local g = entry.gear
+			local name, quality, icon = ns.Names.ItemInfo(g)
+			cell.icon:SetTexture(icon or 134400) -- 134400: the game's question-mark icon file ID
+			cell.title:SetText(name)
+			cell.title:SetTextColor(ns.Names.QualityColor(quality))
+			local meta = {}
+			if g.label ~= "" and g.itemID then
+				meta[#meta + 1] = g.label
+			end
+			if g.slot then
+				meta[#meta + 1] = slotText(g.slot)
+			end
+			if g.class then
+				meta[#meta + 1] = g.class:sub(1, 1) .. g.class:sub(2):lower()
+			end
+			if g.role then
+				meta[#meta + 1] = L[ROLE_TEXT[g.role] or "Damage"]
+			end
+			if g.encounter then
+				local enc = Util.FindById(plan().encounters, g.encounter)
+				if enc then
+					meta[#meta + 1] = ns.Names.Encounter(enc)
+				end
+			end
+			if g.note ~= "" then
+				meta[#meta + 1] = g.note
+			end
+			cell.meta:SetText(table.concat(meta, " \226\128\162 "))
+			cell.badge:SetText(string.format(L["Priority %d"], g.priority))
+		else
+			local it = entry.loot
+			local cName, cQuality, cIcon = ns.Names.ItemInfo({ itemID = it.itemID, label = "" })
+			cell.icon:SetTexture(it.icon or cIcon or 134400)
+			cell.title:SetText(it.name or cName)
+			cell.title:SetTextColor(ns.Names.QualityColor(it.quality or cQuality))
+			local meta = {}
+			if it.slot then
+				meta[#meta + 1] = slotText(it.slot)
+			elseif it.slotText then
+				meta[#meta + 1] = it.slotText
+			end
+			if it.armorType then
+				meta[#meta + 1] = it.armorType
+			end
+			cell.meta:SetText(table.concat(meta, ", "))
+			cell.badge:SetText("")
+		end
+		-- The name and meta run to the badge when there is one, else to the cell's edge.
+		local inset = entry.gear and -(math.ceil(cell.badge:GetStringWidth() or 0) + SP.md + SP.sm) or -SP.sm
+		cell.title:SetPoint("RIGHT", inset, 0)
+		cell.meta:SetPoint("RIGHT", inset, 0)
+	end
+
+	local function cellEnter(cell)
+		local entry = cell.entry
+		if entry and entry.gear and entry.gear.itemID then
+			showTooltip(cell, entry.gear.itemID)
+		elseif entry and entry.loot then
+			showTooltip(cell, entry.loot.itemID, entry.loot.link)
+		end
+	end
+
+	local function cellClick(cell, mouse)
+		W.CommitFocus()
+		local entry = cell.entry
+		if not entry then
+			return
+		end
+		local itemID = entry.gear and entry.gear.itemID or entry.loot and entry.loot.itemID
+		if mouse == "LeftButton" and IsShiftKeyDown and IsShiftKeyDown() then
+			linkInChat(entry.loot and entry.loot.link)
+			return
+		end
+		if mouse ~= "RightButton" or ctx:ReadOnly() then
+			return
+		end
+		if entry.gear then
+			W.Menu(cell, {
+				{
+					L["Delete"],
+					function()
+						Plan.RemoveGear(plan(), entry.gear.id)
+						changed()
+					end,
+				},
+			})
+		elseif itemID then
+			W.Menu(cell, {
+				{ title = entry.loot.name or tostring(itemID) },
+				{
+					L["Recommend this item"],
+					function()
+						addGear({ itemID = itemID, slot = entry.loot.slot, priority = draft.priority, encounter = entry.encounterId })
+					end,
+				},
+			})
+		end
+	end
+
+	local function makeCell(row)
+		local cell = CreateFrame("Button", nil, row)
+		cell:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+		cell.glow = W.RowHighlight(cell)
+		cell.icon = cell:CreateTexture(nil, "ARTWORK")
+		cell.icon:SetSize(32, 32)
+		cell.icon:SetPoint("LEFT", SP.sm, 0)
+		cell.title = W.Text(cell, "body", "ink")
+		cell.title:SetPoint("TOPLEFT", cell.icon, "TOPRIGHT", SP.sm, -1)
+		cell.meta = W.Text(cell, "caption", "muted")
+		cell.meta:SetPoint("BOTTOMLEFT", cell.icon, "BOTTOMRIGHT", SP.sm, 1)
+		cell.badge = W.Text(cell, "caption", "goldBright")
+		cell.badge:SetPoint("RIGHT", -SP.md, 0)
+		cell.badge:SetJustifyH("RIGHT")
+		cell:SetScript("OnEnter", cellEnter)
+		cell:SetScript("OnLeave", function(self)
+			if GameTooltip and GameTooltip:IsOwned(self) then
+				GameTooltip:Hide()
+			end
+		end)
+		cell:SetScript("OnClick", cellClick)
+		return cell
+	end
+
+	-- The list's lines: a section or boss heading, or up to `cols` entries side by side (the page is wide; one entry a
+	-- line left most of it empty).
 	f.list = W.List(f, {
 		rowHeight = SZ.row2,
 		empty = L["No gear for this filter."],
 		create = function(row)
-			row.icon = row:CreateTexture(nil, "ARTWORK")
-			row.icon:SetSize(32, 32)
-			row.icon:SetPoint("LEFT", SP.sm, 0)
-			row.title = W.Text(row, "body", "ink")
-			row.title:SetPoint("TOPLEFT", row.icon, "TOPRIGHT", SP.sm, -1)
-			row.title:SetPoint("RIGHT", -56, 0)
-			row.meta = W.Text(row, "caption", "muted")
-			row.meta:SetPoint("BOTTOMLEFT", row.icon, "BOTTOMRIGHT", SP.sm, 1)
-			row.meta:SetPoint("RIGHT", -56, 0)
-			row.badge = W.Text(row, "caption", "goldBright")
-			row.badge:SetPoint("RIGHT", -SP.md, 0)
-			row.badge:SetJustifyH("RIGHT")
+			row.cells = {}
+			for i = 1, COLS_MAX do
+				row.cells[i] = makeCell(row)
+			end
 			row.heading = W.Text(row, "title", "gold")
 			row.heading:SetPoint("BOTTOMLEFT", SP.sm, SP.xs + 2)
 			row.heading:SetPoint("RIGHT", -SP.sm, 0)
@@ -301,117 +425,72 @@ function Panel.Create(parent, ctx)
 			row.rule:SetPoint("BOTTOMLEFT", 2, 2)
 			row.rule:SetPoint("BOTTOMRIGHT", -2, 2)
 		end,
-		update = function(row, item)
-			local isHeader = item.header ~= nil
+		update = function(row, line)
+			local isHeader = line.header ~= nil
 			row.heading:SetShown(isHeader)
 			-- The band marks the list's sections; the bosses under them (indented) are plain gold headings.
-			local section = isHeader and not item.header:find("^%s")
+			local section = isHeader and not line.header:find("^%s")
 			row.rule:SetShown(section)
 			if row.strip then
 				row.strip:SetShown(section)
 			end
-			row.icon:SetShown(not isHeader)
-			row.title:SetShown(not isHeader)
-			row.meta:SetShown(not isHeader)
-			row.badge:SetShown(not isHeader)
-			row.glow:SetShown(not isHeader)
+			row.glow:SetShown(false) -- each cell has its own
 			if isHeader then
-				row.heading:SetText(item.header)
-				return
+				row.heading:SetText(line.header)
 			end
-			if item.gear then
-				local g = item.gear
-				local name, quality, icon = ns.Names.ItemInfo(g)
-				row.icon:SetTexture(icon or 134400) -- 134400: the game's question-mark icon file ID
-				row.title:SetText(name)
-				row.title:SetTextColor(ns.Names.QualityColor(quality))
-				local meta = {}
-				if g.label ~= "" and g.itemID then
-					meta[#meta + 1] = g.label
+			local cells = line.cells or {}
+			local cols = math.max(1, #cells == 0 and 1 or f.cols)
+			local width = (math.max(0, f.list:GetWidth() - SP.md) - (cols - 1) * SP.sm) / cols
+			for i, cell in ipairs(row.cells) do
+				local entry = cells[i]
+				cell:SetShown(entry ~= nil)
+				if entry then
+					cell:ClearAllPoints()
+					cell:SetPoint("TOPLEFT", (i - 1) * (width + SP.sm), 0)
+					cell:SetSize(math.max(1, width), SZ.row2)
+					fillCell(cell, entry)
+				else
+					cell.entry = nil
 				end
-				if g.slot then
-					meta[#meta + 1] = slotText(g.slot)
-				end
-				if g.class then
-					meta[#meta + 1] = g.class:sub(1, 1) .. g.class:sub(2):lower()
-				end
-				if g.role then
-					meta[#meta + 1] = L[ROLE_TEXT[g.role] or "Damage"]
-				end
-				if g.encounter then
-					local enc = Util.FindById(plan().encounters, g.encounter)
-					if enc then
-						meta[#meta + 1] = ns.Names.Encounter(enc)
-					end
-				end
-				if g.note ~= "" then
-					meta[#meta + 1] = g.note
-				end
-				row.meta:SetText(table.concat(meta, " \194\183 "))
-				row.badge:SetText(string.format(L["Priority %d"], g.priority))
-			else
-				local it = item.loot
-				local cName, cQuality, cIcon = ns.Names.ItemInfo({ itemID = it.itemID, label = "" })
-				row.icon:SetTexture(it.icon or cIcon or 134400)
-				row.title:SetText(it.name or cName)
-				row.title:SetTextColor(ns.Names.QualityColor(it.quality or cQuality))
-				local meta = {}
-				if it.slot then
-					meta[#meta + 1] = slotText(it.slot)
-				elseif it.slotText then
-					meta[#meta + 1] = it.slotText
-				end
-				if it.armorType then
-					meta[#meta + 1] = it.armorType
-				end
-				row.meta:SetText(table.concat(meta, ", "))
-				row.badge:SetText("")
-			end
-		end,
-		onEnter = function(item, row)
-			if item.gear and item.gear.itemID then
-				showTooltip(row, item.gear.itemID)
-			elseif item.loot then
-				showTooltip(row, item.loot.itemID, item.loot.link)
-			end
-		end,
-		onClick = function(item, _, mouse, row)
-			if item.header then
-				return
-			end
-			local itemID = item.gear and item.gear.itemID or item.loot and item.loot.itemID
-			if mouse == "LeftButton" and IsShiftKeyDown and IsShiftKeyDown() then
-				linkInChat(item.loot and item.loot.link)
-				return
-			end
-			if mouse ~= "RightButton" or ctx:ReadOnly() then
-				return
-			end
-			if item.gear then
-				W.Menu(row, {
-					{
-						L["Delete"],
-						function()
-							Plan.RemoveGear(plan(), item.gear.id)
-							changed()
-						end,
-					},
-				})
-			elseif itemID then
-				W.Menu(row, {
-					{ title = item.loot.name or tostring(itemID) },
-					{
-						L["Recommend this item"],
-						function()
-							addGear({ itemID = itemID, slot = item.loot.slot, priority = draft.priority, encounter = item.encounterId })
-						end,
-					},
-				})
 			end
 		end,
 	})
 	f.list:SetPoint("TOPLEFT", f.class, "BOTTOMLEFT", 0, -SP.md)
 	f.list:SetPoint("BOTTOMRIGHT", form, "TOPRIGHT", 0, SP.md)
+	f.cols = 1
+
+	-- Entries into lines: headings alone, the entries under each `cols` to a line.
+	local function lines(entries, cols)
+		local out, line = {}, nil
+		for _, e in ipairs(entries) do
+			if e.header then
+				out[#out + 1] = e
+				line = nil
+			else
+				if not line or #line.cells >= cols then
+					line = { cells = {} }
+					out[#out + 1] = line
+				end
+				line.cells[#line.cells + 1] = e
+			end
+		end
+		return out
+	end
+	local function columns()
+		local w = f.list:GetWidth() - SP.md
+		return math.max(1, math.min(COLS_MAX, math.floor((w + SP.sm) / (CELL_MIN + SP.sm))))
+	end
+	-- The flat list of entries (headings, own items { gear }, drops { loot }) the lines are made of.
+	f.entries = {}
+	local function setLines()
+		f.cols = columns()
+		f.list:SetItems(lines(f.entries, f.cols))
+	end
+	f.list:HookScript("OnSizeChanged", function()
+		if columns() ~= f.cols then
+			setLines()
+		end
+	end)
 
 	-- The journal's drops for the filter, grouped by boss (journal order).
 	local function journalDrops(p)
@@ -585,7 +664,8 @@ function Panel.Create(parent, ctx)
 				ns.Names.Item(id)
 			end
 		end
-		self.list:SetItems(items)
+		self.entries = items
+		setLines()
 	end
 
 	-- Item and loot data arrive asynchronously; refresh while visible, at most once per half second.

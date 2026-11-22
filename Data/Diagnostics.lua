@@ -259,6 +259,28 @@ local function position(out)
 	}
 	local okB, best = call(mapAPI.GetBestMapForUnit, "player")
 	p.bestMap = state(okB, best)
+	-- The instance's map ID (GetInstanceInfo's 8th value) on its own, the indoor flag, and the best map's floor group
+	-- with each member's relativeHeightIndex: what an automatic floor switch would need (Data/Floors.lua PlayerFloor,
+	-- unverified until a scan inside a dungeon shows a map).
+	p.instanceMapID = state(okN, instanceID)
+	p.indoors = state(call(rawget(_G, "IsIndoors")))
+	if okB and type(Util.Plain(best)) == "number" then
+		local okG, group = call(mapAPI.GetMapGroupID, best)
+		p.mapGroup = state(okG, group)
+		if okG and type(Util.Plain(group)) == "number" then
+			local okM, members = call(mapAPI.GetMapGroupMembersInfo, group)
+			local rows = {}
+			for _, m in ipairs(okM and type(Util.Plain(members)) == "table" and members or {}) do
+				if type(m) == "table" then
+					rows[#rows + 1] = state(true, Util.Plain(m.mapID)) .. " " .. state(true, Util.Plain(m.name)) .. " h"
+						.. state(true, Util.Plain(m.relativeHeightIndex))
+				end
+			end
+			p.mapGroupMembers = okM and rows or state(okM, members)
+		end
+		local okF, floor = pcall(ns.Floors.Match, {}, ns.Floors.PlayerMap())
+		p.playerFloorAPI = okF and "ok" or ("error " .. tostring(floor))
+	end
 	if okB and type(Util.Plain(best)) == "number" then
 		local okP, pos = call(mapAPI.GetPlayerMapPosition, best, "player")
 		local okXY, x, y = false, nil, nil

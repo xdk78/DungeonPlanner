@@ -220,7 +220,7 @@ end
 
 -- Document: read-only formatted text in a scroll area, as Dungeon Journal's detail pane (recommended plans show their
 -- text this way instead of in input boxes). Build it with doc:Begin(), then doc:Add(style, text), doc:Space(px) and
--- doc:Place(frame, height[, stretch]) in reading order, then doc:Finish(). Font strings are pooled; the layout reruns when the
+-- doc:Place(frame, height or function(width)[, stretch]) in reading order, then doc:Finish(). Font strings are pooled; the layout reruns when the
 -- area changes size. Styles: title, heading, label, text, muted.
 
 local DOC_STYLES = {
@@ -267,7 +267,7 @@ function W.Document(parent)
 					b.frame:SetWidth(width)
 				end
 				b.frame:Show()
-				y = y + b.height
+				y = y + (type(b.height) == "function" and b.height(width) or b.height)
 			else
 				local spec = DOC_STYLES[b.style] or DOC_STYLES.text
 				if i > 1 then
@@ -302,7 +302,8 @@ function W.Document(parent)
 	function area:Space(px)
 		blocks[#blocks + 1] = { space = px }
 	end
-	-- stretch: the frame is as wide as the text blocks (kept up when the area resizes).
+	-- stretch: the frame is as wide as the text blocks (kept up when the area resizes). height: pixels, or
+	-- function(width) -> pixels for a frame whose height follows its width (wrapped text).
 	function area:Place(frame, height, stretch)
 		blocks[#blocks + 1] = { frame = frame, height = height, stretch = stretch }
 	end

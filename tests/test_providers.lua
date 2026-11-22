@@ -784,7 +784,7 @@ T.case("Gear: with the Dungeon Journal installed and default filters, the drops 
 	local gear = gearPage()
 	gear:Refresh() -- the client raises on an anchor cycle (tests/wowmock.lua does too), which emptied this page
 	local headers, items = {}, 0
-	for _, it in ipairs(gear.list.items) do
+	for _, it in ipairs(gear.entries) do
 		if it.header then
 			headers[#headers + 1] = it.header
 		elseif it.loot then

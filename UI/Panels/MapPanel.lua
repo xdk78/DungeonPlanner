@@ -156,15 +156,23 @@ function Panel.Create(parent, ctx)
 	})
 	f.pull:SetPoint("LEFT", optionsX, 0)
 
+	-- Every floor the map can show (Data/Floors.lua). Going to one clears what belonged to the last.
+	function f:GoToFloor(v)
+		if v == ctx.floor or not ctx:Floors()[v] then
+			return
+		end
+		ctx.floor = v
+		ctx.selectedMarker, ctx.activeRoute, ctx.focusSegment = nil, nil, nil
+		self:LoadFloor()
+		self:Refresh()
+	end
+	-- The toolbar's floor list, for an instance with many floors; fewer have the switcher on the map (FloorBar).
 	f.floor = W.Dropdown(bar, {
 		width = 150,
 		options = function()
 			local out = {}
-			local p = plan()
-			if p then
-				for i, floor in ipairs(p.floors) do
-					out[#out + 1] = { text = ns.Names.Floor(floor, i), value = i }
-				end
+			for i, floor in ipairs(ctx:Floors()) do
+				out[#out + 1] = { text = ns.Names.Floor(floor, i), value = i }
 			end
 			return out
 		end,
@@ -172,10 +180,7 @@ function Panel.Create(parent, ctx)
 			return ctx.floor
 		end,
 		set = function(v)
-			ctx.floor = v
-			ctx.selectedMarker, ctx.activeRoute = nil, nil
-			f:LoadFloor()
-			f:Refresh()
+			f:GoToFloor(v)
 		end,
 	})
 	f.floor:SetPoint("RIGHT", 0, 0)
@@ -244,6 +249,14 @@ function Panel.Create(parent, ctx)
 		readOnly = readOnly,
 		getFloor = function()
 			return ctx.floor
+		end,
+		-- Put something on the current floor (a floor only the map had joins the plan first; ctx:AddOnFloor).
+		addOnFloor = function(add)
+			return ctx:AddOnFloor(add)
+		end,
+		-- A marker that leads to another floor (stairs, a portal) was clicked in a read-only plan: go there.
+		onGoToFloor = function(index)
+			f:GoToFloor(index)
 		end,
 		getTool = function()
 			return readOnly() and "select" or ctx.tool
@@ -331,7 +344,9 @@ function Panel.Create(parent, ctx)
 			end
 			local route = ctx.activeRoute and Util.FindById(p.routes, ctx.activeRoute)
 			if not route then
-				route = Plan.AddRoute(p, ctx.floor, string.format(L["Route %d"], #p.routes + 1), (#p.routes % Schema.COLOR_COUNT) + 1)
+				route = ctx:AddOnFloor(function(floor)
+					return Plan.AddRoute(p, floor, string.format(L["Route %d"], #p.routes + 1), (#p.routes % Schema.COLOR_COUNT) + 1)
+				end)
 				if not route then
 					ns:Print(L["Cannot add more routes."])
 					return
@@ -387,6 +402,8 @@ function Panel.Create(parent, ctx)
 	})
 	f.iconSize:SetPoint("TOPLEFT", labelsBox, "BOTTOMLEFT", 0, -SP.xs)
 	f.controls = controls
+	-- The floor switcher in the top-left corner (UI/Panels/FloorBar.lua).
+	ns.FloorBar.Build(f, ctx, canvas)
 
 	-- Legend panel, floating over the map's top-right corner ------------------------------------------------------------
 	local rail = W.Panel(f, "surface", "border")
@@ -409,6 +426,9 @@ function Panel.Create(parent, ctx)
 		local inset = ns.MapCanvas.FRAME_INSET + SP.sm
 		local cw, ch = controls:GetWidth() or 0, controls:GetHeight() or 0
 		local rects = { { inset, vh - inset - ch, inset + cw, vh - inset } }
+		if f.floorBar:IsShown() then
+			rects[#rects + 1] = f.floorBar:Rect()
+		end
 		if rail:IsShown() and (canvas.reserveRight or 0) > 0 then
 			rects[#rects + 1] = railRect()
 		end
@@ -461,7 +481,9 @@ function Panel.Create(parent, ctx)
 			ns:Print(L["Put markers of at least two pulls on this floor first."])
 			return
 		end
-		local route = Plan.AddRoute(p, ctx.floor, L["Pull route"], 1)
+		local route = ctx:AddOnFloor(function(floor)
+			return Plan.AddRoute(p, floor, L["Pull route"], 1)
+		end)
 		if route then
 			for _, pt in ipairs(points) do
 				Plan.AddRoutePoint(p, route.id, pt[1], pt[2])
@@ -555,11 +577,12 @@ function Panel.Create(parent, ctx)
 		if not p then
 			return
 		end
-		if ctx.floor > #p.floors then
+		if not ctx:Floors()[ctx.floor] then
 			ctx.floor = 1
 		end
-		-- The floor's map art (UI/MapSpawns.lua: own map, the guide's, or the game's old dungeon map tiles).
-		self.canvas:LoadPlanFloor(p, ctx.floor)
+		-- The floor's map art (UI/MapSpawns.lua: own map, the guide's, or the game's old dungeon map tiles), over every
+		-- floor the instance has (Floors.View).
+		self.canvas:LoadPlanFloor(ns.Floors.View(p), ctx.floor)
 	end
 
 	-- Focus on a step (UI.FocusStep set the floor, focus and segment): bring its spot to the middle of the map.
@@ -629,9 +652,12 @@ function Panel.Create(parent, ctx)
 		self.pull:Refresh()
 		self.floor:Refresh()
 		self.focus:Refresh()
-		self.floor:SetShown(#p.floors > 1)
+		-- Many floors: the toolbar's list as well as the switcher on the map.
+		local many = #ctx:Floors() > ns.FloorBar.TABS
+		self.floor:SetShown(many)
+		self.floorBar:Refresh()
 		self.focus:ClearAllPoints()
-		if #p.floors > 1 then
+		if many then
 			self.focus:SetPoint("RIGHT", self.floor, "LEFT", -SP.sm, 0)
 		else
 			self.focus:SetPoint("RIGHT", bar, "RIGHT", 0, 0)
@@ -644,12 +670,12 @@ function Panel.Create(parent, ctx)
 			end
 		end
 		local optW = (self.kind:IsShown() or self.role:IsShown() or self.pull:IsShown()) and 160 or 0
-		local rightW = (#p.floors > 1 and 158 or 0) + 178 + self.fit:GetWidth() + self.legendButton:GetWidth() + 3 * SP.sm
+		local rightW = (many and 158 or 0) + 178 + self.fit:GetWidth() + self.legendButton:GetWidth() + 3 * SP.sm
 		local roomy = bar:GetWidth() <= 0 or toolsW + optW + rightW <= bar:GetWidth()
 		self.focus:SetShown(roomy)
 		self.fit:ClearAllPoints()
-		self.fit:SetPoint("RIGHT", roomy and self.focus or (#p.floors > 1 and self.floor or bar), roomy and "LEFT" or
-			(#p.floors > 1 and "LEFT" or "RIGHT"), roomy and -SP.sm or (#p.floors > 1 and -SP.sm or 0), 0)
+		self.fit:SetPoint("RIGHT", roomy and self.focus or (many and self.floor or bar), roomy and "LEFT" or
+			(many and "LEFT" or "RIGHT"), roomy and -SP.sm or (many and -SP.sm or 0), 0)
 		self.help:SetText(L[ro and TOOL_HELP.readOnly or TOOL_HELP[ctx.tool]])
 		self.labels:SetChecked(ctx.showLabels)
 		self.iconSize:Refresh()

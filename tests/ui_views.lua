@@ -620,6 +620,25 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- Floors (Data/Floors.lua, UI/Panels/FloorBar.lua): Shaper's Terrace has three, one of them only on Santiago Reyes'
+	-- map (the Prismatic Talus, in no plan): the tabs, that floor shown. Lower Blackrock Spire has six: the name between
+	-- arrows, and the toolbar's list.
+	{
+		name = "map-floors-3",
+		setup = function()
+			openPlan("shapers-terrace", "map")
+			ns.UI.GoToFloor(3)
+		end,
+		window = window,
+	},
+	{
+		name = "map-floors-6",
+		setup = function()
+			openPlan("lower-blackrock-spire", "map")
+			ns.UI.GoToFloor(4)
+		end,
+		window = window,
+	},
 	{
 		name = "map-raid",
 		setup = function()

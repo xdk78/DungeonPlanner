@@ -76,6 +76,7 @@ Data\Providers\OpenMap.lua
 Data\Providers\NeedRoll.lua
 Data\Providers\Questie.lua
 Data\ReyesMaps.lua
+Data\Floors.lua
 Data\BossData.lua
 Data\BossInfo.lua
 Data\Templates.lua
@@ -240,8 +241,10 @@ UI\MapSpawns.lua
 UI\MapPins.lua
 UI\MapDraw.lua
 UI\MapCanvas.lua
+UI\MapArt.lua
 UI\MapInput.lua
 UI\MainFrame.lua
+UI\StepText.lua
 UI\Portraits.lua
 UI\Home.lua
 UI\PlanActions.lua
@@ -250,6 +253,7 @@ UI\SidePanel.lua
 UI\InstancePage.lua
 UI\Panels\MapEditor.lua
 UI\Panels\DrawBar.lua
+UI\Panels\FloorBar.lua
 UI\Panels\MapLegend.lua
 UI\Panels\MapPanel.lua
 UI\Panels\MapMenus.lua

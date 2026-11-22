@@ -79,9 +79,17 @@ local function buildProxy()
 		end
 		syncProxy()
 	end)
-	if UISpecialFrames then
-		table.insert(UISpecialFrames, "DungeonPlannerEscape")
+	W.AddSpecialFrame("DungeonPlannerEscape")
+end
+
+-- A frame name into the game's UISpecialFrames (closed by Escape), except with the gamepad interface style on: its
+-- menus read and close those frames (Compat.Gamepad); the window then closes with its close button. True when added.
+function W.AddSpecialFrame(name)
+	if type(UISpecialFrames) ~= "table" or ns.Compat.Gamepad() then
+		return false
 	end
+	table.insert(UISpecialFrames, name)
+	return true
 end
 
 -- Let Escape close `frame` (topmost first). Hooks, so the frame's own OnShow / OnHide scripts may be set before or after.

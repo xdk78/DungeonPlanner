@@ -130,8 +130,9 @@ function Panel.Create(parent, ctx)
 		return false
 	end
 	f:SetScript("OnSizeChanged", function(self)
-		if self:SizeList() and self:IsShown() then
-			self:Refresh() -- the names fit again at the new width
+		-- The names fit again at the new width; a read-only list's box follows the height.
+		if (self:SizeList() or ctx:ReadOnly()) and self:IsShown() then
+			self:Refresh()
 		elseif self.FitCard then
 			self:FitCard()
 		end
@@ -414,11 +415,15 @@ function Panel.Create(parent, ctx)
 		self.down:SetDisabled(not selectedId)
 		box:ClearAllPoints()
 		if ro then
+			-- Nothing is added here: the box is as tall as the pulls (two rows at least, for the empty text), not an
+			-- empty frame down to the bottom beside a short card.
 			box:SetPoint("TOPLEFT")
+			local rows = SZ.row2 * math.max(2, #p.pulls) + 2 * SP.xs
+			box:SetHeight(math.min(rows, math.max(SZ.row2 * 2, self:GetHeight() or rows)))
 		else
 			box:SetPoint("TOPLEFT", self.add, "BOTTOMLEFT", 0, -SP.md)
+			box:SetPoint("BOTTOMLEFT")
 		end
-		box:SetPoint("BOTTOMLEFT")
 		local pull = selected()
 		ed:SetShown(pull ~= nil and not ro)
 		card:SetShown(pull ~= nil and ro)

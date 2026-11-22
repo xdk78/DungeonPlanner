@@ -95,7 +95,7 @@ function Panel.Create(parent, ctx)
 		if p.difficulty ~= "" then
 			meta[#meta + 1] = p.difficulty
 		end
-		doc:Add("muted", table.concat(meta, "  \194\183  "))
+		doc:Add("muted", table.concat(meta, "  \226\128\162  "))
 		-- Where it comes from: a recommended plan's source, data revision and data date (UI.PlanSource).
 		local _, sourceLines = ns.UI.PlanSource(p)
 		if sourceLines then

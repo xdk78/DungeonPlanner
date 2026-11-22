@@ -451,7 +451,7 @@ function Recorder.PlanFromRun(run, instance, text)
 				extra[#extra + 1] = L["wipe"]
 			end
 			plan.pulls[#plan.pulls + 1] = { id = "u" .. n, name = string.format(L["Pull %d"], n) .. " (" .. (p.c or 0) .. ")",
-				note = note .. ". " .. table.concat(extra, " · ") .. "." }
+				note = note .. ". " .. table.concat(extra, " • ") .. "." }
 		end
 	end
 	for i, b in ipairs(run.b) do

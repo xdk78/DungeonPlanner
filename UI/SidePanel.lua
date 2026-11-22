@@ -161,15 +161,22 @@ function SidePanel.Create(parent, ctx)
 			if step.kind == "pull" then
 				local marks = UI.PullMarks(ns.Util.FindById(plan.pulls, step.pull), { progress = true })
 				if marks ~= "" then
-					caption = caption .. "  ·  " .. marks
+					caption = caption .. "  •  " .. marks
 				end
 			end
-			row.caption:SetText(S.WithApprox(caption, approx))
+			-- Cut after a whole word when the floor name and marks do not fit (the tooltip has it whole).
+			W.FitText(row.caption, S.WithApprox(caption, approx))
 			local current = ctx:StepIndex()
 			S.TextColor(row.title, current == index and "white" or (current and index < current) and "muted" or "ink")
 			S.TextColor(row.caption, step.kind == "boss" and "gold" or "muted")
 		end,
-		onClick = function(_, index)
+		onClick = function(step, index)
+			-- A second click on stairs or a portal (the current step) goes to the floor it leads to.
+			local link = UI.StepLink(ctx:Plan(), step)
+			if link and ctx:StepIndex() == index and ctx.floor ~= link then
+				UI.GoToFloor(link)
+				return
+			end
 			UI.FocusStep(index)
 		end,
 		onEnter = function(step, row)
@@ -185,7 +192,7 @@ function SidePanel.Create(parent, ctx)
 			end
 			tt:SetOwner(row, "ANCHOR_RIGHT")
 			tt:SetText(title ~= "" and title or caption, 1, 0.82, 0, 1, true)
-			tt:AddLine(row.caption:GetText() or caption, 0.71, 0.67, 0.59, true)
+			tt:AddLine(row.caption.dpFullText or row.caption:GetText() or caption, 0.71, 0.67, 0.59, true)
 			if note and note ~= "" and note ~= title then
 				tt:AddLine(note, 1, 1, 1, true)
 			end
@@ -288,7 +295,9 @@ function SidePanel.Create(parent, ctx)
 		if not plan then
 			self.state:SetText(L["No plan for this instance yet"])
 		elseif bundled then
-			self.state:SetText(L["Recommended plan · read-only"])
+			-- Researched well before this game build: say so (the Notes section has the dates and the source).
+			local stale = UI.StaleLine(plan) ~= nil
+			self.state:SetText(stale and L["Recommended plan • may be out of date"] or L["Recommended plan • read-only"])
 		elseif plan.origin then
 			self.state:SetText(L["Your copy of a recommended plan"])
 		else

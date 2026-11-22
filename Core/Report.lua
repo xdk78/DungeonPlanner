@@ -304,24 +304,15 @@ function Report.Errors()
 	return out
 end
 
--- "gamepad" or "keyboard and mouse": the interface style the client is in (the gamepad style changes how the game reads
--- slash commands and the Escape list, which matters for bug reports on Forever).
+-- The interface style as the addon uses it (Compat.Gamepad: the gamepad style changes how the game reads slash commands
+-- and the Escape list, which matters for bug reports on Forever) and how it was found: "gamepad (api)",
+-- "keyboard and mouse (setting)", ... or "unknown (none)" when nothing told.
 function Report.InputStyle()
-	local style, gamepad
-	local api, enum = rawget(_G, "C_InputInterfaceStyle"), rawget(_G, "Enum")
-	if type(api) == "table" and type(api.GetCurrentStyle) == "function" and type(enum) == "table" and type(enum.InputInterfaceStyle) == "table" then
-		local ok, v = pcall(api.GetCurrentStyle)
-		style = ok and v or nil
-		gamepad = style ~= nil and style == enum.InputInterfaceStyle.Gamepad
-	elseif type(rawget(_G, "GetCVar")) == "function" then
-		local ok, v = pcall(rawget(_G, "GetCVar"), "InputDeviceInterfaceStyle")
-		style = ok and v or nil
-		gamepad = style ~= nil and tostring(style):lower():find("gamepad", 1, true) ~= nil
+	local on, how = ns.Compat.Gamepad()
+	if how == "none" then
+		return "unknown (none)"
 	end
-	if style == nil then
-		return "unknown"
-	end
-	return gamepad and "gamepad" or "keyboard and mouse"
+	return (on and "gamepad" or "keyboard and mouse") .. " (" .. tostring(how) .. ")"
 end
 
 -- Settings that differ from the defaults, "path=value" sorted, and the profile name ("custom" unless it is the stock

@@ -14,6 +14,7 @@ local SP, SZ = S.SPACE, S.SIZE
 local UI = ns.UI
 
 local ROW_H = 40
+local ORDER_LINES = 6 -- a plan's bosses in the preview; the last line says how many more
 local COL = { level = 70, plans = 64, bosses = 52 }
 
 -- Rows ---------------------------------------------------------------------------------------------------------------------
@@ -130,7 +131,7 @@ local function planMeta(plan)
 	elseif plan.author ~= "" then
 		parts[#parts + 1] = string.format(L["by %s"], plan.author)
 	end
-	return table.concat(parts, "  ·  ")
+	return table.concat(parts, "  •  ")
 end
 
 local function planRowUpdate(row, plan)
@@ -186,6 +187,14 @@ local function buildPreview(f)
 		p.planLines[i] = line
 	end
 	p.note = W.Paragraph(p, "caption", "muted")
+	p.measure = W.Paragraph(p, "caption", "muted")
+	p.measure:Hide()
+	-- A plan's bosses in the order it fights them, under its description.
+	p.orderHeading = W.Heading(p, L["Boss order"])
+	p.orderLines = {}
+	for i = 1, ORDER_LINES do
+		p.orderLines[i] = W.Text(p, "body", "ink")
+	end
 
 	p.open = W.Button(p, L["Open plan"], "primary", function()
 		if p.plan then
@@ -194,7 +203,6 @@ local function buildPreview(f)
 			UI.OpenInstance(p.entry)
 		end
 	end)
-	p.open:SetPoint("BOTTOMLEFT", SP.md, SP.md)
 	p.new = W.Button(p, L["New plan"], "outline", function(self)
 		if p.entry then
 			UI.OpenInstance(p.entry)
@@ -228,7 +236,64 @@ local function buildPreview(f)
 		self.note:ClearAllPoints()
 		self.note:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -SP.sm)
 		self.note:SetPoint("RIGHT", -SP.md, 0)
-		self.note:SetPoint("BOTTOM", self.open, "TOP", 0, SP.sm)
+	end
+
+	-- After the texts are in: the lines that say something, one under the other, then the actions right under the
+	-- content (not at the panel's bottom, far from it). A long description is cut so the actions stay inside.
+	function p:Flow()
+		local function filled(fs)
+			return fs:IsShown() and (fs:GetText() or "") ~= ""
+		end
+		local prev = self.plansHeading
+		for _, line in ipairs(self.planLines) do
+			if filled(line) then
+				prev = line
+			end
+		end
+		self.note:ClearAllPoints()
+		self.note:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -SP.sm)
+		self.note:SetPoint("RIGHT", -SP.md, 0)
+		-- The note's whole height, measured on a copy without a set height (the note's own is cut to the room).
+		local noteH = 0
+		if filled(self.note) then
+			local left, right = prev:GetLeft(), self:GetRight()
+			self.measure:SetWidth(left and right and (right - SP.md - left) or (self:GetWidth() - 2 * SP.md))
+			self.measure:SetText(self.note:GetText())
+			noteH = math.ceil(self.measure:GetStringHeight() or 0)
+		end
+		-- What is left under the plan lines for the note, the boss order and the actions; the note comes first.
+		local top, bottom = prev:GetBottom(), self:GetBottom()
+		-- (Not laid out yet: no limit.)
+		local room = top and bottom and top > bottom and (top - bottom - SP.sm - SP.md - SZ.control - SP.md) or math.huge
+		noteH = math.max(0, math.min(noteH, room))
+		room = room - noteH
+		self.note:SetHeight(math.max(1, noteH))
+		prev = self.note
+		-- The boss order in the lines that fit (two at least); the last says how many more when they do not all fit.
+		local names = self.orderNames or {}
+		local fit = math.min(ORDER_LINES, #names, math.floor((room - SP.lg - 18) / (SP.xs + 16)))
+		self.orderHeading:ClearAllPoints()
+		self.orderHeading:SetShown(fit >= 2)
+		if fit >= 2 then
+			self.orderHeading:SetPoint("TOPLEFT", self.note, "BOTTOMLEFT", 0, -SP.lg)
+			prev = self.orderHeading
+		end
+		for i, line in ipairs(self.orderLines) do
+			line:ClearAllPoints()
+			line:SetShown(fit >= 2 and i <= fit)
+			if line:IsShown() then
+				line:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -SP.xs)
+				line:SetPoint("RIGHT", -SP.md, 0)
+				if i == fit and #names > fit then
+					line:SetText(string.format(L["and %d more"], #names - fit + 1))
+				else
+					W.FitText(line, names[i])
+				end
+				prev = line
+			end
+		end
+		self.open:ClearAllPoints()
+		self.open:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -SP.md)
 	end
 
 	-- Show an instance (entry) or a plan (with its instance).
@@ -240,6 +305,7 @@ local function buildPreview(f)
 		end
 		self.open:SetShown(has)
 		self.new:SetShown(has and plan == nil and not ns.DB.IsReadOnly())
+		self.orderNames = {}
 		if not entry then
 			self.plate:SetEntry(nil)
 			self.name:SetText("")
@@ -249,6 +315,7 @@ local function buildPreview(f)
 			end
 			self.plansHeading:SetText("")
 			self.note:SetText(L["Choose an instance on the left."])
+			self:Flow()
 			return
 		end
 		self:Layout()
@@ -263,7 +330,7 @@ local function buildPreview(f)
 			Home.LevelText(entry),
 			tostring(#plans),
 			entry.killed and (entry.killed .. "/" .. entry.bosses) or (entry.bosses and tostring(entry.bosses) or "-"),
-			tostring(plans[1] and #plans[1].floors or 0),
+			tostring(plans[1] and ns.Floors.Count(plans[1]) or #ns.Floors.Art(entry.name)), -- as many as the map shows
 		}
 		for i, cell in ipairs(self.facts) do
 			cell.value:SetText(values[i])
@@ -281,15 +348,19 @@ local function buildPreview(f)
 			end
 			self.note:SetText(plan.description ~= "" and plan.description or "")
 			self.open:SetLabel(L["Open plan"])
+			for i, enc in ipairs(plan.encounters) do
+				self.orderNames[i] = i .. ". " .. ns.Names.Encounter(enc)
+			end
 		else
 			self.plansHeading:SetText(L["Plans"])
 			for i, line in ipairs(self.planLines) do
 				local pl = plans[i]
-				line:SetText(pl and ("· " .. UI.PlanTitle(pl)) or "")
+				line:SetText(pl and ("• " .. UI.PlanTitle(pl)) or "")
 			end
 			self.note:SetText(#plans == 0 and L["No plan for this instance yet"] or "")
 			self.open:SetLabel(#plans > 0 and L["Open plan"] or L["Open"])
 		end
+		self:Flow()
 	end
 	p:HookScript("OnSizeChanged", function(self)
 		if self.entry then
@@ -462,6 +533,17 @@ function Home.Create(parent, ctx, actionBar)
 		end,
 	})
 	f.plans:SetAllPoints()
+	-- Under a short list (most players keep a few plans): what can be done with them, in the space that stays empty.
+	f.plansTip = W.Paragraph(f.plans, "caption", "muted")
+	f.plansTip:SetText(L["Double-click a plan to open it; right-click it to duplicate, rename, export or delete it."])
+	function f.plans:PlaceTip(n)
+		local y = n * (ROW_H + SP.xxs) + SP.md
+		local fits = n > 0 and y + 3 * 14 <= (self:GetHeight() or 0)
+		f.plansTip:SetShown(fits)
+		f.plansTip:ClearAllPoints()
+		f.plansTip:SetPoint("TOPLEFT", SP.sm, -y)
+		f.plansTip:SetPoint("RIGHT", -(SP.md + SP.sm), 0)
+	end
 
 	local shared = CreateFrame("Frame", nil, content)
 	shared:SetAllPoints()
@@ -625,6 +707,7 @@ function Home.Create(parent, ctx, actionBar)
 			selected = selected or list[1]
 			ns.db.ui.homeSelectedPlan = selected and selected.id or nil
 			self.plans:SetItems(list)
+			self.plans:PlaceTip(#list)
 			self.preview:ShowEntry(selected and UI.EntryForPlan(selected) or nil, selected)
 			self.count:SetText(ns.Plural(#list, L["%d plan|%d plans"]))
 		else

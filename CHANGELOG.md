@@ -21,6 +21,21 @@ follow [Semantic Versioning](https://semver.org/).
   sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
   fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
   older step. Older Dungeon Planners ignore them.
+- **Every floor on the map**: the map shows all the floors an instance has a map for, not only the plan's: Atal'Byzal,
+  the Maximum Security Unit and the Prismatic Talus are there now. A recommended plan shows such a floor as the map
+  alone; in your own plan, putting something on it adds it to the plan. The home table's Floors count agrees.
+- **Floor switcher on the map** (bottom-right corner): tabs for two to four floors, the floor's name between arrows for
+  more (the toolbar list stays for those); each floor's tooltip counts the markers on it; Shift + mouse wheel over the
+  map changes floor. Stairs and portals say "to <floor>" on the map and in the steps; in a recommended plan a click on
+  one, or a second click on its step, goes there. Run mode's mini map names its floor.
+- **The map follows you to another floor** inside an instance, where the game says which floor you are on (not yet
+  confirmed on WoW: Forever; `/dp scan` inside a dungeon records what the client gives). Run mode's mini map then says
+  which floor you are on.
+- **Out-of-date warning on recommended plans**: a plan researched more than 90 days before the game build you run says
+  "may be out of date" beside its steps, and its Notes give the data date, the build's date and the source, so you know
+  to check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
+- **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns, in
+  orange, who it is from and both dates: replacing would undo your newer changes. Keep both stays the first choice.
 - **Report a problem**: `/dp report`, the `!` button in the window's title bar or Settings (Troubleshooting) opens a
   text to paste into a GitHub issue: versions, language, the plan, other addons, the `/dp debug` summary, recent
   Dungeon Planner errors and blocked actions. Add what happened in your own words; "Short for Discord" fits it in one
@@ -34,6 +49,26 @@ follow [Semantic Versioning](https://semver.org/).
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
   Dungeon Planner opens it read-only instead of losing that on its next save.
 - The bug report form on GitHub is now an issue form.
+- **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
+  instead of one narrow column.
+- **Notes**: the objectives follow right under the bosses, each list as tall as its rows; they stand side by side
+  only when that does not fit (a raid's bosses). **Pulls** of a recommended plan: the list's box is as tall as its
+  pulls instead of an empty frame down to the bottom.
+- **Home**: the preview's Open plan follows its content instead of sitting at the bottom; a plan's preview lists its
+  bosses in order; My plans explains double-click and the right-click menu under a short list.
+
+### Fixed
+- **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
+  runs" when recording is already on.
+- **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
+- **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron
+  Ingress", "Anvilmar's Rest"): they move to a free side, and their dark plates are denser.
+- **Gamepad interface style**: with it on, Dungeon Planner registers no slash command and leaves the game's Escape
+  list alone (both can freeze the client or get its windows closed by the gamepad menus there). Open it from the
+  minimap button, the Addon Compartment or a key binding; `/dp debug` says when this is in effect. If it is detected
+  wrongly, Settings > Troubleshooting > "Gamepad interface style" sets it to On or Off (after `/reload`).
+- **Russian**: the separators between items read as a box with the game's Cyrillic font (it has no middle dot); they
+  are a bullet now, in every language.
 
 ## [0.1.0] - 2026-11-16
 

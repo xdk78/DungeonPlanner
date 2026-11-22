@@ -224,3 +224,23 @@ T.case("Reyes maps: the licence ships with the pictures and excludes them from t
 	local mit = readFile("LICENSE") or ""
 	T.ok(mit:find("Media/Maps/Reyes", 1, true), "the MIT licence file names the exclusion")
 end)
+
+-- In game (0.1.0): the boss labels covered the map's painted names ("QUARRY OF KINGS", "DARK IRON INGRESS").
+T.case("Reyes maps: the map's labels keep off its painted names", function()
+	boot()
+	local plan = ns.Bundled.Get(ns.Bundled.PREFIX .. "hall-of-thanes")
+	local art = R.FloorArt(plan, 1)
+	T.ok(art.keepOut and #art.keepOut >= 4, "Hall of Thanes names its painted titles")
+	for _, r in ipairs(art.keepOut) do
+		T.ok(r[1] >= 0 and r[3] <= 1 and r[2] >= 0 and r[4] <= 1 and r[1] < r[3] and r[2] < r[4], "a box in the picture")
+	end
+	local boxes = ns.MapCanvas.KeepOutRects(art, 1024, 683, 0.5, { { 1, 2, 3, 4 } })
+	T.eq(#boxes, #art.keepOut + 1, "added to what is there (the legend)")
+	T.eq(boxes[2][1], art.keepOut[1][1] * 512, "in canvas units")
+	T.eq(boxes[2][4], art.keepOut[1][4] * 683 * 0.5)
+	-- A label that would sit on a painted name goes to a free side.
+	local name = boxes[3] -- RELIQUARY OF KINGS
+	local items = { { x = name[1] - 20, y = (name[2] + name[4]) / 2, r = 10, w = 80, h = 15, kind = "boss", prio = 3 } }
+	ns.MapLayout.Labels(items, boxes, nil)
+	T.eq(items[1].side ~= "right" and items[1].side ~= nil, true, "not to the right, over the name: " .. tostring(items[1].side))
+end)

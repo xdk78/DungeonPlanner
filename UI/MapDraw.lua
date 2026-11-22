@@ -391,15 +391,17 @@ function MapDraw.Install(view)
 		elseif d then
 			local w, h = self:BaseSize()
 			local s = self:Scale()
-			local shape, err = Drawing.Add(plan, self.cb.getFloor(), d.tool, d.pts, {
-				color = d.color,
-				width = d.width,
-				author = author(),
-				aspect = w / h,
-				epsilon = 1.5 / math.max(1, h * s), -- a pixel and a half at this zoom
-				pull = self.cb.drawLinkPull and self.cb.drawLinkPull() or nil,
-				encounter = self.cb.drawLinkEncounter and self.cb.drawLinkEncounter() or nil,
-			})
+			local shape, err = self:AddOnFloor(function(floor)
+				return Drawing.Add(plan, floor, d.tool, d.pts, {
+					color = d.color,
+					width = d.width,
+					author = author(),
+					aspect = w / h,
+					epsilon = 1.5 / math.max(1, h * s), -- a pixel and a half at this zoom
+					pull = self.cb.drawLinkPull and self.cb.drawLinkPull() or nil,
+					encounter = self.cb.drawLinkEncounter and self.cb.drawLinkEncounter() or nil,
+				})
+			end)
 			if shape then
 				self.cb.onChanged("drawings")
 			elseif err == "limit" then

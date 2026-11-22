@@ -1,6 +1,10 @@
--- Micro-benchmarks that fail on regressions (thresholds are generous: several times the measured cost, for slower
--- machines): the steps of a plan at the schema's limits, a pan that moves the canvas without redrawing, one refresh
--- of the map per edit, and the per-revision caches of the Enemies layer and the boss portraits.
+-- Cost checks that fail on regressions: the steps of a plan at the schema's limits, a pan that moves the canvas without
+-- redrawing, one refresh of the map per edit, and the per-revision caches of the Enemies layer and the boss portraits.
+--
+-- Cost is counted in Lua VM instructions (a debug.sethook count hook), not timed. These checks used to compare
+-- os.clock readings and failed now and then: on Windows os.clock is wall time, so any other load on the machine lands
+-- in the reading, and a garbage collection step paid for earlier tests' garbage can fall inside one measured call
+-- (Steps.Build allocates a lot). An instruction count is the same on every run and every machine.
 local T = ...
 local ns, mock = T.ns, T.mock
 local MAX = ns.Schema.MAX
@@ -71,22 +75,35 @@ local function limitPlan(scatter)
 	return p
 end
 
-local function timed(fn, runs)
-	local best = math.huge
-	for _ = 1, runs or 3 do
-		local t0 = os.clock()
-		fn()
-		best = math.min(best, os.clock() - t0)
-	end
-	return best
+-- Thousands of Lua VM instructions that fn runs (a C function counts as the instruction that calls it).
+local function cost(fn)
+	local k = 0
+	debug.sethook(function()
+		k = k + 1
+	end, "", 1000)
+	local ok, err = pcall(fn)
+	debug.sethook()
+	assert(ok, err)
+	return k
 end
 
 T.case("Perf: Steps.Build at the schema's limits", function()
 	local walk, scatter = limitPlan(false), limitPlan(true)
-	local n = #ns.Steps.Build(walk)
+	local n
+	local c = cost(function()
+		n = #ns.Steps.Build(walk)
+	end)
 	T.ok(n > 1000, "every stop, pull, boss, notable marker and objective: " .. n)
-	local scattered = #ns.Steps.Build(scatter)
-	T.ok(scattered > 1000, "with routes scattered over the map: " .. scattered)
+	T.eq(cost(function()
+		ns.Steps.Build(walk)
+	end), c, "the same count on every run")
+	-- Counted 4.8 million instructions (about 0.03 s here; 0.45 s before the follow-ups).
+	T.ok(c < 7000, string.format("steps of a plan at the limits: %dk instructions", c))
+	c = cost(function()
+		ns.Steps.Build(scatter)
+	end)
+	-- Counted 12.7 million.
+	T.ok(c < 18000, string.format("with routes scattered over the map: %dk instructions", c))
 	-- Half the plan costs about half (near-linear, not quadratic).
 	local half = limitPlan(false)
 	for _, key in ipairs({ "markers", "routes", "pulls", "objectives" }) do
@@ -94,14 +111,14 @@ T.case("Perf: Steps.Build at the schema's limits", function()
 			half[key][i] = nil
 		end
 	end
-	local tFull = timed(function()
+	local full = cost(function()
 		ns.Steps.Build(walk)
-	end, 5)
-	local tHalf = timed(function()
+	end)
+	local halfCost = cost(function()
 		ns.Steps.Build(half)
-	end, 5)
-	-- Generous (timing noise on a busy machine): quadratic work would take about four times as long.
-	T.ok(tFull < 6 * tHalf + 0.05, string.format("double the plan, %.3f s against %.3f s", tFull, tHalf))
+	end)
+	-- Counted 4809k against 2069k (2.3 times); quadratic work would cost about four times as much.
+	T.ok(full < 3 * halfCost, string.format("double the plan, %dk against %dk instructions", full, halfCost))
 end)
 
 T.case("Perf: a pan moves the canvas only; one layout on release", function()
@@ -128,14 +145,15 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 		return realDraw(...)
 	end
 	view:GetScript("OnMouseDown")(view, "LeftButton")
-	local t = timed(function()
+	local c = cost(function()
 		for _ = 1, 100 do
 			cx = cx + 2
 			view:GetScript("OnUpdate")(view, 0.016)
 		end
-	end, 3)
-	T.eq(draws + layouts, 0, "300 pointer moves, no layout")
-	T.ok(t < 0.1, string.format("100 pan moves: %.3f s", t))
+	end)
+	T.eq(draws + layouts, 0, "100 pointer moves, no layout")
+	-- Counted 151k: about 1.5k a move, where one layout of this map costs about 740k.
+	T.ok(c < 250, string.format("100 pan moves: %dk instructions", c))
 	view:GetScript("OnMouseUp")(view, "LeftButton")
 	T.eq(layouts, 1, "one layout on release")
 	view.Layout, view.DrawContent = realLayout, realDraw

@@ -103,10 +103,15 @@ Compat.CHECKS = {
 	{ "Unit level", "UnitLevel", "level ranges of recorded pulls" },
 	{ "Minimap zone text", "GetMinimapZoneText", "sub-zone names of recorded pulls" },
 	{ "Player facing", "GetPlayerFacing", "/dp scan's position check" },
+	{ "Indoors", "IsIndoors", "/dp scan's position check" },
 	-- /dp perf (Core/Perf.lua) and the report window (Core/Report.lua).
 	{ "Addon profiler", "C_AddOnProfiler.GetAddOnMetric", "the game's own timings in /dp perf" },
 	{ "Addon memory", "C_AddOns.GetAddOnMemoryUsage", "memory use in /dp perf" },
 	{ "Profile clock", "debugprofilestop", "precise timings in /dp perf (the Lua clock instead)" },
+	-- The gamepad interface style (Compat.Gamepad below).
+	{ "Interface style", "C_InputInterfaceStyle.GetCurrentStyle", "gamepad detection from the CVar (or the setting)" },
+	{ "Interface style values", "Enum.InputInterfaceStyle.Gamepad", "gamepad detection only from the setting" },
+	{ "Console variables", "C_CVar.GetCVar", "gamepad detection without the CVar (GetCVar tried)" },
 }
 
 function Compat.Has(path)
@@ -145,6 +150,54 @@ function Compat.Report()
 		rows[#rows + 1] = { name = m[1], ok = m[2], path = "(method)", degrades = m[3] }
 	end
 	return rows
+end
+
+-- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a
+-- client freeze (an empty slash command is enough), and the gamepad menus read and close the frames in UISpecialFrames
+-- (seen in another addon's shipped code, docs/COMPATIBILITY.md). Detected once, every call guarded: the setting
+-- (settings.gamepad "on" / "off") when the player chose one, else C_InputInterfaceStyle.GetCurrentStyle(), else the
+-- CVar InputDeviceInterfaceStyle; both compare with Enum.InputInterfaceStyle.Gamepad, and without that value nothing is
+-- guessed (off). While it is on, Dungeon Planner registers no slash command, puts nothing in UISpecialFrames, adds no
+-- entries to other addons' menus and opens no world map; the way in is the minimap button, the Addon Compartment and
+-- the key bindings. Returns on, how ("setting" | "api" | "cvar" | "none").
+local gamepad
+function Compat.Gamepad()
+	if gamepad then
+		return gamepad.on, gamepad.how
+	end
+	local Plain = ns.Util.Plain
+	local on, how = false, "none"
+	local choice = ns.db and ns.db.settings.gamepad
+	local api, enum = rawget(_G, "C_InputInterfaceStyle"), rawget(_G, "Enum")
+	local styles = type(enum) == "table" and type(enum.InputInterfaceStyle) == "table" and enum.InputInterfaceStyle or nil
+	local want = styles and Plain(styles.Gamepad) or nil
+	if choice == "on" or choice == "off" then
+		on, how = choice == "on", "setting"
+	elseif want ~= nil and type(api) == "table" and type(api.GetCurrentStyle) == "function" then
+		local ok, style = pcall(api.GetCurrentStyle)
+		style = ok and Plain(style) or nil
+		if style ~= nil then
+			on, how = style == want, "api"
+		end
+	end
+	if how == "none" and tonumber(want) then
+		local cvars = rawget(_G, "C_CVar")
+		local get = type(cvars) == "table" and cvars.GetCVar or rawget(_G, "GetCVar")
+		if type(get) == "function" then
+			local ok, value = pcall(get, "InputDeviceInterfaceStyle")
+			value = ok and tonumber(Plain(value)) or nil
+			if value ~= nil then
+				on, how = value == tonumber(want), "cvar"
+			end
+		end
+	end
+	gamepad = { on = on, how = how }
+	return on, how
+end
+
+-- Detect again (tests).
+function Compat.ResetGamepad()
+	gamepad = nil
 end
 
 -- Client identity, for bug reports.

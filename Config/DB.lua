@@ -413,8 +413,8 @@ function DB.SameNamePlan(plan)
 	return found
 end
 
--- What an import string would replace if the player chose to: a list of { incoming = name, existing = plan }. Empty
--- for a string that does not decode (the import itself reports why).
+-- What an import string would replace if the player chose to: a list of { incoming = name, existing = plan,
+-- incomingUpdated, incomingAuthor, older }. Empty for a string that does not decode (the import itself reports why).
 function DB.ImportConflicts(text)
 	local kind, value = ns.Codec.Decode(text)
 	local out = {}
@@ -424,7 +424,10 @@ function DB.ImportConflicts(text)
 	for _, plan in ipairs(kind == "plan" and { value } or value.plans) do
 		local existing = DB.SameNamePlan(plan)
 		if existing then
-			out[#out + 1] = { incoming = plan.name, existing = existing }
+			-- older: the imported copy was last changed before yours (replacing it would undo newer changes).
+			local theirs, mine = tonumber(plan.updated), tonumber(existing.updated)
+			out[#out + 1] = { incoming = plan.name, existing = existing, incomingUpdated = theirs,
+				incomingAuthor = plan.author, older = theirs ~= nil and mine ~= nil and theirs < mine }
 		end
 	end
 	return out

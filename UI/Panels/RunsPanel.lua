@@ -168,10 +168,10 @@ function Panel.Create(parent, ctx)
 		end,
 		update = function(row, run)
 			local s = RunLog.Summary(run)
-			row.text:SetText((run.done and "" or (L["Recording"] .. " · ")) .. when(run))
+			row.text:SetText((run.done and "" or (L["Recording"] .. " • ")) .. when(run))
 			local best = RunLog.Best(store(), run.k, run)
 			local delta = best.total and run.done and (" " .. D(s.duration - best.total)) or ""
-			row.meta:SetText(T(s.duration) .. " · " .. ns.Plural(s.pulls, L["%d pull|%d pulls"]) .. " · "
+			row.meta:SetText(T(s.duration) .. " • " .. ns.Plural(s.pulls, L["%d pull|%d pulls"]) .. " • "
 				.. ns.Plural(s.bosses, L["%d boss|%d bosses"]) .. delta)
 		end,
 		isSelected = function(run)
@@ -299,7 +299,7 @@ function Panel.Create(parent, ctx)
 		-- What the client cannot tell says so instead of showing a zero.
 		local deaths = s.deaths and ns.Plural(s.deaths, L["%d death|%d deaths"]) or L["deaths not available"]
 		doc:Add("muted", table.concat({ ns.Plural(s.pulls, L["%d pull|%d pulls"]), ns.Plural(s.bosses, L["%d boss|%d bosses"]),
-			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }, " · "))
+			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }, " • "))
 		local splits, best, prev = RunCompare.Splits(store(), run)
 		if best.total then
 			doc:Add("muted", string.format(L["Best: %s over %s"], T(best.total), ns.Plural(best.runs, L["%d run|%d runs"])))
@@ -319,7 +319,7 @@ function Panel.Create(parent, ctx)
 					cmpText[#cmpText + 1] = string.format(L["previous %s"], D(sp.prevDelta))
 				end
 				if #cmpText > 0 then
-					line = line .. "  (" .. table.concat(cmpText, " · ") .. ")"
+					line = line .. "  (" .. table.concat(cmpText, " • ") .. ")"
 				end
 				doc:Add("text", line)
 			end
@@ -329,13 +329,13 @@ function Panel.Create(parent, ctx)
 			for i, p in ipairs(run.p) do
 				local line = string.format("%d. %s  %s", i, T(p.u or 0), RunLog.PullText(p, L, ns.Plural))
 				if p.z then
-					line = line .. " · " .. p.z
+					line = line .. " • " .. p.z
 				end
 				if p.nm then
-					line = line .. " · " .. table.concat(p.nm, ", ")
+					line = line .. " • " .. table.concat(p.nm, ", ")
 				end
 				if p.w then
-					line = line .. " · " .. L["wipe"]
+					line = line .. " • " .. L["wipe"]
 				end
 				doc:Add("text", line)
 			end
@@ -370,18 +370,18 @@ function Panel.Create(parent, ctx)
 					line = line .. " (" .. countDelta(seg.delta) .. ")"
 				end
 				if seg.state == "current" and not run.done then
-					line = line .. " · " .. L["now"]
+					line = line .. " • " .. L["now"]
 				elseif seg.state ~= "done" then
-					line = line .. " · " .. L["not reached"]
+					line = line .. " • " .. L["not reached"]
 				end
 				if (seg.attempts or 0) > 0 then
-					line = line .. " · " .. ns.Plural(seg.attempts, L["%d wipe on the boss|%d wipes on the boss"])
+					line = line .. " • " .. ns.Plural(seg.attempts, L["%d wipe on the boss|%d wipes on the boss"])
 				end
 				doc:Add("muted", line)
 				for i, row in ipairs(seg.rows) do
 					local actual = row.actual and (RunLog.PullText(row.actual.pull, L, ns.Plural) .. ", " .. T(row.actual.pull.u or 0))
 					if row.kind == "pair" then
-						doc:Add("text", string.format("%d. %s · %s", i, entryText(p, row.planned), actual))
+						doc:Add("text", string.format("%d. %s • %s", i, entryText(p, row.planned), actual))
 					elseif row.kind == "extra" then
 						doc:Add("text", string.format(L["+ extra pull: %s"], actual))
 					elseif seg.state == "done" or run.done then
@@ -456,7 +456,7 @@ function Panel.Create(parent, ctx)
 			for _, quest in ipairs(list) do
 				local line = (quest.level and ("[" .. quest.level .. "] ") or "") .. quest.name
 				if quest.starter then
-					line = line .. " · " .. string.format(L["from %s"], quest.starter)
+					line = line .. " • " .. string.format(L["from %s"], quest.starter)
 				end
 				doc:Add("text", line)
 			end

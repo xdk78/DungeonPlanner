@@ -10,7 +10,8 @@ local SP, SZ = S.SPACE, S.SIZE
 local Panel = {}
 ns.Panels.progress = Panel
 
--- The columns sit side by side from this width of the panel on; narrower, the objectives go under the bosses.
+-- The bosses and the objectives stand one under the other while they fit; from this width of the panel on they may
+-- stand side by side when they do not.
 local TWO_COLUMNS = 460
 
 function Panel.Create(parent, ctx)
@@ -65,15 +66,24 @@ function Panel.Create(parent, ctx)
 		left:ClearAllPoints()
 		right:ClearAllPoints()
 		left:SetPoint("TOPLEFT", below, "BOTTOMLEFT", 0, -SP.xl)
-		if w <= 0 or w >= TWO_COLUMNS then
+		-- One under the other, each as tall as its rows, while that fits; side by side only when it does not (a raid's
+		-- bosses) and the panel is wide enough. Before, short lists stood in two columns over an empty half page, or
+		-- the objectives sat at the bottom far below the bosses.
+		local head = 18 + SP.sm
+		local form = ctx:ReadOnly() and 0 or (SZ.control + SP.sm)
+		local bossH = head + math.max(1, #self.bosses.items) * SZ.row2
+		local objH = head + form + math.max(1, #self.objectives.items) * SZ.row
+		local room = h - ((self:GetTop() or 0) - (left:GetTop() or 0))
+		self.stacked = w > 0 and (w < TWO_COLUMNS or bossH + SP.lg + objH <= room)
+		if not self.stacked then
 			left:SetPoint("BOTTOMRIGHT", self, "BOTTOM", -SP.md, 0)
 			right:SetPoint("TOPLEFT", left, "TOPRIGHT", 2 * SP.md, 0)
 			right:SetPoint("BOTTOMRIGHT")
 		else
-			-- Stacked: the bosses take what the objectives (a heading, the field and three rows) leave.
-			local top = (self:GetTop() or 0) - (left:GetTop() or 0)
-			local objH = 18 + SP.sm + (ctx:ReadOnly() and 0 or SZ.control + SP.sm) + 3 * SZ.row
-			local bossH = math.max(18 + SP.sm + SZ.row, h - top - objH - SP.lg)
+			-- The bosses as tall as their rows, leaving the objectives at least their heading, the field and their rows
+			-- (three at most; the rest scroll).
+			local objMin = head + form + math.min(3, math.max(1, #self.objectives.items)) * SZ.row
+			bossH = math.max(head + SZ.row2, math.min(bossH, room - objMin - SP.lg))
 			left:SetPoint("RIGHT")
 			left:SetHeight(bossH)
 			right:SetPoint("TOPLEFT", left, "BOTTOMLEFT", 0, -SP.lg)
@@ -199,7 +209,7 @@ function Panel.Create(parent, ctx)
 		local sum = Progress.PlanSummary(store(), p, gameID)
 		local text = string.format(L["Bosses %d/%d"], sum.bossesKilled, sum.bosses)
 		if sum.objectives > 0 then
-			text = text .. "  \194\183  " .. string.format(L["objectives %d/%d"], sum.objectivesDone, sum.objectives)
+			text = text .. "  \226\128\162  " .. string.format(L["objectives %d/%d"], sum.objectivesDone, sum.objectives)
 		end
 		self.summary:SetText(text)
 		local run = store().run

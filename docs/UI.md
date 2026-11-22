@@ -406,6 +406,31 @@ pull number on a disc in the pull's colour in the gold pin ring; a move step (a 
 map stop, a smaller dark disc ringed in the route's colour with the step number the stop shows; bosses, entrances,
 quest givers and other markers show their icon. A step's caption names its floor only where the plan has several and
 the floor is not named as the instance (the Deadmines' first floor is "The Deadmines"; "Ironclad Cove" stays).
+A step on stairs or a portal that leads to another floor adds "to <floor>"; a second click on it (the current step)
+goes there.
+
+### Floors
+
+The map shows every floor the instance has map art for, not only the plan's (`Data/Floors.lua`): the plan's floors
+first, in their order, then the old map tiles, Santiago Reyes' maps and the minimap pictures no plan floor stands for
+(Atal'Byzal, the Maximum Security Unit and the Prismatic Talus are in no recommended plan). A recommended plan shows such
+a floor as plain map art; in an own plan, putting something on it makes it the plan's (`Floors.Ensure`). The home
+table's Floors count is the same list.
+
+The floor switcher (`UI/Panels/FloorBar.lua`) sits in the map's bottom-right corner inside the frame (left of the marker
+editor while that takes the map's height; the coordinates move over it), hidden on a one-floor map:
+
+```
+two to four floors:   [ The Deadmines ][ Ironclad Cove ]        (tabs; the current one lit)
+more:                 [<][ Hall of Blackhand  4/6 ][>]           (and the toolbar's floor list)
+```
+
+A tab's tooltip counts the plan's markers on that floor; Shift + mouse wheel over the map goes to the next or previous
+floor (round). Tabs too wide for the map's bottom edge (long names, Polish) give way to the arrows. The switcher stays
+out of the top-left corner, where many maps have their entrance (the Deadmines). Stairs and portals on the map say
+"to <floor>" after their label, labels on or off; in a recommended plan a click on one goes there (an own plan's click
+opens the editor; its right-click menu has "Go to"). Run mode's mini map names its floor in its top-left corner when
+the instance has several.
 
 ### Marker icons
 
@@ -515,6 +540,28 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
+Since 0.1.0:
+
+- Floors: the switcher in the map's bottom-right corner (tabs on the Deadmines and Shaper's Terrace, the name between
+  arrows on Lower Blackrock Spire and Blackmaw Hold), left of the marker editor while one is selected, the coordinates
+  over it; the Prismatic Talus, Atal'Byzal and the Maximum Security Unit on their own maps; Shift + wheel; "to
+  <floor>" on the Scholomance outside portal and its step; run mode's floor plate. Inside a dungeon: `/dp scan`, then
+  look at `position.bestMap` / `mapGroup` in the saved diagnostics (does the client give a map there?).
+- Gear: items three to a line at the default size, two at the minimum width (880); hover, Shift-click and right-click
+  on each cell; the item tooltip beside the name.
+- Bosses: an ability with a one-line note (no gap under it); Hall of Thanes' labels beside Reliquary of Kings, Dark
+  Iron Ingress and Anvilmar's Rest, the denser plates.
+- Notes: the objectives right under the bosses; a raid (Molten Core) side by side. Pulls of a recommended plan: the
+  list box as tall as the pulls. Home, My plans: the tip under a short list, the boss order and Open plan under the
+  preview's text.
+- The bullet separator (•) everywhere, in Russian especially (it was a box with the Cyrillic face).
+- With the gamepad interface style on: no `/dp`, the minimap button and key bindings open the window, the gamepad
+  menus leave it alone; the Settings panel's debug button reports "Gamepad interface style: on".
+- A recommended plan's "may be out of date" line on a client whose build is more than 90 days newer than the plan's
+  data.
+
+From 0.1.0:
+
 - The map centred in its frame on every classic and drawn map (equal bands left and right, the table's parchment in
   them); the legend's caret (right when folded, down when open), its folded box, and that it starts folded on Molten
   Core (its painted title shows), Hall of Thanes and the Deadmines. Opened, the Party positions row's gold hint and
@@ -586,7 +633,8 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   plates; "Open" under empty seats.
 - Run mode on a dungeon with a provider map: the framing at each step, the ring on the step, the step counter between
   Prev and Next, the "~" mark (plain ASCII: every face has it).
-- Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner.
+- Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner. Hall of Thanes:
+  the labels beside (not over) the painted room names (`keepOut` in `Data/ReyesMaps.lua`), the denser plates (0.86).
 - Routes: the outlined line, the chevrons' size, spacing and direction at several zooms and icon sizes, the joints at
   bends, the focused segment brighter than the rest, stop numbers readable over the line. `Media/Chevron.tga` is a new
   file: until the game is restarted the older arrow shape stands in (where the client reports that a texture failed).

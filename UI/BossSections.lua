@@ -11,8 +11,9 @@ local SP = S.SPACE
 local BossSections = ns:NewModule("BossSections")
 
 local ROW_H = 34
-local NOTE_H = 36 -- extra height of an ability row for its note (three lines of caption text)
+local NOTE_H = 36 -- an ability's note at most (three lines of caption text), until the row knows its width
 local ICON = 28
+local NOTE_INSET = ICON + SP.sm + SP.xs -- the note's width is the row's less the icon column and the right margin
 local QUESTION_MARK = 134400 -- the game's question-mark icon file ID
 BossSections.ROW_H = ROW_H
 
@@ -90,9 +91,9 @@ local function newRow(parent)
 	row.meta:SetPoint("BOTTOMLEFT", row.icon, "BOTTOMRIGHT", SP.sm, 0)
 	row.meta:SetPoint("RIGHT", -SP.xs, 0)
 	-- An ability's note (hidden on item rows), with a hanging indent: it starts under the name, beside the icon's column.
+	-- Its width is set from the row's (fitRow), so its height can be measured before the row is drawn.
 	row.note = W.Paragraph(row, "caption", "muted")
 	row.note:SetPoint("TOPLEFT", row.icon, "BOTTOMRIGHT", SP.sm, -SP.xxs)
-	row.note:SetPoint("RIGHT", -SP.xs, 0)
 	if row.note.SetMaxLines then
 		row.note:SetMaxLines(3)
 	end
@@ -158,6 +159,22 @@ local function setAbilityRow(row, ab)
 	row:SetHeight(row.dpHeight)
 end
 
+-- A row's height at `width`: as tall as its note's lines (a one-line note adds one line, not three). Without a width
+-- yet (a frame not laid out), room for the longest note.
+local function fitRow(row, width)
+	if not row.note:IsShown() then
+		return ROW_H
+	end
+	if not width or width <= NOTE_INSET then
+		return ROW_H + NOTE_H
+	end
+	row.note:SetWidth(width - NOTE_INSET)
+	local h = math.min(NOTE_H, math.ceil(row.note:GetStringHeight() or NOTE_H))
+	row.dpHeight = ROW_H + h
+	row:SetHeight(row.dpHeight)
+	return row.dpHeight
+end
+
 -- Into a W.Document: after the text the page has put in already. sections = BossInfo.Sections(...).
 function BossSections.FillDoc(doc, sections)
 	local pool = doc.dpItemRows
@@ -195,7 +212,9 @@ function BossSections.FillDoc(doc, sections)
 				pool[used] = row
 			end
 			setAbilityRow(row, ab)
-			doc:Place(row, row.dpHeight + SP.xxs, true)
+			doc:Place(row, function(width)
+				return fitRow(row, width) + SP.xxs
+			end, true)
 		end
 	end
 end
@@ -263,7 +282,7 @@ function BossSections.Stack(parent)
 				row:ClearAllPoints()
 				row:SetPoint("TOPLEFT", 0, -y)
 				row:SetPoint("RIGHT", 0, 0)
-				y = y + row.dpHeight + SP.xxs
+				y = y + fitRow(row, self:GetWidth()) + SP.xxs
 			end
 			y = y + SP.sm
 		end

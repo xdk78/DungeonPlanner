@@ -23,9 +23,18 @@ ReyesMaps.WIDTH, ReyesMaps.HEIGHT, ReyesMaps.STRIP = 1024, 683, 256
 -- [instance key (GameFiles.Key)] = its floors in the order of the recommended plan's: file (Media/Maps/Reyes/<file>N),
 -- label (the floor's name), names (other names a plan floor may have), and the same picture's file name in the Dungeon
 -- Journal (dj) and Forever Dungeon Routes (fdr) addons, so their boss pins and routes can be shown on it.
+-- keepOut: where the picture has painted names (its title, room names, the signature), as { x1, y1, x2, y2 } over the
+-- picture (0..1, measured on the published file): the map's labels go elsewhere when they can (UI/MapCanvas.lua).
 ReyesMaps.DUNGEONS = {
 	hallofthanes = {
-		{ file = "HallOfThanes", label = "The Hall of Thanes", dj = "hallofthanesmap", fdr = "hallofthanes" },
+		{ file = "HallOfThanes", label = "The Hall of Thanes", dj = "hallofthanesmap", fdr = "hallofthanes",
+			keepOut = {
+				{ 0.374, 0.045, 0.663, 0.112 }, -- HALL OF THANES
+				{ 0.550, 0.195, 0.633, 0.246 }, -- RELIQUARY OF KINGS
+				{ 0.635, 0.421, 0.716, 0.475 }, -- DARK IRON INGRESS
+				{ 0.414, 0.702, 0.501, 0.753 }, -- ANVILMAR'S REST
+				{ 0.650, 0.920, 0.990, 0.960 }, -- the signature
+			} },
 	},
 	ruinsoflordaeron = {
 		{ file = "RuinsOfLordaeron", label = "Ruins of Lordaeron", dj = "ruinsoflordaeronmap", fdr = "ruinsoflordaeron" },
@@ -79,8 +88,9 @@ function ReyesMaps.Has(name)
 	return ReyesMaps.Floors(name) ~= nil
 end
 
--- The bundled floor for floor `index` of a plan: one named like it (label or names), else Providers.PickFloor (the
--- most words of its name, else the same position). nil for the zone outside (an unnamed floor with its own map ID).
+-- The bundled floor for floor `index` of a plan: the one at its `art` position when it names one (Data/Floors.lua),
+-- else one named like it (label or names), else Providers.PickFloor (the most words of its name, else the same
+-- position). nil for the zone outside (an unnamed floor with its own map ID).
 function ReyesMaps.Pick(plan, index)
 	local floor = type(plan) == "table" and type(plan.floors) == "table" and plan.floors[index]
 	if type(floor) ~= "table" or ((floor.name or "") == "" and floor.uiMapID) then
@@ -89,6 +99,9 @@ function ReyesMaps.Pick(plan, index)
 	local list = ReyesMaps.Floors(plan.instance and plan.instance.name)
 	if not list then
 		return nil
+	end
+	if floor.art then
+		return list[floor.art]
 	end
 	local want = ns.Match.StripArticle(floor.name or "")
 	if want ~= "" then
@@ -154,7 +167,7 @@ function ReyesMaps.FloorArt(plan, index)
 	end
 	local art = { width = ReyesMaps.WIDTH, height = ReyesMaps.HEIGHT, tileWidth = ReyesMaps.WIDTH,
 		tileHeight = ReyesMaps.STRIP, textures = textures, source = "reyes", artist = ReyesMaps.ARTIST, file = f.file,
-		label = f.label, dj = f.dj, fdr = f.fdr, pins = {} }
+		label = f.label, dj = f.dj, fdr = f.fdr, pins = {}, keepOut = f.keepOut }
 	if provided then
 		art.pins, art.align, art.pinsCredit = provided.pins or {}, provided.align, provided.credit
 	end

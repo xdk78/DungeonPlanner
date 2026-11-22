@@ -129,3 +129,34 @@ function Bundled.ForInstance(entry)
 	end
 	return out
 end
+
+-- Is a recommended plan's research clearly older than the game build the player runs? Routes are the part of a dungeon
+-- guide that goes stale first. All recommended plans are researched together and builds come often, so a build only
+-- counts as newer when it is more than STALE_DAYS after the research: a plan is not flagged by every hotfix.
+-- `dataTime`: the plan's data date (plan.updated, seconds); `buildDate`: GetBuildInfo's third value ("Nov 20 2026").
+-- Returns stale (true / false) and the build's day as "YYYY-MM-DD", or nil when either is unknown. Pure.
+Bundled.STALE_DAYS = 90
+local MONTHS = { jan = 1, feb = 2, mar = 3, apr = 4, may = 5, jun = 6, jul = 7, aug = 8, sep = 9, oct = 10, nov = 11, dec = 12 }
+
+-- Days since 1970-01-01 of a calendar day (proleptic Gregorian; no time zones, no date()).
+local function dayNumber(y, m, d)
+	y = m <= 2 and y - 1 or y
+	local era = math.floor(y / 400)
+	local yoe = y - era * 400
+	local doy = math.floor((153 * (m > 2 and m - 3 or m + 9) + 2) / 5) + d - 1
+	return era * 146097 + yoe * 365 + math.floor(yoe / 4) - math.floor(yoe / 100) + doy - 719468
+end
+
+function Bundled.Stale(dataTime, buildDate)
+	if type(dataTime) ~= "number" or dataTime <= 0 or type(buildDate) ~= "string" then
+		return nil
+	end
+	local mon, d, y = buildDate:match("^%s*(%a%a%a)%a*%s+(%d+)%s+(%d%d%d%d)")
+	local m = mon and MONTHS[mon:lower()]
+	d, y = tonumber(d), tonumber(y)
+	if not m or d < 1 or d > 31 then
+		return nil
+	end
+	local days = dayNumber(y, m, d) - math.floor(dataTime / 86400)
+	return days > Bundled.STALE_DAYS, string.format("%04d-%02d-%02d", y, m, d)
+end

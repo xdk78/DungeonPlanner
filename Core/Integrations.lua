@@ -197,7 +197,8 @@ local function registerOpenMap()
 			return ns.title, lines
 		end)
 	end
-	if type(api.RegisterMenuToggle) == "function" then
+	-- No menu entry with the gamepad interface style on (Compat.Gamepad).
+	if type(api.RegisterMenuToggle) == "function" and not ns.Compat.Gamepad() then
 		pcall(api.RegisterMenuToggle, ns.name, {
 			id = "window",
 			label = ns.title,

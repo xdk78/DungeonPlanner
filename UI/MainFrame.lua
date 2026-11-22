@@ -1,5 +1,5 @@
 -- The main window: a war table, as a raid leader would brief from.
---   header      emblem and title · (instance page) back, instance and plan pickers, plan menu, undo · settings, close
+--   header      emblem and title • (instance page) back, instance and plan pickers, plan menu, undo • settings, close
 --   body        Home (UI/Home.lua): the instance table and a preview of the selected instance
 --               Instance page (UI/InstancePage.lua): the plan's steps and party on the left, the section (the map by
 --               default) filling the rest
@@ -106,6 +106,23 @@ function ctx:Steps()
 		stepsCache.planId, stepsCache.list = plan.id, ns.Steps.Build(plan)
 	end
 	return stepsCache.list
+end
+
+-- Every floor the map can show for the selected plan: its own, then the instance's other map art (Data/Floors.lua).
+function ctx:Floors()
+	return ns.Floors.For(self:Plan())
+end
+
+-- Put something on the current floor: `add(floor)` adds it and returns it (or nil and an error). A floor the map adds
+-- becomes the own plan's first (Floors.Ensure), and stops being the plan's again when the add fails.
+function ctx:AddOnFloor(add)
+	local plan = self:Plan()
+	local before = plan and not self:ReadOnly() and ns.Floors.Ensure(plan, self.floor) or nil
+	local result, err = add(self.floor)
+	if not result and before then
+		ns.Floors.Unensure(plan, before)
+	end
+	return result, err
 end
 
 -- The current step of the selected plan (index), or nil before one is chosen.
@@ -243,6 +260,16 @@ local function routeCredit(plan)
 	return nil
 end
 
+-- A recommended plan researched well before the game build the player runs (Bundled.Stale): one line that says so,
+-- with the build's date; nil otherwise, or when the client's build date cannot be read.
+function UI.StaleLine(plan)
+	local stale, build = ns.Bundled.Stale(plan and plan.updated, ns.Compat.ClientInfo().date)
+	if not stale then
+		return nil
+	end
+	return string.format(L["Researched before this game build (%s): the route and pulls may have changed. Check them in game."], build)
+end
+
 function UI.PlanSource(plan)
 	if not plan then
 		return nil
@@ -255,8 +282,8 @@ function UI.PlanSource(plan)
 			confidence = confidence or tag:match("^confidence: (%a+)$")
 		end
 		local when = day(plan.updated)
-		short = when and string.format(L["Recommended plan · revision %d · data from %s"], plan.rev or 1, when)
-			or string.format(L["Recommended plan · revision %d"], plan.rev or 1)
+		short = when and string.format(L["Recommended plan • revision %d • data from %s"], plan.rev or 1, when)
+			or string.format(L["Recommended plan • revision %d"], plan.rev or 1)
 		lines[#lines + 1] = string.format(L["Source: %s, community research with approximate positions."], plan.author)
 		if confidence then
 			lines[#lines + 1] = string.format(L["Confidence: %s"], L["confidence:" .. confidence])
@@ -268,6 +295,10 @@ function UI.PlanSource(plan)
 		local credit = routeCredit(plan)
 		if credit then
 			lines[#lines + 1] = credit
+		end
+		local stale = UI.StaleLine(plan)
+		if stale then
+			lines[#lines + 1] = stale
 		end
 		lines[#lines + 1] = L["Read-only: make an editable copy to change it."]
 	elseif plan.origin and plan.origin.bundled then
@@ -282,6 +313,10 @@ function UI.PlanSource(plan)
 			end
 			if (base.rev or 1) > rev then
 				lines[#lines + 1] = string.format(L["A newer revision (%d) of it ships with this version."], base.rev)
+			end
+			local stale = UI.StaleLine(base)
+			if stale then
+				lines[#lines + 1] = stale
 			end
 		end
 		lines[#lines + 1] = string.format(L["Copied at revision %d."], rev)
@@ -388,7 +423,7 @@ function UI.SelectPlan(id, stayOnPage)
 		ns.Widgets.CommitFocus() -- text still being typed belongs to the plan being left
 		ns.db.ui.selectedPlan = id
 		ctx.floor, ctx.selectedMarker, ctx.focusPull, ctx.currentPull, ctx.activeRoute = 1, nil, nil, nil, nil
-		ctx.focusEncounter, ctx.focusSegment = nil, nil
+		ctx.focusEncounter, ctx.focusSegment, ctx.selectedShape = nil, nil, nil
 		stepsCache.list = nil
 		resetUndo(ns.DB.GetPlan(id))
 		ns:FirePublic("DUNGEONPLANNER_ACTIVE_PLAN", id)
@@ -411,80 +446,7 @@ function UI.SelectPlan(id, stayOnPage)
 end
 
 -- Steps ---------------------------------------------------------------------------------------------------------------------
-
--- A step's title and caption for lists and run mode, whether its spot is an estimate (the plan says "(approx.)": shown
--- as a small mark, Style.WithApprox), and its note without that mark.
-function UI.StepText(plan, step)
-	if not (plan and step) then
-		return "", "", false, nil
-	end
-	local note, approx = ns.Util.SplitApprox(step.note)
-	local stepMarker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-	if stepMarker and not approx then
-		approx = select(2, ns.Util.SplitApprox(stepMarker.note))
-	end
-	local title, caption
-	if step.kind == "marker" then
-		title = stepMarker and (stepMarker.label ~= "" and stepMarker.label or L[stepMarker.kind]) or L["Move on"]
-		-- A quest item: the item's name as the client has it (in the player's language), the label until it loads.
-		if stepMarker and stepMarker.kind == "quest_item" and stepMarker.itemID then
-			title = ns.Names.Item(stepMarker.itemID) or title
-		end
-		caption = stepMarker and L[stepMarker.kind] or L["Move"]
-	elseif step.kind == "boss" then
-		local enc = step.encounter and ns.Util.FindById(plan.encounters, step.encounter)
-		local marker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-		title = enc and ns.Names.Encounter(enc) or (marker and marker.label ~= "" and marker.label) or L["Boss"]
-		caption = L["Boss"]
-	elseif step.kind == "pull" then
-		local pull, index = ns.Util.FindById(plan.pulls, step.pull)
-		title = pull and pull.name or L["Pull"]
-		caption = index and string.format(L["Pull %d"], index) or L["Pull"]
-	elseif step.kind == "entrance" then
-		local marker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-		title = marker and marker.label ~= "" and marker.label or L.entrance
-		caption = L.entrance
-	elseif step.kind == "objective" then
-		title = note or ""
-		caption = L["Objective"]
-	else
-		title = note and note ~= "" and note or L["Move on"]
-		caption = L["Move"]
-	end
-	-- Where the plan has several floors, the step's, unless it is named as the instance (the Deadmines' first floor is
-	-- "The Deadmines": every step there would repeat what the header says). The other floors keep their names.
-	if step.floor and #plan.floors > 1 and plan.floors[step.floor] then
-		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor)
-		if floorName ~= ns.Names.Instance(plan.instance) and floorName ~= plan.instance.name then
-			caption = caption .. "  ·  " .. floorName
-		end
-	end
-	return title, caption, approx, note
-end
-
--- A pull's plan marks as one short line: its tags, planned cooldowns and Bloodlust ("Interrupt · CC · CDs · Lust"),
--- and with opts.progress its planned forces ("34%"). "" when it has none. opts.long uses the full names.
-function UI.PullMarks(pull, opts)
-	opts = opts or {}
-	if not pull then
-		return ""
-	end
-	local prefix = opts.long and "tag:" or "tagShort:"
-	local parts = {}
-	for _, tag in ipairs(pull.tags or {}) do
-		parts[#parts + 1] = L[prefix .. tag]
-	end
-	if pull.cd then
-		parts[#parts + 1] = L[prefix .. "cd"]
-	end
-	if pull.lust then
-		parts[#parts + 1] = L[prefix .. "lust"]
-	end
-	if opts.progress and pull.progress then
-		parts[#parts + 1] = string.format(L["%d%%"], pull.progress)
-	end
-	return table.concat(parts, "  ·  ")
-end
+-- (How a step reads: UI/StepText.lua.)
 
 -- Make step `index` current: the side panel, run mode and the map follow. opts.stay = keep the current section (run
 -- mode and key bindings); otherwise the window switches to the map.
@@ -520,6 +482,22 @@ function UI.FocusStep(index, opts)
 	ns:Fire("STEP_CHANGED")
 end
 
+-- Show floor `index` of the map (every floor the instance has, ctx:Floors()).
+function UI.GoToFloor(index)
+	if not ctx:Floors()[index] then
+		return
+	end
+	if frame and frame:IsShown() and ns.db.ui.view == "instance" then
+		UI.SelectTab("map")
+		local map = frame.instancePage.panels.map
+		if map then
+			map:GoToFloor(index)
+			return
+		end
+	end
+	ctx.floor = index
+end
+
 -- Move the current step by delta (+1 / -1); the first step when none is current.
 function UI.StepBy(delta, opts)
 	local list = ctx:Steps()
@@ -547,7 +525,7 @@ function UI.RefreshFooter()
 	-- The same number the "My plans" list shows (recommended plans are not counted: they are not yours).
 	parts[#parts + 1] = string.format(L["My plans: %d"], #ns.DB.Plans())
 	local status = frame.footer.status
-	status:SetText(table.concat(parts, "  ·  "))
+	status:SetText(table.concat(parts, "  •  "))
 	-- On a narrow window the sections and Run mode need the line: the status gives way.
 	local page = frame.instancePage
 	-- The game's window tabs hang under the window; only the drawn section bar shares this line.

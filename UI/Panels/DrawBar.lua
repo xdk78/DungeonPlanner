@@ -258,14 +258,16 @@ function DrawBar.Build(f, ctx, bar, canvas)
 				if not p or ctx:ReadOnly() then
 					return
 				end
-				local shape, err = Drawing.Add(p, ctx.floor, "text", { x, y }, {
-					text = text,
-					color = ctx.drawColor,
-					width = ctx.drawWidth,
-					author = ns.MapDraw.Author(),
-					encounter = cb.drawLinkEncounter(),
-					pull = cb.drawLinkPull(),
-				})
+				local shape, err = ctx:AddOnFloor(function(floor)
+					return Drawing.Add(p, floor, "text", { x, y }, {
+						text = text,
+						color = ctx.drawColor,
+						width = ctx.drawWidth,
+						author = ns.MapDraw.Author(),
+						encounter = cb.drawLinkEncounter(),
+						pull = cb.drawLinkPull(),
+					})
+				end)
 				if shape then
 					changed()
 				elseif err == "limit" then

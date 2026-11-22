@@ -19,6 +19,7 @@ end
 
 function addon:OnEnable()
 	ns.loggedIn = true
+	ns.Compat.Gamepad() -- once, before anything registers (slash commands, Escape, menu entries)
 	applyLanguage()
 	ns.Style.Init()
 	ns.Comm.Init()
