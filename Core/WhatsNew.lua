@@ -31,6 +31,10 @@ local ENTRIES = {
 			items = {
 				{ L["Bosses on the route"],
 					L["Where another addon's map puts the bosses elsewhere than the plan, the map keeps the plan's bosses at its route's stops."] },
+				{ L["Blocked addon messages"],
+					L["Sharing and group sync say when the game blocks or refuses addon messages, instead of waiting for answers that cannot come."] },
+				{ L["Runs per wing"],
+					L["In dungeons with wings, each wing keeps its own runs and best times."] },
 			},
 		}
 	end,

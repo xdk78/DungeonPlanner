@@ -1147,7 +1147,7 @@ V.views = {
 		name = "news-update",
 		setup = function()
 			closeAll()
-			ns.NewsFrame.Show("news", "0.2.0")
+			ns.NewsFrame.Show("news", ns.WhatsNew.Versions()[1]) -- the newest card, the one players see next
 		end,
 		window = function()
 			return rawget(_G, "DungeonPlannerNewsFrame")
