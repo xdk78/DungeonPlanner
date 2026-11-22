@@ -1065,4 +1065,17 @@ ns.Locales.ruRU = {
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Забыт %d изученный вход.|Забыто %d изученных входа.|Забыто %d изученных входов.",
 	["Forget learned entrances"] = "Забыть изученные входы",
 	["Getting there uses the bundled entrances again."] = "«Как добраться» снова использует встроенные входы.",
+	-- Gear filters, Show location
+	["Class"] = "Класс",
+	["Slot"] = "Ячейка",
+	["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."] = "Показывает предметы, которые может надеть этот класс: доспехи до самого тяжёлого его типа, а также оружие и щиты, которыми он владеет. Предметы, не относящиеся к экипировке, остаются в списке.",
+	["Shows the drops of one boss, or of the whole instance."] = "Показывает добычу одного босса или всего подземелья.",
+	["Shows the items for one equipment slot."] = "Показывает предметы для одной ячейки экипировки.",
+	["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."] = "Фильтрует собственные записи плана по указанной в них роли. У добычи роли нет, поэтому она остаётся в списке.",
+	["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."] = "У добычи нет роли, а этот план не указывает её ни в одной записи, поэтому фильтровать по роли нечего.",
+	["Show location"] = "Показать место",
+	["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."] = "Щелчок: вход на карте мира. Правый щелчок или Shift+щелчок: «Как добраться».",
+	["Click: open Getting there (the entrance lies on no map)."] = "Щелчок: открыть «Как добраться» (вход не лежит ни на одной карте).",
+	["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."] = "Щелчок: поставить метку на карте (карта мира не открывается в стиле интерфейса для геймпада). Правый щелчок или Shift+щелчок: «Как добраться».",
+	["Not available in combat."] = "Недоступно в бою.",
 }

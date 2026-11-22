@@ -532,16 +532,29 @@ function M.Install()
 			}
 		end,
 	}
-	_G.GetItemInfoInstant = function(itemID)
+	-- The client's answer: itemID, itemType, itemSubType, equipLoc, icon, classID, subclassID (the API's seven values),
+	-- or nothing for an item the client has no data for. M.itemTypes[id] = { equipLoc, classID, subclassID } sets an
+	-- item's type, false makes it unknown; others are cloth (class 4, subclass 1), the journal's equip location or a head.
+	M.itemTypes = {}
+	local function itemInfoInstant(itemID)
+		local t = M.itemTypes[itemID]
+		if t == false then
+			return nil
+		elseif t then
+			return itemID, "Type", "Subtype", t[1], 135000, t[2], t[3]
+		end
 		for _, list in pairs(M.journal.loot) do
 			for _, item in ipairs(list) do
 				if item[1] == itemID then
-					return itemID, "Armor", "Cloth", item[4], 135000
+					return itemID, "Armor", "Cloth", item[4], 135000, 4, 1
 				end
 			end
 		end
-		return itemID, "Armor", "Cloth", "INVTYPE_HEAD", 135000
+		return itemID, "Armor", "Cloth", "INVTYPE_HEAD", 135000, 4, 1
 	end
+	_G.GetItemInfoInstant = itemInfoInstant
+	_G.C_Item = _G.C_Item or {}
+	_G.C_Item.GetItemInfoInstant = itemInfoInstant
 	-- Dungeon finder: one entry (id 5) for the test dungeon's instance map 389, levels 13-18.
 	_G.GetLFGDungeonInfo = function(id)
 		if id == 5 then

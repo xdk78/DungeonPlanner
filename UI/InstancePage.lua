@@ -51,6 +51,52 @@ local function buildChrome(f, ctx, window)
 	end
 	W.SetTooltip(f.instancePick, L["Instance"], L["Switch to another dungeon or raid."], "below")
 
+	-- Show location: the entrance on the world map, the same action as the Getting there card's (GettingThere.Locate);
+	-- right-click or Shift-click opens the Getting there window. Off without a travel record, and in combat.
+	local function locationTarget()
+		return ctx:Plan() or ctx:Instance()
+	end
+	f.location = W.IconButton(chrome, "showLocation", nil, function(_, mouse)
+		local shift = IsShiftKeyDown and IsShiftKeyDown()
+		ns.GettingThere.Locate(locationTarget(), mouse == "RightButton" or shift == true)
+	end)
+	f.location:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	f.location:SetPoint("LEFT", f.instancePick, "RIGHT", SP.xs, 0)
+	-- The pin's picture has a wide clear margin: it fills the button to stay as legible as the back arrow beside it.
+	f.location.art:ClearAllPoints()
+	f.location.art:SetAllPoints()
+	-- combat: true from PLAYER_REGEN_DISABLED, which fires before InCombatLockdown says so.
+	function f.location:Update(combat)
+		local loc = ns.GettingThere.Location(locationTarget())
+		local state = (combat and loc.state == "ready") and "blocked" or loc.state
+		self.dpState = state
+		self:SetDisabled(state ~= "ready")
+		local text
+		if state == "ready" then
+			local hint = loc.mapped and L["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."]
+				or L["Click: open Getting there (the entrance lies on no map)."]
+			if loc.mapped and not ns.Navigation.CanOpenMap() then
+				hint = L["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."]
+			end
+			text = (loc.zone and (loc.zone .. "\n") or "") .. hint
+		elseif state == "blocked" then
+			text = L["Not available in combat."]
+		else
+			text = L["Dungeon Planner has no travel facts for this instance."]
+		end
+		W.SetTooltip(self, L["Show location"], text, "below")
+	end
+	ns:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+		if f.location:IsVisible() then
+			f.location:Update(true)
+		end
+	end)
+	ns:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+		if f.location:IsVisible() then
+			f.location:Update(false)
+		end
+	end)
+
 	f.planPick = W.Dropdown(chrome, {
 		width = 250,
 		placeholder = L["No plan yet"],
@@ -79,7 +125,7 @@ local function buildChrome(f, ctx, window)
 			end
 		end,
 	})
-	f.planPick:SetPoint("LEFT", f.instancePick, "RIGHT", SP.sm, 0)
+	f.planPick:SetPoint("LEFT", f.location, "RIGHT", SP.xs, 0)
 	W.SetTooltip(f.planPick, L["Plan"], L["The plan on the table. Recommended plans are marked with a star."], "below")
 
 	-- The plan's own menu (rename, export, delete...).
@@ -248,6 +294,7 @@ function InstancePage.Create(parent, ctx, window)
 			return
 		end
 		self.instancePick:Refresh()
+		self.location:Update()
 		local plan = ctx:Plan()
 		if plan and not ns.Bundled.SameInstance(plan.instance, entry) then
 			plan = nil

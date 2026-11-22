@@ -9,7 +9,8 @@
 --   EJ_GetNumLoot() -> n
 --   C_EncounterJournal.GetLootInfoByIndex(i) -> { itemID, encounterID, name, itemQuality, icon, slot, armorType, link }
 --     or the older EJ_GetLootInfoByIndex(i) -> itemID, encounterID, name, icon, slot, armorType, link
---   GetItemInfoInstant(itemID) -> itemID, type, subType, equipLoc, icon (the slot, whatever the client's language)
+--   C_Item.GetItemInfoInstant(itemID) (else the global) -> itemID, type, subType, equipLoc, icon, classID, subclassID
+--     (the slot and the armor or weapon type, whatever the client's language)
 -- Item data loads asynchronously: an incomplete read is not cached, and EJ_LOOT_DATA_RECIEVED (the game's spelling)
 -- refreshes the open page. Reading moves the journal's selection, so it never runs while the Blizzard journal is open,
 -- and it puts the journal's loot filter back afterwards.
@@ -70,12 +71,35 @@ local function str(v)
 	return type(v) == "string" and v ~= "" and v or nil
 end
 
-function Loot.SlotOf(itemID)
-	if not itemID or type(GetItemInfoInstant) ~= "function" then
+-- What the client's item database says about an item, without loading it: { classID, subclassID, equipLoc, slot }, or
+-- nil while the client has no data for it (an item the server sends later; Names.RequestItem loads it). The current
+-- API is C_Item.GetItemInfoInstant; the global of the same name is the older spelling (still used by Forever addons).
+local function instant()
+	local items = rawget(_G, "C_Item")
+	if items and type(items.GetItemInfoInstant) == "function" then
+		return items.GetItemInfoInstant
+	end
+	local old = rawget(_G, "GetItemInfoInstant")
+	return type(old) == "function" and old or nil
+end
+
+function Loot.ItemType(itemID)
+	local fn = instant()
+	if not Util.IsInteger(itemID) or not fn then
 		return nil
 	end
-	local ok, _, _, _, equipLoc = pcall(GetItemInfoInstant, itemID)
-	return ok and EQUIP_SLOT[Util.Plain(equipLoc)] or nil
+	local ok, id, _, _, equipLoc, _, classID, subclassID = pcall(fn, itemID)
+	if not ok or Util.Plain(id) == nil then
+		return nil
+	end
+	equipLoc, classID, subclassID = Util.Plain(equipLoc), Util.Plain(classID), Util.Plain(subclassID)
+	return { classID = Util.IsInteger(classID) and classID or nil, subclassID = Util.IsInteger(subclassID) and subclassID
+		or nil, equipLoc = type(equipLoc) == "string" and equipLoc or nil, slot = EQUIP_SLOT[equipLoc] }
+end
+
+function Loot.SlotOf(itemID)
+	local t = Loot.ItemType(itemID)
+	return t and t.slot or nil
 end
 
 local function itemQuality(itemID, journalQuality)

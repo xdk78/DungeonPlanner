@@ -75,6 +75,9 @@ follow [Semantic Versioning](https://semver.org/).
   dragged with the route tool) for a straight line. On by default; works on
   every classic floor and Forever's caves and buildings. Open outdoor maps keep straight lines. Snapped routes are
   ordinary route points, so shared plans work with older versions.
+- **Show location** in the window's header, right after the instance's name: a click shows the entrance on the world
+  map (the game's pin, as in Getting there), a right-click or Shift-click opens the Getting there window. Its tooltip
+  names the zone; it is off in combat and for instances without travel facts.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the
@@ -95,6 +98,12 @@ follow [Semantic Versioning](https://semver.org/).
   tool's name or a drawn glyph, and `/dp debug` lists it.
 
 ### Fixed
+- **Gear filters**: choosing a class or a slot now changes the drop list. The drops come from Dungeon Planner's boss
+  data or another addon as item IDs, and those lists were only filtered by boss. A class now shows what it can equip
+  (armor up to its heaviest type, the weapons and shields it can use; rings, cloaks and trinkets for everyone), a slot
+  the items for that slot, read from the game's item data; items the game has not loaded yet join the list when they
+  arrive. The role filter applies to a plan's own entries; on a recommended plan without such entries it is switched
+  off and its tooltip says why, since drops name no role.
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
 - **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.

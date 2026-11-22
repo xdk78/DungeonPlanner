@@ -1065,4 +1065,17 @@ ns.Locales.frFR = {
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "%d entrée apprise oubliée.|%d entrées apprises oubliées.",
 	["Forget learned entrances"] = "Oublier les entrées apprises",
 	["Getting there uses the bundled entrances again."] = "S'y rendre utilise de nouveau les entrées fournies.",
+	-- Gear filters, Show location
+	["Class"] = "Classe",
+	["Slot"] = "Emplacement",
+	["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."] = "Affiche les objets que cette classe peut équiper : l'armure jusqu'à son type le plus lourd, et les armes et boucliers qu'elle peut utiliser. Les objets qui ne sont pas de l'équipement restent listés.",
+	["Shows the drops of one boss, or of the whole instance."] = "Affiche le butin d'un boss ou de toute l'instance.",
+	["Shows the items for one equipment slot."] = "Affiche les objets d'un emplacement d'équipement.",
+	["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."] = "Filtre les entrées propres à ce plan selon le rôle qui leur est attribué. Le butin n'a pas de rôle et reste listé.",
+	["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."] = "Le butin n'a pas de rôle et ce plan n'en attribue à aucune de ses entrées : il n'y a rien à filtrer par rôle.",
+	["Show location"] = "Voir l'emplacement",
+	["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."] = "Clic : voir l'entrée sur la carte du monde. Clic droit ou Maj-clic : S'y rendre.",
+	["Click: open Getting there (the entrance lies on no map)."] = "Clic : ouvrir S'y rendre (l'entrée n'est sur aucune carte).",
+	["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."] = "Clic : placer le repère sur la carte (la carte du monde ne s'ouvre pas avec le style d'interface manette). Clic droit ou Maj-clic : S'y rendre.",
+	["Not available in combat."] = "Indisponible en combat.",
 }

@@ -269,6 +269,15 @@ function Names.ItemHovered(itemID)
 	end
 end
 
+-- True while an item asked for may still arrive: no name yet and asks left, or the last ask is recent.
+function Names.ItemLoading(itemID)
+	local s = itemState[itemID]
+	if not s or s.done or clientItemName(itemID) then
+		return false
+	end
+	return s.tries < ITEM_TRIES or clock() - s.at < ITEM_RETRY
+end
+
 -- For tests: forget every item asked for.
 function Names.ResetItems()
 	itemState, itemCount, itemArrived = {}, 0, {}

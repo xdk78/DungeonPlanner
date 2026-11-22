@@ -1065,4 +1065,17 @@ ns.Locales.esES = {
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Se olvidó %d entrada aprendida.|Se olvidaron %d entradas aprendidas.",
 	["Forget learned entrances"] = "Olvidar las entradas aprendidas",
 	["Getting there uses the bundled entrances again."] = "Cómo llegar vuelve a usar las entradas incluidas.",
+	-- Gear filters, Show location
+	["Class"] = "Clase",
+	["Slot"] = "Ranura",
+	["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."] = "Muestra los objetos que esta clase puede equipar: armadura hasta su tipo más pesado, y las armas y escudos que puede usar. Los objetos que no son equipo siguen en la lista.",
+	["Shows the drops of one boss, or of the whole instance."] = "Muestra el botín de un jefe o de toda la instancia.",
+	["Shows the items for one equipment slot."] = "Muestra los objetos de una ranura de equipo.",
+	["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."] = "Filtra las entradas propias de este plan por el rol con el que están marcadas. El botín no tiene rol, así que sigue en la lista.",
+	["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."] = "El botín no tiene rol y este plan no marca ninguna de sus entradas con uno, así que no hay nada que filtrar por rol.",
+	["Show location"] = "Ver ubicación",
+	["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."] = "Clic: ver la entrada en el mapa del mundo. Clic derecho o Mayús+clic: Cómo llegar.",
+	["Click: open Getting there (the entrance lies on no map)."] = "Clic: abrir Cómo llegar (la entrada no está en ningún mapa).",
+	["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."] = "Clic: poner el marcador en el mapa (el mapa del mundo no se abre con el estilo de interfaz de mando). Clic derecho o Mayús+clic: Cómo llegar.",
+	["Not available in combat."] = "No disponible en combate.",
 }

@@ -1091,4 +1091,17 @@ ns.Locales.plPL = {
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Zapomniano %d poznane wejście.|Zapomniano %d poznane wejścia.|Zapomniano %d poznanych wejść.",
 	["Forget learned entrances"] = "Zapomnij poznane wejścia",
 	["Getting there uses the bundled entrances again."] = "Dojazd znowu korzysta z wejść dołączonych do dodatku.",
+	-- Gear filters, Show location
+	["Class"] = "Klasa",
+	["Slot"] = "Miejsce",
+	["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."] = "Pokazuje przedmioty, które ta klasa może założyć: zbroję do jej najcięższego rodzaju oraz bronie i tarcze, których może używać. Przedmioty, które nie są ekwipunkiem, zostają na liście.",
+	["Shows the drops of one boss, or of the whole instance."] = "Pokazuje łupy jednego bossa albo całej instancji.",
+	["Shows the items for one equipment slot."] = "Pokazuje przedmioty na jedno miejsce ekwipunku.",
+	["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."] = "Filtruje własne pozycje tego planu według przypisanej im roli. Łupy nie mają roli, więc zostają na liście.",
+	["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."] = "Łupy nie mają roli, a ten plan nie przypisuje jej żadnej swojej pozycji, więc nie ma czego filtrować według roli.",
+	["Show location"] = "Pokaż położenie",
+	["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."] = "Kliknięcie: wejście na mapie świata. Prawy przycisk lub Shift+kliknięcie: Dojazd.",
+	["Click: open Getting there (the entrance lies on no map)."] = "Kliknięcie: otwiera Dojazd (wejście nie leży na żadnej mapie).",
+	["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."] = "Kliknięcie: ustawia znacznik na mapie (mapa świata nie otwiera się w stylu interfejsu dla pada). Prawy przycisk lub Shift+kliknięcie: Dojazd.",
+	["Not available in combat."] = "Niedostępne w walce.",
 }

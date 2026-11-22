@@ -34,6 +34,7 @@ Art.SPECS = {
 	minus = { file = "Interface\\Buttons\\UI-MinusButton-Up" },
 	prevPage = { file = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up" }, -- NR
 	nextPage = { file = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up" },
+	showLocation = { atlas = "Waypoint-MapPin-Tracked", file = ICONS .. "INV_Misc_Map_01" }, -- OM, Attune (the map pin)
 	parchment = { file = "Interface\\QuestFrame\\QuestBG" }, -- FDJ (wash), classic
 	-- Portraits and pins
 	portraitMask = { file = "Interface\\CharacterFrame\\TempPortraitAlphaMask" }, -- NR, FDJ

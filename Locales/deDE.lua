@@ -1065,4 +1065,17 @@ ns.Locales.deDE = {
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "%d gelernter Eingang vergessen.|%d gelernte Eingänge vergessen.",
 	["Forget learned entrances"] = "Gelernte Eingänge vergessen",
 	["Getting there uses the bundled entrances again."] = "Anreise nutzt wieder die mitgelieferten Eingänge.",
+	-- Gear filters, Show location
+	["Class"] = "Klasse",
+	["Slot"] = "Platz",
+	["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."] = "Zeigt die Gegenstände, die diese Klasse anlegen kann: Rüstung bis zu ihrer schwersten Art sowie die Waffen und Schilde, die sie benutzen kann. Gegenstände, die keine Ausrüstung sind, bleiben in der Liste.",
+	["Shows the drops of one boss, or of the whole instance."] = "Zeigt die Beute eines Bosses oder der ganzen Instanz.",
+	["Shows the items for one equipment slot."] = "Zeigt die Gegenstände für einen Ausrüstungsplatz.",
+	["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."] = "Filtert die eigenen Einträge dieses Plans nach der Rolle, mit der sie markiert sind. Beute hat keine Rolle und bleibt in der Liste.",
+	["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."] = "Beute hat keine Rolle, und dieser Plan markiert keinen seiner Einträge mit einer, daher gibt es nichts nach Rolle zu filtern.",
+	["Show location"] = "Ort zeigen",
+	["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."] = "Klick: den Eingang auf der Weltkarte zeigen. Rechtsklick oder Umschalt-Klick: Anreise.",
+	["Click: open Getting there (the entrance lies on no map)."] = "Klick: Anreise öffnen (der Eingang liegt auf keiner Karte).",
+	["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."] = "Klick: die Kartenmarkierung setzen (die Weltkarte öffnet sich im Gamepad-Oberflächenstil nicht). Rechtsklick oder Umschalt-Klick: Anreise.",
+	["Not available in combat."] = "Im Kampf nicht verfügbar.",
 }
