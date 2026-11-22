@@ -40,12 +40,9 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 
 ## Changes
 
-- Work on a branch; `main` is protected by CI (lint + tests + locale + plans).
-- Clean up after a merge without asking (decided 2026-11-22): once a branch is merged into `main`, remove its
-  worktree (`git worktree remove`, after checking it has no uncommitted changes), delete the branch locally and on the
-  remote, and delete the scratch/work folders that work created.
-- Every change that players can see gets a line under the newest, unreleased version in `CHANGELOG.md` (until a
-  release is tagged, `## [0.1.0] - Unreleased`; then a new `## [Unreleased]` above it).
+- Work on a branch and open a pull request; `main` is protected by CI (lint + tests + locale + plans).
+- After a pull request is merged, delete its branch and remove any worktree and work folder used for it.
+- Every change that players can see gets a line under `## [Unreleased]` in `CHANGELOG.md`.
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
