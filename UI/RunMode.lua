@@ -318,6 +318,14 @@ local function build()
 	f.map:SetPoint("RIGHT")
 	f.map:SetHeight(MAP_H)
 	f.map.noArt:SetText("")
+	-- Which floor the mini map shows, on a dark plate in its top-left corner (an instance of several floors only).
+	local inset = ns.MapCanvas.FRAME_INSET + SP.xs
+	f.mapFloor = W.Text(f.map.edge, "caption", "white")
+	f.mapFloor:SetPoint("TOPLEFT", inset + SP.xs, -(inset + SP.xxs))
+	f.mapFloorPlate = f.map.edge:CreateTexture(nil, "ARTWORK", nil, -8)
+	f.mapFloorPlate:SetColorTexture(0.03, 0.035, 0.045, 0.78)
+	f.mapFloorPlate:SetPoint("TOPLEFT", f.mapFloor, "TOPLEFT", -SP.xs, SP.xxs + 1)
+	f.mapFloorPlate:SetPoint("BOTTOMRIGHT", f.mapFloor, "BOTTOMRIGHT", SP.xs, -(SP.xxs + 1))
 	-- Where the map comes from, under it (not over the art).
 	f.mapCredit = W.Text(inner, "caption", "muted")
 	f.mapCredit:SetPoint("TOPRIGHT", f.map, "BOTTOMRIGHT", 0, -SP.xxs)
@@ -463,6 +471,11 @@ function RunMode.Refresh()
 	frame.map:Show()
 	frame.map:LoadPlanFloor(plan, frame.floor)
 	frame.mapCredit:SetText(frame.map.creditText or "")
+	local floors = ns.Floors.For(plan)
+	local several = #floors > 1 and floors[frame.floor] ~= nil
+	frame.mapFloor:SetText(several and ns.Names.Floor(floors[frame.floor], frame.floor) or "")
+	frame.mapFloor:SetShown(several)
+	frame.mapFloorPlate:SetShown(several)
 	local hasDrawings = ns.Drawing.Count(plan) > 0
 	frame.drawings:SetShown(hasDrawings)
 	frame.drawings.text:SetText(L[RunMode.DRAWING_TEXT[RunMode.DrawingsMode()]])

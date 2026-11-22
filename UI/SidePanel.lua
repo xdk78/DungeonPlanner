@@ -169,7 +169,13 @@ function SidePanel.Create(parent, ctx)
 			S.TextColor(row.title, current == index and "white" or (current and index < current) and "muted" or "ink")
 			S.TextColor(row.caption, step.kind == "boss" and "gold" or "muted")
 		end,
-		onClick = function(_, index)
+		onClick = function(step, index)
+			-- A second click on stairs or a portal (the current step) goes to the floor it leads to.
+			local link = UI.StepLink(ctx:Plan(), step)
+			if link and ctx:StepIndex() == index and ctx.floor ~= link then
+				UI.GoToFloor(link)
+				return
+			end
 			UI.FocusStep(index)
 		end,
 		onEnter = function(step, row)

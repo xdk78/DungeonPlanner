@@ -330,7 +330,7 @@ local function buildPreview(f)
 			Home.LevelText(entry),
 			tostring(#plans),
 			entry.killed and (entry.killed .. "/" .. entry.bosses) or (entry.bosses and tostring(entry.bosses) or "-"),
-			tostring(plans[1] and #plans[1].floors or 0),
+			tostring(plans[1] and ns.Floors.Count(plans[1]) or #ns.Floors.Art(entry.name)), -- as many as the map shows
 		}
 		for i, cell in ipairs(self.facts) do
 			cell.value:SetText(values[i])
@@ -535,7 +535,7 @@ function Home.Create(parent, ctx, actionBar)
 	f.plans:SetAllPoints()
 	-- Under a short list (most players keep a few plans): what can be done with them, in the space that stays empty.
 	f.plansTip = W.Paragraph(f.plans, "caption", "muted")
-	f.plansTip:SetText(L["Double-click a plan to open it. Right-click it to duplicate, rename, export or delete it. Make plans with New plan below, or open a dungeon and copy its recommended plan."])
+	f.plansTip:SetText(L["Double-click a plan to open it; right-click it to duplicate, rename, export or delete it."])
 	function f.plans:PlaceTip(n)
 		local y = n * (ROW_H + SP.xxs) + SP.md
 		local fits = n > 0 and y + 3 * 14 <= (self:GetHeight() or 0)

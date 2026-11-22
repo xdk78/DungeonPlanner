@@ -406,6 +406,31 @@ pull number on a disc in the pull's colour in the gold pin ring; a move step (a 
 map stop, a smaller dark disc ringed in the route's colour with the step number the stop shows; bosses, entrances,
 quest givers and other markers show their icon. A step's caption names its floor only where the plan has several and
 the floor is not named as the instance (the Deadmines' first floor is "The Deadmines"; "Ironclad Cove" stays).
+A step on stairs or a portal that leads to another floor adds "to <floor>"; a second click on it (the current step)
+goes there.
+
+### Floors
+
+The map shows every floor the instance has map art for, not only the plan's (`Data/Floors.lua`): the plan's floors
+first, in their order, then the old map tiles, Santiago Reyes' maps and the minimap pictures no plan floor stands for
+(Atal'Byzal, the Maximum Security Unit and the Prismatic Talus are in no recommended plan). A recommended plan shows such
+a floor as plain map art; in an own plan, putting something on it makes it the plan's (`Floors.Ensure`). The home
+table's Floors count is the same list.
+
+The floor switcher (`UI/Panels/FloorBar.lua`) sits in the map's bottom-right corner inside the frame (left of the marker
+editor while that takes the map's height; the coordinates move over it), hidden on a one-floor map:
+
+```
+two to four floors:   [ The Deadmines ][ Ironclad Cove ]        (tabs; the current one lit)
+more:                 [<][ Hall of Blackhand  4/6 ][>]           (and the toolbar's floor list)
+```
+
+A tab's tooltip counts the plan's markers on that floor; Shift + mouse wheel over the map goes to the next or previous
+floor (round). Tabs too wide for the map's bottom edge (long names, Polish) give way to the arrows. The top-left corner
+was tried first and dropped: many maps have their entrance there (the Deadmines). Stairs and portals on the map say
+"to <floor>" after their label, labels on or off; in a recommended plan a click on one goes there (an own plan's click
+opens the editor; its right-click menu has "Go to"). Run mode's mini map names its floor in its top-left corner when
+the instance has several.
 
 ### Marker icons
 

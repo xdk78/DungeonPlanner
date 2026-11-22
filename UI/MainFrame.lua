@@ -108,6 +108,20 @@ function ctx:Steps()
 	return stepsCache.list
 end
 
+-- Every floor the map can show for the selected plan: its own, then the instance's other map art (Data/Floors.lua).
+function ctx:Floors()
+	return ns.Floors.For(self:Plan())
+end
+
+-- The floor to put something on: a floor the map adds becomes the own plan's first (Floors.Ensure).
+function ctx:EditFloor()
+	local plan = self:Plan()
+	if plan and not self:ReadOnly() then
+		ns.Floors.Ensure(plan, self.floor)
+	end
+	return self.floor
+end
+
 -- The current step of the selected plan (index), or nil before one is chosen.
 function ctx:StepIndex()
 	local plan = self:Plan()
@@ -411,80 +425,7 @@ function UI.SelectPlan(id, stayOnPage)
 end
 
 -- Steps ---------------------------------------------------------------------------------------------------------------------
-
--- A step's title and caption for lists and run mode, whether its spot is an estimate (the plan says "(approx.)": shown
--- as a small mark, Style.WithApprox), and its note without that mark.
-function UI.StepText(plan, step)
-	if not (plan and step) then
-		return "", "", false, nil
-	end
-	local note, approx = ns.Util.SplitApprox(step.note)
-	local stepMarker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-	if stepMarker and not approx then
-		approx = select(2, ns.Util.SplitApprox(stepMarker.note))
-	end
-	local title, caption
-	if step.kind == "marker" then
-		title = stepMarker and (stepMarker.label ~= "" and stepMarker.label or L[stepMarker.kind]) or L["Move on"]
-		-- A quest item: the item's name as the client has it (in the player's language), the label until it loads.
-		if stepMarker and stepMarker.kind == "quest_item" and stepMarker.itemID then
-			title = ns.Names.Item(stepMarker.itemID) or title
-		end
-		caption = stepMarker and L[stepMarker.kind] or L["Move"]
-	elseif step.kind == "boss" then
-		local enc = step.encounter and ns.Util.FindById(plan.encounters, step.encounter)
-		local marker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-		title = enc and ns.Names.Encounter(enc) or (marker and marker.label ~= "" and marker.label) or L["Boss"]
-		caption = L["Boss"]
-	elseif step.kind == "pull" then
-		local pull, index = ns.Util.FindById(plan.pulls, step.pull)
-		title = pull and pull.name or L["Pull"]
-		caption = index and string.format(L["Pull %d"], index) or L["Pull"]
-	elseif step.kind == "entrance" then
-		local marker = step.marker and ns.Util.FindById(plan.markers, step.marker)
-		title = marker and marker.label ~= "" and marker.label or L.entrance
-		caption = L.entrance
-	elseif step.kind == "objective" then
-		title = note or ""
-		caption = L["Objective"]
-	else
-		title = note and note ~= "" and note or L["Move on"]
-		caption = L["Move"]
-	end
-	-- Where the plan has several floors, the step's, unless it is named as the instance (the Deadmines' first floor is
-	-- "The Deadmines": every step there would repeat what the header says). The other floors keep their names.
-	if step.floor and #plan.floors > 1 and plan.floors[step.floor] then
-		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor)
-		if floorName ~= ns.Names.Instance(plan.instance) and floorName ~= plan.instance.name then
-			caption = caption .. "  ·  " .. floorName
-		end
-	end
-	return title, caption, approx, note
-end
-
--- A pull's plan marks as one short line: its tags, planned cooldowns and Bloodlust ("Interrupt · CC · CDs · Lust"),
--- and with opts.progress its planned forces ("34%"). "" when it has none. opts.long uses the full names.
-function UI.PullMarks(pull, opts)
-	opts = opts or {}
-	if not pull then
-		return ""
-	end
-	local prefix = opts.long and "tag:" or "tagShort:"
-	local parts = {}
-	for _, tag in ipairs(pull.tags or {}) do
-		parts[#parts + 1] = L[prefix .. tag]
-	end
-	if pull.cd then
-		parts[#parts + 1] = L[prefix .. "cd"]
-	end
-	if pull.lust then
-		parts[#parts + 1] = L[prefix .. "lust"]
-	end
-	if opts.progress and pull.progress then
-		parts[#parts + 1] = string.format(L["%d%%"], pull.progress)
-	end
-	return table.concat(parts, "  ·  ")
-end
+-- (How a step reads: UI/StepText.lua.)
 
 -- Make step `index` current: the side panel, run mode and the map follow. opts.stay = keep the current section (run
 -- mode and key bindings); otherwise the window switches to the map.
@@ -518,6 +459,22 @@ function UI.FocusStep(index, opts)
 		frame.instancePage:FocusStep(list[index], focus)
 	end
 	ns:Fire("STEP_CHANGED")
+end
+
+-- Show floor `index` of the map (every floor the instance has, ctx:Floors()).
+function UI.GoToFloor(index)
+	if not ctx:Floors()[index] then
+		return
+	end
+	if frame and frame:IsShown() and ns.db.ui.view == "instance" then
+		UI.SelectTab("map")
+		local map = frame.instancePage.panels.map
+		if map then
+			map:GoToFloor(index)
+			return
+		end
+	end
+	ctx.floor = index
 end
 
 -- Move the current step by delta (+1 / -1); the first step when none is current.

@@ -401,7 +401,8 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Data/BossInfo.lua, UI/BossSections.lua | what a boss page says beyond the plan: the provider facts (level, description, summon item, drops) per plan boss, cached per plan revision, and a marker's details without repeated names; the sections drawn the same on the map's details pane, the Bosses page and run mode |
 | UI/Style.lua, UI/Art.lua | colour tokens, fonts, backdrops; Blizzard art names with fallbacks |
 | UI/Widgets.lua, UI/Fields.lua, UI/Tabs.lua, UI/Containers.lua, UI/Popup.lua, UI/Window.lua | widget kit: controls, insets, section headers; fields, dropdowns, menus; tabs; lists with scroll bars, portraits, steppers; the opaque popup list behind every dropdown (virtual rows, one keyboard-and-pointer cursor, closes on an outside click); the window, dialogs and Escape |
-| UI/MainFrame.lua, UI/Home.lua, UI/PlanActions.lua | window, header and bottom bar, steps context; home table and preview; plan actions, instance list data, pictures and the drawn plate |
+| UI/MainFrame.lua, UI/StepText.lua, UI/Home.lua, UI/PlanActions.lua | window, header and bottom bar, steps context; how a step reads (title, caption, floor, where stairs lead); home table and preview; plan actions, instance list data, pictures and the drawn plate |
+| Data/Floors.lua, UI/Panels/FloorBar.lua | every floor an instance has map art for, merged with the plan's (no duplicates); the map's floor switcher |
 | UI/InstancePage.lua, UI/SidePanel.lua | the war table: header pickers, section bar; steps and party |
 | Model/Picker.lua, UI/InstancePicker.lua | the instance picker: sections, level bands, search and cursor (pure); its rows and popup |
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line and the drawings' menu |

@@ -97,9 +97,10 @@ function MinimapArt.FloorArt(plan, index)
 		return nil
 	end
 	local name = plan.instance and plan.instance.name
-	local key = tostring(ns.GameFiles.Key(name or "")) .. ":" .. tostring(index)
+	local pos = floor.artIndex or index -- a floor the map adds (Data/Floors.lua): its own position in the art
+	local key = tostring(ns.GameFiles.Key(name or "")) .. ":" .. tostring(pos)
 	if cache[key] == nil then
-		local d = MinimapArt.Data(name, index)
+		local d = MinimapArt.Data(name, pos)
 		local pieces = d and MinimapArt.Pieces(d) or {}
 		if d and #pieces > 0 and type(d.w) == "number" and type(d.h) == "number" and d.w > 0 and d.h > 0 then
 			local textures = {}

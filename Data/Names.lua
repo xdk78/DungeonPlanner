@@ -92,6 +92,10 @@ function Names.Floor(floor, index)
 	if floor and floor.name and floor.name ~= "" then
 		return floor.name
 	end
+	-- The zone outside (an unnamed floor with its own map) whose map has no name on this client.
+	if floor and floor.uiMapID then
+		return ns.L["Outside"]
+	end
 	return string.format(ns.L["Floor %d"], index or 1)
 end
 

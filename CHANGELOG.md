@@ -15,6 +15,14 @@ follow [Semantic Versioning](https://semver.org/).
   (`Locales/README.md`, a "Translation" issue, or a pull request).
 - Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
 - A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
+- **Every floor on the map**: the map shows all the floors an instance has a map for, not only the plan's: Atal'Byzal,
+  the Maximum Security Unit and the Prismatic Talus are there now. A recommended plan shows such a floor as the map
+  alone; in your own plan, putting something on it adds it to the plan. The home table's Floors count agrees.
+- **Floor switcher on the map** (bottom-right corner): tabs for two to four floors, the floor's name between arrows for
+  more (the toolbar list stays for those); each floor's tooltip counts the markers on it; Shift + mouse wheel over the
+  map changes floor. Stairs and portals say "to <floor>" on the map and in the steps; in a recommended plan a click on
+  one, or a second click on its step, goes there. Run mode's mini map names its floor.
+
 ## [Unreleased]
 
 ### Changed

@@ -274,6 +274,11 @@ function MapCanvas.Install(view)
 
 	-- The credit chip sits in the map's own top-left corner (inside the picture, not on the frame's empty band above
 	-- it), or in the frame's corner when that corner of the map is scrolled out of view.
+	-- The floor to put something on: the map section makes a floor only the map had part of the plan first.
+	function view:EditFloor()
+		return self.cb.editFloor and self.cb.editFloor() or self.cb.getFloor()
+	end
+
 	function view:PlaceCredit()
 		local x = math.max(FRAME_INSET, self.ox or 0) + SP.sm
 		local y = math.max(FRAME_INSET, self.oy or 0) + SP.sm
@@ -629,6 +634,13 @@ function MapCanvas.Install(view)
 								b.label:SetText(enc and ns.Names.Encounter(enc) or "")
 								S.TextColor(b.label, "gold")
 							end
+						end
+						-- Stairs and portals say where they lead, labels on or off.
+						if not compact and m.toFloor and plan.floors[m.toFloor] then
+							local to = string.format(L["to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor))
+							local text = b.label:GetText() or ""
+							b.label:SetText(text ~= "" and (text .. "  \194\183  " .. to) or to)
+							S.TextColor(b.label, "goldBright")
 						end
 						b:Show()
 						local kind = m.kind == "boss" and "boss" or (m.kind == "pack" or m.kind == "patrol") and "disc" or "pin"

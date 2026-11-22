@@ -391,7 +391,7 @@ function MapDraw.Install(view)
 		elseif d then
 			local w, h = self:BaseSize()
 			local s = self:Scale()
-			local shape, err = Drawing.Add(plan, self.cb.getFloor(), d.tool, d.pts, {
+			local shape, err = Drawing.Add(plan, self:EditFloor(), d.tool, d.pts, {
 				color = d.color,
 				width = d.width,
 				author = author(),

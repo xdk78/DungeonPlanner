@@ -258,7 +258,7 @@ function DrawBar.Build(f, ctx, bar, canvas)
 				if not p or ctx:ReadOnly() then
 					return
 				end
-				local shape, err = Drawing.Add(p, ctx.floor, "text", { x, y }, {
+				local shape, err = Drawing.Add(p, ctx:EditFloor(), "text", { x, y }, {
 					text = text,
 					color = ctx.drawColor,
 					width = ctx.drawWidth,

@@ -65,6 +65,9 @@ function MapCanvas.InstallInput(view)
 		if m.toFloor and plan.floors[m.toFloor] then
 			tt:AddLine(string.format(L["Leads to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor)), 0.75,
 				0.75, 0.75, true)
+			if self.cb.readOnly() and self.cb.onGoToFloor then
+				tt:AddLine(L["Click to go there."], 0.71, 0.67, 0.59, true)
+			end
 		end
 		if m.itemID then
 			local name = ns.Names.Item and ns.Names.Item(m.itemID)
@@ -242,6 +245,13 @@ function MapCanvas.InstallInput(view)
 				self.cb.onChanged("markers")
 			end
 		else
+			-- In a read-only plan, stairs or a portal that lead to another floor take you there (an own plan's click
+			-- opens the marker's editor; its right-click menu has "Go to").
+			local m = self.cb.readOnly() and self.cb.onGoToFloor and Util.FindById(plan.markers, markerId)
+			if m and m.toFloor and plan.floors[m.toFloor] then
+				self.cb.onGoToFloor(m.toFloor)
+				return
+			end
 			self.cb.onSelectMarker(markerId)
 		end
 	end
@@ -304,7 +314,7 @@ function MapCanvas.InstallInput(view)
 						and self.cb.getFocusPull() or nil,
 				}
 			end
-			local m, err = Plan.AddMarker(plan, self.cb.getFloor(), x, y, kind, nil, extra)
+			local m, err = Plan.AddMarker(plan, self:EditFloor(), x, y, kind, nil, extra)
 			if m then
 				self.cb.onSelectMarker(m.id)
 				self.cb.onChanged("markers")
