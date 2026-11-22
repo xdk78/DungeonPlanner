@@ -15,7 +15,7 @@ local _, ns = ...
 local DB = ns:NewModule("DB")
 local Util, Validate, Defaults = ns.Util, ns.Validate, ns.Defaults
 
-DB.SCHEMA = 4
+DB.SCHEMA = 5
 DB.MAX_QUARANTINE = 50
 
 -- migrations[n] upgrades the global table from schema n-1 to n.
@@ -66,6 +66,11 @@ DB.migrations = {
 	-- 3 -> 4: plan format 4 (raid assignment pages). Nothing to convert; like 3, the step marks the data so an older
 	-- Dungeon Planner opens it read-only instead of dropping the pages on its next save.
 	[4] = function() end,
+	-- 4 -> 5: group sync's links from received copies to their sender's plan (global.shareLinks, Acks.Link). The step
+	-- starts the store (repairing anything there) and marks the data, so an older Dungeon Planner opens it read-only.
+	[5] = function(global)
+		global.shareLinks = ns.Acks.NormalizeLinks(global.shareLinks)
+	end,
 }
 
 function DB.Migrate(t, current, migrations)

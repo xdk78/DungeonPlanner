@@ -297,12 +297,12 @@ end)
 
 T.case("Pages: saved data moves to schema 4 with its pages; data from a newer schema stays read-only", function()
 	local DB = ns.DB
-	T.eq(DB.SCHEMA, 4)
+	T.ok(DB.SCHEMA >= 4)
 	local global = { schema = 3, plans = { p1 = { id = "p1", name = "Old", pages = { v = 1, list = { { id = "n1", title = "a", text = "b" } } } } } }
 	local info = DB.LoadGlobal(global)
-	T.eq(global.schema, 4)
+	T.eq(global.schema, DB.SCHEMA)
 	T.eq(info.migratedFrom, 3)
 	T.eq(global.plans.p1.pages.list[1].text, "b", "pages survive the load")
-	local newer = { schema = 5, plans = {} }
+	local newer = { schema = DB.SCHEMA + 1, plans = {} }
 	T.ok(DB.LoadGlobal(newer).readOnly)
 end)

@@ -93,8 +93,8 @@ end
 -- Links: which plan a received or imported copy came from, so a leader's run (Share/Sync.lua) is matched to the copy.
 -- An import gets a new id here; the link keeps the sender's plan id (`b:<id>` for a recommended plan), the version it
 -- had (its `updated`) and the copy's own `updated` right after the import (an edit since makes it another version).
--- Store (DungeonPlannerDB.global.shareLinks): { [local plan id] = { plan, v, u, at } }. Additive: an older Dungeon
--- Planner leaves it alone.
+-- Store (DungeonPlannerDB.global.shareLinks): { [local plan id] = { plan, v, u, at } }, since schema 5 (Config/DB.lua
+-- migration 5).
 Acks.MAX_LINKS = 100
 
 local function validLink(id, l)

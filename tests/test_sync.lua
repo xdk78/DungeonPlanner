@@ -553,6 +553,29 @@ T.case("Sync, two clients: the leader's states wait out a lockdown as one messag
 	end)
 end)
 
+T.case("Sync: saved data moves to schema 5 with the link store; data from a newer schema stays read-only", function()
+	local DB = ns.DB
+	T.eq(DB.SCHEMA, 5)
+	-- Schema 4 (0.1.0): no store yet; the migration starts it and the plans load as before.
+	local global = { schema = 4, plans = { p1 = { id = "p1", name = "Old" } } }
+	local info = DB.LoadGlobal(global)
+	T.eq(global.schema, 5)
+	T.eq(info.migratedFrom, 4)
+	T.eq(type(global.shareLinks), "table")
+	T.eq(ns.Util.Count(global.shareLinks), 0)
+	T.eq(global.plans.p1.name, "Old")
+	-- A store already there (written by a pre-release build) is repaired, not dropped.
+	global = { schema = 4, plans = {}, shareLinks = { c1 = { plan = "p9", v = 5, u = 6, at = 1 }, ["bad id"] = { plan = "p9" } } }
+	DB.LoadGlobal(global)
+	T.eq(global.shareLinks.c1.plan, "p9")
+	T.eq(global.shareLinks["bad id"], nil)
+	-- Saved by a newer version: read-only, the links untouched.
+	local links = { c1 = { plan = "p9", v = 5, u = 6, at = 1 } }
+	local newer = { schema = DB.SCHEMA + 1, plans = {}, shareLinks = links }
+	T.ok(DB.LoadGlobal(newer).readOnly)
+	T.eq(newer.shareLinks, links)
+end)
+
 T.case("Sync: a received plan is linked to its sender's id and version; deleting it drops the link", function()
 	boot()
 	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Linked", instance = { name = "Test Keep", kind = "dungeon" } }))

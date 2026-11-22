@@ -41,9 +41,10 @@ Rules:
 
 ## Saved data (AceDB, one SavedVariable `DungeonPlannerDB`)
 
-- `global.plans[id]` - plans, shared by all characters; `global.schema` (4: plan format 4, raid pages; 3 added map
-  drawings and pull marks; migrations 3 and 4 convert nothing and only mark the data, so an older version opens it
-  read-only instead of dropping the new fields on its next save); `global.quarantine`.
+- `global.plans[id]` - plans, shared by all characters; `global.schema` (5: the link store below; 4: plan format 4,
+  raid pages; 3 added map drawings and pull marks; migrations 3 and 4 convert nothing and 5 only starts the link store,
+  each marking the data, so an older version opens it read-only instead of dropping the new fields on its next save);
+  `global.quarantine`.
 - `diagnostics` (top level, outside AceDB's sections) - written only by `/dp scan`: every journal instance with its IDs,
   pictures, map and floors, its bosses, how each recommended plan resolved, and a loot sample; `/dp scan clear` removes
   it. For reading the client's real data offline after a `/reload`. `diagnostics.fontTest` holds the font test
@@ -61,7 +62,7 @@ Rules:
   `Acks.Normalize` on load). Additive.
 - `global.shareLinks[local plan id]` - which plan a received or imported copy came from: the sender's plan id, its
   version and the copy's own `updated` after the import (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync
-  matches a leader's plan to the copy. Additive (an older version leaves it alone); a link goes with its plan.
+  matches a leader's plan to the copy. Schema 5 (migration 5 starts it); a link goes with its plan.
 
 Migrations: `DB.migrations[n]` upgrades `global` from schema n-1 to n. Data from a newer schema puts the addon in
 read-only mode instead of being rewritten.

@@ -22,6 +22,10 @@ follow [Semantic Versioning](https://semver.org/).
   fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
   older step. Older Dungeon Planners ignore them.
 
+### Changed
+- Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
+  Dungeon Planner opens it read-only instead of losing that on its next save.
+
 ## [0.1.0] - 2026-11-16
 
 The first public version, for WoW: Forever. Highlights, known limitations and the test checklist:
