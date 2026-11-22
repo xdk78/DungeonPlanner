@@ -1078,4 +1078,6 @@ ns.Locales.plPL = {
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "„Prowadź” w Przygotowaniu przekazuje drogę do Shortest Path Forever",
 	["No map art for this zone."] = "Brak mapy dla tej strefy.",
 	["(you are in %s)"] = "(jesteś w: %s)",
+	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d poznane wejście (/dp entrances reset je zapomina).|%d poznane wejścia (/dp entrances reset je zapomina).|%d poznanych wejść (/dp entrances reset je zapomina).",
+	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Zapomniano %d poznane wejście.|Zapomniano %d poznane wejścia.|Zapomniano %d poznanych wejść.",
 }

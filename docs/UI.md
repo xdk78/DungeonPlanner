@@ -276,12 +276,15 @@ Run mode, before the first step (not started or on step 1), shows a gold line in
 quests to pick up · 1 key missing"; a click opens the Prep section. It hides once there is nothing left or the run
 moves on.
 
-The Getting there window (`UI/GettingThere.lua`, 380 x 560 by default) has a live map on top (`UI/TravelMap.lua`,
+The Getting there window (`UI/GettingThere.lua`, 380 x 560 by default, at least 320 x 460 so the card has room under
+the map) has a live map on top (`UI/TravelMap.lua`,
 170 px tall, as wide as the window): the entrance's zone map from the game's map art, fitted and centred on the
 inset's dark fill, with the entrance (the `Dungeon` mark), the nearest flight masters of both factions on that map,
-a summoning stone, and the player as the minimap arrow turned to `GetPlayerFacing`. Under it one live line: the
-distance and direction ("You are 870 yd away; it lies south-west."), "(you are in Elwynn Forest)" when the player is
-on another map, or the outdoors-only line. The map has no input; the world map and minimap are not touched.
+a summoning stone, and the player as the minimap arrow turned to `GetPlayerFacing` (on a city, cave or other map of
+the same area the arrow is placed from world yards). Under it one live line: the distance and direction ("You are 870
+yd away; it lies south-west."), "(you are in Elwynn Forest)" when the player is on another map, or the outdoors-only
+line. The card below leaves the distance to that line (the Prep section's card keeps its own). A resize lays the art
+out again and puts the pins back. The map has no input; the world map and minimap are not touched.
 
 ### Raid pages and the Notes window
 

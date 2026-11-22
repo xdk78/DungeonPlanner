@@ -2,9 +2,11 @@
 -- entrance, the nearest flight masters and a summoning stone as pins, and the player as an arrow turned to their
 -- facing, with the straight-line distance and direction under it. It sits at the top of the Getting there window
 -- (UI/GettingThere.lua). The lifecycle is Model/TravelLive.lua's state machine: a 10 Hz ticker runs only while the
--- window shows and the client gives a position (never inside an instance, where it gives none); entering the target
--- instance opens its plan and run mode. Loading screens also teach the entrance: the last outdoor spot before one that
--- ends inside an instance is kept per account (TravelLive.Learn) and preferred over the bundled spot.
+-- window shows and the client gives a position (never inside an instance, where it gives none); going from outside
+-- into the target instance opens its plan and run mode. The instance is recognised by its instance ID (and a wing by
+-- its floor map), never by its localized name. Loading screens also teach the entrance: the last outdoor spot before
+-- one that ends inside an instance is kept per account (TravelLive.Learn) when it lies near that instance's bundled
+-- entrance, and preferred over the bundled spot; /dp entrances reset forgets them.
 --
 -- Everything is drawn on our own frames (parented to our window); nothing touches the world map or the minimap.
 
@@ -95,30 +97,36 @@ function TravelMap.Create(parent)
 		tex:Show()
 	end
 
+	-- Each pin where it was last put (on resize only these are placed again).
+	function f:Pin(tex, x, y)
+		self.spots[tex] = { x, y }
+		self:Place(tex, x, y)
+	end
+
 	-- The zone of the entrance and its pins (once per target).
 	function f:SetTarget(rec, ent)
 		self.rec, self.ent = rec, ent
 		local map = ent and ent.uiMapID
 		self.map = map
+		self.spots = {}
 		self.art = map and ns.Instances.MapArt(map) or nil
 		self.empty:SetShown(self.art == nil)
 		self:Layout()
-		self:Place(self.entrance, ent and ent.x, ent and ent.y)
+		self:Pin(self.entrance, ent and ent.x, ent and ent.y)
 		local stone = rec and rec.stone
-		local stoneMap = stone and ns.Instances.ZoneMapByName(stone.zone)
-		if stone and (stoneMap == map or stone.zone == rec.zone) then
-			self:Place(self.stone, stone.x / 100, stone.y / 100)
+		if stone and stone.map == map then
+			self:Pin(self.stone, stone.x / 100, stone.y / 100)
 		else
 			self.stone:Hide()
 		end
 		local shown = 0
 		for _, side in ipairs({ "alliance", "horde" }) do
-			for _, near in ipairs(rec and ns.Travel.Nearest(rec, side, 2) or {}) do
-				local m, x, y = ns.Travel.NodeOnMap(near.id)
+			for _, near in ipairs(rec and map and ns.Travel.Nearest(rec, side, 2) or {}) do
+				local m, x, y = ns.Travel.NodeOnMap(near.id, map)
 				if m == map and shown < MAX_FLIGHTS then
 					shown = shown + 1
 					self.flights[shown].name = near.name
-					self:Place(self.flights[shown], x, y)
+					self:Pin(self.flights[shown], x, y)
 				end
 			end
 		end
@@ -127,22 +135,34 @@ function TravelMap.Create(parent)
 		end
 	end
 
-	-- The player: an arrow on the map when on the same map, turned to the facing (radians, 0 = north, counter-
-	-- clockwise, as the client gives it).
+	-- The player: an arrow where they stand on the entrance's map (a position on a city, cave or other map below it is
+	-- projected from world yards), turned to the facing (radians, 0 = north, counter-clockwise, as the client gives it).
 	function f:SetPlayer(player)
-		if not (player and player.uiMapID == self.map) then
-			self.player:Hide()
-			return
+		local x, y
+		if player and player.uiMapID == self.map then
+			x, y = player.x, player.y
+		elseif player and player.wx and self.map then
+			local m, px, py = ns.Travel.ToMap(player.continent, player.wx, player.wy, self.map)
+			if m == self.map then
+				x, y = px, py
+			end
 		end
-		self:Place(self.player, player.x, player.y)
-		if player.facing and self.player.SetRotation then
+		self.spots[self.player] = { x, y }
+		self:Place(self.player, x, y)
+		if x and player.facing and self.player.SetRotation then
 			self.player:SetRotation(player.facing)
 		end
 	end
 
-	f:SetScript("OnSizeChanged", function(self)
-		if self.rec then
-			self:SetTarget(self.rec, self.ent)
+	-- A new size: the art laid out again and the pins put back where they were (nothing looked up again).
+	f.spots = {}
+	f:HookScript("OnSizeChanged", function(self)
+		if not self.rec then
+			return
+		end
+		self:Layout()
+		for tex, at in pairs(self.spots) do
+			self:Place(tex, at[1], at[2])
 		end
 	end)
 	return f
@@ -154,24 +174,32 @@ local state = Live.New()
 local ticker
 local view -- { map = widget, line = font string, target = plan or entry, key = instance key }
 
-local function outdoors()
-	return ns.Travel.Player() ~= nil
-end
-
-local function currentInstance()
+-- The records of the instance the player is in (by its instance ID and map, not its localized name), or nil outdoors.
+local function currentRecords()
 	local here = ns.Instances.Current()
 	if not here.inInstance then
 		return nil
 	end
-	return ns.Providers.Key(here.name)
+	return ns.Travel.Here(here.instanceID, here.uiMapID)
 end
 
-function TravelMap.Draw()
+local function keySet(records)
+	if not records then
+		return nil
+	end
+	local out = {}
+	for _, rec in ipairs(records) do
+		out[rec.key] = true
+	end
+	return out
+end
+
+-- The arrow, the distance and the direction. player: Travel.Player() (the tick passes the one it read). Nothing is
+-- redrawn when the position, the facing and the line are the ones already shown.
+function TravelMap.Draw(player)
 	if not view then
 		return
 	end
-	local player = ns.Travel.Player()
-	view.map:SetPlayer(player)
 	local ent = view.map.ent
 	local text
 	if not player then
@@ -189,7 +217,16 @@ function TravelMap.Draw()
 			text = text .. "  " .. string.format(L["(you are in %s)"], ns.Instances.MapName(player.uiMapID) or "?")
 		end
 	end
-	W.FitText(view.line, text or "")
+	text = text or ""
+	local last = view.drawn
+	if last and player and last.map == player.uiMapID and last.x == player.x and last.y == player.y
+		and last.facing == player.facing and last.text == text then
+		return
+	end
+	view.drawn = player and { map = player.uiMapID, x = player.x, y = player.y, facing = player.facing, text = text }
+		or nil
+	view.map:SetPlayer(player)
+	W.FitText(view.line, text)
 end
 
 -- Entering the target instance: its plan on the table and run mode open, the travel window closed.
@@ -209,17 +246,19 @@ function TravelMap.Arrive()
 	end
 end
 
-local function apply(effects)
+-- player: the position the event was made from (Travel.Player, read once per event).
+local function apply(effects, player)
 	for _, e in ipairs(effects) do
 		if e == "start" and not ticker and C_Timer and C_Timer.NewTicker then
 			ticker = C_Timer.NewTicker(Live.INTERVAL, function()
-				TravelMap.Dispatch({ kind = "tick", outdoors = outdoors() })
+				local p = ns.Travel.Player()
+				TravelMap.Dispatch({ kind = "tick", outdoors = p ~= nil, player = p })
 			end)
 		elseif e == "stop" and ticker then
 			ticker:Cancel()
 			ticker = nil
 		elseif e == "draw" then
-			TravelMap.Draw()
+			TravelMap.Draw(player)
 		elseif e == "arrived" then
 			TravelMap.Arrive()
 		end
@@ -229,7 +268,7 @@ end
 function TravelMap.Dispatch(event)
 	local effects
 	state, effects = Live.Step(state, event)
-	apply(effects)
+	apply(effects, event.player)
 end
 
 function TravelMap.State()
@@ -248,31 +287,64 @@ function TravelMap.Show(target)
 	view.target = target
 	local rec = ns.Travel.For(target)
 	view.key = rec and rec.key or nil
+	view.drawn = nil
 	view.map:SetTarget(rec, rec and ns.Travel.Entrance(rec))
-	TravelMap.Dispatch({ kind = "show", target = view.key, outdoors = outdoors() })
+	local p = ns.Travel.Player()
+	TravelMap.Dispatch({ kind = "show", target = view.key, outdoors = p ~= nil, player = p,
+		instances = keySet(currentRecords()) })
 end
 
 function TravelMap.Hide()
 	TravelMap.Dispatch({ kind = "hide" })
 end
 
--- Loading screens: the world changed (live map), and the entrance learned (the spot before a screen that ended in an
--- instance).
+-- The spot on the map the record's entrance is drawn on (the bundled entrance's map, else the zone's), or nil.
+local function onEntranceMap(rec, last)
+	local ent = ns.Travel.Bundled(rec)
+	local map = (ent and ent.uiMapID) or ns.Travel.ZoneMap(rec)
+	if not map then
+		return nil
+	end
+	if last.uiMapID == map then
+		return { map = map, x = last.x, y = last.y }
+	end
+	local m, x, y = last.wx and ns.Travel.ToMap(last.continent, last.wx, last.wy, map)
+	if m == map and x >= 0 and x <= 1 and y >= 0 and y <= 1 then
+		return { map = map, x = x, y = y }
+	end
+	return nil
+end
+
+-- Loading screens: the world changed (live map), and the entrance learned: the spot before a screen that ended inside
+-- an instance, when it lies near that instance's bundled entrance (TravelLive.Accept), kept on its zone map.
 local lastOutdoor
 function TravelMap.OnLeavingWorld()
-	local p = ns.Travel.Player()
-	lastOutdoor = p and { map = p.uiMapID, x = p.x, y = p.y, at = ns.Now() } or nil
+	lastOutdoor = ns.Travel.Player()
 end
 
 function TravelMap.OnWorld()
-	local key = currentInstance()
-	if key and lastOutdoor and ns.db and ns.db.entrances and ns.Travel.ByKey(key) then
-		if Live.Learn(ns.db.entrances, key, lastOutdoor, ns.Now()) then
+	local records = currentRecords()
+	local store = ns.db and ns.db.entrances
+	if records and lastOutdoor and store then
+		local rec = Live.Choose(records, lastOutdoor, ns.Travel.Bundled, ns.Travel.ZoneMap)
+		local spot = rec and onEntranceMap(rec, lastOutdoor)
+		if spot and Live.Learn(store, rec.key, spot, ns.Now()) then
 			ns.Travel.Reset()
 		end
 	end
 	lastOutdoor = nil
-	TravelMap.Dispatch({ kind = "world", outdoors = outdoors(), instance = key })
+	local p = ns.Travel.Player()
+	TravelMap.Dispatch({ kind = "world", outdoors = p ~= nil, player = p, instances = keySet(records) })
+end
+
+-- /dp entrances reset: forget every learned entrance (the bundled ones are used again).
+function TravelMap.ForgetLearned()
+	local n = Live.Forget(ns.db and ns.db.entrances)
+	ns.Travel.Reset()
+	if view and view.target then
+		view.map:SetTarget(ns.Travel.For(view.target), ns.Travel.Entrance(ns.Travel.For(view.target)))
+	end
+	return n
 end
 
 function TravelMap.Init()

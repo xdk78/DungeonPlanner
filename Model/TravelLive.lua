@@ -1,25 +1,32 @@
--- The live "Getting there" map's lifecycle as a state machine (pure). It ticks (redraws the player's arrow, the
--- bearing and the distance) only while its window is shown and the player is outdoors: the client gives no position
--- inside instances (docs/COMPATIBILITY.md section 10), and an idle addon costs nothing.
+-- The live "Getting there" map's lifecycle as a state machine (pure), and which entrances are learned from play. It
+-- ticks (redraws the player's arrow, the bearing and the distance) only while its window is shown and the player is
+-- outdoors: the client gives no position inside instances (docs/COMPATIBILITY.md section 10), and an idle addon costs
+-- nothing.
 --
---   state = { mode = "hidden" | "waiting" | "live", target = instance key | nil }
+--   state = { mode = "hidden" | "waiting" | "live", target = instance key | nil, inside = bool }
+--     inside: the last world event put the player in the target instance (only arriving from outside counts)
 --   TravelLive.Step(state, event) -> new state, effects
---   events: { kind = "show", target, outdoors }  the window opened (outdoors: the client gives a position now)
---           { kind = "hide" }                     the window closed
---           { kind = "world", outdoors, instance } a loading screen or zone change ended; instance: the key of the
---                                                 instance the player is in, or nil
---           { kind = "tick", outdoors }           the ticker fired; outdoors false when the position is gone
---   effects: "start" (the ticker), "stop", "draw" (redraw now), "arrived" (the player entered the target instance:
---            open its plan and run mode)
+--   events: { kind = "show", target, outdoors, instances }  the window opened (outdoors: the client gives a position
+--                                                            now; instances: the keys of the instance the player is in)
+--           { kind = "hide" }                                the window closed
+--           { kind = "world", outdoors, instances }          a loading screen or zone change ended
+--           { kind = "tick", outdoors, player }              the ticker fired; outdoors false when the position is gone
+--   instances: { [instance key] = true } (Travel.Here: by instance ID, not the localized name), or nil outdoors
+--   effects: "start" (the ticker), "stop", "draw" (redraw now), "arrived" (the player went from outside into the
+--            target instance: open its plan and run mode)
 
 local _, ns = ...
 local TravelLive = ns:NewModule("TravelLive")
 
 TravelLive.INTERVAL = 0.1 -- seconds between redraws while live (10 Hz)
 
--- Entrances learned from play (per account, global.entrances): [instance key] = { map, x, y, at }, the last outdoor
--- spot before a loading screen that ended inside that instance. Bounded and checked on load.
+-- Entrances learned from play (per account, global.entrances): [instance key] = { map, x, y, at }, the spot on the
+-- instance's zone map where the player stood before a loading screen that ended inside it; `at` is when it was learned.
+-- Bounded and checked on load.
 TravelLive.MAX_LEARNED = 100
+-- A spot counts as the entrance only this near (world yards) to the bundled one, so a summon, a hearthstone or a portal
+-- into an instance teaches nothing. Instances without a bundled entrance take a spot on their zone's map.
+TravelLive.LEARN_RADIUS = 400
 
 function TravelLive.NormalizeLearned(t)
 	local out, n = {}, 0
@@ -40,17 +47,45 @@ function TravelLive.NormalizeLearned(t)
 	return out
 end
 
--- What to remember at a loading screen's end: the spot before it, filed under the instance it ended in. A spot older
--- than MAX_AGE seconds (a hearthstone, a portal elsewhere) is not the entrance.
-TravelLive.MAX_AGE = 120
-function TravelLive.Learn(store, key, last, now)
-	if type(store) ~= "table" or type(key) ~= "string" or type(last) ~= "table" or not last.map then
+-- Whether the spot the player left from can be this instance's entrance. last: { uiMapID, x, y, continent?, wx?, wy? }
+-- (Travel.Player before the loading screen); ent: the bundled entrance (Travel.Bundled) or nil; zoneMap: the record's
+-- zone map (uiMapID) or nil.
+function TravelLive.Accept(last, ent, zoneMap)
+	if type(last) ~= "table" then
 		return false
 	end
-	if (now or 0) - (last.at or 0) > TravelLive.MAX_AGE then
+	if ent and ent.wx then
+		if not (last.wx and last.continent == ent.continent) then
+			return false
+		end
+		local dx, dy = last.wx - ent.wx, last.wy - ent.wy
+		return math.sqrt(dx * dx + dy * dy) <= TravelLive.LEARN_RADIUS
+	end
+	return zoneMap ~= nil and last.uiMapID == zoneMap
+end
+
+-- The one record to learn for: of the records of the instance entered (Travel.Here), those that accept the spot; nil
+-- when none does, or when several do (wings with one shared entrance: the spot says nothing about which).
+-- bundledOf(rec), zoneMapOf(rec): Travel.Bundled, Travel.ZoneMap.
+function TravelLive.Choose(records, last, bundledOf, zoneMapOf)
+	local hit
+	for _, rec in ipairs(records or {}) do
+		if TravelLive.Accept(last, bundledOf(rec), zoneMapOf(rec)) then
+			if hit then
+				return nil
+			end
+			hit = rec
+		end
+	end
+	return hit
+end
+
+-- Files a spot (already on the record's zone map: { map, x, y }) under the instance. True when stored.
+function TravelLive.Learn(store, key, spot, now)
+	if type(store) ~= "table" or type(key) ~= "string" or type(spot) ~= "table" then
 		return false
 	end
-	local fresh = TravelLive.NormalizeLearned({ [key] = { map = last.map, x = last.x, y = last.y, at = now } })[key]
+	local fresh = TravelLive.NormalizeLearned({ [key] = { map = spot.map, x = spot.x, y = spot.y, at = now } })[key]
 	if not fresh then
 		return false
 	end
@@ -58,12 +93,26 @@ function TravelLive.Learn(store, key, last, now)
 	return true
 end
 
-function TravelLive.New()
-	return { mode = "hidden" }
+-- Forgets every learned entrance; returns how many there were.
+function TravelLive.Forget(store)
+	local n = 0
+	for k in pairs(type(store) == "table" and store or {}) do
+		store[k] = nil
+		n = n + 1
+	end
+	return n
 end
 
-local function to(state, mode, target)
-	return { mode = mode, target = target or state.target }
+function TravelLive.New()
+	return { mode = "hidden", inside = false }
+end
+
+local function to(state, mode, target, inside)
+	return { mode = mode, target = target or state.target, inside = inside == true }
+end
+
+local function inTarget(target, instances)
+	return target ~= nil and type(instances) == "table" and instances[target] == true
 end
 
 function TravelLive.Step(state, event)
@@ -71,16 +120,22 @@ function TravelLive.Step(state, event)
 	local kind = event.kind
 	if kind == "show" then
 		if event.outdoors then
-			return to(state, "live", event.target), mode == "live" and { "draw" } or { "start", "draw" }
+			return to(state, "live", event.target, false), mode == "live" and { "draw" } or { "start", "draw" }
 		end
-		return to(state, "waiting", event.target), mode == "live" and { "stop", "draw" } or { "draw" }
+		-- Opened while already inside the target: remembered, so it is no arrival.
+		local inside = inTarget(event.target, event.instances)
+		return to(state, "waiting", event.target, inside), mode == "live" and { "stop", "draw" } or { "draw" }
 	elseif kind == "hide" then
 		return to(state, "hidden"), mode == "live" and { "stop" } or {}
 	elseif mode == "hidden" then
 		return state, {} -- nothing runs while hidden; a stale tick changes nothing
 	elseif kind == "world" then
-		if event.instance and state.target and event.instance == state.target then
-			return to(state, "waiting"), mode == "live" and { "stop", "arrived" } or { "arrived" }
+		if inTarget(state.target, event.instances) then
+			local fx = mode == "live" and { "stop" } or {}
+			if not state.inside then
+				fx[#fx + 1] = "arrived"
+			end
+			return to(state, "waiting", nil, true), fx
 		end
 		if event.outdoors then
 			return to(state, "live"), mode == "live" and { "draw" } or { "start", "draw" }

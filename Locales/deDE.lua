@@ -1052,4 +1052,6 @@ ns.Locales.deDE = {
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "„Navigieren“ in Vorbereitung übergibt den Weg an Shortest Path Forever",
 	["No map art for this zone."] = "Keine Karte für diese Zone.",
 	["(you are in %s)"] = "(du bist in %s)",
+	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d gelernter Eingang (/dp entrances reset vergisst ihn).|%d gelernte Eingänge (/dp entrances reset vergisst sie).",
+	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "%d gelernter Eingang vergessen.|%d gelernte Eingänge vergessen.",
 }

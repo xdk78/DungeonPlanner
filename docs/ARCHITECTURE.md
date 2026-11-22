@@ -62,7 +62,8 @@ Rules:
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
   `Acks.Normalize` on load). Additive.
 - `global.entrances` - instance entrances learned from play (`Model/TravelLive.lua`): `[instance key] = { map, x, y,
-  at }`, at most 100. Additive.
+  at }` (a spot on the instance's zone map; `at` when it was learned), at most 100, `NormalizeLearned` on load;
+  absent while the data is read-only. Additive like `shareAcks`: an older version ignores the field and keeps it.
 - `global.shareLinks[local plan id]` - which plan a copy received in game came from: `{ plan = the sender's plan id,
   at }` (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync matches a leader's plan to the copy (by its steps
   revision, `Sync.Signature`). Pasted strings make none. Schema 5 (migration 5 starts it); a link goes with its plan.
@@ -315,17 +316,28 @@ The live map (`UI/TravelMap.lua`) runs on a state machine, `Model/TravelLive.lua
 
 ```
 hidden  --show (outdoors)-->  live     [start ticker, draw]       ticker: C_Timer.NewTicker(0.1) -> tick event
-hidden  --show (inside)--->   waiting  [draw]
-live    --tick (no position)-> waiting [stop, draw]
+hidden  --show (inside)--->   waiting  [draw]                     inside = the player is in the target already
+live    --tick (no position)-> waiting [stop, draw]               a tick carries the position it read; an
+                                                                  unchanged position and line draw nothing
 waiting --world (outdoors)-->  live    [start, draw]              world: PLAYER_ENTERING_WORLD, ZONE_CHANGED_NEW_AREA
-any     --world (in the target instance)--> waiting [stop, arrived: its plan and run mode open, the window closes]
-any     --hide-->              hidden  [stop]                     a tick while hidden or waiting changes nothing
+live or waiting --world (in the target, inside false)--> waiting, inside [stop, arrived: its plan and run mode open,
+                                                                  the window closes]
+live or waiting --world (in the target, inside true)--> waiting  [no arrival: the player did not come in]
+any     --hide-->              hidden  [stop]                     a tick or world event while hidden changes nothing
 ```
 
-Learned entrances: `PLAYER_LEAVING_WORLD` keeps the outdoor spot; when the next `PLAYER_ENTERING_WORLD` ends inside an
-instance with travel facts, `TravelLive.Learn` files that spot (at most two minutes old) under the instance in
+"In the target" comes from the instance ID (`GetInstanceInfo`'s eighth value, `Travel.Here`), never the localized
+name: each travel record carries its plan's instance map ID (`iid`) and floor maps (`maps`), and when wings share an
+ID (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) the floor map the client gives picks the wing; without
+one, every wing of the instance counts.
+
+Learned entrances: `PLAYER_LEAVING_WORLD` keeps the outdoor position (`Travel.Player`, with world yards). When the next
+`PLAYER_ENTERING_WORLD` ends inside an instance, `TravelLive.Choose` takes the one record of that instance whose
+bundled entrance lies within 400 world yards of that spot (or, for an instance without one, whose zone map the spot
+is on); none, or several (wings sharing one entrance), learns nothing, so a summon, a hearthstone or a portal teaches
+nothing. The spot is put on the map the entrance is drawn on and filed by `TravelLive.Learn` under the instance in
 `global.entrances` (per account, at most 100, `NormalizeLearned` on load; additive, no schema change), and
-`Travel.Entrance` prefers it over the bundled one.
+`Travel.Entrance` prefers it over the bundled one (`Travel.Bundled`). `/dp entrances reset` forgets them all.
 
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 
