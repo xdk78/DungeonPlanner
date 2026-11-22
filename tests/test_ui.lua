@@ -811,6 +811,34 @@ T.case("Fonts: the font test draws every face and /dp scan saves both looks", fu
 	closeAllDialogs()
 end)
 
+T.case("Fonts: the font test does not draw a face whose addon is not installed or disabled", function()
+	boot()
+	local S = ns.Style
+	mock.loadedAddons = nil -- the mock's GetAddOnInfo knows no addon: WoW Po Polsku is missing
+	mock.missingFonts = nil
+	S.ForgetFontProbes()
+	T.eq(ns.Integrations.AddonState("WoWPoPolskuForever"), "missing")
+	local test = S.FontTest()
+	local panel = S.ShowFontTest(test)
+	T.ok(panel.rows[1].label:GetText():find("frizquadratatt_pl.ttf  -  not installed", 1, true), "its header says so")
+	T.ok(not panel.rows[1].direct:IsShown() and not panel.rows[1].object:IsShown(), "no sample lines, so no boxes")
+	T.ok(panel.rows[2].direct:IsShown() and panel.rows[2].object:IsShown(), "the other faces are drawn")
+	mock.Advance(2.5)
+	S.FontTestAgain(test)
+	S.MarkFontTest(test)
+	T.ok(panel.rows[1].label:GetText():find("not installed", 1, true), "the second look keeps it")
+	T.ok(panel.rows[2].label:GetText():find("loads", 1, true), "and marks the others")
+	-- Enabled again: drawn.
+	mock.loadedAddons = { WoWPoPolskuForever = true }
+	S.ForgetFontProbes()
+	panel = S.ShowFontTest(S.FontTest())
+	T.ok(panel.rows[1].direct:IsShown(), "drawn while the addon is loaded")
+	T.ok(not panel.rows[1].label:GetText():find("not installed", 1, true), "no status then")
+	mock.loadedAddons = nil
+	S.ForgetFontProbes()
+	closeAllDialogs()
+end)
+
 T.case("Fonts: a Polish UI without a Polish face stays Polish, says why once, and takes a face that loads later", function()
 	boot()
 	local S = ns.Style

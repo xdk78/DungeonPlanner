@@ -2,7 +2,7 @@
 -- OpenMap's menu and in Settings > Data from other addons).
 --
 -- OpenMap's public API has no way to add lines or pins to its dungeon map, so this reads its private view, the frame
--- OpenMapDungeonView (OpenMap 0.8.12, Map/Dungeons.lua): `page` (the picture, re-laid out on zoom and drag), `floor`,
+-- OpenMapDungeonView (OpenMap 0.8.12 and 0.8.13, Map/Dungeons.lua): `page` (the picture, re-laid out on zoom and drag), `floor`,
 -- `floors`, `inst` ({ instance mapID, name, ... }), `source`, its floor buttons `prev`, `next`, `floorButton` (with the
 -- list it opens, `list.rows`) and the side panel's floor pictures (`side.pool.thumb`). Everything is read with shape
 -- checks and pcall; nothing of OpenMap is changed or called. HookScript on OpenMap's own frames adds handlers after

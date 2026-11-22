@@ -96,7 +96,7 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
   and markers of your plan for the dungeon OpenMap shows (the selected plan, else the one you last chose there) on
   OpenMap's own dungeon map, as the main map draws them, and follows its zoom, panning and floor switching. A floor is
   drawn only where the plan lines up with it: the game's own map of that floor, or OpenMap's boss positions to align
-  the plan with. It reads parts of OpenMap that are not public (written for OpenMap 0.8.12), so an OpenMap update may
+  the plan with. It reads parts of OpenMap that are not public (written for OpenMap 0.8.12, also checked against 0.8.13), so an OpenMap update may
   switch it off; `/dp debug` says why when nothing is drawn.
 
 ### Changed
@@ -144,6 +144,8 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
   recommended plan's floors (also when started inside the instance in another game language). Plans already saved
   that way keep every marker, route and drawing where it was: the first floor shows the cave and its name, and if
   something was put on the extra copy, that copy stays as a second, numbered floor ("The Deadmines (2)").
+- **Font test** (`/dp debug`): a font whose addon is not installed or is switched off (WoW Po Polsku's) is listed as
+  "not installed" instead of being drawn as boxes.
 
 ### For contributors
 - `/dp scan` also records the client's floor and position answers inside an instance (`position.bestMap`,
