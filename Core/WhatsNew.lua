@@ -25,6 +25,15 @@ end
 -- Newest first by the entry's version; each entry is a function so the text follows the language chosen at runtime.
 -- items = { { heading, text, settingsGroup? } } (the card's Open Settings button goes to the first group named)
 local ENTRIES = {
+	["0.2.1"] = function()
+		return {
+			title = L["What's new in 0.2.1"],
+			items = {
+				{ L["Bosses on the route"],
+					L["Where another addon's map puts the bosses elsewhere than the plan, the map keeps the plan's bosses at its route's stops."] },
+			},
+		}
+	end,
 	["0.2.0"] = function()
 		return {
 			title = L["What's new in 0.2.0"],
