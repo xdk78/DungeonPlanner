@@ -78,7 +78,8 @@ Compat.CHECKS = {
 	{ "Journal loot filter read", "EJ_GetLootFilter", "putting the Adventure Guide's loot filter back" },
 	{ "Spell names", "C_Spell.GetSpellName", "boss ability names (\"Spell <id>\" instead)" },
 	{ "Spell icons", "C_Spell.GetSpellTexture", "boss ability icons (a question mark instead)" },
-	{ "Item slots", "GetItemInfoInstant", "the slot filter for Adventure Guide loot" },
+	{ "Item types", "C_Item.GetItemInfoInstant", "the Gear page's class and slot filters (the global GetItemInfoInstant instead)" },
+	{ "Item types, older call", "GetItemInfoInstant", "the Gear page's class and slot filters where C_Item lacks it" },
 	{ "Specializations of a class", "GetSpecializationInfoForClassID", "the role filter for Adventure Guide loot" },
 	{ "Chat links", "ChatEdit_InsertLink", "Shift-click to link an item in chat" },
 	-- Sources used because WoW: Forever's Adventure Guide is empty (Data/GameFiles.lua, Data/Diagnostics.lua).

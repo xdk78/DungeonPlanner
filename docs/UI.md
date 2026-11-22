@@ -28,7 +28,7 @@ differently:
 
 ```
 (O)--------------------- Dungeon Planner ---------------------------X   title bar (portrait ring, title, close)
-(O)  < [Deadmines v] [Full clear v] [...] [Undo]                    *   header row beside the portrait
+(O)  < [Deadmines v] <> [Full clear v] [...] [Undo]                 *   header row beside the portrait
 +-----------+------------------------------------------------------+
 | state     |  [Select][Marker][Pull]...   [Legend][Fit][Focus][Floor]|
 | [copy]    |                                                       |
@@ -48,9 +48,14 @@ differently:
 
 - **Header** (`UI/Window.lua`, `UI/MainFrame.lua`, `UI/InstancePage.lua`): the game's title bar with the title and
   the close button, the addon's logo in the portrait ring; under the title bar, right of the ring, the header row: on an
-  instance page a back button, the **instance picker** (below) and the **plan picker** (recommended plans marked
-  with the raid star), the plan menu ("...") and Undo; on the right the settings button (options and language). The
-  header's tooltips open below their control, never over the next one.
+  instance page a back button, the **instance picker** (below), **Show location** (the game's waypoint pin,
+  `Waypoint-MapPin-Tracked`, else the map icon), the **plan picker** (recommended plans marked with the raid star),
+  the plan menu ("...") and Undo; on the right the settings button (options and language). The header's tooltips open
+  below their control, never over the next one. Show location is the Getting there card's "Show on world map" one
+  click away (`GettingThere.Locate`): a click pins the entrance and opens the world map on its zone (only the pin with
+  the gamepad interface style), a right-click or Shift-click opens the Getting there window, as does a click when the
+  game can neither pin nor show the entrance. Its tooltip names the zone and says what a click does there; it is off,
+  greyed, with the reason in its tooltip, in combat, while dead and for an instance without travel facts.
 - **Side panel** (`UI/SidePanel.lua`, 236 px, an inset): the plan's state ("Recommended plan · read-only" with
   **Make an editable copy**, the red panel button), the **steps** (Model/Steps.lua) under a section header, each
   with an icon in a ring by kind: a boss its portrait in the Adventure Guide's ring, a pull its number on a disc in
@@ -70,6 +75,15 @@ differently:
   name, top-aligned with it (`W.AnchorBeside`: just right of the name's last letter, not at the row's far edge), so
   the game's comparison tooltips line up next to it over the rows below. The game keeps tooltips on screen; when that
   pushes one up over "Open in NeedRoll", it opens left of the item's icon instead.
+  The filters (`Model/GearFilter.lua`): **class** shows the items the class can wear and wield at full level, by the
+  current client's class rules (armor up to its heaviest type, the weapons, shields and relics it can use; rings,
+  necklaces, trinkets, cloaks and held-in-off-hand items for every class; things that are not equipment stay), by the
+  item's class and subclass from `GetItemInfoInstant`. It does not know the level at which mail or plate becomes
+  wearable, nor whether Forever keeps the classic rules (see "Needs a look in game"). **Boss** shows one boss's drops
+  or the whole instance; **slot** the item's equip location (a one-hand weapon under main hand and off hand). The bundled and provider drop lists are item IDs, so an item the client has no data for yet is
+  asked for and joins a filtered list when it arrives ("Loading items..." meanwhile). **Role** filters the plan's own
+  entries by their role tag (drops carry no role; the Adventure Guide's loot by specialization where a client has
+  it); on a read-only plan without such entries it is disabled with a tooltip saying so.
 - **Sections**: the game's window tabs hanging under the window's bottom edge (on the home screen the same place holds
   Dungeons, Raids, My plans and Shared). The window stays on screen with them.
 - **Bottom bar**: Run mode, version and status.
@@ -618,6 +632,18 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 - The live map in the Getting there window: the zone's art, the arrow's place and turn while walking and riding, the
   flight master and stone pins, the live line; that it stops inside an instance and starts again outside; entering the
   target instance opening its plan and run mode; a learned entrance replacing the bundled one after a loading screen.
+- Gear filters on a recommended plan (Wailing Caverns): Warrior and Mage change the drop list (a mage loses Lord
+  Cobrahn's leather and mail), a slot shows only that slot, a boss only his drops; items not cached at login join the
+  list once loaded (no endless "Loading items..."); the disabled role filter's tooltip; whether
+  `C_Item.GetItemInfoInstant` or the global answers (`/dp debug`, "Item types"); an item that never loads leaves
+  "Loading items..." after about 13 seconds.
+- The class filter's rules on Forever (`Model/GearFilter.lua` follows the current client's rules and does not model
+  levels): can a level-20 hunter or shaman wear mail, a warrior or paladin below 40 wear plate, a rogue use one-handed
+  axes, a druid use polearms? Adjust the table to what the game allows.
+- Show location in the header: the pin's look beside the instance name and greyed when off, its tooltip (zone, hint),
+  the click pinning the entrance and opening the world map, right-click and Shift-click opening Getting there, the
+  button off in combat and while dead and back after both, off for an instance without travel facts; with the gamepad
+  interface style, the pin only; the header at the minimum width (880) in German.
 
 Since 0.1.0:
 

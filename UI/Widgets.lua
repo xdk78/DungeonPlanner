@@ -412,6 +412,11 @@ local function paintButton(b)
 		b.icon:SetDesaturated(not enabled or (v == "segment" and not b.dpActive and not hover))
 		b.icon:SetAlpha(enabled and 1 or 0.5)
 	end
+	-- An icon button's picture (W.IconButton) greys out the same way when the button is off.
+	if b.art then
+		b.art:SetDesaturated(not enabled)
+		b.art:SetAlpha(enabled and 1 or 0.5)
+	end
 end
 W.PaintButton = paintButton
 

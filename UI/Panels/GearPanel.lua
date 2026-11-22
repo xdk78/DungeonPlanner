@@ -42,6 +42,15 @@ local function slotText(slot)
 end
 
 local ROLE_TEXT = { TANK = "Tank", HEALER = "Healer", DAMAGER = "Damage" }
+
+local function hasRole(p)
+	for _, g in ipairs(p.gear or {}) do
+		if g.role then
+			return true
+		end
+	end
+	return false
+end
 -- Items side by side: as many columns as fit at CELL_MIN wide (an item's name and slot), at most COLS_MAX.
 local CELL_MIN, COLS_MAX = 250, 3
 
@@ -104,6 +113,10 @@ function Panel.Create(parent, ctx)
 		return out
 	end, "slot")
 	f.slot:SetPoint("LEFT", f.encounter, "RIGHT", SP.sm, 0)
+	W.SetTooltip(f.class, L["Class"],
+		L["Items this class can wear and wield at full level: armor up to its heaviest type, the weapons and shields it can use. Other items stay listed."])
+	W.SetTooltip(f.encounter, L["Boss"], L["Shows the drops of one boss, or of the whole instance."])
+	W.SetTooltip(f.slot, L["Slot"], L["Shows the items for one equipment slot."])
 	-- The filters share the line, each as wide as its longest option (in either language); when the line is too narrow
 	-- for that, they shrink alike (never under each other).
 	f.measure = W.Text(f, "body", "ink")
@@ -536,9 +549,13 @@ function Panel.Create(parent, ctx)
 		return out, status
 	end
 
-	-- Loot from the data providers, grouped by boss, with the same slot filter.
+	-- Loot from the bundled boss data and the data providers, grouped by boss. These lists are item IDs only, so the
+	-- class and slot filters read each item's type from the client (Loot.ItemType, GearFilter.Match). An item the
+	-- client has no data for yet is asked for (Names.Item); it is left out of a filtered list until it arrives, and
+	-- ITEMS_READY redraws the page once it does (out.loading meanwhile).
 	local function providerDrops(p)
 		local out = {}
+		local want = { class = filter.class, slot = filter.slot }
 		for _, enc in ipairs(p.encounters) do
 			local list, credit = nil, nil
 			if not filter.encounter or enc.id == filter.encounter then
@@ -548,7 +565,11 @@ function Panel.Create(parent, ctx)
 				out.credit = credit
 				local rows = {}
 				for _, it in ipairs(list) do
-					if not filter.slot or it.slot == filter.slot then
+					local match = ns.GearFilter.Match(want, ns.Loot.ItemType(it.itemID))
+					if match == nil then
+						ns.Names.Item(it.itemID)
+						out.loading = out.loading or ns.Names.ItemLoading(it.itemID)
+					elseif match then
 						rows[#rows + 1] = { loot = it, encounterId = enc.id }
 					end
 				end
@@ -603,8 +624,29 @@ function Panel.Create(parent, ctx)
 			self.list:SetPoint("BOTTOMRIGHT", form, "TOPRIGHT", 0, SP.md)
 		end
 
+		-- The role filter needs data that names a role: the plan's own entries tagged with one (and the add form, which
+		-- tags new entries), or the Adventure Guide's loot by specialization. A drop list of item IDs names none, so on
+		-- a read-only plan without such entries the filter is switched off and says why.
+		local roleUseful = not ro or ns.Journal.HasData() or hasRole(p)
+		if not roleUseful then
+			filter.role = nil
+		end
+		self.role:SetDisabled(not roleUseful)
+		local roleTip = roleUseful
+			and L["Filters this plan's own entries by the role they are tagged with. Drops carry no role, so they stay listed."]
+			or L["Drops carry no role, and this plan tags none of its entries with one, so there is nothing to filter by role."]
+		W.SetTooltip(self.role, L["Role"], roleTip)
+		self.role:Refresh()
+
 		local items = {}
-		local own = Plan.FilterGear(p, filter)
+		local own = {}
+		for _, g in ipairs(Plan.FilterGear(p, filter)) do
+			-- An entry tagged with no class follows the class filter by its item's type; one not known yet stays.
+			if g.class or not (filter.class and g.itemID)
+				or ns.GearFilter.CanEquip(filter.class, ns.Loot.ItemType(g.itemID)) ~= false then
+				own[#own + 1] = g
+			end
+		end
 		if #own > 0 then
 			items[#items + 1] = { header = L["Recommended by this plan"] }
 			for _, g in ipairs(own) do
@@ -631,6 +673,9 @@ function Panel.Create(parent, ctx)
 			if status == "nojournal" then
 				status = "provider"
 			end
+		end
+		if provided.loading and status ~= "loading" then
+			status = "loading"
 		end
 		local links = #ns.Providers.LootLinks() > 0
 		self.needRoll:SetShown(links)

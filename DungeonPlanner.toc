@@ -36,6 +36,7 @@ Model\Schema.lua
 Model\Validate.lua
 Model\Plan.lua
 Model\PlanLists.lua
+Model\GearFilter.lua
 Model\PlanBosses.lua
 Model\History.lua
 Model\Drawing.lua

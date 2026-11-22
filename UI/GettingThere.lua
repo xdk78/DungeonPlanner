@@ -204,15 +204,60 @@ local function points(f, withFlight)
 end
 GT.Points = points
 
+-- The entrance on the world map: the game's pin, then the map on its zone (Navigation.ShowOnMap: nothing in combat,
+-- no map with the gamepad interface style). The card's "Show on world map" and the header's Show location button.
+-- False when the facts have no entrance on a map.
+function GT.ShowEntrance(facts)
+	local p = facts and points(facts)
+	if not p then
+		return false
+	end
+	ns.Navigation.ShowOnMap(p[#p][1], p[#p][2], p[#p][3])
+	return true
+end
+
+-- The header's Show location button for a plan or a home entry: { state, facts, zone, canPin, canOpen, gamepad }.
+-- state: "ready", "combat" or "dead" (Navigation.BlockReason), "unknown" (no travel record for the instance) or "none"
+-- (no target). canPin: the game can pin the entrance; canOpen: the world map can open on it (not with the gamepad
+-- interface style); with neither, a click opens the Getting there window instead.
+function GT.Location(target)
+	if type(target) ~= "table" then
+		return { state = "none" }
+	end
+	local facts = GT.Facts(target)
+	if not facts.rec then
+		return { state = "unknown", facts = facts }
+	end
+	local ent, p = facts.ent, points(facts)
+	local m = rawget(_G, "C_Map")
+	local gamepad = ns.Compat.Gamepad()
+	return { state = ns.Navigation.BlockReason() or "ready", facts = facts, gamepad = gamepad,
+		zone = ns.Travel.Where(facts.rec, ent and ent.uiMapID),
+		canPin = p ~= nil and ns.Navigation.CanPin(p[#p][1]),
+		canOpen = p ~= nil and m ~= nil and type(m.OpenWorldMap) == "function" and not gamepad }
+end
+
+-- A click on that button: the world map (left), or the Getting there window (right-click, Shift-click, or an
+-- entrance the game can neither pin nor show). Nothing while blocked.
+function GT.Locate(target, window)
+	local loc = GT.Location(target)
+	if loc.state ~= "ready" then
+		return false
+	end
+	if window or not (loc.canPin or loc.canOpen) then
+		GT.Open(target)
+		return "window"
+	end
+	GT.ShowEntrance(loc.facts)
+	return "map"
+end
+
 -- The buttons under the card: Show on world map, Navigate (and its menu of the other ways).
 function GT.Actions(parent)
 	local bar = CreateFrame("Frame", nil, parent)
 	bar:SetHeight(SZ.control)
 	bar.map = W.Button(bar, L["Show on world map"], "outline", function()
-		local p = bar.facts and points(bar.facts)
-		if p then
-			ns.Navigation.ShowOnMap(p[#p][1], p[#p][2], p[#p][3])
-		end
+		GT.ShowEntrance(bar.facts)
 	end)
 	bar.map:SetPoint("LEFT")
 	bar.nav = W.Button(bar, L["Navigate"], "outline", function(self)

@@ -163,35 +163,49 @@ end
 
 local askItem, scheduleSweep
 
+-- Each item is checked ITEM_RETRY after its own last ask: the next sweep comes when the earliest waiting ask is due, so
+-- an item's three asks and its giving up take about 3 x ITEM_RETRY, whatever else is waiting.
 local function sweepItems()
 	sweepTimer = false
-	local named = settleItems(itemState)
+	local changed = settleItems(itemState)
 	local t = clock()
+	local wait, due = nil, {}
 	for id, s in pairs(itemState) do
 		if not s.done then
-			if t - s.at < ITEM_RETRY - 0.05 then -- this sweep's own asks are due now, not one interval later
-				scheduleSweep()
+			local left = ITEM_RETRY - (t - s.at)
+			if left > 0.05 then -- this sweep's own asks are due now, not one interval later
+				wait = math.min(wait or left, left)
 			elseif s.tries < ITEM_TRIES then
-				askItem(id, s)
+				due[#due + 1] = id
+			elseif not s.gaveUp then
+				-- Its last ask went unanswered: no longer loading. The pages redraw once so they stop saying so.
+				s.gaveUp = true
+				changed = true
 			end
 		end
 	end
-	if named then
+	if wait then
+		scheduleSweep(wait)
+	end
+	for _, id in ipairs(due) do
+		askItem(id, itemState[id])
+	end
+	if changed then
 		itemsReady()
 	end
 end
 
-function scheduleSweep()
+function scheduleSweep(delay)
 	if not sweepTimer and C_Timer and C_Timer.After then
 		sweepTimer = true
-		C_Timer.After(ITEM_RETRY, function()
+		C_Timer.After(delay or ITEM_RETRY, function()
 			ns.SafeCall(sweepItems)
 		end)
 	end
 end
 
 function askItem(itemID, s)
-	s.tries, s.at = s.tries + 1, clock()
+	s.tries, s.at, s.gaveUp = s.tries + 1, clock(), nil
 	scheduleSweep()
 	local items = rawget(_G, "C_Item")
 	if items and type(items.RequestLoadItemDataByID) == "function" then
@@ -267,6 +281,15 @@ function Names.ItemHovered(itemID)
 	if itemID and not clientItemName(itemID) then
 		Names.RequestItem(itemID, true)
 	end
+end
+
+-- True while an item asked for may still arrive: no name yet, and the sweep has not given up on it.
+function Names.ItemLoading(itemID)
+	local s = itemState[itemID]
+	if not s or s.done or s.gaveUp or clientItemName(itemID) then
+		return false
+	end
+	return true
 end
 
 -- For tests: forget every item asked for.

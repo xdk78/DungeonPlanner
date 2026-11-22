@@ -104,7 +104,7 @@ local function cursorOn(f)
 end
 
 local function itemFrame(p, index)
-	for _, f in ipairs(p.pools[p.spec.style].item) do
+	for _, f in ipairs(p.pools[p.poolKey].item) do
 		if f:IsShown() and f.index == index then
 			return f
 		end

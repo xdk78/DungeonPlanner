@@ -75,6 +75,9 @@ follow [Semantic Versioning](https://semver.org/).
   dragged with the route tool) for a straight line. On by default; works on
   every classic floor and Forever's caves and buildings. Open outdoor maps keep straight lines. Snapped routes are
   ordinary route points, so shared plans work with older versions.
+- **Show location** in the window's header, right after the instance's name: a click shows the entrance on the world
+  map (the game's pin, as in Getting there), a right-click or Shift-click opens the Getting there window. Its tooltip
+  names the zone and what a click does; it is greyed out in combat, while dead and for instances without travel facts.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the
@@ -95,6 +98,14 @@ follow [Semantic Versioning](https://semver.org/).
   tool's name or a drawn glyph, and `/dp debug` lists it.
 
 ### Fixed
+- **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or
+  another addon as item IDs, and the class and role filters were not applied to them. A class shows the items it can
+  wear and wield at full level, by the current game rules (armor up to its heaviest type, the weapons and shields it
+  can use; rings, cloaks and trinkets for everyone); it does not account for the level at which mail or plate becomes
+  wearable. The item types for the class and slot filters are read from `C_Item.GetItemInfoInstant` first (the older
+  global after it), items the game has not loaded yet are requested and join the list when they arrive, and a
+  one-hand weapon is listed under the off hand too. The role filter applies to a plan's own entries; on a recommended
+  plan without such entries it is switched off and its tooltip says why, since drops name no role.
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
 - **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
