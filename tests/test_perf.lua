@@ -152,7 +152,6 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(layouts, 1, "one layout on release")
 	view.Layout, view.DrawContent = realLayout, realDraw
-	mock.ResetInput()
 	ns.DB.DeletePlan(plan.id)
 end)
 

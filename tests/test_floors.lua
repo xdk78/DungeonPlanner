@@ -119,10 +119,8 @@ T.case("Floor switcher: hidden on one floor, tabs for a few, the name between ar
 	T.eq(ns.UI.ctx.floor, 2, "a tab goes to its floor")
 	T.ok(bar.tabs[2].dpActive and not bar.tabs[1].dpActive, "the current floor's tab is lit")
 	-- Shift + wheel: the next or previous floor, round; the wheel alone zooms.
-	mock.shiftDown = true
-	mock.Wheel(map.canvas, -1)
+	mock.WithInput({ keys = { "SHIFT" } }, mock.Wheel, map.canvas, -1)
 	T.eq(ns.UI.ctx.floor, 1, "past the last floor: the first")
-	mock.shiftDown = false
 	local zoom = map.canvas.zoom
 	mock.Wheel(map.canvas, 1)
 	T.eq(ns.UI.ctx.floor, 1, "the wheel alone stays on the floor")

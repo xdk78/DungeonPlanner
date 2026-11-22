@@ -419,7 +419,6 @@ T.case("Review: map presses: one drag at a time, the readout survives a click, a
 	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(redraws, 1, "laid out once on release")
 	view.DrawContent, view.MoveCanvas = realDraw, realMove
-	mock.ResetInput()
 	ns.DB.DeletePlan(plan.id)
 end)
 

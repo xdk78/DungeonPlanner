@@ -71,7 +71,7 @@ end
 
 -- A control's click, as the game runs it.
 local function click(b)
-	mock.Click(b)
+	assert(mock.Click(b), "the click did not reach the button (hidden or disabled)")
 end
 
 -- The window at a size (the minimum, 880 x 560, or a large one); views after it get the default back.
@@ -749,9 +749,8 @@ V.views = {
 			end
 			openOwn("assignments", "select")
 			local list = page().panels.assignments.inner.list
-			if list.rows[1] and list.rows[1]:GetScript("OnClick") then
-				mock.Click(list.rows[1])
-			end
+			assert(list.rows[1], "an assignment row")
+			click(list.rows[1])
 			ns.UI.RefreshPage()
 		end,
 		window = window,

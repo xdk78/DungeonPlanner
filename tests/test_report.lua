@@ -14,7 +14,7 @@ local function boot()
 end
 
 local function click(b)
-	mock.Click(b)
+	T.ok(mock.Click(b), "the click reached the button (shown, enabled)")
 end
 
 -- Run fn with the game's error handler silenced (SafeCall passes errors on to it).

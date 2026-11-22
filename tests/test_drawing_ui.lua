@@ -42,7 +42,7 @@ local function closeDialogs()
 end
 
 local function click(button)
-	mock.Click(button)
+	T.ok(mock.Click(button), "the click reached the button (shown, enabled)")
 end
 
 T.case("Drawing UI: the Draw tool shows its bar; strokes, shapes and text become drawings with one undo each", function()

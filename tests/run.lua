@@ -40,6 +40,7 @@ function T.case(name, fn)
 		return
 	end
 	local ok, err = pcall(fn)
+	mock.ResetInput() -- no cursor, key or button carried into the next case, also after a failure
 	if ok then
 		T.passed = T.passed + 1
 	else

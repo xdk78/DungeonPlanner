@@ -264,7 +264,6 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 	mock.Leave(canvas)
 	ns.RouteArrows.Place = place
 	tt.SetText, tt.AddLine = realSetText, realAdd
-	mock.ResetInput()
 	ns.UI.RefreshPage()
 end)
 
@@ -466,5 +465,4 @@ T.case("Route hover: a still pointer over an unchanged map costs nothing per tic
 	T.eq(calls, 4, "after entering again")
 	mock.Leave(canvas)
 	RL.Hit = hit
-	mock.ResetInput()
 end)

@@ -27,7 +27,7 @@ local function closeDialogs()
 end
 
 local function click(button)
-	mock.Click(button)
+	T.ok(mock.Click(button), "the click reached the button (shown, enabled)")
 end
 
 T.case("Recommended plans name their source, revision and data date; copies say what they are based on", function()

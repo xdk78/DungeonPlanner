@@ -32,7 +32,6 @@ local function case(name, fn)
 		ns.Journal.HasData, ns.Travel.For, ns.Compat.Gamepad = saved.hasData, saved.travelFor, saved.gamepad
 		items.GetItemNameByID, items.RequestLoadItemDataByID = saved.name, saved.request
 		_G.UnitIsDeadOrGhost, mock.inCombat = saved.dead, saved.inCombat
-		mock.ResetInput()
 		mock.itemTypes = {}
 		ns.Names.ResetItems()
 		ns.Widgets.ClosePopup()

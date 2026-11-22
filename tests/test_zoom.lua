@@ -45,7 +45,6 @@ local function openMap(planId)
 		view.canvas.GetLeft, view.canvas.GetTop = nil, nil
 		view.zoom = 1
 		view:SetSize(400, 300)
-		mock.ResetInput()
 		mock.Advance(0.3)
 	end
 end
@@ -217,8 +216,10 @@ T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; 
 	T.eq(paths, 3, "two ticks and the settle: the hover check draws nothing more")
 	T.eq(view.routeHover.route, leg.route, "still the leg under the pointer")
 	-- Leaving the map during a zoom: no highlight, tooltip or coordinates left behind.
+	-- OnLeave with the pointer still over the map's rectangle (IsMouseOver stays true), as the game does when the pointer
+	-- moves onto a pin: only the map's own pointerIn says it left.
 	wheel(view, 1)
-	mock.Leave(view)
+	mock.FireScript(view, "OnLeave", true)
 	mock.Advance(0.3)
 	T.eq(view.drag.mode, "idle")
 	T.eq(view.routeHover, nil, "no highlight")
@@ -248,7 +249,7 @@ T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; 
 	view.OnDragUpdate(view)
 	local x1, y1 = view:CursorPosition()
 	T.ok(math.abs(x1 - x0) < 1e-9 and math.abs(y1 - y0) < 1e-9, "the map follows the pointer after the tick")
-	mock.Leave(view)
+	mock.FireScript(view, "OnLeave", true) -- onto a pin: still over the map's rectangle
 	mock.SetMouseButtonDown("LeftButton", false)
 	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(view:GetScript("OnUpdate"), nil, "released over a pin: no hover updates")

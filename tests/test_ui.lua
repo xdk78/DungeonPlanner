@@ -178,9 +178,7 @@ T.case("Map tools add markers, positions, pulls and routes; layers and undo", fu
 	T.eq(plan.markers[1].pull, plan.pulls[1].id)
 	ctx.tool = "route"
 	canvas:OnMapClick("LeftButton")
-	mock.shiftDown = true
-	canvas:OnMapClick("LeftButton")
-	mock.shiftDown = false
+	mock.WithInput({ keys = { "SHIFT" } }, canvas.OnMapClick, canvas, "LeftButton")
 	T.eq(#plan.routes, 1)
 	T.eq(#plan.routes[1].points, 2)
 	T.eq(plan.routes[1].points[2].step, 1, "shift-click adds a numbered stop")

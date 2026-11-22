@@ -6,7 +6,6 @@ local ns, mock = T.ns, T.mock
 local RA = ns.RouteArrows
 
 local function boot()
-	mock.ResetInput() -- no button or key left held by a case that failed
 	if not _G.DungeonPlannerDB then
 		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 		mock.loggedIn = true
@@ -569,7 +568,6 @@ T.case("Route arrows: a real route point drag hides them; the drop places them i
 	T.eq(canvas.drag.mode, "idle")
 	T.ok(canvas.counts.arrows > 0, "placed by the drop's redraw, before any timer: " .. canvas.counts.arrows)
 	T.ok(canvas.pools.arrows[1]:IsShown(), "shown")
-	mock.ResetInput()
 	ns.DB.DeletePlan(copy.id)
 end)
 
@@ -632,7 +630,6 @@ T.case("Route arrows: the size grip holds them until its release, the window hid
 		T.eq(ns.sizingWindow, nil, "and the resize counts as over")
 		T.eq(canvas.counts.arrows, before)
 	end)
-	mock.ResetInput()
 	ns.sizingWindow = nil
 	RA.Place = place
 	if not ok then

@@ -368,8 +368,11 @@ T.case("Enemies layer: drawn from spawn data, decluttered, without doubling the 
 	T.ok(spawnRow.check:GetChecked(), "on by default for a recommended plan")
 	local dot = map.canvas.pools.spawns[1]
 	T.eq(#dot.members, 2, "the merged dot holds both")
+	local tip = ns.Widgets.Tip()
+	tip:Hide()
 	mock.Hover(dot)
-	mock.Click(spawnRow.check)
+	T.ok(tip:IsShown(), "hovering the dot shows its tooltip")
+	T.ok(mock.Click(spawnRow.check), "the legend's check box takes the click")
 	T.eq(ns.db.ui.mapLayers.spawns, false)
 	map.canvas:DrawContent()
 	T.eq(map.canvas.counts.spawns, 0, "switched off")
