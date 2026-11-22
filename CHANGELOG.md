@@ -5,8 +5,6 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [Unreleased]
-
 ### Added
 - **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" now follows your
   game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other languages stay

@@ -164,7 +164,8 @@ function SidePanel.Create(parent, ctx)
 					caption = caption .. "  ·  " .. marks
 				end
 			end
-			row.caption:SetText(S.WithApprox(caption, approx))
+			-- Cut after a whole word when the floor name and marks do not fit (the tooltip has it whole).
+			W.FitText(row.caption, S.WithApprox(caption, approx))
 			local current = ctx:StepIndex()
 			S.TextColor(row.title, current == index and "white" or (current and index < current) and "muted" or "ink")
 			S.TextColor(row.caption, step.kind == "boss" and "gold" or "muted")
@@ -191,7 +192,7 @@ function SidePanel.Create(parent, ctx)
 			end
 			tt:SetOwner(row, "ANCHOR_RIGHT")
 			tt:SetText(title ~= "" and title or caption, 1, 0.82, 0, 1, true)
-			tt:AddLine(row.caption:GetText() or caption, 0.71, 0.67, 0.59, true)
+			tt:AddLine(row.caption.dpFullText or row.caption:GetText() or caption, 0.71, 0.67, 0.59, true)
 			if note and note ~= "" and note ~= title then
 				tt:AddLine(note, 1, 1, 1, true)
 			end
