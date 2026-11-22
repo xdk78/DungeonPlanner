@@ -1,4 +1,3 @@
--- wowui-check: ignore file-length grew past 800 lines before the check ran in CI; to be split by responsibility
 -- Run mode: a compact window to keep open while running the instance. It shows the plan's current step (Model/Steps.lua),
 -- the next pull with its note, tips for the next boss, and a mini map framing the step and its neighbours, with its
 -- route segment, a ring on the step's spot and only that step's party positions (no labels: MapCanvas compact mode).

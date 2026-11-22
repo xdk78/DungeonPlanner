@@ -57,6 +57,9 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   after a client patch or an update of ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install; fix a
   drift in its own pull request (`data-src/routes/README.md`, "When to run the `--check`s").
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
+  `wowui check` enforces 800 for addon code. Exceptions, in `.wowui-check.json`: `Locales/` (one string per line,
+  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked), and
+  `UI/Fonts.lua` and `UI/RunMode.lua`, capped at about their size until they are split (they may not grow).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
   otherwise). Format strings must keep the same `%s`/`%d` order (a test checks).
@@ -84,9 +87,11 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 - Addon messages go through `Share/Comm.lua` only (AceComm + lockdown outbox).
 - Untrusted input (imports, received plans, community files) goes through `Codec.Decode` and `Validate.*`. Never
   `loadstring`.
-- `wowui check` enforces what it can see of these rules (forbidden calls and hooks, the combat log, new globals, file
-  length, slash commands and `UISpecialFrames` only behind `Compat.Gamepad`); its config is `.wowui-check.json`. Keep
-  that file's global allowlist in step with `docs/API.md` and `.luacheckrc`. Suppress one finding with
+- `wowui check` enforces what it can see of these rules (forbidden calls and hooks, addon messages outside
+  `Share/Comm.lua`, the combat log, new globals, file length, `UISpecialFrames` and `SLASH_*` / `SlashCmdList`
+  registrations only behind `Compat.Gamepad`); its config is `.wowui-check.json`. It does not see AceConsole's
+  `RegisterChatCommand` (`tests/test_gamepad.lua` covers `/dp`), secure templates or changes to the game's font
+  objects: review those. Keep that file's global allowlist in step with `docs/API.md` and `.luacheckrc`. Suppress one finding with
   `-- wowui-check: ignore <rule> <reason>`, never without a reason.
 
 ## Data honesty
