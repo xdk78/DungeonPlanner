@@ -277,7 +277,7 @@ outlines the mask does not count as floor, or a stop's own piece):
 stops on parts of the map the floor and its walls do not connect (6) or far from any floor (2): they stay straight.
 At runtime a leg is found in the same call as the click or the drop (Data/Corridors.lua). Measured with reference Lua
 5.1, which the client's is close to, over the recommended plans' 236 legs on their 76 floors with a grid (`lua tools/walk_timing.lua`; each
-figure is the median of five runs, on a machine busy with other work, so an idle one is faster):
+figure is the median of five runs; times vary with the computer and its load, so read them as an indication):
 
 | What | Median | At most |
 |---|---|---|
