@@ -267,8 +267,10 @@ end
 function Report.Errors()
 	local out, seen = {}, {}
 	for _, e in ipairs(ns.Errors.list) do
-		seen[e.message] = true
-		out[#out + 1] = { message = e.message, count = e.count, source = "Dungeon Planner" }
+		-- Scrubbed again: a name the game only knew later (the guild at login) was not known when this was stored.
+		local message = ns.Errors.Scrub(e.message)
+		seen[message] = true
+		out[#out + 1] = { message = message, count = e.count, source = "Dungeon Planner" }
 	end
 	local grabber = rawget(_G, "BugGrabber")
 	if type(grabber) == "table" and type(grabber.GetDB) == "function" then
@@ -285,9 +287,15 @@ function Report.Errors()
 					end
 				end
 			end
+			-- BugGrabber's keep their order (oldest first) and come before ours; the oldest of all are trimmed below.
+			local merged = {}
 			for i = math.max(1, #found - Report.MAX_ERRORS + 1), #found do
-				table.insert(out, 1, found[i])
+				merged[#merged + 1] = found[i]
 			end
+			for _, e in ipairs(out) do
+				merged[#merged + 1] = e
+			end
+			out = merged
 		end
 	end
 	while #out > Report.MAX_ERRORS do
@@ -339,7 +347,7 @@ end
 local function logLines()
 	local out = {}
 	for _, entry in ipairs(ns.LogLines(5)) do
-		out[#out + 1] = entry.text
+		out[#out + 1] = ns.Errors.Scrub(entry.text) -- again: names known only now
 	end
 	return out
 end

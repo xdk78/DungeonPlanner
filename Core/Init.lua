@@ -67,59 +67,136 @@ local function privateNames()
 	local plain = ns.Util and ns.Util.Plain or function(v)
 		return v
 	end
-	local function add(name)
+	local function include(variant)
+		local key = variant:lower()
+		if variant ~= "" and not seen[key] then
+			seen[key] = true
+			names[#names + 1] = variant
+		end
+	end
+	-- The name as it is, without spaces and hyphens ("Area52"), and for a name of several words its last word on its
+	-- own ("First Surname" -> "Surname") when that has 3 characters or more. Plans: the name only (their words are common).
+	local function add(name, wholeOnly)
 		name = plain(name)
 		if type(name) ~= "string" or name == "" then
 			return
 		end
-		for _, variant in ipairs({ name, (name:gsub("[%s%-]", "")) }) do
-			local key = variant:lower()
-			if variant ~= "" and not seen[key] then
-				seen[key] = true
-				names[#names + 1] = variant
+		include(name)
+		if not wholeOnly then
+			include((name:gsub("[%s%-]", "")))
+			local last = name:match("%s(%S+)$")
+			if last and #last >= 3 then
+				include(last)
 			end
 		end
 	end
-	local function call(fn, ...)
+	-- fn's first result, or both for UnitName (name and realm).
+	local function call(fn, both, ...)
 		if type(fn) == "function" then
 			local ok, a, b = pcall(fn, ...)
 			if ok then
 				add(a)
-				add(b)
+				if both then
+					add(b)
+				end
 			end
 		end
 	end
-	call(UnitName, "player")
-	call(GetRealmName)
-	call(rawget(_G, "GetNormalizedRealmName"))
-	call(rawget(_G, "GetGuildInfo"), "player")
+	call(UnitName, true, "player")
+	call(GetRealmName, false)
+	call(rawget(_G, "GetNormalizedRealmName"), false)
+	call(rawget(_G, "GetGuildInfo"), false, "player") -- the guild's name only, not the rank that follows it
 	local unitName = UnitName
 	if type(unitName) == "function" then
 		for i = 1, 4 do
-			call(unitName, "party" .. i)
+			call(unitName, true, "party" .. i)
 		end
 		for i = 1, 40 do
-			call(unitName, "raid" .. i)
+			call(unitName, true, "raid" .. i)
 		end
 	end
+	-- The player's own plans, by name, unless the name would eat the messages themselves: under 3 characters, only
+	-- digits, or a directory, file or module name that stack lines hold ("Core", "UI", "Model", "Init", "lua", ...).
 	local plans = ns.db and ns.db.plans
 	if type(plans) == "table" then
 		local prefix = ns.Bundled and ns.Bundled.PREFIX
+		local reserved = { dungeonplanner = true, interface = true, addons = true, lua = true, core = true, ui = true, model = true,
+			share = true, data = true, config = true, tracker = true, libs = true, locales = true, panels = true }
+		for _, module in ipairs(ns.modules or {}) do
+			reserved[tostring(module):lower()] = true
+		end
 		for id, plan in pairs(plans) do
 			if type(plan) == "table" and not (prefix and type(id) == "string" and id:sub(1, #prefix) == prefix) then
-				add(plan.name)
+				local name = plain(plan.name)
+				if type(name) == "string" and #name >= 3 and not name:find("^%d+$") and not reserved[name:lower()] then
+					add(name, true)
+				end
 			end
 		end
 	end
 	return names
 end
 
--- A letter, digit or non-ASCII byte: part of a word.
-local function wordByte(c)
-	return c ~= nil and c ~= "" and (c:find("%w") ~= nil or c:byte() >= 128)
+-- The code point of the UTF-8 character that starts at byte j, or nil when the bytes are not valid.
+local function codePoint(text, j)
+	local lead = text:byte(j)
+	if not lead then
+		return nil
+	end
+	if lead < 0x80 then
+		return lead
+	end
+	local n = lead >= 0xF0 and 4 or lead >= 0xE0 and 3 or lead >= 0xC0 and 2 or nil
+	if not n then
+		return nil
+	end
+	local cp = lead - (n == 4 and 0xF0 or n == 3 and 0xE0 or 0xC0)
+	for k = 1, n - 1 do
+		local b = text:byte(j + k)
+		if not b or b < 0x80 or b >= 0xC0 then
+			return nil
+		end
+		cp = cp * 64 + (b - 0x80)
+	end
+	return cp
 end
 
--- `name` replaced by <name> wherever it stands as a whole word, ignoring case.
+-- Does the character with this code point belong to a word? ASCII letters and digits, and non-ASCII letters; not the
+-- Latin-1 punctuation and no-break space (U+0080-00BF: guillemets, NBSP, inverted marks), the multiplication and division
+-- signs, general punctuation and symbols (U+2000-2BFF: dashes, curly quotes, ellipsis) or CJK punctuation.
+local function wordChar(cp)
+	if cp == nil then
+		return true -- invalid bytes: treated as part of a word, the safe side for the rest of the text
+	end
+	if cp < 0x80 then
+		return string.char(cp):find("%w") ~= nil
+	end
+	return not (cp <= 0xBF or cp == 0xD7 or cp == 0xF7 or (cp >= 0x2000 and cp <= 0x2BFF) or (cp >= 0x3000 and cp <= 0x303F)
+		or (cp >= 0xFE00 and cp <= 0xFE0F) or (cp >= 0xFF00 and cp <= 0xFF0F))
+end
+
+-- The character that ends just before byte s, and the one that starts at byte e.
+local function wordBefore(text, s)
+	local i = s - 1
+	if i < 1 then
+		return false
+	end
+	local j = i
+	while j > 1 and i - j < 3 and text:byte(j) >= 0x80 and text:byte(j) < 0xC0 do
+		j = j - 1
+	end
+	return wordChar(codePoint(text, j))
+end
+
+local function wordAfter(text, e)
+	if e > #text then
+		return false
+	end
+	return wordChar(codePoint(text, e))
+end
+
+-- `name` replaced by <name> wherever it stands as a whole word. The match ignores case for ASCII letters only (the
+-- lower-casing is byte-wise), so "Tester" and "TESTER" match, "Zażółć" and "ZAŻÓŁĆ" do not.
 local function scrubName(text, name)
 	local low, wanted = text:lower(), name:lower()
 	local out, pos = {}, 1
@@ -128,7 +205,7 @@ local function scrubName(text, name)
 		if not s then
 			break
 		end
-		if not wordByte(text:sub(s - 1, s - 1)) and not wordByte(text:sub(e + 1, e + 1)) then
+		if not wordBefore(text, s) and not wordAfter(text, e + 1) then
 			out[#out + 1] = text:sub(pos, s - 1)
 			out[#out + 1] = "<name>"
 			pos = e + 1

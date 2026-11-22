@@ -4,13 +4,14 @@
 -- newest released version in the changelog has no entry, or when the changelog has an [Unreleased] section and no entry
 -- is newer than the last release. Strings go through L, so each language has its own text (Locales/plPL.lua).
 --
--- When it shows (Decide, pure): the saved version (global.news.seen, written once the card was shown or skipped) is
--- compared with the running one.
---   * nothing saved and this is a fresh install (no saved data existed before this session): the welcome;
+-- When it shows (Decide, pure): the saved version (global.news.seen) is compared with the running one.
+--   * nothing saved and this is a fresh install (no saved data existed before this session, or an earlier session of
+--     it has not shown its welcome yet, global.news.firstRun): the welcome;
 --   * nothing saved on an install that had data (0.1.0 saved nothing): the entry for this version;
---   * a different version saved: the entry for this version, if there is one;
---   * the same version, or a development checkout ("dev"): nothing.
--- The version is saved as soon as the decision is made, so the card shows once.
+--   * a different, older version saved: the entry for this version, if there is one;
+--   * the same or a newer version saved (a downgrade), or a development checkout ("dev"): nothing.
+-- The version is saved once the card has been shown (Show returned true), or at once when the version has no entry and
+-- there is nothing to show; until then the card stays pending for the next quiet moment.
 
 local _, ns = ...
 local WhatsNew = ns:NewModule("WhatsNew")

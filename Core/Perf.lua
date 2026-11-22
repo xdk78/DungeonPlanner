@@ -370,11 +370,12 @@ function Perf.Summary(top)
 	return lines
 end
 
--- For tests and the report: how many spikes the ring holds.
+-- For tests: the depth of the call stack the probe tracks.
 function Perf.Depth()
 	return depth
 end
 
+-- For tests: how many spikes the ring holds.
 function Perf.SpikeCount()
 	return #spikes
 end
