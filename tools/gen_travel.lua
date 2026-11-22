@@ -490,14 +490,21 @@ local function main(args)
 		end
 	end
 	if report then
-		local e, p, s = 0, 0, 0
+		local e, p, s, noIid = 0, 0, 0, {}
 		for slug in pairs(slugs) do
 			e = e + (openmap.entrances[slug] and 1 or 0)
 			p = p + (placesDoc.places[slug] and 1 or 0)
 			s = s + ((placesDoc.places[slug] or {}).stone and 1 or 0)
+			if placesDoc.places[slug] and not planInfo[slug].iid then
+				noIid[#noIid + 1] = slug
+			end
 		end
+		table.sort(noIid)
 		print(string.format("plans %d, entrances %d, places %d, stones %d, flight masters %d, transports %d, bytes %d",
 			#bosses.ListFiles(PLANS_DIR, ".json"), e, p, s, #openmap.nodes, #openmap.transports, #text))
+		-- Without an instance map ID the live map cannot tell the player arrived (data-src/travel/README.md).
+		print("records without an instance map ID (no arrival, nothing learned): "
+			.. (#noIid > 0 and table.concat(noIid, ", ") or "none"))
 	end
 	if check then
 		if #differs > 0 then

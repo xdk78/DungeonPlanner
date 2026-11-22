@@ -1054,4 +1054,6 @@ ns.Locales.ruRU = {
 	["(you are in %s)"] = "(вы в: %s)",
 	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d изученный вход (/dp entrances reset забывает его).|%d изученных входа (/dp entrances reset забывает их).|%d изученных входов (/dp entrances reset забывает их).",
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Забыт %d изученный вход.|Забыто %d изученных входа.|Забыто %d изученных входов.",
+	["Forget learned entrances"] = "Забыть изученные входы",
+	["Getting there uses the bundled entrances again."] = "«Как добраться» снова использует встроенные входы.",
 }

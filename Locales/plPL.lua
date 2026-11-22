@@ -1080,4 +1080,6 @@ ns.Locales.plPL = {
 	["(you are in %s)"] = "(jesteś w: %s)",
 	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d poznane wejście (/dp entrances reset je zapomina).|%d poznane wejścia (/dp entrances reset je zapomina).|%d poznanych wejść (/dp entrances reset je zapomina).",
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Zapomniano %d poznane wejście.|Zapomniano %d poznane wejścia.|Zapomniano %d poznanych wejść.",
+	["Forget learned entrances"] = "Zapomnij poznane wejścia",
+	["Getting there uses the bundled entrances again."] = "Dojazd znowu korzysta z wejść dołączonych do dodatku.",
 }

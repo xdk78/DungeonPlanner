@@ -332,12 +332,17 @@ ID (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) the floor map the
 one, every wing of the instance counts.
 
 Learned entrances: `PLAYER_LEAVING_WORLD` keeps the outdoor position (`Travel.Player`, with world yards). When the next
-`PLAYER_ENTERING_WORLD` ends inside an instance, `TravelLive.Choose` takes the one record of that instance whose
-bundled entrance lies within 400 world yards of that spot (or, for an instance without one, whose zone map the spot
-is on); none, or several (wings sharing one entrance), learns nothing, so a summon, a hearthstone or a portal teaches
-nothing. The spot is put on the map the entrance is drawn on and filed by `TravelLive.Learn` under the instance in
-`global.entrances` (per account, at most 100, `NormalizeLearned` on load; additive, no schema change), and
-`Travel.Entrance` prefers it over the bundled one (`Travel.Bundled`). `/dp entrances reset` forgets them all.
+`PLAYER_ENTERING_WORLD` ends inside an instance (only that event uses the spot; `ZONE_CHANGED_NEW_AREA` updates the
+live map alone), `TravelLive.Choose` takes the one record of that instance whose bundled entrance lies within 400
+world yards of that spot (or, for an instance with no bundled entrance at all, whose zone map the spot is on; a
+bundled entrance the client cannot place in the world learns nothing); none, or several (wings sharing one entrance),
+learns nothing. So a summon, a hearthstone or a portal from farther away teaches nothing, while one taken within 400
+yards of the entrance can be learned. The spot is put on the map the entrance is drawn on and filed by
+`TravelLive.Learn` under the instance in `global.entrances` (per account, at most 100, `NormalizeLearned` on load;
+additive, no schema change); an instance's first learned spot is replaced only by one within 100 yards of it
+(`RELEARN_RADIUS`), so a later summon nearby does not move it. `Travel.Entrance` prefers it over the bundled one
+(`Travel.Bundled`). `/dp entrances reset`, or the Settings panel's "Forget learned entrances" (Troubleshooting; for
+gamepad players, who have no slash commands), forgets them all and the bundled entrances are used at once.
 
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 

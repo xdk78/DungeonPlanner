@@ -193,7 +193,10 @@ local function inside01(x, y)
 	return x and x >= 0 and x <= 1 and y >= 0 and y <= 1
 end
 
-Travel.ZoneMap = zoneMap
+-- The record's zone map (the bundled uiMapID).
+function Travel.ZoneMap(rec)
+	return rec.zm
+end
 
 -- A spot { map, x, y } or { c, x, y } on its zone's map and in the world, as far as the client can say.
 local function place(rec, e)

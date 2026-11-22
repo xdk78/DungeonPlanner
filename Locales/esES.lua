@@ -1054,4 +1054,6 @@ ns.Locales.esES = {
 	["(you are in %s)"] = "(estás en %s)",
 	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d entrada aprendida (/dp entrances reset la olvida).|%d entradas aprendidas (/dp entrances reset las olvida).",
 	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Se olvidó %d entrada aprendida.|Se olvidaron %d entradas aprendidas.",
+	["Forget learned entrances"] = "Olvidar las entradas aprendidas",
+	["Getting there uses the bundled entrances again."] = "Cómo llegar vuelve a usar las entradas incluidas.",
 }

@@ -25,8 +25,11 @@ TravelLive.INTERVAL = 0.1 -- seconds between redraws while live (10 Hz)
 -- Bounded and checked on load.
 TravelLive.MAX_LEARNED = 100
 -- A spot counts as the entrance only this near (world yards) to the bundled one, so a summon, a hearthstone or a portal
--- into an instance teaches nothing. Instances without a bundled entrance take a spot on their zone's map.
+-- taken far from the entrance teaches nothing (one taken nearer can). Instances without a bundled entrance take a spot
+-- on their zone's map.
 TravelLive.LEARN_RADIUS = 400
+-- A learned entrance is replaced only by a spot this near (world yards) to it; a later spot elsewhere keeps the first.
+TravelLive.RELEARN_RADIUS = 100
 
 function TravelLive.NormalizeLearned(t)
 	local out, n = {}, 0
@@ -49,13 +52,14 @@ end
 
 -- Whether the spot the player left from can be this instance's entrance. last: { uiMapID, x, y, continent?, wx?, wy? }
 -- (Travel.Player before the loading screen); ent: the bundled entrance (Travel.Bundled) or nil; zoneMap: the record's
--- zone map (uiMapID) or nil.
+-- zone map (uiMapID) or nil. The zone map alone counts only for a record with no bundled entrance: when the client
+-- cannot place a bundled one in the world, nothing is learned.
 function TravelLive.Accept(last, ent, zoneMap)
 	if type(last) ~= "table" then
 		return false
 	end
-	if ent and ent.wx then
-		if not (last.wx and last.continent == ent.continent) then
+	if ent then
+		if not (ent.wx and last.wx and last.continent == ent.continent) then
 			return false
 		end
 		local dx, dy = last.wx - ent.wx, last.wy - ent.wy
@@ -80,14 +84,23 @@ function TravelLive.Choose(records, last, bundledOf, zoneMapOf)
 	return hit
 end
 
--- Files a spot (already on the record's zone map: { map, x, y }) under the instance. True when stored.
-function TravelLive.Learn(store, key, spot, now)
+-- Files a spot (already on the record's zone map: { map, x, y }) under the instance. True when stored. When one is
+-- learned already, the new spot replaces it only within RELEARN_RADIUS of it; apart(a, b) -> world yards between two
+-- spots, or nil when the client cannot tell (then the first is kept).
+function TravelLive.Learn(store, key, spot, now, apart)
 	if type(store) ~= "table" or type(key) ~= "string" or type(spot) ~= "table" then
 		return false
 	end
 	local fresh = TravelLive.NormalizeLearned({ [key] = { map = spot.map, x = spot.x, y = spot.y, at = now } })[key]
 	if not fresh then
 		return false
+	end
+	local old = store[key]
+	if old then
+		local yards = apart and apart(old, fresh)
+		if not (yards and yards <= TravelLive.RELEARN_RADIUS) then
+			return false
+		end
 	end
 	store[key] = fresh
 	return true

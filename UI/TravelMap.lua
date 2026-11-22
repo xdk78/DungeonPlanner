@@ -318,8 +318,19 @@ local function onEntranceMap(rec, last)
 	return nil
 end
 
+-- World yards between two spots on maps ({ map, x, y }), or nil when the client cannot place both on one continent.
+local function apart(a, b)
+	local c1, x1, y1 = ns.Travel.ToWorld(a.map, a.x, a.y)
+	local c2, x2, y2 = ns.Travel.ToWorld(b.map, b.x, b.y)
+	if not (c1 and c1 == c2) then
+		return nil
+	end
+	return math.sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2)
+end
+
 -- Loading screens: the world changed (live map), and the entrance learned: the spot before a screen that ended inside
--- an instance, when it lies near that instance's bundled entrance (TravelLive.Accept), kept on its zone map.
+-- an instance, when it lies near that instance's bundled entrance (TravelLive.Accept), kept on its zone map. Only
+-- PLAYER_ENTERING_WORLD (the screen's end) uses the spot; a zone change on the way does not drop it.
 local lastOutdoor
 function TravelMap.OnLeavingWorld()
 	lastOutdoor = ns.Travel.Player()
@@ -327,20 +338,25 @@ end
 
 function TravelMap.OnWorld()
 	local records = currentRecords()
-	local store = ns.db and ns.db.entrances
-	if records and lastOutdoor and store then
-		local rec = Live.Choose(records, lastOutdoor, ns.Travel.Bundled, ns.Travel.ZoneMap)
-		local spot = rec and onEntranceMap(rec, lastOutdoor)
-		if spot and Live.Learn(store, rec.key, spot, ns.Now()) then
-			ns.Travel.Reset()
-		end
-	end
-	lastOutdoor = nil
 	local p = ns.Travel.Player()
 	TravelMap.Dispatch({ kind = "world", outdoors = p ~= nil, player = p, instances = keySet(records) })
 end
 
--- /dp entrances reset: forget every learned entrance (the bundled ones are used again).
+function TravelMap.OnEnteringWorld()
+	local records = currentRecords()
+	local store = ns.db and ns.db.entrances
+	if records and lastOutdoor and store then
+		local rec = Live.Choose(records, lastOutdoor, ns.Travel.Bundled, ns.Travel.ZoneMap)
+		local spot = rec and onEntranceMap(rec, lastOutdoor)
+		if spot and Live.Learn(store, rec.key, spot, ns.Now(), apart) then
+			ns.Travel.Reset()
+		end
+	end
+	lastOutdoor = nil
+	TravelMap.OnWorld()
+end
+
+-- /dp entrances reset and the Settings panel's button: forget every learned entrance (the bundled ones are used again).
 function TravelMap.ForgetLearned()
 	local n = Live.Forget(ns.db and ns.db.entrances)
 	ns.Travel.Reset()
@@ -352,6 +368,6 @@ end
 
 function TravelMap.Init()
 	ns:RegisterEvent("PLAYER_LEAVING_WORLD", TravelMap.OnLeavingWorld)
-	ns:RegisterEvent("PLAYER_ENTERING_WORLD", TravelMap.OnWorld)
+	ns:RegisterEvent("PLAYER_ENTERING_WORLD", TravelMap.OnEnteringWorld)
 	ns:RegisterEvent("ZONE_CHANGED_NEW_AREA", TravelMap.OnWorld)
 end
