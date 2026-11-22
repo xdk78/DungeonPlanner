@@ -475,9 +475,9 @@ function RunMode.Refresh()
 	local several = #floors > 1 and floors[frame.floor] ~= nil
 	local floorText = several and ns.Names.Floor(floors[frame.floor], frame.floor) or ""
 	-- Where the player is, when the client says (Floors.PlayerFloor; unverified on Forever) and it is another floor.
-	local here = several and ns.Floors.PlayerFloor(plan)
-	if here and here ~= frame.floor and floors[here] then
-		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[here], here))
+	local playerFloor = several and ns.Floors.PlayerFloor(plan)
+	if playerFloor and playerFloor ~= frame.floor and floors[playerFloor] then
+		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[playerFloor], playerFloor))
 	end
 	frame.mapFloor:SetText(floorText)
 	frame.mapFloor:SetShown(several)
