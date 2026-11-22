@@ -54,6 +54,7 @@ T.case("TravelLive.Step: ticks only while shown and outdoors; arriving in the ta
 	T.eq(s.mode, "waiting", "shown inside an instance: no ticker")
 	T.ok(not has(fx, "start"))
 	s, fx = Live.Step({ mode = "live", target = "dm" }, { kind = "hide" })
+	T.eq(s.mode, "hidden")
 	T.ok(has(fx, "stop"))
 end)
 
