@@ -34,7 +34,7 @@ local ENTRIES = {
 				{ L["Group sync in run mode"],
 					L["The leader clicks Lead this run; members with the same plan follow along, and one without it asks for it in one click."] },
 				{ L["Prep and Getting there"],
-					L["Prep lists quests, keys and your group's levels. Getting there shows the way to the entrance with a live map outdoors; Navigate hands it to Polestar, Shortest Path Forever or TomTom."] },
+					L["Prep lists quests, keys and group levels. Getting there shows the way to the entrance and hands it to Polestar, Shortest Path Forever or TomTom."] },
 				{ L["Every floor on the map"],
 					L["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] },
 				{ L["Clearer routes"],
