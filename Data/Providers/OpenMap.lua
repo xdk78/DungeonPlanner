@@ -128,9 +128,13 @@ end
 -- here where a plan goes on it. Nothing is guessed: a floor that cannot be placed draws nothing.
 --   1. A floor of the game's own dungeon maps whose first tile is the plan floor's first old map tile (file IDs,
 --      GameFiles): the same picture, drawn as it is.
---   2. Else the plan floor matched by name (Providers.PickFloor, OpenMap's floor names), placed through the plan's
---      boss markers paired with OpenMap's boss positions on that floor (Providers.Align): "same" or "fit".
---   3. Else nothing.
+--   2. Else the plan floor matched by name, else by position (Providers.PickFloor, OpenMap's floor names), and
+--      confirmed by OpenMap's boss positions on that floor: the plan's boss markers paired with them by name
+--      (Providers.Align) must agree ("same") or fit through a per-axis scale and offset ("fit"). One pair alone is
+--      enough only when OpenMap places one boss on that floor.
+--   3. Else nothing; also nothing on OpenMap's blank page (a dungeon it has no map of).
+-- OpenMap draws a player's own boss placements (/openmap bosses, saved in its SavedVariables) over its shipped ones;
+-- those cannot be read (no other addon's SavedVariables are read), so the alignment uses its shipped positions only.
 
 -- Which of OpenMap's tables the shown floors come from (its own word for it when it gives one).
 function A.ViewSource(root, s)
@@ -177,7 +181,8 @@ local function fileID(t)
 	return type(t) == "string" and ns.GameFiles.FileID(t) or nil
 end
 
--- The plan floor the shown floor is: index, how ("tile": the same picture | "name"), or nil.
+-- The plan floor the shown floor is: index, how ("tile": the same picture | "name": by name, else position, still to
+-- be confirmed by boss positions), or nil.
 function A.ViewFloor(root, plan, s)
 	local shown = s.floors[s.floor]
 	local first = type(shown) == "table" and type(shown.tiles) == "table" and fileID(shown.tiles[1]) or nil
@@ -211,6 +216,10 @@ function A.Placement(root, plan, s)
 	if type(plan) ~= "table" or type(s) ~= "table" or type(s.floors) ~= "table" or type(s.inst) ~= "table" then
 		return nil, "nothing to place"
 	end
+	local shown = s.floors[s.floor]
+	if type(shown) ~= "table" or shown.blank then
+		return nil, "OpenMap has no map of this floor"
+	end
 	local floor, how = A.ViewFloor(root, plan, s)
 	if not floor then
 		return nil, "no floor of the plan matches this floor"
@@ -222,6 +231,8 @@ function A.Placement(root, plan, s)
 	local list = Providers.BossPairs(plan, floor, pins)
 	if #list == 0 then
 		return nil, "no boss positions to line the plan up with"
+	elseif #list == 1 and #pins > 1 then
+		return nil, "only one of OpenMap's bosses on this floor matches the plan's"
 	end
 	local a = Providers.Align(list)
 	if a.mode == "same" then

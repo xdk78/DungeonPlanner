@@ -51,7 +51,24 @@ local function installOpenMap()
 	root.MapDungeonBosses[36] = {}
 	mock.files[("Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_1"):lower()] = 449591
 	mock.files[("Interface\\WorldMap\\TheDeadmines\\TheDeadmines2_1"):lower()] = 449603
-	_G.OpenMapAPI = { major = 1, version = 4 }
+	-- Its public API's callbacks (CallbackHandler's shape: RegisterCallback(owner, event, fn)); fire(event) calls them.
+	local callbacks = {}
+	_G.OpenMapAPI = { major = 1, version = 4,
+		RegisterCallback = function(owner, event, fn)
+			callbacks[event] = callbacks[event] or {}
+			callbacks[event][owner] = fn
+		end,
+		UnregisterCallback = function(owner, event)
+			if callbacks[event] then
+				callbacks[event][owner] = nil
+			end
+		end,
+		fire = function(event, ...)
+			for _, fn in pairs(callbacks[event] or {}) do
+				fn(event, ...)
+			end
+		end,
+	}
 	ns.GameFiles.Reset()
 	ns.Providers.Reset()
 	ns.Providers.ResetCaches()
@@ -222,6 +239,32 @@ case("OpenMap overlay: floor changes through its arrows and its floor list follo
 	T.eq(O.Drawn(), same, "unchanged: not drawn again")
 end)
 
+case("OpenMap overlay: floor pictures the side panel makes later are hooked once its tab is clicked", function()
+	local _, view = setup()
+	-- The side panel (BuildView): its tabs; the Floors tab's pictures are made as the panel fills (FillSide).
+	local side = CreateFrame("Frame", nil, view)
+	side.pool = { thumb = {} }
+	side.tabs = { button(side, function()
+		for i = 1, #view.floors do
+			local w = side.pool.thumb[i] or button(side, function(self)
+				view.floor = self.item.floor
+			end)
+			w.item = { kind = "thumb", floor = i }
+			side.pool.thumb[i] = w
+		end
+	end) }
+	view.side = side
+	enable()
+	T.eq(O.Drawn().floor, 1)
+	T.eq(#side.pool.thumb, 0, "no pictures yet")
+	click(side.tabs[1]) -- the Floors tab: the pictures are made now
+	mock.Advance(0) -- hooked a frame later
+	click(side.pool.thumb[2]) -- at zoom 1: the page keeps its size, nothing else tells
+	T.eq(O.Drawn().floor, 2, "the picture's floor drawn")
+	click(side.pool.thumb[1])
+	T.eq(O.Drawn().floor, 1)
+end)
+
 case("OpenMap overlay: without floor buttons, a check at most 4 times a second while shown, none while hidden", function()
 	local _, view = setup({ noButtons = true })
 	enable()
@@ -298,6 +341,31 @@ case("OpenMap overlay: a drawn floor matched by name is placed through OpenMap's
 	place = ns.Providers.Call("openMap", "Placement", plan,
 		{ floor = 1, floors = root.MapDungeonMinimap[36], inst = { mapID = 36, name = "Deadmines" } })
 	T.eq(place and place.mode, "same", "minimap floor recognised by its table and placed by its own boss list")
+	-- One boss matching of several OpenMap places on the floor: not enough.
+	root.MapDungeonBosses[36] = { Gilnid = { 2, 0.1248, 0.759 }, ["Someone Else"] = { 2, 0.5, 0.5 } }
+	place, why = ns.Providers.Call("openMap", "Placement", plan, snap)
+	T.eq(place, nil)
+	T.ok(why:find("only one", 1, true), why)
+	-- OpenMap's blank page (a dungeon it has no map of) is never matched, not even by position.
+	place, why = ns.Providers.Call("openMap", "Placement", plan,
+		{ floor = 1, floors = { { blank = true } }, inst = { mapID = 36, name = "Deadmines" } })
+	T.eq(place, nil)
+	T.ok(why:find("no map of this floor", 1, true), why)
+end)
+
+case("OpenMap overlay: an error in the placement stays the overlay's; the OpenMap adapter keeps working", function()
+	setup()
+	local adapter = ns.Providers.Adapter("openMap")
+	local real = adapter.Placement
+	adapter.Placement = function()
+		error("broken placement")
+	end
+	local ok, err = pcall(enable)
+	adapter.Placement = real
+	assert(ok, err)
+	T.eq(O.Drawn(), nil)
+	T.ok(O.Status():find("placement failed", 1, true), O.Status())
+	T.ok(ns.Providers.Get("openMap"), "the adapter is still active for our own map")
 end)
 
 case("OpenMap overlay: the alignment carries the drawing on the view", function()
@@ -372,23 +440,38 @@ case("OpenMap overlay: what does not fit degrades with a reason in /dp debug, ne
 	T.ok(table.concat(lines, "\n"):find("OpenMap overlay:", 1, true), "reported")
 end)
 
-case("OpenMap overlay: found when OpenMap makes its view while its dungeon card is up; the search stops itself", function()
+case("OpenMap overlay: found when the first dungeon map opens after its world map was used; the search stops itself", function()
+	-- OpenMap makes its view when an entrance is clicked: no card shows and no callback fires then. The callbacks
+	-- before it (the world map shown, moved) start the search; it keeps ticking while they come several a second.
 	local root = setup({ noView = true })
 	enable()
-	O.CardShown()
-	mock.Advance(O.POLL)
-	local view = fakeView(root)
+	_G.OpenMapAPI.fire("OpenMap_StitchedChanged", true)
+	for _ = 1, 6 do
+		mock.Advance(0.1)
+		_G.OpenMapAPI.fire("OpenMap_ViewChanged", 0.5, 0.5, 2)
+	end
+	local view = fakeView(root) -- the click: built and shown, after the last callback
 	mock.Advance(O.POLL)
 	mock.Advance(0)
 	local _, _, state = O.Drawn()
-	T.eq(state.mode, "shown", "found and shown")
+	T.eq(state.mode, "shown", "found and shown: " .. O.Status())
 	T.ok(O.Drawn(), "drawn")
 	T.eq(type(view:GetScript("OnShow")), "function", "its show hooked")
+	-- The dungeon card asking for our section starts the search too.
+	teardown()
+	root = setup({ noView = true })
+	enable()
+	O.CardShown()
+	mock.Advance(O.POLL)
+	fakeView(root)
+	mock.Advance(O.POLL)
+	mock.Advance(0)
+	T.ok(O.Drawn(), "found from the card")
 	-- Not found within the search: no tick keeps running.
 	teardown()
 	setup({ noView = true })
 	enable()
-	O.CardShown()
+	_G.OpenMapAPI.fire("OpenMap_ViewChanged", 0.5, 0.5, 2)
 	for _ = 1, math.ceil(O.WAIT / O.POLL) + 4 do
 		mock.Advance(O.POLL)
 	end

@@ -196,6 +196,19 @@ local function styleDisc(b, size, r, g, bl, number, kind)
 	end
 end
 
+-- A route point's size at icon scale `scale`: a numbered stop's, else a bend's (Style.ROUTE).
+function MapPins.StopSize(scale, step)
+	return (step and S.ROUTE.stop or S.ROUTE.bend) * math.max(0.75, scale or 1)
+end
+
+-- A numbered stop on pin b (already reset to `size`): a dark disc with a ring in the route's colour (r, g, bl), so the
+-- number reads on any art and over the line. The map canvas and the OpenMap overlay draw stops with this.
+function MapPins.StyleStop(b, size, r, g, bl, number)
+	local f = S.ROUTE.stopFill
+	styleDisc(b, size, f[1], f[2], f[3], number)
+	b.ring:SetVertexColor(r, g, bl, 1)
+end
+
 -- The boss of a boss marker and its face (the matched journal boss's portrait, Data/Journal.lua).
 local function boss(plan, m)
 	local enc = m.encounter and Util.FindById(plan.encounters, m.encounter)

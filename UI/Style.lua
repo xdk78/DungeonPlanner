@@ -72,6 +72,9 @@ Style.ROUTE = {
 		paper = { 0.80, 0.68, 0.48 },
 		dark = { 0.12, 0.10, 0.08 },
 	},
+	stop = 20, -- a numbered stop's disc across, at icon scale 1 (UI/MapPins.lua StyleStop)
+	bend = 9, -- a bend's disc while its route is edited
+	stopFill = { 0.1, 0.07, 0.04 }, -- the stop's dark disc under its number, ringed in the route's colour
 }
 
 local function rgb(r, g, b, a)

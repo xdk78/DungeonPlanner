@@ -845,13 +845,14 @@ From 0.1.0:
   markers follow OpenMap's zoom (wheel) and panning (drag) and stay inside its clipped picture; their frame level
   against OpenMap's boss pins (ours at page + 1 and page + 3, its pins at page + 5) and its credit, hint and bar;
   floor changes through the arrows, the floor list under the floor name and the side panel's floor pictures (each
-  redraws at once; `/dp debug` says whether the buttons were found or the 4-a-second check runs); the first dungeon
-  map opened in a session (OpenMap makes its view then: from its dungeon card, from its menu, and opened inside a
-  dungeon); placement on the game's tiles (Deadmines, Shadowfang Keep: the same picture), on OpenMap's drawn maps and
+  redraws at once, also after switching the side panel's tabs or the quest log's; `/dp debug` says whether the
+  buttons were found or the 4-a-second check runs); the first dungeon map opened in a session (OpenMap makes its view
+  then: clicking an entrance on the world map, from its dungeon card, from its menu, and opened inside a dungeon);
+  placement on the game's tiles (Deadmines, Shadowfang Keep: the same picture), on OpenMap's drawn maps and
   on its minimap floors (aligned through its boss positions, or nothing drawn); the plan's boss markers left out where
   OpenMap pins the boss; no taint or blocked action with the quest log beside the map, Escape closing the view, or
   opening and zooming in combat (a change in combat hides the drawing until combat ends); OpenMap's "Dungeon maps"
-  option off (nothing shows); the gamepad interface style (nothing registers or runs).
+  option off (nothing shows); the gamepad interface style (nothing runs).
 
 ## Sources
 

@@ -19,9 +19,10 @@
 --
 -- Phases (Overlay.Step, a state table and Step(state, event, ctx) -> state, effects):
 --   off          the setting is off, the gamepad interface style is on, or OpenMap is not loaded: nothing runs
---   waiting      on, OpenMap has not made its view yet (it does on the first dungeon map opened): looked for when
---                OpenMap's public callbacks fire, on entering the world, and while its dungeon card is up (a short
---                search, 4 a second for at most WAIT seconds, that stops itself)
+--   waiting      on, OpenMap has not made its view yet (it makes it when the first dungeon map opens, after its
+--                world map was used): each of OpenMap's public callbacks (the world map shown, moved, a dungeon
+--                UiMap), its dungeon card and its menu start or extend a short search (4 a second, ending WAIT seconds
+--                after the last of them) that stops itself; also looked for once on entering the world
 --   unavailable  the view exists but not in the shape expected: nothing runs
 --   hidden       attached, the view hidden: nothing runs
 --   shown        attached, the view shown: redrawn when its floor buttons are clicked, its picture changes size
@@ -33,7 +34,7 @@ local Overlay = ns:NewModule("OpenMapOverlay")
 local Util = ns.Util
 
 Overlay.POLL = 0.25 -- the fallback check while the view is shown (at most 4 a second)
-Overlay.WAIT = 30 -- how long the search for OpenMap's view runs after its dungeon card showed (seconds)
+Overlay.WAIT = 30 -- how long the search for OpenMap's view runs after the last sign of its map (seconds)
 Overlay.MAX_PINS = 150 -- stops and markers per drawing
 Overlay.LEVEL = 1 -- our frame's level over the view's page; pins at LEVEL + 2 (OpenMap's boss pins: page + 5)
 Overlay.VIEW = "OpenMapDungeonView"
@@ -117,9 +118,9 @@ function Overlay.PlanFor(name)
 end
 
 -- Step(state, event, ctx) -> new state, effects. ctx = { enabled, attached (the view was found), shown (it is shown),
--- poll (its floor buttons were not found), now }. Events: "setting", "look" (a moment to look for the view), "card"
--- (OpenMap's dungeon card is up), "waitTick", "found", "missing", "bad" (the view has another shape), "show", "hide",
--- "change", "tick". Effects: "attach" (look for the view), "draw" (draw what changed), "drawSoon" (on the next frame:
+-- poll (its floor buttons were not found), now }. Events: "setting", "look" (a moment to look for the view), "search"
+-- (a sign of OpenMap's map: its callbacks, card or menu; starts or extends the search), "waitTick", "found",
+-- "missing", "bad" (the view has another shape), "show", "hide", "change", "tick". Effects: "attach" (look for the view), "draw" (draw what changed), "drawSoon" (on the next frame:
 -- OpenMap sets the floor just after showing its view), "clear", "hideNow" (hide, keep the drawing), "poll", "wait".
 -- A tick of a phase that has ended changes nothing.
 function Overlay.Step(s, event, ctx)
@@ -159,11 +160,13 @@ function Overlay.Step(s, event, ctx)
 		return { mode = "unavailable" }, { "clear" }
 	elseif event == "look" then
 		return s, mode == "waiting" and { "attach" } or {}
-	elseif event == "card" then
+	elseif event == "search" then
 		if mode ~= "waiting" then
 			return s, {}
 		end
-		return { mode = "waiting", waitUntil = ctx.now + Overlay.WAIT }, { "attach", "wait" }
+		-- A search already running is only extended (its ticks go on); OpenMap's callbacks can come several a second.
+		local running = s.waitUntil and ctx.now < s.waitUntil
+		return { mode = "waiting", waitUntil = ctx.now + Overlay.WAIT }, running and { "attach" } or { "attach", "wait" }
 	elseif event == "waitTick" then
 		if mode == "waiting" and s.waitUntil and ctx.now < s.waitUntil then
 			return s, { "attach", "wait" }
@@ -306,12 +309,11 @@ local function paint(plan, place, pw, ph)
 				for i, pt in ipairs(route.points) do
 					local p = pt.step and pin()
 					if p then
-						local size = 20 * math.max(0.75, scale)
+						local size = MapPins.StopSize(scale, true)
 						MapPins.Reset(p, size)
 						p:ClearAllPoints()
 						p:SetPoint("CENTER", f, "TOPLEFT", px(pt[1], pt[2]), py(pt[2], pt[1]))
-						MapPins.StyleDisc(p, size, 0.1, 0.07, 0.04, tostring((numbers[route.id] or {})[i] or pt.step))
-						p.ring:SetVertexColor(r, g, b, 1)
+						MapPins.StyleStop(p, size, r, g, b, tostring((numbers[route.id] or {})[i] or pt.step))
 						p:SetAlpha(route.optional and 0.7 or 1)
 						p:Show()
 						counts.stops = counts.stops + 1
@@ -386,9 +388,18 @@ local function redraw()
 		end
 		return
 	end
-	local place, reason = ns.Providers.Call("openMap", "Placement", plan, snap)
-	if not place then
-		return clear(reason or "OpenMap's data is not available (Settings: Data from other addons)")
+	-- The adapter is called directly: an error here stays the overlay's and does not switch off the OpenMap adapter
+	-- (its maps and boss pins on our own map).
+	local adapter, root = ns.Providers.Get("openMap")
+	if not adapter then
+		return clear("OpenMap's data is not available (Settings: Data from other addons)")
+	end
+	local okPlace, place, reason = pcall(adapter.Placement, root, plan, snap)
+	if not okPlace then
+		ns:Debug("openmap overlay", place)
+		return clear("placement failed: " .. ns.Providers.ShortError(place))
+	elseif not place then
+		return clear(reason)
 	end
 	local okPaint, counts = pcall(paint, plan, place, pw, ph)
 	if not okPaint then
@@ -437,6 +448,16 @@ local function hookLists()
 	end
 end
 
+-- After OpenMap's side panel fills itself again (its tabs, the quest log's tabs, a new width): its new floor pictures
+-- are hooked a frame later, once they are made.
+local function hookListsSoon()
+	C_Timer.After(0, function()
+		if view then
+			hookLists()
+		end
+	end)
+end
+
 -- Hooks the view's own frames; true when the floor buttons were found (else the fallback check runs while shown).
 local function hookView()
 	hook(view, "OnShow", function()
@@ -449,6 +470,17 @@ local function hookView()
 	local prev = hook(rawget(view, "prev"), "OnClick", changed)
 	local nextOk = hook(rawget(view, "next"), "OnClick", changed)
 	hook(rawget(view, "floorButton"), "OnClick", hookLists)
+	local side, sideTabs = rawget(view, "side"), rawget(view, "sideTabs")
+	local tabs = type(side) == "table" and rawget(side, "tabs")
+	local logTabs = type(sideTabs) == "table" and rawget(sideTabs, "list")
+	for _, list in ipairs({ type(tabs) == "table" and tabs or {}, type(logTabs) == "table" and logTabs or {} }) do
+		for i = 1, math.min(#list, 8) do
+			hook(list[i], "OnClick", hookListsSoon)
+		end
+	end
+	if type(side) == "table" then
+		hook(side, "OnSizeChanged", hookListsSoon)
+	end
 	hookLists()
 	status.hooks = prev and nextOk
 	return status.hooks
@@ -465,8 +497,10 @@ local function listen(on)
 	listening = on
 	for _, event in ipairs(CALLBACKS) do
 		if on then
+			-- Each is a sign that OpenMap's map is in use: its view may be made any moment (the first dungeon map
+			-- opened from an entrance shows no card and fires none of these).
 			pcall(api.RegisterCallback, Overlay, event, function()
-				dispatch("look")
+				dispatch("search")
 			end)
 		elseif type(api.UnregisterCallback) == "function" then
 			pcall(api.UnregisterCallback, Overlay, event)
@@ -573,14 +607,14 @@ end
 -- OpenMap's dungeon card asked for our section (Core/Integrations.lua): its view may be about to be made.
 function Overlay.CardShown()
 	if state.mode == "waiting" then
-		dispatch("card")
+		dispatch("search")
 	end
 end
 
--- A moment to look for the view (OpenMap drew its menu with our switch in it).
+-- OpenMap drew its menu with our switch in it: its map is in use, the view may be made next.
 function Overlay.Look()
 	if state.mode == "waiting" then
-		dispatch("look")
+		dispatch("search")
 	end
 end
 
