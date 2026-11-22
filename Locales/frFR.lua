@@ -266,6 +266,7 @@ ns.Locales.frFR = {
 	["First step"] = "Première étape",
 	["Fit"] = "Tout",
 	["Floor %d"] = "Étage %d",
+	["%s (%d)"] = "%s (%d)",
 	["%d marker on this floor|%d markers on this floor"] = "%d marqueur à cet étage|%d marqueurs à cet étage",
 	["Boss order"] = "Ordre des boss",
 	["Click to go there."] = "Cliquez pour y aller.",

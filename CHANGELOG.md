@@ -139,6 +139,11 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
   "Anvilmar's Rest"), and their dark plates are denser.
 - **Russian**: the separators between items showed as a box in the game's Cyrillic font; they are a bullet now, in every
   language.
+- **Own plans' floors**: a new plan for a classic dungeon (Wailing Caverns, the Deadmines, Shadowfang Keep and others)
+  no longer shows a bogus "Outside" floor followed by the same cave again as an extra floor. New plans start with the
+  recommended plan's floors (also when started inside the instance in another game language). Plans already saved
+  that way keep every marker, route and drawing where it was: the first floor shows the cave and its name, and if
+  something was put on the extra copy, that copy stays as a second, numbered floor ("The Deadmines (2)").
 
 ### For contributors
 - `/dp scan` also records the client's floor and position answers inside an instance (`position.bestMap`,

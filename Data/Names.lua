@@ -82,7 +82,11 @@ function Names.Instance(inst)
 	return inst.name or ""
 end
 
-function Names.Floor(floor, index)
+-- `plan` (optional) names an unnamed dungeon floor: the name the instance's map art has at the floor's position
+-- (Floors.Art: Santiago Reyes' or the recommended plan's), else the instance's name when the map has one floor. A floor
+-- showing art an earlier floor of the plan already shows (an extra floor saved by a version that took the dungeon's
+-- own map for the zone outside) gets a number: "The Deadmines (2)".
+function Names.Floor(floor, index, plan)
 	if floor and floor.uiMapID then
 		local name = ns.Instances.MapName(floor.uiMapID)
 		if name and name ~= "" then
@@ -92,9 +96,27 @@ function Names.Floor(floor, index)
 	if floor and floor.name and floor.name ~= "" then
 		return floor.name
 	end
-	-- The zone outside (an unnamed floor with its own map) whose map has no name on this client.
-	if floor and floor.uiMapID then
+	-- The zone outside (Floors.IsOutside) whose map has no name on this client.
+	if ns.Floors.IsOutside(floor) then
 		return ns.L["Outside"]
+	end
+	if type(plan) == "table" and type(plan.instance) == "table" then
+		local pos = floor and floor.art or index or 1
+		local art = ns.Floors.Art(plan.instance.name)[pos]
+		local name = art and art.label
+		if not name and #ns.Floors.For(plan) == 1 then
+			name = Names.Instance(plan.instance)
+		end
+		if name and name ~= "" then
+			local same = 1
+			for j = 1, math.min((index or 1) - 1, #(plan.floors or {})) do
+				local f = plan.floors[j]
+				if not ns.Floors.IsOutside(f) and (f.art or j) == pos then
+					same = same + 1
+				end
+			end
+			return same > 1 and string.format(ns.L["%s (%d)"], name, same) or name
+		end
 	end
 	return string.format(ns.L["Floor %d"], index or 1)
 end

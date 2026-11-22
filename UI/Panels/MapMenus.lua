@@ -38,7 +38,7 @@ function MapMenus.Install(f, ctx)
 		}
 		if m.toFloor and p.floors[m.toFloor] then
 			items[#items + 1] = {
-				string.format(L["Go to %s"], ns.Names.Floor(p.floors[m.toFloor], m.toFloor)),
+				string.format(L["Go to %s"], ns.Names.Floor(p.floors[m.toFloor], m.toFloor, p)),
 				function()
 					ctx.floor = m.toFloor
 					ctx.selectedMarker = nil

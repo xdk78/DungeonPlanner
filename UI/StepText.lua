@@ -47,7 +47,7 @@ function UI.StepText(plan, step)
 	-- Where the plan has several floors, the step's, unless it is named as the instance (the Deadmines' first floor is
 	-- "The Deadmines": every step there would repeat what the header says). The other floors keep their names.
 	if step.floor and #plan.floors > 1 and plan.floors[step.floor] then
-		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor)
+		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor, plan)
 		if floorName ~= ns.Names.Instance(plan.instance) and floorName ~= plan.instance.name then
 			caption = caption .. "  •  " .. floorName
 		end
@@ -55,7 +55,7 @@ function UI.StepText(plan, step)
 	-- Stairs or a portal on the way: where it leads (a second click on the step goes there, UI/SidePanel.lua).
 	local link = UI.StepLink(plan, step)
 	if link then
-		caption = caption .. "  •  " .. string.format(L["to %s"], ns.Names.Floor(plan.floors[link], link))
+		caption = caption .. "  •  " .. string.format(L["to %s"], ns.Names.Floor(plan.floors[link], link, plan))
 	end
 	return title, caption, approx, note
 end

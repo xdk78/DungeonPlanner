@@ -55,7 +55,7 @@ function FloorBar.Build(f, ctx, canvas)
 			return
 		end
 		tt:SetOwner(owner, "ANCHOR_BOTTOM")
-		tt:SetText(ns.Names.Floor(floor, index), 1, 0.82, 0, 1, true)
+		tt:SetText(ns.Names.Floor(floor, index, p), 1, 0.82, 0, 1, true)
 		local n = FloorBar.MarkerCount(p, index)
 		if floor.extra then
 			tt:AddLine(ctx:ReadOnly() and L["The instance's map of this floor; this plan has nothing on it."]
@@ -164,7 +164,7 @@ function FloorBar.Build(f, ctx, canvas)
 			for i, floor in ipairs(floors) do
 				local b = tab(i)
 				b.floorIndex = i
-				label(b, ns.Names.Floor(floor, i), TAB_MAX)
+				label(b, ns.Names.Floor(floor, i, ctx:Plan()), TAB_MAX)
 				tabsW = tabsW + b:GetWidth() + SP.xs
 			end
 			-- Too wide for the map's edge (long names in Polish): the pager instead.
@@ -184,7 +184,7 @@ function FloorBar.Build(f, ctx, canvas)
 			end
 		else
 			self.name.floorIndex = ctx.floor
-			label(self.name, string.format("%s  %d/%d", ns.Names.Floor(floors[ctx.floor], ctx.floor), ctx.floor, n),
+			label(self.name, string.format("%s  %d/%d", ns.Names.Floor(floors[ctx.floor], ctx.floor, ctx:Plan()), ctx.floor, n),
 				math.min(NAME_MAX, room() - 2 * SZ.control - 4 * SP.xs))
 			self.name:SetActive(true)
 			self.prev:ClearAllPoints()

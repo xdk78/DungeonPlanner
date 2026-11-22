@@ -9,7 +9,7 @@ local function bundled(id)
 end
 
 local function dungeonFloor(floor)
-	return not ((floor.name or "") == "" and floor.uiMapID)
+	return not ns.Floors.IsOutside(floor)
 end
 
 T.case("Spawns: data loads and is available", function()
@@ -41,8 +41,12 @@ end)
 T.case("Spawns: boss spawns sit on the plans' boss markers (transform error 0)", function()
 	local checked, worst = 0, 0
 	for _, plan in ipairs(ns.Bundled.All()) do
-		local fixture = plan.id:find("^b:test%-") -- other tests' own bundled plans, not from Data/Plans
-		for _, m in ipairs(fixture and {} or plan.markers) do
+		-- Other tests' own bundled plans are not from Data/Plans and have no spawns.
+		local file = io.open("Data/Plans/" .. plan.id:gsub("^b:", "") .. ".lua", "rb")
+		if file then
+			file:close()
+		end
+		for _, m in ipairs(file and plan.markers or {}) do
 			local floor = plan.floors[m.floor or 1]
 			if m.kind == "boss" and floor and dungeonFloor(floor) then
 				local best

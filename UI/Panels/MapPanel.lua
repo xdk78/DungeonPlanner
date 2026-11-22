@@ -136,7 +136,7 @@ function Panel.Create(parent, ctx)
 		options = function()
 			local out = {}
 			for i, floor in ipairs(ctx:Floors()) do
-				out[#out + 1] = { text = ns.Names.Floor(floor, i), value = i }
+				out[#out + 1] = { text = ns.Names.Floor(floor, i, ctx:Plan()), value = i }
 			end
 			return out
 		end,

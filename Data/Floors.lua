@@ -14,25 +14,120 @@
 local _, ns = ...
 local Floors = ns:NewModule("Floors")
 
--- A plan floor that stands for the zone outside (no name, its own map): it has no dungeon art.
-function Floors.IsOutside(floor)
-	return type(floor) == "table" and (floor.name or "") == "" and floor.uiMapID ~= nil
+-- The zone maps instances are entered from (Data/TravelData.lua, `zm`): the only maps a floor stands outside on.
+local zoneMaps
+local function isZoneMap(uiMapID)
+	if not zoneMaps then
+		zoneMaps = {}
+		local data = ns.TravelData and ns.TravelData.instances
+		for _, rec in pairs(type(data) == "table" and data or {}) do
+			if type(rec) == "table" and type(rec.zm) == "number" then
+				zoneMaps[rec.zm] = true
+			end
+		end
+	end
+	return zoneMaps[uiMapID] == true
 end
 
--- The instance's art floors by position: { { label = Reyes' name or nil } }, as many as its richest source has.
-function Floors.Art(name)
-	local out = {}
-	if type(name) ~= "string" or name == "" then
-		return out
+-- A plan floor that stands for the zone outside: no name, and its map is an entrance zone in our travel data. It has
+-- no dungeon art. An unnamed floor on any other map (the instance's own map, which WoW: Forever's client does not name:
+-- COMPATIBILITY.md section 9) is a dungeon floor.
+function Floors.IsOutside(floor)
+	return type(floor) == "table" and (floor.name or "") == "" and floor.uiMapID ~= nil and isZoneMap(floor.uiMapID)
+end
+
+-- The names a recommended plan of the instance gives its dungeon floors, by art position (the position a floor
+-- stands for: its `art`, else its place).
+local function recommendedLabels(name)
+	local labels = {}
+	local plan = ns.Bundled.ForInstance({ name = name })[1]
+	for i, f in ipairs(plan and plan.floors or {}) do
+		if not Floors.IsOutside(f) and (f.name or "") ~= "" and not labels[f.art or i] then
+			labels[f.art or i] = f.name
+		end
 	end
+	return labels
+end
+
+-- Floors.Art per instance name (bounded by the instances there are), while the number of recommended plans stands.
+local artByName, artStamp = {}, nil
+
+-- The instance's art floors by position: { { label = Reyes' name, else the recommended plan's name for the floor at
+-- that position, or nil } }, as many as its richest source has. Cached: read it, do not change it.
+function Floors.Art(name)
+	if type(name) ~= "string" or name == "" then
+		return {}
+	end
+	local stamp = ns.Bundled.Count()
+	if stamp ~= artStamp then
+		artByName, artStamp = {}, stamp
+	end
+	if artByName[name] then
+		return artByName[name]
+	end
+	local out = {}
 	local tiles = ns.GameFiles.MapTiles(name) or {}
 	local reyes = ns.ReyesMaps.Floors(name) or {}
 	local mini = 0
 	while ns.MinimapArt.Data(name, mini + 1) do
 		mini = mini + 1
 	end
+	local labels = recommendedLabels(name)
 	for i = 1, math.max(#tiles, #reyes, mini) do
-		out[i] = { label = reyes[i] and reyes[i].label or nil, reyes = reyes[i] }
+		out[i] = { label = reyes[i] and reyes[i].label or labels[i], reyes = reyes[i] }
+	end
+	artByName[name] = out
+	return out
+end
+
+-- The recommended plan for a new plan's instance: by the instance's map ID (GetInstanceInfo's eighth return; the
+-- travel data's `iid`) when it names one instance, so a client in another language finds it too; else by name or map.
+local function recommendedFor(instance, instanceID)
+	if ns.Util.IsInteger(instanceID) then
+		local recs = ns.Travel.Here(instanceID, instance.uiMapID)
+		if #recs == 1 then
+			for _, plan in ipairs(ns.Bundled.All()) do
+				if ns.Providers.Key(plan.instance.name) == recs[1].key then
+					return plan
+				end
+			end
+		end
+	end
+	local name = type(instance.name) == "string" and instance.name or ""
+	return name ~= "" and ns.Bundled.ForInstance(instance)[1] or nil
+end
+
+-- The floors a new plan for `instance` ({ name, uiMapID? }; `instanceID`: the instance's map ID when known) starts
+-- with: a recommended plan's for the instance when there is one (so a new plan and a copy number their floors alike,
+-- and the zone outside is there only where our data has one); else the client's floors when it names them; else one
+-- floor per map art floor; else one floor. A floor that stands alone is named after the instance. Never the bare
+-- instance map without a name: on WoW: Forever that read as the zone outside, and the cave came back as an extra floor.
+function Floors.Initial(instance, instanceID)
+	instance = type(instance) == "table" and instance or {}
+	local name = type(instance.name) == "string" and instance.name or ""
+	local out = {}
+	local plan = recommendedFor(instance, instanceID)
+	if plan then
+		for i, f in ipairs(plan.floors) do
+			out[i] = { uiMapID = f.uiMapID, name = f.name, art = f.art }
+		end
+		return out
+	end
+	if instance.uiMapID then
+		local client = ns.Instances.Floors(instance.uiMapID)
+		local named = #client > 0
+		for _, f in ipairs(client) do
+			named = named and (f.name or "") ~= ""
+		end
+		if named then
+			return client
+		end
+	end
+	for i, a in ipairs(Floors.Art(name)) do
+		out[i] = { name = a.label or "" }
+	end
+	if #out <= 1 then
+		out[1] = { uiMapID = instance.uiMapID, name = out[1] and out[1].name ~= "" and out[1].name or name }
 	end
 	return out
 end
@@ -204,4 +299,5 @@ end
 
 function Floors.Reset()
 	cache = setmetatable({}, { __mode = "k" })
+	artByName, artStamp, zoneMaps = {}, nil, nil
 end

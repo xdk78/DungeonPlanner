@@ -90,10 +90,10 @@ end
 
 -- The bundled floor for floor `index` of a plan: the one at its `art` position when it names one (Data/Floors.lua),
 -- else one named like it (label or names), else Providers.PickFloor (the most words of its name, else the same
--- position). nil for the zone outside (an unnamed floor with its own map ID).
+-- position). nil for the zone outside (Floors.IsOutside).
 function ReyesMaps.Pick(plan, index)
 	local floor = type(plan) == "table" and type(plan.floors) == "table" and plan.floors[index]
-	if type(floor) ~= "table" or ((floor.name or "") == "" and floor.uiMapID) then
+	if type(floor) ~= "table" or ns.Floors.IsOutside(floor) then
 		return nil
 	end
 	local list = ReyesMaps.Floors(plan.instance and plan.instance.name)

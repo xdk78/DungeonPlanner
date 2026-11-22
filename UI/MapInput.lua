@@ -64,7 +64,7 @@ function MapCanvas.InstallInput(view)
 			tt:AddLine(string.format(L["For %s"], ns.Names.Encounter(menc)), 0.75, 0.75, 0.75, true)
 		end
 		if m.toFloor and plan.floors[m.toFloor] then
-			tt:AddLine(string.format(L["Leads to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor)), 0.75,
+			tt:AddLine(string.format(L["Leads to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor, plan)), 0.75,
 				0.75, 0.75, true)
 			if self.cb.readOnly() and self.cb.onGoToFloor then
 				tt:AddLine(L["Click to go there."], 0.71, 0.67, 0.59, true)

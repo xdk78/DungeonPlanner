@@ -4,6 +4,8 @@
 local T = ...
 local ns, mock = T.ns, T.mock
 local Floors = ns.Floors
+-- The zone outside: an unnamed floor on an entrance zone of the travel data (Western Plaguelands, Scholomance's).
+local OUTSIDE = ns.TravelData.instances["Scholomance"].zm
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -28,10 +30,10 @@ end
 T.case("Floors: merging keeps the plan's floors first and adds each art floor once", function()
 	local art = { { label = "Upper" }, { label = "Lower" }, { label = nil } }
 	-- Floors 1 and 2 stand for art 1 and 2 by position; the zone outside stands for none.
-	local merged = Floors.Merge({ { name = "Upper" }, { name = "", uiMapID = 9 } }, art, {})
+	local merged = Floors.Merge({ { name = "Upper" }, { name = "", uiMapID = OUTSIDE } }, art, {})
 	T.eq(#merged, 4, "two of the plan's, then art 2 and 3")
 	T.eq(merged[1].name, "Upper")
-	T.eq(merged[2].uiMapID, 9, "the plan's own floors keep their places (markers keep their numbers)")
+	T.eq(merged[2].uiMapID, OUTSIDE, "the plan's own floors keep their places (markers keep their numbers)")
 	T.ok(merged[3].extra and merged[3].art == 2 and merged[3].name == "Lower", "art floor 2, named")
 	T.ok(merged[4].extra and merged[4].art == 3 and merged[4].name == "", "art floor 3, unnamed")
 	-- A plan floor that shows a Reyes map elsewhere (picked by name) covers that map.
@@ -186,7 +188,7 @@ T.case("Floors: a floor keeps the art it was added for when the zone outside sta
 	-- Pure: art 2 stands at plan floor 3 (floor 2 is the zone outside); once floor 3 is the plan's, art 2 is not added
 	-- again, and art 3 is still added (floor 3 names art 2, so it does not stand for art 3 by its position).
 	local art = { { label = "Hall" }, { label = nil }, { label = nil } }
-	local floors = { { name = "Hall" }, { name = "", uiMapID = 9 } }
+	local floors = { { name = "Hall" }, { name = "", uiMapID = OUTSIDE } }
 	local merged = Floors.Merge(floors, art, {})
 	T.eq(#merged, 4)
 	T.eq(merged[3].art, 2, "floor 3 shows art 2")
@@ -198,7 +200,7 @@ T.case("Floors: a floor keeps the art it was added for when the zone outside sta
 	T.eq(merged[4].art, 3, "art 3 still added")
 	-- The art lookups take the art the floor names (the old map tiles here: the Deadmines has two).
 	local plan = ns.Validate.Plan({ name = "Outside first", instance = { name = "The Deadmines", kind = "dungeon" },
-		floors = { { name = "Mine" }, { name = "", uiMapID = 9 }, { name = "", art = 2 } } })
+		floors = { { name = "Mine" }, { name = "", uiMapID = OUTSIDE }, { name = "", art = 2 } } })
 	T.eq(plan.floors[3].art, 2, "validation keeps art")
 	local tiles = ns.GameFiles.MapTiles("The Deadmines")
 	local saved = mock.files[("Interface\\WorldMap\\" .. tiles[2] .. "1"):lower()]
@@ -417,4 +419,192 @@ T.case("Run mode: zone events redraw only when the player's floor changed, and n
 	end)
 	ns.RunMode.Refresh, _G.C_Map = realRefresh, savedMap
 	assert(ok, err)
+end)
+
+-- WoW: Forever's client has no map info for the classic dungeon maps (COMPATIBILITY.md section 9): the mock names every
+-- map, so these cases blank the names of the ones they use. Returns a function that puts them back.
+local function foreverMaps(ids)
+	local saved = {}
+	mock.mapInfo = mock.mapInfo or {}
+	for _, id in ipairs(ids) do
+		saved[id] = mock.mapInfo[id] or false
+		mock.mapInfo[id] = { name = "" }
+	end
+	return function()
+		for id, v in pairs(saved) do
+			mock.mapInfo[id] = v or nil
+		end
+	end
+end
+
+local function sources(plan)
+	local out = {}
+	local view = Floors.View(plan)
+	for i = 1, #view.floors do
+		local _, source = ns.MinimapArt.Choose(view, i, ns.Journal.FloorMap(view, i))
+		out[i] = source
+	end
+	return table.concat(out, ",")
+end
+
+T.case("Floors: a new plan starts with its instance's floors, the zone outside only where the data has one", function()
+	boot()
+	local restore = foreverMaps({ 279, 291, 292, 310, 311, 312, 313, 314, 315, 316, 4242, OUTSIDE })
+	local ok, err = pcall(function()
+		-- What the client gives on Forever: the dungeon's own map, unnamed (this read as the zone outside before).
+		local client = ns.Instances.Floors(279)
+		T.ok(#client == 1 and client[1].uiMapID == 279 and client[1].name == "", "the client names no dungeon map")
+		T.ok(not Floors.IsOutside(client[1]), "the instance's own map is not the zone outside")
+		T.ok(Floors.IsOutside({ uiMapID = OUTSIDE, name = "" }), "an entrance zone is")
+		-- Wailing Caverns through the New plan action: one floor, named after the instance, no switcher.
+		local entry = ns.UI.EntryForPlan(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns"))
+		local plan = ns.Home.CreatePlan("blank", "New plan", entry)
+		T.eq(#plan.floors, 1, "one floor")
+		T.eq(plan.floors[1].name, "Wailing Caverns")
+		T.eq(#Floors.For(plan), 1, "no art floor added again")
+		T.eq(ns.Names.Floor(plan.floors[1], 1, plan), "Wailing Caverns", "the label")
+		T.eq(sources(plan), sources(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns")), "the recommended plan's map")
+		ns.UI.SelectTab("map")
+		local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+		map.canvas:SetSize(900, 560)
+		map:RefreshNow()
+		T.ok(not map.floorBar:IsShown(), "one floor: no switcher")
+		ns.DB.DeletePlan(plan.id)
+		-- Where the player stands, without a map (Forever inside an instance): the same, found by name.
+		T.eq(Floors.Initial({ name = "Wailing Caverns", kind = "dungeon" })[1].name, "Wailing Caverns")
+		-- Every instance with a recommended plan: the same floors as the plan and as its copy, nothing added twice.
+		for _, rec in ipairs(ns.Bundled.All()) do
+			local label = rec.id
+			local own = ns.Plan.New({ name = "New plan", instance = ns.Instances.ToPlanInstance(ns.UI.EntryForPlan(rec)),
+				floors = Floors.Initial(ns.UI.EntryForPlan(rec)) })
+			local copy = ns.Plan.Duplicate(rec, "Copy")
+			T.eq(#own.floors, #rec.floors, label .. ": the recommended plan's floors")
+			for i, f in ipairs(rec.floors) do
+				T.eq(own.floors[i].name, f.name, label .. ": floor " .. i)
+				T.eq(Floors.IsOutside(own.floors[i]), Floors.IsOutside(f), label .. ": floor " .. i .. " outside or not")
+			end
+			T.eq(#Floors.For(own), #Floors.For(rec), label .. ": as many floors as the recommended plan shows")
+			T.eq(#Floors.For(copy), #Floors.For(rec), label .. ": and its copy")
+			T.eq(sources(own), sources(rec), label .. ": the same maps")
+		end
+		-- The Deadmines keeps two floors; Scholomance its four and Western Plaguelands outside.
+		local dm = Floors.Initial({ name = "The Deadmines", uiMapID = 291 })
+		T.eq(#dm, 2)
+		T.eq(dm[2].name, "Ironclad Cove")
+		local scholo = Floors.Initial({ name = "Scholomance" })
+		T.eq(#scholo, 5)
+		T.ok(Floors.IsOutside(scholo[5]) and not Floors.IsOutside(scholo[1]), "only the last floor is outside")
+		T.eq(ns.Names.Floor(scholo[5], 5), ns.L["Outside"], "the zone outside, its map unnamed: Outside")
+		T.eq(ns.Names.Floor(scholo[1], 1), "The Reliquary")
+		-- Started inside the instance on a Spanish client: found by the instance's map ID, not its name.
+		local iid = ns.TravelData.instances["Wailing Caverns"].iid
+		local es = Floors.Initial({ name = "Cuevas de los Lamentos", kind = "dungeon" }, iid)
+		T.ok(#es == 1 and es[1].name == "Wailing Caverns" and es[1].uiMapID == 279, "the recommended plan's floor")
+		T.eq(#Floors.Initial({ name = "Cuevas de los Lamentos", kind = "dungeon" }), 1, "without the ID: one floor")
+		-- An instance ID several wings share (Stratholme) names no single plan: found by name as before.
+		local strat = ns.TravelData.instances["Stratholme: Live (Main Gate)"].iid
+		T.eq(strat, ns.TravelData.instances["Stratholme: Undead (Service Entrance)"].iid, "one ID, two wings")
+		T.eq(#Floors.Initial({ name = "Stratholme: Live (Main Gate)" }, strat), 2, "Stratholme by name")
+		-- No recommended plan: one floor named after the instance, on its map.
+		local other = Floors.Initial({ name = "Nowhere Keep", uiMapID = 4242 })
+		T.ok(#other == 1 and other[1].name == "Nowhere Keep" and other[1].uiMapID == 4242, "one named floor")
+	end)
+	restore()
+	assert(ok, err)
+end)
+
+T.case("Floors: an own plan saved with the instance's unnamed map shows one floor, its markers where they were", function()
+	boot()
+	local restore = foreverMaps({ 279, 291, 292 })
+	local ok, err = pcall(function()
+		-- The shape the New plan action saved before: floor 1 is the dungeon's own map, unnamed.
+		local function saved(name, uiMapID)
+			local p = ns.Validate.Plan({ name = "Mine", instance = { name = name, kind = "dungeon", uiMapID = uiMapID },
+				floors = { { uiMapID = uiMapID, name = "" } },
+				markers = { { id = "m1", floor = 1, x = 0.4, y = 0.55, kind = "note", label = "Here" } },
+				routes = { { id = "r1", floor = 1, color = 1, points = { { 0.4, 0.55 }, { 0.5, 0.6 } } } } })
+			p.id = ns.Util.UniqueId("p")
+			return p
+		end
+		local plan = saved("Wailing Caverns", 279)
+		T.eq(#Floors.For(plan), 1, "one floor, not a second copy of the cave")
+		T.eq(ns.Names.Floor(Floors.For(plan)[1], 1, plan), "Wailing Caverns", "named after the floor, not Outside")
+		T.ok(ns.Names.Floor(plan.floors[1], 1) ~= ns.L["Outside"], "not Outside without the plan either")
+		T.eq(sources(plan), sources(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns")), "the recommended plan's map")
+		local rec = ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns")
+		T.ok(#ns.Spawns.For(rec, 1) > 0 and #ns.Spawns.For(plan, 1) == #ns.Spawns.For(rec, 1), "the enemies layer too")
+		ns.DB.AddPlan(plan)
+		ns.UI.SelectPlan(plan.id)
+		ns.UI.SelectTab("map")
+		local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+		map.canvas:SetSize(900, 560)
+		map:RefreshNow()
+		T.ok(not map.floorBar:IsShown(), "no switcher")
+		local p = ns.UI.ctx:Plan()
+		T.eq(p.floors[1].name, "", "the saved data is unchanged")
+		T.ok(p.markers[1].floor == 1 and p.markers[1].x == 0.4 and p.markers[1].y == 0.55, "the marker in its place")
+		T.ok(p.routes[1].floor == 1 and #p.routes[1].points == 2, "the route too")
+		ns.DB.DeletePlan(plan.id)
+		-- A two-floor dungeon saved the same way: its first floor, then the second, named; nothing twice.
+		local dm = saved("The Deadmines", 291)
+		local list = Floors.For(dm)
+		T.eq(#list, 2, "the plan's floor and Ironclad Cove")
+		T.eq(list[1], dm.floors[1], "the plan's own floor first")
+		T.eq(ns.Names.Floor(list[1], 1, dm), "The Deadmines")
+		T.eq(ns.Names.Floor(list[2], 2, dm), "Ironclad Cove")
+		-- Saved by the same build after something was put on its extra "Floor 2" (Floors.Ensure: the cave again, art 1):
+		-- both copies of the cave stay, the second one numbered, and Ironclad Cove is still there after them.
+		local twice = saved("The Deadmines", 291)
+		twice.floors[2] = { name = "", art = 1 }
+		twice.markers[2] = { id = "m2", floor = 2, x = 0.3, y = 0.3, kind = "note", label = "Second" }
+		twice = ns.Validate.Plan(twice)
+		twice.id = ns.Util.UniqueId("p")
+		list = Floors.For(twice)
+		T.eq(#list, 3, "the plan's two floors, then Ironclad Cove")
+		T.eq(ns.Names.Floor(list[1], 1, twice), "The Deadmines")
+		T.eq(ns.Names.Floor(list[2], 2, twice), string.format(ns.L["%s (%d)"], "The Deadmines", 2), "told apart")
+		T.eq(ns.Names.Floor(list[3], 3, twice), "Ironclad Cove")
+		T.ok(list[3].extra and list[3].art == 2, "the real second floor is not hidden")
+		T.ok(twice.markers[1].floor == 1 and twice.markers[2].floor == 2, "each marker on its floor")
+		local one, two = sources(ns.Bundled.Get(ns.Bundled.PREFIX .. "the-deadmines")):match("^([^,]+),([^,]+)$")
+		T.eq(sources(twice), one .. "," .. one .. "," .. two, "the cave twice, then Ironclad Cove, as recommended")
+	end)
+	restore()
+	assert(ok, err)
+end)
+
+T.case("Floors: the zone outside is what the generators and tools take it for, on every recommended plan", function()
+	boot()
+	-- The data tools read the entrance zones from data-src/travel/places.json (`zoneMap`); the addon from TravelData.
+	local file = assert(io.open("data-src/travel/places.json", "rb"))
+	local text = file:read("*a")
+	file:close()
+	local places, zones = {}, {}
+	for id in text:gmatch('"zoneMap":%s*(%d+)') do
+		places[tonumber(id)] = true
+	end
+	for _, rec in pairs(ns.TravelData.instances) do
+		zones[rec.zm] = true
+	end
+	for id in pairs(places) do
+		T.ok(zones[id], "places.json zone " .. id .. " is in TravelData")
+	end
+	for id in pairs(zones) do
+		T.ok(places[id], "TravelData zone " .. id .. " is in places.json")
+	end
+	-- The recommended plans were generated (spawns, routes, walk grids) with every unnamed floor with a map ID taken
+	-- for the zone outside: the rule now agrees on each of their floors, so nothing generated changes.
+	local outside = 0
+	for _, plan in ipairs(ns.Bundled.All()) do
+		local data = io.open("Data/Plans/" .. plan.id:gsub("^b:", "") .. ".lua", "rb") -- not other tests' plans
+		if data then
+			data:close()
+			for i, f in ipairs(plan.floors) do
+				local was = (f.name or "") == "" and f.uiMapID ~= nil
+				T.eq(Floors.IsOutside(f), was, plan.id .. " floor " .. i)
+				outside = outside + (was and 1 or 0)
+			end
+		end
+	end
+	T.eq(outside, 10, "the ten recommended plans with a floor outside")
 end)

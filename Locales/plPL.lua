@@ -181,6 +181,7 @@ ns.Locales.plPL = {
 	["Fill from my raid"] = "Wypełnij z mojego rajdu",
 	["Fit"] = "Dopasuj",
 	["Floor %d"] = "Poziom %d",
+	["%s (%d)"] = "%s (%d)",
 	["Outside"] = "Na zewnątrz",
 	["%d marker on this floor|%d markers on this floor"] = "%d znacznik na tym poziomie|%d znaczniki na tym poziomie|%d znaczników na tym poziomie",
 	["Click to go there."] = "Kliknij, aby tam przejść.",

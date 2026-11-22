@@ -89,11 +89,11 @@ function MinimapArt.FromMap(a, x, y)
 end
 
 -- The art of floor `index` of a plan, in the shape Instances.MapArt returns (width, height, textures) plus pieces,
--- align and source = "minimap"; nil when the instance or floor is not covered. An unnamed floor stored with its own
--- map ID (the zone outside) gets none, as with the old map tiles.
+-- align and source = "minimap"; nil when the instance or floor is not covered. The zone outside (Floors.IsOutside)
+-- gets none, as with the old map tiles.
 function MinimapArt.FloorArt(plan, index)
 	local floor = type(plan) == "table" and type(plan.floors) == "table" and plan.floors[index]
-	if type(floor) ~= "table" or ((floor.name or "") == "" and floor.uiMapID) then
+	if type(floor) ~= "table" or ns.Floors.IsOutside(floor) then
 		return nil
 	end
 	local name = plan.instance and plan.instance.name
@@ -176,8 +176,8 @@ function MinimapArt.Summary()
 	for _, plan in ipairs(ns.Bundled.All()) do
 		for i, source in ipairs(MinimapArt.Sources(plan)) do
 			local f = plan.floors[i]
-			-- The zone outside (an unnamed floor with its own map) is not a dungeon floor: not counted.
-			if not ((f.name or "") == "" and f.uiMapID) then
+			-- The zone outside is not a dungeon floor: not counted.
+			if not ns.Floors.IsOutside(f) then
 				local base = source:match("^[^:]+")
 				counts[base] = (counts[base] or 0) + 1
 				if base == "grid" then
