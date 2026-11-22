@@ -426,8 +426,8 @@ more:                 [<][ Hall of Blackhand  4/6 ][>]           (and the toolba
 ```
 
 A tab's tooltip counts the plan's markers on that floor; Shift + mouse wheel over the map goes to the next or previous
-floor (round). Tabs too wide for the map's bottom edge (long names, Polish) give way to the arrows. The top-left corner
-was tried first and dropped: many maps have their entrance there (the Deadmines). Stairs and portals on the map say
+floor (round). Tabs too wide for the map's bottom edge (long names, Polish) give way to the arrows. The switcher stays
+out of the top-left corner, where many maps have their entrance (the Deadmines). Stairs and portals on the map say
 "to <floor>" after their label, labels on or off; in a recommended plan a click on one goes there (an own plan's click
 opens the editor; its right-click menu has "Go to"). Run mode's mini map names its floor in its top-left corner when
 the instance has several.
@@ -540,7 +540,7 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
-This round (0.2 polish):
+Since 0.1.0:
 
 - Floors: the switcher in the map's bottom-right corner (tabs on the Deadmines and Shaper's Terrace, the name between
   arrows on Lower Blackrock Spire and Blackmaw Hold), left of the marker editor while one is selected, the coordinates
@@ -560,7 +560,7 @@ This round (0.2 polish):
 - A recommended plan's "may be out of date" line on a client whose build is more than 90 days newer than the plan's
   data.
 
-Earlier:
+From 0.1.0:
 
 - The map centred in its frame on every classic and drawn map (equal bands left and right, the table's parchment in
   them); the legend's caret (right when folded, down when open), its folded box, and that it starts folded on Molten
