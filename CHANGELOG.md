@@ -21,10 +21,23 @@ follow [Semantic Versioning](https://semver.org/).
   sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
   fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
   older step. Older Dungeon Planners ignore them.
+- **Report a problem**: `/dp report`, a `!` button in the window's title bar and a button in Settings (Troubleshooting)
+  open a window with one text to paste into a GitHub issue: addon and game versions, language, the instance, your plan's
+  id, revision and step, the other addons it works with and whether each is loaded, the `/dp debug` summary and the
+  last ten Lua errors from Dungeon Planner (also read from BugGrabber when it is installed). A "What happened?" field
+  goes into the text, and the window shows the new-issue link to copy, with the first fields filled in. It never holds
+  your character, realm, guild, group members or chat, and none of your plans' names or notes. The GitHub bug form now
+  has the matching fields.
+- **What's new**: a card with the highlights, shown once after the addon is updated (never on a first install, where a
+  short welcome with `/dp`, run mode and three tips shows instead). `/dp new` and a Settings button show it again. In
+  English and Polish.
+- **`/dp perf`**: an opt-in probe that times the addon's event handlers, listeners and main redraws, counts the calls,
+  lists the ones over 5 ms and shows the addon's memory. Off until `/dp perf start`; `/dp perf stop` removes it.
 
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
   Dungeon Planner opens it read-only instead of losing that on its next save.
+- The bug report form on GitHub is now an issue form.
 
 ## [0.1.0] - 2026-11-16
 

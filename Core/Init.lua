@@ -54,9 +54,51 @@ end
 
 -- Error isolation -------------------------------------------------------------------------------------------------------
 
+-- Errors raised inside our own entry points (events, bus listeners, button clicks, slash commands) are caught here, kept
+-- in a small ring (the last MAX distinct messages, with a count) for the report window (UI/ReportFrame.lua), and passed on
+-- to the game's error handler as before. Nothing hooks the global error handler.
+local Errors = { MAX = 10, list = {} }
+ns.Errors = Errors
+
+-- Shortens the add-on path and removes the player's name and realm, so a message can be pasted in public.
+function Errors.Clean(text)
+	text = tostring(text or ""):gsub("Interface[/\\]AddOns[/\\]", "")
+	for _, secret in ipairs({ UnitName and UnitName("player") or false, GetRealmName and GetRealmName() or false }) do
+		if type(secret) == "string" and #secret > 2 then
+			text = text:gsub(secret:gsub("%p", "%%%0"), "<name>")
+		end
+	end
+	if #text > 400 then
+		text = text:sub(1, 400) .. "..."
+	end
+	return text
+end
+
+function Errors.Record(err)
+	local message = Errors.Clean(err)
+	local list = Errors.list
+	for i = #list, 1, -1 do
+		if list[i].message == message then
+			local item = table.remove(list, i)
+			item.count = item.count + 1
+			list[#list + 1] = item
+			return
+		end
+	end
+	list[#list + 1] = { message = message, count = 1 }
+	while #list > Errors.MAX do
+		table.remove(list, 1)
+	end
+end
+
+function Errors.Clear()
+	Errors.list = {}
+end
+
 function ns.SafeCall(fn, ...)
 	local ok, err = pcall(fn, ...)
 	if not ok then
+		pcall(Errors.Record, err)
 		local handler = geterrorhandler and geterrorhandler()
 		if handler then
 			handler(err)
@@ -72,6 +114,11 @@ end
 -- others. Public events for other addons go through ns.API's CallbackHandler (Core/API.lua).
 
 local listeners = {}
+
+-- For /dp perf (Core/Perf.lua), which wraps handlers only while a probe runs.
+function ns.ListenerTable()
+	return listeners
+end
 
 function ns:On(message, owner, fn)
 	local list = listeners[message]
@@ -136,6 +183,10 @@ end
 -- list per event and registers one AceEvent dispatcher for it.
 
 local eventHandlers = {}
+
+function ns.EventTable()
+	return eventHandlers
+end
 
 local function dispatch(event, ...)
 	local handlers = eventHandlers[event]

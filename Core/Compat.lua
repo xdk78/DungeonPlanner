@@ -103,6 +103,10 @@ Compat.CHECKS = {
 	{ "Unit level", "UnitLevel", "level ranges of recorded pulls" },
 	{ "Minimap zone text", "GetMinimapZoneText", "sub-zone names of recorded pulls" },
 	{ "Player facing", "GetPlayerFacing", "/dp scan's position check" },
+	-- /dp perf (Core/Perf.lua) and the report window (Core/Report.lua).
+	{ "Addon profiler", "C_AddOnProfiler.GetAddOnMetric", "the game's own timings in /dp perf" },
+	{ "Addon memory", "C_AddOns.GetAddOnMemoryUsage", "memory use in /dp perf" },
+	{ "Profile clock", "debugprofilestop", "precise timings in /dp perf (the Lua clock instead)" },
 }
 
 function Compat.Has(path)

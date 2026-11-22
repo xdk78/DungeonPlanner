@@ -218,6 +218,9 @@ Data\Bosses\zulgurub.lua
 
 Core\API.lua
 Share\Roster.lua
+Core\Perf.lua
+Core\Report.lua
+Core\WhatsNew.lua
 Share\Comm.lua
 Share\Discord.lua
 Tracker\Tracker.lua
@@ -264,6 +267,8 @@ UI\Panels\SharePanel.lua
 UI\RunMode.lua
 UI\RunSync.lua
 UI\NotesFrame.lua
+UI\ReportFrame.lua
+UI\NewsFrame.lua
 UI\Shots.lua
 UI\Prompts.lua
 UI\Settings.lua

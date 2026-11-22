@@ -458,6 +458,22 @@ local function options()
 							ns.Slash.Debug()
 						end,
 					},
+					report = {
+						type = "execute",
+						order = 3,
+						name = L["Report a problem"],
+						func = function()
+							ns.Report.Open()
+						end,
+					},
+					whatsnew = {
+						type = "execute",
+						order = 4,
+						name = L["Show what's new"],
+						func = function()
+							ns.WhatsNew.Open()
+						end,
+					},
 				},
 			},
 		},

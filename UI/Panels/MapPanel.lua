@@ -353,6 +353,7 @@ function Panel.Create(parent, ctx)
 	canvas:SetPoint("TOPLEFT", bar, "BOTTOMLEFT", 0, -SP.sm)
 	canvas:SetPoint("BOTTOMRIGHT")
 	f.canvas = canvas
+	ns.UI.mapCanvas = canvas -- for /dp perf (Core/Perf.lua)
 	-- The drawing tools' line under the toolbar, and the canvas's drawing callbacks (UI/Panels/DrawBar.lua).
 	ns.DrawBar.Build(f, ctx, bar, canvas)
 
