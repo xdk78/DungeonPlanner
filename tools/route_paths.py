@@ -1,7 +1,8 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["numpy", "pillow", "scipy", "scikit-image"]
+# dependencies = ["numpy==2.5.5", "pillow==13.0.0", "scipy==1.18.1", "scikit-image==0.26.0"]
 # ///
+# (The versions data-src/routes/*.json were last checked with: a newer resampling, filter or skeleton can move a bend.)
 """Route bends that follow a dungeon's corridors, for the recommended plans.
 
 The plans in Data/Plans/ draw their route as straight lines between numbered stops, and a straight line cuts through

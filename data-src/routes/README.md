@@ -51,7 +51,9 @@ with the other checks that need the game (`tools/walk_grids.py`, `tools/minimap_
 - after a client patch, or after updating ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install;
 - before every release (AGENTS.md, "Changes").
 
-When one reports a change, find which input moved before regenerating, and name in the pull request the provider
+`route_paths.py` and `minimap_art.py` pin their Python dependencies to the versions the shipped files were last checked
+with (a newer filter or resampling can move a bend), as `walk_grids.py` does; raise a pin only together with a full
+`--check` run. When one reports a change, find which input moved before regenerating, and name in the pull request the provider
 versions the files were computed with. Last full run: 2026-11-22, with ForeverDungeonJournal 2.1.3, OpenMap v0.8.13
 and Forever Dungeon Routes 1.3.8 installed. It changed only the alignment label of Alcaz Prison and Shaper's Terrace
 (`none` before), here and in `Data/MinimapArtData.lua`: ForeverDungeonJournal 2.0.9 and 2.1.2 added boss pins to those
