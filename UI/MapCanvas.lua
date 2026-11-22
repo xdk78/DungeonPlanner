@@ -602,7 +602,6 @@ function MapCanvas.Install(view)
 				return -y * h * s
 			end
 			local provided = self.provided
-			local pinsOnly = provided and provided.align and provided.align.mode == "pins"
 
 			-- Where enemies stand (Data/Spawns.lua), under everything the plan draws.
 			local spawns = self.cb.spawnsShown and self.cb.spawnsShown()
@@ -645,9 +644,7 @@ function MapCanvas.Install(view)
 						bossesOnFloor = true
 					end
 					local layer = Schema.KIND_LAYER[m.kind] or "notes"
-					-- On a provider map the plan's boss markers do not line up with: its pins stand in for them.
-					local hidden = pinsOnly and m.kind == "boss" and m.id ~= selected
-					if not hidden and layerShown(layer) and positionShown(m, focusPull, focusEncounter, compact) then
+					if layerShown(layer) and positionShown(m, focusPull, focusEncounter, compact) then
 						nPins = nPins + 1
 						local b = getPin(nPins)
 						b.markerId = m.id
@@ -716,10 +713,11 @@ function MapCanvas.Install(view)
 					layoutItem(layout, b, px(pin.x, pin.y), -py(pin.y, pin.x), size, "boss", 3)
 				end
 			end
-			-- A provider map's own boss pins: for the bosses the plan does not place, or for every boss when the plan's
-			-- boss markers do not line up with that map (Providers.Align "pins").
+			-- A provider map's own boss pins, only for the bosses the plan does not place: the plan's boss markers stay
+			-- where the plan put them even when they do not line up with the pins (Providers.Align "pins"), because
+			-- the plan's route was made against them.
 			if provided and layerShown("bosses") and #(provided.pins or {}) > 0 then
-				local pins = pinsOnly and provided.pins or ns.Instances.PinsNotPlaced(plan, floor, provided.pins)
+				local pins = ns.Instances.PinsNotPlaced(plan, floor, provided.pins)
 				for _, pin in ipairs(pins) do
 					nJournal = nJournal + 1
 					local b = getJournalPin(nJournal)

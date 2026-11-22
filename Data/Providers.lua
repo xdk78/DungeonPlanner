@@ -306,9 +306,10 @@ end
 --   "same"  the points already agree (root mean square distance <= TOLERANCE): drawn as they are
 --   "fit"   a per-axis scale and offset (least squares over >= 3 bosses) brings them within TOLERANCE: the plan is drawn
 --           through that transform (input goes through its inverse, so edits stay in the plan's own space)
---   "pins"  neither: the provider's boss pins are shown for every boss and the plan's boss markers are hidden; the
---           plan's other markers and steps still show
---   "none"  fewer than one matching boss: nothing to compare, drawn as they are.
+--   "pins"  neither: the plan is still drawn as it is, its boss markers included (its route was made against them,
+--           not against the provider's pins); the provider's pins show only for bosses the plan does not place, as in
+--           every mode
+--   "none"  no matching boss: nothing to compare, drawn as they are.
 Providers.TOLERANCE = 0.035
 
 local function rms(list, sx, tx, sy, ty)

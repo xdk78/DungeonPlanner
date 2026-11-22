@@ -367,7 +367,7 @@ T.case("NeedRoll adapter: public links only; Questie adapter: dungeon quests thr
 	fresh()
 end)
 
-T.case("Providers.Align: same, fitted or replaced by the provider's pins", function()
+T.case("Providers.Align: same, fitted, pins (neither) or none", function()
 	local same = P.Align({ { 0.5, 0.5, 0.51, 0.49 }, { 0.2, 0.3, 0.2, 0.31 } })
 	T.eq(same.mode, "same")
 	local list = {}

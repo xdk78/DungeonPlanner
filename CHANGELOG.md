@@ -5,6 +5,11 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- **Shaper's Terrace with Dungeon Journal 2.1.2 or later installed**: the map showed Dungeon Journal's boss pins in
+  place of the plan's bosses, some well away from the route's stops. The plan's bosses stay where the route expects
+  them again; another addon's pins show only for bosses the plan does not place.
+
 ## [0.2.0] - 2026-11-22
 
 Highlights, upgrade notes, known limitations and the in-game test checklist: `docs/RELEASE-NOTES-0.2.0.md` in the
