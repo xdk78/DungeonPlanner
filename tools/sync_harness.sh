@@ -17,7 +17,8 @@ ref="${2:-HEAD}"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 git -C "$src" archive "$ref" lua lib python/check.py LICENSE VERSION | tar -x -C "$work"
-commit="$(git -C "$src" rev-parse "$ref")"
+# The commit itself: for an annotated tag, rev-parse "$ref" names the tag object, which `git log` does not show.
+commit="$(git -C "$src" rev-parse "$ref^{commit}")"
 version="$(tr -d '\r\n' < "$work/VERSION")"
 
 dest=tests/vendor/wow-ui-harness
