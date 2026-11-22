@@ -375,10 +375,9 @@ T.case("Sharing over AceComm: offer, accept, payload, import", function()
 	end
 	T.ok(transfer.state == "sending" or transfer.state == "done", "state " .. transfer.state)
 	-- Receiving side: an offer from a group member is prompted, accepted, and imported.
-	local realUnitInParty = _G.UnitInParty
-	_G.UnitInParty = function(name)
-		return name == "Bob"
-	end
+	-- Bob is in the party (group membership is read from the roster's units, Share/Roster.lua).
+	local realUnits = mock.units
+	mock.inGroup, mock.units = true, { party1 = { name = "Bob" } }
 	local before = #ns.DB.Plans()
 	local data = ns.Codec.ExportPlan(plan)
 	local offer = ns.Transfer.Encode({ type = "offer", proto = ns.PROTOCOL_VERSION, tid = "zz1", bytes = #data,
@@ -396,8 +395,7 @@ T.case("Sharing over AceComm: offer, accept, payload, import", function()
 	prompted = nil
 	ns.Comm.OnMessage(ns.prefix, offer:gsub("zz1", "zz2"), "WHISPER", "Stranger")
 	T.eq(prompted, nil, "stranger not prompted")
-	mock.inGroup = false
-	_G.UnitInParty = realUnitInParty
+	mock.inGroup, mock.units = false, realUnits
 end)
 
 T.case("Theme switch and Polish fonts follow the translation addon", function()

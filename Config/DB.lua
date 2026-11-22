@@ -15,7 +15,7 @@ local _, ns = ...
 local DB = ns:NewModule("DB")
 local Util, Validate, Defaults = ns.Util, ns.Validate, ns.Defaults
 
-DB.SCHEMA = 4
+DB.SCHEMA = 5
 DB.MAX_QUARANTINE = 50
 
 -- migrations[n] upgrades the global table from schema n-1 to n.
@@ -66,6 +66,11 @@ DB.migrations = {
 	-- 3 -> 4: plan format 4 (raid assignment pages). Nothing to convert; like 3, the step marks the data so an older
 	-- Dungeon Planner opens it read-only instead of dropping the pages on its next save.
 	[4] = function() end,
+	-- 4 -> 5: group sync's links from received copies to their sender's plan (global.shareLinks, Acks.Link). The step
+	-- starts the store (repairing anything there) and marks the data, so an older Dungeon Planner opens it read-only.
+	[5] = function(global)
+		global.shareLinks = ns.Acks.NormalizeLinks(global.shareLinks)
+	end,
 }
 
 function DB.Migrate(t, current, migrations)
@@ -170,6 +175,15 @@ local function makeView(adb, readOnlyPlans)
 			elseif key == "quarantine" then
 				local q = adb.global.quarantine
 				return type(q) == "table" and q or noQuarantine
+			elseif key == "shareLinks" then
+				-- Which plan each received copy came from (Acks.Link); none while the data is read-only.
+				if readOnlyPlans then
+					return nil
+				end
+				if type(adb.global.shareLinks) ~= "table" then
+					adb.global.shareLinks = {}
+				end
+				return adb.global.shareLinks
 			end
 			return nil
 		end,
@@ -218,6 +232,9 @@ function DB.Init()
 	adb.char.recorder = ns.RunLog.Normalize(adb.char.recorder)
 	adb.char.notes = ns.Pages.NormalizeReceived(adb.char.notes)
 	adb.char.shareAcks = ns.Acks.Normalize(adb.char.shareAcks)
+	if not newer then
+		adb.global.shareLinks = ns.Acks.NormalizeLinks(adb.global.shareLinks)
+	end
 	ns.db = makeView(adb, newer and DB.ReadOnlyPlans(adb.global) or nil)
 	ns.char = setmetatable({}, {
 		__index = function(_, key)
@@ -344,6 +361,9 @@ function DB.DeletePlan(id)
 	end
 	ns.db.plans[id] = nil
 	ns.char.progress.objectives[id] = nil
+	if ns.db.shareLinks then
+		ns.db.shareLinks[id] = nil
+	end
 	if ns.db.ui.selectedPlan == id then
 		ns.db.ui.selectedPlan = nil
 	end
@@ -421,8 +441,11 @@ function DB.ImportString(text, source, opts)
 		return false, value
 	end
 	local plans = kind == "plan" and { value } or value.plans
-	local added, replaced = {}, {}
+	local added, replaced, from = {}, {}, {}
 	for _, plan in ipairs(plans) do
+		-- The sender's id, for the link (Acks.Link): a recommended plan travels without its id.
+		from[#from + 1] = plan.id or (plan.origin and plan.origin.bundled and (ns.Bundled.PREFIX .. plan.origin.bundled))
+			or false
 		plan.id = nil
 		plan.source = {
 			from = source and source.from or nil,
@@ -445,6 +468,13 @@ function DB.ImportString(text, source, opts)
 			DB.Changed(existing, "import")
 		else
 			added[#added + 1] = DB.AddPlan(plan)
+		end
+	end
+	-- Only a plan received in game from a group member's transfer is linked (group sync); pasted strings are not.
+	local links = source and source.kind == "received" and ns.db.shareLinks
+	for i, plan in ipairs(added) do
+		if links and from[i] then
+			ns.Acks.Link(links, plan.id, from[i], ns.Now())
 		end
 	end
 	local summary = Validate.Summary(report)

@@ -2,8 +2,9 @@
 -- picker and other dropdown lists, every section of a Forever dungeon on Santiago Reyes' bundled map (Share with Advanced open),
 -- a raid's party, a classic dungeon and a raid on the game's old map tiles, an own plan with the drawing tools and
 -- drawings (also at the window's minimum size, 880 x 560, and a large one), run mode at its first, a middle and its
--- last step, the /dp debug dialog and a confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the
--- recommended plans, and (made-up data in their real shapes) the provider addons.
+-- last step and with group sync (following, leading, a plan the member lacks), the /dp debug dialog and a
+-- confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the recommended plans, and
+-- (made-up data in their real shapes) the provider addons.
 --
 -- Not here: the Settings panel (the game's own Settings frame with AceConfig's widgets, which the mock cannot build).
 -- `/dp shots` takes it in game.
@@ -254,10 +255,10 @@ local function pagesView(name, w, h)
 end
 
 -- Share with a group of four: two imported the plan (one has an older version), one runs the addon and has not, one
--- cannot answer.
-local function shareTracking()
+-- cannot answer. "share-sync": the same while leading its run (UI/RunSync.lua), Aldra following.
+local function shareTracking(leading)
 	return {
-		name = "share-tracking",
+		name = leading and "share-sync" or "share-tracking",
 		setup = function()
 			party(true)
 			ns.Comm.peers.Corin = { version = "dev", proto = 2, seen = 0 }
@@ -265,10 +266,18 @@ local function shareTracking()
 			local store = ns.Comm.AcksStore()
 			ns.Acks.Record(store, plan.id, "Aldra", plan.updated, 1)
 			ns.Acks.Record(store, plan.id, "Bram", plan.updated - 60, 1)
+			if leading then
+				local s = ns.Sync.New()
+				ns.RunSync.state = s
+				ns.Sync.Step(s, { type = "lead", rank = { inGroup = true, leader = true }, session = "v1", plan = plan.id,
+					version = ns.RunSync.Signature(plan), step = 1, pull = 1 }, 0)
+				ns.Sync.Step(s, { type = "report", from = "Aldra", rank = { inGroup = true }, session = "v1", status = "f" }, 1)
+			end
 			openOwn("share", "select")
 		end,
 		window = window,
 		teardown = function()
+			ns.RunSync.state = ns.Sync.New()
 			ns.Comm.peers.Corin = nil
 			ns.Comm.AcksStore().plans = {}
 			party(false)
@@ -348,6 +357,47 @@ local function runModeDrift()
 		teardown = function()
 			ns.Recorder.ClearHistory()
 			ns.db.settings.recorder.enabled = false
+			closeAll()
+			window():Show()
+		end,
+	}
+end
+
+-- Run mode with group sync (UI/RunSync.lua) in a party of four, driven through the state machine (no messages leave):
+-- "follow" follows Aldra, "lead" leads with two following and one without the plan, "ask" is on a plan it lacks.
+local LEADER_RANK = { inGroup = true, leader = true }
+local function runModeSync(which)
+	return {
+		name = "runmode-" .. which,
+		setup = function()
+			party(true)
+			openPlan("hall-of-thanes", "map")
+			local plan = ns.UI.ctx:Plan()
+			local Sync, s = ns.Sync, ns.Sync.New()
+			ns.RunSync.state = s
+			ns.UI.FocusStep(5, { stay = true })
+			if which == "lead" then
+				Sync.Step(s, { type = "lead", rank = LEADER_RANK, session = "v1", plan = plan.id, version = ns.RunSync.Signature(plan),
+					step = 5, pull = 3 }, 0)
+				for name, status in pairs({ Bram = "f", Corin = "f", Dessa = "m" }) do
+					Sync.Step(s, { type = "report", from = name, rank = { inGroup = true }, session = "v1", status = status }, 1)
+				end
+			else
+				local msg = { type = "run", proto = ns.PROTOCOL_VERSION, session = "v1", seq = 1, plan = plan.id,
+					version = ns.RunSync.Signature(plan), step = 5, pull = 3 }
+				local match = which == "ask" and { status = "missing" } or { status = "ok", id = plan.id }
+				Sync.Step(s, { type = "run", from = "Aldra", rank = LEADER_RANK, msg = msg, match = match }, 0)
+			end
+			ns.RunMode.Show()
+			ns.RunMode.Refresh()
+			window():Hide()
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerRunFrame")
+		end,
+		teardown = function()
+			ns.RunSync.state = ns.Sync.New()
+			party(false)
 			closeAll()
 			window():Show()
 		end,
@@ -654,11 +704,15 @@ V.views = {
 	runMode("middle"),
 	runMode("last"),
 	runModeDrift(),
+	runModeSync("follow"),
+	runModeSync("lead"),
+	runModeSync("ask"),
 	pagesView("party-pages"),
 	pagesView("party-pages-min", 880, 560),
 	notesWindow(),
 	notesEmpty(),
 	shareTracking(),
+	shareTracking(true),
 	{
 		name = "debug",
 		setup = function()

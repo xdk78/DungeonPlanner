@@ -9,7 +9,7 @@
 
 local _, ns = ...
 local Comm = ns:NewModule("Comm")
-local Transfer, Util = ns.Transfer, ns.Util
+local Transfer, Util, Roster = ns.Transfer, ns.Util, ns.Roster
 
 local TICK = 0.5
 local MAX_OPEN_PROMPTS = 3
@@ -104,30 +104,108 @@ local function send(msg, channel, target, prio, callback, arg)
 	ns.addon:SendCommMessage(ns.prefix, msg, channel, target, prio or "NORMAL", callback, arg)
 end
 
-local function enqueue(msg, channel, target, prio, callback, arg)
-	if Comm.IsLockedDown() then
-		Comm.outbox[#Comm.outbox + 1] = { msg, channel, target, prio, callback, arg }
-		ensureTicker()
-	else
-		send(msg, channel, target, prio, callback, arg)
+-- The outbox: messages waiting for a lockdown to end, sent in order. Whatever waits goes out before any newer message,
+-- so a message never overtakes one queued before it. Bounded: MAX_OUTBOX messages without a key; when it is full the
+-- oldest ack or hello goes first; a transfer's message is never dropped (a transfer missing a part would be broken):
+-- with nothing left to drop, that transfer is aborted instead.
+Comm.MAX_OUTBOX = 40
+local DROPPABLE = { ack = true, hello = true }
+local NO_OPTS = {}
+
+local function flushOutbox()
+	if #Comm.outbox > 0 and not Comm.IsLockedDown() then
+		local box = Comm.outbox
+		Comm.outbox = {}
+		for _, item in ipairs(box) do
+			send(unpack(item, 1, 6))
+		end
 	end
+end
+
+-- A transfer whose message cannot wait: its queued messages go, it ends as failed (the other side times out). One that
+-- has already ended (cancelled by the player, done) keeps its state; only its waiting messages go.
+local function abortTransfer(t)
+	for i = #Comm.outbox, 1, -1 do
+		if Comm.outbox[i].transfer == t then
+			table.remove(Comm.outbox, i)
+		end
+	end
+	if Transfer.IsFinished(t) then
+		return
+	end
+	t.state, t.reason = "failed", "outbox"
+	ns:Fire("SHARE_STATUS", t)
+end
+
+local function makeRoom()
+	local unkeyed, oldest = 0, nil
+	for i, item in ipairs(Comm.outbox) do
+		if not item.key then
+			unkeyed = unkeyed + 1
+			if not oldest and DROPPABLE[item.kind] then
+				oldest = i
+			end
+		end
+	end
+	if unkeyed < Comm.MAX_OUTBOX then
+		return true
+	elseif oldest then
+		table.remove(Comm.outbox, oldest)
+		return true
+	end
+	return false
+end
+
+-- opts (optional): key = only the newest message with this key matters (run sync's state): one still waiting is
+-- replaced in place, so a lockdown sends one current message; kind = "ack" or "hello" (the first to go when the outbox
+-- is full); transfer = the transfer the message belongs to. A whisper goes to the sender's name as it arrived
+-- (Roster.WhisperTarget). Returns false when the message was not queued.
+local function enqueue(msg, channel, target, prio, callback, arg, opts)
+	opts = opts or NO_OPTS
+	if channel == "WHISPER" then
+		target = Roster.WhisperTarget(target)
+	end
+	if not Comm.IsLockedDown() then
+		flushOutbox()
+		send(msg, channel, target, prio, callback, arg)
+		return true
+	end
+	local item = { msg, channel, target, prio, callback, arg, key = opts.key, kind = opts.kind, transfer = opts.transfer }
+	if opts.key then
+		for i, old in ipairs(Comm.outbox) do
+			if old.key == opts.key then
+				Comm.outbox[i] = item
+				return true
+			end
+		end
+	elseif not makeRoom() then
+		if opts.transfer then
+			abortTransfer(opts.transfer)
+		end
+		return false
+	end
+	Comm.outbox[#Comm.outbox + 1] = item
+	ensureTicker()
+	return true
 end
 
 local applyEffects
 
 local function stepOut(t, event)
-	applyEffects(Transfer.StepOutgoing(t, event, now()))
+	applyEffects(Transfer.StepOutgoing(t, event, now()), t)
 end
 
 local function stepIn(t, event)
-	applyEffects(Transfer.StepIncoming(t, event, now()))
+	applyEffects(Transfer.StepIncoming(t, event, now()), t)
 end
 
-function applyEffects(effects)
+-- effects of transfer `owner` (Transfer.Step*).
+function applyEffects(effects, owner)
+	local opts = { transfer = owner }
 	for _, e in ipairs(effects) do
 		local kind = e[1]
 		if kind == "send" then
-			enqueue(e[2], e[3], e[4], "ALERT")
+			enqueue(e[2], e[3], e[4], "ALERT", nil, nil, opts)
 		elseif kind == "sendPayload" then
 			local t, msg = e[2], e[3]
 			-- AceComm calls back after each part with (arg, bytesSent, bytesTotal).
@@ -140,9 +218,9 @@ function applyEffects(effects)
 				else
 					stepOut(transfer, { type = "progress", sent = sent, total = total })
 				end
-			end, t)
+			end, t, opts)
 		elseif kind == "sendPayloadTo" then
-			enqueue(e[3], "WHISPER", e[4], "BULK")
+			enqueue(e[3], "WHISPER", e[4], "BULK", nil, nil, opts)
 		elseif kind == "prompt" then
 			local t = e[2]
 			ns:RunOutOfCombat(function()
@@ -180,13 +258,7 @@ function Comm.OnTick()
 			stepIn(transfer, { type = "tick" })
 		end
 	end
-	if #Comm.outbox > 0 and not Comm.IsLockedDown() then
-		local box = Comm.outbox
-		Comm.outbox = {}
-		for _, item in ipairs(box) do
-			send(unpack(item, 1, 6))
-		end
-	end
+	flushOutbox()
 	stopTickerIfIdle()
 end
 
@@ -220,7 +292,7 @@ function Comm.SharePlan(plan, channel, target)
 	-- For the acks of who imported it (Share/Acks.lua): which plan, which version.
 	transfer.planId, transfer.version = plan.id, plan.updated
 	Comm.outgoing[transfer.tid] = transfer
-	applyEffects(effects)
+	applyEffects(effects, transfer)
 	ns:Fire("SHARE_STATUS", transfer)
 	return transfer
 end
@@ -236,7 +308,8 @@ function Comm.Cancel(transfer)
 	if transfer.dir == "out" then
 		stepOut(transfer, { type = "cancel" })
 	elseif transfer.dir == "in" and not Transfer.IsFinished(transfer) then
-		enqueue(Transfer.Encode({ type = "cancel", tid = transfer.tid }), "WHISPER", transfer.sender, "ALERT")
+		enqueue(Transfer.Encode({ type = "cancel", tid = transfer.tid }), "WHISPER", transfer.sender, "ALERT", nil, nil,
+			{ transfer = transfer })
 		stepIn(transfer, { type = "cancel" })
 	end
 end
@@ -264,68 +337,10 @@ end
 
 -- Group -------------------------------------------------------------------------------------------------------------------
 
-local function plainCall(fn, ...)
-	if type(fn) ~= "function" then
-		return nil
-	end
-	local ok, v = pcall(fn, ...)
-	return ok and Util.Plain(v) or nil
-end
-
--- The group's unit tokens (the player first, then the party or raid).
-function Comm.GroupUnits()
-	local units = { "player" }
-	if IsInRaid and IsInRaid() then
-		units = {}
-		for i = 1, 40 do
-			units[i] = "raid" .. i
-		end
-	else
-		for i = 1, 4 do
-			units[#units + 1] = "party" .. i
-		end
-	end
-	return units
-end
-
--- The other group members' names (plain, short), never secret values.
-function Comm.GroupMembers()
-	local out = {}
-	local me = UnitName and Util.ShortName(plainCall(UnitName, "player"))
-	for _, unit in ipairs(Comm.GroupUnits()) do
-		if plainCall(UnitExists, unit) then
-			local name = Util.ShortName(plainCall(UnitName, unit))
-			if name and name ~= me and not Util.IndexOf(out, name) then
-				out[#out + 1] = name
-			end
-		end
-	end
-	return out
-end
-
--- Who `name` (nil: the player) is in the group: { inGroup, inRaid, leader, assist, unit }. Leader and assistant come
--- from UnitIsGroupLeader / UnitIsGroupAssistant (guarded; a secret or missing answer counts as no).
-function Comm.GroupRank(name)
-	local inGroup = (IsInGroup and IsInGroup()) and true or false
-	local inRaid = (IsInRaid and IsInRaid()) and true or false
-	local unit
-	if name == nil then
-		unit = "player"
-	elseif inGroup then
-		for _, u in ipairs(Comm.GroupUnits()) do
-			if Util.ShortName(plainCall(UnitName, u)) == name then
-				unit = u
-				break
-			end
-		end
-	end
-	local info = { inGroup = inGroup and unit ~= nil, inRaid = inRaid, unit = unit }
-	if unit then
-		info.leader = plainCall(rawget(_G, "UnitIsGroupLeader"), unit) == true
-		info.assist = plainCall(rawget(_G, "UnitIsGroupAssistant"), unit) == true
-	end
-	return info
-end
+-- Share/Roster.lua: unit tokens, the other members' identities, and a sender's rank by its whole identity.
+Comm.GroupUnits = Roster.Units
+Comm.GroupMembers = Roster.Members
+Comm.GroupRank = Roster.Rank
 
 -- Shared-plan tracking (Share/Acks.lua) ----------------------------------------------------------------------------------
 
@@ -359,24 +374,25 @@ function Comm.SendAck(t, data)
 		id = ns.Bundled.PREFIX .. plan.origin.bundled
 	end
 	enqueue(Transfer.Encode({ type = "ack", tid = t.tid, plan = id, version = plan.updated or 0 }), "WHISPER", t.sender,
-		"BULK")
+		"BULK", nil, nil, { kind = "ack" })
 	return true
 end
 
--- Is `name` in the player's party or raid? Only a plain `true` counts (a secret answer is "no").
+-- Is `name` (a Roster.Id) exactly one member of the player's party or raid?
 local function inMyGroup(name)
-	if plainCall(UnitInParty, name) == true then
-		return true
-	end
-	local raid = plainCall(UnitInRaid, name) -- the raid index, or nil
-	return raid ~= nil and raid ~= false
+	return Roster.Rank(name).inGroup
 end
 
 -- A whisper finds its player whatever the case of the typed name, but replies carry the name as the game spells it:
 -- the first reply from that player fixes the transfer's target, so "anna" and "Anna" are one receiver.
+-- On Forever a typed first name ("ana") reaches "Ana Smith": a reply whose first name is the typed name adopts the
+-- whole name too (only the player the whisper reached has the transfer id).
 local function adoptTarget(out, sender)
-	if out and out.channel == "WHISPER" and out.target ~= sender and type(out.target) == "string"
-		and out.target:lower() == sender:lower() then
+	if not (out and out.channel == "WHISPER" and out.target ~= sender and type(out.target) == "string") then
+		return
+	end
+	local typed, first = out.target:lower(), (sender:match("^[^%s%-]+") or sender):lower()
+	if typed == sender:lower() or typed == first then
 		out.target = sender
 	end
 end
@@ -418,6 +434,16 @@ function Comm.PlanStatus(plan)
 	return ns.Acks.Status(Comm.AcksStore(), plan.id, plan.updated, Comm.GroupMembers(), Comm.peers)
 end
 
+-- Run sync (Share/Sync.lua, UI/RunSync.lua): small state messages at NORMAL priority, through the outbox; `key` keeps
+-- only the newest one of a kind waiting in a lockdown. Returns false when addon messages are not available.
+function Comm.SendSync(msg, channel, target, key)
+	if not Comm.IsAvailable() or not channel then
+		return false
+	end
+	enqueue(msg, channel, target, "NORMAL", nil, nil, { key = key })
+	return true
+end
+
 -- Raid assignment pages ----------------------------------------------------------------------------------------------------
 
 -- The pages received from the group's leader (DungeonPlannerDB.char[key].notes).
@@ -453,7 +479,9 @@ function Comm.SendPage(payload)
 	end
 	-- While the game holds addon messages (a boss fight), the outbox keeps it until the lockdown ends.
 	local waiting = Comm.IsLockedDown()
-	enqueue(Transfer.Encode({ type = "note", proto = ns.PROTOCOL_VERSION, data = data }), channel, nil, "ALERT")
+	if not enqueue(Transfer.Encode({ type = "note", proto = ns.PROTOCOL_VERSION, data = data }), channel, nil, "ALERT") then
+		return nil, ns.L["Too many messages are waiting for the boss fight to end: the page was not sent."]
+	end
 	return true, waiting
 end
 
@@ -524,12 +552,10 @@ function Comm.OnMessage(prefix, text, channel, sender)
 	if prefix ~= ns.prefix then
 		return
 	end
-	text, sender = Util.Plain(text), Util.ShortName(sender)
-	if type(text) ~= "string" or not sender then
-		return
-	end
-	local me = UnitName and Util.ShortName(UnitName("player"))
-	if sender == me then
+	-- The sender by its whole identity (Share/Roster.lua); replies go to its name as it arrived.
+	local raw = Util.Plain(sender)
+	text, sender = Util.Plain(text), Roster.Id(raw)
+	if type(text) ~= "string" or not sender or sender == Roster.Me() then
 		return
 	end
 	local t = now()
@@ -540,12 +566,16 @@ function Comm.OnMessage(prefix, text, channel, sender)
 	if not msg then
 		return
 	end
+	-- Replies to group members go to their name as it arrived (Roster.WhisperTarget).
+	if Roster.Rank(sender).inGroup then
+		Roster.Heard(sender, raw)
+	end
 
 	if msg.type == "hello" or msg.type == "helloReply" then
 		Comm.peers[sender] = { version = msg.version, proto = msg.proto, seen = t }
 		if msg.type == "hello" and ns.db and ns.db.settings.share.replyHello then
 			enqueue(Transfer.Encode({ type = "helloReply", proto = ns.PROTOCOL_VERSION, version = ns.version }), "WHISPER",
-				sender, "BULK")
+				sender, "BULK", nil, nil, { kind = "hello" })
 		end
 		ns:Fire("SHARE_PEERS")
 		return
@@ -557,6 +587,13 @@ function Comm.OnMessage(prefix, text, channel, sender)
 	end
 	if msg.type == "ack" then
 		onAck(msg, sender)
+		return
+	end
+	-- Run sync: older Dungeon Planners parse these tags as nothing and drop them (Transfer.Parse returns nil).
+	if msg.type == "run" or msg.type == "follow" or msg.type == "query" or msg.type == "want" then
+		if msg.proto == ns.PROTOCOL_VERSION and ns.RunSync then
+			ns.RunSync.OnMessage(msg, sender, channel)
+		end
 		return
 	end
 
@@ -578,7 +615,7 @@ function Comm.OnMessage(prefix, text, channel, sender)
 		local transfer, effects = Transfer.NewIncoming(msg, sender, channel, t)
 		if transfer then
 			Comm.incoming[key] = transfer
-			applyEffects(effects)
+			applyEffects(effects, transfer)
 		end
 		return
 	end

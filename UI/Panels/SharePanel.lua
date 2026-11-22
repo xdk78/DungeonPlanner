@@ -220,8 +220,19 @@ function Panel.Create(parent, ctx)
 			missing = L["not yet"],
 			unknown = L["unknown"],
 		}
+		-- While you lead this plan's run (UI/RunSync.lua): who follows, who steps on their own, who is out of sync.
+		local SYNC = { following = L["following"], free = L["steps on their own"], missing = L["out of sync"],
+			version = L["out of sync"] }
+		local sync = {}
+		for _, m in ipairs(self.sync and self.sync.list or {}) do
+			sync[m.name] = SYNC[m.state]
+		end
 		for _, m in ipairs(self.status.list) do
-			tt:AddDoubleLine(m.name, STATE[m.state] or m.state, 0.93, 0.91, 0.86, 0.71, 0.67, 0.59)
+			local state = STATE[m.state] or m.state
+			if sync[m.name] then
+				state = state .. "  ·  " .. sync[m.name]
+			end
+			tt:AddDoubleLine(m.name, state, 0.93, 0.91, 0.86, 0.71, 0.67, 0.59)
 		end
 		tt:AddLine(
 			L["From the reply a player's Dungeon Planner sends after importing your plan. Unknown: no reply can come (no addon, other client, trial account)."],
@@ -320,12 +331,19 @@ function Panel.Create(parent, ctx)
 		receiving = "receiving",
 		failed = "failed",
 	}
+	-- A transfer's state, with the cause when the outbox had no room for it (Share/Comm.lua).
+	local function stateText(t)
+		if t.state == "failed" and t.reason == "outbox" then
+			return L["failed: too many messages were waiting for a boss fight to end"]
+		end
+		return L[STATE_TEXT[t.state] or t.state]
+	end
 
 	function f:RefreshStatus()
 		local lines = {}
 		for _, t in pairs(ns.Comm.outgoing) do
 			local who = t.target or t.channel
-			local text = string.format(L["\"%s\" to %s: %s"], t.name, who, L[STATE_TEXT[t.state] or t.state])
+			local text = string.format(L["\"%s\" to %s: %s"], t.name, who, stateText(t))
 			if t.state == "offering" and t.acceptCount > 0 then
 				text = text .. " (" .. string.format(L["%d accepted"], t.acceptCount) .. ")"
 			elseif t.state == "sending" and t.total then
@@ -335,7 +353,7 @@ function Panel.Create(parent, ctx)
 		end
 		for _, t in pairs(ns.Comm.incoming) do
 			if t.state ~= "prompt" then
-				lines[#lines + 1] = string.format(L["\"%s\" from %s: %s"], t.name, t.sender, L[STATE_TEXT[t.state] or t.state])
+				lines[#lines + 1] = string.format(L["\"%s\" from %s: %s"], t.name, t.sender, stateText(t))
 			end
 		end
 		c.status:SetText(table.concat(lines, "\n"))
@@ -348,11 +366,19 @@ function Panel.Create(parent, ctx)
 			if status.unknown > 0 then
 				text = text .. ", " .. string.format(L["unknown: %d"], status.unknown)
 			end
-			c.track.text:SetText(text)
-			c.track.status = status
+			-- Leading this plan's run: who follows it and who is out of sync.
+			local sync = ns.RunSync.Summary(plan())
+			if sync then
+				text = text .. "; " .. string.format(L["following: %d"], sync.following)
+				if sync.outOfSync > 0 then
+					text = text .. ", " .. string.format(L["out of sync: %d"], sync.outOfSync)
+				end
+			end
+			W.FitText(c.track.text, text)
+			c.track.status, c.track.sync = status, sync
 		else
 			c.track.text:SetText("")
-			c.track.status = nil
+			c.track.status, c.track.sync = nil, nil
 		end
 		local n = ns.Comm.PeerCount()
 		c.peers:SetText(n > 0 and ns.Plural(n,
@@ -370,6 +396,11 @@ function Panel.Create(parent, ctx)
 		end
 	end)
 	ns:On("SHARE_PEERS", f, function()
+		if f:IsVisible() then
+			f:RefreshStatus()
+		end
+	end)
+	ns:On("SYNC_CHANGED", f, function()
 		if f:IsVisible() then
 			f:RefreshStatus()
 		end

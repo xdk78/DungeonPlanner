@@ -8,7 +8,7 @@ Bindings.xml, /dp, minimap, compartment  ->  Core/Actions, Core/Slash
                          |  reads/writes plans only through Model/Plan and Config/DB
 Model/  (Schema, Validate, Plan, PlanLists, PlanBosses, Drawing, Pages, History, Bundled, Route, Progress, RunLog, RunCompare)
         pure Lua 5.1, no game API
-Share/  (Checksum, Inflate, Codec, Transfer, Discord)       pure, plus Comm (AceComm glue)
+Share/  (Checksum, Inflate, Codec, Transfer, Acks, Sync, Discord)  pure, plus Roster and Comm (game glue)
 Config/ (Defaults, DB: AceDB, migrations, quarantine)       LoadGlobal is pure
 Data/   (Instances, Journal, Loot, Names, Templates)         runtime game data only, no bundled IDs
         (Providers + Providers/*)                          optional adapters reading other installed addons
@@ -27,7 +27,8 @@ Rules:
   received. Invalid stored plans go to a quarantine list, never deleted.
 - **IDs are truth, names are display.** Plans store the client's IDs; `Data/Names.lua` resolves names at display time.
 - **Explicit state machines** for phased behaviour: transfers (`Share/Transfer.lua`: state + `Step*(state, event, now)`
-  returning effects) and map dragging (`MapCanvas` `view.drag`: idle / pan / marker / point / draw). Timers are events.
+  returning effects), group sync for run mode (`Share/Sync.lua`: `Sync.Step(state, event, now)`) and map dragging
+  (`MapCanvas` `view.drag`: idle / pan / marker / point / draw). Timers are events.
 - **Idle costs nothing.** No OnUpdate unless dragging or hovering the map (throttled to 20 Hz); the comm ticker runs
   only while a transfer is open; the window is built on first open, not at login; the journal is scanned on demand.
 
@@ -40,9 +41,10 @@ Rules:
 
 ## Saved data (AceDB, one SavedVariable `DungeonPlannerDB`)
 
-- `global.plans[id]` - plans, shared by all characters; `global.schema` (4: plan format 4, raid pages; 3 added map
-  drawings and pull marks; migrations 3 and 4 convert nothing and only mark the data, so an older version opens it
-  read-only instead of dropping the new fields on its next save); `global.quarantine`.
+- `global.plans[id]` - plans, shared by all characters; `global.schema` (5: the link store below; 4: plan format 4,
+  raid pages; 3 added map drawings and pull marks; migrations 3 and 4 convert nothing and 5 only starts the link store,
+  each marking the data, so an older version opens it read-only instead of dropping the new fields on its next save);
+  `global.quarantine`.
 - `diagnostics` (top level, outside AceDB's sections) - written only by `/dp scan`: every journal instance with its IDs,
   pictures, map and floors, its bosses, how each recommended plan resolved, and a loot sample; `/dp scan clear` removes
   it. For reading the client's real data offline after a `/reload`. `diagnostics.fontTest` holds the font test
@@ -58,6 +60,9 @@ Rules:
   repairs it on load). Additive, like the recorder.
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
   `Acks.Normalize` on load). Additive.
+- `global.shareLinks[local plan id]` - which plan a copy received in game came from: `{ plan = the sender's plan id,
+  at }` (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync matches a leader's plan to the copy (by its steps
+  revision, `Sync.Signature`). Pasted strings make none. Schema 5 (migration 5 starts it); a link goes with its plan.
 
 Migrations: `DB.migrations[n]` upgrades `global` from schema n-1 to n. Data from a newer schema puts the addon in
 read-only mode instead of being rewritten.
@@ -131,7 +136,8 @@ floor, pull or boss focus and route segment (`Steps.Focus`), and fires `STEP_CHA
 mode follow. `UI/RunMode.lua` is the compact run window (current step, next pull, next boss's tips, a mini map from
 `MapCanvas` in compact mode: no labels, no numbered stops, only the step's party positions, a ring on the step,
 framed with its neighbours by `view:FrameSteps`), Prev / Next); the pull key bindings walk the steps while it is open, and the tracker's `BOSS_KILLED`
-moves past a killed boss's step (`Steps.AfterKill`).
+moves past a killed boss's step (`Steps.AfterKill`). In a group, the leader's run mode can drive the members' (group
+sync: `Share/Sync.lua`, `UI/RunSync.lua`; the messages and rules in docs/SHARING-FORMAT.md, "Group sync for run mode").
 
 Recommended plans (`Model/Bundled.lua`, data files call `Bundled.Add`) are read-only: `Plan.*` mutators refuse them,
 `ctx:ReadOnly()` hides the edit tools, and "Make an editable copy" duplicates one with `origin` set.
@@ -398,7 +404,9 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line and the drawings' menu |
 | UI/MapCanvas.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing; pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
 | UI/RunMode.lua | the run window (with the recorder line and the drift line) |
-| Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown) |
+| Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
+| Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
+| Share/Roster.lua | the group's units and members, a sender's rank by its whole name (surnames on Forever), whisper targets as names arrived |
 | Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua | raid pages: data, validation, keywords, permissions, the Notes window's state machine; the Party section's editor; the Notes window, sending and chat posting |
 | UI/Panels/ | sections (map + legend, marker editor and menus, plan, bosses, pulls, assignments, gear, runs, notes, progress, share) |
 | UI/Prompts.lua, UI/Settings.lua | share prompts, options page |

@@ -193,6 +193,11 @@ local function build()
 	f.planName = W.Text(inner, "caption", "muted")
 	f.planName:SetPoint("TOPLEFT")
 	f.planName:SetPoint("RIGHT")
+	-- Group sync (UI/RunSync.lua): who leads and who follows, with Lead / Unfollow / Rejoin / Ask for it. Shown only in a
+	-- group with something to say; the window grows by its height.
+	f.sync = ns.RunSync.BuildLine(inner)
+	f.sync:SetPoint("TOPLEFT", f.planName, "BOTTOMLEFT", 0, -SP.xs)
+	f.sync:SetPoint("RIGHT")
 	-- The run recorder (Tracker/Recorder.lua): a red dot and "Recording" while it records, the live pull count against
 	-- the plan's pulls; a click switches recording on or off.
 	f.rec = CreateFrame("Button", nil, inner)
@@ -366,6 +371,7 @@ local function build()
 	f:SetScript("OnShow", function()
 		saved().shown = true
 		RunMode.Refresh()
+		ns.RunSync.OnShow()
 	end)
 	f:Hide()
 	frame = f
@@ -382,6 +388,7 @@ function RunMode.Refresh()
 	local steps = c:Steps()
 	local index = c:StepIndex()
 	frame.planName:SetText(plan and (ns.Names.Instance(plan.instance) .. "  ·  " .. plan.name) or L["Select a plan first."])
+	RunMode.RefreshSync(plan)
 	RunMode.RefreshRecorder(plan)
 	frame.prev:SetDisabled(not index or index <= 1)
 	frame.next:SetDisabled(#steps == 0 or (index ~= nil and index >= #steps))
@@ -576,6 +583,19 @@ function RunMode.GoToEstimate()
 	end
 end
 
+-- The group sync line (UI/RunSync.lua) under the plan's name; the recorder line goes under it, and the window grows by
+-- its height so the blocks below keep theirs.
+function RunMode.RefreshSync(plan)
+	if not frame then
+		return
+	end
+	local h = ns.RunSync.RefreshLine(frame.sync, plan)
+	frame.rec:ClearAllPoints()
+	frame.rec:SetPoint("TOPLEFT", h > 0 and frame.sync or frame.planName, "BOTTOMLEFT", 0, -SP.xxs)
+	frame.rec:SetPoint("RIGHT")
+	frame:SetHeight(HEIGHT + (h > 0 and (h + SP.xs) or 0))
+end
+
 function RunMode.RefreshRecorder(plan)
 	if not frame then
 		return
@@ -679,6 +699,8 @@ function RunMode.OnKill(encounterID, name)
 		nextIndex = i and math.min(i + 1, #steps) or current
 	end
 	if nextIndex ~= c:StepIndex() then
+		-- Group sync: the leader's next state waits out the fight's lockdown; this kill must not read as stepping away.
+		ns.RunSync.LocalKill(plan.id, nextIndex)
 		UI.FocusStep(nextIndex, { stay = true })
 		RunMode.Refresh()
 	end
@@ -699,6 +721,11 @@ function RunMode.Init()
 	end)
 	ns:On("PLAN_CHANGED", RunMode, function()
 		RunMode.Refresh()
+	end)
+	ns:On("SYNC_CHANGED", RunMode, function()
+		if frame and frame:IsShown() then
+			RunMode.RefreshSync(ctx():Plan())
+		end
 	end)
 	ns:On("BOSS_KILLED", RunMode, function(encounterID, name)
 		ns.SafeCall(RunMode.OnKill, encounterID, name)

@@ -20,7 +20,8 @@ addons add extras when installed (see "Recommended companion addons").
 - **Run mode**: a small window to keep open while playing: the current step, the next pull, tips for the next boss and
   a mini map, with Prev / Next (also on the pull key bindings) and automatic progress when a boss dies. With the run
   recorder on, it shows your progress against the plan and warns when you take more pulls than planned before a boss
-  or kill bosses out of order.
+  or kill bosses out of order. In a group, the leader can lead the run: members with the same plan follow the
+  leader's step, can step on their own and rejoin, and a member without the plan asks for it in one click.
 - **Run recorder** (opt-in): pulls, boss kills and wipes of your runs; a run against the plan (extra and skipped pulls,
   boss order), two runs side by side, splits against your best and previous run, a run summary for Discord.
 - **Map planning** on the game's own dungeon maps (the old dungeon map tiles the client still has; multi-floor; for

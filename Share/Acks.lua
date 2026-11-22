@@ -90,6 +90,52 @@ function Acks.Record(store, planId, name, version, now)
 	return true
 end
 
+-- Links: which plan a copy received in game (from a group member's transfer) came from, so a leader's run
+-- (Share/Sync.lua) is matched to the copy. A received plan gets a new id here; the link keeps the sender's plan id
+-- (`b:<id>` for a recommended plan). Whether the copy still has the leader's steps is checked by their revision
+-- (Sync.Signature), not here. Pasted strings make no link.
+-- Store (DungeonPlannerDB.global.shareLinks): { [local plan id] = { plan, at } }, since schema 5 (Config/DB.lua
+-- migration 5).
+Acks.MAX_LINKS = 100
+
+local function validLink(id, l)
+	return Acks.ValidPlanId(id) and type(l) == "table" and Acks.ValidPlanId(l.plan)
+end
+
+function Acks.NormalizeLinks(links)
+	local out, n = {}, 0
+	for id, l in pairs(type(links) == "table" and links or EMPTY) do
+		if validLink(id, l) and n < Acks.MAX_LINKS then
+			out[id] = { plan = l.plan, at = Util.IsInteger(l.at) and l.at or 0 }
+			n = n + 1
+		end
+	end
+	return out
+end
+
+-- Remember that local plan `localId` came from plan `planId`. The oldest link goes when the store is full. Returns
+-- true when stored.
+function Acks.Link(links, localId, planId, now)
+	local l = { plan = planId, at = now }
+	if not (type(links) == "table" and validLink(localId, l)) then
+		return false
+	end
+	if not links[localId] then
+		local count, oldestId, oldestAt = 0, nil, nil
+		for id, old in pairs(links) do
+			count = count + 1
+			if not oldestAt or old.at < oldestAt then
+				oldestId, oldestAt = id, old.at
+			end
+		end
+		if count >= Acks.MAX_LINKS and oldestId then
+			links[oldestId] = nil
+		end
+	end
+	links[localId] = l
+	return true
+end
+
 -- The group against a plan: members = the other group members' names, current = the plan's `updated`, peers = the
 -- names known to run Dungeon Planner (Comm.peers). Returns { total, has, current, outdated, missing, unknown,
 -- list = { { name, state = "current" | "outdated" | "missing" | "unknown" } } }; `has` counts current and outdated.
