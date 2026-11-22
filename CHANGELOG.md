@@ -38,6 +38,7 @@ follow [Semantic Versioning](https://semver.org/).
 ### Fixed
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
+- **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
 
 ## [0.1.0] - 2026-11-16
 

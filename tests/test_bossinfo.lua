@@ -394,6 +394,15 @@ T.case("Bosses page: an ability's note hangs under its name, not under its icon"
 	T.eq(name[2], found.icon)
 	local icon = found.icon:FindPoint("TOPLEFT")
 	T.ok(icon and (icon[2] == nil or icon[2] == found), "the icon at the row's top")
+	-- The row is as tall as its note's lines: a short note leaves no empty lines under it.
+	local ROW_H = ns.BossSections.ROW_H
+	local lines = math.ceil(found.note:GetStringHeight())
+	T.ok(lines > 0, "the note is measured")
+	T.eq(found:GetHeight(), ROW_H + lines, "name, tags and the note's own lines")
+	found.note:SetText("Short.")
+	local oneLine = math.ceil(found.note:GetStringHeight())
+	page.doc:Finish() -- the layout again, as on a resize
+	T.ok(found:GetHeight() < ROW_H + 2 * oneLine, "a one-line note adds one line: " .. found:GetHeight())
 	ns.BossData.enabled = saved
 	P.ResetCaches()
 end)
