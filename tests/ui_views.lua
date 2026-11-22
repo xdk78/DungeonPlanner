@@ -2,8 +2,9 @@
 -- picker and other dropdown lists, every section of a Forever dungeon on Santiago Reyes' bundled map (Share with Advanced open),
 -- a raid's party, a classic dungeon and a raid on the game's old map tiles, an own plan with the drawing tools and
 -- drawings (also at the window's minimum size, 880 x 560, and a large one), run mode at its first, a middle and its
--- last step and with group sync (following, leading, a plan the member lacks), the /dp debug dialog and a confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the
--- recommended plans, and (made-up data in their real shapes) the provider addons.
+-- last step and with group sync (following, leading, a plan the member lacks), the /dp debug dialog and a
+-- confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the recommended plans, and
+-- (made-up data in their real shapes) the provider addons.
 --
 -- Not here: the Settings panel (the game's own Settings frame with AceConfig's widgets, which the mock cannot build).
 -- `/dp shots` takes it in game.
