@@ -812,6 +812,7 @@ ns.Locales.plPL = {
 	["Enemies seen"] = "Widziani wrogowie",
 	["In combat"] = "W walce",
 	["No recorded run of this instance yet. Turn on \"Record my runs\" in the Runs section."] = "Brak nagranego przejścia tej instancji. Włącz „Zapisuj moje przejścia” w sekcji Przejścia.",
+	["No recorded run of this instance yet. Recording is on: your next run here can be shared."] = "Brak nagranego przejścia tej instancji. Zapis jest włączony: następne przejście tutaj będzie można udostępnić.",
 	["Not reached: %s"] = "Nie dotarto: %s",
 	["Off plan"] = "Odstępstwa od planu",
 	["On plan so far."] = "Na razie zgodnie z planem.",

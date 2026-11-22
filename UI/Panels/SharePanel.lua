@@ -278,6 +278,10 @@ function Panel.Create(parent, ctx)
 			run = st and key and ((st.current and st.current.k == key and st.current) or ns.RunLog.Runs(st, key)[1])
 		end
 		if not run then
+			-- Like the Runs section's empty pane: the turn-on hint only while recording is off.
+			if R.Enabled() then
+				return { L["No recorded run of this instance yet. Recording is on: your next run here can be shared."] }
+			end
 			return { L["No recorded run of this instance yet. Turn on \"Record my runs\" in the Runs section."] }
 		end
 		local Runs = ns.Panels.runs

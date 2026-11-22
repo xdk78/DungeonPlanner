@@ -35,6 +35,10 @@ follow [Semantic Versioning](https://semver.org/).
   Dungeon Planner opens it read-only instead of losing that on its next save.
 - The bug report form on GitHub is now an issue form.
 
+### Fixed
+- **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
+  runs" when recording is already on.
+
 ## [0.1.0] - 2026-11-16
 
 The first public version, for WoW: Forever. Highlights, known limitations and the test checklist:

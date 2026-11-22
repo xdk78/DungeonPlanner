@@ -236,6 +236,27 @@ T.case("Runs section: before the first run, the Run pane says whether recording 
 	R.ClearHistory()
 end)
 
+T.case("Share section: the run text before the first run says whether recording is on", function()
+	boot()
+	local R, L = ns.Recorder, ns.L
+	R.SetEnabled(false)
+	R.ClearHistory()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("share")
+	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.share.inner
+	local p = ns.UI.ctx:Plan()
+	local off = L["No recorded run of this instance yet. Turn on \"Record my runs\" in the Runs section."]
+	local on = L["No recorded run of this instance yet. Recording is on: your next run here can be shared."]
+	T.eq(panel:RunParts(p, {})[1], off, "off: how to turn it on")
+	R.SetEnabled(true)
+	T.eq(panel:RunParts(p, {})[1], on, "on: not the turn-on hint")
+	R.SetEnabled(false)
+	R.ClearHistory()
+end)
+
 T.case("Runs section lists recorded runs and drafts a plan", function()
 	boot()
 	local R = ns.Recorder
