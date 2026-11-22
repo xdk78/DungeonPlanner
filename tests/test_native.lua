@@ -198,11 +198,12 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	T.eq(GameTooltip:FindPoint("TOPLEFT"), nil, "and only there")
 	T.ok(GameTooltip:IsShown(), "shown while hovered")
 	-- The mock's tooltips own nothing (IsOwned is false); here the game's tooltip belongs to the row, as in game.
-	GameTooltip.IsOwned = function(_, f)
+	local tooltip = _G.GameTooltip
+	tooltip.IsOwned = function(_, f)
 		return f == row
 	end
 	mock.Leave(row)
-	GameTooltip.IsOwned = nil
+	tooltip.IsOwned = nil
 	T.ok(not GameTooltip:IsShown(), "leaving the item hides its tooltip")
 	panel.needRoll:Hide()
 end)
