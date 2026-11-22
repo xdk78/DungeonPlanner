@@ -188,6 +188,7 @@ end
 Compat.FILES = {
 	{ "Model/RouteLook.lua", "RouteLook", "route lines on the map" },
 	{ "UI/MapRoutes.lua", "MapRoutes", "route lines on the map" },
+	{ "UI/OpenMapOverlay.lua", "OpenMapOverlay", "the experimental plan on OpenMap's dungeon map" },
 }
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a

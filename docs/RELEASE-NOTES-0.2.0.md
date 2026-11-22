@@ -58,6 +58,9 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
   the party strip with a real group, the Gear filters on Forever's rules, and the other items in the checklist below.
   The UI was checked offline in all six languages; `/dp debug` lists what your client provides. Please attach its output
   and `/dp report` to bug reports.
+- **The plan on OpenMap's dungeon map is experimental** (off by default). It relies on OpenMap 0.8.12's private
+  dungeon view, not on its public API, so it may stop working after an OpenMap update; `/dp debug` then says why
+  ("OpenMap overlay: ...").
 - The limits listed for 0.1.0 still apply ([RELEASE-NOTES-0.1.0.md](RELEASE-NOTES-0.1.0.md#known-limitations-on-wow-forever)).
 
 ## Test checklist
@@ -135,5 +138,13 @@ what to look for.
 23. **Settings panel groups**: Appearance, Routes, Progress tracking, Data from other addons, Sharing, Raid pages and
     Troubleshooting show in all six languages; the Troubleshooting buttons (self-test, Forget learned entrances,
     Report a problem, Show what's new) each work.
-24. **Type `/dp shots` and wait about half a minute.** Every view is captured; put the useful screenshots in
+24. **The plan on OpenMap's dungeon map (experimental), with OpenMap installed.** Right after a game restart, turn on
+    "Show plan on OpenMap's dungeon map (experimental)" in OpenMap's menu, select the Deadmines' recommended plan,
+    then click the Deadmines' entrance on OpenMap's world map: the route, numbered stops and markers show on that very
+    first dungeon map. Zoom with the wheel and drag: they follow and stay inside the picture. Switch floors with the
+    arrows, the floor list under the floor name and the side panel's floor pictures (after opening its Floors tab):
+    the plan's other floor shows each time. Open it once inside a dungeon too. In combat, open, zoom and close the map:
+    no Lua error or blocked action. `/dp debug` has an "OpenMap overlay:" line. With the gamepad interface style on,
+    nothing is drawn and the switch is not in OpenMap's menu.
+25. **Type `/dp shots` and wait about half a minute.** Every view is captured; put the useful screenshots in
     `docs/screenshots/`.

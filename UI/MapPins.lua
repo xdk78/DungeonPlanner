@@ -202,7 +202,7 @@ function MapPins.StopSize(scale, step)
 end
 
 -- A numbered stop on pin b (already reset to `size`): a dark disc with a ring in the route's colour (r, g, bl), so the
--- number reads on any art and over the line. The map canvas and the OpenMap overlay draw stops with this.
+-- number reads on any art and over the line. Every map draws its stops with this (UI/MapRoutes.lua DrawRouteStops).
 function MapPins.StyleStop(b, size, r, g, bl, number)
 	local f = S.ROUTE.stopFill
 	styleDisc(b, size, f[1], f[2], f[3], number)

@@ -10,8 +10,8 @@
 --
 -- One frame of ours, made the first time it is needed (never in combat), is a child of the view's page with all its
 -- points on it, so OpenMap's pan and zoom carry it and its clipping cuts it; frame level just above the picture and
--- under OpenMap's boss pins (page + 1; the pins are at page + 5). On it: the plan's route lines with their arrows
--- (UI/MapPins.lua MapRoutes, the Routes settings), its numbered stops and its markers (no labels, no mouse). Plan
+-- under OpenMap's boss pins (page + 1; the pins are at page + 5). On it, drawn as the main map draws them: the plan's
+-- route lines and numbered stops (UI/MapRoutes.lua, the Routes settings) and its markers (no labels, no mouse). Plan
 -- coordinates go through Data/Providers/OpenMap.lua Placement: the same picture (the game's tiles), or the alignment
 -- found from OpenMap's boss positions; no alignment, nothing drawn on that floor.
 --
@@ -35,7 +35,7 @@ local Util = ns.Util
 
 Overlay.POLL = 0.25 -- the fallback check while the view is shown (at most 4 a second)
 Overlay.WAIT = 30 -- how long the search for OpenMap's view runs after the last sign of its map (seconds)
-Overlay.MAX_PINS = 150 -- stops and markers per drawing
+Overlay.MAX_PINS = 150 -- markers per drawing (stops: as many as the plan's routes have, Model/Schema.lua bounds them)
 Overlay.LEVEL = 1 -- our frame's level over the view's page; pins at LEVEL + 2 (OpenMap's boss pins: page + 5)
 Overlay.VIEW = "OpenMapDungeonView"
 
@@ -223,7 +223,7 @@ local function ensureFrame(page)
 	f:EnableMouse(false)
 	f:SetFrameLevel(page:GetFrameLevel() + Overlay.LEVEL)
 	if not holder then
-		holder = { overlay = f, canvas = f, pools = { lines = {}, arrows = {}, pins = {} } }
+		holder = { overlay = f, canvas = f, pools = { lines = {}, arrows = {}, points = {}, pins = {} } }
 		ns.MapRoutes.Install(holder)
 	end
 	holder.page = page
@@ -285,43 +285,41 @@ local function paint(plan, place, pw, ph)
 	local scale = ns.db.ui.iconScale or 1
 	local counts = { lines = 0, stops = 0, markers = 0 }
 	local f, pools = holder.overlay, holder.pools
+	-- A pin of ours from `list`: no mouse (OpenMap's map keeps its clicks), under OpenMap's boss pins.
+	local function pooled(list, i)
+		local b = list[i]
+		if not b then
+			b = MapPins.New(holder, f)
+			b:EnableMouse(false)
+			b:SetFrameLevel(f:GetFrameLevel() + 2)
+			list[i] = b
+		end
+		return b
+	end
+	-- The route as the main map draws it (UI/MapRoutes.lua: casing, colour along the route, dashed way back, arrows,
+	-- the Routes settings), then its numbered stops (rings in the colour at their place, the steps' numbers).
 	local routesShown = shown("route")
 	counts.lines = holder:DrawRoutePaths(routesShown and plan or nil, floor, px, py, { scale = scale }).lines
+	if routesShown then
+		local numbers = stopNumbers(plan)
+		counts.stops = holder:DrawRouteStops(plan, floor, px, py, { scale = scale, layout = {}, drawTool = true,
+			getPoint = function(i)
+				return pooled(pools.points, i)
+			end,
+			stopNumber = function(routeId, index)
+				return (numbers[routeId] or {})[index]
+			end })
+	end
+	for i = counts.stops + 1, #pools.points do
+		pools.points[i]:Hide()
+	end
 	local n = 0
 	local function pin()
 		if n >= Overlay.MAX_PINS then
 			return nil
 		end
 		n = n + 1
-		local b = pools.pins[n]
-		if not b then
-			b = MapPins.New(holder, f)
-			b:EnableMouse(false)
-			b:SetFrameLevel(f:GetFrameLevel() + 2)
-			pools.pins[n] = b
-		end
-		return b
-	end
-	if routesShown then
-		local numbers = stopNumbers(plan)
-		for _, route in ipairs(plan.routes or {}) do
-			if route.floor == floor then
-				local r, g, b = ns.MapRoutes.Color(route, true)
-				for i, pt in ipairs(route.points) do
-					local p = pt.step and pin()
-					if p then
-						local size = MapPins.StopSize(scale, true)
-						MapPins.Reset(p, size)
-						p:ClearAllPoints()
-						p:SetPoint("CENTER", f, "TOPLEFT", px(pt[1], pt[2]), py(pt[2], pt[1]))
-						MapPins.StyleStop(p, size, r, g, b, tostring((numbers[route.id] or {})[i] or pt.step))
-						p:SetAlpha(route.optional and 0.7 or 1)
-						p:Show()
-						counts.stops = counts.stops + 1
-					end
-				end
-			end
-		end
+		return pooled(pools.pins, n)
 	end
 	local pinned = pinnedBosses()
 	for _, m in ipairs(plan.markers or {}) do

@@ -91,6 +91,13 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
 - **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory use. Nothing runs
   until `/dp perf start`; `/dp perf stop` turns it off.
 - The home table's preview names the instance's zone, in your game's language.
+- **The plan on OpenMap's dungeon map (experimental, off by default).** "Show plan on OpenMap's dungeon map
+  (experimental)", in OpenMap's menu and in Settings > Data from other addons, draws the route lines, numbered stops
+  and markers of your plan for the dungeon OpenMap shows (the selected plan, else the one you last chose there) on
+  OpenMap's own dungeon map, as the main map draws them, and follows its zoom, panning and floor switching. A floor is
+  drawn only where the plan lines up with it: the game's own map of that floor, or OpenMap's boss positions to align
+  the plan with. It reads parts of OpenMap that are not public (written for OpenMap 0.8.12), so an OpenMap update may
+  switch it off; `/dp debug` says why when nothing is drawn.
 
 ### Changed
 - **Map toolbar with icons**: the map tools show the game's pictures beside their names; on a narrow window only the

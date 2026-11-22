@@ -82,7 +82,8 @@ addons add extras when installed (see "Recommended companion addons").
   - **Dungeon Journal**: boss pins on the maps of Forever's new dungeons, boss portraits and loot per boss (Gear), and a
     button to open it;
   - **Forever Dungeon Routes**: its routes as an extra map layer (also on the bundled maps);
-  - **OpenMap**: drawn dungeon maps and boss pins (and your plans on its dungeon card);
+  - **OpenMap**: drawn dungeon maps and boss pins (and your plans on its dungeon card); experimental and off by
+    default: your plan drawn on OpenMap's own dungeon map;
   - **NeedRoll**: "Open in NeedRoll" in Gear; **Questie**: the dungeon's quests in Runs, and who gives each in Prep;
   - **Polestar**, **Shortest Path Forever** or **TomTom**: "Navigate" in Getting there hands them the way to the
     entrance;
@@ -104,7 +105,7 @@ other addons). Settings lists the ones you do not have, with what they would add
 |---|---|---|
 | **[DungeonJournal](https://www.curseforge.com/wow/addons/dungeonjournal)** (Dungeon Journal) | **Recommended.** Boss pins on the maps of Forever's new dungeons, boss portraits, each boss's loot (Gear), its level and description, and a button on the Bosses page that opens it | Pins, portraits, loot |
 | **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)** | **Recommended.** Its routes as an extra map layer (off until you tick it in the legend; not shown in run mode), on the bundled maps of Forever's new dungeons too | Routes |
-| [OpenMap](https://www.curseforge.com/wow/addons/openmap) | Drawn maps and boss pins as a further map source (used after the two above), your plans listed on its dungeon cards, and a Dungeon Planner switch in its menu | Maps, plans on its cards |
+| [OpenMap](https://www.curseforge.com/wow/addons/openmap) | Drawn maps and boss pins as a further map source (used after the two above), your plans listed on its dungeon cards, and a Dungeon Planner switch in its menu; experimental, off by default: the plan's route, stops and markers on its own dungeon map (relies on its private view) | Maps, plans on its cards, the plan on its map |
 | [NeedRoll](https://www.curseforge.com/wow/addons/needroll) | An "Open in NeedRoll" button in Gear that opens its loot page for the boss you picked | Loot |
 | [QuestieDB](https://www.curseforge.com/wow/addons/questiedb) (the data part of [Questie](https://www.curseforge.com/wow/addons/questie)) | The dungeon's quests, with level and quest giver, in Runs, and who gives each quest and where in Prep | Quests |
 | Polestar, Shortest Path Forever or [TomTom](https://www.curseforge.com/wow/addons/tomtom) | "Navigate" in Getting there hands the entrance to the first one installed (Polestar also estimates the travel time); without them the game's own map pin | Directions |

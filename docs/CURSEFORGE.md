@@ -54,7 +54,7 @@ All optional. Dungeon Planner reads them in your game only (nothing is copied) a
 
 *   **[Dungeon Journal](https://www.curseforge.com/wow/addons/dungeonjournal)**: extra boss details and boss pins on the maps of Forever's new dungeons, and a button to open it.
 *   **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)**: its routes as an extra map layer.
-*   **[OpenMap](https://www.curseforge.com/wow/addons/openmap)**: another map source; your plans appear on its dungeon cards.
+*   **[OpenMap](https://www.curseforge.com/wow/addons/openmap)**: another map source; your plans appear on its dungeon cards. Experimental and off by default: your plan drawn on OpenMap's own dungeon map.
 *   **[NeedRoll](https://www.curseforge.com/wow/addons/needroll)**: an "Open in NeedRoll" button in Gear.
 *   **[Questie](https://www.curseforge.com/wow/addons/questie) / [QuestieDB](https://www.curseforge.com/wow/addons/questiedb)**: the dungeon's quests in Runs, and who gives each in Prep.
 *   **Polestar**, **Shortest Path Forever** or **[TomTom](https://www.curseforge.com/wow/addons/tomtom)**: "Navigate" in Getting there hands them the way to the entrance.

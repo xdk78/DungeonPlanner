@@ -214,6 +214,14 @@ case("OpenMap overlay: draws the selected plan on the game's map of the same flo
 		end
 	end
 	T.ok(found, "a line from the route's first point")
+	-- The numbered stops as the main map draws them (UI/MapRoutes.lua DrawRouteStops): rings in the colour along the
+	-- route at their place (MapRoutes.StopColor), no mouse.
+	local stop = O.Holder().pools.points[1]
+	T.ok(stop and stop:IsShown(), "a stop drawn")
+	local r, g, b = ns.MapRoutes.StopColor(ns.Util.FindById(ns.DB.GetPlan(DEADMINES).routes, stop.routeId), stop.pointIndex)
+	local v = stop.ring._vertex
+	T.ok(math.abs(v[1] - r) < 1e-6 and math.abs(v[2] - g) < 1e-6 and math.abs(v[3] - b) < 1e-6, "the ring's colour")
+	T.eq(stop._mouse, false)
 	T.ok(O.Status():find("floor buttons hooked", 1, true), O.Status())
 end)
 
