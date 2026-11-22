@@ -10,10 +10,10 @@ kills and objectives, and share plans in game, as text, or on Discord.
 
 ## See it
 
-Short clips of the main interactions (rendered offline from the addon's own UI code with the game's textures, so
-details differ a little from the client; in-game screenshots will be in [docs/screenshots/](docs/screenshots/) after
-the first in-game test). The images contain Blizzard Entertainment game art, are not under the MIT licence and are
-shown for documentation only ([docs/media/README.md](docs/media/README.md)).
+Short clips of the main interactions, rendered offline from the addon's own UI code with the game's textures, so
+details differ a little from the client. In-game screenshots are in [docs/screenshots/](docs/screenshots/). The images
+contain Blizzard Entertainment game art, are not under the MIT licence and are shown for documentation only
+([docs/media/README.md](docs/media/README.md)).
 
 | Click a step, the map follows | Run mode: Next, Next |
 |---|---|
@@ -152,11 +152,11 @@ Options are in the game's Settings panel (`/dp settings`) and the settings butto
 ## What is verified
 
 Verified offline (no game client): plan model, validation of hostile input, migrations, export strings (LibSerialize +
-LibDeflate, bounded inflate, checksums), transfer state machines, Discord rendering, Polish locale coverage, and a
+LibDeflate, bounded inflate, checksums), transfer state machines, Discord rendering, locale coverage in every language, and a
 smoke test that loads the whole addon with its libraries against a mock client and builds every panel. `luacheck`
 and `luac -p` are clean.
 
-Needs the first in-game test: real map tiles, fonts and Polish letters, dropdown menus, drag and drop, addon messages
+Checked in the game, not offline: real map tiles, fonts and non-English letters, dropdown menus, drag and drop, addon messages
 between two players (and during a boss lockdown), Settings panel, minimap button, the other addons' data. The
 ordered checklist is in the [release notes](docs/RELEASE-NOTES-0.1.0.md#test-checklist). `/dp debug` reports what the
 client provides. Details: [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).

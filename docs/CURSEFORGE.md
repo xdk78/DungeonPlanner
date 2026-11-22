@@ -10,7 +10,7 @@ _The text below is the project description as published on CurseForge. Paste eve
 
 ![](https://media.forgecdn.net/attachments/description/1808067/description_a7d9bc32-4429-4ff8-970f-f6b5ebe579e0.png)
 
-**See it** (clips made from the addon's own UI; these links work once `docs/media/` is on `main`):
+**See it** (clips rendered from the addon's own UI):
 
 ![Click a step in the list and the map follows](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/steps.gif)
 ![Run mode: Next, Next](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/runmode.gif)

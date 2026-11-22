@@ -190,12 +190,10 @@ uv run --script tools/make_gifs.py --png $W/png --out docs/media     # --only st
 
 `tools/make_gifs.py` (PEP 723, Pillow) crops, scales to about 720 px, captions (the bundled Alegreya Sans) and writes
 `docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops, delays and captions
-are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. **Look
-at every frame before committing:** pick frames where the renderer's placeholders do not show (grey loading-screen
-boxes: the picker sequence stubs `GetFileIDFromPath` for them; missing scroll bars; unrotated chevrons), stub the
-texture in the view's setup or leave the view out. A frame that trips the layout lint is a real state to fix or avoid
-(the steps are chosen so none does). The GIFs are approximations of the client, as `docs/media/README.md` says; real
-in-game screenshots (`/dp shots`) still go in `docs/screenshots/`.
+are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. Check
+every frame before committing: no renderer placeholders (grey loading-screen boxes, missing scroll bars, unrotated
+chevrons) and no layout lint findings. Stub the texture in the view's setup or leave the frame out. In-game screenshots
+(`/dp shots`) go in `docs/screenshots/`.
 
 ## What is verified where
 

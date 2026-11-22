@@ -21,23 +21,14 @@ follow [Semantic Versioning](https://semver.org/).
   sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
   fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
   older step. Older Dungeon Planners ignore them.
-- **Report a problem**: `/dp report`, a `!` button in the window's title bar and a button in Settings (Troubleshooting)
-  open a window with one text to paste into a GitHub issue: addon and game versions, language, the instance, your plan's
-  id, revision and step, the other addons it works with and whether each is loaded, the `/dp debug` summary and the
-  last ten Lua errors from Dungeon Planner (also read from BugGrabber when it is installed) and the actions the game
-  blocked (taint, with where it happened), the last log lines, the settings that differ from the defaults and the input
-  style (gamepad or keyboard). A "What happened?" field goes into the text; "Short for Discord" fits it in 2000
-  characters, dropping details in a fixed order and keeping your words whole. The window shows the new-issue link to
-  copy (short, with the first fields filled in). It never holds your character, realm, guild, group members or chat, and
-  none of your plans' names or notes. The GitHub bug form now has the matching fields.
-- **What's new**: a card with the highlights, shown once after the addon is updated (never on a first install, where a
-  short welcome with `/dp`, run mode and three tips shows instead). It waits for a quiet moment: no combat, cinematic,
-  instance or open Dungeon Planner window. `/dp new` and a Settings button show it again; a note can open its Settings
-  group. In all six languages.
-- **`/dp perf`**: an opt-in probe that times the addon's events, internal messages and callbacks (own time against
-  total, so nested calls are not counted twice), the frames and hitches that were ours, spikes over 5 ms with what called
-  them, and the addon's memory and the game's own profiler. Off until `/dp perf start`: nothing is swapped or running
-  before that; `/dp perf stop` puts everything back.
+- **Report a problem**: `/dp report`, the `!` button in the window's title bar or Settings (Troubleshooting) opens a
+  text to paste into a GitHub issue: versions, language, the plan, other addons, the `/dp debug` summary, recent
+  Dungeon Planner errors and blocked actions. Add what happened in your own words; "Short for Discord" fits it in one
+  message. Character, realm, guild, group and plan names are replaced with `<name>`, and chat is never included.
+- **What's new**: a card with the highlights, shown once after an update at a quiet moment (out of combat and
+  instances). A first install shows a short welcome instead. `/dp new` shows it again.
+- **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory. Nothing runs until
+  `/dp perf start`; `/dp perf stop` turns it off.
 
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
