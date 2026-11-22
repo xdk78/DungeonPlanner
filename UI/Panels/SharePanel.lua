@@ -59,8 +59,8 @@ function Panel.Create(parent, ctx)
 	c.exportPlan.dpGround = "surface"
 	c.exportPack = W.Button(c, L["Export all plans of this instance"], "outline", function()
 		local p = plan()
-		local key = ns.DB.InstanceKey(p.instance)
-		local plans = ns.DB.Plans(key)
+		-- Every own plan of the same instance, whatever language or key it was saved under (Bundled.SameInstance).
+		local plans = ns.DB.PlansFor(ns.UI.EntryForPlan(p))
 		local text, err = ns.Codec.ExportPack(ns.Names.Instance(p.instance), "", plans)
 		c.exportBox:SetValue(text or ("Error: " .. tostring(err)))
 		c.exportBox.edit:SetFocus()

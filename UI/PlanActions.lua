@@ -355,13 +355,17 @@ function Home.AllEntries()
 			end
 		end
 	end
+	local entryKeys = {} -- [entry] = its canonical key, worked out once for all the plans compared with it
 	local function addFromPlan(plan)
 		local key = ns.DB.InstanceKey(plan.instance)
 		if seen[key] or key == "other" then
 			return
 		end
 		for _, e in ipairs(out) do
-			if ns.Bundled.SameInstance(plan, e) then
+			if entryKeys[e] == nil then
+				entryKeys[e] = ns.Bundled.EntryKey(e)
+			end
+			if ns.Bundled.SameInstance(plan, e, entryKeys[e]) then
 				return
 			end
 		end

@@ -169,17 +169,23 @@ function UI.EntryForPlan(plan)
 	if resolved and score >= 75 then
 		return resolved
 	end
-	-- The bundled instance the plan is (its floors tell a wing; IDs a localized name), so the entry finds the same
-	-- recommended plans, pictures and travel facts.
-	local instanceMapID = ns.Instances.InstanceMapID(plan)
+	-- An own plan of a bundled instance (its floors tell a wing; IDs a localized name) belongs on that instance's card:
+	-- the entry of its first recommended plan, the card the home table merges it into (Home.AllEntries), so the plan is
+	-- remembered there (ui.lastPlans) and the home selection stays on that card. That also joins an English plan made
+	-- inside the instance (no uiMapID: a "name:" key) with a card keyed by its map ("map:").
+	local canonical = ns.Instances.ResolvedKey(plan)
+	local rec = canonical and not plan.bundled and ns.Instances.RecommendedFor(canonical)
+	if rec then
+		return UI.EntryForPlan(rec)
+	end
 	return {
 		key = key,
 		name = ns.Names.Instance(inst),
 		kind = inst.kind,
 		ejInstanceID = inst.ejInstanceID,
 		uiMapID = inst.uiMapID,
-		instanceMapID = instanceMapID,
-		canonicalKey = ns.Instances.ResolvedKey(plan),
+		instanceMapID = ns.Instances.InstanceMapID(plan),
+		canonicalKey = canonical,
 		levelMin = inst.levelMin,
 		levelMax = inst.levelMax,
 	}

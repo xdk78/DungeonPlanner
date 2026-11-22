@@ -270,7 +270,8 @@ function Instances.PinsNotPlaced(plan, floor, pins)
 end
 
 -- An instance's level range: the Group Finder's (by the journal's instance map ID, else by the instance's own map ID
--- when no other wing shares it, so an English name finds a German client's entry, else by name; Data/GameFiles.lua)
+-- when no other wing shares it, so an English name finds a German client's entry; only when the finder lists one
+-- instance for that map, not the first of several such as Blackrock Depths' parts; else by name; Data/GameFiles.lua)
 -- when it gives two different levels, else a plan's (recommended plans carry one), else the finder's one level
 -- (GameFiles.ResolveRange). entry = a home entry or plan instance { ejInstanceID?, name?, levelMin?, levelMax? }.
 -- Returns min, max or nil.
@@ -281,6 +282,6 @@ function Instances.LevelRange(entry)
 		local iid, shared = Instances.InstanceMapID(entry)
 		mapID = not shared and iid or nil
 	end
-	local hit = ns.GameFiles.FinderFor(entry and entry.name, mapID)
+	local hit = mapID and ns.GameFiles.FinderByMap(mapID) or ns.GameFiles.FinderFor(entry and entry.name)
 	return ns.GameFiles.ResolveRange(hit, entry)
 end

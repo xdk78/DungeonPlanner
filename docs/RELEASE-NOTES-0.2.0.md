@@ -64,7 +64,9 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
 - **Wings of one instance** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) share one instance ID. A plan
   made inside one of them in another game language cannot tell which wing it is; it keeps the parchment instead of
   showing another wing's map, and `/dp debug` lists it. A plan for a wing made from the instance list, or copied from
-  a recommended plan, knows its wing.
+  a recommended plan, knows its wing. Recorded runs are stored by instance ID, so a wing's Runs section lists the
+  runs of every wing of that instance, and run mode counts a boss kill in any wing unless the client says which wing
+  you are in.
 - The limits listed for 0.1.0 still apply ([RELEASE-NOTES-0.1.0.md](RELEASE-NOTES-0.1.0.md#known-limitations-on-wow-forever)).
 
 ## Test checklist
@@ -154,6 +156,6 @@ what to look for.
     Deadmines and Hall of Thanes and make a New plan from the window: the map, the Enemies layer, the Bosses facts,
     Prep and Getting there are the recommended plan's, and the home table shows one card per instance. In Scarlet
     Monastery the new plan stays on the parchment (the client does not say which wing). `/dp debug` has an "Own plans
-    matched" line and lists "Instance names by ID" when `GetRealZoneText` is missing.
+    matched" line and lists "Instance names by ID (present)" when `GetRealZoneText` is missing.
 26. **Type `/dp shots` and wait about half a minute.** Every view is captured; put the useful screenshots in
     `docs/screenshots/`.

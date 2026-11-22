@@ -27,8 +27,10 @@ Rules:
   received. Invalid stored plans go to a quarantine list, never deleted.
 - **IDs are truth, names are display.** Plans store the client's IDs; `Data/Names.lua` resolves names at display time.
   The bundled data is keyed by English instance names, so every lookup from a plan goes through
-  `Instances.CanonicalName` / `Providers.PlanKey` (`Data/InstanceIdentity.lua`): the instance map ID, then the English
-  name, the instance's and floors' map IDs, the floor names and the client's own names, the stored name last.
+  `Instances.CanonicalName` / `Providers.PlanKey` (`Data/InstanceIdentity.lua`): the exact English name (unless the
+  instance map ID rules it out), the instance map ID, then for dungeons and raids the instance's and floors' map IDs,
+  the floor names and the client's own names, the stored name last. A plan of a bundled instance opens on that
+  instance's home card (`UI.EntryForPlan`), and plans are grouped for it by `Bundled.SameInstance`, not by key.
 - **Explicit state machines** for phased behaviour: transfers (`Share/Transfer.lua`: state + `Step*(state, event, now)`
   returning effects), group sync for run mode (`Share/Sync.lua`: `Sync.Step(state, event, now)`) and map dragging
   (`MapCanvas` `view.drag`: idle / pan / marker / point / draw). Timers are events.
@@ -289,7 +291,10 @@ Every value read from the game goes through `Util.Plain` (a secret becomes nil a
 summaries, best splits per boss (`RunLog.Best`, `Splits`), and `RunLog.PlanFromRun`, a draft plan (pulls in order with
 their make-up in the note, bosses in kill order with their encounter IDs, no markers) that goes through
 `Validate.Plan` and `DB.AddPlan`. The Runs section (`UI/Panels/RunsPanel.lua`) shows the runs of the plan's instance,
-found by the Group Finder's instance map ID for its name (`Recorder.KeyForPlan`); Run mode shows the live pull count.
+found by its instance map ID (`Recorder.KeyForPlan`: the plan's stored `instanceMapID`, else its bundled instance's
+through `Instances.InstanceMapID`, else the Group Finder's for its name, else a run recorded under the same name). Runs
+are stored under `GetInstanceInfo`'s instance ID, which the wings of one instance share, so a wing's plan lists every
+wing's runs (the client does not say which wing a run was in). Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
 

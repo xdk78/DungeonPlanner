@@ -89,13 +89,9 @@ local function recommendedFor(instance, instanceID)
 	if ns.Util.IsInteger(instanceID) and not instance.instanceMapID then
 		probe = setmetatable({ instanceMapID = instanceID }, { __index = instance })
 	end
-	local key = ns.Instances.ResolvedKey(probe)
-	if key then
-		for _, plan in ipairs(ns.Bundled.All()) do
-			if ns.Providers.Key(plan.instance.name) == key then
-				return plan
-			end
-		end
+	local plan = ns.Instances.RecommendedFor(ns.Instances.ResolvedKey(probe))
+	if plan then
+		return plan
 	end
 	local name = type(instance.name) == "string" and instance.name or ""
 	return name ~= "" and ns.Bundled.ForInstance(instance)[1] or nil

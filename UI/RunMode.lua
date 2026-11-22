@@ -778,12 +778,8 @@ function RunMode.OnKill(encounterID, name)
 	if enc then
 		nextIndex = ns.Steps.AfterKill(steps, current, enc.id)
 	else
-		-- In the plan's instance: by its map ID (the same in every client language), else by name.
-		local here = ns.Instances.Current()
-		local iid = ns.Instances.InstanceMapID(plan)
-		local inst = ns.Names.Instance(plan.instance)
-		local same = iid and here.instanceID == iid or ns.Match.Norm(here.name or "") == ns.Match.Norm(inst)
-		if not (here.inInstance and same) then
+		-- In the plan's instance (and wing, where both are known): Instances.IsHere.
+		if not ns.Instances.IsHere(plan, ns.Instances.Current()) then
 			return
 		end
 		local i = ns.Steps.Next(steps, current, "boss")

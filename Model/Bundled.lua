@@ -18,6 +18,7 @@ local raws, order = {}, {} -- added, not yet validated
 local seen = {} -- every id ever added
 local cache = { list = {}, byId = {} } -- validated: { list = { plan, ... }, byId = { ["b:<id>"] = plan } }
 Bundled.problems = {} -- { "<id>: what was wrong" }, shown by /dp debug
+Bundled.revision = 0 -- counts plans added, so caches over the recommended plans see a change without validating them
 
 function Bundled.Add(raw)
 	if type(raw) ~= "table" then
@@ -40,6 +41,7 @@ function Bundled.Add(raw)
 	seen[key] = true
 	raws[key] = raw
 	order[#order + 1] = key
+	Bundled.revision = Bundled.revision + 1
 	return true
 end
 
@@ -101,7 +103,9 @@ Bundled.canonicalKey = nil
 -- Does a plan (or a plan's instance) describe the same instance as `entry` ({ ejInstanceID?, uiMapID?, name? })?
 -- Journal ID first, then map ID, then the bundled instance both are (a plan's floors tell a wing; a localized name
 -- finds its instance by ID), then name: recommended plans are written outside the game and may carry only some of them.
-function Bundled.SameInstance(plan, entry)
+-- `entryKey` (optional): the entry's canonical key, worked out once by a caller that compares many plans with it
+-- (false: none).
+function Bundled.SameInstance(plan, entry, entryKey)
 	local planInstance = type(plan) == "table" and type(plan.instance) == "table" and plan.instance or plan
 	if type(planInstance) ~= "table" or type(entry) ~= "table" then
 		return false
@@ -114,8 +118,12 @@ function Bundled.SameInstance(plan, entry)
 	end
 	local canonical = Bundled.canonicalKey
 	if canonical then
-		local a, b = canonical(plan), canonical(entry)
-		if a and b then
+		local b = entryKey
+		if b == nil then
+			b = canonical(entry)
+		end
+		local a = b and canonical(plan)
+		if a then
 			return a == b
 		end
 	end
@@ -132,11 +140,18 @@ function Bundled.SameInstance(plan, entry)
 	return false
 end
 
+-- The `entryKey` for SameInstance: the entry's canonical key, false without one (or without the identity module).
+function Bundled.EntryKey(entry)
+	local canonical = Bundled.canonicalKey
+	return canonical and type(entry) == "table" and canonical(entry) or false
+end
+
 -- Recommended plans for one instance.
 function Bundled.ForInstance(entry)
 	local out = {}
+	local key = Bundled.EntryKey(entry)
 	for _, plan in ipairs(get().list) do
-		if Bundled.SameInstance(plan, entry) then
+		if Bundled.SameInstance(plan, entry, key) then
 			out[#out + 1] = plan
 		end
 	end

@@ -223,8 +223,8 @@ T.case("Identity: wings sharing one instance ID are told apart by floor, name or
 		T.ok(ns.GameFiles.FloorArt(armory, 1).base ~= ns.GameFiles.FloorArt(library, 1).base, "another map")
 		T.eq(Instances.ResolvedKey(plan("Scharlachrotes Kloster", { { name = "Cathedral" } })), "scarletmonasterycathedral",
 			"by the recommended plan's floor name")
-		T.eq(Instances.ResolvedKey(plan("Scharlachrotes Kloster", { { name = "" } }, "Graveyard run")),
-			"scarletmonasterygraveyard", "by a word of the plan's name")
+		T.eq(Instances.ResolvedKey(plan("Scharlachrotes Kloster (Graveyard)", { { name = "" } })),
+			"scarletmonasterygraveyard", "by the wing's label in the instance name")
 		T.eq(Instances.ResolvedKey(plan("Scarlet Monastery: Armory", { { name = "" } })), "scarletmonasteryarmory",
 			"by the English name")
 		-- Nothing tells the wing: no wing at all, not the first one.
@@ -257,7 +257,23 @@ T.case("Identity: wings sharing one instance ID are told apart by floor, name or
 				floors = { { name = "Crusader's Square" }, { name = "The Gauntlet" } } })
 		end
 		T.eq(Instances.ResolvedKey(stratPlan("Plan")), nil, "both wings have these floors")
-		T.eq(Instances.ResolvedKey(stratPlan("Undead side")), "stratholmeundeadserviceentrance", "by a word")
+		-- A plan's own name never picks a wing: players name plans freely, and words such as "main", "gate", "entrance"
+		-- or another wing's label in it say nothing about the wing.
+		for _, name in ipairs({ "Main tank route", "Entrance pulls", "Undead side", "Service entrance run", "Live" }) do
+			T.eq(Instances.ResolvedKey(stratPlan(name)), nil, "plan name '" .. name .. "' picks no wing")
+		end
+		T.eq(Instances.ResolvedKey(plan("Scharlachrotes Kloster", { { name = "" } }, "Library and Graveyard")), nil,
+			"Scarlet Monastery: the plan's name picks no wing")
+		local lower = make({ name = "Upper key quest", instance = { name = "Untere Schwarzfelsspitze", kind = "dungeon",
+			instanceMapID = ns.TravelData.instances["Lower Blackrock Spire"].iid }, floors = { { name = "" } } })
+		T.eq(Instances.ResolvedKey(lower), nil, "a Lower Spire plan named 'Upper ...' is not the Upper Spire")
+		-- Only the label counts in the instance name: "Main Gate" is not "Live".
+		local function stratNamed(name)
+			return make({ name = "Plan", instance = { name = name, kind = "dungeon", instanceMapID = strat },
+				floors = { { name = "" } } })
+		end
+		T.eq(Instances.ResolvedKey(stratNamed("Stratholme (Undead)")), "stratholmeundeadserviceentrance", "its label")
+		T.eq(Instances.ResolvedKey(stratNamed("Stratholme Main Gate")), nil, "generic words of the name do not count")
 		-- Blackrock Spire: the lower spire's six floors, or the upper spire's seventh.
 		local brs = ns.TravelData.instances["Lower Blackrock Spire"].iid
 		local function spire(rec)
@@ -333,4 +349,100 @@ T.case("Identity: the instance map ID is an optional plan field; copies and olde
 			T.ok(ns.Travel.For(rec) ~= nil, rec.id .. ": travel facts")
 		end
 	end
+end)
+
+T.case("Identity: an English name resolves as before; zones are never looked for by maps, floors or client names", function()
+	boot()
+	run(client("enUS", nil, nil), function()
+		-- The exact English name first, unless the instance's ID rules it out: an ID no bundled instance has does not.
+		local mc = make({ name = "Plan", instance = { name = "Molten Core", kind = "raid", instanceMapID = 99999 } })
+		T.eq(Instances.ResolvedKey(mc), "moltencore", "Molten Core with an unknown instance ID")
+		-- An English Lower Spire plan whose floors carry every spire map (the Upper Spire's seventh too): its name wins.
+		local floors = {}
+		for m = 250, 256 do
+			floors[#floors + 1] = { uiMapID = m, name = "" }
+		end
+		local brs = ns.TravelData.instances["Lower Blackrock Spire"].iid
+		for _, iid in ipairs({ false, brs }) do
+			local lower = make({ name = "Plan", instance = { name = "Lower Blackrock Spire", kind = "dungeon",
+				instanceMapID = iid or nil }, floors = floors })
+			T.eq(Instances.ResolvedKey(lower), "lowerblackrockspire", "by its English name, ID " .. tostring(iid))
+		end
+		-- A zone (kind "other") with a floor named like a recommended plan's floor stays a zone.
+		local zone = make({ name = "Plan", instance = { name = "Somewhere outdoors", kind = "other" },
+			floors = { { name = "Library" } } })
+		T.eq(Instances.Resolve(zone), nil, "a zone plan with a floor named Library")
+		local dungeon = make({ name = "Plan", instance = { name = "Somewhere", kind = "dungeon" }, floors = { { name = "Library" } } })
+		T.eq(Instances.ResolvedKey(dungeon), "scarletmonasterylibrary", "the same floor in a dungeon plan does count")
+	end)
+end)
+
+T.case("Identity: the client's names answer only when one instance has the name", function()
+	boot()
+	local function saved(name)
+		return make({ name = "Alt", instance = { name = name, kind = "dungeon" }, floors = { { name = name } } })
+	end
+	-- Two instance IDs answer the same name: no answer.
+	run(client("deDE", nil, nil, { [36] = "Die Todesminen", [43] = "Die Todesminen" }), function()
+		T.eq(Instances.Resolve(saved("Die Todesminen")), nil, "one name, two instances")
+	end)
+	-- The client ignores the argument and gives the current zone for every ID: no answer for anything.
+	local everywhere = setmetatable({}, { __index = function()
+		return "Wald von Elwynn"
+	end })
+	run(client("deDE", nil, nil, everywhere), function()
+		T.eq(Instances.Resolve(saved("Wald von Elwynn")), nil, "the current zone is no instance")
+		T.eq(Instances.Resolve(saved("Die Todesminen")), nil, "and names nothing else")
+	end)
+end)
+
+T.case("Identity: level ranges by instance ID only when the Group Finder lists one instance for it", function()
+	boot()
+	local real = _G.C_LFGList
+	_G.C_LFGList = {
+		GetAvailableActivities = function()
+			return { 1, 2, 3 }
+		end,
+		GetActivityInfoTable = function(id)
+			local rows = {
+				{ "Blackrock Depths - Detention Block", 40, 45, 230 },
+				{ "Blackrock Depths - Upper City", 45, 50, 230 },
+				{ "Die Todesminen", 18, 23, 36 },
+			}
+			local r = rows[id]
+			return r and { fullName = r[1], minLevelSuggestion = r[2], maxLevelSuggestion = r[3], mapID = r[4] } or nil
+		end,
+	}
+	ns.GameFiles.Reset()
+	local ok, err = pcall(function()
+		local brd = bundled("blackrock-depths")
+		local lo, hi = ns.Instances.LevelRange(ns.UI.EntryForPlan(brd))
+		T.ok(lo == brd.instance.levelMin and hi == brd.instance.levelMax, "two parts listed: the plan's own range, "
+			.. tostring(lo) .. "-" .. tostring(hi))
+		lo, hi = ns.Instances.LevelRange(ns.UI.EntryForPlan(bundled("the-deadmines")))
+		T.ok(lo == 18 and hi == 23, "one entry for the Deadmines' ID, in German: " .. tostring(lo) .. "-" .. tostring(hi))
+	end)
+	_G.C_LFGList = real
+	ns.GameFiles.Reset()
+	assert(ok, err)
+end)
+
+T.case("Identity: run mode's 'in the plan's instance' tells wings apart when both are known", function()
+	boot()
+	run(client("deDE", nil, nil), function()
+		local iid = ns.TravelData.instances["Scarlet Monastery: Library"].iid
+		local library = make({ name = "Plan", instance = { name = "Scharlachrotes Kloster", kind = "dungeon",
+			instanceMapID = iid }, floors = { { uiMapID = 303, name = "" } } })
+		local unclear = make({ name = "Plan", instance = { name = "Scharlachrotes Kloster", kind = "dungeon",
+			instanceMapID = iid }, floors = { { name = "" } } })
+		local function here(uiMapID, instanceID)
+			return { inInstance = true, instanceID = instanceID or iid, uiMapID = uiMapID, name = "Scharlachrotes Kloster" }
+		end
+		T.ok(Instances.IsHere(library, here(303)), "in the Library")
+		T.ok(not Instances.IsHere(library, here(437)), "the client says Armory: not the Library's run")
+		T.ok(Instances.IsHere(library, here(nil)), "the client names no wing: the shared instance counts")
+		T.ok(Instances.IsHere(unclear, here(437)), "the plan's wing is unclear: the shared instance counts")
+		T.ok(not Instances.IsHere(library, here(nil, 36)), "another instance")
+		T.ok(not Instances.IsHere(library, { inInstance = false }), "outside")
+	end)
 end)

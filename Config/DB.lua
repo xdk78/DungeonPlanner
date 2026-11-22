@@ -329,8 +329,9 @@ end
 -- Saved plans for an instance entry ({ ejInstanceID?, uiMapID?, name? }), matched like recommended plans are.
 function DB.PlansFor(entry)
 	local out = {}
+	local key = ns.Bundled.EntryKey(entry)
 	for _, plan in ipairs(DB.Plans()) do
-		if ns.Bundled.SameInstance(plan, entry) then
+		if ns.Bundled.SameInstance(plan, entry, key) then
 			out[#out + 1] = plan
 		end
 	end
@@ -346,11 +347,22 @@ function DB.RememberPlan(instanceKey, planId)
 	end
 end
 
+-- A plan remembered under another key of the same instance (saved by an earlier version under its localized name or
+-- its "name:" key while the card is keyed by its map) counts too: the instances are compared, not the keys.
 function DB.RememberedPlan(entry)
-	local id = entry and entry.key and ns.db.ui.lastPlans[entry.key]
-	local plan = id and DB.GetPlan(id)
+	if not (entry and entry.key) then
+		return nil
+	end
+	local last = ns.db.ui.lastPlans
+	local plan = last[entry.key] and DB.GetPlan(last[entry.key])
 	if plan and ns.Bundled.SameInstance(plan, entry) then
 		return plan
+	end
+	for _, key in ipairs(Util.SortedKeys(last)) do
+		plan = key ~= entry.key and DB.GetPlan(last[key])
+		if plan and ns.Bundled.SameInstance(plan, entry) then
+			return plan
+		end
 	end
 	return nil
 end
