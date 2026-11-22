@@ -338,9 +338,9 @@ T.case("Map toolbar: tool pictures, their fallbacks, tooltips and the lines' fit
 		T.eq(f.focus:IsShown(), spec.focus, w .. " px: Focus")
 		T.eq(f.fit:IsShown(), spec.fit, w .. " px: Fit")
 		for _, tool in ipairs(ns.MapToolbar.TOOLS) do
-			local b = f.toolButtons[tool]
-			T.eq(b.label:IsShown(), spec.names, w .. " px: " .. tool .. "'s name")
-			T.eq(b:GetWidth(), b:WidthFor(not spec.names), w .. " px: " .. tool .. "'s width")
+			local tb = f.toolButtons[tool]
+			T.eq(tb.label:IsShown(), spec.names, w .. " px: " .. tool .. "'s name")
+			T.eq(tb:GetWidth(), tb:WidthFor(not spec.names), w .. " px: " .. tool .. "'s width")
 		end
 		return level
 	end
