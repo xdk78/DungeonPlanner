@@ -240,6 +240,7 @@ UI\MapSpawns.lua
 UI\MapPins.lua
 UI\MapDraw.lua
 UI\MapCanvas.lua
+UI\MapArt.lua
 UI\MapInput.lua
 UI\MainFrame.lua
 UI\Portraits.lua

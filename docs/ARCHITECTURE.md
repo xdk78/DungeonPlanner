@@ -405,7 +405,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | UI/InstancePage.lua, UI/SidePanel.lua | the war table: header pickers, section bar; steps and party |
 | Model/Picker.lua, UI/InstancePicker.lua | the instance picker: sections, level bands, search and cursor (pure); its rows and popup |
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line and the drawings' menu |
-| UI/MapCanvas.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing; pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
+| UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
 | UI/RunMode.lua | the run window (with the recorder line and the drift line) |
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
 | Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
