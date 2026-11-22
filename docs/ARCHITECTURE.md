@@ -61,6 +61,9 @@ Rules:
   repairs it on load). Additive, like the recorder.
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
   `Acks.Normalize` on load). Additive.
+- `global.entrances` - instance entrances learned from play (`Model/TravelLive.lua`): `[instance key] = { map, x, y,
+  at }` (a spot on the instance's zone map; `at` when it was learned), at most 100, `NormalizeLearned` on load;
+  absent while the data is read-only. Additive like `shareAcks`: an older version ignores the field and keeps it.
 - `global.shareLinks[local plan id]` - which plan a copy received in game came from: `{ plan = the sender's plan id,
   at }` (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync matches a leader's plan to the copy (by its steps
   revision, `Sync.Signature`). Pasted strings make none. Schema 5 (migration 5 starts it); a link goes with its plan.
@@ -307,7 +310,39 @@ UI/Panels/PrepPanel.lua the section; RunMode.PrepText the run window's line
 ```
 
 Prep notes are a plan field (`prep`, format 5, optional; `DB.SCHEMA` 6 only marks the data). Idle cost: event
-handlers that return at once unless a watcher shows prep; no ticker.
+handlers that return at once unless a watcher shows prep.
+
+The live map (`UI/TravelMap.lua`) runs on a state machine, `Model/TravelLive.lua`:
+
+```
+hidden  --show (outdoors)-->  live     [start ticker, draw]       ticker: C_Timer.NewTicker(0.1) -> tick event
+hidden  --show (inside)--->   waiting  [draw]                     inside = the player is in the target already
+live    --tick (no position)-> waiting [stop, draw]               a tick carries the position it read; an
+                                                                  unchanged position and line draw nothing
+waiting --world (outdoors)-->  live    [start, draw]              world: PLAYER_ENTERING_WORLD, ZONE_CHANGED_NEW_AREA
+live or waiting --world (in the target, inside false)--> waiting, inside [stop, arrived: its plan and run mode open,
+                                                                  the window closes]
+live or waiting --world (in the target, inside true)--> waiting  [no arrival: the player did not come in]
+any     --hide-->              hidden  [stop]                     a tick or world event while hidden changes nothing
+```
+
+"In the target" comes from the instance ID (`GetInstanceInfo`'s eighth value, `Travel.Here`), never the localized
+name: each travel record carries its plan's instance map ID (`iid`) and floor maps (`maps`), and when wings share an
+ID (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) the floor map the client gives picks the wing; without
+one, every wing of the instance counts.
+
+Learned entrances: `PLAYER_LEAVING_WORLD` keeps the outdoor position (`Travel.Player`, with world yards). When the next
+`PLAYER_ENTERING_WORLD` ends inside an instance (only that event uses the spot; `ZONE_CHANGED_NEW_AREA` updates the
+live map alone), `TravelLive.Choose` takes the one record of that instance whose bundled entrance lies within 400
+world yards of that spot (or, for an instance with no bundled entrance at all, whose zone map the spot is on; a
+bundled entrance the client cannot place in the world learns nothing); none, or several (wings sharing one entrance),
+learns nothing. So a summon, a hearthstone or a portal from farther away teaches nothing, while one taken within 400
+yards of the entrance can be learned. The spot is put on the map the entrance is drawn on and filed by
+`TravelLive.Learn` under the instance in `global.entrances` (per account, at most 100, `NormalizeLearned` on load;
+additive, no schema change); an instance's first learned spot is replaced only by one within 100 yards of it
+(`RELEARN_RADIUS`), so a later summon nearby does not move it. `Travel.Entrance` prefers it over the bundled one
+(`Travel.Bundled`). `/dp entrances reset`, or the Settings panel's "Forget learned entrances" (Troubleshooting; for
+gamepad players, who have no slash commands), forgets them all and the bundled entrances are used at once.
 
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 

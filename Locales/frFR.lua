@@ -1050,4 +1050,10 @@ ns.Locales.frFR = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "« Guider » dans Préparation règle la flèche de TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "« Guider » dans Préparation confie le trajet à Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "« Guider » dans Préparation confie le trajet à Shortest Path Forever",
+	["No map art for this zone."] = "Pas de carte pour cette zone.",
+	["(you are in %s)"] = "(vous êtes en %s)",
+	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d entrée apprise (/dp entrances reset l'oublie).|%d entrées apprises (/dp entrances reset les oublie).",
+	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "%d entrée apprise oubliée.|%d entrées apprises oubliées.",
+	["Forget learned entrances"] = "Oublier les entrées apprises",
+	["Getting there uses the bundled entrances again."] = "S'y rendre utilise de nouveau les entrées fournies.",
 }

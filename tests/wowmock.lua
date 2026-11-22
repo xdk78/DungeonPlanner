@@ -253,9 +253,9 @@ function M.Install()
 		end,
 	}
 	-- Prep and Getting there (Data/PrepInfo.lua, Data/Travel.lua, Data/Navigation.lua). A made-up world: map m spans
-	-- 10000 x 1000 yards (east-west, north-south) from world (-10 m, 6000) to the south-east, map x going east (world y
-	-- falls), map y south (world x falls), on continent m % 2 unless a world spot placed it on another. Without an
-	-- override the "best" map of a world spot is the one whose band holds it. M.mapBoxes[m] = { continent, x0, y0 }
+	-- 10000 x 1000 yards (east-west, north-south) from world (500 - 10 m, 6000) to the south-east, map x going east
+	-- (world y falls), map y south (world x falls), on continent m % 2 unless a world spot placed it on another. Without
+	-- an override the "best" map of a world spot is the one whose band holds it. M.mapBoxes[m] = { continent, x0, y0 }
 	-- moves a map's top-left corner (a zone map round a real entrance). M.playerPos = { map, x, y } is where the player
 	-- stands outdoors (nil: inside an instance, no position).
 	M.questsDone, M.questLog, M.itemCounts, M.waypoints, M.openedMaps = {}, {}, {}, {}, {}
@@ -271,7 +271,7 @@ function M.Install()
 		if b then
 			return b[1], b[2], b[3]
 		end
-		return mapContinent[m] or m % 2, -m * 10, 6000
+		return mapContinent[m] or m % 2, -m * 10 + 500, 6000
 	end
 	_G.C_Map.GetWorldPosFromMapPos = function(m, pos)
 		local c, x0, y0 = box(m)

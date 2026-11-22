@@ -288,7 +288,8 @@ function W.Window(name, title, saved, minW, minH, opts)
 	f:SetMovable(true)
 	f:SetResizable(true)
 	f:EnableMouse(true)
-	f:SetSize(saved.width or 1000, saved.height or 680)
+	-- A size saved before the window's minimum grew (or by hand) opens at the minimum, not below it.
+	f:SetSize(math.max(minW, saved.width or 1000), math.max(minH, saved.height or 680))
 	if f.SetResizeBounds then
 		f:SetResizeBounds(minW, minH)
 	elseif f.SetMinResize then

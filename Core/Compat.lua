@@ -102,7 +102,7 @@ Compat.CHECKS = {
 	{ "Unit dead or ghost", "UnitIsDeadOrGhost", "deaths and wipes in recorded pulls" },
 	{ "Unit level", "UnitLevel", "level ranges of recorded pulls" },
 	{ "Minimap zone text", "GetMinimapZoneText", "sub-zone names of recorded pulls" },
-	{ "Player facing", "GetPlayerFacing", "/dp scan's position check" },
+	{ "Player facing", "GetPlayerFacing", "the live map's arrow turning (it points up), /dp scan's position check" },
 	{ "Indoors", "IsIndoors", "/dp scan's position check" },
 	-- /dp perf (Core/Perf.lua) and the report window (Core/Report.lua).
 	{ "Addon profiler", "C_AddOnProfiler.GetAddOnMetric", "the game's own timings in /dp perf" },

@@ -51,7 +51,7 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `debugprofilestop`, `C_AddOnProfiler.GetAddOnMetric` with `Enum.AddOnProfilerMetric`, `C_AddOns.GetAddOnMemoryUsage` / `UpdateAddOnMemoryUsage` (or the old globals), the `BugGrabber` global's `GetDB()`, `debugstack`, the events `ADDON_ACTION_BLOCKED` / `ADDON_ACTION_FORBIDDEN`, `C_InputInterfaceStyle.GetCurrentStyle` (or the CVar `InputDeviceInterfaceStyle`), `IsInInstance`, `InCinematic` | Inferred (retail 11.x/12.x), guarded; **not yet checked in game** | Retail API; `/dp debug` lists the three checkable ones | `/dp perf` (timings, memory), the report window's Lua errors, blocked actions and input style, and the What's new card's quiet-moment check; each missing call leaves its line out and says so. BugGrabber is only read |
 | `EJ_GetEncounterInfo`, `EJ_GetInstanceInfo`, `EJ_GetInstanceForMap` | Inferred, guarded | DBM uses `EJ_GetEncounterInfo` in shared code | Display names by ID (section 8) |
 | `ENCOUNTER_START`, `ENCOUNTER_END`, `BOSS_KILL` | Verified | ForeverDungeonJournal `Systems/RunLog.lua`; NeedRoll `Core/Drops.lua` | Kill tracking; the ID equals the journal's `dungeonEncounterID` |
-| `GetInstanceInfo` | Verified | 20 uses in Forever-only addons | Runs, difficulty |
+| `GetInstanceInfo` | Verified | 20 uses in Forever-only addons | Runs, difficulty; its eighth value (the instance ID) tells the Getting there window which instance the player entered, in any client language |
 | `C_ChatInfo.RegisterAddonMessagePrefix`, `SendAddonMessage`, `CHAT_MSG_ADDON` | Verified | ForeverDungeonJournal `Systems/VersionCheck.lua`; NeedRoll | Sharing (through AceComm) |
 | `C_ChatInfo.InChatMessagingLockdown`, `AreOutgoingAddonChatMessagesRestricted`, `Enum.SendAddonMessageResult` | Verified (pcall-guarded there too) | NeedRoll `Core/Init.lua` | Lockdown handling |
 | `Settings.RegisterCanvasLayoutCategory`, `Settings.RegisterAddOnCategory` | Verified | ForeverCore `UI/ForeverFamily.lua`; AceConfigDialog uses them | Options page |
@@ -107,7 +107,9 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `Texture:SetRotation` | Inferred, guarded | — | Route direction arrows, the Share section's Advanced caret; without it arrows point up and the caret down |
 | `C_NamePlate.GetNamePlates`, `UnitAffectingCombat`, `UnitIsDead`, `UnitIsDeadOrGhost`, `UnitLevel`, `UnitClassification`, `UnitCanAttack` | Inferred, guarded (each value through `Util.Plain`) | Retail 12.1.5 API; hostility, level and classification **checked in game** inside Hall of Thanes | The run recorder's enemy counts (`Tracker/Recorder.lua`); without nameplates pulls are only timed |
 | `GetMinimapZoneText`, `GetSubZoneText` | Inferred, guarded | Retail 12.1.5 API | Sub-zone names of recorded pulls |
-| `GetPlayerFacing`, `Minimap:IsProtected`, `GetZoom`, `GetZoomLevels`, `GetPingPosition` | Inferred, guarded, `/dp scan` only | Retail 12.1.5 API | Recorded by `/dp scan` (section 10); nothing is built on them |
+| `GetPlayerFacing` | Inferred, guarded | Retail 12.1.5 API | The live Getting there map's arrow, outdoors (`/dp scan` records it too); the arrow points up without it |
+| `PLAYER_LEAVING_WORLD` | Inferred | Retail event | The last outdoor spot before a loading screen, for learned entrances |
+| `Minimap:IsProtected`, `GetZoom`, `GetZoomLevels`, `GetPingPosition` | Inferred, guarded, `/dp scan` only | Retail 12.1.5 API | Recorded by `/dp scan` (section 10); nothing is built on them |
 | `COMBAT_LOG_EVENT_UNFILTERED` | **Not available** | ForeverDungeonJournal RunLog | Not used |
 | `C_QuestLog.IsQuestFlaggedCompleted`, `IsOnQuest`, `GetLogIndexForQuestID`, `GetTitleForQuestID` | Verified, guarded | DataStore_Quests, GearQuestForever, Attune, ForeverDungeonJournal | Prep's quest states and attunement quests; titles in the player's language when cached, else the bundled English name |
 | `C_Item.GetItemCount` (bank included), `GetItemCount` | Verified, guarded | Attune, BuffRadar, Altoholic | Prep's keys: carried or not; "Unknown" without |
@@ -510,7 +512,7 @@ in the diagnostics).
 | Hostility, level, classification (`UnitCanAttack`, `UnitLevel`, `UnitClassification`) | readable | In game | The run recorder's pull make-up |
 | Nameplates (`C_NamePlate.GetNamePlates`) | the plates of nearby enemies, each with its unit token (inferred) | Retail API; `/dp scan` records the count and which fields read | The run recorder's enemy counts, every 0.5 s during combat only |
 | Combat start and end, encounters (`PLAYER_REGEN_*`, `ENCOUNTER_END`, `BOSS_KILL`) | available | Verified (section 3) | Pull segments, boss kills, wipes |
-| Facing (`GetPlayerFacing`) | nil in instances on Retail since 7.1 (inferred for Forever) | `/dp scan` records it | Nothing |
+| Facing (`GetPlayerFacing`) | nil in instances on Retail since 7.1 (inferred for Forever) | `/dp scan` records it | Nothing inside; outdoors it turns the live Getting there map's arrow |
 | Minimap ping offset (`Minimap:GetPingPosition`) | an offset from the player in minimap units (inferred) | `/dp scan` records it | Nothing |
 | The minimap's dungeon layout | drawn by the game inside the `Minimap` frame; its pixels cannot be read, but the pictures it is drawn from are ordinary textures | Seen in game; the files checked offline (section 9) | The maps of floors without map art (section 9) |
 

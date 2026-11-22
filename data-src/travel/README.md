@@ -32,6 +32,13 @@ A leg's label is written the same way: the names of the two docks' nearest fligh
 (the town before the comma, "Grom'gol - Undercity"), in the direction of travel. A leg whose dock has no flight master
 that near, or whose docks share one, keeps OpenMap's route name.
 
+Each record also carries, from the plan itself (`data-src/dungeons/<slug>.json`), its instance map ID (`iid`, the
+plan's `instanceMapID`) and its floors' uiMapIDs (`maps`), so the live map knows which instance the player entered
+from `GetInstanceInfo` without its localized name, and which wing of a shared instance from the floor map. Hyjal
+Summit has no `iid` (its plan's `instanceMapID` is unknown), so walking into it opens nothing and no entrance is
+learned for it; `--report` lists every record without one. Arrival needs the client to call the instance a dungeon
+or a raid (`GetInstanceInfo`'s type `party` or `raid`); Zul'Gurub is a raid instance, and either type counts.
+
 ## `places.json` (researched)
 
 ```json

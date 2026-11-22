@@ -1050,4 +1050,10 @@ ns.Locales.ruRU = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "«Вести» в «Подготовке» ставит стрелку TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "«Вести» в «Подготовке» передает путь в Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "«Вести» в «Подготовке» передает путь в Shortest Path Forever",
+	["No map art for this zone."] = "Нет карты этой зоны.",
+	["(you are in %s)"] = "(вы в: %s)",
+	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d изученный вход (/dp entrances reset забывает его).|%d изученных входа (/dp entrances reset забывает их).|%d изученных входов (/dp entrances reset забывает их).",
+	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "Забыт %d изученный вход.|Забыто %d изученных входа.|Забыто %d изученных входов.",
+	["Forget learned entrances"] = "Забыть изученные входы",
+	["Getting there uses the bundled entrances again."] = "«Как добраться» снова использует встроенные входы.",
 }

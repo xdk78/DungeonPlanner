@@ -1050,4 +1050,10 @@ ns.Locales.deDE = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "„Navigieren“ in Vorbereitung setzt TomToms Pfeil",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "„Navigieren“ in Vorbereitung übergibt den Weg an Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "„Navigieren“ in Vorbereitung übergibt den Weg an Shortest Path Forever",
+	["No map art for this zone."] = "Keine Karte für diese Zone.",
+	["(you are in %s)"] = "(du bist in %s)",
+	["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."] = "%d gelernter Eingang (/dp entrances reset vergisst ihn).|%d gelernte Eingänge (/dp entrances reset vergisst sie).",
+	["Forgot %d learned entrance.|Forgot %d learned entrances."] = "%d gelernter Eingang vergessen.|%d gelernte Eingänge vergessen.",
+	["Forget learned entrances"] = "Gelernte Eingänge vergessen",
+	["Getting there uses the bundled entrances again."] = "Anreise nutzt wieder die mitgelieferten Eingänge.",
 }

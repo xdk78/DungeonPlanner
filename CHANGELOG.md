@@ -60,6 +60,16 @@ follow [Semantic Versioning](https://semver.org/).
 - Run mode shows "Prep: 3 quests to pick up" before the first step and updates it as you pick up quests or keys; a
   click opens Prep.
 - The home table's preview names the instance's zone, in your game's language.
+- **A live map in the Getting there window**, outdoors: the entrance's zone map with the entrance, the nearest flight
+  masters and a summoning stone, your position as an arrow turned the way you face, and the distance and direction,
+  updated ten times a second while the window is open and you are outside (the game gives no position inside
+  instances). Walking into that instance with the window open opens its plan and run mode, in every client language;
+  when the instance has no plan, the window just closes.
+- Dungeon Planner learns entrances as you play: the spot you stood on before a loading screen into an instance is kept
+  (per account) and used instead of the bundled one, when it lies within 400 yards of the bundled one. A summon,
+  portal or hearthstone from farther away teaches nothing; one taken near the entrance can be learned. A later spot
+  replaces a learned one only when it lies within 100 yards of it. `/dp entrances reset`, or "Forget learned
+  entrances" under Troubleshooting in the Settings panel, forgets them.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the

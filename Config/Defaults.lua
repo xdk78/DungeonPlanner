@@ -56,7 +56,7 @@ Defaults.ui = {
 	run = {}, -- run mode window: { point, shown }
 	notes = { width = 380, height = 400 }, -- the Notes window: { point, width, height }; resizable, its size saved
 	partyMode = "assignments", -- the Party section: "assignments" | "pages"
-	travel = { width = 360, height = 420 }, -- the Getting there window: { point, width, height }
+	travel = { width = 380, height = 560 }, -- the Getting there window (live map on top): { point, width, height }
 	prepShowAll = false, -- the Prep section lists done and too-low quests too
 }
 

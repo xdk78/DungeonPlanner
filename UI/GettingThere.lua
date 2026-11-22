@@ -66,8 +66,9 @@ function GT.Facts(target)
 		kind = inst.kind, lo = lo, hi = hi }
 end
 
--- The card's lines: { { style, text } } for W.Document (pure over the facts and what the client says).
-function GT.Lines(target)
+-- The card's lines: { { style, text } } for W.Document (pure over the facts and what the client says). live: the card
+-- sits under the live map (the window), which shows the distance itself.
+function GT.Lines(target, live)
 	local f = GT.Facts(target)
 	local out = {}
 	local function add(style, text)
@@ -139,23 +140,32 @@ function GT.Lines(target)
 			add(side == faction and "text" or "muted", text)
 		end
 	end
-	-- Where the player is (outdoors only).
+	-- Where the player is (outdoors only). With the live map (the window), its own line keeps the distance and
+	-- direction current, so the card leaves them out and keeps Polestar's estimate and the boats and zeppelins.
 	local player = ns.Travel.Player()
 	if not player then
-		add("muted", L["Distance and direction show outdoors (the game gives no position inside instances)."])
+		if not live then
+			add("muted", L["Distance and direction show outdoors (the game gives no position inside instances)."])
+		end
 	elseif ent then
 		local yards, why = ns.Travel.Distance(ent, player)
 		if yards and yards > 0 then
-			local line = string.format(L["You are %s away; it lies %s."], GT.Yards(yards), GT.Direction(why))
 			local eta = ent.uiMapID and ns.Navigation.Estimate(ent.uiMapID, ent.x, ent.y)
-			if eta then
-				line = line .. "  " .. string.format(L["About %d min with Polestar."], math.max(1, math.floor(eta / 60 + 0.5)))
+			eta = eta and string.format(L["About %d min with Polestar."], math.max(1, math.floor(eta / 60 + 0.5)))
+			if not live then
+				local line = string.format(L["You are %s away; it lies %s."], GT.Yards(yards), GT.Direction(why))
+				add("text", eta and (line .. "  " .. eta) or line)
+			elseif eta then
+				add("text", eta)
 			end
-			add("text", line)
 		elseif yards then
-			add("text", L["You are at the entrance."])
+			if not live then
+				add("text", L["You are at the entrance."])
+			end
 		elseif why == "continent" then
-			add("text", color("warning", L["You are on another continent."]))
+			if not live then
+				add("text", color("warning", L["You are on another continent."]))
+			end
 			local ships = ns.Prep.Crossings(ns.Travel.Transports(), player.continent, ent.continent, faction)
 			if #ships > 0 then
 				local names = {}
@@ -254,8 +264,8 @@ function GT.Actions(parent)
 end
 
 -- Draw the card into a document; `bar` (GT.Actions) is placed under it.
-function GT.Fill(doc, target, bar, heading)
-	local lines, facts = GT.Lines(target)
+function GT.Fill(doc, target, bar, heading, live)
+	local lines, facts = GT.Lines(target, live)
 	if heading ~= false then
 		doc:Add("heading", L["Getting there"])
 	end
@@ -273,15 +283,30 @@ end
 -- The small window (home table's "Getting there", the Prep card's Pop out). Escape closes it like the other windows.
 -- While shown it redraws on PREP_CHANGED (level, group, zone changes; Data/PrepInfo.lua).
 local window
+GT.MIN_W, GT.MIN_H = 320, 460
 function GT.Open(target)
 	if not window then
 		local saved = ns.db.ui.travel
-		window = W.Window("DungeonPlannerTravelFrame", L["Getting there"], saved, 300, 260, { compact = true })
+		-- At least the live map, its line and the first lines of the card under it.
+		window = W.Window("DungeonPlannerTravelFrame", L["Getting there"], saved, GT.MIN_W, GT.MIN_H, { compact = true })
 		-- Over the planner it was opened from (both are movable; Escape closes this one first).
 		window:SetFrameStrata("DIALOG")
 		local ins = window.insets
+		-- The live map (UI/TravelMap.lua): outdoors, the player's arrow on the entrance's zone map, updated while shown.
+		window.map = ns.TravelMap.Create(window)
+		window.map:SetPoint("TOPLEFT", ins.left + SP.md, -(ins.top + SP.sm))
+		-- A fixed width from the window's (not a second anchor), so pins are placed right on the first draw.
+		local function fit()
+			window.map:SetWidth(math.max(100, (window:GetWidth() or 0) - ins.left - ins.right - 2 * SP.md))
+		end
+		fit()
+		window:HookScript("OnSizeChanged", fit)
+		window.live = W.Text(window, "caption", "ink")
+		window.live:SetPoint("TOPLEFT", window.map, "BOTTOMLEFT", 0, -SP.xs)
+		window.live:SetPoint("RIGHT", window.map, "RIGHT")
+		ns.TravelMap.Attach(window.map, window.live)
 		window.doc = W.Document(window)
-		window.doc:SetPoint("TOPLEFT", ins.left + SP.md, -(ins.top + SP.sm))
+		window.doc:SetPoint("TOPLEFT", window.live, "BOTTOMLEFT", 0, -SP.sm)
 		window.doc:SetPoint("BOTTOMRIGHT", -(ins.right + SP.sm), ins.bottom + SP.md)
 		window.bar = GT.Actions(window.doc.content)
 		ns.PrepInfo.Watch(window, function()
@@ -292,9 +317,18 @@ function GT.Open(target)
 				GT.Refresh()
 			end
 		end)
+		window:HookScript("OnShow", function(self)
+			ns.TravelMap.Show(self.target)
+		end)
+		window:HookScript("OnHide", function()
+			ns.TravelMap.Hide()
+		end)
 	end
 	window.target = target
 	GT.Refresh()
+	if window:IsShown() then
+		ns.TravelMap.Show(target)
+	end
 	window:Show()
 	return window
 end
@@ -306,7 +340,7 @@ function GT.Refresh()
 	local doc = window.doc
 	doc:Begin()
 	doc:Add("title", GT.Facts(window.target).name)
-	GT.Fill(doc, window.target, window.bar, false)
+	GT.Fill(doc, window.target, window.bar, false, true)
 	doc:Finish()
 end
 

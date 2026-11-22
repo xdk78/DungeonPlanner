@@ -6,7 +6,8 @@ local _, ns = ...
 ns.TravelData = {
 	-- [instance name] = { e = entrance { c, x, y } (world yards: x north, y west) or { map, x, y } (0..1),
 	--   zone (English), zm (the zone's uiMapID), sub, fac (zone faction), how (approach),
-	--   stone = { map, zone, x, y } (0-100 on that map), hint }
+	--   stone = { map, zone, x, y } (0-100 on that map), hint, iid (the instance's map ID, GetInstanceInfo's
+	--   eighth return), maps (the plan's floor uiMapIDs: which wing of a shared instance) }
 	instances = {
 		["Alcaz Prison"] = {
 			e = { map = 1445, x = 0.753, y = 0.141 },
@@ -16,6 +17,7 @@ ns.TravelData = {
 			fac = "contested",
 			how = "building",
 			hint = "Island off the north-east coast; go in the keep, down to the basement",
+			iid = 2994,
 		},
 		["Blackfathom Deeps"] = {
 			e = { c = 1, x = 4249.1, y = 748.4 },
@@ -24,12 +26,15 @@ ns.TravelData = {
 			sub = "The Zoram Strand",
 			how = "underwater",
 			hint = "Swim down an underwater shaft on the Zoram Strand coast",
+			iid = 48,
+			maps = { 221, 222, 223 },
 		},
 		["Blackmaw Hold"] = {
 			e = { map = 1447, x = 0.386, y = 0.332 },
 			zone = "Azshara",
 			zm = 1447,
 			fac = "neutral",
+			iid = 2974,
 		},
 		["Blackrock Depths"] = {
 			e = { c = 0, x = -7178.1, y = -928.6 },
@@ -39,6 +44,8 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "mountain",
 			hint = "Cross the chain to the central island, then down past Grinding Quarry",
+			iid = 230,
+			maps = { 242, 243 },
 		},
 		["Blackwing Lair"] = {
 			e = { c = 0, x = -7522.5, y = -1233 },
@@ -48,6 +55,7 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "mountain",
 			hint = "Orb of Command at the end of the right-hand hall by the Spire entrance",
+			iid = 469,
 		},
 		["City of Dalaran"] = {
 			e = { map = 1416, x = 0.085, y = 0.593 },
@@ -56,6 +64,7 @@ ns.TravelData = {
 			sub = "Dalaran",
 			stone = { map = 1416, zone = "Alterac Mountains", x = 8, y = 61 },
 			hint = "Sewer grate on Dalaran's west wall; needs the Dalaran Sewer Key",
+			iid = 2959,
 		},
 		["Dire Maul: East"] = {
 			e = { c = 1, x = -3908, y = 1130 },
@@ -64,6 +73,7 @@ ns.TravelData = {
 			sub = "High Wilderness",
 			fac = "contested",
 			hint = "Warpwood Quarter is the east wing, in north-central Feralas",
+			iid = 429,
 		},
 		["Dire Maul: North"] = {
 			e = { c = 1, x = -3908, y = 1130 },
@@ -72,6 +82,7 @@ ns.TravelData = {
 			sub = "High Wilderness",
 			fac = "contested",
 			hint = "Gordok Commons is the north wing, in north-central Feralas",
+			iid = 429,
 		},
 		["Dire Maul: West"] = {
 			e = { c = 1, x = -3908, y = 1130 },
@@ -80,6 +91,7 @@ ns.TravelData = {
 			sub = "High Wilderness",
 			fac = "contested",
 			hint = "Capital Gardens is the west wing, in north-central Feralas",
+			iid = 429,
 		},
 		["Excavation Site: Wetlands"] = {
 			e = { map = 1437, x = 0.478, y = 0.562 },
@@ -89,6 +101,7 @@ ns.TravelData = {
 			fac = "contested",
 			stone = { map = 1437, zone = "Wetlands", x = 53.4, y = 65.3 },
 			hint = "Stone and instance line are together at Whelgar's Excavation Site",
+			iid = 2998,
 		},
 		["Gnomeregan"] = {
 			e = { c = 0, x = -5162.7, y = 931.6 },
@@ -97,6 +110,8 @@ ns.TravelData = {
 			sub = "Gnomeregan",
 			fac = "alliance",
 			hint = "Elevator down to the Train Depot; front door south, back door north",
+			iid = 90,
+			maps = { 226, 227, 228, 229 },
 		},
 		["Hall of Thanes"] = {
 			e = { map = 1455, x = 0.277, y = 0.479 },
@@ -105,6 +120,7 @@ ns.TravelData = {
 			sub = "High Seat (beneath)",
 			fac = "alliance",
 			hint = "Below the High Seat; stairs down from a left turn by Deliana",
+			iid = 3065,
 		},
 		["Hyjal Summit"] = {
 			zone = "Mount Hyjal",
@@ -118,6 +134,7 @@ ns.TravelData = {
 			sub = "Sunnyglade (north of it)",
 			fac = "neutral",
 			hint = "North of Sunnyglade, near the Badlands / Redridge way into the zone",
+			iid = 3039,
 		},
 		["Lower Blackrock Spire"] = {
 			e = { c = 0, x = -7522.5, y = -1233 },
@@ -127,6 +144,8 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "mountain",
 			hint = "South side of the Hall of Blackhand, opposite the Upper Spire",
+			iid = 229,
+			maps = { 250, 251, 252, 253, 254, 255 },
 		},
 		["Maraudon"] = {
 			e = { c = 1, x = -1432.7, y = 2925 },
@@ -136,6 +155,8 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "cave",
 			hint = "Tunnel to Zaetar's Choice; three wing portals, one in an alcove",
+			iid = 349,
+			maps = { 280, 281 },
 		},
 		["Molten Core"] = {
 			e = { c = 0, x = -7522.5, y = -1233 },
@@ -145,12 +166,14 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "mountain",
 			hint = "Portal at the far bottom of Blackrock Depths",
+			iid = 409,
 		},
 		["Naxxramas"] = {
 			zone = "Eastern Plaguelands",
 			zm = 1423,
 			sub = "Plaguewood",
 			hint = "Classic necropolis floated above the Eastern Plaguelands",
+			iid = 533,
 		},
 		["Onyxia's Lair"] = {
 			e = { c = 1, x = -4753.3, y = -3752.4 },
@@ -160,6 +183,8 @@ ns.TravelData = {
 			fac = "contested",
 			how = "cave",
 			hint = "Cave mouth carved like a dragon's maw in the Wyrmbog",
+			iid = 249,
+			maps = { 248 },
 		},
 		["Ragefire Chasm"] = {
 			e = { c = 1, x = 1816.8, y = -4423.4 },
@@ -168,6 +193,8 @@ ns.TravelData = {
 			sub = "Cleft of Shadow",
 			fac = "horde",
 			hint = "Portal is beside Neeru Fireblade's tent",
+			iid = 389,
+			maps = { 213 },
 		},
 		["Razorfen Downs"] = {
 			e = { c = 1, x = -4662.9, y = -2535.9 },
@@ -176,6 +203,8 @@ ns.TravelData = {
 			sub = "The Barrens (south-east)",
 			fac = "neutral",
 			hint = "Far southern edge of the Barrens, east side, in brambles",
+			iid = 129,
+			maps = { 300 },
 		},
 		["Razorfen Kraul"] = {
 			e = { c = 1, x = -4459.4, y = -1660.2 },
@@ -184,6 +213,8 @@ ns.TravelData = {
 			sub = "Southern Barrens",
 			fac = "neutral",
 			hint = "Far southern edge of the Barrens, west side",
+			iid = 47,
+			maps = { 301 },
 		},
 		["Ruins of Ahn'Qiraj"] = {
 			e = { c = 1, x = -8114.5, y = 1526.4 },
@@ -192,6 +223,7 @@ ns.TravelData = {
 			sub = "Gates of Ahn'Qiraj",
 			fac = "neutral",
 			hint = "Through the Gates, take the left portal",
+			iid = 509,
 		},
 		["Ruins of Lordaeron"] = {
 			e = { map = 1458, x = 0.725, y = 0.114 },
@@ -201,6 +233,7 @@ ns.TravelData = {
 			fac = "horde",
 			how = "open",
 			hint = "Ruins above Undercity, near the entrance used from Brill",
+			iid = 2999,
 		},
 		["Scarlet Monastery: Armory"] = {
 			e = { c = 0, x = 2892.2, y = -811.3 },
@@ -209,6 +242,8 @@ ns.TravelData = {
 			sub = "Whispering Gardens",
 			fac = "horde",
 			hint = "North-east corner of Tirisfal Glades",
+			iid = 189,
+			maps = { 437 },
 		},
 		["Scarlet Monastery: Cathedral"] = {
 			e = { c = 0, x = 2892.2, y = -811.3 },
@@ -217,6 +252,8 @@ ns.TravelData = {
 			sub = "Whispering Gardens",
 			fac = "horde",
 			hint = "North-east corner of Tirisfal Glades",
+			iid = 189,
+			maps = { 438 },
 		},
 		["Scarlet Monastery: Graveyard"] = {
 			e = { c = 0, x = 2892.2, y = -811.3 },
@@ -225,6 +262,8 @@ ns.TravelData = {
 			sub = "Whispering Gardens",
 			fac = "horde",
 			hint = "North-east corner of Tirisfal Glades",
+			iid = 189,
+			maps = { 302 },
 		},
 		["Scarlet Monastery: Library"] = {
 			e = { c = 0, x = 2892.2, y = -811.3 },
@@ -233,6 +272,8 @@ ns.TravelData = {
 			sub = "Whispering Gardens",
 			fac = "horde",
 			hint = "North-east corner of Tirisfal Glades",
+			iid = 189,
+			maps = { 303 },
 		},
 		["Scholomance"] = {
 			e = { c = 0, x = 1274.8, y = -2552.6 },
@@ -240,6 +281,8 @@ ns.TravelData = {
 			zm = 1422,
 			sub = "Caer Darrow",
 			hint = "Barov house ruins on a rise above Caer Darrow",
+			iid = 289,
+			maps = { 476, 477, 478, 479 },
 		},
 		["Shadowfang Keep"] = {
 			e = { c = 0, x = -231, y = 1571.6 },
@@ -248,6 +291,8 @@ ns.TravelData = {
 			sub = "Shadowfang Keep",
 			fac = "horde",
 			hint = "Keep on a high bluff above Pyrewood Village",
+			iid = 33,
+			maps = { 310, 311, 312, 313, 314, 315, 316 },
 		},
 		["Shaper's Terrace"] = {
 			e = { map = 1449, x = 0.481, y = 0.061 },
@@ -255,6 +300,7 @@ ns.TravelData = {
 			zm = 1449,
 			sub = "Northern pylon",
 			hint = "Instance line is at the crater's northern pylon",
+			iid = 3001,
 		},
 		["Stratholme: Live (Main Gate)"] = {
 			e = { c = 0, x = 3392.3, y = -3378.5 },
@@ -262,6 +308,8 @@ ns.TravelData = {
 			zm = 1423,
 			sub = "Plaguewood",
 			hint = "Main gate of the city, north of the Plaguewood",
+			iid = 329,
+			maps = { 317, 318 },
 		},
 		["Stratholme: Undead (Service Entrance)"] = {
 			e = { c = 0, x = 3392.3, y = -3378.5 },
@@ -269,6 +317,8 @@ ns.TravelData = {
 			zm = 1423,
 			sub = "Plaguewood",
 			hint = "The service entrance: a back door by the Eastwall Gate",
+			iid = 329,
+			maps = { 317, 318 },
 		},
 		["Temple of Ahn'Qiraj"] = {
 			e = { c = 1, x = -8114.5, y = 1526.4 },
@@ -277,6 +327,7 @@ ns.TravelData = {
 			sub = "Gates of Ahn'Qiraj",
 			fac = "neutral",
 			hint = "Through the Gates, take the right portal",
+			iid = 531,
 		},
 		["The Deadmines"] = {
 			e = { c = 0, x = -11207.8, y = 1681.2 },
@@ -285,6 +336,8 @@ ns.TravelData = {
 			sub = "Moonbrook",
 			fac = "alliance",
 			hint = "Entered from the town of Moonbrook, south-west Westfall",
+			iid = 36,
+			maps = { 291, 292 },
 		},
 		["The Drowned City"] = {
 			e = { map = 1434, x = 0.213, y = 0.278 },
@@ -292,6 +345,7 @@ ns.TravelData = {
 			zm = 1434,
 			how = "underwater",
 			hint = "Underwater, south of Haunted Isle and due west of Grom'gol",
+			iid = 2970,
 		},
 		["The Stockade"] = {
 			e = { c = 0, x = -8762.4, y = 848 },
@@ -301,6 +355,8 @@ ns.TravelData = {
 			fac = "alliance",
 			how = "building",
 			hint = "Building on the north canal by the Mage Quarter, stairs down",
+			iid = 34,
+			maps = { 225 },
 		},
 		["The Temple of Atal'Hakkar"] = {
 			e = { c = 0, x = -10170.1, y = -3996 },
@@ -308,6 +364,8 @@ ns.TravelData = {
 			zm = 1435,
 			sub = "Pool of Tears",
 			hint = "Portal is in the Hall of Masks, past the flooded Broken Hall",
+			iid = 109,
+			maps = { 220 },
 		},
 		["Uldaman"] = {
 			e = { c = 0, x = -6060.2, y = -2955 },
@@ -315,6 +373,8 @@ ns.TravelData = {
 			zm = 1418,
 			sub = "The Maker's Terrace",
 			hint = "A side entrance lies between Fuselight and Tomb of the Watchers",
+			iid = 70,
+			maps = { 230, 231 },
 		},
 		["Upper Blackrock Spire"] = {
 			e = { c = 0, x = -7522.5, y = -1233 },
@@ -324,6 +384,8 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "mountain",
 			hint = "Same portal as the Lower Spire; keep to the left wall",
+			iid = 229,
+			maps = { 250, 251, 252, 253, 254, 255, 256 },
 		},
 		["Wailing Caverns"] = {
 			e = { c = 1, x = -751.1, y = -2209.2 },
@@ -333,6 +395,8 @@ ns.TravelData = {
 			fac = "neutral",
 			how = "cave",
 			hint = "North side of the Lushwater Oasis, south of the Crossroads",
+			iid = 43,
+			maps = { 279 },
 		},
 		["Zul'Farrak"] = {
 			e = { c = 1, x = -6790.6, y = -2891.3 },
@@ -341,6 +405,8 @@ ns.TravelData = {
 			sub = "Sandsorrow Watch",
 			fac = "neutral",
 			hint = "Troll city in north-west Tanaris",
+			iid = 209,
+			maps = { 219 },
 		},
 		["Zul'Gurub"] = {
 			e = { c = 0, x = -11916.1, y = -1224.6 },
@@ -349,6 +415,7 @@ ns.TravelData = {
 			sub = "Zul'Gurub",
 			how = "open",
 			hint = "North-east Stranglethorn; the raid is an outdoor zone",
+			iid = 309,
 		},
 	},
 	-- flight masters: { id, name, continent, x, y, factions = 1 Alliance | 2 Horde | 3 both }

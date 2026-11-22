@@ -201,6 +201,7 @@ local HELP = {
 	"/dp new - what's new in this version",
 	"/dp perf [start|stop|reset] - opt-in timing of the addon's handlers and redraws, and its memory",
 	"/dp mapid - print the current map ID",
+	"/dp entrances [reset] - how many instance entrances were learned from play; reset forgets them",
 	"/dp scan - save what the Adventure Guide, Group Finder, maps and game files return into DungeonPlannerDB.diagnostics (written on /reload)",
 	"/dp scan clear - remove those diagnostics",
 	"/dp shots - screenshot every view of the window (Escape stops; list in DungeonPlannerDB.shots)",
@@ -271,6 +272,14 @@ function Slash.Handle(input)
 		ns.WhatsNew.Open()
 	elseif cmd == "perf" then
 		ns.Perf.Command((input or ""):match("^%s*%S+%s+(%S+)"))
+	elseif cmd == "entrances" then
+		if (input or ""):match("^%s*%S+%s+(%S+)") == "reset" then
+			ns:Print(ns.Plural(ns.TravelMap.ForgetLearned(),
+				L["Forgot %d learned entrance.|Forgot %d learned entrances."]))
+		else
+			ns:Print(ns.Plural(ns.Util.Count(ns.db.entrances or {}),
+				L["%d learned entrance (/dp entrances reset forgets it).|%d learned entrances (/dp entrances reset forgets them)."]))
+		end
 	elseif cmd == "mapid" then
 		local cur = ns.Instances.Current()
 		ns:Print(string.format("uiMapID %s, journal instance %s, %s", tostring(cur.uiMapID), tostring(cur.ejInstanceID),

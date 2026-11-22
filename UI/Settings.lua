@@ -461,6 +461,19 @@ local function options()
 							ns.Slash.Debug()
 						end,
 					},
+					-- /dp entrances reset for players without slash commands (gamepad style).
+					forgetEntrances = {
+						type = "execute",
+						order = 2.5,
+						name = L["Forget learned entrances"],
+						desc = L["Getting there uses the bundled entrances again."],
+						func = function()
+							ns:RunOutOfCombat(function()
+								ns:Print(ns.Plural(ns.TravelMap.ForgetLearned(),
+									L["Forgot %d learned entrance.|Forgot %d learned entrances."]))
+							end)
+						end,
+					},
 					report = {
 						type = "execute",
 						order = 3,

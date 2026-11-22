@@ -187,6 +187,15 @@ local function makeView(adb, readOnlyPlans)
 					adb.global.shareLinks = {}
 				end
 				return adb.global.shareLinks
+			elseif key == "entrances" then
+				-- Instance entrances learned from play (Model/TravelLive.lua); additive, none while read-only.
+				if readOnlyPlans then
+					return nil
+				end
+				if type(adb.global.entrances) ~= "table" then
+					adb.global.entrances = {}
+				end
+				return adb.global.entrances
 			end
 			return nil
 		end,
@@ -239,6 +248,7 @@ function DB.Init()
 	adb.char.shareAcks = ns.Acks.Normalize(adb.char.shareAcks)
 	if not newer then
 		adb.global.shareLinks = ns.Acks.NormalizeLinks(adb.global.shareLinks)
+		adb.global.entrances = ns.TravelLive.NormalizeLearned(adb.global.entrances)
 	end
 	ns.db = makeView(adb, newer and DB.ReadOnlyPlans(adb.global) or nil)
 	ns.char = setmetatable({}, {

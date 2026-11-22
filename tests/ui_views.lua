@@ -152,7 +152,10 @@ end
 -- The player outdoors, a little north-east of the instance's entrance on its map.
 local function standNear(slug)
 	local ent = ns.Travel.Entrance(ns.Travel.For(ns.Bundled.Get(ns.Bundled.PREFIX .. slug)))
-	mock.playerPos = ent and ent.uiMapID and { map = ent.uiMapID, x = ent.x + 0.3, y = ent.y - 0.25 } or nil
+	local function clamp(v)
+		return math.max(0.05, math.min(0.95, v))
+	end
+	mock.playerPos = ent and ent.uiMapID and { map = ent.uiMapID, x = clamp(ent.x + 0.3), y = clamp(ent.y - 0.25) } or nil
 end
 
 local function prepView(name, slug, copyIt)
@@ -187,6 +190,25 @@ local function travelWindow()
 			closeAll()
 			ns.UI.GoHome("dungeons")
 			standNear("the-deadmines")
+			-- The live map needs the zone's art: the made-up world's maps get the test map's tiles.
+			local layers, textures = _G.C_Map.GetMapArtLayers, _G.C_Map.GetMapArtLayerTextures
+			prepGlobals.art = { layers, textures }
+			_G.C_Map.GetMapArtLayers = function(id)
+				if id >= 1000 then
+					return { { layerWidth = 1002, layerHeight = 668, tileWidth = 256, tileHeight = 256 } }
+				end
+				return layers(id)
+			end
+			_G.C_Map.GetMapArtLayerTextures = function(id, layer)
+				if id >= 1000 then
+					local t = {}
+					for i = 1, 12 do
+						t[i] = 5000 + i
+					end
+					return t
+				end
+				return textures(id, layer)
+			end
 			ns.GettingThere.Open({ name = "The Deadmines", kind = "dungeon" })
 		end,
 		window = function()
@@ -197,6 +219,7 @@ local function travelWindow()
 			if w then
 				w:Hide()
 			end
+			_G.C_Map.GetMapArtLayers, _G.C_Map.GetMapArtLayerTextures = prepGlobals.art[1], prepGlobals.art[2]
 			prepWorld(false)
 		end,
 	}
