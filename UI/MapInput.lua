@@ -7,6 +7,7 @@
 local _, ns = ...
 local MapCanvas = ns.MapCanvas
 local Plan, Util = ns.Plan, ns.Util
+local W = ns.Widgets
 
 local MIN_ZOOM, MAX_ZOOM = 1, 8
 local CLICK_SLOP = 4 -- pixels of movement before a press becomes a drag
@@ -199,6 +200,8 @@ function MapCanvas.InstallInput(view)
 
 	function view:EndDrag()
 		local d = self.drag
+		-- Idle before the redraw below, so it places the route arrows again (UI/MapPins.lua PlaceRouteArrows).
+		self:Idle()
 		local plan = self.cb.getPlan()
 		if plan and d.moved then
 			if d.mode == "marker" then
@@ -220,7 +223,6 @@ function MapCanvas.InstallInput(view)
 				end
 			end
 		end
-		self:Idle()
 	end
 	view.EndMarkerDrag = view.EndDrag
 
@@ -343,6 +345,7 @@ function MapCanvas.InstallInput(view)
 		if self.drag.mode ~= "idle" then
 			return
 		end
+		self:ClearRouteHover() -- no highlight while dragging
 		ns.Widgets.CommitFocus()
 		-- A drawing tool takes a left press (UI/MapDraw.lua); otherwise the press may become a pan.
 		if mouse == "LeftButton" and self.DrawPress and self:DrawPress() then
@@ -374,24 +377,120 @@ function MapCanvas.InstallInput(view)
 	view:SetScript("OnMouseWheel", function(self, delta)
 		self:ZoomAt(delta)
 	end)
-	-- While the pointer is over the map, the coordinate readout updates at most 20 times a second.
+	-- Route hover: the leg under the pointer (a route's stretch between two numbered stops) is highlighted
+	-- (UI/MapPins.lua SetRouteHover) with a tooltip naming the steps it joins. Only while the map is idle, with no
+	-- drawing tool, and with the Routes setting on; a pin under the pointer ends it (the map's OnLeave).
+	local function hoverEnabled()
+		local s = ns.db and ns.db.settings and ns.db.settings.routes
+		return not (type(s) == "table" and s.hover == false)
+	end
+	function view:ClearRouteHover(source)
+		if self.routeHover and (not source or self.routeHoverSource == source) then
+			self:SetRouteHover(nil)
+		end
+		local tt = W.Tip()
+		if tt and tt:IsOwned(self) and self.routeTip then
+			tt:Hide()
+		end
+		self.routeTip = nil
+	end
+	-- The tooltip: "Step 3 to step 4" and the two steps' names (as the steps list names them), or the route's name for
+	-- a route without steps.
+	function view:RouteTooltip(plan, list, index, prev, routeId)
+		local tt = W.Tip()
+		if not tt then
+			return
+		end
+		local title, line
+		if index then
+			local name = ns.UI.StepText(plan, list[index])
+			if prev then
+				title = string.format(L["Step %d to step %d"], prev, index)
+				line = string.format(L["From %s to %s"], ns.UI.StepText(plan, list[prev]), name)
+			else
+				title, line = string.format(L["To step %d"], index), string.format(L["To %s"], name)
+			end
+		else
+			local route = plan and Util.FindById(plan.routes, routeId)
+			title = route and route.name ~= "" and route.name or L["Route"]
+		end
+		tt:SetOwner(self, "ANCHOR_CURSOR")
+		tt:SetText(title, 1, 0.82, 0)
+		if line then
+			tt:AddLine(line, 1, 1, 1, true)
+		end
+		W.TipShow(tt)
+		self.routeTip = true
+	end
+	function view:RouteHoverUpdate()
+		local jobs = self.routeJobs
+		if not (jobs and hoverEnabled() and self.drag.mode == "idle" and not (self.cb.drawTool and self.cb.drawTool())) then
+			self:ClearRouteHover("map")
+			return
+		end
+		local cx, cy = cursorIn(canvas)
+		local left, top = canvas:GetLeft(), canvas:GetTop()
+		-- Canvas offsets, y up: the routes' own coordinates (UI/MapPins.lua DrawRoutePaths).
+		local hit = left and ns.RouteLegs.Hit(jobs.paths, cx - left, cy - top, math.max(4, jobs.look.width / 2 + 3))
+		if not hit then
+			self:ClearRouteHover("map")
+			return
+		end
+		local routeId = jobs.routes[hit.path]
+		local plan = self.cb.getPlan()
+		local ctx = ns.UI.ctx
+		local list = ctx and ctx:Plan() == plan and ctx:Steps() or {}
+		local index, prev = ns.RouteLegs.StepOf(list, routeId, hit.seg)
+		local leg
+		if index then
+			leg = { route = routeId, from = list[index].from, to = list[index].to }
+		else
+			local from, to = ns.RouteLegs.Leg(jobs.raw[hit.path], hit.seg)
+			leg = { route = routeId, from = from, to = to }
+		end
+		if self:SetRouteHover(leg, "map") or not self.routeTip then
+			self:RouteTooltip(plan, list, index, prev, routeId)
+		end
+	end
+
+	-- While the pointer is over the map, the coordinate readout and the route hover update at most 20 times a second,
+	-- and only when something changed: a still pointer over the same drawn routes does nothing (as OnDragUpdate does);
+	-- a redraw under it (new routeJobs: a zoom, an edit) is looked at again. view.hoverAt: the pointer and routes last
+	-- looked at, forgotten when the pointer enters or a drag ends.
 	local sinceCoords = 0
 	local function hoverUpdate(v, elapsed)
 		sinceCoords = sinceCoords + (elapsed or 0)
 		if sinceCoords >= 0.05 then
 			sinceCoords = 0
+			local x, y = GetCursorPosition()
+			local at = v.hoverAt
+			if at and at.x == x and at.y == y and at.jobs == v.routeJobs then
+				return
+			end
+			if not at then
+				at = {}
+				v.hoverAt = at
+			end
+			at.x, at.y = x, y
 			v:UpdateCoords()
+			v:RouteHoverUpdate()
+			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapPins.lua SetRouteHover)
 		end
+	end
+	local function wantsHover(v)
+		return v.cb.showCoordinates() or hoverEnabled()
 	end
 	-- Back to idle after a press, a drag or a stroke: the coordinate readout keeps following a pointer that is still
 	-- over the map.
 	function view:Idle()
 		self.drag = { mode = "idle" }
-		local hover = self:IsVisible() and self:IsMouseOver() and self.cb.showCoordinates()
+		self.hoverAt = nil
+		local hover = self:IsVisible() and self:IsMouseOver() and wantsHover(self)
 		self:SetScript("OnUpdate", hover and hoverUpdate or nil)
 	end
 	view:SetScript("OnEnter", function(self)
-		if self.drag.mode == "idle" and self.cb.showCoordinates() then
+		if self.drag.mode == "idle" and wantsHover(self) then
+			self.hoverAt = nil
 			self:SetScript("OnUpdate", hoverUpdate)
 		end
 	end)
@@ -399,6 +498,7 @@ function MapCanvas.InstallInput(view)
 		if self.drag.mode == "idle" then
 			self:SetScript("OnUpdate", nil)
 			self.coords:SetText("")
+			self:ClearRouteHover("map")
 		end
 	end)
 	-- HookScript: the backdrop mixin listens to size changes too.
@@ -415,5 +515,6 @@ function MapCanvas.InstallInput(view)
 		end
 		self.drag = { mode = "idle" }
 		self:SetScript("OnUpdate", nil)
+		self.routeHover, self.routeHoverSource, self.routeTip = nil, nil, nil -- drawn plainly when shown again
 	end)
 end

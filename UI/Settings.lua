@@ -55,6 +55,146 @@ for pct = 70, 140, 5 do
 	scaleSorting[#scaleSorting + 1] = tostring(pct)
 end
 
+-- Routes: how route lines and their direction arrows look on the map (settings.routes; UI/MapPins.lua MapRoutes).
+-- Every change redraws the map and run mode at once.
+local function routesGroup()
+	-- The palette's colours in order (UI/Style.lua palette; the colour-blind set keeps the same slots).
+	local COLOR_NAMES = { L["Red"], L["Blue"], L["Green"], L["Violet"], L["Orange"], L["Teal"], L["Yellow"], L["White"] }
+	local function routeGet(key)
+		return function()
+			return ns.db.settings.routes[key]
+		end
+	end
+	local function routeSet(key, convert)
+		return function(_, v)
+			ns.db.settings.routes[key] = convert and convert(v) or v
+			UI.ApplyColors()
+		end
+	end
+	-- The arrows' own options mean nothing while the arrows are off.
+	local function arrowsOff()
+		return ns.db.settings.routes.arrows == "off"
+	end
+	local opacityValues, opacitySorting = {}, {}
+	for pct = 40, 100, 10 do
+		opacityValues[tostring(pct)] = pct .. "%"
+		opacitySorting[#opacitySorting + 1] = tostring(pct)
+	end
+	local colorSorting = { "0" }
+	for i = 1, #COLOR_NAMES do
+		colorSorting[#colorSorting + 1] = tostring(i)
+	end
+	local function colorValues()
+		local values = { ["0"] = L["Each route's own"] }
+		for i, name in ipairs(COLOR_NAMES) do
+			local r, g, b = ns.Style.PaletteColor(i)
+			values[tostring(i)] = string.format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, name)
+		end
+		return values
+	end
+	return {
+		type = "group",
+		inline = true,
+		order = 15,
+		name = L["Routes"],
+		args = {
+			width = {
+				type = "select",
+				order = 1,
+				name = L["Line width"],
+				values = { thin = L["Thin"], medium = L["Medium"], thick = L["Thick"] },
+				sorting = { "thin", "medium", "thick" },
+				get = routeGet("width"),
+				set = routeSet("width"),
+			},
+			opacity = {
+				type = "select",
+				order = 2,
+				name = L["Line opacity"],
+				values = opacityValues,
+				sorting = opacitySorting,
+				get = function()
+					local pct = math.floor((tonumber(ns.db.settings.routes.opacity) or 1) * 10 + 0.5) * 10
+					return tostring(math.max(40, math.min(100, pct)))
+				end,
+				set = routeSet("opacity", function(v)
+					return (tonumber(v) or 100) / 100
+				end),
+			},
+			color = {
+				type = "select",
+				order = 3,
+				name = L["Route colour"],
+				desc = L["Each route's own colour, or one colour for every route of a plan. Another addon's routes keep theirs."],
+				values = colorValues,
+				sorting = colorSorting,
+				get = function()
+					return tostring(ns.db.settings.routes.color or 0)
+				end,
+				set = routeSet("color", function(v)
+					return tonumber(v) or 0
+				end),
+			},
+			outline = {
+				type = "toggle",
+				order = 4,
+				name = L["Dark outline"],
+				desc = L["A dark edge around route lines and arrows, so they read on light map art."],
+				get = routeGet("outline"),
+				set = routeSet("outline"),
+			},
+			arrows = {
+				type = "select",
+				order = 5,
+				name = L["Direction arrows"],
+				desc = L["How many arrows show the direction along a route. They keep clear of stops, bends, pins, labels and places where a route crosses itself."],
+				values = { off = L["Off"], few = L["Few"], normal = L["Normal"], many = L["Many"] },
+				sorting = { "off", "few", "normal", "many" },
+				get = routeGet("arrows"),
+				set = routeSet("arrows"),
+			},
+			arrowSize = {
+				type = "select",
+				order = 6,
+				name = L["Arrow size"],
+				values = { small = L["Small"], medium = L["Standard"], large = L["Large"] },
+				sorting = { "small", "medium", "large" },
+				get = routeGet("arrowSize"),
+				set = routeSet("arrowSize"),
+				disabled = arrowsOff,
+			},
+			heads = {
+				type = "toggle",
+				order = 7,
+				name = L["Arrowheads at stops"],
+				desc = L["A larger arrowhead just before each numbered stop and at the route's end."],
+				get = routeGet("heads"),
+				set = routeSet("heads"),
+				disabled = arrowsOff,
+			},
+			focusArrows = {
+				type = "toggle",
+				order = 8,
+				width = "double",
+				name = L["Arrows only on the focused step's leg"],
+				desc = L["While a step is in focus, direction arrows show only on the part of the route that leads to it."],
+				get = routeGet("focusArrows"),
+				set = routeSet("focusArrows"),
+				disabled = arrowsOff,
+			},
+			hover = {
+				type = "toggle",
+				order = 9,
+				width = "double",
+				name = L["Highlight the route under the pointer"],
+				desc = L["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."],
+				get = routeGet("hover"),
+				set = routeSet("hover"),
+			},
+		},
+	}
+end
+
 local function options()
 	return {
 		type = "group",
@@ -231,6 +371,7 @@ local function options()
 					},
 				},
 			},
+			routes = routesGroup(),
 			tracking = {
 				type = "group",
 				inline = true,

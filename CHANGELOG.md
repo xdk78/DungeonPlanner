@@ -110,6 +110,21 @@ follow [Semantic Versioning](https://semver.org/).
   buttons (a glyph of each shape, the game's broom and move cursors, a line of each width), named in their tooltips;
   Clear floor and Clear all move into one menu button at the line's end. A picture the game lacks falls back to the
   tool's name or a drawn glyph, and `/dp debug` lists it.
+- **Clearer route arrows.** Direction arrows are smaller solid arrowheads in a lighter tone of the line, with a thin
+  dark edge, spaced by distance on screen instead of per segment. A larger arrowhead points into each numbered stop
+  and the route's end. Arrows keep clear of stops, sharp bends, pins, labels and each other, and none sit where a route
+  crosses itself, so loops and paths that double back (Wailing Caverns) no longer turn into clutter.
+- **Route settings**: a new Routes group in Settings sets the line width, opacity, outline and colour (each route's own
+  or one colour for all) and the arrows' density (off, few, normal, many), size, arrowheads at stops, and arrows only
+  on the focused step's leg. Changes show at once on the map and in run mode.
+- Map labels keep clear of the "No map art" note on a map without art, and of the coordinate readout wherever it
+  sits (above the floor switcher on a map with several floors).
+- **Follow a route by pointing at it.** The leg under the pointer (between two numbered stops) stands out above the
+  rest with its arrows while the other routes dim, and a tooltip names the two steps it joins. Pointing at a step in
+  the steps list does the same for the leg that leads to it, and run mode highlights its current step's leg. A setting
+  in the Routes group turns it off.
+- **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, each
+  direction draws slightly apart from the other, so the two read as lanes with their own arrows.
 
 ### Fixed
 - **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or

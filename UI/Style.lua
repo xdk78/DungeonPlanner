@@ -31,6 +31,21 @@ Style.SIZE = {
 }
 -- Kept for code that still names a radius; the game's frames have their own corners.
 Style.RADIUS = { badge = 2, control = 4, container = 4, dialog = 6 }
+-- Route lines and their direction arrows on the map (UI/MapPins.lua MapRoutes), at icon size 1, by the Routes settings
+-- (settings.routes). width: the line; outline: the dark edge around it (both sides together); spacing: path length on
+-- screen between arrows (false: no arrows); arrow: an arrow's size as a share of the outlined line's width; head: the
+-- arrowhead before each stop, as a share of an arrow; tone: how far an arrow's fill is mixed towards white.
+Style.ROUTE = {
+	width = { thin = 2.5, medium = 4, thick = 6 },
+	outline = 3,
+	spacing = { off = false, few = 190, normal = 120, many = 75 },
+	arrow = { small = 1.9, medium = 2.4, large = 3 },
+	head = 1.35,
+	tone = 0.4,
+	focusWidth = 2, -- the focused step's leg is this much wider
+	dim = 0.35, -- the rest of the routes while a leg is highlighted (hover, a hovered step, run mode's current step)
+	lane = 0.6, -- a corridor walked out and back: each direction moves this share of the outlined width to its right
+}
 
 local function rgb(r, g, b, a)
 	return { r, g, b, a or 1 }

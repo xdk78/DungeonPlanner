@@ -458,16 +458,21 @@ function MapCanvas.Install(view)
 		return b
 	end
 
-	-- Labels keep clear of what floats over the map (the legend: view.avoidFrame, set by the map section).
+	-- Labels keep clear of what floats over the map (the legend: view.avoidFrame, set by the map section; the note shown
+	-- when a map has no art).
 	local function applyLayout(list)
 		local avoid
-		local over = view.avoidFrame
-		if over and over:IsShown() then
-			local l, t, r, b = over:GetLeft(), over:GetTop(), over:GetRight(), over:GetBottom()
-			local cl, ct = canvas:GetLeft(), canvas:GetTop()
-			if l and t and r and b and cl and ct then
-				local k = (over:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
-				avoid = { { l * k - cl, ct - t * k, r * k - cl, ct - b * k } }
+		for _, over in ipairs({ view.avoidFrame or false, view.noArt }) do
+			if over and over:IsShown() then
+				local l, t, r, b = over:GetLeft(), over:GetTop(), over:GetRight(), over:GetBottom()
+				local cl, ct = canvas:GetLeft(), canvas:GetTop()
+				if l and t and r and b and cl and ct then
+					-- A font string has no scale of its own: its frame's.
+					local scaled = over.GetEffectiveScale and over or over:GetParent()
+					local k = (scaled:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
+					avoid = avoid or {}
+					avoid[#avoid + 1] = { l * k - cl, ct - t * k, r * k - cl, ct - b * k }
+				end
 			end
 		end
 		-- And the names painted on the map (a bundled map's keepOut, in the picture's 0..1), where another side is free.
@@ -479,7 +484,31 @@ function MapCanvas.Install(view)
 		if bounds[3] - bounds[1] < 40 or bounds[4] - bounds[2] < 40 then
 			bounds = nil -- not laid out yet
 		end
+		-- And the coordinate readout (shown while the pointer is over the map) where it is anchored: the bottom-right
+		-- corner, or above the floor switcher (UI/Panels/FloorBar.lua). Its right and bottom edges from its anchor, the
+		-- room its widest text takes measured once per font. view.coordsBox: that rectangle in canvas units.
+		view.coordsBox = nil
+		if bounds and view.cb.showCoordinates and view.cb.showCoordinates() then
+			local c = view.coords
+			local font = c:GetFont()
+			if view.coordsFont ~= font then
+				local text = c:GetText()
+				c:SetText("100.0, 100.0")
+				view.coordsFont, view.coordsW, view.coordsH = font, c:GetStringWidth() or 0, c:GetStringHeight() or 0
+				c:SetText(text or "")
+			end
+			local r, b, cl, ct = c:GetRight(), c:GetBottom(), canvas:GetLeft(), canvas:GetTop()
+			if r and b and cl and ct then
+				local k = (c:GetParent():GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
+				local right, bottom = r * k - cl, ct - b * k
+				view.coordsBox = { right - (view.coordsW + SP.xs) * k, bottom - (view.coordsH + SP.xs) * k, right + SP.xs * k,
+					bottom + SP.xs * k }
+				avoid = avoid or {}
+				avoid[#avoid + 1] = view.coordsBox
+			end
+		end
 		MapPins.ApplyLayout(list, canvas, avoid, bounds)
+		return bounds
 	end
 
 	-- Visibility ----------------------------------------------------------------------------------------------------------
@@ -549,20 +578,22 @@ function MapCanvas.Install(view)
 			local spawns = self.cb.spawnsShown and self.cb.spawnsShown()
 			nSpawns = self:DrawSpawns(spawns and plan or nil, floor, px, py, scale)
 
-			-- Routes under the pins: the paths (outlined lines, joints at bends, direction chevrons: MapRoutes in
-			-- UI/MapPins.lua), then the stops.
+			-- Routes under the pins: the paths (outlined lines, joints at bends: MapRoutes in UI/MapPins.lua), then the
+			-- stops; the direction arrows once the pins and labels are laid out (below), so they keep clear of them.
 			-- Another addon's route as an extra layer (Data/Providers.lua Routes), in the map's own coordinates.
 			local extra = not compact and self.cb.providerRoutesShown and self.cb.providerRoutesShown()
 				and MapCanvas.ProviderRoutes(plan, floor, self.artInfo) or nil
 			if layerShown("route") or extra then
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
-					extra = extra, mx = mx, my = my })
-				nLines, nArrows, pathsDrawn = drawn.lines, drawn.arrows, true
+					extra = extra, mx = mx, my = my, deferArrows = true,
+					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapPins.lua SetRouteHover).
+					highlight = self.cb.highlightFocus and self.cb.highlightFocus() and seg or nil })
+				nLines, pathsDrawn = drawn.lines, true
 				self.routeCounts = drawn
 				for _, route in ipairs(own and plan.routes or {}) do
 					if route.floor == floor then
-						local r, g, b = S.PaletteColor(route.color)
+						local r, g, b = ns.MapRoutes.Color(route, true)
 						local active = route.id == activeRoute
 						for i, pt in ipairs(route.points) do
 							if (pt.step and not compact) or active or editingRoutes then
@@ -597,6 +628,7 @@ function MapCanvas.Install(view)
 								p:SetAlpha(route.optional and 0.7 or 1)
 								p:Show()
 								layoutItem(layout, p, px(pt[1], pt[2]), -py(pt[2], pt[1]), size, pt.step and "stop" or "pin", 0)
+								layout[#layout].bend = not pt.step -- on the line itself: arrows need not avoid it
 							end
 						end
 					end
@@ -729,7 +761,16 @@ function MapCanvas.Install(view)
 				self.focusGlow:Hide()
 				self.focusRing:Hide()
 			end
-			applyLayout(layout)
+			local shown = applyLayout(layout)
+			if pathsDrawn then
+				-- Arrows clear of the pins and labels, only on the visible map and a margin of one view size on every
+				-- side (canvas offsets, y up), so a pan (which moves the canvas without a redraw) shows arrows on the
+				-- map it reveals; beyond that they come with the redraw on release.
+				local obstacles = ns.RouteArrows.Obstacles(layout, true)
+				local mw, mh = shown and shown[3] - shown[1], shown and shown[4] - shown[2]
+				obstacles.bounds = shown and { shown[1] - mw, -shown[4] - mh, shown[3] + mw, -shown[2] + mh }
+				nArrows = self:PlaceRouteArrows(obstacles)
+			end
 		end
 		for i = nPins + 1, #pools.pins do
 			pools.pins[i]:Hide()

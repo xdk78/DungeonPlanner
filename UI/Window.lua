@@ -358,14 +358,24 @@ function W.Window(name, title, saved, minW, minH, opts)
 	grip.highlight = grip:CreateTexture(nil, "HIGHLIGHT")
 	grip.highlight:SetAllPoints()
 	Art.Set(grip.highlight, "sizeGripHighlight")
-	grip:SetScript("OnMouseDown", function()
-		grip.down:Show()
-		f:StartSizing("BOTTOMRIGHT")
-	end)
-	grip:SetScript("OnMouseUp", function()
+	-- ns.sizingWindow: the window being resized, so work that can wait for the final size does (the map's route arrows).
+	-- It ends on the release, or when the window hides first (Escape, a key binding): a hidden grip gets no release.
+	local function endSizing()
 		grip.down:Hide()
 		f:StopMovingOrSizing()
+		ns.sizingWindow = nil
 		save()
+	end
+	grip:SetScript("OnMouseDown", function()
+		grip.down:Show()
+		ns.sizingWindow = f
+		f:StartSizing("BOTTOMRIGHT")
+	end)
+	grip:SetScript("OnMouseUp", endSizing)
+	f:HookScript("OnHide", function()
+		if ns.sizingWindow == f then
+			endSizing()
+		end
 	end)
 	f.grip = grip
 

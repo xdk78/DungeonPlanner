@@ -187,8 +187,9 @@ position) and the guide's boss pins. "Make an editable copy" stores the IDs foun
 that finds nothing (the journal not ready, the Blizzard guide open) is retried on a later call.
 
 Pins come from pools: boss portraits in the Adventure Guide's ring, round icons in the gold minimap ring, pull-coloured
-discs for packs, role icons for positions; routes are outlined lines with joints at bends, direction chevrons spaced by
-screen distance (`MapLayout.RouteMarks`, drawn by `MapRoutes` in `UI/MapPins.lua`) and numbered stops. Layers
+discs for packs, role icons for positions; routes are outlined lines with joints at bends, direction arrows spaced by
+screen distance and kept clear of pins, labels and crossings (`RouteArrows.Place` in `Model/RouteArrows.lua`, drawn by
+`MapRoutes` in `UI/MapPins.lua` after the pins are laid out) and numbered stops. Layers
 (`Schema.LAYERS`) can be hidden from the legend; positions tied to a boss or pull show while it is in focus. Without
 boss markers, the Adventure Guide's own boss pins (`EJ_GetMapEncounter`) are shown. `UI/MapInput.lua` holds tooltips and
 input (state machine `view.drag`: idle / pan / marker / point / draw). Tools (own plans): Select (drag to move markers

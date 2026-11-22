@@ -82,6 +82,7 @@ Compat.CHECKS = {
 	{ "Item types, older call", "GetItemInfoInstant", "the Gear page's class and slot filters where C_Item lacks it" },
 	{ "Specializations of a class", "GetSpecializationInfoForClassID", "the role filter for Adventure Guide loot" },
 	{ "Chat links", "ChatEdit_InsertLink", "Shift-click to link an item in chat" },
+	{ "Mouse buttons", "IsMouseButtonDown", "route arrows after a lost size-grip release come back when the window hides" },
 	-- Sources used because WoW: Forever's Adventure Guide is empty (Data/GameFiles.lua, Data/Diagnostics.lua).
 	{ "Dungeon finder order", "GetLFDChoiceOrder", "the dungeon finder's list (a bounded ID scan instead)" },
 	{ "Group Finder activities", "C_LFGList.GetAvailableActivities", "level ranges of Forever's new dungeons" },

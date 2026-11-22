@@ -172,64 +172,7 @@ T.case("Map layout: dense points merge into groups", function()
 	T.eq(#ns.MapLayout.Cluster(pts, 9, 2), 2, "limited")
 end)
 
--- Path length along pts up to a mark on segment m.seg.
-local function along(pts, m)
-	local d = 0
-	for i = 2, m.seg - 1 do
-		d = d + math.sqrt((pts[i][1] - pts[i - 1][1]) ^ 2 + (pts[i][2] - pts[i - 1][2]) ^ 2)
-	end
-	local a = pts[m.seg - 1]
-	return d + math.sqrt((m.x - a[1]) ^ 2 + (m.y - a[2]) ^ 2)
-end
-
-T.case("Route marks: chevrons spaced by screen distance, clear of stops, one per leg even through tight bends", function()
-	local RM = ns.MapLayout.RouteMarks
-	local o = { spacing = 72, size = 18, stopGap = 14, bendGap = 3 }
-	-- A long straight leg: marks every 72 units, none within a stop's gap.
-	local straight = { { 0, 0, stop = true }, { 300, 0, stop = true } }
-	local marks, joints = RM(straight, o)
-	T.eq(#marks, 4, "four on 300 units")
-	T.eq(#joints, 0)
-	for i, m in ipairs(marks) do
-		T.ok(m.x >= 14 + 9 and m.x <= 300 - 14 - 9, "clear of the stops: " .. m.x)
-		T.eq(m.angle, 0, "pointing along the segment")
-		if i > 1 then
-			T.eq(m.x - marks[i - 1].x, 72, "regular spacing")
-		end
-	end
-	-- Zoomed in twice as far: twice the screen length, about twice the marks (the spacing is on screen).
-	T.ok(#RM({ { 0, 0, stop = true }, { 600, 0, stop = true } }, o) >= 7, "denser path, same on-screen spacing")
-	-- Too short for a mark between two stops: none.
-	T.eq(#RM({ { 0, 0, stop = true }, { 40, 0, stop = true } }, o), 0, "no clutter on a short leg")
-	-- A corridor route: a leg of many 10-unit zigzags, none long enough for a mark of its own, still gets one, in the
-	-- middle of the leg; every bend gets a joint.
-	local zig = { { 0, 0, stop = true } }
-	for i = 1, 19 do
-		zig[#zig + 1] = { i * 10, (i % 2) * 6 }
-	end
-	zig[#zig + 1] = { 200, 0, stop = true }
-	marks, joints = RM(zig, o)
-	T.eq(#marks, 1, "one mark for the whole leg")
-	T.ok(math.abs(along(zig, marks[1]) - along(zig, { seg = #zig, x = 200, y = 0 }) / 2) < 1, "at the leg's middle")
-	T.eq(#joints, 19, "a joint at each bend")
-	-- A long path of 40-unit bends: marks on many segments, but never closer than half a spacing along the path.
-	local bends = { { 0, 0, stop = true } }
-	for i = 1, 30 do
-		bends[#bends + 1] = { i * 40, (i % 2) * 8, stop = i == 30 }
-	end
-	marks = RM(bends, o)
-	T.ok(#marks >= 15, "marks along the way: " .. #marks)
-	for i = 2, #marks do
-		T.ok(along(bends, marks[i]) - along(bends, marks[i - 1]) >= 36 - 1e-6, "never denser than half a spacing")
-	end
-	-- Straight on through a bend point: no joint.
-	local _, j2 = RM({ { 0, 0, stop = true }, { 100, 0 }, { 200, 0, stop = true } }, o)
-	T.eq(#j2, 0, "no joint where the path runs straight on")
-	T.eq(#RM({ { 0, 0 } }, o), 0, "a single point draws nothing")
-	T.eq(#RM(straight, { spacing = 10, size = 4, limit = 3 }), 3, "bounded")
-end)
-
-T.case("Route paths: outlined lines, joints at bends, chevrons; the focused step's segment brighter, the rest dimmed", function()
+T.case("Route paths: outlined lines, joints at bends, arrows; the focused step's segment brighter, the rest dimmed", function()
 	boot()
 	ns.UI.SelectPlan("b:ragefire-chasm")
 	ns.UI.SelectTab("map")
@@ -246,9 +189,9 @@ T.case("Route paths: outlined lines, joints at bends, chevrons; the focused step
 	T.eq(n.lines, 4)
 	T.eq(n.outlines, 4, "a dark outline under every segment")
 	T.eq(n.joints, 2, "a joint at each of the two bends (stops have their own disc)")
-	T.ok(n.arrows >= 4, "chevrons along the path: " .. n.arrows)
+	T.ok(n.arrows >= 4, "arrows along the path: " .. n.arrows)
 	local pools = canvas.pools
-	T.eq(pools.arrows[1]:GetTexture(), ns.Style.MEDIA .. "Chevron")
+	T.eq(pools.arrows[1]:GetTexture(), ns.MapRoutes.ARROW_EDGE_FILE)
 	local or1, og1, ob1 = pools.outlines[1]:GetVertexColor()
 	T.ok(or1 < 0.1 and og1 < 0.1 and ob1 < 0.1, "the outline is dark")
 	-- Focus on the step reached by segments 2..4 (points 1 -> 4): brighter there, dimmed after.
@@ -264,15 +207,22 @@ T.case("Route paths: outlined lines, joints at bends, chevrons; the focused step
 	T.eq(#pools.lines, made, "lines reused")
 	canvas:DrawRoutePaths(nil)
 	T.ok(not pools.lines[1]:IsShown() and not pools.arrows[1]:IsShown() and not pools.joints[1]:IsShown(), "all hidden")
-	-- The icon-size setting scales the spacing: larger icons, fewer chevrons on the same path.
+	-- The icon-size setting scales the spacing: larger icons, fewer arrows on the same path.
 	local big = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 2 })
-	T.ok(big.arrows < n.arrows, "fewer, larger chevrons at 200%")
-	-- A chevron file the client cannot open yet (added while the game runs): the older arrow stands in.
+	T.ok(big.arrows < n.arrows, "fewer, larger arrows at 200%")
+	-- Arrow files the client cannot open yet (added while the game runs): the older shapes stand in.
 	for i = #pools.arrows, 1, -1 do
 		pools.arrows[i]:Hide()
 		pools.arrows[i] = nil
 	end
-	mock.missingTextures = { [ns.Style.MEDIA .. "Chevron"] = true }
+	mock.missingTextures = { [ns.MapRoutes.ARROW_EDGE_FILE] = true }
+	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1 })
+	T.eq(pools.arrows[1]:GetTexture(), ns.Style.MEDIA .. "Chevron")
+	for i = #pools.arrows, 1, -1 do
+		pools.arrows[i]:Hide()
+		pools.arrows[i] = nil
+	end
+	mock.missingTextures = { [ns.MapRoutes.ARROW_EDGE_FILE] = true, [ns.Style.MEDIA .. "Chevron"] = true }
 	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1 })
 	T.eq(pools.arrows[1]:GetTexture(), ns.Style.MEDIA .. "Arrow")
 	mock.missingTextures = nil

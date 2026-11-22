@@ -471,15 +471,57 @@ still overlap move apart, half the way each. Route bends shown while editing sta
 
 ### Routes
 
-A route has to read on busy map art. Each segment is a thick line in the route's colour over a dark outline line; each
-bend gets a joint (a disc in the line's colour over a dark disc), so routes that follow corridors with many bends turn
-smoothly. Direction chevrons (`Media/Chevron.tga`, a bold open chevron with a dark edge baked in, tinted a lighter shade
-of the route) sit along the path about every 72 screen pixels, scaled with the icon-size setting, so they keep the same
-density at any zoom; `MapLayout.RouteMarks` keeps them clear of stops and bends, gives every segment with room at least
-one, none to segments too short for one, and one to a stretch between two stops whose bends are all too short. While a
-step is in focus its segment is brighter and thicker and the rest of the path dims. Numbered stops are dark discs with
-a ring in the route's colour, drawn above the path. Chevrons are turned in their texture coordinates
-(`MapPins.TurnedCoords`), not with `SetRotation`, which left every chevron pointing up in game.
+A route has to read on busy map art and stay calm where it bends, doubles back or crosses itself. Each segment is a line
+in the route's colour over a dark outline line; each bend gets a joint (a disc in the line's colour over a dark disc),
+so routes that follow corridors with many bends turn smoothly. Lines draw under every pin and label.
+
+Direction arrows are small solid arrowheads (`Media/RouteArrowEdge.tga`, with a thin dark edge baked in;
+`Media/RouteArrow.tga` without it), tinted a lighter tone of the line and a little wider than the outlined line, so they
+sit on it. A larger arrowhead goes just before each numbered stop and at the route's end; the others are spaced by
+distance on screen (about 120 pixels at the default density, scaled with the icon-size setting), not per segment, so
+they keep the same density at any zoom. `RouteArrows.Place` (`Model/RouteArrows.lua`) keeps them clear of stops, sharp
+bends, pins, labels and each other, and leaves none where another part of the route (or another route) crosses the
+line; a corridor walked out and back keeps its arrows an arrow's length apart. A leg between two stops that is left
+without any arrow gets one near its middle, a little smaller if that is all that fits. The arrows are placed once per
+map redraw, after the pins and labels are laid out, only on the visible part of the map and a margin of one view size
+on every side (at most 200 per route and 400 in all), never per frame. A pan moves the canvas without a redraw, so the
+margin's arrows show on the map it reveals; past that margin they come with the redraw on release. The margin costs
+up to a fifth more per redraw than the visible part alone (measured with the instruction count of `tests/test_perf.lua`
+on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide, and
+they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its
+release, when the window hides, or when the timer finds no mouse button held). Every
+part of a route takes its colour from `MapRoutes.Color`: lines, arrows, stop rings and bend discs. While a step
+is in focus its leg is brighter and wider and the rest of the path dims. Numbered stops are dark discs with a ring in
+the route's colour, drawn above the path. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
+with `SetRotation`, which left every arrow pointing up in game.
+
+**Route settings.** The Routes group in the Settings panel changes the look at once, on the map and in run mode: line
+width (thin, medium, thick), line opacity, route colour (each route's own, or one palette colour for every route of a
+plan; another addon's routes keep theirs), the dark outline, direction arrows (off, few, normal, many), arrow size,
+arrowheads at stops, arrows only on the focused step's leg, and the hover highlight. They are stored in the profile
+(`settings.routes`); the arrows' own options are greyed out while arrows are off.
+
+**Two lanes.** A corridor walked out and back (two parts of a route running close together in opposite directions)
+draws as two lanes: each direction moves a little away from the other (`RouteLegs.Lanes`, a share of the outlined
+line's width; to its own right when the two lie on one line), and its arrows follow its lane, so the way in and the
+way back read apart instead of as one doubled line. Only the part two segments share moves: a long segment with a
+short way back keeps the rest of its length on the middle line, with a short slant onto the lane.
+
+**Hover highlight.** With the pointer over a route line (hit test against the drawn segments, a few pixels of
+tolerance), the leg under it, the stretch between the two numbered stops it joins, is drawn above the other lines,
+a little brighter and wider, with its arrows at the normal density even where the settings show fewer (but not when
+arrows are off), and the rest of the routes dim to 35 %. A tooltip names the two steps as the steps list does
+("Step 3 to step 4", "From Lady Anacondra to Lord Cobrahn"). Pointing at a step in the steps list highlights the leg
+that leads to it the same way when that step's route is on the floor shown (a step elsewhere, or a hidden Route layer,
+changes nothing), and scrolling the list under a still pointer follows the step now under it; run mode draws its
+current step's leg so. One highlight at a time, shared by the pointer and the list. It follows the coordinate
+readout's hover check (at most 20 times a second, only while the pointer is over the map, and nothing while the pointer
+and the drawn routes stay the same) and changes only when the leg changes: the lines are restyled and the placed
+arrows reused.
+None while dragging or with a drawing tool, and none over a pin.
+
+Labels at the map's edge keep clear of the coordinate readout where it is drawn: the bottom-right corner, or above
+the floor switcher on a map with several floors (its rectangle is measured, with the room of its widest text).
 
 **Snap to corridors.** With the switch on, a click with the Route tool adds a numbered stop and its leg from the
 route's last point follows the corridors; Shift-click keeps the leg straight, and a stop dropped with the Route tool
@@ -765,9 +807,10 @@ From 0.1.0:
   Prev and Next, the "~" mark (plain ASCII: every face has it).
 - Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner. Hall of Thanes:
   the labels beside (not over) the painted room names (`keepOut` in `Data/ReyesMaps.lua`), the denser plates (0.86).
-- Routes: the outlined line, the chevrons' size, spacing and direction at several zooms and icon sizes, the joints at
-  bends, the focused segment brighter than the rest, stop numbers readable over the line. `Media/Chevron.tga` is a new
-  file: until the game is restarted the older arrow shape stands in (where the client reports that a texture failed).
+- Routes: the outlined line, the arrows' size, spacing and direction at several zooms and icon sizes, the joints at
+  bends, the focused segment brighter than the rest, stop numbers readable over the line, and every option of the
+  Routes settings. `Media/RouteArrow.tga` and `Media/RouteArrowEdge.tga` are new files: until the game is restarted
+  the older chevron or arrow shape stands in (where the client reports that a texture failed).
 - Everything from the previous list still applies: map tiles lining up with markers, boss portraits, Polish letters.
 
 ## Sources

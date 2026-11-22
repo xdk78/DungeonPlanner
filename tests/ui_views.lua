@@ -856,6 +856,63 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- Wailing Caverns' recommended plan: a long route that bends, doubles back and crosses itself (the loops around
+	-- Lord Pythas and Lord Serpentis), at the default and the smallest window size, and on run mode's mini map.
+	{
+		name = "map-wailing",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+		end,
+		window = window,
+	},
+	-- The same with the pointer over a leg of the route (the longest, Kresh to Verdan the Everliving, walked out and
+	-- back): that leg drawn above the rest, brighter and wider, with its arrows; the rest dimmed (UI/MapPins.lua
+	-- SetRouteHover).
+	{
+		name = "map-wailing-hover",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+			local best
+			for _, s in ipairs(ns.UI.ctx:Steps()) do
+				if s.stop and s.route and (not best or s.to - s.from > best.to - best.from) then
+					best = s
+				end
+			end
+			page().panels.map.canvas:SetRouteHover({ route = best.route, from = best.from, to = best.to }, "map")
+		end,
+		window = window,
+		teardown = function()
+			page().panels.map.canvas:SetRouteHover(nil)
+		end,
+	},
+	{
+		name = "map-wailing-min",
+		setup = function()
+			resize(880, 560)
+			openPlan("wailing-caverns", "map")
+		end,
+		window = window,
+		teardown = function()
+			resize()
+		end,
+	},
+	{
+		name = "runmode-wailing",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+			ns.UI.FocusStep(math.floor((#ns.UI.ctx:Steps() + 1) / 2), { stay = true })
+			ns.RunMode.Show()
+			ns.RunMode.Refresh()
+			window():Hide()
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerRunFrame")
+		end,
+		teardown = function()
+			closeAll()
+			window():Show()
+		end,
+	},
 	{
 		name = "map-outdoor",
 		setup = function()
