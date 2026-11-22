@@ -175,6 +175,8 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	ns.UI.SelectTab("gear")
 	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.gear.inner
 	panel:Refresh()
+	-- From the top: the list keeps its scroll offset across plans, and an earlier file may have scrolled it down.
+	panel.list:ScrollTo(1)
 	local row -- the item's cell in its line
 	for _, r in ipairs(panel.list.rows) do
 		for _, cell in ipairs(r:IsShown() and r.cells or {}) do

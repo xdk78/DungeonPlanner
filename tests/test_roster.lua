@@ -275,11 +275,7 @@ T.case("Comm: sends the game refuses (result 7) are counted, fail their transfer
 	boot()
 	local Comm = ns.Comm
 	local realSendAddon = _G.C_ChatInfo.SendAddonMessage
-	-- Own state: no lockdown, nothing waiting, no run being led, and ChatThrottleLib's queue drained of what earlier
-	-- tests sent (it would be counted here otherwise).
-	mock.lockdown, Comm.outbox = false, {}
-	ns.RunSync.state = ns.Sync.New()
-	mock.Advance(10, 0.1)
+	T.quietComm() -- what earlier files sent or scheduled would be counted here otherwise
 	local stats = Comm.sendStats
 	Comm.sendStats = ns.SendStats.New()
 	mock.inGroup, mock.units = true, { party1 = { name = "Anna" } }
@@ -366,9 +362,8 @@ end)
 T.case("Comm: the restriction answer alone holds nothing: messages are sent, debug shows the flag", function()
 	boot()
 	local Comm = ns.Comm
-	mock.lockdown, Comm.outbox, Comm.sendStats = false, {}, ns.SendStats.New()
-	ns.RunSync.state = ns.Sync.New()
-	mock.Advance(10, 0.1) -- ChatThrottleLib's queue drained of earlier tests' messages
+	T.quietComm()
+	Comm.sendStats = ns.SendStats.New()
 	local sent = #mock.sent
 	mock.inGroup = true
 	-- Forever 1.60.1 was reported to answer true outside encounters; holding on it would send nothing ever.
@@ -391,10 +386,8 @@ end)
 T.case("Comm: during the encounter lockdown messages wait, sharing says so, and they go out after it", function()
 	boot()
 	local Comm = ns.Comm
-	mock.lockdown, Comm.outbox, Comm.sendStats = false, {}, ns.SendStats.New()
-	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = nil
-	ns.RunSync.state = ns.Sync.New()
-	mock.Advance(10, 0.1) -- ChatThrottleLib's queue drained of earlier tests' messages
+	T.quietComm()
+	Comm.sendStats = ns.SendStats.New()
 	local sent = #mock.sent
 	mock.inGroup, mock.lockdown = true, true
 	T.eq(Comm.Problem(), "blocked")

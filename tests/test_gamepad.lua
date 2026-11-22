@@ -37,6 +37,21 @@ local function registrations(fn)
 end
 
 T.case("Gamepad style on: no slash command, nothing in UISpecialFrames, /dp debug says so", function()
+	-- The addon booted (its fonts set up) before /dp debug builds its dialog, which stays for the session: built
+	-- before the boot, its texts would keep the game's fonts in every later file.
+	if not _G.DungeonPlannerDB then
+		T.mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
+		T.mock.loggedIn = true
+		T.mock.FireEvent("PLAYER_LOGIN")
+		T.mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+	end
+	-- /dp debug below opens the first dialog of the session, which builds the Escape stand-in once (UI/Window.lua); built
+	-- with the gamepad style on, it would stay out of UISpecialFrames for every later file. Build it in keyboard mode
+	-- first, as a session that had opened a window before would have.
+	ns.Compat.ResetGamepad()
+	local throwaway = CreateFrame("Frame")
+	throwaway:Hide()
+	ns.Widgets.CloseOnEscape(throwaway)
 	withGlobals({ C_InputInterfaceStyle = { GetCurrentStyle = function()
 		return GAMEPAD
 	end }, Enum = enum, UISpecialFrames = rawget(_G, "UISpecialFrames") or {} }, function()
@@ -57,6 +72,14 @@ T.case("Gamepad style on: no slash command, nothing in UISpecialFrames, /dp debu
 		end
 		local ok = pcall(ns.Slash.Debug)
 		_G.print = realPrint
+		-- Its font test dialog closes again, so later files do not find it open (or queued).
+		local dialog = _G.DungeonPlannerDialog
+		for _ = 1, 20 do
+			if not (dialog and dialog:IsShown()) then
+				break
+			end
+			dialog:Hide()
+		end
 		T.ok(ok, "debug runs")
 		local said = false
 		for _, l in ipairs(lines) do

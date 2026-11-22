@@ -388,6 +388,7 @@ end)
 
 T.case("Sharing over AceComm: offer, accept, payload, import", function()
 	smoke()
+	T.quietComm()
 	local plan = ns.UI.ctx:Plan()
 	mock.inGroup = true
 	mock.sent = {}

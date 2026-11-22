@@ -58,6 +58,8 @@ T.case("Acks over AceComm: the receiver acks an import; the sender records it; l
 		mock.FireEvent("PLAYER_LOGIN")
 		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
 	end
+	-- What goes out is counted: no hello an earlier file's roster change scheduled may land in it.
+	T.quietComm()
 	local Comm = ns.Comm
 	local outgoing = {}
 	local realSend = ns.addon.SendCommMessage

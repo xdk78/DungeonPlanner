@@ -64,11 +64,44 @@ function T.raises(fn, msg)
 	end
 end
 
+-- The sending functions cases replace to see what goes out, and the game's lockdown answers: put back after every case,
+-- so a case that fails before its own cleanup does not take the next ones' messages (or hold them) with it.
+local comm = {}
+local function saveComm()
+	if not comm.saved and ns.addon then
+		comm.saved = true
+		comm.send = ns.addon.SendCommMessage
+		comm.sendAddon = _G.C_ChatInfo.SendAddonMessage
+		comm.restricted = _G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted
+	end
+end
+local function restoreComm()
+	if comm.saved then
+		ns.addon.SendCommMessage = comm.send
+		_G.C_ChatInfo.SendAddonMessage = comm.sendAddon
+		_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = comm.restricted
+	end
+	mock.lockdown = false
+end
+
+-- Addon messages from a known state, for cases that count what goes out: no group, no lockdown, nothing waiting in
+-- Comm's outbox, no run led or followed, the timers an earlier file left run out (a hello goes 5 s after a roster
+-- change), and ChatThrottleLib's queue sent. Advances the mock clock by 10 s.
+function T.quietComm()
+	mock.inGroup, mock.units, mock.lockdown = false, {}, false
+	ns.Comm.outbox = {}
+	ns.RunSync.state = ns.Sync.New()
+	mock.Advance(10, 0.1)
+end
+
 function T.case(name, fn)
 	if filter and not name:find(filter, 1, true) then
 		return
 	end
+	saveComm()
 	local ok, err = pcall(fn)
+	saveComm() -- the first case boots the addon
+	restoreComm()
 	mock.ResetInput() -- no cursor, key or button carried into the next case, also after a failure
 	if ok then
 		T.passed = T.passed + 1
