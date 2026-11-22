@@ -20,6 +20,9 @@ follow [Semantic Versioning](https://semver.org/).
   the message" instead of waiting for answers that cannot come. Refused messages are not sent again. `/dp debug` and
   `/dp report` show the game's lockdown and restriction answers and how many messages were sent and refused per
   channel.
+- **Addon messages are held only during a boss fight's lockdown.** When the game merely reports outgoing addon
+  messages as restricted (WoW: Forever 1.60.1 was reported to do so outside encounters), Dungeon Planner now sends
+  them instead of holding every message indefinitely; if the game refuses them, sharing and group sync say so.
 
 ## [0.2.0] - 2026-11-22
 

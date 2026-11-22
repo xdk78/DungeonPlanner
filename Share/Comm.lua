@@ -2,8 +2,10 @@
 -- messages and paces them through ChatThrottleLib; ChatThrottleLib v32 also retries the server's "throttled" answer).
 --
 -- What we add on top:
--- * Lockdowns: on Forever the game blocks addon messages at times (boss fights, restricted states). Messages wait in
---   our small outbox until C_ChatInfo says the lockdown is over, instead of being dropped.
+-- * Lockdowns: the game blocks addon messages in boss fights (C_ChatInfo.InChatMessagingLockdown). Messages wait in
+--   our small outbox until the lockdown is over, instead of being dropped. AreOutgoingAddonChatMessagesRestricted alone
+--   does not hold them (Forever 1.60.1 was reported to answer true outside encounters, which would block every
+--   message): they are sent, and a refusal is counted (Share/SendStats.lua) and shown.
 -- * Incoming offers are filtered by the sharing setting, rate-limited per sender, and prompted out of combat.
 -- * A timer runs only while something waits or a transfer is open; an idle addon has no timer.
 
@@ -53,10 +55,11 @@ function Comm.Blocks()
 	return ask("InChatMessagingLockdown"), ask("AreOutgoingAddonChatMessagesRestricted")
 end
 
--- True while the game blocks addon messages.
+-- True while the game holds addon messages: the encounter lockdown only. The restriction answer alone does not count
+-- (docs/COMPATIBILITY.md, "Refused sends"): if Forever reports it permanently, holding on it would send nothing ever;
+-- the game refuses what it must, and Comm counts and shows the refusals.
 function Comm.IsLockedDown()
-	local lockdown, restricted = Comm.Blocks()
-	return lockdown == true or restricted == true
+	return (Comm.Blocks()) == true
 end
 
 function Comm.GroupChannel()
@@ -167,8 +170,9 @@ function abortTransfer(t, reason)
 	ns:Fire("SHARE_STATUS", t)
 end
 
--- Why messages on `channel` (nil: any) do not get through right now: "blocked" while the game holds them (they wait
--- in the outbox), "refused" when it refused the last few (SendStats.REFUSED_STREAK in a row), else nil.
+-- Why messages on `channel` (nil: any) do not get through right now: "blocked" during the encounter lockdown (they
+-- wait in the outbox), "refused" when the game refused the last few (SendStats.REFUSED_STREAK in a row), else nil.
+-- The restriction answer alone shows nothing: messages are sent, and only refusals say they did not go.
 function Comm.Problem(channel)
 	if Comm.IsLockedDown() then
 		return "blocked"

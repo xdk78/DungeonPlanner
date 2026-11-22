@@ -90,7 +90,7 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   guarded), add globals beyond those in `docs/API.md`.
 - Nothing shown in game (the window, tooltips, chat output, the Settings panel, messages to other players) asks for
   donations or advertises: Blizzard's UI Add-On Development Policy (rule 5). Donation and support links live only in
-  `README.md`, `docs/CURSEFORGE.md` and `docs/licenses/` (decided 2026-11-22). A test scans the files the TOC loads
+  `README.md`, `docs/CURSEFORGE.md` and `docs/licenses/`. A test scans the files the TOC loads
   for donation words (`tests/test_reyesmaps.lua`); `wowui check` skips string contents, so it cannot.
 - Combat: sharing, prompts and the Settings panel wait for `PLAYER_REGEN_ENABLED` (`ns:RunOutOfCombat`).
 - Addon messages go through `Share/Comm.lua` only (AceComm + lockdown outbox).

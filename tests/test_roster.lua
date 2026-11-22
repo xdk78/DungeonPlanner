@@ -287,7 +287,10 @@ T.case("Comm: sends the game refuses (result 7) are counted, fail their transfer
 		return unit == "player"
 	end
 	-- The real AceComm and ChatThrottleLib on the mock client (ChatThrottleLib sends from its OnUpdate, so time moves
-	-- after each send); the game answers InvalidChannel.
+	-- after each send); the game answers InvalidChannel, with the restriction answer true as reported on Forever.
+	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = function()
+		return true
+	end
 	local calls = 0
 	_G.C_ChatInfo.SendAddonMessage = function()
 		calls = calls + 1
@@ -348,27 +351,47 @@ T.case("Comm: sends the game refuses (result 7) are counted, fail their transfer
 	T.eq(states[#states], "ok")
 	T.eq(ns.RunSync.LineState(plan).text, ns.L["Lead the group's run mode"])
 	ns:Off("COMM_STATE", states)
+	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = nil
 	_G.UnitIsGroupLeader = leaderFn
 	Comm.sendStats = stats
 	mock.inGroup, mock.units = false, {}
 	ns.DB.DeletePlan(plan.id)
 end)
 
-T.case("Comm: while outgoing addon messages are restricted they wait, and sharing says so", function()
+T.case("Comm: the restriction answer alone holds nothing: messages are sent, debug shows the flag", function()
 	boot()
 	local Comm = ns.Comm
 	local sent = #mock.sent
-	mock.inGroup = true
-	local restricted = true
+	mock.inGroup, mock.lockdown = true, false
+	-- Forever 1.60.1 was reported to answer true outside encounters; holding on it would send nothing ever.
 	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = function()
-		return restricted
+		return true
 	end
+	T.eq(Comm.IsLockedDown(), false)
+	T.eq(Comm.Problem(), nil, "no line while sends are not refused")
+	T.eq(Comm.ProblemText(), nil)
+	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), "PARTY", nil, "query")
+	T.eq(#Comm.outbox, 0, "not held")
+	mock.Advance(2, 0.1)
+	T.eq(#mock.sent, sent + 1, "sent")
+	T.ok(Comm.DebugLine():find("lockdown no, outgoing restricted yes, waiting 0", 1, true), Comm.DebugLine())
+	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = nil
+	T.ok(Comm.DebugLine():find("outgoing restricted n/a", 1, true), "a client without the function")
+	mock.inGroup = false
+end)
+
+T.case("Comm: during the encounter lockdown messages wait, sharing says so, and they go out after it", function()
+	boot()
+	local Comm = ns.Comm
+	local sent = #mock.sent
+	mock.inGroup, mock.lockdown = true, true
 	T.eq(Comm.Problem(), "blocked")
 	T.eq(Comm.ProblemText(), "Addon messages are blocked by the game right now: they wait and go out when it allows them.")
 	Comm.SendSync(Transfer.Encode({ type = "query", proto = ns.PROTOCOL_VERSION }), "PARTY", nil, "query")
 	T.eq(#Comm.outbox, 1, "it waits")
+	mock.Advance(2, 0.1)
 	T.eq(#mock.sent, sent, "nothing went out")
-	T.ok(Comm.DebugLine():find("lockdown no, outgoing restricted yes, waiting 1", 1, true), Comm.DebugLine())
+	T.ok(Comm.DebugLine():find("lockdown yes, outgoing restricted n/a, waiting 1", 1, true), Comm.DebugLine())
 	-- The share section's status starts with the line.
 	if not ns.UI.IsShown() then
 		ns.UI.Toggle()
@@ -378,14 +401,13 @@ T.case("Comm: while outgoing addon messages are restricted they wait, and sharin
 	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.share.inner
 	panel:RefreshStatus()
 	T.eq(panel.content.status:GetText():match("^[^\n]*"), Comm.ProblemText())
-	restricted = false
+	mock.lockdown = false
 	mock.Advance(2, 0.1)
 	T.eq(#Comm.outbox, 0)
-	T.eq(#mock.sent, sent + 1, "sent once the game allows it")
+	T.eq(#mock.sent, sent + 1, "sent once the lockdown lifts")
 	T.eq(Comm.Problem(), nil)
-	T.ok(Comm.DebugLine():find("outgoing restricted no", 1, true))
-	_G.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = nil
-	T.ok(Comm.DebugLine():find("outgoing restricted n/a", 1, true), "a client without the function")
+	panel:RefreshStatus()
+	T.ok(not (panel.content.status:GetText() or ""):find("blocked", 1, true), "the line is gone")
 	mock.inGroup = false
 end)
 

@@ -770,10 +770,10 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 - Addon messages on Forever 1.60.1 (docs/COMPATIBILITY.md, section 2, "Refused sends"): out of combat, in a party, a
   raid and a guild, with a second account or a friend, `/dp debug`'s "Addon messages:" line (lockdown, outgoing
   restricted, sent and refused per distribution) before and after sharing a plan, leading a run and a whisper share.
-  Is "outgoing restricted" `true` outside encounters? If it is, the Share section and run mode's sync line should say
-  "Addon messages are blocked by the game right now" and nothing arrives; note whether party or whisper messages would
-  have got through (another addon that sends regardless, such as Dungeon Journal's version check). If sends are
-  refused, note the distribution and whether a code shows.
+  Is "outgoing restricted" `true` outside encounters? Messages are sent regardless (only the encounter lockdown holds
+  them): note whether they arrive on each distribution, or come back refused ("The game refused the last addon
+  messages" after three in a row, the share "failed: the game refused the message"), and whether a code shows. In a
+  boss fight, "Addon messages are blocked by the game right now" should show and the messages go out after the kill.
 - The map chip of a Santiago Reyes map (Hall of Thanes): its tooltip names him and his site only, with no donation
   request; the same in the map settings' credit line.
 
