@@ -6,6 +6,7 @@ local ns, mock = T.ns, T.mock
 local RA = ns.RouteArrows
 
 local function boot()
+	mock.ResetInput() -- no button or key left held by a case that failed
 	if not _G.DungeonPlannerDB then
 		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 		mock.loggedIn = true
@@ -519,10 +520,12 @@ T.case("Route arrows wait while a route point is dragged or the window is resize
 	T.eq(calls, 1, "placed once when the drag ends")
 	T.eq(canvas.counts.arrows, before, "all back")
 	ns.sizingWindow = _G.DungeonPlannerMainFrame
+	mock.SetMouseButtonDown("LeftButton", true) -- the size grip is held
 	canvas:DrawContent()
 	mock.Advance(0.2)
 	T.eq(calls, 1, "none while the window is resized")
 	ns.sizingWindow = nil
+	mock.SetMouseButtonDown("LeftButton", false)
 	mock.Advance(0.2)
 	T.eq(calls, 2, "placed once the resize ends")
 	RA.Place = place
@@ -587,46 +590,51 @@ T.case("Route arrows: the size grip holds them until its release, the window hid
 		calls = calls + 1
 		return place(...)
 	end
-	local realDown = rawget(_G, "IsMouseButtonDown")
+	-- The grip pressed and released with the left button held in between (mock input, as the client reports it).
+	local function press()
+		mock.SetMouseButtonDown("LeftButton", true)
+		mock.FireScript(grip, "OnMouseDown", "LeftButton")
+	end
+	local function release()
+		mock.SetMouseButtonDown("LeftButton", false)
+		mock.FireScript(grip, "OnMouseUp", "LeftButton")
+	end
 	local ok, err = pcall(function()
 		-- Pressed and released.
-		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		press()
 		T.eq(ns.sizingWindow, f, "resizing")
 		canvas:DrawContent()
 		T.eq(canvas.counts.arrows, 0, "none while resizing")
 		mock.Advance(0.2)
 		T.eq(calls, 0, "the timer waits")
-		grip:GetScript("OnMouseUp")(grip, "LeftButton")
+		release()
 		T.eq(ns.sizingWindow, nil, "released")
 		mock.Advance(0.2)
 		T.eq(calls, 1, "placed once")
 		T.eq(canvas.counts.arrows, before, "all back")
 		-- The window hidden mid-resize (Escape): its grip gets no release.
-		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		press()
 		canvas:DrawContent()
 		f:Hide()
 		T.eq(ns.sizingWindow, nil, "the resize ends with the window")
+		mock.SetMouseButtonDown("LeftButton", false)
 		f:Show()
 		canvas:DrawContent()
 		mock.Advance(0.2)
 		T.ok(canvas.counts.arrows > 0, "arrows when it is back")
 		-- The release lost: once no mouse button is held, the timer stops waiting.
-		grip:GetScript("OnMouseDown")(grip, "LeftButton")
+		press()
 		canvas:DrawContent()
-		local held = true
-		_G.IsMouseButtonDown = function()
-			return held
-		end
 		calls = 0
 		mock.Advance(0.2)
 		T.eq(calls, 0, "a button still held: waiting")
-		held = false
+		mock.SetMouseButtonDown("LeftButton", false) -- released away from the grip: no OnMouseUp
 		mock.Advance(0.2)
 		T.eq(calls, 1, "no button held: placed")
 		T.eq(ns.sizingWindow, nil, "and the resize counts as over")
 		T.eq(canvas.counts.arrows, before)
 	end)
-	_G.IsMouseButtonDown = realDown
+	mock.ResetInput()
 	ns.sizingWindow = nil
 	RA.Place = place
 	if not ok then

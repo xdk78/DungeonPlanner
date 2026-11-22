@@ -117,8 +117,9 @@ local function fakeView(root, o)
 	return view
 end
 
+-- A click runs the button's handler and the hooks added to it (our overlay's), as the client does.
 local function click(b)
-	b:GetScript("OnClick")(b)
+	mock.FireScript(b, "OnClick", "LeftButton", false)
 end
 
 local savedLast -- the plans last chosen per instance before a case (other tests leave some)
