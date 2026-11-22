@@ -27,13 +27,32 @@ function MapEditor.Build(f, ctx, rail, h)
 		end
 	end
 
-	ed.heading = W.Heading(ed, L["Marker"])
-	ed.heading:SetPoint("TOPLEFT")
 	ed.close = W.IconButton(ed, "x", L["Close"], function()
 		ctx.selectedMarker = nil
 		f:Refresh()
 	end)
 	ed.close:SetPoint("TOPRIGHT", 0, 4)
+	-- The title stops before the close button: a long one ("Druids of the Fang and vipers near Anacondra") is cut after
+	-- a whole word, with the whole title in a tooltip.
+	ed.heading = W.Heading(ed, L["Marker"])
+	ed.heading:SetPoint("TOPLEFT")
+	ed.heading:SetPoint("RIGHT", ed.close, "LEFT", -SP.xs, 0)
+	local headTip = CreateFrame("Frame", nil, ed)
+	headTip:SetAllPoints(ed.heading)
+	headTip:SetScript("OnEnter", function(self)
+		W.FullTextTooltip(self, ed.heading)
+	end)
+	headTip:SetScript("OnLeave", function(self)
+		local tt = W.Tip()
+		if tt and tt:IsOwned(self) then
+			tt:Hide()
+		end
+	end)
+	-- Set the title (cut to fit; the tooltip only while it is cut).
+	function ed:SetTitle(text)
+		local _, cut = W.FitText(self.heading, text)
+		headTip:EnableMouse(cut)
+	end
 	-- Details of a recommended plan's marker: a scrolling document (a boss: portrait, name and level, then what Dungeon
 	-- Journal states about it, the plan's strategy and the note).
 	ed.details = W.Document(ed)
@@ -243,7 +262,7 @@ function MapEditor.Build(f, ctx, rail, h)
 	function ed:ShowDetails(p, m)
 		local d = ns.BossInfo.MarkerDetail(p, m)
 		local doc = self.details
-		self.heading:SetText(d.heading)
+		self:SetTitle(d.heading)
 		doc:Begin()
 		if d.boss then
 			local boss = d.boss
@@ -286,7 +305,7 @@ function MapEditor.Build(f, ctx, rail, h)
 		if ro then
 			self:ShowDetails(p, m)
 		else
-			self.heading:SetText(m.label ~= "" and m.label or L[m.kind])
+			self:SetTitle(m.label ~= "" and m.label or L[m.kind])
 			layoutForm(m)
 			self.label:SetValue(m.label)
 			self.kind:Refresh()

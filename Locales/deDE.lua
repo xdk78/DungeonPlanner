@@ -1133,6 +1133,8 @@ ns.Locales.deDE = {
 	["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."] = "Der Abschnitt unter dem Mauszeiger oder eines in der Liste gezeigten Schritts hebt sich mit seinen Pfeilen ab; der Rest wird blasser. Ebenso der aktuelle Schritt im Durchlaufmodus.",
 	["Step %d to step %d"] = "Schritt %d bis Schritt %d",
 	["To step %d"] = "Bis Schritt %d",
+	["Colour along the route"] = "Farbverlauf entlang der Route",
+	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "Die Farbe der Linie wechselt vom Anfang einer Route bis zu ihrem Ende, so ist zu erkennen, welcher Teil zuerst kommt. Aus: eine Farbe.",
 	["From %s to %s"] = "Von %s bis %s",
 	["To %s"] = "Bis %s",
 }

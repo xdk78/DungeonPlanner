@@ -1133,6 +1133,8 @@ ns.Locales.ruRU = {
 	["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."] = "Отрезок под указателем или шага, на который вы наводите в списке, выделяется со стрелками; остальное тускнеет. Так же и текущий шаг в режиме прохождения.",
 	["Step %d to step %d"] = "Шаг %d — шаг %d",
 	["To step %d"] = "До шага %d",
+	["Colour along the route"] = "Цвет вдоль пути",
+	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "Цвет линии меняется от начала пути к его концу, чтобы было видно, какая часть идёт раньше. Выкл.: один цвет.",
 	["From %s to %s"] = "Из %s в %s",
 	["To %s"] = "До %s",
 }

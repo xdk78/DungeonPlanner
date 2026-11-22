@@ -471,9 +471,29 @@ still overlap move apart, half the way each. Route bends shown while editing sta
 
 ### Routes
 
-A route has to read on busy map art and stay calm where it bends, doubles back or crosses itself. Each segment is a line
-in the route's colour over a dark outline line; each bend gets a joint (a disc in the line's colour over a dark disc),
-so routes that follow corridors with many bends turn smoothly. Lines draw under every pin and label.
+A route has to read on busy map art and stay calm where it bends, doubles back or crosses itself, and the order of its
+legs should show at a glance (`UI/MapRoutes.lua`). Each segment is a thin line (2.5 pixels at the medium width) over a
+dark casing (a wider dark line under it, 1.25 pixels each side), which keeps it apart from parchment and painted map
+art; each bend gets a joint (a disc in the line's colour over a dark disc), so routes that follow corridors with many
+bends turn smoothly. Lines draw under every pin and label.
+
+**Colour along the route** (on by default). The line's colour runs from the route's own colour at its start to a
+partner colour at its end (`Model/RouteLook.lua`, `Style.ROUTE.ramp`), by distance along the route, so an earlier
+corridor reads apart from a later one where a route doubles back or crosses itself. The ramp is made in Oklch: the hue
+turns 120 degrees, the way whose end differs more in lightness and on the blue-yellow axis (what red-green colour
+blindness keeps) and stays further from parchment; the lightness moves 0.14 towards the middle band (a darker start
+gets lighter); the chroma stays at least 0.11, lowered only to fit the sRGB gamut. The default red runs through
+magenta and violet to a periwinkle blue (`#DB3329`, `#E03D84`, `#D157CD`, `#AD7BFF`, `#81A1FF`). Tests check every
+palette colour (both sets): the ramp starts exactly on the route's colour, moves steadily away from it, keeps clear of
+parchment and of dark minimap art, and its start and end stay apart under simulated deuteranopia, protanopia and
+tritanopia. A stretch longer than 1/48 of the route is drawn in pieces so its colour flows. The numbered stops' rings,
+the steps list's stop badges and the arrows take the colour at their place. With "one colour for every route" the ramp
+starts on that colour; with the setting off a route has one colour. Another addon's routes keep their one colour.
+
+**The way back is dashed.** Of the two lanes of a corridor walked out and back (below), the second pass is drawn as
+dashes over a continuous casing, so the two lanes read as "there" (solid) and "back" (dashed). Dashes are two outlined
+widths long with gaps of 1.2; they are worked out with the redraw, at most 600 per redraw (longer dashes and gaps
+beyond that).
 
 Direction arrows are small solid arrowheads (`Media/RouteArrowEdge.tga`, with a thin dark edge baked in;
 `Media/RouteArrow.tga` without it), tinted a lighter tone of the line and a little wider than the outlined line, so they
@@ -490,14 +510,17 @@ up to a fifth more per redraw than the visible part alone (measured with the ins
 on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide, and
 they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its
 release, when the window hides, or when the timer finds no mouse button held). Every
-part of a route takes its colour from `MapRoutes.Color`: lines, arrows, stop rings and bend discs. While a step
-is in focus its leg is brighter and wider and the rest of the path dims. Numbered stops are dark discs with a ring in
-the route's colour, drawn above the path. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
+part of a route takes its colour from `MapRoutes.ColorAt`: lines, arrows, stop rings and bend discs. While a step
+is in focus its leg is brighter and wider and the rest of the path dims (as with the hover highlight, below). Numbered
+stops are dark discs with a ring in the route's colour at that stop, drawn above the path. While a route is edited,
+a bend's small handle that a pin or stop covers is left out (`MapLayout.Nudge` marks it), so a click there takes the
+pin and the two never overlap; zooming in shows it again, and the point being dragged always shows. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
 with `SetRotation`, which left every arrow pointing up in game.
 
 **Route settings.** The Routes group in the Settings panel changes the look at once, on the map and in run mode: line
 width (thin, medium, thick), line opacity, route colour (each route's own, or one palette colour for every route of a
-plan; another addon's routes keep theirs), the dark outline, direction arrows (off, few, normal, many), arrow size,
+plan; another addon's routes keep theirs), colour along the route, the dark outline (the casing), direction arrows
+(off, few, normal, many), arrow size,
 arrowheads at stops, arrows only on the focused step's leg, and the hover highlight. They are stored in the profile
 (`settings.routes`); the arrows' own options are greyed out while arrows are off.
 
@@ -510,7 +533,8 @@ short way back keeps the rest of its length on the middle line, with a short sla
 **Hover highlight.** With the pointer over a route line (hit test against the drawn segments, a few pixels of
 tolerance), the leg under it, the stretch between the two numbered stops it joins, is drawn above the other lines,
 a little brighter and wider, with its arrows at the normal density even where the settings show fewer (but not when
-arrows are off), and the rest of the routes dim to 35 %. A tooltip names the two steps as the steps list does
+arrows are off), and the rest of the routes dim: 55 % of their opacity and half way to a grey of the same lightness
+(`Style.ROUTE.dim`, `dimGrey`), so they stay readable and do not fade to pink on parchment. A tooltip names the two steps as the steps list does
 ("Step 3 to step 4", "From Lady Anacondra to Lord Cobrahn"). Pointing at a step in the steps list highlights the leg
 that leads to it the same way when that step's route is on the floor shown (a step elsewhere, or a hidden Route layer,
 changes nothing), and scrolling the list under a still pointer follows the step now under it; run mode draws its

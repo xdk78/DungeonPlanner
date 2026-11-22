@@ -1,6 +1,6 @@
 -- The map canvas: the dungeon's map art (drawn at runtime; no Blizzard art is shipped) in a bronze-edged frame, with
 -- the plan on it: round boss portraits, round icons in the minimap ring, pull-coloured discs for packs, role icons for
--- party positions, the route (UI/MapPins.lua) with numbered stops (the focused step's segment bold), and the Enemies layer
+-- party positions, the route (UI/MapRoutes.lua) with numbered stops (the focused step's segment bold), and the Enemies layer
 -- underneath (UI/MapSpawns.lua). A parchment grid stands in when a map has no art.
 --
 -- Coordinates: plans store normalized x, y in 0..1 over the art layer (0,0 top-left). The canvas lays everything out
@@ -25,7 +25,7 @@ local FRAME_INSET = 7 -- the gold frame's width over the parchment
 MapCanvas.FRAME_INSET = FRAME_INSET
 MapCanvas.GLYPH = MapPins.GLYPH
 MapCanvas.ArtKey = MapPins.ArtKey
-local resetPin, styleRound, styleDisc = MapPins.Reset, MapPins.StyleRound, MapPins.StyleDisc
+local resetPin, styleRound = MapPins.Reset, MapPins.StyleRound
 local layoutItem, stylePin, boss = MapPins.LayoutItem, MapPins.Style, MapPins.Boss
 MapCanvas.BossOf = boss
 
@@ -106,7 +106,7 @@ function MapCanvas.Create(parent, cb)
 	overlay:SetAllPoints()
 	overlay:SetFrameLevel(canvas:GetFrameLevel() + 5)
 	view.overlay = overlay
-	view.pools = { lines = {}, arrows = {}, points = {}, pins = {}, journal = {} } -- route paths: UI/MapPins.lua
+	view.pools = { lines = {}, arrows = {}, points = {}, pins = {}, journal = {} } -- route paths: UI/MapRoutes.lua
 	-- Where the current step is on a compact map (run mode): a soft accent disc with a ring, under the pins.
 	view.focusGlow = overlay:CreateTexture(nil, "ARTWORK", nil, 0)
 	view.focusGlow:SetTexture(S.MEDIA .. "Circle")
@@ -578,8 +578,8 @@ function MapCanvas.Install(view)
 			local spawns = self.cb.spawnsShown and self.cb.spawnsShown()
 			nSpawns = self:DrawSpawns(spawns and plan or nil, floor, px, py, scale)
 
-			-- Routes under the pins: the paths (outlined lines, joints at bends: MapRoutes in UI/MapPins.lua), then the
-			-- stops; the direction arrows once the pins and labels are laid out (below), so they keep clear of them.
+			-- Routes under the pins (UI/MapRoutes.lua): the paths (cased lines, joints at bends), then the stops; the
+			-- direction arrows once the pins and labels are laid out (below), so they keep clear of them.
 			-- Another addon's route as an extra layer (Data/Providers.lua Routes), in the map's own coordinates.
 			local extra = not compact and self.cb.providerRoutesShown and self.cb.providerRoutesShown()
 				and MapCanvas.ProviderRoutes(plan, floor, self.artInfo) or nil
@@ -587,51 +587,14 @@ function MapCanvas.Install(view)
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
 					extra = extra, mx = mx, my = my, deferArrows = true,
-					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapPins.lua SetRouteHover).
+					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapRoutes.lua SetRouteHover).
 					highlight = self.cb.highlightFocus and self.cb.highlightFocus() and seg or nil })
 				nLines, pathsDrawn = drawn.lines, true
 				self.routeCounts = drawn
-				for _, route in ipairs(own and plan.routes or {}) do
-					if route.floor == floor then
-						local r, g, b = ns.MapRoutes.Color(route, true)
-						local active = route.id == activeRoute
-						for i, pt in ipairs(route.points) do
-							if (pt.step and not compact) or active or editingRoutes then
-								nPoints = nPoints + 1
-								local p = getPoint(nPoints)
-								p.routeId, p.pointIndex = route.id, i
-								p:EnableMouse(not (self.cb.drawTool and self.cb.drawTool()))
-								local size = (pt.step and 20 or 9) * math.max(0.75, scale)
-								resetPin(p, size)
-								p:ClearAllPoints()
-								p:SetPoint("CENTER", canvas, "TOPLEFT", px(pt[1], pt[2]), py(pt[2], pt[1]))
-								if pt.step then
-									-- A dark disc with a ring in the route's colour: the number reads on any art and over the line.
-									-- The number is the step's in the side panel (Steps.StopNumbers), not the stop's own order.
-									local number = self.cb.stopNumber and self.cb.stopNumber(route.id, i) or pt.step
-									styleDisc(p, size, 0.1, 0.07, 0.04, tostring(number))
-									p.ring:SetVertexColor(r, g, b, 1)
-									if seg and seg.route == route.id and seg.to == i then
-										p.select:ClearAllPoints()
-										p.select:SetPoint("CENTER")
-										p.select:SetSize(size + 10, size + 10)
-										p.select:SetVertexColor(S.Color("accent"))
-										p.select:Show()
-									end
-								else
-									p.disc:ClearAllPoints()
-									p.disc:SetPoint("CENTER")
-									p.disc:SetSize(size, size)
-									p.disc:SetVertexColor(r, g, b, 1)
-									p.disc:Show()
-								end
-								p:SetAlpha(route.optional and 0.7 or 1)
-								p:Show()
-								layoutItem(layout, p, px(pt[1], pt[2]), -py(pt[2], pt[1]), size, pt.step and "stop" or "pin", 0)
-								layout[#layout].bend = not pt.step -- on the line itself: arrows need not avoid it
-							end
-						end
-					end
+				if own then
+					nPoints = self:DrawRouteStops(plan, floor, px, py, { getPoint = getPoint, layout = layout, scale = scale,
+						seg = seg, activeRoute = activeRoute, editing = editingRoutes, compact = compact,
+						stopNumber = self.cb.stopNumber, drawTool = self.cb.drawTool and self.cb.drawTool() })
 				end
 			end
 

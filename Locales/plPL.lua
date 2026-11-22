@@ -1159,6 +1159,8 @@ ns.Locales.plPL = {
 	["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."] = "Odcinek pod wskaźnikiem albo kroku wskazanego na liście wyróżnia się razem ze strzałkami; reszta przygasa. Tak samo bieżący krok w trybie przejścia.",
 	["Step %d to step %d"] = "Krok %d do kroku %d",
 	["To step %d"] = "Do kroku %d",
+	["Colour along the route"] = "Kolor zmienia się wzdłuż trasy",
+	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "Kolor linii przechodzi od początku trasy do jej końca, więc widać, która część jest wcześniej. Wyłączone: jeden kolor.",
 	["From %s to %s"] = "Od: %s, do: %s",
 	["To %s"] = "Do: %s",
 }

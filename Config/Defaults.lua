@@ -29,7 +29,7 @@ Defaults.settings = {
 	providers = {}, -- [adapter id] = false when switched off (Data/Providers.lua); every adapter is on by default
 	preferProviderMaps = true, -- drawn maps (Data/ReyesMaps.lua, other addons') before the game's minimap pictures
 	mapColors = "parchment", -- minimap floors: "parchment" (tinted like the old map tiles) | "game" (UI/MapCanvas.lua)
-	-- How routes look on the map (UI/MapPins.lua MapRoutes; sizes in UI/Style.lua ROUTE).
+	-- How routes look on the map (UI/MapRoutes.lua; sizes in UI/Style.lua ROUTE).
 	routes = {
 		width = "medium", -- "thin" | "medium" | "thick"
 		arrows = "normal", -- direction arrows: "off" | "few" | "normal" | "many"
@@ -38,6 +38,7 @@ Defaults.settings = {
 		opacity = 1, -- the lines' opacity, 0.4 .. 1
 		outline = true, -- a dark edge around lines and arrows
 		color = 0, -- 0: each route's own colour; 1 .. 8: every plan route in that palette colour
+		ramp = true, -- the colour runs along the route, from that colour at its start to a partner colour at its end
 		focusArrows = false, -- while a step is in focus, arrows only on the leg that leads to it
 		hover = true, -- highlight the leg under the pointer (and a hovered step's) with a tooltip
 	},

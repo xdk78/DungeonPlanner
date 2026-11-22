@@ -2,7 +2,8 @@
 -- y down) on whatever the canvas drew: the map calls it once per redraw, never per frame.
 --   MapLayout.Nudge(items)  pins never cover each other: a pull disc on a boss becomes a badge just right of it, a
 --                           numbered route stop on a marker one just left of it (the marker stays put), and other
---                           pins that still overlap are pushed apart (each half the way). Small route bends stay.
+--                           pins that still overlap are pushed apart (each half the way). Small route bends stay; one
+--                           a pin covers is marked `covered` (left out).
 --   MapLayout.Labels(items, avoid, bounds) picks a side for each label (below, above, right, left), or hides it when
 --                           every side is taken; higher `prio` places first, and labels with prio >= KEEP always show.
 --                           avoid: optional rectangles { x1, y1, x2, y2 } no label may cover (the floating legend).
@@ -99,6 +100,22 @@ function MapLayout.Nudge(items)
 		end
 		if not any then
 			break
+		end
+	end
+	-- A route bend's small handle (shown while editing; it.bend) that a pin covers, where it is or where the pin was
+	-- moved to, is left out (it.covered): the pin takes the click there, and zooming in shows the bend again. One marked
+	-- `keep` (being dragged) stays.
+	for _, it in ipairs(items) do
+		if it.bend and not it.keep then
+			for _, other in ipairs(items) do
+				if not other.bend and other.r >= MIN_SPREAD_R then
+					local ox, oy = boxOverlap(it, other)
+					if ox > 0 and oy > 0 then
+						it.covered = true
+						break
+					end
+				end
+			end
 		end
 	end
 	return items

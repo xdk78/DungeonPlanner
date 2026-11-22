@@ -816,6 +816,19 @@ V.views = {
 			ns.UI.ctx.selectedMarker = nil
 		end,
 	},
+	-- A pack with a long name selected: the details pane's title stops before its close button, cut after a word.
+	{
+		name = "pack-detail",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+			ns.UI.ctx.selectedMarker = "m12"
+			ns.UI.RefreshPage()
+		end,
+		window = window,
+		teardown = function()
+			ns.UI.ctx.selectedMarker = nil
+		end,
+	},
 	{
 		name = "map-classic",
 		setup = function()
@@ -829,6 +842,18 @@ V.views = {
 			openPlan("hall-of-thanes", "map", true)
 		end,
 		window = window,
+	},
+	-- The same in the game's own minimap colours (settings.mapColors "game"): the route on dark art.
+	{
+		name = "map-minimap-dark",
+		setup = function()
+			ns.db.settings.mapColors = "game"
+			openPlan("hall-of-thanes", "map", true)
+		end,
+		window = window,
+		teardown = function()
+			ns.db.settings.mapColors = "parchment"
+		end,
 	},
 	-- Santiago Reyes' bundled map (Data/ReyesMaps.lua) with no other addon installed: the map, the plan on it and the
 	-- "Map by Santiago Reyes" chip.
@@ -866,7 +891,7 @@ V.views = {
 		window = window,
 	},
 	-- The same with the pointer over a leg of the route (the longest, Kresh to Verdan the Everliving, walked out and
-	-- back): that leg drawn above the rest, brighter and wider, with its arrows; the rest dimmed (UI/MapPins.lua
+	-- back): that leg drawn above the rest, brighter and wider, with its arrows; the rest dimmed (UI/MapRoutes.lua
 	-- SetRouteHover).
 	{
 		name = "map-wailing-hover",

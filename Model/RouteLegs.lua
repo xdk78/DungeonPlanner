@@ -47,7 +47,8 @@ end
 -- o: { shift (how far each lane moves aside), near (segments closer than this, running opposite ways, are an
 -- out-and-back stretch), yUp (true when y grows upwards, as in canvas offsets: decides which side is right) }.
 -- Returns a new list of points { x, y, stop, i (the original point; nil for a point added inside a segment), seg (the
--- original segment ending here) } and whether any segment moved. Each segment of such a stretch moves away from its
+-- original segment ending here), lane (moved onto a lane), back (the drawn segment ending here lies on the lane of
+-- the second pass through a corridor: the way back) } and whether any segment moved. Each segment of such a stretch moves away from its
 -- partner (the opposite segment it runs alongside the longest), to its own right when the two lie on one line. Only
 -- the part a segment shares with its partner moves: a long segment with a short way back is split, with a short
 -- slant to the lane where the shared part begins and back where it ends. Where the path turns back on a shifted
@@ -100,17 +101,18 @@ function RouteLegs.Lanes(pts, o)
 				s.lo = lo > ramp and lo or 0
 				s.hi = s.len - hi > ramp and hi or s.len
 				s.sx, s.sy = s.rx * side, s.ry * side -- the unit step towards its lane
+				s.back = partner.i < s.i -- the second pass through the corridor: the way back
 				moved = true
 			end
 		end
 	end
 	local out = {}
-	local function add(x, y, i, seg)
-		out[#out + 1] = { x, y, stop = pts[i].stop, i = i, seg = seg }
+	local function add(x, y, i, seg, lane)
+		out[#out + 1] = { x, y, stop = pts[i].stop, i = i, seg = seg, lane = lane }
 	end
 	-- A point inside segment s, `along` from its start, in its lane (k = shift) or on the middle line (k = 0).
 	local function inner(s, along, k)
-		out[#out + 1] = { s.ax + s.ux * along + s.sx * k, s.ay + s.uy * along + s.sy * k, seg = s.i }
+		out[#out + 1] = { s.ax + s.ux * along + s.sx * k, s.ay + s.uy * along + s.sy * k, seg = s.i, lane = k ~= 0 }
 	end
 	for v = 1, n do
 		local p = pts[v]
@@ -120,19 +122,19 @@ function RouteLegs.Lanes(pts, o)
 		if inLane and outLane then
 			local dot = sIn.sx * sOut.sx + sIn.sy * sOut.sy
 			if dot < U_TURN then
-				add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v)
-				add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v)
+				add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v, true)
+				add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v, true)
 			else
 				-- A mitred corner keeps both lanes at the same distance from the middle line.
 				local mx, my = sIn.sx + sOut.sx, sIn.sy + sOut.sy
 				local m = sqrt(mx * mx + my * my)
 				local k = shift / max(0.5, (mx * sIn.sx + my * sIn.sy) / m) / m
-				add(p[1] + mx * k, p[2] + my * k, v, v)
+				add(p[1] + mx * k, p[2] + my * k, v, v, true)
 			end
 		elseif inLane then
-			add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v)
+			add(p[1] + sIn.sx * shift, p[2] + sIn.sy * shift, v, v, true)
 		elseif outLane then
-			add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v)
+			add(p[1] + sOut.sx * shift, p[2] + sOut.sy * shift, v, v, true)
 		else
 			add(p[1], p[2], v, v)
 		end
@@ -146,6 +148,13 @@ function RouteLegs.Lanes(pts, o)
 				inner(sOut, sOut.hi, shift)
 				inner(sOut, sOut.hi + ramp, 0)
 			end
+		end
+	end
+	-- A drawn segment on the lane of a corridor's way back (both its ends in that lane) is marked at its end point.
+	for k = 2, #out do
+		local s = segs[out[k].seg]
+		if s and s.back and out[k].lane and out[k - 1].lane then
+			out[k].back = true
 		end
 	end
 	return out, moved

@@ -200,7 +200,7 @@ function MapCanvas.InstallInput(view)
 
 	function view:EndDrag()
 		local d = self.drag
-		-- Idle before the redraw below, so it places the route arrows again (UI/MapPins.lua PlaceRouteArrows).
+		-- Idle before the redraw below, so it places the route arrows again (UI/MapRoutes.lua PlaceRouteArrows).
 		self:Idle()
 		local plan = self.cb.getPlan()
 		if plan and d.moved then
@@ -378,7 +378,7 @@ function MapCanvas.InstallInput(view)
 		self:ZoomAt(delta)
 	end)
 	-- Route hover: the leg under the pointer (a route's stretch between two numbered stops) is highlighted
-	-- (UI/MapPins.lua SetRouteHover) with a tooltip naming the steps it joins. Only while the map is idle, with no
+	-- (UI/MapRoutes.lua SetRouteHover) with a tooltip naming the steps it joins. Only while the map is idle, with no
 	-- drawing tool, and with the Routes setting on; a pin under the pointer ends it (the map's OnLeave).
 	local function hoverEnabled()
 		local s = ns.db and ns.db.settings and ns.db.settings.routes
@@ -430,7 +430,7 @@ function MapCanvas.InstallInput(view)
 		end
 		local cx, cy = cursorIn(canvas)
 		local left, top = canvas:GetLeft(), canvas:GetTop()
-		-- Canvas offsets, y up: the routes' own coordinates (UI/MapPins.lua DrawRoutePaths).
+		-- Canvas offsets, y up: the routes' own coordinates (UI/MapRoutes.lua DrawRoutePaths).
 		local hit = left and ns.RouteLegs.Hit(jobs.paths, cx - left, cy - top, math.max(4, jobs.look.width / 2 + 3))
 		if not hit then
 			self:ClearRouteHover("map")
@@ -474,7 +474,7 @@ function MapCanvas.InstallInput(view)
 			at.x, at.y = x, y
 			v:UpdateCoords()
 			v:RouteHoverUpdate()
-			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapPins.lua SetRouteHover)
+			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapRoutes.lua SetRouteHover)
 		end
 	end
 	local function wantsHover(v)

@@ -125,8 +125,15 @@ follow [Semantic Versioning](https://semver.org/).
   in the Routes group turns it off.
 - **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, each
   direction draws slightly apart from the other, so the two read as lanes with their own arrows.
+- **Routes easier to follow.** Lines are thinner with a dark casing, and their colour shifts along the route from its
+  own colour (red runs through magenta to blue), so the earlier and later parts of a route that doubles back read apart;
+  stop numbers and arrows take the colour at their place. The way back through a corridor is dashed. While a leg is
+  highlighted, the rest dims to a greyer, still readable tone instead of fading to pink. "Colour along the route" in the
+  Routes settings turns the colour shift off.
 
 ### Fixed
+- A marker's long title in the map's details panel no longer runs under its close button: it is cut after a word,
+  with the whole title in a tooltip. While a route is edited, a bend's handle no longer overlaps a pin or stop.
 - **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or
   another addon as item IDs, and the class and role filters were not applied to them. A class shows the items it can
   wear and wield at full level, by the current game rules (armor up to its heaviest type, the weapons and shields it

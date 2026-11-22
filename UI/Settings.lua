@@ -55,7 +55,7 @@ for pct = 70, 140, 5 do
 	scaleSorting[#scaleSorting + 1] = tostring(pct)
 end
 
--- Routes: how route lines and their direction arrows look on the map (settings.routes; UI/MapPins.lua MapRoutes).
+-- Routes: how route lines and their direction arrows look on the map (settings.routes; UI/MapRoutes.lua).
 -- Every change redraws the map and run mode at once.
 local function routesGroup()
 	-- The palette's colours in order (UI/Style.lua palette; the colour-blind set keeps the same slots).
@@ -134,6 +134,14 @@ local function routesGroup()
 				set = routeSet("color", function(v)
 					return tonumber(v) or 0
 				end),
+			},
+			ramp = {
+				type = "toggle",
+				order = 3.5,
+				name = L["Colour along the route"],
+				desc = L["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."],
+				get = routeGet("ramp"),
+				set = routeSet("ramp"),
 			},
 			outline = {
 				type = "toggle",

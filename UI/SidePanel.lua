@@ -40,7 +40,8 @@ local function stopBadge(b, plan, step, index)
 	b.disc:SetVertexColor(0.1, 0.07, 0.04, 1)
 	b.ring:Hide()
 	if route then
-		b.stopRing:SetVertexColor(ns.MapRoutes.Color(route, true))
+		-- The colour the map's ring has: the route's at that stop (UI/MapRoutes.lua).
+		b.stopRing:SetVertexColor(ns.MapRoutes.StopColor(route, step.to or 1))
 	else
 		b.stopRing:SetVertexColor(S.PaletteColor(1))
 	end
