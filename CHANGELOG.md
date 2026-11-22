@@ -23,6 +23,11 @@ follow [Semantic Versioning](https://semver.org/).
 - **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
   instead of one narrow column.
 
+- **Notes**: the objectives follow right under the bosses, each list as tall as its rows; they stand side by side
+  only when that does not fit (a raid's bosses). **Pulls** of a recommended plan: the list's box is as tall as its
+  pulls instead of an empty frame down to the bottom.
+- **Home**: the preview's Open plan follows its content instead of sitting at the bottom; a plan's preview lists its
+  bosses in order; My plans explains double-click and the right-click menu under a short list.
 
 ### Fixed
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my

@@ -466,3 +466,58 @@ T.case("Home: an instance table with a preview; a plate where the game has no pi
 	T.eq(ns.db.ui.view, "instance", "Open plan opens the war table")
 	ns.UI.GoHome("dungeons")
 end)
+
+-- In game (0.1.0): short lists stood over half-empty pages: Pulls' list box ran to the bottom beside a short card,
+-- Notes put the objectives at the bottom far under the bosses (or in a column beside them over an empty half), and
+-- the home preview's actions sat at its bottom, far from the plan they open.
+T.case("Layout follows the content: Pulls' list box, Notes' bosses and objectives, the home preview's actions", function()
+	boot()
+	local SZ, SP = ns.Style.SIZE, ns.Style.SPACE
+	local page = _G.DungeonPlannerMainFrame.instancePage
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	local plan = ns.UI.ctx:Plan()
+	-- Pulls (read-only): the box is as tall as its pulls.
+	ns.UI.SelectTab("pulls")
+	local pulls = page.panels.pulls.inner
+	pulls:Refresh()
+	T.eq(pulls.listBox:GetHeight(), SZ.row2 * math.max(2, #plan.pulls) + 2 * SP.xs, "the list box fits the pulls")
+	T.eq(pulls.listBox:FindPoint("BOTTOMLEFT"), nil, "not stretched to the bottom")
+	-- Notes: the objectives right under the bosses, which are as tall as their rows.
+	ns.UI.SelectTab("plan")
+	local progress = page.panels.plan.progress
+	-- The mock's GetTop is a frame's own height, so the room it finds under the buttons is the bosses column's height:
+	-- make that tall (the layout harness behind tests/ui_dump.lua measures it for real).
+	progress:SetSize(420, 2000)
+	progress.left:SetHeight(1800)
+	progress:Refresh()
+	T.ok(progress.stacked, "one under the other")
+	local a = progress.right:FindPoint("TOPLEFT")
+	T.ok(a and a[2] == progress.left and a[3] == "BOTTOMLEFT", "the objectives under the bosses")
+	T.eq(progress.left:GetHeight(), 18 + SP.sm + #plan.encounters * SZ.row2, "the bosses as tall as their rows")
+	-- Wide, the same while it fits; side by side only when it does not.
+	progress:SetSize(600, 2000)
+	progress.left:SetHeight(1800)
+	progress:Layout()
+	T.ok(progress.stacked, "fits: still one under the other")
+	progress:SetSize(600, 200)
+	progress:Layout()
+	T.ok(not progress.stacked, "too tall: side by side")
+	-- Home, My plans: the preview's actions under its content; a tip under a short list.
+	local copy = ns.Plan.Duplicate(plan, "Layout copy")
+	ns.DB.AddPlan(copy)
+	ns.db.ui.homeSelectedPlan = copy.id
+	ns.UI.GoHome("plans")
+	local home = _G.DungeonPlannerMainFrame.home
+	local open = home.preview.open:FindPoint("TOPLEFT")
+	T.ok(open and open[2] ~= home.preview and open[3] == "BOTTOMLEFT", "Open plan follows the content")
+	T.eq(#home.preview.orderNames, #copy.encounters, "the copy's bosses in order")
+	T.eq(home.preview.orderNames[1], "1. " .. ns.Names.Encounter(copy.encounters[1]))
+	T.ok(home.preview.orderHeading:IsShown(), "under a Boss order heading")
+	home.plans:SetHeight(400)
+	home.plans:PlaceTip(1)
+	T.ok(home.plansTip:IsShown(), "a tip under a short list")
+	home.plans:PlaceTip(9)
+	T.ok(not home.plansTip:IsShown(), "none when the list fills it")
+	ns.DB.DeletePlan(copy.id)
+	ns.UI.GoHome("dungeons")
+end)
