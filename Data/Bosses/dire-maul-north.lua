@@ -122,4 +122,12 @@ ns.BossData.Add({
 		{ id = 8990, name = "The Right Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 		{ id = 9030, name = "Anthion's Parting Words", lv = 15, req = 15 },
 	},
+	keys = {
+		{ item = 18249, name = "Crescent Key", kind = "key", req = true,
+			note = "Opens the door to this wing (or Lockpicking 300)." },
+		{ item = 18268, name = "Gordok Inner Door Key", kind = "key",
+			note = "Inner door before Captain Kromcrush (tribute run)." },
+		{ item = 18250, name = "Gordok Shackle Key", kind = "key",
+			note = "Frees Knot Thimblejack for his quest." },
+	},
 })

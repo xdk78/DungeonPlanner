@@ -95,4 +95,8 @@ ns.BossData.Add({
 		{ id = 3528, name = "The God Hakkar", lv = 53, req = 40, giver = 8579 },
 		{ id = 8733, name = "Eranikus, Tyrant of the Dream", lv = 60, req = 60, giver = 15362 },
 	},
+	keys = {
+		{ item = 10818, name = "Yeh'kinya's Scroll", kind = "summon",
+			note = "Calls the Avatar of Hakkar again after the first time." },
+	},
 })

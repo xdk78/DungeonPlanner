@@ -362,5 +362,16 @@
    "req": 38,
    "src": 3
   }
+ ],
+ "keys": [
+  {
+   "item": 267089,
+   "name": "Krol'dok Compound Key",
+   "kind": "key",
+   "required": false,
+   "note": "Unlocks a shortcut inside.",
+   "forever": true,
+   "src": 2
+  }
  ]
 }

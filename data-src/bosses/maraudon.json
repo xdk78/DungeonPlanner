@@ -821,5 +821,19 @@
    "src": 1,
    "giver": 4967
   }
+ ],
+ "keys": [
+  {
+   "item": 17191,
+   "name": "Scepter of Celebras",
+   "kind": "summon",
+   "required": false,
+   "quests": [
+    7046
+   ],
+   "note": "Opens a portal to the inner part.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

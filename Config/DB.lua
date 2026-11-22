@@ -15,7 +15,7 @@ local _, ns = ...
 local DB = ns:NewModule("DB")
 local Util, Validate, Defaults = ns.Util, ns.Validate, ns.Defaults
 
-DB.SCHEMA = 5
+DB.SCHEMA = 6
 DB.MAX_QUARANTINE = 50
 
 -- migrations[n] upgrades the global table from schema n-1 to n.
@@ -71,6 +71,9 @@ DB.migrations = {
 	[5] = function(global)
 		global.shareLinks = ns.Acks.NormalizeLinks(global.shareLinks)
 	end,
+	-- 5 -> 6: plan format 5 (prep notes). Nothing to convert; the step marks the data so an older Dungeon Planner opens
+	-- it read-only instead of dropping the notes on its next save.
+	[6] = function() end,
 }
 
 function DB.Migrate(t, current, migrations)

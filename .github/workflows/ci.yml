@@ -39,6 +39,8 @@ jobs:
         run: lua tools/gen_spawns.lua --check
       - name: Boss facts match data-src/bosses (valid JSON, every plan boss covered)
         run: lua tools/gen_bosses.lua --check
+      - name: Travel facts match data-src/travel
+        run: lua tools/gen_travel.lua --check
       - name: UI layout lint, English (tests/ui_dump.lua; new findings fail, tests/ui_lint_baseline.txt)
         run: lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui"
       - name: UI layout lint, every other locale in Locales/

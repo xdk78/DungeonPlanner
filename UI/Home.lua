@@ -210,6 +210,14 @@ local function buildPreview(f)
 		end
 	end)
 	p.new:SetPoint("LEFT", p.open, "RIGHT", SP.sm, 0)
+	-- Where the instance is and how to get there (UI/GettingThere.lua), without opening a plan.
+	p.travel = W.Button(p, L["Getting there"], "outline", function()
+		if p.entry then
+			ns.GettingThere.Open(p.plan or p.entry)
+		end
+	end)
+	p.travel:SetPoint("BOTTOMRIGHT", -SP.md, SP.md)
+	W.SetTooltip(p.travel, L["Getting there"], L["Where the entrance is, the nearest flight master and the way from it."])
 
 	function p:Layout()
 		local w = self:GetWidth()
@@ -306,6 +314,8 @@ local function buildPreview(f)
 		self.open:SetShown(has)
 		self.new:SetShown(has and plan == nil and not ns.DB.IsReadOnly())
 		self.orderNames = {}
+		local travel = entry and ns.Travel.For(plan or entry)
+		self.travel:SetShown(travel ~= nil)
 		if not entry then
 			self.plate:SetEntry(nil)
 			self.name:SetText("")
@@ -321,7 +331,11 @@ local function buildPreview(f)
 		self:Layout()
 		self.plate:SetEntry(entry, "header")
 		self.name:SetText(plan and plan.name or entry.name or "")
-		self.sub:SetText(plan and (entry.name or "") or (entry.kind == "raid" and L["Raid"] or L["Dungeon"]))
+		local sub = plan and (entry.name or "") or (entry.kind == "raid" and L["Raid"] or L["Dungeon"])
+		if travel then
+			sub = sub .. "  •  " .. ns.Travel.Where(travel)
+		end
+		self.sub:SetText(sub)
 		if not entry.plans then
 			Home.Decorate(entry)
 		end

@@ -223,8 +223,11 @@ function M.Install()
 	}
 	_G.Enum.GameRule = { EncounterJournalDisabled = 77 }
 	_G.C_Map = {
+		-- M.mapInfo[id] = { name?, mapType?, parentMapID? } sets a map's answer (tests: a zone in another language).
 		GetMapInfo = function(id)
-			return { mapID = id, name = id == 300 and "The Hall of Tests" or ("Map " .. id) }
+			local over = M.mapInfo and M.mapInfo[id] or {}
+			return { mapID = id, name = over.name or (id == 300 and "The Hall of Tests" or ("Map " .. id)),
+				mapType = over.mapType, parentMapID = over.parentMapID }
 		end,
 		GetBestMapForUnit = function()
 			return 100
@@ -249,6 +252,86 @@ function M.Install()
 			return nil
 		end,
 	}
+	-- Prep and Getting there (Data/PrepInfo.lua, Data/Travel.lua, Data/Navigation.lua). A made-up world: map m spans
+	-- 10000 x 1000 yards (east-west, north-south) from world (-10 m, 6000) to the south-east, map x going east (world y
+	-- falls), map y south (world x falls), on continent m % 2 unless a world spot placed it on another. Without an
+	-- override the "best" map of a world spot is the one whose band holds it. M.mapBoxes[m] = { continent, x0, y0 }
+	-- moves a map's top-left corner (a zone map round a real entrance). M.playerPos = { map, x, y } is where the player
+	-- stands outdoors (nil: inside an instance, no position).
+	M.questsDone, M.questLog, M.itemCounts, M.waypoints, M.openedMaps = {}, {}, {}, {}, {}
+	M.playerPos, M.mapBoxes, M.mapInfo = nil, {}, {}
+	local mapContinent = {}
+	_G.CreateVector2D = function(x, y)
+		return { x = x, y = y, GetXY = function(v)
+			return v.x, v.y
+		end }
+	end
+	local function box(m)
+		local b = M.mapBoxes[m]
+		if b then
+			return b[1], b[2], b[3]
+		end
+		return mapContinent[m] or m % 2, -m * 10, 6000
+	end
+	_G.C_Map.GetWorldPosFromMapPos = function(m, pos)
+		local c, x0, y0 = box(m)
+		return c, _G.CreateVector2D(x0 - pos.y * 1000, y0 - pos.x * 10000)
+	end
+	_G.C_Map.GetMapPosFromWorldPos = function(c, pos, override)
+		local m = override or math.floor(-pos.x / 10)
+		if not override and not mapContinent[m] then
+			mapContinent[m] = c
+		end
+		local mc, x0, y0 = box(m)
+		if c ~= mc then
+			return nil
+		end
+		return m, _G.CreateVector2D((y0 - pos.y) / 10000, (x0 - pos.x) / 1000)
+	end
+	_G.C_Map.GetPlayerMapPosition = function(m)
+		local p = M.playerPos
+		if p and p.map == m then
+			return _G.CreateVector2D(p.x, p.y)
+		end
+		return nil
+	end
+	_G.C_Map.GetBestMapForUnit = function()
+		return M.playerPos and M.playerPos.map or 100
+	end
+	_G.C_Map.CanSetUserWaypointOnMap = function(m)
+		return m ~= 300
+	end
+	_G.C_Map.SetUserWaypoint = function(point)
+		M.waypoints[#M.waypoints + 1] = point
+	end
+	_G.C_Map.OpenWorldMap = function(m)
+		M.openedMaps[#M.openedMaps + 1] = m
+	end
+	_G.C_Map.GetAreaInfo = function(area)
+		return "Area " .. area
+	end
+	_G.UiMapPoint = { CreateFromCoordinates = function(m, x, y)
+		return { uiMapID = m, position = _G.CreateVector2D(x, y) }
+	end }
+	_G.C_SuperTrack = { SetSuperTrackedUserWaypoint = function(on)
+		M.superTracked = on
+	end }
+	_G.C_QuestLog = {
+		IsQuestFlaggedCompleted = function(id)
+			return M.questsDone[id] == true
+		end,
+		IsOnQuest = function(id)
+			return M.questLog[id] == true
+		end,
+		GetTitleForQuestID = function()
+			return nil
+		end,
+	}
+	if _G.C_Item then
+		_G.C_Item.GetItemCount = function(id)
+			return M.itemCounts[id] or 0
+		end
+	end
 	-- A fake Adventure Guide (tests replace M.journal to try other shapes). Tier 1 has the classic test dungeon (63) and
 	-- a raid (70); tier 2 is a new dungeon whose journal name differs from the plans' ("The Hall of Tests"), with a map
 	-- (300, with art), bosses, creature portraits and loot.
@@ -575,9 +658,14 @@ function M.InstallProviders()
 				return quests[id] and quests[id][4]
 			end,
 		},
-		Npc = { name = function(id)
-			return id == 5001 and "Thane Keeper" or nil
-		end },
+		Npc = {
+			name = function(id)
+				return id == 5001 and "Thane Keeper" or nil
+			end,
+			spawns = function(id)
+				return id == 5001 and { [1537] = { { 45.2, 61.75 } } } or nil
+			end,
+		},
 	}
 end
 

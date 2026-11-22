@@ -584,11 +584,15 @@ end)
 
 T.case("Sync: saved data moves to schema 5 with the link store; data from a newer schema stays read-only", function()
 	local DB = ns.DB
-	T.eq(DB.SCHEMA, 5)
-	-- Schema 4 (0.1.0): no store yet; the migration starts it and the plans load as before.
+	-- The 4 -> 5 step itself starts the store.
+	local step = { schema = 4, plans = {} }
+	T.ok(DB.Migrate(step, 5, DB.migrations))
+	T.eq(step.schema, 5)
+	T.eq(type(step.shareLinks), "table")
+	-- Schema 4 (0.1.0) to the current one: the store is there and the plans load as before.
 	local global = { schema = 4, plans = { p1 = { id = "p1", name = "Old" } } }
 	local info = DB.LoadGlobal(global)
-	T.eq(global.schema, 5)
+	T.eq(global.schema, DB.SCHEMA)
 	T.eq(info.migratedFrom, 4)
 	T.eq(type(global.shareLinks), "table")
 	T.eq(ns.Util.Count(global.shareLinks), 0)

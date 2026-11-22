@@ -144,4 +144,10 @@ ns.BossData.Add({
 	quests = {
 		{ id = 8288, name = "Only One May Rise", lv = 60, req = 60 },
 	},
+	keys = {
+		{ item = 18987, name = "Blackhand's Command", kind = "attunement",
+			note = "Starts the brand quest (Upper Blackrock Spire)." },
+		{ quest = 7761, name = "Blackhand's Command", kind = "attunement", req = true,
+			note = "The brand lets the orb take you into the raid." },
+	},
 })

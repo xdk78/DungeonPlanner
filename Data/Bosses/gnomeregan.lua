@@ -96,4 +96,8 @@ ns.BossData.Add({
 		{ id = 4605, name = "The Sparklematic 5200!", lv = 30, req = 25 },
 		{ id = 4606, name = "The Sparklematic 5200!", lv = 30, req = 25 },
 	},
+	keys = {
+		{ item = 6893, name = "Workshop Key", kind = "key",
+			note = "Opens the back door; skips most of the trash." },
+	},
 })

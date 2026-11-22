@@ -235,6 +235,47 @@ Before the instance has a run, the Run column says how to start ("Turn on "Recor
 or, with recording on, "Recording is on. Your next run in this instance will appear here."; the check box and the
 Settings panel's switch both redraw it (`RECORDER_CHANGED`).
 
+### Prep and Getting there
+
+```
++ Before you go ------------ [ ] Show all + Getting there --------------- [Pop out] +
+| Quests to pick up (3)                    | Westfall · Moonbrook                    |
+| To pick up 3 · In your log 1 · Done 1    | Alliance territory                      |
+| In your log [17] Red Silk Bandanas       | Entrance: 42.6, 71.8 on the map of ...   |
+| To pick up  [18] Collecting Memories     | Levels 17-26 · you are 18 · a party of 5 |
+|   Gryan Stoutmantle, Westfall 56.3, 47.5 | How to get there                        |
+| Keys and attunements                     | Alliance: fly to Sentinel Hill, ...      |
+| Not with you  Seal of Ascension Required | Horde: fly to ... (muted)               |
+| Group                                    | You are 390 yd away; it lies south-west. |
+| Party: 3 of 5 · Tank 1 · Healer 1 · ...  | [Show on world map] [Navigate: X] [...]  |
+| Still needed: 2 Damage                   | Prep notes ----------------------------- |
+| Tamsin · level 13 (below 17-26) · Damage | [multi-line field]                      |
++------------------------------------------+-----------------------------------------+
+```
+
+`UI/Panels/PrepPanel.lua`, the second tab ("Prep"), two insets like Notes. Left, a document: the instance's quests
+(the player's log first, then to pick up; done and too-low ones behind "Show all", their counts on the summary line;
+the other faction's never), the giver and zone under each quest with Questie, the objective items with their icons;
+keys and attunements (have it in green, missing and required in orange, "(classic fact; not checked on Forever)"
+where no Forever source confirms one); the group (roles against the five seats, levels against the range in orange
+when below). Right: the Getting there card (`UI/GettingThere.lua`) over the prep notes (a field in an own plan, a
+muted line in a recommended one). The card's text is a document too: the zone in the client's language, the area,
+the territory (orange "enemy territory for you"), the entrance's coordinates and how it is entered, the research's
+hint, a summoning stone, the levels coloured like the home table with the player's level, each faction's nearest
+flight master with the direction and distance from it (the player's faction first, the other muted), boats and
+zeppelins when the player is on another continent, and outdoors the distance and direction (Polestar's travel time
+when installed). Inside an instance it says distances show outdoors: the client gives no position there. Under it
+Show on world map (the game's pin, then `C_Map.OpenWorldMap`), Navigate with the best target in its label and "..."
+for the others (`Data/Navigation.lua`). "Pop out" and the home preview's "Getting there" (bottom right, no plan needed)
+open the same card in a small movable window (`ui.travel`, DIALOG strata). The Prep section, run mode's prep line and
+that window each register a watcher and redraw on `PREP_CHANGED` (quest, bag, group, level and zone events; one
+message 0.3 s after the first of a burst, sent only while one of them is shown); run mode redraws only its prep line.
+The Prep section also redraws on `ITEMS_READY`.
+
+Run mode, before the first step (not started or on step 1), shows a gold line in the drift line's place: "Prep: 3
+quests to pick up · 1 key missing"; a click opens the Prep section. It hides once there is nothing left or the run
+moves on.
+
 ### Raid pages and the Notes window
 
 The Party section (`UI/Panels/AssignmentsPanel.lua`, the people in `UI/Panels/PartyGroups.lua`) has a switch at its
@@ -539,6 +580,13 @@ the pointer is over the map (coordinates, 20 Hz). The steps are rebuilt only aft
 plan changes, in near-linear time (about 0.03 s for a plan at every list limit). Lists are virtual (only visible rows exist). Run mode redraws on a step change or a plan change.
 
 ## Needs a look in game
+
+- Prep: quest states after accepting, abandoning and turning in a quest; quest titles in Polish and Russian clients;
+  the key icons and names (a key on the key ring, in the bank); the group lines in a party and a raid; the Getting
+  there card outdoors (distance and direction match the world map; the entrance coordinates of a classic and a Forever
+  dungeon; the zone name in the client's language), inside an instance (the "outdoors" line), Show on world map (the
+  pin, super-tracking, the map opening; nothing in combat), Navigate with Polestar, TomTom and none; the Pop out window
+  and the home preview's button; run mode's prep line on step 1 and its click.
 
 Since 0.1.0:
 

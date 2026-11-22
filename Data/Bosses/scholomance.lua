@@ -176,4 +176,10 @@ ns.BossData.Add({
 		{ id = 8969, name = "The Left Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 		{ id = 8992, name = "The Right Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 	},
+	keys = {
+		{ item = 13704, name = "Skeleton Key", kind = "key", quests = { 5803, 5804 },
+			note = "Opens the front door (lockpicking or charges also work)." },
+		{ item = 13873, name = "Viewing Room Key", kind = "key",
+			note = "Viewing room door to the later bosses; Rattlegore drops it." },
+	},
 })

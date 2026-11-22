@@ -49,8 +49,9 @@ Callbacks run inside Dungeon Planner's event handling; keep them short and do no
 | `DungeonPlannerMainFrame`, `DungeonPlannerDialog` | `UISpecialFrames` (Escape closes them) and skin addons |
 | `DungeonPlannerRunFrame`, `DungeonPlannerPopup` | The run mode window (its position is saved) and the dropdown list |
 | `DungeonPlannerNotesFrame` | The Notes window (raid pages; its position and size are saved) |
+| `DungeonPlannerTravelFrame` | The Getting there window (`UISpecialFrames`: Escape closes it; its position and size are saved) |
 | Parts the game's window template names after its window (for example `DungeonPlannerMainFrameInset`) | Created by `ButtonFrameTemplate` itself where its parts carry `$parent` names; Dungeon Planner neither reads nor writes them |
-| `DungeonPlannerHome`, `DungeonPlannerInstancePage`, `DungeonPlannerInstanceHeader`, `DungeonPlannerSearchBox`, `DungeonPlannerMapSection`, `DungeonPlannerPlanSection` | Stable names of the window's parts, for skin addons (created on first open) |
+| `DungeonPlannerHome`, `DungeonPlannerInstancePage`, `DungeonPlannerInstanceHeader`, `DungeonPlannerSearchBox`, `DungeonPlannerMapSection`, `DungeonPlannerPlanSection`, `DungeonPlannerPrepSection` | Stable names of the window's parts, for skin addons (created on first open) |
 | `DungeonPlanner_Binding(action)` | Called by `Bindings.xml` |
 | `DungeonPlanner_OnAddonCompartmentClick` | The TOC's `AddonCompartmentFunc` |
 | `BINDING_HEADER_DUNGEONPLANNER`, `BINDING_NAME_DUNGEONPLANNER_*` | Key Bindings UI labels |

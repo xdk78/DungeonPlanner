@@ -11,6 +11,8 @@
 --   BossData.Portrait(plan, enc)  -> { displayInfo = id } | nil
 --   BossData.Abilities(plan, enc, max?) -> { { spellID, tags = { "interrupt", ... }, note? }, ... } | nil
 --   BossData.Quests(plan)         -> { { questID, name, level?, req?, side?, giver?, items? }, ... } | nil
+--   BossData.Keys(plan)           -> { { itemID? | questID?, name, kind, required, side, quests?, alt?, group?, note?,
+--                                      forever }, ... }
 --   BossData.Credit               the sources, for "Sources: ..." lines
 
 local _, ns = ...
@@ -176,6 +178,21 @@ function BossData.Quests(plan)
 	for _, q in ipairs(d.quests) do
 		out[#out + 1] = { questID = q.id, name = q.name, level = q.lv, req = q.req, side = SIDE[q.side or "b"],
 			giver = q.giver, items = q.items }
+	end
+	return #out > 0 and out or nil
+end
+
+-- Keys and attunements of the plan's instance (an item to carry or a quest to have done), required ones first.
+function BossData.Keys(plan)
+	local d = BossData.Instance(plan)
+	if not d or type(d.keys) ~= "table" then
+		return nil
+	end
+	local out = {}
+	for _, k in ipairs(d.keys) do
+		out[#out + 1] = { itemID = k.item, questID = k.quest, name = k.name, kind = k.kind, required = k.req == true,
+			side = SIDE[k.side or "b"], quests = k.quests, alt = k.alt, group = k.group, note = k.note,
+			forever = k.fv == true }
 	end
 	return #out > 0 and out or nil
 end

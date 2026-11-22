@@ -1430,5 +1430,20 @@
    "side": "both",
    "src": 1
   }
+ ],
+ "keys": [
+  {
+   "quest": 9121,
+   "alt": [
+    9122,
+    9123
+   ],
+   "name": "The Dread Citadel - Naxxramas",
+   "kind": "attunement",
+   "required": true,
+   "note": "Argent Dawn turn-in at Light's Hope Chapel.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

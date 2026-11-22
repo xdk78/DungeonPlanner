@@ -1,10 +1,11 @@
 # Sharing format
 
 Two ways to move plans: **export strings** (copy and paste: chat, forums, Discord, the community repository) and
-**in-game transfers** (addon messages). Both carry the same export string. Format version 2 (plan format 4,
-transfer protocol 2); version 1 strings still import. Plan formats 3 and 4 only add optional fields (map drawings, pull
-tags, planned cooldowns, Bloodlust and progress; raid assignment pages), so the header stays `!DP2!`: an older Dungeon
-Planner still imports a format 3 or 4 string and drops what it does not know (see "Format 3 and older readers").
+**in-game transfers** (addon messages). Both carry the same export string. Format version 2 (plan format 5,
+transfer protocol 2); version 1 strings still import. Plan formats 3 to 5 only add optional fields (map drawings, pull
+tags, planned cooldowns, Bloodlust and progress; raid assignment pages; prep notes), so the header stays `!DP2!`: an
+older Dungeon Planner still imports a format 3 to 5 string and drops what it does not know (see "Format 3 and older
+readers").
 
 ## Export string
 
@@ -71,6 +72,7 @@ their own language). Coordinates are 0..1 over the floor's map art (0,0 top-left
 | `rev` | int (v2) | data revision of a recommended plan |
 | `drawings` | `{ v = 1, shapes = { shape, ... } }` (v3, optional; below) | 150 shapes, 50 per floor, 40 points per stroke |
 | `pages` | `{ v = 1, list = { page, ... } }` (v4, optional; below) | 20 pages, 3000 bytes of text each |
+| `prep` | string (v5, optional; left out when empty): the Prep section's notes | 2000 bytes, multi-line |
 | `nextId` | int | next free id number |
 
 A pack (`kind = "pack"` in the header) is `{ name, description, plans = { plan, ... } }` with at most 50 plans.

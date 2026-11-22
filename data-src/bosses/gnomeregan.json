@@ -598,5 +598,16 @@
    "side": "both",
    "src": 1
   }
+ ],
+ "keys": [
+  {
+   "item": 6893,
+   "name": "Workshop Key",
+   "kind": "key",
+   "required": false,
+   "note": "Opens the back door; skips most of the trash.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

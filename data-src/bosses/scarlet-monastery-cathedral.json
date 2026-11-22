@@ -392,5 +392,16 @@
    "giver": 4488,
    "shared": true
   }
+ ],
+ "keys": [
+  {
+   "item": 7146,
+   "name": "The Scarlet Key",
+   "kind": "key",
+   "required": true,
+   "note": "Opens the locked doors to this wing (or Lockpicking 175).",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

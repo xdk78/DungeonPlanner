@@ -876,5 +876,34 @@
    "src": 1,
    "shared": true
   }
+ ],
+ "keys": [
+  {
+   "item": 18249,
+   "name": "Crescent Key",
+   "kind": "key",
+   "required": true,
+   "note": "Opens the door to this wing (or Lockpicking 300).",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 18268,
+   "name": "Gordok Inner Door Key",
+   "kind": "key",
+   "required": false,
+   "note": "Inner door before Captain Kromcrush (tribute run).",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 18250,
+   "name": "Gordok Shackle Key",
+   "kind": "key",
+   "required": false,
+   "note": "Frees Knot Thimblejack for his quest.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

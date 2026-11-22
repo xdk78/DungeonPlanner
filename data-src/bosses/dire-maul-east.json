@@ -876,5 +876,16 @@
    "src": 1,
    "shared": true
   }
+ ],
+ "keys": [
+  {
+   "item": 18249,
+   "name": "Crescent Key",
+   "kind": "key",
+   "required": false,
+   "note": "Opens the hidden back entrance; Pusillin also drops it here.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

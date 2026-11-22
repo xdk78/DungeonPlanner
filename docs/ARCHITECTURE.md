@@ -41,8 +41,9 @@ Rules:
 
 ## Saved data (AceDB, one SavedVariable `DungeonPlannerDB`)
 
-- `global.plans[id]` - plans, shared by all characters; `global.schema` (5: the link store below; 4: plan format 4,
-  raid pages; 3 added map drawings and pull marks; migrations 3 and 4 convert nothing and 5 only starts the link store,
+- `global.plans[id]` - plans, shared by all characters; `global.schema` (6: plan format 5, prep notes; 5: the link store
+  below; 4: plan format 4, raid pages; 3 added map drawings and pull marks; migrations 3, 4 and 6 convert nothing and 5
+  only starts the link store,
   each marking the data, so an older version opens it read-only instead of dropping the new fields on its next save);
   `global.quarantine`.
 - `diagnostics` (top level, outside AceDB's sections) - written only by `/dp scan`: every journal instance with its IDs,
@@ -283,6 +284,31 @@ The Runs section's "Show" dropdown picks This run (splits against best and previ
 or Compare with another run (a four-column table). Share > Advanced > Discord's "Run summary" renders the selected
 run (or the latest) with `Discord.RenderRun`.
 
+## Prep (Model/Prep.lua, Data/PrepInfo.lua, Data/Travel.lua, Data/Navigation.lua)
+
+```
+Model/Prep.lua        pure: Quests(quests, env) -> rows, counts (status done / log / low / available; the other
+                      faction's counted apart), Keys(keys, env) (have: true / false / nil), Group(members, lo, hi, kind)
+                      (roles, missing seats, levels below), Bearing / WorldBearing (yards, 8-point direction),
+                      NearestNodes(nodes, continent, x, y, faction, n), Crossings(transports, from, to), Summary
+                      (one per key group: an item and the quests toward it; a quest key's alternative IDs count)
+Data/PrepInfo.lua     the game: faction, level, C_QuestLog, item counts, the group; Questie's givers; PREP_CHANGED
+                      to the watchers (PrepInfo.Watch): the Prep section, run mode (its prep line only), the Getting
+                      there window, each while shown
+Data/BossData.lua     Quests(plan), Keys(plan): bundled (data-src/bosses)
+Data/Travel.lua       TravelData (data-src/travel) by instance name; the entrance on its bundled zone map (uiMapID,
+                      not the zone's name) and in the world (C_Map world <-> map, cached per session); zone and
+                      continent names from the client's maps; the player outdoors (nil inside); Distance
+Data/Navigation.lua   the game's pin, the navigation providers (Polestar, Shortest Path Forever, TomTom) best first;
+                      nothing in combat or while dead; the world map only through C_Map.OpenWorldMap, never with the
+                      gamepad style
+UI/GettingThere.lua   the card's lines (pure over the above) and buttons; its small window
+UI/Panels/PrepPanel.lua the section; RunMode.PrepText the run window's line
+```
+
+Prep notes are a plan field (`prep`, format 5, optional; `DB.SCHEMA` 6 only marks the data). Idle cost: event
+handlers that return at once unless a watcher shows prep; no ticker.
+
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 
 Named pages of free text per boss or phase (plan field `pages`, format in docs/SHARING-FORMAT.md), written in the
@@ -407,7 +433,9 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Model/Picker.lua, UI/InstancePicker.lua | the instance picker: sections, level bands, search and cursor (pure); its rows and popup |
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line and the drawings' menu |
 | UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
-| UI/RunMode.lua | the run window (with the recorder line and the drift line) |
+| UI/RunMode.lua | the run window (with the recorder line, the drift line and the prep line) |
+| Model/Prep.lua, Data/PrepInfo.lua, Data/Travel.lua, Data/TravelData.lua, Data/Navigation.lua, Data/Providers/TomTom.lua, Polestar.lua, ShortestPathForever.lua | Prep: quests, keys, group, the way there, navigation hand-off (section above) |
+| UI/Panels/PrepPanel.lua, UI/GettingThere.lua | the Prep section; the Getting there card and its window |
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
 | Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
 | Share/Roster.lua | the group's units and members, a sender's rank by its whole name (surnames on Forever), whisper targets as names arrived |

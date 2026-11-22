@@ -756,5 +756,16 @@
    "giver": 16033,
    "shared": true
   }
+ ],
+ "keys": [
+  {
+   "item": 12382,
+   "name": "Key to the City",
+   "kind": "key",
+   "required": false,
+   "note": "Service gate and inner gates; Magistrate Barthilas drops it.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

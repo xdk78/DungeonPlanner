@@ -85,4 +85,8 @@ ns.BossData.Add({
 		{ id = 94968, name = "Eye of Mugg", req = 38, side = "h", giver = 256418 },
 		{ id = 94973, name = "Krol'dok Moulding", req = 38, side = "h" },
 	},
+	keys = {
+		{ item = 267089, name = "Krol'dok Compound Key", kind = "key", fv = true,
+			note = "Unlocks a shortcut inside." },
+	},
 })

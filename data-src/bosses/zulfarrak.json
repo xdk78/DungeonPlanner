@@ -808,5 +808,16 @@
    "src": 1,
    "giver": 8579
   }
+ ],
+ "keys": [
+  {
+   "item": 9240,
+   "name": "Mallet of Zul'Farrak",
+   "kind": "summon",
+   "required": false,
+   "note": "Rung at the gong, it calls Gahz'rilla.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

@@ -208,7 +208,7 @@ function InstancePage.Create(parent, ctx, window)
 		local panel = self.panels[id]
 		if not panel then
 			-- The map draws its own frame; the other sections sit in one inset panel.
-			if id == "map" or id == "plan" then
+			if id == "map" or id == "plan" or id == "prep" then
 				panel = ns.Panels[id].Create(body, ctx)
 				panel:SetAllPoints()
 			else

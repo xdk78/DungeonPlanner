@@ -122,4 +122,8 @@ ns.BossData.Add({
 		{ id = 8990, name = "The Right Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 		{ id = 9030, name = "Anthion's Parting Words", lv = 15, req = 15 },
 	},
+	keys = {
+		{ item = 18249, name = "Crescent Key", kind = "key",
+			note = "Opens the hidden back entrance; Pusillin also drops it here." },
+	},
 })

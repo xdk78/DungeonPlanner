@@ -121,4 +121,8 @@ ns.BossData.Add({
 		{ id = 3042, name = "Troll Temper", lv = 45, req = 40, giver = 7804 },
 		{ id = 3527, name = "The Prophecy of Mosh'aru", lv = 47, req = 40, giver = 8579 },
 	},
+	keys = {
+		{ item = 9240, name = "Mallet of Zul'Farrak", kind = "summon",
+			note = "Rung at the gong, it calls Gahz'rilla." },
+	},
 })

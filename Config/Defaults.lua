@@ -56,6 +56,8 @@ Defaults.ui = {
 	run = {}, -- run mode window: { point, shown }
 	notes = { width = 380, height = 400 }, -- the Notes window: { point, width, height }; resizable, its size saved
 	partyMode = "assignments", -- the Party section: "assignments" | "pages"
+	travel = { width = 360, height = 420 }, -- the Getting there window: { point, width, height }
+	prepShowAll = false, -- the Prep section lists done and too-low quests too
 }
 
 -- Fill missing keys of `target` from `defaults` (recursively), and replace values of the wrong type.

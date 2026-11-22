@@ -12,6 +12,13 @@
    "url": "https://www.wowhead.com/classic",
    "licence": "facts only (IDs, levels, drop lists)",
    "what": "NPC pages: display ID, level, classification, drop lists, ability lists; zone and quest pages: quest IDs"
+  },
+  {
+   "id": 3,
+   "name": "Warcraft Wiki: World of Warcraft: Forever",
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "licence": "CC BY-SA 4.0, facts only; no text copied",
+   "what": "The raid attunements Forever keeps (Seal of Ascension, Drakefire Amulet)"
   }
  ],
  "bosses": [
@@ -146,6 +153,44 @@
     "class": 1,
     "level": 1
    }
+  }
+ ],
+ "keys": [
+  {
+   "item": 16309,
+   "name": "Drakefire Amulet",
+   "kind": "attunement",
+   "group": "amulet",
+   "required": true,
+   "quests": [
+    6502,
+    6602
+   ],
+   "note": "Every raid member needs it to enter.",
+   "forever": true,
+   "src": 3
+  },
+  {
+   "quest": 4182,
+   "name": "Dragonkin Menace",
+   "kind": "attunement",
+   "group": "amulet",
+   "required": true,
+   "side": "alliance",
+   "note": "Starts the Alliance chain to the amulet.",
+   "forever": true,
+   "src": 3
+  },
+  {
+   "quest": 4903,
+   "name": "Warlord's Command",
+   "kind": "attunement",
+   "group": "amulet",
+   "required": true,
+   "side": "horde",
+   "note": "Starts the Horde chain to the amulet.",
+   "forever": true,
+   "src": 3
   }
  ]
 }

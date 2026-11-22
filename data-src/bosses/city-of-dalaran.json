@@ -518,5 +518,43 @@
    "src": 2,
    "giver": 2278
   }
+ ],
+ "keys": [
+  {
+   "item": 277507,
+   "name": "Dalaran Sewer Key",
+   "kind": "key",
+   "group": "sewer",
+   "required": true,
+   "quests": [
+    92458,
+    96984
+   ],
+   "note": "One party member needs it to pass the wards at the entrance.",
+   "forever": true,
+   "src": 2
+  },
+  {
+   "quest": 92458,
+   "name": "Heart of Disruption",
+   "kind": "attunement",
+   "group": "sewer",
+   "required": true,
+   "side": "alliance",
+   "note": "Gives the key.",
+   "forever": true,
+   "src": 2
+  },
+  {
+   "quest": 96984,
+   "name": "Heart of Disruption",
+   "kind": "attunement",
+   "group": "sewer",
+   "required": true,
+   "side": "horde",
+   "note": "Gives the key.",
+   "forever": true,
+   "src": 2
+  }
  ]
 }

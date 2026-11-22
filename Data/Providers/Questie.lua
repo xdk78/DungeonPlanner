@@ -1,6 +1,7 @@
 -- Provider: Questie's database (QuestieDB, GPL-3.0), through its public data contract: the global LibQuestieDB with
 -- RequireContract(4), LibQuestieDB.Enum.zoneIDs (area IDs by name), and the entity readers Quest.GetAllIds,
--- Quest.zoneOrSort, Quest.name, Quest.questLevel, Quest.startedBy and Npc.name. Read at runtime only; nothing is copied.
+-- Quest.zoneOrSort, Quest.name, Quest.questLevel, Quest.startedBy, Npc.name and Npc.spawns. Read at runtime only;
+-- nothing is copied.
 --
 -- What it gives: the quests filed under a dungeon's area (zoneOrSort = the dungeon's area ID), with their level and who
 -- starts them. Questie has no positions inside dungeons (its instance NPCs carry the "-1, -1" placeholder), so there
@@ -150,6 +151,45 @@ function A.Quests(lib, plan, onDone)
 	end
 	slice()
 	return c.list, c.done
+end
+
+-- Who starts each quest and where (Prep's quest list): { [questID] = { name?, area?, x?, y? } } for the quests Questie
+-- knows. x, y are the first spawn of the first starting NPC, 0-100 on that area's map (Questie's area IDs; the zone's
+-- name comes from the client's C_Map.GetAreaInfo). A few lookups per quest, on demand; at most A.MAX quests.
+function A.Givers(lib, questIDs)
+	local out = {}
+	local npc = type(lib.Npc) == "table" and lib.Npc or {}
+	for i, id in ipairs(type(questIDs) == "table" and questIDs or {}) do
+		if i > A.MAX then
+			break
+		end
+		local by = read(lib.Quest.startedBy, id)
+		local npcs = type(by) == "table" and by[1]
+		local starter = type(npcs) == "table" and npcs[1]
+		if Util.IsInteger(starter) then
+			local g = {}
+			local name = read(npc.name, starter)
+			g.name = type(name) == "string" and Util.CleanText(name, 64) or nil
+			local spawns = read(npc.spawns, starter)
+			if type(spawns) == "table" then
+				local best
+				for area, list in pairs(spawns) do
+					if Util.IsInteger(area) and area > 0 and type(list) == "table" and type(list[1]) == "table"
+						and (not best or area < best) then
+						best = area
+					end
+				end
+				local p = best and spawns[best][1]
+				if p and Util.IsFiniteNumber(p[1]) and Util.IsFiniteNumber(p[2]) and p[1] >= 0 and p[2] >= 0 then
+					g.area, g.x, g.y = best, Util.Round(p[1], 1), Util.Round(p[2], 1)
+				end
+			end
+			if g.name or g.area then
+				out[id] = g
+			end
+		end
+	end
+	return out
 end
 
 function A.Counts(lib)
