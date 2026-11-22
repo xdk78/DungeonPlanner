@@ -190,6 +190,7 @@ ns.Locales.plPL = {
 	["The instance's map of this floor. Put something on it and it joins your plan."] = "Mapa tego poziomu instancji. Postaw na nim coś, a dołączy do twojego planu.",
 	["The instance's map of this floor; this plan has nothing on it."] = "Mapa tego poziomu instancji; ten plan nic na nim nie ma.",
 	["to %s"] = "do: %s",
+	["\"%s\" from %s was last changed %s, before yours (%s): replacing would undo your newer changes."] = "„%s” od %s zmieniono ostatnio %s, przed twoim (%s): zastąpienie cofnęłoby twoje nowsze zmiany.",
 	["Recommended plan • may be out of date"] = "Plan polecany • może być nieaktualny",
 	["Researched before this game build (%s): the route and pulls may have changed. Check them in game."] = "Zebrany przed tą wersją gry (%s): trasa i pulle mogły się zmienić. Sprawdź je w grze.",
 	["%s (you are on %s)"] = "%s (jesteś na: %s)",

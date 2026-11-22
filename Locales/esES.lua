@@ -275,6 +275,7 @@ ns.Locales.esES = {
 	["The instance's map of this floor; this plan has nothing on it."] = "El mapa de esta planta de la instancia; este plan no tiene nada en ella.",
 	["and %d more"] = "y %d más",
 	["to %s"] = "a %s",
+	["\"%s\" from %s was last changed %s, before yours (%s): replacing would undo your newer changes."] = "«%s» de %s se cambió por última vez el %s, antes que el tuyo (%s): reemplazarlo desharía tus cambios más recientes.",
 	["Recommended plan • may be out of date"] = "Plan recomendado • puede estar desfasado",
 	["Researched before this game build (%s): the route and pulls may have changed. Check them in game."] = "Investigado antes de esta versión del juego (%s): la ruta y los pulls pueden haber cambiado. Compruébalos en el juego.",
 	["%s (you are on %s)"] = "%s (estás en %s)",

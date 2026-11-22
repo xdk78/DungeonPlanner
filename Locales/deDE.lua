@@ -275,6 +275,7 @@ ns.Locales.deDE = {
 	["The instance's map of this floor; this plan has nothing on it."] = "Die Karte dieser Ebene der Instanz; dieser Plan hat dort nichts.",
 	["and %d more"] = "und %d weitere",
 	["to %s"] = "nach %s",
+	["\"%s\" from %s was last changed %s, before yours (%s): replacing would undo your newer changes."] = "„%s“ von %s wurde zuletzt %s geändert, vor deinem (%s): Ersetzen würde deine neueren Änderungen rückgängig machen.",
 	["Recommended plan • may be out of date"] = "Empfohlener Plan • möglicherweise veraltet",
 	["Researched before this game build (%s): the route and pulls may have changed. Check them in game."] = "Vor diesem Spiel-Build (%s) recherchiert: Route und Pulls können sich geändert haben. Prüfe sie im Spiel.",
 	["%s (you are on %s)"] = "%s (du bist auf %s)",

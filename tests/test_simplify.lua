@@ -121,6 +121,20 @@ T.case("Import: a plan named like one of yours asks first; keep both adds, repla
 	-- Received plans never replace anything.
 	local ok, _, added, replaced = ns.DB.ImportString(text, { from = "Someone", kind = "received" })
 	T.ok(ok and #added == 1 and #replaced == 0, "received: always a new plan")
+	-- An older revision over a newer one (MDT #430): the dialog says whose and when.
+	local old = ns.Util.DeepCopy(ns.DB.GetPlan(mine.id))
+	old.updated, old.author = (ns.DB.GetPlan(mine.id).updated or 0) - 3600, "Gandalw"
+	local conflicts = ns.DB.ImportConflicts(ns.Codec.ExportPlan(old))
+	T.eq(#conflicts, 1)
+	T.eq(conflicts[1].older, true, "last changed before yours")
+	ns.UI.ImportWithConfirm(ns.Codec.ExportPlan(old), { kind = "import" })
+	local text2 = dialog.text and dialog.text:GetText() or ""
+	T.ok(text2:find("Gandalw", 1, true) and text2:find("newer changes", 1, true), "the notice names the sender: " .. text2)
+	click(dialog.buttons[3])
+	local newer = ns.Util.DeepCopy(old)
+	newer.updated = (ns.DB.GetPlan(mine.id).updated or 0) + 3600
+	T.eq(ns.DB.ImportConflicts(ns.Codec.ExportPlan(newer))[1].older, false, "a newer copy: no notice")
+	T.eq(ns.UI.OlderImportNotice(ns.DB.ImportConflicts(ns.Codec.ExportPlan(newer))), nil)
 end)
 
 T.case("Runs: deaths the client cannot read are not available, not zero", function()

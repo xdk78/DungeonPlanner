@@ -67,6 +67,25 @@ end
 -- Import a pasted string. When it holds a plan with the name of one of yours for the same instance, ask first: keep
 -- both (the primary choice) or replace yours. Replacing the plan on the table can be undone (it is one more step in its
 -- history). onDone(ok, message) gets the import's result; nothing happens on Cancel.
+-- The notice for imported plans last changed before yours (DB.ImportConflicts older): which, by whom and when, or nil.
+function UI.OlderImportNotice(conflicts)
+	local lines = {}
+	for _, c in ipairs(conflicts or {}) do
+		if c.older then
+			local function day(t)
+				return t and type(date) == "function" and date("%Y-%m-%d %H:%M", t) or "?"
+			end
+			local who = (c.incomingAuthor or "") ~= "" and c.incomingAuthor or L["unknown"]
+			lines[#lines + 1] = string.format(L["\"%s\" from %s was last changed %s, before yours (%s): replacing would undo your newer changes."],
+				c.incoming, who, day(c.incomingUpdated), day(c.existing.updated))
+		end
+	end
+	if #lines == 0 then
+		return nil
+	end
+	return "|cffff9933" .. table.concat(lines, "\n") .. "|r"
+end
+
 function UI.ImportWithConfirm(text, source, onDone)
 	local function run(replace)
 		local ok, message, _, replaced = ns.DB.ImportString(text, source, { replace = replace })
@@ -92,9 +111,12 @@ function UI.ImportWithConfirm(text, source, onDone)
 		question = ns.Plural(#conflicts,
 			L["%d imported plan is named like one of yours. Keep both or replace?|%d imported plans are named like plans of yours. Keep both or replace?"])
 	end
+	-- An older revision over a newer one (MDT #430: a stale copy wiped newer work): say whose and when, in orange.
+	local older = UI.OlderImportNotice(conflicts)
 	W.ShowDialog({
 		title = L["Replace your plan?"],
-		text = question .. "\n\n" .. L["Replacing overwrites your plan with the imported one."],
+		text = question .. "\n\n" .. (older and (older .. "\n\n") or "")
+			.. L["Replacing overwrites your plan with the imported one."],
 		buttons = {
 			{
 				L["Keep both"],

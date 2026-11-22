@@ -275,6 +275,7 @@ ns.Locales.ruRU = {
 	["The instance's map of this floor; this plan has nothing on it."] = "Карта этого этажа подземелья; в этом плане на нём ничего нет.",
 	["and %d more"] = "и ещё %d",
 	["to %s"] = "в %s",
+	["\"%s\" from %s was last changed %s, before yours (%s): replacing would undo your newer changes."] = "«%s» от %s в последний раз менялся %s, раньше вашего (%s): замена отменит ваши более новые изменения.",
 	["Recommended plan • may be out of date"] = "Рекомендуемый план • может быть устаревшим",
 	["Researched before this game build (%s): the route and pulls may have changed. Check them in game."] = "Собран до этой сборки игры (%s): маршрут и пуллы могли измениться. Проверьте их в игре.",
 	["%s (you are on %s)"] = "%s (вы на этаже: %s)",

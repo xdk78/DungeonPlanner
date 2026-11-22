@@ -26,6 +26,8 @@ follow [Semantic Versioning](https://semver.org/).
 - **Out-of-date warning on recommended plans**: a plan researched before the game build you run says "may be out of
   date" in orange beside its steps, and its Notes give the data date, the build's date and the source, so you know to
   check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
+- **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns, in
+  orange, who it is from and both dates: replacing would undo your newer changes. Keep both stays the first choice.
 
 ## [Unreleased]
 
