@@ -263,6 +263,7 @@ UI\MapCanvas.lua
 UI\MapArt.lua
 UI\MapInput.lua
 UI\RouteSnap.lua
+UI\OpenMapOverlay.lua
 UI\MainFrame.lua
 UI\StepText.lua
 UI\Undo.lua

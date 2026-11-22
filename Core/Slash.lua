@@ -56,6 +56,10 @@ function Slash.Debug()
 	print("  " .. string.format("Integrations: launcher %s, OpenMap %s, Dungeon Journal %s, WoW Po Polsku %s, DBM %s, BigWigs %s",
 		tostring(s.launcher), tostring(s.openMap), tostring(s.dungeonJournal), tostring(s.polish),
 		tostring(ns.Tracker.sources.dbm), tostring(ns.Tracker.sources.bigwigs)))
+	-- The experimental plan overlay on OpenMap's dungeon map (UI/OpenMapOverlay.lua): its phase, or why it draws nothing.
+	if ns.OpenMapOverlay then
+		print("  " .. ns.OpenMapOverlay.Status())
+	end
 	-- Data providers (Data/Providers.lua): every adapter, active or not, with what it found.
 	for _, row in ipairs(ns.Providers.Report()) do
 		local counts = {}

@@ -463,6 +463,28 @@ local function options()
 							end,
 						}
 					end
+					-- Experimental (UI/OpenMapOverlay.lua): the plan on OpenMap's own dungeon map; off by default.
+					args.openmapOverlay = {
+						type = "toggle",
+						order = #ns.Providers.list + 1,
+						width = "full",
+						name = L["Show plan on OpenMap's dungeon map (experimental)"],
+						desc = L["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."],
+						hidden = function()
+							return ns.OpenMapOverlay == nil
+						end,
+						disabled = function()
+							return ns.Compat.Gamepad() or (rawget(_G, "OpenMapAPI") == nil and rawget(_G, "OpenMap") == nil)
+						end,
+						get = function()
+							return ns.OpenMapOverlay ~= nil and ns.OpenMapOverlay.IsEnabled()
+						end,
+						set = function(_, v)
+							if ns.OpenMapOverlay then
+								ns.OpenMapOverlay.SetEnabled(v)
+							end
+						end,
+					}
 					-- Supported addons that are not loaded, one line each (read when the panel is drawn).
 					local BENEFITS = {
 						dungeonJournal = L["drawn maps of Forever's new dungeons, boss portraits and loot"],
