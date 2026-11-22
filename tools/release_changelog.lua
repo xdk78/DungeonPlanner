@@ -6,16 +6,22 @@
 -- The section is the lines under "## [0.2.0] ..." (whatever follows the brackets, such as a date) up to the next
 -- "## [". Paths of files or folders the repository has (`git ls-files`), as a relative Markdown link, in backticks or
 -- in plain text, become links to that path at the tag (blob for a file, tree for a folder); the paths are the tag's
--- when git has it (`git ls-tree`), else the checkout's. Exit code 1, with the
--- reason, when the version has no section or its section is empty: a release never goes out with the whole file.
+-- when git has it (`git ls-tree`), else the checkout's. A pre-release tag (v0.3.0-beta1) takes the base version's
+-- section, else a non-empty [Unreleased] (M.ForTag). Exit code 1, with the reason, when the tag has no section to take:
+-- a release never goes out with the whole file.
 
 local M = {}
 
 M.REPO = "https://github.com/xdk78/DungeonPlanner"
 
--- "v0.2.0", "refs/tags/v0.2.0" or "0.2.0" -> "0.2.0"
+-- "v0.2.0", "refs/tags/v0.2.0" or "0.2.0" -> "0.2.0"; a pre-release "v0.3.0-beta1" -> "0.3.0", "beta1"
 function M.Version(tag)
-	return (tostring(tag):gsub("^refs/tags/", ""):gsub("^v", ""))
+	local v = tostring(tag):gsub("^refs/tags/", ""):gsub("^v", "")
+	local base, suffix = v:match("^([^%-]+)%-(.+)$")
+	if base then
+		return base, suffix
+	end
+	return v
 end
 
 local function lines(text)
@@ -65,6 +71,26 @@ function M.Latest(text)
 		end
 	end
 	return nil
+end
+
+-- The section a tag releases, and the heading it came from (or nil and why). A release tag (v0.3.0) needs its own
+-- section. A pre-release tag (v0.3.0-beta1) takes its base version's section when there is one (a pre-release after
+-- the notes were written), else [Unreleased] when that is not empty (a beta of what is coming), else it fails.
+function M.ForTag(text, tag)
+	local version, suffix = M.Version(tag)
+	if suffix and M.Section(text, version .. "-" .. suffix) then -- a section of its own: "## [0.3.0-beta1]"
+		return M.Section(text, version .. "-" .. suffix), version .. "-" .. suffix
+	end
+	local body, err = M.Section(text, version)
+	if body or not suffix then
+		return body, body and version or err
+	end
+	local unreleased = M.Section(text, "Unreleased")
+	if unreleased then
+		return unreleased, "Unreleased"
+	end
+	return nil, string.format('CHANGELOG.md has no section for %s and [Unreleased] is empty: a pre-release %s needs one'
+		.. ' of them', version, tostring(tag))
 end
 
 -- The repository's paths at `ref` when git knows that ref (`git ls-tree`), else the checkout's (`git ls-files`):
@@ -189,15 +215,17 @@ function M.Main(args)
 	if not text then
 		return 1, "cannot read " .. opts.changelog
 	end
-	local version = tag and M.Version(tag) or (opts.latest and M.Latest(text))
-	if not version then
+	if not tag and opts.latest then
+		tag = M.Latest(text) and "v" .. M.Latest(text)
+	end
+	if not tag then
 		return 1, "usage: lua tools/release_changelog.lua <tag> | --latest [--out FILE] [--repo URL]"
 	end
-	local body, err = M.Section(text, version)
+	local body, version = M.ForTag(text, tag)
 	if not body then
-		return 1, err
+		return 1, version
 	end
-	local ref = "v" .. version
+	local ref = tostring(tag):gsub("^refs/tags/", "")
 	local out = M.Linkify(body, M.RepoPaths(ref), (opts.repo:gsub("/+$", "")), ref)
 	if opts.out then
 		local f = io.open(opts.out, "wb")

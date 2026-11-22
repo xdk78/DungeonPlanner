@@ -52,6 +52,8 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   push the tag `vX.Y.Z`. The release workflow packages only that section (`lua tools/release_changelog.lua vX.Y.Z`:
   the repository's paths in it become links to the tag) as the CurseForge file's changelog and the GitHub release's
   text, and fails when the tag has no section. Write the section for players; paths are fine, they become links.
+  A pre-release tag (`vX.Y.Z-beta1`) takes a section of its own if there is one, else `X.Y.Z`'s, else a non-empty
+  `[Unreleased]`, and fails when none of them has text.
 - The checks that need a local game install do not run in CI: `tools/route_paths.py`, `tools/walk_grids.py`,
   `tools/minimap_art.py` and `tools/reyes_maps.py` with `--check` (commands above). Run them before every release and
   after a client patch or an update of ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install; fix a

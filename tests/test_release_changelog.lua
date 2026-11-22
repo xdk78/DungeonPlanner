@@ -78,8 +78,27 @@ T.case("Release changelog: a heading's date need not be the tag's; no section or
 	T.ok(message:find("no section for 99.0.0", 1, true), message)
 	-- The newest released section of the real file (what CI checks before a tag).
 	local latest = R.Latest(changelog)
-	T.ok(latest and latest:find("^%d+%.%d+%.%d+$"), "a released version heads the file: " .. tostring(latest))
+	T.ok(latest and latest:find("^%d+%.%d+%.%d+"), "a released version heads the file: " .. tostring(latest))
 	local ok, body = R.Main({ "--latest" })
 	T.eq(ok, 0, body)
 	T.ok(#body > 0)
+end)
+
+T.case("Release changelog: a pre-release tag takes its own section, its version's, else [Unreleased]", function()
+	local text = "## [Unreleased]\n\n- coming\n\n## [1.3.0-rc1] - 2020-03-01\n\n- candidate\n\n## [1.2.0] - 2020-01-31\n\n"
+		.. "- one\n"
+	T.eq(R.ForTag(text, "v1.3.0-rc1"), "- candidate\n", "a section of its own")
+	T.eq(R.ForTag(text, "v1.2.0-beta2"), "- one\n", "the base version's section")
+	local body, from = R.ForTag(text, "refs/tags/v1.4.0-beta1")
+	T.eq(body, "- coming\n", "no section yet: [Unreleased]")
+	T.eq(from, "Unreleased")
+	local none, why = R.ForTag(text:gsub("%- coming\n", ""), "v1.4.0-beta1")
+	T.eq(none, nil, "[Unreleased] empty: fails")
+	T.ok(why:find("[Unreleased] is empty", 1, true), why)
+	T.eq(R.ForTag(text, "v1.4.0"), nil, "a release tag never falls back to [Unreleased]")
+	T.eq(R.Latest(text), "1.3.0-rc1")
+	-- The links point at the pre-release's own tag.
+	local code, out = R.Main({ "v0.2.0-rc1" })
+	T.eq(code, 0, out)
+	T.ok(out:find("/blob/v0.2.0-rc1/docs/RELEASE-NOTES-0.2.0.md", 1, true), "linked to the tag pushed")
 end)
