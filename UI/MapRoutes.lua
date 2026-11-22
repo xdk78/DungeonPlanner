@@ -180,15 +180,13 @@ function MapRoutes.Install(view)
 	-- the end of a drag or zoom at the same scale) and a marker drag reuse them. While the map is busy (`scaled`: a
 	-- zoom or a resize), the route's last worked-out lanes are scaled to the new scale instead (the two lanes' spacing
 	-- grows or shrinks with the map for that moment); the exact lanes come with the full look when it settles.
+	-- cache: the last draw's lanes by route (keyed by its points table: another addon's route is a new table on every
+	-- draw, its points are not); into: where this draw's go (only the routes it draws, so the cache never grows past
+	-- one floor's routes). Without the map's scale (a caller that does not give it) nothing is kept.
 	local abs = math.abs
-	local function lanesFor(v, route, raw, wide, scale, scaled)
-		local cache = v.laneCache
-		if not cache then
-			cache = setmetatable({}, { __mode = "k" })
-			v.laneCache = cache
-		end
-		local c = cache[route]
-		local k = c and c.wide == wide and #c.raw == #raw and scale and c.scale and scale / c.scale
+	local function lanesFor(cache, into, key, raw, wide, scale, scaled)
+		local c = scale and cache[key]
+		local k = c and c.wide == wide and #c.raw == #raw and scale / c.scale
 		if k and (k == 1 or scaled) then
 			local same = true
 			for i, p in ipairs(raw) do
@@ -199,9 +197,11 @@ function MapRoutes.Install(view)
 					break
 				end
 			end
-			if same and k == 1 then
-				return c.lanes
-			elseif same then
+			if same then
+				into[key] = c -- the exact lanes stay the base a later zoom scales
+				if k == 1 then
+					return c.lanes
+				end
 				local out = {}
 				for i, p in ipairs(c.lanes) do
 					out[i] = { p[1] * k, p[2] * k, stop = p.stop, i = p.i, seg = p.seg, lane = p.lane, back = p.back }
@@ -211,7 +211,9 @@ function MapRoutes.Install(view)
 		end
 		local R = S.ROUTE
 		local lanes = ns.RouteLegs.Lanes(raw, { shift = wide * R.lane, near = wide * 1.2, yUp = true })
-		cache[route] = { raw = raw, lanes = lanes, wide = wide, scale = scale }
+		if scale then
+			into[key] = { raw = raw, lanes = lanes, wide = wide, scale = scale }
+		end
 		return lanes
 	end
 
@@ -266,6 +268,9 @@ function MapRoutes.Install(view)
 		-- First every route's drawn path, so all routes share the dashes' budget: one scale for every route, from the
 		-- length of their ways back inside o.bounds (the visible map and the arrows' margin).
 		local need = 0
+		-- A restyle draws the same routes: their lanes go into the cache it reads. A new draw keeps only its own.
+		local laneCache = self.laneCache or {}
+		local laneInto = o.restyle and laneCache or {}
 		for _, entry in ipairs(all) do
 			local route = entry.route
 			if drawn(route) then
@@ -282,7 +287,7 @@ function MapRoutes.Install(view)
 				entry.thickness = look.width + (route.id == o.activeRoute and u or 0)
 				entry.wide = entry.thickness + look.outline
 				entry.raw = raw
-				entry.lanes = lanesFor(self, route, raw, entry.wide, o.mapScale, lite)
+				entry.lanes = lanesFor(laneCache, laneInto, route.points, raw, entry.wide, o.mapScale, lite)
 				if not lite then
 					-- A dash and its gap per period, and up to two more per segment of the way back (a dash cut where the
 					-- segment or the bounds begin and end): so the scale below keeps the count within maxDashes.
@@ -291,6 +296,7 @@ function MapRoutes.Install(view)
 				end
 			end
 		end
+		self.laneCache = laneInto
 		local dashScale = math.max(1, need / R.maxDashes)
 		for _, entry in ipairs(all) do
 			local route = entry.route
@@ -655,7 +661,7 @@ function MapRoutes.Install(view)
 			self.arrowsPending = nil
 			return self:DrawRouteArrows(obstacles)
 		end
-		self.arrowsPending = true
+		self.arrowsPending, self.routeMarks = true, nil
 		for i = 1, #pools.arrows do
 			pools.arrows[i]:Hide()
 		end
@@ -682,9 +688,12 @@ function MapRoutes.Install(view)
 		self.routeHover, self.routeHoverSource = leg, leg and source or nil
 		if self.routeArgs and self:IsVisible() then
 			redrawPaths(self)
-			local n = drawMarks(self, self.routeMarks)
-			if self.counts then
-				self.counts.arrows = n
+			-- While the map is busy its arrows wait (the ones placed before are for another layout).
+			if not self.arrowsPending then
+				local n = drawMarks(self, self.routeMarks)
+				if self.counts then
+					self.counts.arrows = n
+				end
 			end
 		end
 		return true

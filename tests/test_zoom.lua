@@ -88,11 +88,12 @@ end
 T.case("Zoom: ZoomStep, the wheel zoom's states", function()
 	local Z = ns.MapCanvas.ZoomStep
 	local SETTLE = ns.MapCanvas.ZOOM_SETTLE
-	local d, fx = Z({ mode = "idle" }, "wheel", 10)
+	local d, fx = Z({ mode = "idle" }, "wheel", 10, 1)
 	T.eq(d.mode, "zoom")
 	T.ok(fx.zoom and fx.wait == SETTLE, "zooms and waits")
 	local id = d.id
-	local d2, fx2 = Z(d, "wheel", 10.05)
+	T.eq(id, 1, "the id the caller gave")
+	local d2, fx2 = Z(d, "wheel", 10.05, 2)
 	T.ok(fx2.zoom and not fx2.wait, "another tick: no second timer")
 	T.eq(d2.id, id, "the same zoom")
 	local d3, fx3 = Z(d2, "timer", 10 + SETTLE, id)
@@ -104,7 +105,7 @@ T.case("Zoom: ZoomStep, the wheel zoom's states", function()
 	local d5, fx5 = Z(d4, "timer", 11, id)
 	T.eq(d5, d4, "a stale timer changes nothing")
 	T.ok(not next(fx5))
-	local again = Z({ mode = "idle" }, "wheel", 12)
+	local again = Z({ mode = "idle" }, "wheel", 12, 2)
 	local _, stale = Z(again, "timer", 13, id)
 	T.ok(not next(stale), "an earlier zoom's timer changes nothing in a new zoom")
 	local _, ended = Z(again, "press", 12.01)
@@ -189,6 +190,96 @@ T.case("Zoom: a burst of wheel ticks draws plain once per tick, the full look on
 	restore()
 end)
 
+T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; a pan after a tick", function()
+	local view, restore = openMap(ns.Bundled.PREFIX .. "wailing-caverns")
+	local coords = ns.db.settings.showCoordinates
+	ns.db.settings.showCoordinates = true
+	view.IsMouseOver = function()
+		return true
+	end
+	-- The pointer on a route point near the middle (the canvas offsets of the drawn route, y up).
+	local p = view.routeJobs.raw[1][30]
+	local cx, cy = view.canvas:GetLeft() + p[1], view.canvas:GetTop() + p[2]
+	_G.GetCursorPosition = function()
+		return cx, cy
+	end
+	local paths, realPaths = 0, view.DrawRoutePaths
+	view.DrawRoutePaths = function(...)
+		paths = paths + 1
+		return realPaths(...)
+	end
+	local function hoverOn()
+		view:GetScript("OnEnter")(view)
+		mock.Advance(0.06)
+		T.ok(view.routeHover and view.routeJobs.hl, "a leg under the pointer is highlighted")
+	end
+	local function tipShown()
+		local tt = ns.Widgets.Tip()
+		return tt and tt:IsShown() and tt:IsOwned(view) or false
+	end
+	hoverOn()
+	local leg = view.routeHover
+	-- Kept through a zoom (the zoom keeps the point under the pointer), and the settled map drawn once.
+	paths = 0
+	wheel(view, 1)
+	mock.Advance(0.05)
+	wheel(view, 1)
+	mock.Advance(0.05)
+	T.ok(view.routeHover == leg and view.routeJobs.hl, "kept while zooming")
+	mock.Advance(0.2)
+	mock.Advance(0.06)
+	T.eq(view.drag.mode, "idle")
+	T.eq(paths, 3, "two ticks and the settle: the hover check draws nothing more")
+	T.eq(view.routeHover.route, leg.route, "still the leg under the pointer")
+	-- Leaving the map during a zoom: no highlight, tooltip or coordinates left behind.
+	wheel(view, 1)
+	view:GetScript("OnLeave")(view)
+	mock.Advance(0.3)
+	T.eq(view.drag.mode, "idle")
+	T.eq(view.routeHover, nil, "no highlight")
+	T.ok(not view.routeJobs.hl, "drawn without it")
+	T.ok(not tipShown(), "no tooltip")
+	T.eq(view.coords:GetText() or "", "", "no coordinates")
+	T.eq(view:GetScript("OnUpdate"), nil, "no hover updates")
+	-- A press right after a zoom: the paths drawn once, without the highlight.
+	hoverOn()
+	wheel(view, 1)
+	paths = 0
+	view:GetScript("OnMouseDown")(view, "LeftButton")
+	T.eq(paths, 1, "drawn once")
+	T.eq(view.routeHover, nil)
+	T.eq(view.drag.mode, "pan")
+	-- A tick during that pan: the pan goes on from where the zoom left the map (the point under the pointer follows
+	-- it), and leaving the map onto a pin before the release leaves the hover off.
+	cx = cx + 20
+	view.OnDragUpdate(view)
+	wheel(view, 1)
+	T.eq(view.drag.mode, "pan", "the pan goes on")
+	local x0, y0 = view:CursorPosition()
+	cx, cy = cx + 15, cy - 10
+	view.OnDragUpdate(view)
+	local x1, y1 = view:CursorPosition()
+	T.ok(math.abs(x1 - x0) < 1e-9 and math.abs(y1 - y0) < 1e-9, "the map follows the pointer after the tick")
+	view:GetScript("OnLeave")(view)
+	view:GetScript("OnMouseUp")(view, "LeftButton")
+	T.eq(view:GetScript("OnUpdate"), nil, "released over a pin: no hover updates")
+	mock.Advance(0.3)
+	-- Hiding the map during a zoom ends it; its timer changes nothing later.
+	view:GetScript("OnEnter")(view)
+	wheel(view, -1)
+	T.eq(view.drag.mode, "zoom")
+	view:GetScript("OnHide")(view)
+	T.eq(view.drag.mode, "idle", "hiding ends the zoom")
+	T.eq(view.laneCache, nil, "and drops the route lanes")
+	mock.Advance(0.3)
+	T.eq(view.drag.mode, "idle")
+	view.DrawRoutePaths, view.IsMouseOver = realPaths, nil
+	ns.db.settings.showCoordinates = coords
+	view:GetScript("OnLeave")(view)
+	view:Layout()
+	restore()
+end)
+
 T.case("Zoom: route lanes are reused while the drawn route stays, worked out again when it changes", function()
 	boot()
 	local copy = ns.UI.CopyPlan(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns"))
@@ -251,14 +342,40 @@ T.case("Zoom: route lanes are reused while the drawn route stays, worked out aga
 	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "razorfen-kraul")
 	ns.UI.RefreshPage()
 	T.ok(calls >= #view.routeJobs.paths and exact(), "another plan")
+	-- The cache holds the routes of the last draw only, however many plans and floors were shown.
+	local function kept()
+		local n = 0
+		for _ in pairs(view.laneCache or {}) do
+			n = n + 1
+		end
+		return n
+	end
+	T.eq(kept(), #view.routeJobs.paths, "only this plan's routes kept")
 	-- Another floor with routes of its own (Blackmaw Hold: floors 3 and 4).
 	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "blackmaw-hold")
 	ns.UI.ctx.floor = 3
 	ns.UI.RefreshPage()
+	T.eq(kept(), #view.routeJobs.paths, "only this floor's routes kept")
 	calls = 0
 	ns.UI.ctx.floor = 4
 	ns.UI.RefreshPage()
 	T.ok(calls >= 1 and #view.routeJobs.paths >= 1 and exact(), "another floor")
+	T.eq(kept(), #view.routeJobs.paths, "and only its routes kept")
+	-- Another addon's route (a new route table on every draw) is found again by its points.
+	local points = copy.routes[1].points
+	local extra = { { id = "provider1", floor = 4, color = 6, mapSpace = true, points = points } }
+	local args = view.routeArgs
+	local o = {}
+	for key, value in pairs(args[5]) do
+		o[key] = value
+	end
+	o.extra = extra
+	view:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
+	calls = 0
+	o.extra = { { id = "provider1", floor = 4, color = 6, mapSpace = true, points = points } }
+	view:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
+	T.eq(calls, 0, "another addon's route: lanes reused")
+	ns.UI.RefreshPage()
 	ns.UI.ctx.floor = 1
 	RL.Lanes = real
 	restore()

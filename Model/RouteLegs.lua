@@ -45,7 +45,9 @@ local function sideFrom(s, t, lo, hi)
 end
 
 -- o: { shift (how far each lane moves aside), near (segments closer than this, running opposite ways, are an
--- out-and-back stretch), yUp (true when y grows upwards, as in canvas offsets: decides which side is right) }.
+-- out-and-back stretch), yUp (true when y grows upwards, as in canvas offsets: decides which side is right), cell
+-- (the lookup grid's cell size, below; only the work depends on it: a cell larger than a path in positive coordinates
+-- holds it whole, so every pair is compared) }.
 -- Returns a new list of points { x, y, stop, i (the original point; nil for a point added inside a segment), seg (the
 -- original segment ending here), lane (moved onto a lane), back (the drawn segment ending here lies on a lane that
 -- runs against the corridor's first pass: the way back; a third pass the first's way is not, and shares its lane) }
@@ -69,7 +71,7 @@ function RouteLegs.Lanes(pts, o)
 		local dx, dy = pts[i][1] - pts[i - 1][1], pts[i][2] - pts[i - 1][2]
 		total = total + sqrt(dx * dx + dy * dy)
 	end
-	local cell = max(16, near * 2, n > 1 and total / (n - 1) or 0)
+	local cell = o.cell or max(16, near * 2, n > 1 and total / (n - 1) or 0)
 	local grid = G.NewGrid(cell)
 	local function eachPiece(s, grow, fn)
 		local pieces = ceil(s.len / cell)

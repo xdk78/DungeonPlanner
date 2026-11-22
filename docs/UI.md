@@ -455,7 +455,9 @@ size) with the routes in their plain look (no dashes, no arrows, the arrows plac
 for 0.15 s a timer event ends the zoom and the full look (colour pieces, the dashed way back, the arrows) is drawn once,
 on the pins and labels that last tick laid out. One timer runs per zoom; a timer of an earlier zoom changes nothing, a
 timer that comes before the zoom's end waits for the rest. A press on the map, or hiding it, ends a zoom at once. The
-leg under the pointer stays highlighted while zooming and is looked at again when the zoom has settled. Measured with
+leg under the pointer stays highlighted while zooming and is looked at again when the zoom has settled; a pointer that
+leaves the map (or moves onto a pin) during a zoom takes the highlight, its tooltip and the coordinates with it. A
+tick during a pan zooms and the pan goes on from there. Measured with
 the instruction count (`tests/test_zoom.lua`, Wailing Caverns): a tick costs about a third of a full redraw and a fifth
 of what a tick cost when each one was a full redraw.
 
@@ -530,7 +532,9 @@ release, when the window hides, or when the timer finds no mouse button held; a 
 A route's two lanes (`RouteLegs.Lanes`) are worked out again only when its drawn points or the line's width change:
 a hover change, a marker drag and the end of a drag or zoom reuse them, and while the wheel zooms or a window is
 resized the last lanes are scaled with the map (their spacing grows or shrinks with it for that moment) and worked out
-exactly when the full look comes. Every
+exactly when the full look comes. Only the routes of the last draw are kept (none once the map hides). The lanes'
+lookup grid has cells as large as an average segment, so their cost does not grow with the zoom; of two opposite
+segments that run alongside a segment equally far, the earlier is its partner. Every
 part of a route takes its colour from `MapRoutes.ColorAt`: lines, arrows, stop rings and bend discs. While a step
 is in focus its leg is brighter and wider and the rest of the path dims (as with the hover highlight, below). Numbered
 stops are dark discs with a ring in the route's colour at that stop, drawn above the path. While a route is edited,

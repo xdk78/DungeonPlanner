@@ -17,6 +17,34 @@ local function boot()
 	end
 end
 
+T.case("Route lanes: the lookup grid changes only the work, never the lanes (every bundled route, three scales)", function()
+	-- One cell larger than the whole path (positive coordinates) holds every segment: every pair is compared.
+	local checked = 0
+	for _, plan in ipairs(ns.Bundled.All()) do
+		for _, route in ipairs(plan.routes) do
+			for _, s in ipairs({ 700, 2400, 5600 }) do
+				local raw = {}
+				for i, pt in ipairs(route.points) do
+					raw[i] = { pt[1] * s, pt[2] * s, stop = pt.step ~= nil }
+				end
+				local o = { shift = 3, near = 6, yUp = true }
+				local fast = RL.Lanes(raw, o)
+				o.cell = 1e9
+				local all = RL.Lanes(raw, o)
+				T.eq(#fast, #all, plan.id .. " " .. route.id .. " at " .. s)
+				for k, p in ipairs(all) do
+					local q = fast[k]
+					if p[1] ~= q[1] or p[2] ~= q[2] or p.back ~= q.back or p.lane ~= q.lane or p.seg ~= q.seg then
+						error(string.format("%s %s at %d: point %d differs", plan.id, route.id, s, k))
+					end
+				end
+				checked = checked + 1
+			end
+		end
+	end
+	T.ok(checked > 100, "routes checked: " .. checked)
+end)
+
 T.case("Route lanes: out and back along one corridor becomes two lanes, each on its own right", function()
 	-- y up (canvas offsets): east, then back west on the same line.
 	local pts = { { 0, 0, stop = true }, { 200, 0, stop = true }, { 0, 0, stop = true } }
