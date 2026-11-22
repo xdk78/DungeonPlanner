@@ -717,6 +717,19 @@ function Style.FontTestPanel()
 	return panel
 end
 
+-- "not installed" or "switched off" for a face whose file the client will not open (WoW Po Polsku's, while that addon is
+-- missing or disabled: the same check the chat report uses), else nil. Such a face is not drawn: it would be boxes.
+local function absentStatus(test, f)
+	if f.kind == "wowpopolsku" then
+		if test.polishAddon == "missing" then
+			return L["not installed"]
+		elseif test.polishAddon == "disabled" then
+			return L["switched off"]
+		end
+	end
+	return nil
+end
+
 local function rowLabel(f, status)
 	local text = shortName(f.file)
 	if status then
@@ -742,13 +755,18 @@ function Style.ShowFontTest(test)
 	for i, f in ipairs(test.faces) do
 		local row = panel.rows[i]
 		if row then
-			row.label:SetText(rowLabel(f))
-			row.direct:SetFontObject(Style.fonts.body)
-			pcall(row.direct.SetFont, row.direct, f.file, 16, "")
-			row.direct:SetText(SAMPLE_TEXT)
-			local font = faceFont(f.file)
-			row.object:SetFontObject(font or Style.fonts.body)
-			row.object:SetText(SAMPLE_TEXT)
+			local absent = absentStatus(test, f)
+			row.label:SetText(rowLabel(f, absent))
+			row.direct:SetShown(not absent)
+			row.object:SetShown(not absent)
+			if not absent then
+				row.direct:SetFontObject(Style.fonts.body)
+				pcall(row.direct.SetFont, row.direct, f.file, 16, "")
+				row.direct:SetText(SAMPLE_TEXT)
+				local font = faceFont(f.file)
+				row.object:SetFontObject(font or Style.fonts.body)
+				row.object:SetText(SAMPLE_TEXT)
+			end
 		end
 	end
 	return panel
@@ -762,7 +780,7 @@ function Style.MarkFontTest(test)
 	for i, f in ipairs(test.faces) do
 		local row = panel.rows[i]
 		if row then
-			row.label:SetText(rowLabel(f, faceWorks(f) and L["loads"] or L["does not load"]))
+			row.label:SetText(rowLabel(f, absentStatus(test, f) or (faceWorks(f) and L["loads"] or L["does not load"])))
 		end
 	end
 end

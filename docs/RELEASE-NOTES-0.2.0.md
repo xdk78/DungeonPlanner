@@ -58,7 +58,7 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
   the party strip with a real group, the Gear filters on Forever's rules, and the other items in the checklist below.
   The UI was checked offline in all six languages; `/dp debug` lists what your client provides. Please attach its output
   and `/dp report` to bug reports.
-- **The plan on OpenMap's dungeon map is experimental** (off by default). It relies on OpenMap 0.8.12's private
+- **The plan on OpenMap's dungeon map is experimental** (off by default). It relies on the private parts of OpenMap 0.8.12 and 0.8.13 in its
   dungeon view, not on its public API, so it may stop working after an OpenMap update; `/dp debug` then says why
   ("OpenMap overlay: ...").
 - The limits listed for 0.1.0 still apply ([RELEASE-NOTES-0.1.0.md](RELEASE-NOTES-0.1.0.md#known-limitations-on-wow-forever)).

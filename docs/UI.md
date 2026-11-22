@@ -850,7 +850,7 @@ From 0.1.0:
   Routes settings. `Media/RouteArrow.tga` and `Media/RouteArrowEdge.tga` are new files: until the game is restarted
   the older chevron or arrow shape stands in (where the client reports that a texture failed).
 - Everything from the previous list still applies: map tiles lining up with markers, boss portraits, Polish letters.
-- The experimental plan on OpenMap's dungeon map (`UI/OpenMapOverlay.lua`, OpenMap 0.8.12): the route, stops and
+- The experimental plan on OpenMap's dungeon map (`UI/OpenMapOverlay.lua`, OpenMap 0.8.12 and 0.8.13): the route, stops and
   markers follow OpenMap's zoom (wheel) and panning (drag) and stay inside its clipped picture; their frame level
   against OpenMap's boss pins (ours at page + 1 and page + 3, its pins at page + 5) and its credit, hint and bar;
   floor changes through the arrows, the floor list under the floor name and the side panel's floor pictures (each

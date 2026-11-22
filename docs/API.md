@@ -66,4 +66,4 @@ Dungeon Planner defines no global for these; it only reads them, guarded (docs/C
 
 | Name | Addon | Why |
 |---|---|---|
-| `OpenMapDungeonView` | OpenMap (its private dungeon view, 0.8.12) | The experimental plan overlay (`UI/OpenMapOverlay.lua`, off by default): one frame of ours on its `page`, and `HookScript` on its own frames (`OnShow`, `OnHide`, the page's `OnSizeChanged`, the floor buttons' `OnClick`). Its fields `page`, `floor`, `floors`, `inst`, `source`, `prev`, `next`, `floorButton`, `list.rows`, `side.pool.thumb` and `bossPins` are read with shape checks and never written |
+| `OpenMapDungeonView` | OpenMap (its private dungeon view, 0.8.12 and 0.8.13) | The experimental plan overlay (`UI/OpenMapOverlay.lua`, off by default): one frame of ours on its `page`, and `HookScript` on its own frames (`OnShow`, `OnHide`, the page's `OnSizeChanged`, the floor buttons' `OnClick`). Its fields `page`, `floor`, `floors`, `inst`, `source`, `prev`, `next`, `floorButton`, `list.rows`, `side.pool.thumb` and `bossPins` are read with shape checks and never written |
