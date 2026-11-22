@@ -203,8 +203,9 @@ lua tools/gen_plans.lua --check            # recommended plans are up to date wi
 lua tools/gen_spawns.lua --check           # enemy spawn points are up to date with the plans and data-src/spawns
 lua tools/gen_bosses.lua --check           # bundled boss facts are valid, cover every plan boss and are up to date
 lua tests/ui_dump.lua --out <work dir>     # UI views as JSON + layout lint (CI)
-uv run --script tools/make_gifs.py --png <renders> --out docs/media   # the README's clips (AGENTS.md, "Seeing the UI")
+uv run --script <wow-ui-harness>/python/wowui.py gif --spec tools/gif_sequences.json --png <renders> --out docs/media   # the README's clips (AGENTS.md, "Seeing the UI")
 luacheck .                                 # lint (CI)
+uv run --script tests/vendor/wow-ui-harness/python/check.py   # static safety check (CI)
 ```
 
 Run the repository in game with a directory link (Developer Mode or an elevated prompt; adjust both paths):

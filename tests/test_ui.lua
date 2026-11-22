@@ -113,7 +113,7 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 	home:Refresh()
 
 	-- Open the instance: no plan yet, so the page offers to create one.
-	card:GetScript("OnDoubleClick")(card, "LeftButton")
+	mock.FireScript(card, "OnDoubleClick", "LeftButton")
 	T.eq(ns.db.ui.view, "instance")
 	local page = frame.instancePage
 	T.ok(page.empty:IsShown(), "empty state")
@@ -131,7 +131,7 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 	T.eq(ns.db.ui.tab, "plan", "old tab names map to sections")
 	T.eq(ns.Names.Encounter(plan.encounters[1]), "Journal boss 91", "names come from the journal by ID")
 	-- Breadcrumb back home.
-	page.back:GetScript("OnClick")(page.back, "LeftButton")
+	mock.Click(page.back)
 	T.eq(ns.db.ui.view, "home")
 	home:Refresh()
 	T.eq(findCard(home, "Test Dungeon").count:GetText(), "1 plan", "card counts the plan")
@@ -178,9 +178,7 @@ T.case("Map tools add markers, positions, pulls and routes; layers and undo", fu
 	T.eq(plan.markers[1].pull, plan.pulls[1].id)
 	ctx.tool = "route"
 	canvas:OnMapClick("LeftButton")
-	mock.shiftDown = true
-	canvas:OnMapClick("LeftButton")
-	mock.shiftDown = false
+	mock.WithInput({ keys = { "SHIFT" } }, canvas.OnMapClick, canvas, "LeftButton")
 	T.eq(#plan.routes, 1)
 	T.eq(#plan.routes[1].points, 2)
 	T.eq(plan.routes[1].points[2].step, 1, "shift-click adds a numbered stop")
@@ -194,7 +192,7 @@ T.case("Map tools add markers, positions, pulls and routes; layers and undo", fu
 	canvas:DrawContent()
 	T.eq(canvas.counts.pins, 0, "bosses layer hidden")
 	ns.db.ui.mapLayers.bosses = nil
-	map.iconSize.plus:GetScript("OnClick")(map.iconSize.plus, "LeftButton")
+	mock.Click(map.iconSize.plus)
 	T.ok(ns.db.ui.iconScale > 1, "icon size stepper")
 	ns.db.ui.iconScale = 1
 	canvas:ZoomAt(1)
@@ -256,7 +254,7 @@ T.case("A recommended plan is read-only, shows as recommended, and copies into a
 	T.eq(findCard(frame.home, "Test Dungeon").tag:GetText(), "Recommended plan")
 	-- Copy.
 	ns.UI.SelectPlan(rec.id)
-	page.header.copy:GetScript("OnClick")(page.header.copy, "LeftButton")
+	mock.Click(page.header.copy)
 	local copy = ns.UI.ctx:Plan()
 	T.ok(copy and not copy.bundled, "the copy is selected")
 	T.eq(copy.origin.bundled, "test-dungeon-standard")

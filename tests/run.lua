@@ -40,6 +40,7 @@ function T.case(name, fn)
 		return
 	end
 	local ok, err = pcall(fn)
+	mock.ResetInput() -- no cursor, key or button carried into the next case, also after a failure
 	if ok then
 		T.passed = T.passed + 1
 	else
@@ -79,7 +80,8 @@ local files = { "test_model.lua", "test_share.lua", "test_db.lua", "test_v2.lua"
 	"test_prep.lua", "test_travel_live.lua", "test_party.lua",
 	"test_walk.lua", "test_walk_ui.lua", "test_gearfilter.lua", "test_routes.lua",
 	"test_provider_pins.lua",
-	"test_routelegs.lua", "test_routelook.lua", "test_openmap_overlay.lua", "test_identity.lua", "test_zoom.lua" }
+	"test_routelegs.lua", "test_routelook.lua", "test_openmap_overlay.lua", "test_identity.lua", "test_zoom.lua",
+	"test_release_changelog.lua" }
 for _, file in ipairs(files) do
 	local chunk = assert(loadfile("tests/" .. file))
 	chunk(T)

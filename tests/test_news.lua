@@ -140,7 +140,7 @@ T.case("What's new: the card and the welcome are built, dismissable, and reopen 
 	local f = ns.NewsFrame.Frame()
 	T.ok(f:IsShown(), "welcome shown")
 	T.ok(f.open:IsShown(), "the welcome offers to open the planner")
-	f.ok:GetScript("OnClick")(f.ok)
+	mock.Click(f.ok)
 	T.ok(not f:IsShown(), "dismissed")
 	ns.Slash.Handle("new")
 	T.ok(f:IsShown(), "/dp new reopens it")

@@ -131,7 +131,7 @@ T.case("Follow-ups: a dropdown list survives Alt+Z whole, and closes cleanly aft
 			value = v
 		end,
 	})
-	dd:GetScript("OnClick")(dd, "LeftButton")
+	mock.Click(dd)
 	local popup = W.ActivePopup()
 	T.ok(popup, "the list is open")
 	toggleUI({ popup, dd })
@@ -142,7 +142,7 @@ T.case("Follow-ups: a dropdown list survives Alt+Z whole, and closes cleanly aft
 	T.eq(popup.owner, nil, "and finished: no owner")
 	T.ok(not dd.dpPopupOpen, "the control knows")
 	-- Closing while the UI is hidden (no OnHide then) still finishes it.
-	dd:GetScript("OnClick")(dd, "LeftButton")
+	mock.Click(dd)
 	popup = W.ActivePopup()
 	popup:Close()
 	T.eq(popup.owner, nil)
@@ -245,17 +245,17 @@ T.case("Follow-ups: the objective field adds on Enter or its button, never on le
 	local field, edit = progress.newObjective, progress.newObjective.edit
 	local before = #plan.objectives
 	edit:SetText("Buy repairs")
-	edit:GetScript("OnEditFocusLost")(edit)
+	mock.FireScript(edit, "OnEditFocusLost")
 	T.eq(#plan.objectives, before, "leaving the field adds nothing")
 	T.eq(field:GetValue(), "Buy repairs", "and keeps the text")
-	edit:GetScript("OnEnterPressed")(edit)
+	mock.FireScript(edit, "OnEnterPressed")
 	T.eq(#plan.objectives, before + 1, "Enter adds")
 	T.eq(plan.objectives[#plan.objectives].text, "Buy repairs")
 	T.eq(field:GetValue(), "", "the field empties")
 	edit:SetText("Agree on marks")
-	progress.addObjective:GetScript("OnClick")(progress.addObjective, "LeftButton")
+	mock.Click(progress.addObjective)
 	T.eq(#plan.objectives, before + 2, "the button adds")
 	edit:SetText("   ")
-	edit:GetScript("OnEnterPressed")(edit)
+	mock.FireScript(edit, "OnEnterPressed")
 	T.eq(#plan.objectives, before + 2, "blank text adds nothing")
 end)

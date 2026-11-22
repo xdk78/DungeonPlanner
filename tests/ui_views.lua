@@ -71,7 +71,7 @@ end
 
 -- A control's click, as the game runs it.
 local function click(b)
-	b:GetScript("OnClick")(b, "LeftButton")
+	assert(mock.Click(b), "the click did not reach the button (hidden or disabled)")
 end
 
 -- The window at a size (the minimum, 880 x 560, or a large one); views after it get the default back.
@@ -749,9 +749,8 @@ V.views = {
 			end
 			openOwn("assignments", "select")
 			local list = page().panels.assignments.inner.list
-			if list.rows[1] and list.rows[1]:GetScript("OnClick") then
-				list.rows[1]:GetScript("OnClick")(list.rows[1], "LeftButton")
-			end
+			assert(list.rows[1], "an assignment row")
+			click(list.rows[1])
 			ns.UI.RefreshPage()
 		end,
 		window = window,
@@ -1170,21 +1169,13 @@ V.views = {
 	},
 }
 
--- Sequences: one interaction as several frames (`seq-<name>-NN`), each frame the state after the next step, for
--- tools/make_gifs.py (AGENTS.md, "Seeing the UI"). A step does what the click does (UI.FocusStep, RunMode.Step, the
--- model's route functions followed by DB.Changed); only the last frame tears down. The frame texts are
--- tools/gif_sequences.json's.
+-- Sequences (wowui.views): one interaction as several frames (`seq-<name>-NN`), each frame the state after the next
+-- step, for `wowui gif` (AGENTS.md, "Seeing the UI"). A step does what the click does (UI.FocusStep, RunMode.Step, the
+-- model's route functions followed by DB.Changed); `finish` runs after the last frame. The captions, crops and timing
+-- are in tools/gif_sequences.json.
+local Views = require("wowui.views")
 local function sequence(name, steps, windowFn, finish)
-	local views = {}
-	for i, step in ipairs(steps) do
-		views[i] = {
-			name = string.format("seq-%s-%02d", name, i),
-			setup = step,
-			window = windowFn or window,
-			teardown = i == #steps and finish or nil,
-		}
-	end
-	return views
+	return Views.Sequence(name, steps, { window = windowFn or window, finish = finish })
 end
 
 -- The plan the sequences show: a classic dungeon on the game's old map tiles, with few enough steps that the list needs no
@@ -1303,7 +1294,7 @@ local function pickerSequence()
 			end
 			local edit = rawget(_G, "DungeonPlannerPopup").search.edit
 			edit:SetText(query)
-			edit:GetScript("OnTextChanged")(edit, true)
+			mock.FireScript(edit, "OnTextChanged", true)
 		end
 	end
 	return sequence("picker", steps, function()
@@ -1411,5 +1402,9 @@ V.lintIgnore = { "^outside%-window | [%w_.]*PortraitContainer" }
 V.fallbackFont = "Media/Fonts/AlegreyaSans-Medium.ttf"
 V.fallbackScale = 1.22
 V.fontRoots = { { "Interface\\AddOns\\DungeonPlanner\\", "." } }
+-- The game's answers the layout depends on, recorded from a local install (file IDs and sizes only, no pixels; AGENTS.md
+-- "Seeing the UI"): which files the client has (GetFileIDFromPath), atlas sizes, and the size a texture given none takes.
+-- CI has no game, so with these the dump takes the branches it takes in game.
+V.sizes = "tests/ui-sizes.json"
 
 return V

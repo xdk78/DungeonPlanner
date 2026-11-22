@@ -261,7 +261,7 @@ T.case("War table: clicking a step focuses the map on its floor, segment and bos
 	local clicked
 	for _, row in ipairs(page.side.list.rows) do
 		if row.index == tara then
-			row:GetScript("OnClick")(row, "LeftButton")
+			mock.Click(row)
 			clicked = true
 		end
 	end
@@ -300,7 +300,7 @@ T.case("Run mode: steps with Prev / Next and the pull keys; a boss kill moves on
 	local f = _G.DungeonPlannerRunFrame
 	T.ok(f and f:IsShown(), "run window")
 	T.eq(f.next.label:GetText(), ns.L["Start"])
-	f.next:GetScript("OnClick")(f.next, "LeftButton")
+	mock.Click(f.next)
 	T.eq(ns.UI.ctx:StepIndex(), 1)
 	_G.DungeonPlanner_Binding("nextPull")
 	T.eq(ns.UI.ctx:StepIndex(), 2, "the next-pull key walks the steps while run mode is open")
@@ -368,8 +368,11 @@ T.case("Enemies layer: drawn from spawn data, decluttered, without doubling the 
 	T.ok(spawnRow.check:GetChecked(), "on by default for a recommended plan")
 	local dot = map.canvas.pools.spawns[1]
 	T.eq(#dot.members, 2, "the merged dot holds both")
-	dot:GetScript("OnEnter")(dot)
-	spawnRow.check:GetScript("OnClick")(spawnRow.check)
+	local tip = ns.Widgets.Tip()
+	tip:Hide()
+	mock.Hover(dot)
+	T.ok(tip:IsShown(), "hovering the dot shows its tooltip")
+	T.ok(mock.Click(spawnRow.check), "the legend's check box takes the click")
 	T.eq(ns.db.ui.mapLayers.spawns, false)
 	map.canvas:DrawContent()
 	T.eq(map.canvas.counts.spawns, 0, "switched off")
@@ -404,7 +407,7 @@ T.case("Home: an instance table with a preview; a plate where the game has no pi
 		home.list:ScrollTo(index)
 		for _, row in ipairs(home.list.rows) do
 			if row.index == index then
-				row:GetScript("OnClick")(row, "LeftButton")
+				mock.Click(row)
 			end
 		end
 	end
@@ -425,7 +428,7 @@ T.case("Home: an instance table with a preview; a plate where the game has no pi
 	T.eq(plate.hasArt, true, "Hall of Thanes: Forever's own loading screen")
 	T.ok(not plate.emblem:IsShown(), "a picture, no emblem")
 	T.eq(home.preview.facts[1].value:GetText(), "LV 13-20", "levels from the browse list")
-	home.preview.open:GetScript("OnClick")(home.preview.open, "LeftButton")
+	mock.Click(home.preview.open)
 	T.eq(ns.db.ui.view, "instance", "Open plan opens the war table")
 	ns.UI.GoHome("dungeons")
 end)

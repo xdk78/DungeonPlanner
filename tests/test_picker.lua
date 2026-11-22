@@ -91,7 +91,7 @@ end
 
 local function openPicker()
 	local pick = page().instancePick
-	pick:GetScript("OnClick")(pick, "LeftButton")
+	mock.Click(pick)
 	return ns.Widgets.ActivePopup(), pick
 end
 
@@ -130,13 +130,13 @@ T.case("Instance picker: an opaque popup with sections, bands and the open insta
 	T.ok(p.search.placeholder and p.search.placeholder:IsShown(), "the search's placeholder shows")
 	T.eq(p.search.placeholder:GetText(), ns.L["Search dungeons and raids..."])
 	p.search.edit:SetFocus()
-	p.search.edit:GetScript("OnEditFocusGained")(p.search.edit)
+	mock.FireScript(p.search.edit, "OnEditFocusGained")
 	T.ok(p.search.placeholder:IsShown(), "still there while the empty field has the focus")
 	p.search.edit:SetText("rag")
-	p.search.edit:GetScript("OnTextChanged")(p.search.edit, false)
+	mock.FireScript(p.search.edit, "OnTextChanged", false)
 	T.ok(not p.search.placeholder:IsShown(), "gone once something is typed")
 	p.search.edit:SetText("")
-	p.search.edit:GetScript("OnTextChanged")(p.search.edit, false)
+	mock.FireScript(p.search.edit, "OnTextChanged", false)
 	T.eq(p:GetHeight() - 2 * p.shadowY, 440, "a fixed height (the menu art's shadow around it)")
 	T.ok(p.rows[1].kind == "header", "the first band's divider")
 	local cur = p.rows[p.cursor]
@@ -158,11 +158,11 @@ T.case("Instance picker: an opaque popup with sections, bands and the open insta
 	-- Pooled rows: only the visible ones exist.
 	local made = #p.pools.instance.item
 	T.ok(made < #p.rows, "virtual: " .. made .. " frames for " .. #p.rows .. " rows")
-	p.view:GetScript("OnMouseWheel")(p.view, -1)
-	p.view:GetScript("OnMouseWheel")(p.view, 1)
+	mock.Wheel(p.view, -1)
+	mock.Wheel(p.view, 1)
 	T.ok(#p.pools.instance.item <= made + 1, "scrolling reuses them")
 	-- The control's own click closes it again.
-	pick:GetScript("OnClick")(pick, "LeftButton")
+	mock.Click(pick)
 	T.eq(ns.Widgets.ActivePopup(), nil, "toggled closed")
 	T.ok(not pick.dpPopupOpen)
 end)
@@ -173,53 +173,53 @@ T.case("Instance picker: keyboard, hover and search share one cursor; Enter open
 	local p = openPicker()
 	local edit = p.search.edit
 	local start = p.cursor
-	edit:GetScript("OnArrowPressed")(edit, "DOWN")
+	mock.FireScript(edit, "OnArrowPressed", "DOWN")
 	T.ok(p.cursor > start and p.rows[p.cursor].kind == "item", "down moves to the next instance")
 	T.ok(cursorOn(itemFrame(p, p.cursor)), "the highlight follows")
 	T.ok(not cursorOn(itemFrame(p, start)), "and leaves the old row")
-	edit:GetScript("OnArrowPressed")(edit, "UP")
+	mock.FireScript(edit, "OnArrowPressed", "UP")
 	T.eq(p.cursor, start, "up comes back")
 	-- The pointer moves the same highlight.
 	local other = Picker.Step(p.rows, start, 1)
 	local f = itemFrame(p, other)
-	f:GetScript("OnEnter")(f)
+	mock.Hover(f)
 	T.eq(p.cursor, other, "hovering moves the cursor")
 	-- Tab switches the section.
-	edit:GetScript("OnTabPressed")(edit)
+	mock.FireScript(edit, "OnTabPressed")
 	T.eq(p.tab, "raid")
 	for _, r in ipairs(p.rows) do
 		T.eq(r.kind, "item", "raids have no level bands")
 		T.eq(r.entry.kind, "raid")
 	end
-	edit:GetScript("OnTabPressed")(edit)
+	mock.FireScript(edit, "OnTabPressed")
 	T.eq(p.tab, "dungeon")
 	-- Typing filters as you type; a raid name switches to the raids.
 	edit:SetText("molten")
-	edit:GetScript("OnTextChanged")(edit, true)
+	mock.FireScript(edit, "OnTextChanged", true)
 	T.eq(p.tab, "raid", "the section with matches")
 	T.eq(#p.rows, 1)
 	T.eq(p.rows[1].entry.name, "Molten Core")
 	local raids = p.tabBar:Button("raid")
 	T.ok(raids.label:GetText():find("1", 1, true), "the tab shows its match count while searching")
 	edit:SetText("lordaeron")
-	edit:GetScript("OnTextChanged")(edit, true)
+	mock.FireScript(edit, "OnTextChanged", true)
 	T.eq(p.tab, "dungeon")
 	T.eq(p.rows[p.cursor].entry.name, "Ruins of Lordaeron", "the cursor on the first match")
 	edit:SetText("no such place")
-	edit:GetScript("OnTextChanged")(edit, true)
+	mock.FireScript(edit, "OnTextChanged", true)
 	T.eq(#p.rows, 0)
 	T.ok(p.empty:IsShown(), "says nothing matches")
-	edit:GetScript("OnEnterPressed")(edit)
+	mock.FireScript(edit, "OnEnterPressed")
 	T.ok(ns.Widgets.ActivePopup(), "Enter on nothing keeps it open")
 	edit:SetText("lordaeron")
-	edit:GetScript("OnTextChanged")(edit, true)
-	edit:GetScript("OnEnterPressed")(edit)
+	mock.FireScript(edit, "OnTextChanged", true)
+	mock.FireScript(edit, "OnEnterPressed")
 	T.eq(ns.Widgets.ActivePopup(), nil, "Enter chooses and closes")
 	T.eq(ns.db.ui.instance.name, "Ruins of Lordaeron", "the chosen instance is open")
 	-- Escape closes without choosing.
 	p = openPicker()
 	T.eq(p.rows[p.cursor].entry.name, "Ruins of Lordaeron", "the new current instance")
-	p.search.edit:GetScript("OnEscapePressed")(p.search.edit)
+	mock.FireScript(p.search.edit, "OnEscapePressed")
 	T.eq(ns.Widgets.ActivePopup(), nil, "Escape closes")
 	T.eq(ns.db.ui.instance.name, "Ruins of Lordaeron", "nothing changed")
 	ns.UI.SelectPlan("b:hall-of-thanes")
@@ -256,7 +256,7 @@ T.case("Forever: the instances new in WoW: Forever carry a bronze tag and match 
 	end
 	T.ok(tagged >= 9 and untagged >= 20, "origins on the entries (" .. tagged .. " Forever, " .. untagged .. " classic)")
 	p.search.edit:SetText("forever")
-	p.search.edit:GetScript("OnTextChanged")(p.search.edit, true)
+	mock.FireScript(p.search.edit, "OnTextChanged", true)
 	for _, row in ipairs(p.rows) do
 		if row.kind == "item" then
 			T.eq(row.entry.origin, "forever", "the search keeps only Forever's instances: " .. row.entry.name)
@@ -269,7 +269,7 @@ T.case("Forever: the instances new in WoW: Forever carry a bronze tag and match 
 	end
 	-- Without the search: a classic instance's row has no tag.
 	p.search.edit:SetText("")
-	p.search.edit:GetScript("OnTextChanged")(p.search.edit, true)
+	mock.FireScript(p.search.edit, "OnTextChanged", true)
 	local classic = 0
 	for _, item in ipairs(p.pools.instance.item) do
 		local row = item:IsShown() and p.rows[item.index]
@@ -292,46 +292,44 @@ T.case("Popups close on a click outside, when their control hides, and a click o
 	T.ok(not p:IsEventRegistered("GLOBAL_MOUSE_DOWN"), "and it stops listening")
 	-- A click inside does not.
 	p = openPicker()
-	p.IsMouseOver = function()
-		return true
-	end
+	mock.Hover(p)
 	mock.FireEvent("GLOBAL_MOUSE_DOWN", "LeftButton")
 	T.ok(ns.Widgets.ActivePopup(), "a click inside keeps it")
-	p.IsMouseOver = nil
+	mock.Leave(p)
 	-- Hiding the control (the window closes) closes it.
 	page().instancePick:Hide()
 	T.eq(ns.Widgets.ActivePopup(), nil, "closed with its control")
 	page().instancePick:Show()
 	-- The plan dropdown uses the same popup: opaque, the current plan marked, keys without a search field.
 	local plan = page().planPick
-	plan:GetScript("OnClick")(plan, "LeftButton")
+	mock.Click(plan)
 	p = ns.Widgets.ActivePopup()
 	T.ok(p and p.spec.style == "menu", "the plan list is the opaque popup")
 	T.ok(not p.search:IsShown() and not (p.tabBar and p.tabBar:IsShown()), "no search, no tabs")
 	T.ok(p.rows[p.cursor].value == "b:hall-of-thanes", "the cursor starts on the plan on the table")
 	T.ok(itemFrame(p, p.cursor).mark:IsShown(), "marked as the current plan")
 	T.ok(p:GetWidth() >= plan:GetWidth(), "at least as wide as its control")
-	p:GetScript("OnKeyDown")(p, "DOWN")
+	mock.FireScript(p, "OnKeyDown", "DOWN")
 	T.ok(p.rows[p.cursor].value ~= "b:hall-of-thanes", "arrow keys move the cursor")
-	p:GetScript("OnKeyDown")(p, "ESCAPE")
+	mock.FireScript(p, "OnKeyDown", "ESCAPE")
 	T.eq(ns.Widgets.ActivePopup(), nil, "Escape closes")
 	-- Any other dropdown: a click on a row chooses it.
 	ns.UI.SelectTab("map")
 	local focus = page().panels.map.focus
-	focus:GetScript("OnClick")(focus, "LeftButton")
+	mock.Click(focus)
 	p = ns.Widgets.ActivePopup()
 	T.ok(p and #p.rows > 1, "the focus list")
 	local target = Picker.Step(p.rows, p.cursor, 1)
 	local f = itemFrame(p, target)
 	local value = p.rows[target].value
-	f:GetScript("OnClick")(f, "LeftButton")
+	mock.Click(f)
 	T.eq(ns.Widgets.ActivePopup(), nil, "closed after the choice")
 	T.ok(focus.label:GetText() == p.rows[target].text or value ~= nil, "the choice is shown")
-	focus:GetScript("OnClick")(focus, "LeftButton")
+	mock.Click(focus)
 	T.eq(ns.Widgets.ActivePopup().rows[ns.Widgets.ActivePopup().cursor].value, value, "and is the current one next time")
 	ns.Widgets.ClosePopup()
 	-- A combat that starts while a keyboard list is open closes it (it could not pass keys on any more).
-	plan:GetScript("OnClick")(plan, "LeftButton")
+	mock.Click(plan)
 	mock.FireEvent("PLAYER_REGEN_DISABLED")
 	T.eq(ns.Widgets.ActivePopup(), nil, "closed on entering combat")
 end)

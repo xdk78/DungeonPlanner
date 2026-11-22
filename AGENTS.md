@@ -36,6 +36,7 @@ uv run --script tools/reyes_maps.py --work <scratch> [--check] # Santiago Reyes'
 uv run --script tools/walk_grids.py --game <client folder> --work <scratch> --reyes <reyes_maps work> [--check] # Data/WalkData.lua
 lua tools/walk_timing.lua [repeats]        # Snap to corridors timings (Data/Corridors.lua, docs/DATA-SOURCES.md)
 luacheck .                                 # lint, must be clean (CI)
+uv run --script tests/vendor/wow-ui-harness/python/check.py # wowui check: the game API rules below (CI; .wowui-check.json)
 lua tests/ui_dump.lua --out <work dir>      # UI views as JSON + layout lint (CI; "Seeing the UI" below)
 lua tools/gen_textures.lua                 # regenerate Media/*.tga
 uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga from Media/Logo/*.svg
@@ -43,14 +44,24 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 
 ## Changes
 
-- Work on a branch and open a pull request; `main` is protected by CI (lint + tests + locale + plans).
+- Work on a branch and open a pull request; `main` is protected by CI (lint + safety check + tests + locale +
+  plans).
 - After a pull request is merged, delete its branch and remove any worktree and work folder used for it.
 - Every change that players can see gets a line under `## [Unreleased]` in `CHANGELOG.md`.
+- A release: rename `## [Unreleased]` to `## [X.Y.Z] - <date>` (add a new empty `[Unreleased]` above it), merge, then
+  push the tag `vX.Y.Z`. The release workflow packages only that section (`lua tools/release_changelog.lua vX.Y.Z`:
+  the repository's paths in it become links to the tag) as the CurseForge file's changelog and the GitHub release's
+  text, and fails when the tag has no section. Write the section for players; paths are fine, they become links.
+  A pre-release tag (`vX.Y.Z-beta1`) takes a section of its own if there is one, else `X.Y.Z`'s, else a non-empty
+  `[Unreleased]`, and fails when none of them has text.
 - The checks that need a local game install do not run in CI: `tools/route_paths.py`, `tools/walk_grids.py`,
   `tools/minimap_art.py` and `tools/reyes_maps.py` with `--check` (commands above). Run them before every release and
   after a client patch or an update of ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install; fix a
   drift in its own pull request (`data-src/routes/README.md`, "When to run the `--check`s").
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
+  `wowui check` enforces 800 for addon code. Exceptions, in `.wowui-check.json`: `Locales/` (one string per line,
+  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked), and
+  `UI/Fonts.lua` and `UI/RunMode.lua`, capped at about their size until they are split (they may not grow).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
   otherwise). Format strings must keep the same `%s`/`%d` order (a test checks).
@@ -78,6 +89,12 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 - Addon messages go through `Share/Comm.lua` only (AceComm + lockdown outbox).
 - Untrusted input (imports, received plans, community files) goes through `Codec.Decode` and `Validate.*`. Never
   `loadstring`.
+- `wowui check` enforces what it can see of these rules (forbidden calls and hooks, addon messages outside
+  `Share/Comm.lua`, the combat log, new globals, file length, `UISpecialFrames` and `SLASH_*` / `SlashCmdList`
+  registrations only behind `Compat.Gamepad`); its config is `.wowui-check.json`. It does not see AceConsole's
+  `RegisterChatCommand` (`tests/test_gamepad.lua` covers `/dp`), secure templates or changes to the game's font
+  objects: review those. Keep that file's global allowlist in step with `docs/API.md` and `.luacheckrc`. Suppress one finding with
+  `-- wowui-check: ignore <rule> <reason>`, never without a reason.
 
 ## Data honesty
 
@@ -169,6 +186,16 @@ CI runs both and fails on lint findings not in `tests/ui_lint_baseline.txt` (tru
 overlapping buttons, things outside the window). Without the game's fonts, text is measured with the bundled Alegreya
 Sans widened to Friz Quadrata's average (`tests/ui_views.lua`); the baseline is for that measurement.
 
+Without the game, the dump answers the questions the layout asks the client (does `GetFileIDFromPath` know a file, an
+atlas's size, the pixel size of a texture given none) from `tests/ui-sizes.json` (`V.sizes`; file IDs and sizes only,
+no pixels), recorded from a local install. Refresh it after a game patch or when the addon uses other game files or
+atlases (`H`, `G`, `W` as below; review the diff, and fix a new lint finding rather than accept it):
+
+```sh
+lua tests/ui_dump.lua --out $W/dump --all-files     # writes files-asked.txt and atlases-asked.txt
+uv run --script $H/python/wowui.py files --game "$G" --dump $W/dump --sizes tests/ui-sizes.json --addon DungeonPlanner=.
+```
+
 For pictures, with a harness checkout and a local game install (read only; keep `<work>` outside the repository or
 in the ignored `.ui-work/`, it holds game files):
 
@@ -204,12 +231,14 @@ picker). Dump and render them like any view, then build the GIFs; keep `<work>` 
 ```sh
 # after the `lua tests/ui_dump.lua ... --files $W/files.txt` dump above:
 uv run --script $H/python/wowui.py render --game "$G" --dump $W/dump --out $W/png --addon DungeonPlanner=. --only seq-steps-01,seq-steps-02,...
-uv run --script tools/make_gifs.py --png $W/png --out docs/media     # --only steps,route; --width 720; --max-mb 3
+uv run --script $H/python/wowui.py gif --spec tools/gif_sequences.json --png $W/png --out docs/media  # --only steps,route
 ```
 
-`tools/make_gifs.py` (PEP 723, Pillow) crops, scales to about 720 px, captions (the bundled Alegreya Sans) and writes
-`docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops, delays and captions
-are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. Check
+The sequences are `wowui.views` sequences (`Views.Sequence` in `tests/ui_views.lua`): steps run on one state, and
+`--only seq-route-04` sets up the steps before it first. `wowui gif` crops, scales to 720 px, captions (in a band, with
+"n/total") and writes `docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops,
+timing and captions are in `tools/gif_sequences.json` (the harness's spec format); a new sequence needs its steps in
+`tests/ui_views.lua` and an entry there. Check
 every frame before committing: no renderer placeholders (grey loading-screen boxes, missing scroll bars, unrotated
 chevrons) and no layout lint findings. Stub the texture in the view's setup or leave the frame out. In-game screenshots
 (`/dp shots`) go in `docs/screenshots/`.

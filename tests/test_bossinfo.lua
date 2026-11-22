@@ -325,7 +325,7 @@ T.case("Bosses page and run mode show the same facts, hidden without them", func
 		panel:Refresh()
 		for _, row in ipairs(panel.list.rows) do
 			if row.item and row.item.name == name then
-				row:GetScript("OnClick")(row, "LeftButton")
+				mock.Click(row)
 			end
 		end
 		return shownTexts(panel.doc)
@@ -377,7 +377,7 @@ T.case("Bosses page: an ability's note hangs under its name, not under its icon"
 	local plan = ns.UI.ctx:Plan()
 	for _, row in ipairs(page.list.rows) do
 		if row.item == plan.encounters[1] then
-			row:GetScript("OnClick")(row, "LeftButton")
+			mock.Click(row)
 		end
 	end
 	local found

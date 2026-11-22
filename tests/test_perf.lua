@@ -1,13 +1,14 @@
 -- Cost checks that fail on regressions: the steps of a plan at the schema's limits, a pan that moves the canvas without
 -- redrawing, one refresh of the map per edit, and the per-revision caches of the Enemies layer and the boss portraits.
 --
--- Cost is counted in Lua VM instructions (a debug.sethook count hook), not timed. These checks used to compare
+-- Cost is counted in Lua VM instructions (wowui.perf.count), not timed. These checks used to compare
 -- os.clock readings and failed now and then: on Windows os.clock is wall time, so any other load on the machine lands
 -- in the reading, and a garbage collection step paid for earlier tests' garbage can fall inside one measured call
 -- (Steps.Build allocates a lot). An instruction count is the same on every run and every machine.
 local T = ...
 local ns, mock = T.ns, T.mock
 local MAX = ns.Schema.MAX
+local Perf = require("wowui.perf")
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -75,16 +76,9 @@ local function limitPlan(scatter)
 	return p
 end
 
--- Thousands of Lua VM instructions that fn runs (a C function counts as the instruction that calls it).
+-- Thousands of Lua VM instructions that fn runs (wowui.perf; a C function counts as the instruction that calls it).
 local function cost(fn)
-	local k = 0
-	debug.sethook(function()
-		k = k + 1
-	end, "", 1000)
-	local ok, err = pcall(fn)
-	debug.sethook()
-	assert(ok, err)
-	return k
+	return math.floor(Perf.count(fn) / 1000)
 end
 
 T.case("Perf: Steps.Build at the schema's limits", function()
@@ -131,10 +125,9 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 		ns.Plan.AddMarker(plan, 1, (i % 10) / 10, math.floor(i / 10) / 7, "pack")
 	end
 	ns.UI.ctx:Changed("markers")
-	local realGet, cx = _G.GetCursorPosition, 100
-	_G.GetCursorPosition = function()
-		return cx, 100
-	end
+	local cx = 100
+	mock.SetCursor(cx, 100)
+	mock.SetMouseButtonDown("LeftButton", true)
 	local layouts, draws, realLayout, realDraw = 0, 0, view.Layout, view.DrawContent
 	view.Layout = function(...)
 		layouts = layouts + 1
@@ -144,20 +137,21 @@ T.case("Perf: a pan moves the canvas only; one layout on release", function()
 		draws = draws + 1
 		return realDraw(...)
 	end
-	view:GetScript("OnMouseDown")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
 	local c = cost(function()
 		for _ = 1, 100 do
 			cx = cx + 2
-			view:GetScript("OnUpdate")(view, 0.016)
+			mock.SetCursor(cx, 100)
+			mock.FireScript(view, "OnUpdate", 0.016)
 		end
 	end)
 	T.eq(draws + layouts, 0, "100 pointer moves, no layout")
 	-- Counted 151k: about 1.5k a move, where one layout of this map costs about 740k.
 	T.ok(c < 250, string.format("100 pan moves: %dk instructions", c))
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.SetMouseButtonDown("LeftButton", false)
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(layouts, 1, "one layout on release")
 	view.Layout, view.DrawContent = realLayout, realDraw
-	_G.GetCursorPosition = realGet
 	ns.DB.DeletePlan(plan.id)
 end)
 

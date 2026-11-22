@@ -4,6 +4,7 @@
 -- Cost is counted in Lua VM instructions (as in tests/test_perf.lua).
 local T = ...
 local ns, mock = T.ns, T.mock
+local Perf = require("wowui.perf")
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -15,15 +16,9 @@ local function boot()
 	ns.UI.Show()
 end
 
+-- Thousands of Lua VM instructions that fn runs (wowui.perf).
 local function cost(fn)
-	local k = 0
-	debug.sethook(function()
-		k = k + 1
-	end, "", 1000)
-	local ok, err = pcall(fn)
-	debug.sethook()
-	assert(ok, err)
-	return k
+	return math.floor(Perf.count(fn) / 1000)
 end
 
 -- The map section on a plan, at a usual size, with the pointer near its middle. The mock lays out no anchors, so the
@@ -35,10 +30,7 @@ local function openMap(planId)
 	ns.UI.SelectTab("map")
 	ns.UI.RefreshPage()
 	local view = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
-	local realGet = _G.GetCursorPosition
-	_G.GetCursorPosition = function()
-		return 330, 280
-	end
+	mock.SetCursor(330, 280)
 	view.canvas.GetLeft = function()
 		return view:GetLeft() + view.ox
 	end
@@ -53,14 +45,11 @@ local function openMap(planId)
 		view.canvas.GetLeft, view.canvas.GetTop = nil, nil
 		view.zoom = 1
 		view:SetSize(400, 300)
-		_G.GetCursorPosition = realGet
 		mock.Advance(0.3)
 	end
 end
 
-local function wheel(view, delta)
-	view:GetScript("OnMouseWheel")(view, delta)
-end
+local wheel = mock.Wheel
 
 -- What the map shows: every shown route piece, joint, arrow, pin and stop, with its place and look.
 local function shown(view)
@@ -177,10 +166,10 @@ T.case("Zoom: a burst of wheel ticks draws plain once per tick, the full look on
 	-- A press during a zoom ends it first: the full look, then the press (a pan).
 	wheel(view, -1)
 	T.eq(view.routeCounts.dashes, 0)
-	view:GetScript("OnMouseDown")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
 	T.eq(view.drag.mode, "pan", "the press became a pan")
 	T.ok(view.routeCounts.dashes > 0 and view.counts.arrows > 0, "the full look at once")
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	-- At the deepest zoom a tick changes nothing and starts no zoom.
 	view.zoom = 8
 	view:Layout()
@@ -194,22 +183,17 @@ T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; 
 	local view, restore = openMap(ns.Bundled.PREFIX .. "wailing-caverns")
 	local coords = ns.db.settings.showCoordinates
 	ns.db.settings.showCoordinates = true
-	view.IsMouseOver = function()
-		return true
-	end
 	-- The pointer on a route point near the middle (the canvas offsets of the drawn route, y up).
 	local p = view.routeJobs.raw[1][30]
 	local cx, cy = view.canvas:GetLeft() + p[1], view.canvas:GetTop() + p[2]
-	_G.GetCursorPosition = function()
-		return cx, cy
-	end
+	mock.SetCursor(cx, cy)
 	local paths, realPaths = 0, view.DrawRoutePaths
 	view.DrawRoutePaths = function(...)
 		paths = paths + 1
 		return realPaths(...)
 	end
 	local function hoverOn()
-		view:GetScript("OnEnter")(view)
+		mock.Hover(view)
 		mock.Advance(0.06)
 		T.ok(view.routeHover and view.routeJobs.hl, "a leg under the pointer is highlighted")
 	end
@@ -232,8 +216,10 @@ T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; 
 	T.eq(paths, 3, "two ticks and the settle: the hover check draws nothing more")
 	T.eq(view.routeHover.route, leg.route, "still the leg under the pointer")
 	-- Leaving the map during a zoom: no highlight, tooltip or coordinates left behind.
+	-- OnLeave with the pointer still over the map's rectangle (IsMouseOver stays true), as the game does when the pointer
+	-- moves onto a pin: only the map's own pointerIn says it left.
 	wheel(view, 1)
-	view:GetScript("OnLeave")(view)
+	mock.FireScript(view, "OnLeave", true)
 	mock.Advance(0.3)
 	T.eq(view.drag.mode, "idle")
 	T.eq(view.routeHover, nil, "no highlight")
@@ -245,37 +231,41 @@ T.case("Zoom: the hovered leg through a zoom, leaving the map, a press, hiding; 
 	hoverOn()
 	wheel(view, 1)
 	paths = 0
-	view:GetScript("OnMouseDown")(view, "LeftButton")
+	mock.SetMouseButtonDown("LeftButton", true)
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
 	T.eq(paths, 1, "drawn once")
 	T.eq(view.routeHover, nil)
 	T.eq(view.drag.mode, "pan")
 	-- A tick during that pan: the pan goes on from where the zoom left the map (the point under the pointer follows
 	-- it), and leaving the map onto a pin before the release leaves the hover off.
 	cx = cx + 20
+	mock.SetCursor(cx, cy)
 	view.OnDragUpdate(view)
 	wheel(view, 1)
 	T.eq(view.drag.mode, "pan", "the pan goes on")
 	local x0, y0 = view:CursorPosition()
 	cx, cy = cx + 15, cy - 10
+	mock.SetCursor(cx, cy)
 	view.OnDragUpdate(view)
 	local x1, y1 = view:CursorPosition()
 	T.ok(math.abs(x1 - x0) < 1e-9 and math.abs(y1 - y0) < 1e-9, "the map follows the pointer after the tick")
-	view:GetScript("OnLeave")(view)
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.FireScript(view, "OnLeave", true) -- onto a pin: still over the map's rectangle
+	mock.SetMouseButtonDown("LeftButton", false)
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(view:GetScript("OnUpdate"), nil, "released over a pin: no hover updates")
 	mock.Advance(0.3)
 	-- Hiding the map during a zoom ends it; its timer changes nothing later.
-	view:GetScript("OnEnter")(view)
+	mock.Hover(view)
 	wheel(view, -1)
 	T.eq(view.drag.mode, "zoom")
-	view:GetScript("OnHide")(view)
+	mock.FireScript(view, "OnHide")
 	T.eq(view.drag.mode, "idle", "hiding ends the zoom")
 	T.eq(view.laneCache, nil, "and drops the route lanes")
 	mock.Advance(0.3)
 	T.eq(view.drag.mode, "idle")
-	view.DrawRoutePaths, view.IsMouseOver = realPaths, nil
+	view.DrawRoutePaths = realPaths
 	ns.db.settings.showCoordinates = coords
-	view:GetScript("OnLeave")(view)
+	mock.Leave(view)
 	view:Layout()
 	restore()
 end)

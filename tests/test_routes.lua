@@ -6,7 +6,6 @@ local ns, mock = T.ns, T.mock
 local RA = ns.RouteArrows
 
 local function boot()
-	mock.ResetInput() -- no button or key left held by a case that failed
 	if not _G.DungeonPlannerDB then
 		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 		mock.loggedIn = true
@@ -557,21 +556,18 @@ T.case("Route arrows: a real route point drag hides them; the drop places them i
 	end
 	T.ok(pin, "a numbered stop's pin")
 	local pt = ns.Util.FindById(copy.routes, pin.routeId).points[pin.pointIndex]
-	local real = _G.GetCursorPosition
-	local tx, ty = pt[1] + 0.01, pt[2]
-	_G.GetCursorPosition = function()
-		return pointAt(canvas, tx, ty)
-	end
-	pin:GetScript("OnDragStart")(pin)
+	mock.SetCursor(pointAt(canvas, pt[1] + 0.01, pt[2]))
+	mock.SetMouseButtonDown("LeftButton", true)
+	mock.FireScript(pin, "OnDragStart")
 	mock.Advance(0.016) -- one frame: OnDragUpdate moves the point and redraws the map
 	T.ok(canvas.drag.mode == "point" and canvas.drag.moved, "dragging the point")
 	T.eq(canvas.counts.arrows, 0, "no arrows while it moves")
 	T.ok(not canvas.pools.arrows[1]:IsShown(), "hidden")
-	pin:GetScript("OnDragStop")(pin)
+	mock.SetMouseButtonDown("LeftButton", false)
+	mock.FireScript(pin, "OnDragStop")
 	T.eq(canvas.drag.mode, "idle")
 	T.ok(canvas.counts.arrows > 0, "placed by the drop's redraw, before any timer: " .. canvas.counts.arrows)
 	T.ok(canvas.pools.arrows[1]:IsShown(), "shown")
-	_G.GetCursorPosition = real
 	ns.DB.DeletePlan(copy.id)
 end)
 
@@ -634,7 +630,6 @@ T.case("Route arrows: the size grip holds them until its release, the window hid
 		T.eq(ns.sizingWindow, nil, "and the resize counts as over")
 		T.eq(canvas.counts.arrows, before)
 	end)
-	mock.ResetInput()
 	ns.sizingWindow = nil
 	RA.Place = place
 	if not ok then

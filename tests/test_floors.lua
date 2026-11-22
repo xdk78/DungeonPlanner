@@ -115,25 +115,23 @@ T.case("Floor switcher: hidden on one floor, tabs for a few, the name between ar
 	T.ok(not bar.prev:IsShown(), "no arrows")
 	T.ok(not map.floor:IsShown(), "the toolbar's list only for many floors")
 	T.eq(bar.tabs[2].label:GetText(), ns.Names.Floor(ns.UI.ctx:Plan().floors[2], 2), "the floor's name")
-	bar.tabs[2]:GetScript("OnClick")(bar.tabs[2], "LeftButton")
+	mock.Click(bar.tabs[2])
 	T.eq(ns.UI.ctx.floor, 2, "a tab goes to its floor")
 	T.ok(bar.tabs[2].dpActive and not bar.tabs[1].dpActive, "the current floor's tab is lit")
 	-- Shift + wheel: the next or previous floor, round; the wheel alone zooms.
-	mock.shiftDown = true
-	map.canvas:GetScript("OnMouseWheel")(map.canvas, -1)
+	mock.WithInput({ keys = { "SHIFT" } }, mock.Wheel, map.canvas, -1)
 	T.eq(ns.UI.ctx.floor, 1, "past the last floor: the first")
-	mock.shiftDown = false
 	local zoom = map.canvas.zoom
-	map.canvas:GetScript("OnMouseWheel")(map.canvas, 1)
+	mock.Wheel(map.canvas, 1)
 	T.eq(ns.UI.ctx.floor, 1, "the wheel alone stays on the floor")
 	T.ok(map.canvas.zoom > zoom, "and zooms")
 	map, bar = open("lower-blackrock-spire")
 	T.ok(bar.prev:IsShown() and bar.next:IsShown() and bar.name:IsShown(), "six floors: arrows and the name")
 	T.ok(map.floor:IsShown(), "and the toolbar's list")
 	T.ok(bar.name.label:GetText():find("1/6", 1, true), bar.name.label:GetText())
-	bar.prev:GetScript("OnClick")(bar.prev, "LeftButton")
+	mock.Click(bar.prev)
 	T.eq(ns.UI.ctx.floor, 6, "back from the first: the last")
-	bar.next:GetScript("OnClick")(bar.next, "LeftButton")
+	mock.Click(bar.next)
 	T.eq(ns.UI.ctx.floor, 1)
 	T.eq(ns.FloorBar.Step(3, 6, 1), 4)
 	T.eq(ns.FloorBar.Step(1, 1, 1), nil, "one floor: nowhere to go")
@@ -275,7 +273,7 @@ T.case("Floors: stairs and portals say where they lead; a second click on the st
 		end
 	end
 	T.ok(row, "the step's row")
-	row:GetScript("OnClick")(row, "LeftButton")
+	mock.Click(row)
 	T.eq(ctx.floor, 1, "a second click goes in")
 	local bar = _G.DungeonPlannerMainFrame.instancePage.panels.map.floorBar
 	T.ok(bar.name.label:GetText():find("1/" .. #ctx:Floors(), 1, true), "the switcher follows: " .. bar.name.label:GetText())

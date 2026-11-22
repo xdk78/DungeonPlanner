@@ -191,10 +191,7 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 	local x, y, seg = legPoint(canvas, list)
 	local index, prev = RL.StepOf(list, canvas.routeJobs.routes[1], seg)
 	local s = canvas:GetEffectiveScale()
-	local realGet = _G.GetCursorPosition
-	_G.GetCursorPosition = function()
-		return (canvas.canvas:GetLeft() + x) * s, (canvas.canvas:GetTop() + y) * s
-	end
+	mock.SetCursor((canvas.canvas:GetLeft() + x) * s, (canvas.canvas:GetTop() + y) * s)
 	local tt = ns.Widgets.Tip()
 	local shown = {}
 	local realSetText, realAdd = tt.SetText, tt.AddLine
@@ -211,8 +208,8 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 		calls = calls + 1
 		return place(...)
 	end
-	canvas:GetScript("OnEnter")(canvas)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.Hover(canvas)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	local h = canvas.routeHover
 	T.ok(h and h.route == list[index].route and h.from == list[index].from and h.to == list[index].to,
 		"the hovered step's leg: " .. (h and (h.from .. ".." .. h.to) or "none") .. " for " .. list[index].from .. ".."
@@ -236,9 +233,9 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 	end
 	T.ok(top > 0 and dim > 0, "highlighted " .. top .. ", dimmed " .. dim)
 	-- Moving along the same leg changes nothing; leaving restores.
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(canvas.routeHover, h, "the same leg")
-	canvas:GetScript("OnLeave")(canvas)
+	mock.Leave(canvas)
 	T.eq(canvas.routeHover, nil, "restored")
 	for i = 1, canvas.routeCounts.lines do
 		local _, sub = canvas.pools.lines[i]:GetDrawLayer()
@@ -248,26 +245,25 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 	ns.db.settings.routes.arrows = "few"
 	ns.UI.RefreshPage()
 	calls = 0
-	canvas:GetScript("OnEnter")(canvas)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.Hover(canvas)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 1, "the leg's arrows placed once")
-	canvas:GetScript("OnLeave")(canvas)
+	mock.Leave(canvas)
 	-- Off in the settings, or while a drawing tool or a drag is on: no highlight.
 	ns.db.settings.routes.arrows = "normal"
 	ns.db.settings.routes.hover = false
-	canvas:GetScript("OnEnter")(canvas)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.Hover(canvas)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(canvas.routeHover, nil, "the setting is off")
 	ns.db.settings.routes.hover = true
 	canvas.drag = { mode = "pan" }
 	canvas:RouteHoverUpdate()
 	T.eq(canvas.routeHover, nil, "while dragging")
 	canvas.drag = { mode = "idle" }
-	canvas:GetScript("OnLeave")(canvas)
+	mock.Leave(canvas)
 	ns.RouteArrows.Place = place
 	tt.SetText, tt.AddLine = realSetText, realAdd
-	_G.GetCursorPosition = realGet
 	ns.UI.RefreshPage()
 end)
 
@@ -282,14 +278,14 @@ T.case("Route hover: pointing at a step in the list highlights the leg that lead
 		end
 	end
 	T.ok(row, "a stop step in the list")
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	local h = canvas.routeHover
 	T.ok(h and h.route == row.item.route and h.from == row.item.from and h.to == row.item.to, "its leg")
 	T.eq(canvas.routeHoverSource, "list")
 	-- The pointer over empty map does not take the list's highlight away.
 	canvas:RouteHoverUpdate()
 	T.eq(canvas.routeHover, h, "kept while the list row is hovered")
-	row:GetScript("OnLeave")(row)
+	mock.Leave(row)
 	T.eq(canvas.routeHover, nil, "restored")
 	-- Run mode: the current step's leg drawn as a highlighted one, the rest dimmed.
 	ns.UI.FocusStep(row.index, { stay = true })
@@ -352,13 +348,13 @@ T.case("Route hover: a step on another floor highlights nothing and dims nothing
 	end
 	local row = listRow(onFloor(2))
 	T.ok(row, "a stop step on floor 2 in the list")
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	T.eq(canvas.routeHover, nil, "no highlight for a leg the map does not show")
 	local after = lineAlphas(canvas)
 	for i, a in ipairs(before) do
 		T.eq(after[i], a, "line " .. i .. " keeps its alpha")
 	end
-	row:GetScript("OnLeave")(row)
+	mock.Leave(row)
 	-- The map itself ignores a highlight whose route it does not draw.
 	local other = row.item
 	canvas:SetRouteHover({ route = other.route, from = other.from, to = other.to }, "map")
@@ -370,9 +366,9 @@ T.case("Route hover: a step on another floor highlights nothing and dims nothing
 	canvas:SetRouteHover(nil)
 	-- A step on the floor shown still highlights its leg.
 	row = listRow(onFloor(1))
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	T.ok(canvas.routeHover and canvas.routeHover.route == row.item.route, "a step on floor 1")
-	row:GetScript("OnLeave")(row)
+	mock.Leave(row)
 end)
 
 T.case("Route hover: with the Route layer off, a hovered step draws no route line", function()
@@ -392,10 +388,10 @@ T.case("Route hover: with the Route layer off, a hovered step draws no route lin
 	local row = listRow(function(step)
 		return step.stop and step.route and step.from and true or false
 	end)
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	T.eq(shownLines(), 0, "still none while the step is hovered")
 	T.eq(canvas.counts.arrows, 0, "and no arrows")
-	row:GetScript("OnLeave")(row)
+	mock.Leave(row)
 	T.eq(shownLines(), 0, "none after it")
 	ns.db.ui.mapLayers.route = nil
 	ns.UI.RefreshPage()
@@ -414,24 +410,24 @@ T.case("Route hover: the list's highlight follows the row under a still pointer 
 			break
 		end
 	end
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	local h = canvas.routeHover
 	T.ok(h and h.from == row.item.from, "the row's leg")
 	-- Scrolled by the wheel: the pointer is now over another step, whose leg (or none) shows.
-	list:GetScript("OnMouseWheel")(list, -1)
+	mock.Wheel(list, -1)
 	local now = row.item
 	T.ok(now ~= nil, "the row shows another step")
 	local want = now.stop and now.route and now.from and now.from or nil
 	T.eq(canvas.routeHover and canvas.routeHover.from or nil, want, "the highlight follows the row's new step")
 	T.eq(canvas.routeHover and canvas.routeHoverSource or "list", "list")
 	-- The list empties under the pointer: the highlight ends.
-	list:GetScript("OnMouseWheel")(list, 1)
+	mock.Wheel(list, 1)
 	T.ok(canvas.routeHover, "a stop step's leg again")
 	list:SetItems({})
 	T.eq(canvas.routeHover, nil, "nothing left under the pointer")
 	-- Leaving a row that has no item still ends a highlight it left behind.
 	canvas:SetRouteHover(h, "list")
-	row:GetScript("OnLeave")(row)
+	mock.Leave(row)
 	T.eq(canvas.routeHover, nil, "onLeave runs without an item")
 	ns.UI.RefreshPage()
 end)
@@ -441,36 +437,32 @@ T.case("Route hover: a still pointer over an unchanged map costs nothing per tic
 	local list = ns.UI.ctx:Steps()
 	local x, y = legPoint(canvas, list)
 	local s = canvas:GetEffectiveScale()
-	local realGet = _G.GetCursorPosition
-	local dx = 0
-	_G.GetCursorPosition = function()
-		return (canvas.canvas:GetLeft() + x + dx) * s, (canvas.canvas:GetTop() + y) * s
-	end
+	local cx, cy = (canvas.canvas:GetLeft() + x) * s, (canvas.canvas:GetTop() + y) * s
+	mock.SetCursor(cx, cy)
 	local hit, calls = RL.Hit, 0
 	RL.Hit = function(...)
 		calls = calls + 1
 		return hit(...)
 	end
-	canvas:GetScript("OnEnter")(canvas)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.Hover(canvas)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 1, "the first tick looks")
 	T.ok(canvas.routeHover, "a leg under the pointer")
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 1, "still pointer: no more hit tests")
-	dx = 1
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.SetCursor(cx + s, cy)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 2, "a move looks again")
 	-- A redraw under the still pointer (a zoom, an edit) is looked at again.
 	ns.UI.RefreshPage()
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 3, "after a redraw")
 	-- Leaving and coming back to the same spot looks again.
-	canvas:GetScript("OnLeave")(canvas)
-	canvas:GetScript("OnEnter")(canvas)
-	canvas:GetScript("OnUpdate")(canvas, 0.06)
+	mock.Leave(canvas)
+	mock.Hover(canvas)
+	mock.FireScript(canvas, "OnUpdate", 0.06)
 	T.eq(calls, 4, "after entering again")
-	canvas:GetScript("OnLeave")(canvas)
+	mock.Leave(canvas)
 	RL.Hit = hit
-	_G.GetCursorPosition = realGet
 end)

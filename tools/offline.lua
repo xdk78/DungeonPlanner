@@ -4,10 +4,13 @@
 local M = {}
 
 function M.Load()
-	_G.time = _G.time or os.time
+	-- The modules read the client's global `time`, which plain Lua does not have: they run in an environment that adds
+	-- it (and keeps the globals they define) on top of _G, so loading them changes no global of the caller.
+	local env = setmetatable({ time = rawget(_G, "time") or os.time }, { __index = _G })
 	local ns = {}
 	local function load(path)
 		local chunk = assert(loadfile(path))
+		setfenv(chunk, env)
 		chunk("DungeonPlanner", ns)
 	end
 	load("Libs/LibStub/LibStub.lua")

@@ -1,0 +1,1616 @@
+{
+ "atlases": {
+  "128-redbutton-delete": [
+   128,
+   128
+  ],
+  "Dungeon": [
+   32,
+   32
+  ],
+  "OptionsIcon-Brown": [
+   16,
+   16
+  ],
+  "Options_List_Active": [
+   187,
+   21
+  ],
+  "Options_List_Hover": [
+   187,
+   21
+  ],
+  "QuestNormal": [
+   32,
+   32
+  ],
+  "Raid": [
+   32,
+   32
+  ],
+  "RedButton-Exit": [
+   18,
+   19
+  ],
+  "UI-DialogBox-Background-Dark": [
+   64,
+   64
+  ],
+  "UI-LFG-RoleIcon-DPS": [
+   70,
+   70
+  ],
+  "UI-LFG-RoleIcon-Healer": [
+   70,
+   70
+  ],
+  "UI-LFG-RoleIcon-Tank": [
+   70,
+   70
+  ],
+  "Waypoint-MapPin-Tracked": [
+   30,
+   30
+  ],
+  "common-dropdown-bg": [
+   68,
+   68
+  ],
+  "common-icon-checkmark": [
+   22,
+   22
+  ],
+  "common-icon-redx": [
+   25,
+   25
+  ],
+  "common-search-magnifyingglass": [
+   24,
+   24
+  ],
+  "crosshair_broom_32": [
+   32,
+   32
+  ],
+  "crosshair_directions_32": [
+   32,
+   32
+  ],
+  "crosshair_mappincursor_32": [
+   32,
+   32
+  ],
+  "crosshair_missions_32": [
+   32,
+   32
+  ],
+  "crosshair_palette_32": [
+   32,
+   32
+  ],
+  "crosshair_point_32": [
+   32,
+   32
+  ],
+  "crosshair_ui-cursor-move_32": [
+   32,
+   32
+  ],
+  "groupfinder-icon-role-micro-dps": [
+   16,
+   16
+  ],
+  "groupfinder-icon-role-micro-heal": [
+   16,
+   16
+  ],
+  "groupfinder-icon-role-micro-tank": [
+   16,
+   16
+  ],
+  "poi-door": [
+   25,
+   24
+  ],
+  "poi-door-arrow-up": [
+   13,
+   14
+  ],
+  "socialqueuing-icon-group": [
+   29,
+   26
+  ]
+ },
+ "files": {
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Arrow": {
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Circle": {
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\LogoIcon": {
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\HallOfThanes1": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\HallOfThanes2": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\HallOfThanes3": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\ShapersTerracePrismaticTalus1": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\ShapersTerracePrismaticTalus2": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Maps\\Reyes\\ShapersTerracePrismaticTalus3": {
+   "size": [
+    1024,
+    256
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Ring": {
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\RouteArrowEdge": {
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\AddOns\\DungeonPlanner\\Media\\Vignette": {
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Buttons\\Arrow-Down-Up": {
+   "id": 293770,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Buttons\\UI-CheckBox-Check": {
+   "id": 130751,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-CheckBox-Down": {
+   "id": 130752,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-CheckBox-Highlight": {
+   "id": 130753,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-CheckBox-Up": {
+   "id": 130755,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-Common-MouseHilight": {
+   "id": 130757,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-MinusButton-Up": {
+   "id": 130821,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Buttons\\UI-OptionsButton": {
+   "id": 851903,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Buttons\\UI-PlusButton-Up": {
+   "id": 130838,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled": {
+   "id": 130864,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down": {
+   "id": 130865,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up": {
+   "id": 130866,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled": {
+   "id": 130867,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down": {
+   "id": 130868,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up": {
+   "id": 130869,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Buttons\\WHITE8X8": {
+   "id": 130871,
+   "size": [
+    8,
+    8
+   ]
+  },
+  "Interface\\CharacterFrame\\TempPortraitAlphaMask": {
+   "id": 130924,
+   "size": [
+    128,
+    128
+   ]
+  },
+  "Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down": {
+   "id": 386862,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight": {
+   "id": 386863,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up": {
+   "id": 386864,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Common\\UI-Searchbox-Icon": {
+   "id": 374210,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\DialogFrame\\UI-DialogBox-Background-Dark": {
+   "id": 312922,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\DialogFrame\\UI-DialogBox-Border": {
+   "id": 131072,
+   "size": [
+    256,
+    32
+   ]
+  },
+  "Interface\\EncounterJournal\\UI-EncounterJournalTextures": {
+   "id": 522972,
+   "size": [
+    512,
+    1024
+   ]
+  },
+  "Interface\\FrameGeneral\\UI-Background-Marble": {
+   "id": 374154,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenAhnQiraj20man": {
+   "id": 131818
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenAhnQiraj40man": {
+   "id": 131819
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenBlackfathomDeeps": {
+   "id": 131823
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenBlackrockSpire": {
+   "id": 131825
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenBlackwingLair": {
+   "id": 131827
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenDeadmines": {
+   "id": 131833
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenGnomeregan": {
+   "id": 131841
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenHyjal": {
+   "id": 131847
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenMoltenCore": {
+   "id": 131851
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenNaxxramas": {
+   "id": 131854
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenRagefireChasm": {
+   "id": 131862
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenRaid": {
+   "id": 131863
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenScarletMonastery2": {
+   "id": 645156,
+   "size": [
+    1024,
+    1024
+   ]
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenShadowFangKeep": {
+   "id": 131869
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenWailingCaverns": {
+   "id": 131882
+  },
+  "Interface\\Glues\\LoadingScreens\\LoadScreenZulGurub": {
+   "id": 131886
+  },
+  "Interface\\GossipFrame\\AvailableQuestIcon": {
+   "id": 132049,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\GossipFrame\\GossipGossipIcon": {
+   "id": 132053,
+   "size": [
+    16,
+    16
+   ]
+  },
+  "Interface\\Icons\\Ability_Marksmanship": {
+   "id": 132222,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_MeleeDamage": {
+   "id": 132223,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_Mount_Wyvern_01": {
+   "id": 132268,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_Rogue_Sprint": {
+   "id": 132307,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_Warrior_BattleShout": {
+   "id": 132333,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_Warrior_Charge": {
+   "id": 132337,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Ability_Warrior_DefensiveStance": {
+   "id": 132341,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Box_01": {
+   "id": 132594,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Chest_Plate01": {
+   "id": 132736,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Bag_07": {
+   "id": 133628,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Bag_08": {
+   "id": 133633,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Bag_10": {
+   "id": 133639,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Bone_HumanSkull_01": {
+   "id": 133730,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Book_09": {
+   "id": 133741,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Head_Dragon_01": {
+   "id": 134153,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Key_03": {
+   "id": 134237,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Map_01": {
+   "id": 134269,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Note_01": {
+   "id": 134327,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Note_02": {
+   "id": 134328,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_PocketWatch_01": {
+   "id": 134376,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Misc_Rune_01": {
+   "id": 134414,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\INV_Scroll_03": {
+   "id": 134939,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Spell_Arcane_Blink": {
+   "id": 135736,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Spell_Arcane_PortalStormWind": {
+   "id": 135748,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Spell_Fire_Fire": {
+   "id": 135805,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Spell_Holy_FlashHeal": {
+   "id": 135907,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Icons\\Spell_Magic_FeatherFall": {
+   "id": 135992,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\LFGFrame\\LFGRole": {
+   "id": 252190,
+   "size": [
+    64,
+    16
+   ]
+  },
+  "Interface\\LFGFrame\\UI-LFG-ICON-ROLES": {
+   "id": 337499,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\Minimap\\MiniMap-TrackingBorder": {
+   "id": 136430,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\Minimap\\MinimapArrow": {
+   "id": 136431,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\QuestFrame\\QuestBG": {
+   "id": 530420,
+   "size": [
+    512,
+    512
+   ]
+  },
+  "Interface\\QuestFrame\\UI-QuestLogTitleHighlight": {
+   "id": 136809,
+   "size": [
+    128,
+    16
+   ]
+  },
+  "Interface\\QuestFrame\\UI-QuestTitleHighlight": {
+   "id": 136810,
+   "size": [
+    128,
+    16
+   ]
+  },
+  "Interface\\RaidFrame\\ReadyCheck-Ready": {
+   "id": 136814,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\TargetingFrame\\UI-RaidTargetingIcon_1": {
+   "id": 137001,
+   "size": [
+    64,
+    64
+   ]
+  },
+  "Interface\\TargetingFrame\\UI-TargetingFrame-Skull": {
+   "id": 137025,
+   "size": [
+    32,
+    32
+   ]
+  },
+  "Interface\\Tooltips\\UI-Tooltip-Border": {
+   "id": 137057,
+   "size": [
+    128,
+    16
+   ]
+  },
+  "Interface\\WorldMap\\AhnQiraj\\AhnQiraj1_1": {
+   "id": 450110,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\AhnQiraj\\AhnQiraj2_1": {
+   "id": 450122,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\AhnQiraj\\AhnQiraj3_1": {
+   "id": 450134,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackFathomDeeps\\BlackFathomDeeps1_1": {
+   "id": 447578,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackFathomDeeps\\BlackFathomDeeps2_1": {
+   "id": 447590,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackFathomDeeps\\BlackFathomDeeps3_1": {
+   "id": 447602,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockDepths\\BlackrockDepths1_1": {
+   "id": 447638,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockDepths\\BlackrockDepths2_1": {
+   "id": 447650,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire1_1": {
+   "id": 447662,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire2_1": {
+   "id": 447674,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire3_1": {
+   "id": 447686,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_1": {
+   "id": 447698,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_10": {
+   "id": 447699,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_11": {
+   "id": 447700,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_12": {
+   "id": 447701,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_2": {
+   "id": 447702,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_3": {
+   "id": 447703,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_4": {
+   "id": 447704,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_5": {
+   "id": 447705,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_6": {
+   "id": 447706,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_7": {
+   "id": 447707,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_8": {
+   "id": 447708,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire4_9": {
+   "id": 447709,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire5_1": {
+   "id": 447710,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackrockSpire\\BlackrockSpire6_1": {
+   "id": 447722,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackwingLair\\BlackwingLair1_1": {
+   "id": 447770,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackwingLair\\BlackwingLair2_1": {
+   "id": 447782,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackwingLair\\BlackwingLair3_1": {
+   "id": 447794,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\BlackwingLair\\BlackwingLair4_1": {
+   "id": 447806,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul1_1": {
+   "id": 449508,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul2_1": {
+   "id": 449520,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul3_1": {
+   "id": 449532,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul4_1": {
+   "id": 449544,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul5_1": {
+   "id": 449556,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\DireMaul\\DireMaul6_1": {
+   "id": 449568,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Gnomeregan\\Gnomeregan1_1": {
+   "id": 449580,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Gnomeregan\\Gnomeregan2_1": {
+   "id": 449628,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Gnomeregan\\Gnomeregan3_1": {
+   "id": 449640,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Gnomeregan\\Gnomeregan4_1": {
+   "id": 449652,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Maraudon\\Maraudon1_1": {
+   "id": 449676,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Maraudon\\Maraudon2_1": {
+   "id": 449688,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_1": {
+   "id": 448058,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_10": {
+   "id": 448059,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_11": {
+   "id": 448060,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_12": {
+   "id": 448061,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_2": {
+   "id": 448062,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_3": {
+   "id": 448063,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_4": {
+   "id": 448064,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_5": {
+   "id": 448065,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_6": {
+   "id": 448066,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_7": {
+   "id": 448067,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_8": {
+   "id": 448068,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\MoltenCore\\MoltenCore1_9": {
+   "id": 448069,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas1_1": {
+   "id": 252466,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas2_1": {
+   "id": 252478,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas3_1": {
+   "id": 252490,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas4_1": {
+   "id": 252502,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas5_1": {
+   "id": 252514,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Naxxramas\\Naxxramas6_1": {
+   "id": 255178,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\OnyxiasLair\\OnyxiasLair1_1": {
+   "id": 448070,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_1": {
+   "id": 449736,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_10": {
+   "id": 449737,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_11": {
+   "id": 449738,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_12": {
+   "id": 449739,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_2": {
+   "id": 449740,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_3": {
+   "id": 449741,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_4": {
+   "id": 449742,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_5": {
+   "id": 449743,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_6": {
+   "id": 449744,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_7": {
+   "id": 449745,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_8": {
+   "id": 449746,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Ragefire\\Ragefire1_9": {
+   "id": 449747,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\RazorfenDowns\\RazorfenDowns1_1": {
+   "id": 448094,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\RazorfenKraul\\RazorfenKraul1_1": {
+   "id": 448106,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\RuinsofAhnQiraj\\RuinsofAhnQiraj1": {
+   "id": 449748,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery1_1": {
+   "id": 449760,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_1": {
+   "id": 449772,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_10": {
+   "id": 449773,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_11": {
+   "id": 449774,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_12": {
+   "id": 449775,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_2": {
+   "id": 449776,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_3": {
+   "id": 449777,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_4": {
+   "id": 449778,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_5": {
+   "id": 449779,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_6": {
+   "id": 449780,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_7": {
+   "id": 449781,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_8": {
+   "id": 449782,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery2_9": {
+   "id": 449783,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery3_1": {
+   "id": 449784,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ScarletMonastery\\ScarletMonastery4_1": {
+   "id": 449796,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep1_1": {
+   "id": 448226,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep2_1": {
+   "id": 448238,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep3_1": {
+   "id": 448250,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep4_1": {
+   "id": 448262,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep5_1": {
+   "id": 448274,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep6_1": {
+   "id": 448286,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ShadowfangKeep\\ShadowfangKeep7_1": {
+   "id": 448298,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Stratholme\\Stratholme1_1": {
+   "id": 448322,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Stratholme\\Stratholme2_1": {
+   "id": 448334,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_1": {
+   "id": 449591,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_10": {
+   "id": 449592,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_11": {
+   "id": 449593,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_12": {
+   "id": 449594,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_2": {
+   "id": 449595,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_3": {
+   "id": 449596,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_4": {
+   "id": 449597,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_5": {
+   "id": 449598,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_6": {
+   "id": 449599,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_7": {
+   "id": 449600,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_8": {
+   "id": 449601,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines1_9": {
+   "id": 449602,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheDeadmines\\TheDeadmines2_1": {
+   "id": 449603,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheStockade\\TheStockade1_1": {
+   "id": 455959,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\TheTempleOfAtalHakkar\\TheTempleOfAtalHakkar1_1": {
+   "id": 452514,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Uldaman\\Uldaman1_1": {
+   "id": 448430,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\Uldaman\\Uldaman2_1": {
+   "id": 448442,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_1": {
+   "id": 448454,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_10": {
+   "id": 448455,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_11": {
+   "id": 448456,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_12": {
+   "id": 448457,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_2": {
+   "id": 448458,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_3": {
+   "id": 448459,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_4": {
+   "id": 448460,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_5": {
+   "id": 448461,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_6": {
+   "id": 448462,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_7": {
+   "id": 448463,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_8": {
+   "id": 448464,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\WailingCaverns\\WailingCaverns1_9": {
+   "id": 448465,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ZulFarrak\\ZulFarrak1": {
+   "id": 449820,
+   "size": [
+    256,
+    256
+   ]
+  },
+  "Interface\\WorldMap\\ZulGurub\\ZulGurub1": {
+   "id": 515607,
+   "size": [
+    256,
+    256
+   ]
+  }
+ },
+ "schema": "wowui-sizes/1"
+}

@@ -19,12 +19,20 @@ jobs:
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: leafo/gh-actions-lua@v10
+      - uses: leafo/gh-actions-lua@v13
         with:
           luaVersion: "5.1.5"
       - name: Offline tests
         run: lua tests/run.lua
+      # Only this version's section of CHANGELOG.md, its paths linked to the tag (.pkgmeta manual-changelog: the
+      # CurseForge file's changelog and the GitHub release's text). Fails when CHANGELOG.md has no section for the tag.
+      - name: Changelog of this release
+        run: |
+          mkdir -p .release
+          lua tools/release_changelog.lua "$GITHUB_REF_NAME" --repo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+            --out .release/CHANGELOG-release.md
+          cat .release/CHANGELOG-release.md
       - uses: BigWigsMods/packager@v2

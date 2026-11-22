@@ -183,7 +183,7 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	end
 	T.ok(row, "a gear item")
 	panel.needRoll:Hide()
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	local a = GameTooltip:FindPoint("TOPLEFT")
 	T.ok(a, "anchored by its top-left corner")
 	T.eq(a[2], row.title, "to the item's name, not the row's far edge")
@@ -192,11 +192,19 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	T.eq(GameTooltip:FindPoint("TOPRIGHT"), nil, "one anchor")
 	-- Pushed up over "Open in NeedRoll" (the game keeps tooltips on screen): it opens left of the icon instead.
 	panel.needRoll:Show()
-	row:GetScript("OnEnter")(row)
+	mock.Hover(row)
 	local flipped = GameTooltip:FindPoint("TOPRIGHT")
 	T.ok(flipped and flipped[2] == row.icon, "left of the item's icon")
 	T.eq(GameTooltip:FindPoint("TOPLEFT"), nil, "and only there")
-	row:GetScript("OnLeave")(row)
+	T.ok(GameTooltip:IsShown(), "shown while hovered")
+	-- The mock's tooltips own nothing (IsOwned is false); here the game's tooltip belongs to the row, as in game.
+	local tooltip = _G.GameTooltip
+	tooltip.IsOwned = function(_, f)
+		return f == row
+	end
+	mock.Leave(row)
+	tooltip.IsOwned = nil
+	T.ok(not GameTooltip:IsShown(), "leaving the item hides its tooltip")
 	panel.needRoll:Hide()
 end)
 
@@ -211,7 +219,7 @@ T.case("Gear: the items fill the page's width, side by side, the headings on lin
 	panel:Refresh()
 	local function check(width, cols)
 		panel.list:SetWidth(width)
-		panel.list:GetScript("OnSizeChanged")(panel.list, width, panel.list:GetHeight())
+		mock.FireScript(panel.list, "OnSizeChanged", width, panel.list:GetHeight())
 		T.eq(panel.cols, cols, width .. " px wide")
 		local entries, placed = 0, 0
 		for _, e in ipairs(panel.entries) do
@@ -256,7 +264,7 @@ T.case("Native window: the game's framed window, insets, tabs under the window, 
 	T.eq(frame.emblem:GetTexture(), Art.SPECS.launcher.file, "the addon's logo in the portrait ring")
 	T.ok(frame.insets.top > 40 and frame.insets.left < 10, "content under the header row, inside the edge")
 	-- The close button is ours (the template's would go through the game's panel code).
-	frame.close:GetScript("OnClick")(frame.close)
+	mock.Click(frame.close)
 	T.ok(not frame:IsShown(), "closed")
 	ns.UI.Toggle()
 	T.ok(frame:IsShown(), "open again")
@@ -312,7 +320,7 @@ T.case("Native window: the game's framed window, insets, tabs under the window, 
 	T.eq(long.offset, math.floor(0.5 * range + 0.5), "the list follows the lbar")
 	T.eq((lbar._sets or 0) - sets, 1, "no echo back to the lbar")
 	-- The mouse wheel on the list moves the lbar.
-	long:GetScript("OnMouseWheel")(long, -1)
+	mock.Wheel(long, -1)
 	T.ok(math.abs(lbar:GetScrollPercentage() - long.offset / range) < 0.01, "the lbar follows the list")
 	-- Scroll areas (real scroll frames): the game's own wiring joins them to its scroll bar.
 	local area = W.ScrollArea(UIParent)
@@ -320,7 +328,7 @@ T.case("Native window: the game's framed window, insets, tabs under the window, 
 	area:SetContentHeight(900)
 	-- Popups: the game's menu panel.
 	T.ok(page.planPick, "plan picker")
-	page.planPick:GetScript("OnClick")(page.planPick, "LeftButton")
+	mock.Click(page.planPick)
 	local p = W.ActivePopup()
 	T.ok(p and p.dpMenuBg, "the game's menu art behind the list")
 	W.ClosePopup()

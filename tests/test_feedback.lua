@@ -252,7 +252,7 @@ T.case("What's new: a note can name its Settings group, and the card offers to o
 	ns.UI.OpenSettings = function(group)
 		opened = group
 	end
-	f.settings:GetScript("OnClick")(f.settings)
+	mock.Click(f.settings)
 	ns.UI.OpenSettings = old
 	T.eq(opened, "routes")
 	ns.NewsFrame.Show("welcome")

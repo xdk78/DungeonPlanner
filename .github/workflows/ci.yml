@@ -12,16 +12,24 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: lunarmodules/luacheck@v1
         with:
           args: .
 
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      - name: Static safety check (wowui check, .wowui-check.json)
+        run: uv run --script tests/vendor/wow-ui-harness/python/check.py
+
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: leafo/gh-actions-lua@v10
+      - uses: actions/checkout@v7
+      - uses: leafo/gh-actions-lua@v13
         with:
           luaVersion: "5.1.5"
       - name: Syntax check (luac -p)
@@ -29,6 +37,8 @@ jobs:
           find . -type f -name '*.lua' -not -path './.git/*' -not -path './.lua/*' -not -path './.luarocks/*' -print0 | xargs -0 -n1 luac -p
       - name: Offline tests
         run: lua tests/run.lua
+      - name: The newest CHANGELOG.md section extracts as the release workflow packages it
+        run: lua tools/release_changelog.lua --latest --out "$RUNNER_TEMP/CHANGELOG-release.md"
       - name: Every locale covers every key (0 missing, 0 unused; the log names the keys a new string still needs)
         run: lua tools/locale_keys.lua --all
       - name: Community plans validate
@@ -51,3 +61,35 @@ jobs:
             echo "== $code"
             lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui" --locale "$code" --prefix "$code/"
           done
+
+  # The release path without uploading: the changelog release.yml writes, then the packager (the same v2 release.sh
+  # the action runs) with -d (no upload) and -z (no zip). It resolves .pkgmeta's manual-changelog against the checkout
+  # and prints the file's first lines; they must be the extracted section's.
+  package:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: leafo/gh-actions-lua@v13
+        with:
+          luaVersion: "5.1.5"
+      - name: Changelog of the newest release, as release.yml writes it
+        run: |
+          mkdir -p .release
+          lua tools/release_changelog.lua --latest --repo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+            --out .release/CHANGELOG-release.md
+      - name: Packager dry run reads that file as the release's changelog
+        shell: bash
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/BigWigsMods/packager/v2/release.sh -o "$RUNNER_TEMP/release.sh"
+          bash "$RUNNER_TEMP/release.sh" -d -z | tee "$RUNNER_TEMP/packager.log"
+          marker='##[group]Using manual changelog .release/CHANGELOG-release.md'
+          if ! grep -Fqx "$marker" "$RUNNER_TEMP/packager.log"; then
+            echo "::error::the packager did not use .release/CHANGELOG-release.md as its changelog"
+            exit 1
+          fi
+          awk -v m="$marker" 'p && n < 7 { print; n++ } $0 == m { p = 1 }' "$RUNNER_TEMP/packager.log" \
+            > "$RUNNER_TEMP/printed.md"
+          head -n 7 .release/CHANGELOG-release.md | diff - "$RUNNER_TEMP/printed.md"

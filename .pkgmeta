@@ -31,6 +31,7 @@ ignore:
   - community-plans
   - .github
   - .luacheckrc
+  - .wowui-check.json
   - .editorconfig
   - .gitattributes
   - .gitignore
@@ -39,6 +40,9 @@ ignore:
   - CODE_OF_CONDUCT.md
   - SECURITY.md
 
+# The release's own section of CHANGELOG.md, its paths linked to the tag: written by tools/release_changelog.lua in
+# .github/workflows/release.yml before the packager runs (not committed; .release/ is the packager's work folder). It is
+# the CurseForge file's changelog and the GitHub release's text.
 manual-changelog:
-  filename: CHANGELOG.md
+  filename: .release/CHANGELOG-release.md
   markup-type: markdown

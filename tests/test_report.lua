@@ -14,7 +14,7 @@ local function boot()
 end
 
 local function click(b)
-	b:GetScript("OnClick")(b, "LeftButton")
+	T.ok(mock.Click(b), "the click reached the button (shown, enabled)")
 end
 
 -- Run fn with the game's error handler silenced (SafeCall passes errors on to it).
@@ -209,13 +209,13 @@ T.case("Report window: opens from /dp report and the title-bar button, shows the
 	ns.Slash.Handle("report")
 	T.ok(f:IsShown(), "opened by /dp report")
 	f.what.edit:SetText("it broke")
-	f.what.edit:GetScript("OnTextChanged")(f.what.edit, true)
+	mock.FireScript(f.what.edit, "OnTextChanged", true)
 	T.ok(f.report:GetValue():find("it broke", 1, true), "the report follows the text")
 	T.ok(f.link:GetValue():find("what=it%20broke", 1, true), "the link follows the text")
 	-- The report box is read only: typing restores it.
 	local before = f.report:GetValue()
 	f.report.edit:SetText("typed")
-	f.report.edit:GetScript("OnTextChanged")(f.report.edit, true)
+	mock.FireScript(f.report.edit, "OnTextChanged", true)
 	T.eq(f.report.edit:GetText(), before)
 	click(f.select)
 	f:Hide()

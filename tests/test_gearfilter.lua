@@ -24,14 +24,14 @@ local function case(name, fn)
 		local saved = {
 			hasData = ns.Journal.HasData, travelFor = ns.Travel.For, gamepad = ns.Compat.Gamepad,
 			name = items.GetItemNameByID, request = items.RequestLoadItemDataByID,
-			shift = _G.IsShiftKeyDown, dead = _G.UnitIsDeadOrGhost, inCombat = mock.inCombat,
+			dead = _G.UnitIsDeadOrGhost, inCombat = mock.inCombat,
 		}
 		mock.itemTypes = {}
 		ns.Names.ResetItems()
 		local ok, err = pcall(fn)
 		ns.Journal.HasData, ns.Travel.For, ns.Compat.Gamepad = saved.hasData, saved.travelFor, saved.gamepad
 		items.GetItemNameByID, items.RequestLoadItemDataByID = saved.name, saved.request
-		_G.IsShiftKeyDown, _G.UnitIsDeadOrGhost, mock.inCombat = saved.shift, saved.dead, saved.inCombat
+		_G.UnitIsDeadOrGhost, mock.inCombat = saved.dead, saved.inCombat
 		mock.itemTypes = {}
 		ns.Names.ResetItems()
 		ns.Widgets.ClosePopup()
@@ -75,12 +75,12 @@ end
 
 -- Open a dropdown with its own click and click the popup row showing `text`.
 local function choose(dd, text)
-	dd:GetScript("OnClick")(dd, "LeftButton")
+	mock.Click(dd)
 	local p = ns.Widgets.ActivePopup()
 	T.ok(p and p.owner == dd, "the dropdown's list is open")
 	for _, f in ipairs(p.pools[p.poolKey].item) do
 		if f:IsShown() and f.label and f.label:GetText() == text then
-			f:GetScript("OnClick")(f, "LeftButton")
+			mock.Click(f)
 			T.eq(ns.Widgets.ActivePopup(), nil, "choosing closes the list")
 			return
 		end
@@ -357,7 +357,7 @@ case("Popup rows: two lists of one style with different row builders never share
 	})
 	choose(dd, "Two")
 	T.eq(chosen, 2, "the dropdown's rows work")
-	dd:GetScript("OnClick")(dd, "LeftButton")
+	mock.Click(dd)
 	T.ok(ns.Widgets.ActivePopup().poolKey ~= bareKey, "its own row pool")
 	W.ClosePopup()
 end)
@@ -378,22 +378,16 @@ case("Show location: pins the entrance and opens the map, right-click opens Gett
 	T.eq(select(2, page().planPick:GetPoint(1)), b, "before the plan picker")
 
 	mock.waypoints, mock.openedMaps = {}, {}
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 	T.eq(#mock.waypoints, 1, "the game's pin")
 	T.eq(#mock.openedMaps, 1, "the world map opened")
 	T.eq(mock.openedMaps[1], mock.waypoints[1].uiMapID, "on the entrance's map")
 
-	b:GetScript("OnClick")(b, "RightButton")
+	mock.Click(b, "RightButton")
 	T.ok(ns.GettingThere.Window() and ns.GettingThere.Window():IsShown(), "right-click: the Getting there window")
 	ns.GettingThere.Window():Hide()
-	_G.IsShiftKeyDown = function()
-		return true
-	end
 	mock.openedMaps = {}
-	b:GetScript("OnClick")(b, "LeftButton")
-	_G.IsShiftKeyDown = function()
-		return false
-	end
+	mock.WithInput({ keys = { "SHIFT" } }, mock.Click, b)
 	T.ok(ns.GettingThere.Window():IsShown(), "Shift-click too")
 	T.eq(#mock.openedMaps, 0, "and no map")
 	ns.GettingThere.Window():Hide()
@@ -405,7 +399,7 @@ case("Show location: pins the entrance and opens the map, right-click opens Gett
 	T.eq(b.dpTooltipText, ns.L["Not available in combat."])
 	mock.inCombat = true
 	mock.openedMaps = {}
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 	T.eq(#mock.openedMaps, 0, "a click in combat does nothing")
 	mock.inCombat = false
 	mock.FireEvent("PLAYER_REGEN_ENABLED")
@@ -431,7 +425,7 @@ case("Show location: pins the entrance and opens the map, right-click opens Gett
 	page():Refresh()
 	T.ok(b.dpTooltipText:find("gamepad", 1, true), b.dpTooltipText)
 	mock.waypoints, mock.openedMaps = {}, {}
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 	T.eq(#mock.waypoints, 1, "the pin")
 	T.eq(#mock.openedMaps, 0, "no world map")
 	-- Neither a pin nor the map: a click opens Getting there.
@@ -445,7 +439,7 @@ case("Show location: pins the entrance and opens the map, right-click opens Gett
 	ns.Navigation.CanPin = function()
 		return false
 	end
-	b:GetScript("OnClick")(b, "LeftButton")
+	mock.Click(b)
 	ns.Navigation.CanPin = canPin
 	T.ok(ns.GettingThere.Window():IsShown(), "the Getting there window instead")
 	ns.Compat.Gamepad = function()

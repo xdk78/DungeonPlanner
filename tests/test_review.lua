@@ -241,10 +241,10 @@ local function focus(edit)
 	edit.ClearFocus = function(self)
 		if focused then
 			focused = false
-			self:GetScript("OnEditFocusLost")(self)
+			mock.FireScript(self, "OnEditFocusLost")
 		end
 	end
-	edit:GetScript("OnEditFocusGained")(edit)
+	mock.FireScript(edit, "OnEditFocusGained")
 end
 
 T.case("Review: the game's scroll bar keeps its own Update, so its thumb is laid out", function()
@@ -281,7 +281,7 @@ T.case("Review: text typed for one pull is not written into the pull clicked nex
 	focus(edit)
 	edit:SetText("Typed for Alpha")
 	local rowB = f.list.rows[2]
-	rowB:GetScript("OnClick")(rowB, "LeftButton")
+	mock.Click(rowB)
 	edit:ClearFocus()
 	T.eq(plan.pulls[2].name, "Beta", "the second pull keeps its name")
 	T.eq(plan.pulls[1].name, "Typed for Alpha", "the typed name went to the pull it was typed for")
@@ -311,9 +311,9 @@ T.case("Review: Escape in the home search clears the filter with the text", func
 	local home = ns.UI.Frame().home
 	local edit = home.search.edit
 	edit:SetText("dead")
-	edit:GetScript("OnTextChanged")(edit, true)
+	mock.FireScript(edit, "OnTextChanged", true)
 	T.eq(ns.UI.ctx.search, "dead")
-	edit:GetScript("OnEscapePressed")(edit)
+	mock.FireScript(edit, "OnEscapePressed")
 	T.eq(ns.UI.ctx.search or "", "", "the list is no longer filtered")
 end)
 
@@ -373,10 +373,10 @@ T.case("Review: map presses: one drag at a time, the readout survives a click, a
 	view.CursorPosition = function()
 		return 0.5, 0.5
 	end
-	view:GetScript("OnMouseDown")(view, "LeftButton")
-	view:GetScript("OnMouseDown")(view, "RightButton")
-	view:GetScript("OnMouseUp")(view, "RightButton")
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "RightButton")
+	mock.FireScript(view, "OnMouseUp", "RightButton")
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(ns.Drawing.Count(plan, 1), 0, "erased")
 	T.eq(changes, 1, "and reported once")
 	T.eq(view.drawErase, nil)
@@ -386,24 +386,18 @@ T.case("Review: map presses: one drag at a time, the readout survives a click, a
 	map:Refresh()
 	-- After a click the coordinate readout keeps updating while the pointer stays over the map.
 	ns.db.settings.showCoordinates = true
-	local realOver = view.IsMouseOver
-	view.IsMouseOver = function()
-		return true
-	end
-	view:GetScript("OnEnter")(view)
+	mock.Hover(view)
 	T.ok(view:GetScript("OnUpdate"), "hovering updates the readout")
-	view:GetScript("OnMouseDown")(view, "LeftButton")
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.ok(view:GetScript("OnUpdate"), "also after a click")
-	view.IsMouseOver = realOver
+	mock.Leave(view)
 	-- A held button with a still pointer: no redraw.
-	local realGet, cx = _G.GetCursorPosition, 100
-	_G.GetCursorPosition = function()
-		return cx, 100
-	end
-	view:GetScript("OnMouseDown")(view, "LeftButton")
-	cx = 140
-	view:GetScript("OnUpdate")(view, 0.016)
+	mock.SetCursor(100, 100)
+	mock.SetMouseButtonDown("LeftButton", true)
+	mock.FireScript(view, "OnMouseDown", "LeftButton")
+	mock.SetCursor(140, 100)
+	mock.FireScript(view, "OnUpdate", 0.016)
 	local redraws, realDraw, moves, realMove = 0, view.DrawContent, 0, view.MoveCanvas
 	view.DrawContent = function(...)
 		redraws = redraws + 1
@@ -414,17 +408,17 @@ T.case("Review: map presses: one drag at a time, the readout survives a click, a
 		return realMove(...)
 	end
 	for _ = 1, 30 do
-		view:GetScript("OnUpdate")(view, 0.016)
+		mock.FireScript(view, "OnUpdate", 0.016)
 	end
 	T.eq(redraws + moves, 0, "nothing moved, nothing redrawn")
-	cx = 160
-	view:GetScript("OnUpdate")(view, 0.016)
+	mock.SetCursor(160, 100)
+	mock.FireScript(view, "OnUpdate", 0.016)
 	T.eq(moves, 1, "a move moves the map")
 	T.eq(redraws, 0, "without a redraw (the follow-ups: transform only while panning)")
-	view:GetScript("OnMouseUp")(view, "LeftButton")
+	mock.SetMouseButtonDown("LeftButton", false)
+	mock.FireScript(view, "OnMouseUp", "LeftButton")
 	T.eq(redraws, 1, "laid out once on release")
 	view.DrawContent, view.MoveCanvas = realDraw, realMove
-	_G.GetCursorPosition = realGet
 	ns.DB.DeletePlan(plan.id)
 end)
 

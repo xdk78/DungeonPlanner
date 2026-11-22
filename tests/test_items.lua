@@ -208,7 +208,7 @@ T.case("Item names: drops of every boss end up named on the open pages, however 
 	bossPage:Refresh()
 	for _, row in ipairs(bossPage.list.rows) do
 		if row.item == plan.encounters[1] then
-			row:GetScript("OnClick")(row, "LeftButton")
+			mock.Click(row)
 		end
 	end
 	local function bossRows()

@@ -446,7 +446,7 @@ T.case("Map: a provider's map is drawn with its credit; Fit frames the markers; 
 	ns.db.ui.showLegend = nil
 	local later = ns.Panels.map.Create(_G.UIParent, ns.UI.ctx)
 	T.eq(later.LegendShown(), false, "off after the first view")
-	later.legendButton:GetScript("OnClick")(later.legendButton, "LeftButton")
+	mock.Click(later.legendButton)
 	T.eq(ns.db.ui.showLegend, true, "the button's choice sticks")
 	ns.db.ui.showLegend = nil
 end)
@@ -478,11 +478,11 @@ T.case("Map legend: its title folds it, the choice sticks; untouched, it folds w
 	T.ok(not map.legend.rows[1]:IsShown(), "the title alone")
 	T.ok(map.rail:GetWidth() < 150 and map.rail:GetHeight() < 60, "a small box")
 	-- The title opens it, and that choice sticks on every map.
-	map.legend.heading:GetScript("OnClick")(map.legend.heading, "LeftButton")
+	mock.Click(map.legend.heading)
 	T.eq(ns.db.ui.legendFolded, false, "opened by the player")
 	map:RefreshNow()
 	T.eq(map.legend:IsFolded(), false, "stays open")
-	map.legend.heading:GetScript("OnClick")(map.legend.heading, "LeftButton")
+	mock.Click(map.legend.heading)
 	T.eq(ns.db.ui.legendFolded, true, "folded by the player")
 	canvas.FitIsWhole = whole
 	ns.db.ui.legendFolded, ns.db.ui.showLegend = nil, nil
@@ -758,7 +758,7 @@ T.case("Gear: the filters and the NeedRoll button never share a line with the hi
 	T.ok(not gear.status:GetText():find("Dungeon Journal", 1, true), "the source is in the section header, not here")
 	-- A narrow panel: the filters shrink alike instead of running under each other.
 	gear:SetWidth(420)
-	gear:GetScript("OnSizeChanged")(gear, 420, 300)
+	mock.FireScript(gear, "OnSizeChanged", 420, 300)
 	local sum = gear.class:GetWidth() + gear.role:GetWidth() + gear.encounter:GetWidth() + gear.slot:GetWidth()
 	T.ok(sum + 3 * ns.Style.SPACE.sm <= 420, "filters fit: " .. sum)
 	mock.RemoveProviders()
@@ -896,7 +896,7 @@ T.case("Party positions: shown for the boss or pull in focus; at \"everything\" 
 	T.eq(target.kind, "encounter")
 	T.eq(target.id, plan.encounters[1].id, "the first boss with positions")
 	-- A click on the hint focuses that boss, as the Focus menu would: its positions show, the hint goes.
-	hint:GetScript("OnClick")(hint, "LeftButton")
+	mock.Click(hint)
 	map:RefreshNow()
 	T.eq(ctx.focusEncounter, target.id, "the boss in focus")
 	T.ok(shownPositions() > 0, "its positions on the map")
