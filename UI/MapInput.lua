@@ -199,6 +199,8 @@ function MapCanvas.InstallInput(view)
 
 	function view:EndDrag()
 		local d = self.drag
+		-- Idle before the redraw below, so it places the route arrows again (UI/MapPins.lua PlaceRouteArrows).
+		self:Idle()
 		local plan = self.cb.getPlan()
 		if plan and d.moved then
 			if d.mode == "marker" then
@@ -220,7 +222,6 @@ function MapCanvas.InstallInput(view)
 				end
 			end
 		end
-		self:Idle()
 	end
 	view.EndMarkerDrag = view.EndDrag
 

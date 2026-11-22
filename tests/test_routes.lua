@@ -347,3 +347,138 @@ T.case("Routes settings: a change redraws the map at once", function()
 	end
 	ns.UI.RefreshPage()
 end)
+
+T.case("Route arrows: only on the visible part, so a long route zoomed in still shows them near its end", function()
+	-- Wailing Caverns at the deepest zoom on "many": the whole route is far longer than the caps allow.
+	local plan = ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns")
+	local route = plan.routes[1]
+	local zoom = 8 * 900
+	local pts = {}
+	for i, p in ipairs(route.points) do
+		pts[i] = { p[1] * zoom, -p[2] * zoom, stop = p.step ~= nil }
+	end
+	local last = pts[#pts]
+	local view = { last[1] - 400, last[2] - 300, last[1] + 400, last[2] + 300 }
+	local o = with({ spacing = 75, size = 17, headSize = 23 })
+	local function inView(arrows)
+		local n = 0
+		for _, a in ipairs(arrows) do
+			if a.x >= view[1] and a.x <= view[3] and a.y >= view[2] and a.y <= view[4] then
+				n = n + 1
+			end
+		end
+		return n
+	end
+	local everywhere = RA.Place({ { pts = pts } }, o)
+	T.eq(#everywhere, RA.LIMIT, "without bounds the cap is spent from the start")
+	T.ok(inView(everywhere) <= 1, "and at most the end's arrowhead is left for the end: " .. inView(everywhere))
+	o.bounds = view
+	local visible = RA.Place({ { pts = pts } }, o)
+	T.ok(inView(visible) >= 3, "arrows near the route's end: " .. inView(visible))
+	for _, a in ipairs(visible) do
+		T.ok(a.x + 9 >= view[1] and a.x - 9 <= view[3] and a.y + 9 >= view[2] and a.y - 9 <= view[4], "none outside the bounds")
+	end
+end)
+
+T.case("Route arrows: a doubled point still makes a corner; bends are not obstacles; spacing at least twice the size", function()
+	local corner = { { 0, 0, stop = true }, { 200, 0 }, { 200, 0 }, { 200, 200, stop = true } }
+	for _, a in ipairs(RA.Place({ { pts = corner } }, with({ spacing = 20 }))) do
+		T.ok(math.abs(a.x - 200) + math.abs(a.y) >= 6, "clear of the corner: " .. a.x .. "," .. a.y)
+	end
+	T.eq(#RA.Joints(corner), 2, "the doubled corner gets its joints")
+	local ob = RA.Obstacles({ { x = 10, y = 0, r = 5, bend = true }, { x = 50, y = 0, r = 10 } }, true)
+	T.eq(#ob.pins, 1, "a bend point is not an obstacle")
+	local tight = RA.Place({ { pts = { { 0, 0, stop = true }, { 600, 0, stop = true } } } }, with({ spacing = 5 }))
+	for i = 2, #tight do
+		T.ok(tight[i].x - tight[i - 1].x >= 24 - 1e-6, "at least twice the size apart")
+	end
+end)
+
+T.case("Routes: one colour for every plan route reaches stops; another addon's route keeps its own", function()
+	boot()
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "wailing-caverns")
+	ns.UI.SelectTab("map")
+	ns.db.settings.routes.color = 2
+	ns.UI.RefreshPage()
+	local canvas = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	local want = { ns.Style.PaletteColor(2) }
+	local rings = 0
+	for _, p in ipairs(canvas.pools.points) do
+		if p:IsShown() and p.ring:IsShown() then
+			local r, g, b = p.ring:GetVertexColor()
+			T.ok(r == want[1] and g == want[2] and b == want[3], "a stop ring in the chosen colour")
+			rings = rings + 1
+		end
+	end
+	T.ok(rings > 0, "stops drawn: " .. rings)
+	-- A provider's route (Data/Providers.lua Routes) beside a plan route.
+	local plan = { routes = { { id = "own", floor = 1, color = 1, points = { { 0.1, 0.1, step = 1 }, { 0.9, 0.1, step = 2 } } } } }
+	local extra = { { id = "provider1", floor = 1, color = 6, mapSpace = true, points = { { 0.1, 0.5 }, { 0.9, 0.5 } } } }
+	local function px(x)
+		return x * 1000
+	end
+	local function py(y)
+		return -y * 600
+	end
+	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, extra = extra, mx = px, my = py })
+	local r1, g1, b1 = canvas.pools.lines[1]:GetVertexColor()
+	local r2, g2, b2 = canvas.pools.lines[2]:GetVertexColor()
+	local teal = { ns.Style.PaletteColor(6) }
+	T.ok(r1 == want[1] and g1 == want[2] and b1 == want[3], "the plan's route in the chosen colour")
+	T.ok(r2 == teal[1] and g2 == teal[2] and b2 == teal[3], "the provider's route keeps its colour")
+	ns.db.settings.routes.color = 0
+	ns.UI.RefreshPage()
+end)
+
+T.case("Routes settings: run mode's map follows a change at once; arrow options wait while arrows are off", function()
+	boot()
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "wailing-caverns")
+	ns.UI.SelectTab("map")
+	ns.UI.FocusStep(3, { stay = true })
+	ns.RunMode.Show()
+	ns.RunMode.Refresh()
+	local run = _G.DungeonPlannerRunFrame.map
+	local args = routesOptions()
+	local before = run.pools.lines[1]:GetThickness()
+	args.width.set({}, "thick")
+	T.ok(run.pools.lines[1]:GetThickness() > before, "run mode's lines thicker")
+	args.arrows.set({}, "off")
+	T.eq(run.counts.arrows, 0, "run mode's arrows off")
+	T.ok(args.heads.disabled() and args.arrowSize.disabled() and args.focusArrows.disabled(), "arrow options greyed out")
+	args.arrows.set({}, "normal")
+	T.ok(not args.heads.disabled(), "available again")
+	args.width.set({}, "medium")
+	ns.RunMode.Hide()
+end)
+
+T.case("Route arrows wait while a route point is dragged or the window is resized, then come back", function()
+	boot()
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "wailing-caverns")
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+	local canvas = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	local before = canvas.counts.arrows
+	T.ok(before > 0, "arrows to begin with")
+	local place, calls = RA.Place, 0
+	RA.Place = function(...)
+		calls = calls + 1
+		return place(...)
+	end
+	canvas.drag = { mode = "point" }
+	canvas:DrawContent()
+	canvas:DrawContent()
+	T.eq(calls, 0, "no placement while dragging")
+	T.ok(not canvas.pools.arrows[1]:IsShown(), "arrows hidden meanwhile")
+	canvas.drag = { mode = "idle" }
+	mock.Advance(0.2)
+	T.eq(calls, 1, "placed once when the drag ends")
+	T.eq(canvas.counts.arrows, before, "all back")
+	ns.sizingWindow = _G.DungeonPlannerMainFrame
+	canvas:DrawContent()
+	mock.Advance(0.2)
+	T.eq(calls, 1, "none while the window is resized")
+	ns.sizingWindow = nil
+	mock.Advance(0.2)
+	T.eq(calls, 2, "placed once the resize ends")
+	RA.Place = place
+end)

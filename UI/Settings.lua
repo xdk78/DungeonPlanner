@@ -71,6 +71,10 @@ local function routesGroup()
 			UI.ApplyColors()
 		end
 	end
+	-- The arrows' own options mean nothing while the arrows are off.
+	local function arrowsOff()
+		return ns.db.settings.routes.arrows == "off"
+	end
 	local opacityValues, opacitySorting = {}, {}
 	for pct = 40, 100, 10 do
 		opacityValues[tostring(pct)] = pct .. "%"
@@ -157,6 +161,7 @@ local function routesGroup()
 				sorting = { "small", "medium", "large" },
 				get = routeGet("arrowSize"),
 				set = routeSet("arrowSize"),
+				disabled = arrowsOff,
 			},
 			heads = {
 				type = "toggle",
@@ -165,6 +170,7 @@ local function routesGroup()
 				desc = L["A larger arrowhead just before each numbered stop and at the route's end."],
 				get = routeGet("heads"),
 				set = routeSet("heads"),
+				disabled = arrowsOff,
 			},
 			focusArrows = {
 				type = "toggle",
@@ -174,6 +180,7 @@ local function routesGroup()
 				desc = L["While a step is in focus, direction arrows show only on the part of the route that leads to it."],
 				get = routeGet("focusArrows"),
 				set = routeSet("focusArrows"),
+				disabled = arrowsOff,
 			},
 		},
 	}

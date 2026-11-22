@@ -483,7 +483,10 @@ they keep the same density at any zoom. `RouteArrows.Place` (`Model/RouteArrows.
 bends, pins, labels and each other, and leaves none where another part of the route (or another route) crosses the
 line; a corridor walked out and back keeps its arrows an arrow's length apart. A leg between two stops that is left
 without any arrow gets one near its middle, a little smaller if that is all that fits. The arrows are placed once per
-map redraw, after the pins and labels are laid out (at most 200 per route and 400 in all), never per frame. While a step
+map redraw, after the pins and labels are laid out, only on the visible part of the map and a margin (at most 200 per
+route and 400 in all), never per frame. While a marker or route point is dragged or a window is resized the arrows
+hide, and they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip). Every
+part of a route takes its colour from `MapRoutes.Color`: lines, arrows, stop rings and bend discs. While a step
 is in focus its leg is brighter and wider and the rest of the path dims. Numbered stops are dark discs with a ring in
 the route's colour, drawn above the path. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
 with `SetRotation`, which left every arrow pointing up in game.

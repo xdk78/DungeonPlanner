@@ -467,7 +467,9 @@ function MapCanvas.Install(view)
 				local l, t, r, b = over:GetLeft(), over:GetTop(), over:GetRight(), over:GetBottom()
 				local cl, ct = canvas:GetLeft(), canvas:GetTop()
 				if l and t and r and b and cl and ct then
-					local k = (over:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
+					-- A font string has no scale of its own: its frame's.
+					local scaled = over.GetEffectiveScale and over or over:GetParent()
+					local k = (scaled:GetEffectiveScale() or 1) / (canvas:GetEffectiveScale() or 1)
 					avoid = avoid or {}
 					avoid[#avoid + 1] = { l * k - cl, ct - t * k, r * k - cl, ct - b * k }
 				end
@@ -483,6 +485,7 @@ function MapCanvas.Install(view)
 			bounds = nil -- not laid out yet
 		end
 		MapPins.ApplyLayout(list, canvas, avoid, bounds)
+		return bounds
 	end
 
 	-- Visibility ----------------------------------------------------------------------------------------------------------
@@ -565,7 +568,7 @@ function MapCanvas.Install(view)
 				self.routeCounts = drawn
 				for _, route in ipairs(own and plan.routes or {}) do
 					if route.floor == floor then
-						local r, g, b = S.PaletteColor(route.color)
+						local r, g, b = ns.MapRoutes.Color(route, true)
 						local active = route.id == activeRoute
 						for i, pt in ipairs(route.points) do
 							if (pt.step and not compact) or active or editingRoutes then
@@ -600,6 +603,7 @@ function MapCanvas.Install(view)
 								p:SetAlpha(route.optional and 0.7 or 1)
 								p:Show()
 								layoutItem(layout, p, px(pt[1], pt[2]), -py(pt[2], pt[1]), size, pt.step and "stop" or "pin", 0)
+								layout[#layout].bend = not pt.step -- on the line itself: arrows need not avoid it
 							end
 						end
 					end
@@ -732,9 +736,12 @@ function MapCanvas.Install(view)
 				self.focusGlow:Hide()
 				self.focusRing:Hide()
 			end
-			applyLayout(layout)
+			local shown = applyLayout(layout)
 			if pathsDrawn then
-				nArrows = self:DrawRouteArrows(ns.RouteArrows.Obstacles(layout, true))
+				-- Arrows clear of the pins and labels, only on the visible map and a margin (canvas offsets, y up).
+				local obstacles = ns.RouteArrows.Obstacles(layout, true)
+				obstacles.bounds = shown and { shown[1] - 40, -shown[4] - 40, shown[3] + 40, -shown[2] + 40 }
+				nArrows = self:PlaceRouteArrows(obstacles)
 			end
 		end
 		for i = nPins + 1, #pools.pins do

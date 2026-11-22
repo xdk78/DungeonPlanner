@@ -360,6 +360,14 @@ function MapRoutes.Look(u)
 	}
 end
 
+-- A route's colour on the map: the Routes setting's one colour for the plan's own routes when it is set, else the
+-- route's own. Lines, arrows, stop rings and bend discs all read it here. own: a route of the plan (not another
+-- addon's).
+function MapRoutes.Color(route, own)
+	local look = MapRoutes.Look(1)
+	return S.PaletteColor(own and look.color or route.color)
+end
+
 function MapRoutes.Install(view)
 	local overlay = view.overlay
 	local pools = view.pools
@@ -432,7 +440,7 @@ function MapRoutes.Install(view)
 		for _, entry in ipairs(all) do
 			local route = entry.route
 			if route.floor == floor and #route.points >= 2 then
-				local r, g, b = S.PaletteColor(entry.own and look.color or route.color)
+				local r, g, b = MapRoutes.Color(route, entry.own)
 				local alpha = (route.optional and 0.55 or 1) * look.opacity
 				local thickness = look.width + (route.id == o.activeRoute and u or 0)
 				local fx, fy = px, py
@@ -541,6 +549,7 @@ function MapRoutes.Install(view)
 				gap = 2 * u,
 				pins = obstacles and obstacles.pins,
 				boxes = obstacles and obstacles.boxes,
+				bounds = obstacles and obstacles.bounds,
 				total = MapRoutes.MAX_ARROWS,
 			})
 			local file = look.outline > 0 and ARROW_EDGE_FILE or ARROW_FILE
@@ -566,5 +575,47 @@ function MapRoutes.Install(view)
 			pools.arrows[i]:Hide()
 		end
 		return count
+	end
+
+	-- While a marker or route point is dragged, or a window is being resized, the map redraws on every pointer move:
+	-- the arrows hide then and are placed once the drag or resize ends (a short timer checks; a stale tick does nothing).
+	local function busy(v)
+		local mode = v.drag and v.drag.mode
+		return mode == "marker" or mode == "point" or ns.sizingWindow ~= nil
+	end
+	local function settle()
+		view.arrowTimer = nil
+		if not view.arrowsPending then
+			return
+		end
+		if busy(view) then
+			view.arrowTimer = true
+			C_Timer.After(0.1, settle)
+			return
+		end
+		view.arrowsPending = nil
+		if view:IsVisible() then
+			local n = view:DrawRouteArrows(view.arrowObstacles)
+			if view.counts then
+				view.counts.arrows = n
+			end
+		end
+	end
+	-- The map's way to draw the arrows (UI/MapCanvas.lua DrawContent). Returns how many it drew now.
+	function view:PlaceRouteArrows(obstacles)
+		self.arrowObstacles = obstacles
+		if not busy(self) then
+			self.arrowsPending = nil
+			return self:DrawRouteArrows(obstacles)
+		end
+		self.arrowsPending = true
+		for i = 1, #pools.arrows do
+			pools.arrows[i]:Hide()
+		end
+		if not self.arrowTimer and C_Timer and C_Timer.After then
+			self.arrowTimer = true
+			C_Timer.After(0.1, settle)
+		end
+		return 0
 	end
 end
