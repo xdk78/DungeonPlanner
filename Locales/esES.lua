@@ -890,4 +890,6 @@ ns.Locales.esES = {
 	["out of sync"] = "desincronizado",
 	["out of sync: %d"] = "desincronizados: %d",
 	["steps on their own"] = "avanza por su cuenta",
+	["Too many messages are waiting for the boss fight to end: the page was not sent."] = "Demasiados mensajes esperan a que termine el combate contra el jefe: la página no se envió.",
+	["failed: too many messages were waiting for a boss fight to end"] = "fallido: demasiados mensajes esperaban a que terminara un combate contra un jefe",
 }

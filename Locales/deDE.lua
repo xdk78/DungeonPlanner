@@ -890,4 +890,6 @@ ns.Locales.deDE = {
 	["out of sync"] = "nicht synchron",
 	["out of sync: %d"] = "nicht synchron: %d",
 	["steps on their own"] = "geht eigenständig",
+	["Too many messages are waiting for the boss fight to end: the page was not sent."] = "Zu viele Nachrichten warten auf das Ende des Bosskampfs: Die Seite wurde nicht gesendet.",
+	["failed: too many messages were waiting for a boss fight to end"] = "fehlgeschlagen: zu viele Nachrichten warteten auf das Ende eines Bosskampfs",
 }

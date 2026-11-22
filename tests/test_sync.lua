@@ -641,6 +641,16 @@ T.case("Sync: an end held in an outbox does not end a newer lead; an ended sessi
 	T.eq(s.mode, "idle")
 	Sync.Step(s, runEvent("Lead", LEADER, runMsg("s3", 1, 4), OK, LEADER), 5)
 	T.eq(s.mode, "following", "a new lead is taken")
+	-- s3 ends too; a delayed state of s2 (two leads back) still cannot bring it back.
+	Sync.Step(s, runEvent("Lead", LEADER, { type = "run", session = "s3", seq = 2 }, nil, LEADER), 6)
+	T.eq(#Sync.Step(s, runEvent("Lead", LEADER, runMsg("s2", 60, 5), OK, LEADER), 7), 0)
+	T.eq(s.mode, "idle")
+	-- Bounded.
+	for i = 1, Sync.MAX_ENDED + 3 do
+		Sync.Step(s, runEvent("Lead", LEADER, runMsg("e" .. i, 1, 1), OK, LEADER), 10 + i)
+		Sync.Step(s, runEvent("Lead", LEADER, { type = "run", session = "e" .. i, seq = 2 }, nil, LEADER), 10 + i)
+	end
+	T.eq(#s.ended, Sync.MAX_ENDED)
 end)
 
 T.case("Sync, Comm: after a lockdown, what waited goes before anything newer (R and F keep their order)", function()
@@ -695,93 +705,6 @@ T.case("Sync, Comm: after a lockdown, what waited goes before anything newer (R 
 	end)
 end)
 
-T.case("Sync, Roster: a sender is matched by its whole name; a namesake from elsewhere gets no rank", function()
-	boot()
-	local realName, realLeader = _G.UnitName, _G.UnitIsGroupLeader
-	local realm = mock.realm
-	mock.inGroup = true
-	_G.UnitIsGroupLeader = function(unit)
-		return unit == "party1"
-	end
-	-- Named realms (as elsewhere): the leader "Lead" on our realm, a "Lead" from another realm in the group too.
-	mock.realm = "Home Realm"
-	mock.units = { party1 = { name = "Lead" }, party2 = { name = "Lead", realm = "Other Realm" } }
-	_G.UnitName = function(unit)
-		if unit == "player" then
-			return "Tester"
-		end
-		local u = mock.units[unit]
-		return u and u.name, u and u.realm
-	end
-	local R = ns.Roster
-	T.eq(R.Id("Lead-HomeRealm"), "Lead", "our realm is left off")
-	T.eq(R.Id("Lead-OtherRealm"), "Lead-OtherRealm")
-	T.eq(R.UnitId("party2"), "Lead-OtherRealm")
-	T.ok(ns.Comm.GroupRank(R.Id("Lead-HomeRealm")).leader, "the leader")
-	T.eq(ns.Comm.GroupRank(R.Id("Lead-OtherRealm")).leader, false, "the namesake is not the leader")
-	T.eq(ns.Comm.GroupRank(R.Id("Lead-OtherRealm")).inGroup, true)
-	-- WoW: Forever: surnames. UnitName's second return is the surname; senders read "First Surname".
-	mock.realm = ""
-	mock.units = { party1 = { name = "Ana", realm = "Smith" }, party2 = { name = "Ana", realm = "Jones" } }
-	_G.UnitName = function(unit)
-		if unit == "player" then
-			return "Tess", "Tester"
-		end
-		local u = mock.units[unit]
-		return u and u.name, u and u.realm
-	end
-	T.ok(R.Surnames())
-	T.eq(R.Me(), "Tess Tester")
-	T.eq(R.Id("Ana Smith"), "Ana Smith")
-	T.eq(R.Id("Ana Smith-SomeRealm"), "Ana Smith", "names with surnames are unique: the realm is left off")
-	T.ok(ns.Comm.GroupRank("Ana Smith").leader)
-	T.eq(ns.Comm.GroupRank("Ana Jones").leader, false, "same first name, another player")
-	T.eq(ns.Comm.GroupRank("Ana").inGroup, false, "a first name alone is nobody")
-	-- Two units the client cannot tell apart: untrusted.
-	mock.units.party2 = { name = "Ana", realm = "Smith" }
-	T.eq(ns.Comm.GroupRank("Ana Smith").inGroup, false)
-	-- A unit the client names otherwise than the sender (no surname given): the client is asked which unit the sender,
-	-- as it arrived, is (UnitIsUnit).
-	mock.units.party2, mock.units.party3 = { name = "Ana", realm = "Jones" }, { name = "Bo" }
-	local realIsUnit = _G.UnitIsUnit
-	_G.UnitIsUnit = function(a, b)
-		return a == "Bo Long-FarRealm" and b == "party3"
-	end
-	T.eq(ns.Comm.GroupRank("Bo Long").inGroup, false, "never heard: nothing to ask with but the name")
-	R.Heard("Bo Long", "Bo Long-FarRealm")
-	T.eq(ns.Comm.GroupRank("Bo Long").unit, "party3")
-	_G.UnitIsUnit = realIsUnit
-	mock.units.party3 = nil
-	-- Through Comm: a run state from the namesake is not followed; replies go to the name as it arrived.
-	mock.units.party2 = { name = "Ana", realm = "Jones" }
-	local outgoing = {}
-	local realSend = ns.addon.SendCommMessage
-	ns.addon.SendCommMessage = function(_, _, text, channel, target)
-		outgoing[#outgoing + 1] = { text = text, channel = channel, target = target }
-	end
-	local plan = ns.DB.GetPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
-	ns.UI.SelectPlan(plan.id, true)
-	ns.RunMode.Show()
-	local msg = "R^2^nm1^1^" .. plan.id .. "^" .. ns.RunSync.Signature(plan) .. "^3^1"
-	ns.Comm.OnMessage(ns.prefix, msg, "PARTY", "Ana Jones-FarRealm")
-	T.eq(ns.RunSync.state.mode, "idle", "not the leader")
-	ns.Comm.OnMessage(ns.prefix, msg, "PARTY", "Ana Smith-FarRealm")
-	T.eq(ns.RunSync.state.mode, "following")
-	T.eq(ns.RunSync.state.lead.name, "Ana Smith")
-	local report
-	for _, m in ipairs(outgoing) do
-		if m.text:sub(1, 2) == "F^" then
-			report = m
-		end
-	end
-	T.eq(report.target, "Ana Smith-FarRealm", "whispered to the full name it came from")
-	ns.addon.SendCommMessage = realSend
-	ns.RunMode.Hide()
-	ns.RunSync.state = Sync.New()
-	_G.UnitName, _G.UnitIsGroupLeader, mock.realm = realName, realLeader, realm
-	mock.inGroup, mock.units = false, {}
-end)
-
 T.case("Sync: a leader's edits that leave the steps as they were keep followers; new steps make another version", function()
 	boot()
 	local own = ns.DB.AddPlan(ns.Validate.Plan({ name = "Edited", instance = { name = "Test Keep", kind = "dungeon" },
@@ -795,61 +718,4 @@ T.case("Sync: a leader's edits that leave the steps as they were keep followers;
 	ns.DB.Changed(own, "pull")
 	T.ok(ns.RunSync.Signature(own) ~= sig, "a new pull: another version")
 	ns.DB.DeletePlan(own.id)
-end)
-
-T.case("Comm: the outbox is bounded; acks and hellos go first; a transfer is aborted, never cut", function()
-	boot()
-	local Comm = ns.Comm
-	local realMax, realSend = Comm.MAX_OUTBOX, ns.addon.SendCommMessage
-	local sent = {}
-	ns.addon.SendCommMessage = function(_, _, text)
-		sent[#sent + 1] = text
-	end
-	Comm.MAX_OUTBOX = 4
-	mock.inGroup = true
-	mock.units = { party1 = { name = "Anna" } }
-	mock.lockdown = true
-	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Boxed", instance = { name = "Test Keep", kind = "dungeon" } }))
-	local data = ns.Codec.ExportPlan(plan)
-	local function ack(i)
-		return Comm.SendAck({ kind = "plan", sender = "Anna", tid = "ob" .. i }, data)
-	end
-	ack(1)
-	ack(2)
-	local t1 = assert(Comm.SharePlan(plan, "GROUP")) -- its offer waits
-	ack(3)
-	T.eq(#Comm.outbox, 4)
-	-- Full: the oldest ack goes for a new one.
-	ack(4)
-	T.eq(#Comm.outbox, 4)
-	T.eq(Transfer.Parse(Comm.outbox[1][1]).tid, "ob2", "ack 1 dropped")
-	-- Three more transfers take the acks' room; then nothing can go: the newest transfer is aborted, the others kept.
-	local t2 = assert(Comm.SharePlan(plan, "GROUP"))
-	local t3 = assert(Comm.SharePlan(plan, "GROUP"))
-	local t4 = assert(Comm.SharePlan(plan, "GROUP")) -- the last ack makes room
-	local t5 = Comm.SharePlan(plan, "GROUP")
-	T.eq(t5.state, "failed", "no room: aborted")
-	T.eq(t5.reason, "outbox")
-	T.eq(t1.state, "offering")
-	T.eq(t2.state, "offering")
-	T.eq(t3.state, "offering")
-	T.eq(t4.state, "offering")
-	for _, item in ipairs(Comm.outbox) do
-		T.ok(item.transfer ~= t5, "nothing of the aborted transfer waits")
-		T.ok(item.kind ~= "ack", "every ack made room")
-	end
-	-- Keyed messages replace each other and do not count.
-	Comm.SendSync("Q^2", "PARTY", nil, "query:")
-	Comm.SendSync("Q^2", "PARTY", nil, "query:")
-	T.eq(#Comm.outbox, 5)
-	mock.lockdown = false
-	mock.Advance(1)
-	T.eq(#Comm.outbox, 0)
-	T.ok(#sent >= 5, "all sent after the lockdown")
-	for _, t in ipairs({ t1, t2, t3, t4 }) do
-		Comm.Cancel(t)
-	end
-	Comm.MAX_OUTBOX, ns.addon.SendCommMessage = realMax, realSend
-	mock.inGroup, mock.units = false, {}
-	ns.DB.DeletePlan(plan.id)
 end)

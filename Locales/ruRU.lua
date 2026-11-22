@@ -890,4 +890,6 @@ ns.Locales.ruRU = {
 	["out of sync"] = "рассинхрон",
 	["out of sync: %d"] = "рассинхрон: %d",
 	["steps on their own"] = "идёт самостоятельно",
+	["Too many messages are waiting for the boss fight to end: the page was not sent."] = "Слишком много сообщений ждут конца боя с боссом: страница не отправлена.",
+	["failed: too many messages were waiting for a boss fight to end"] = "ошибка: слишком много сообщений ждали конца боя с боссом",
 }

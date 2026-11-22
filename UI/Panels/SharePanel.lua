@@ -331,12 +331,19 @@ function Panel.Create(parent, ctx)
 		receiving = "receiving",
 		failed = "failed",
 	}
+	-- A transfer's state, with the cause when the outbox had no room for it (Share/Comm.lua).
+	local function stateText(t)
+		if t.state == "failed" and t.reason == "outbox" then
+			return L["failed: too many messages were waiting for a boss fight to end"]
+		end
+		return L[STATE_TEXT[t.state] or t.state]
+	end
 
 	function f:RefreshStatus()
 		local lines = {}
 		for _, t in pairs(ns.Comm.outgoing) do
 			local who = t.target or t.channel
-			local text = string.format(L["\"%s\" to %s: %s"], t.name, who, L[STATE_TEXT[t.state] or t.state])
+			local text = string.format(L["\"%s\" to %s: %s"], t.name, who, stateText(t))
 			if t.state == "offering" and t.acceptCount > 0 then
 				text = text .. " (" .. string.format(L["%d accepted"], t.acceptCount) .. ")"
 			elseif t.state == "sending" and t.total then
@@ -346,7 +353,7 @@ function Panel.Create(parent, ctx)
 		end
 		for _, t in pairs(ns.Comm.incoming) do
 			if t.state ~= "prompt" then
-				lines[#lines + 1] = string.format(L["\"%s\" from %s: %s"], t.name, t.sender, L[STATE_TEXT[t.state] or t.state])
+				lines[#lines + 1] = string.format(L["\"%s\" from %s: %s"], t.name, t.sender, stateText(t))
 			end
 		end
 		c.status:SetText(table.concat(lines, "\n"))

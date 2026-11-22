@@ -121,12 +121,27 @@ function apply(effects)
 end
 
 -- Messages (from Comm.OnMessage, protocol checked): only from players in the group.
-function RunSync.OnMessage(msg, sender)
+-- Each message on the channel it is meant for: R to the group, or whispered (the leader's answer to Q; the leader's
+-- rank is checked by Sync); F and W whispered; Q to the group. Anything else is dropped.
+local GROUP_CHANNEL = { PARTY = true, RAID = true, INSTANCE_CHAT = true }
+local function rightChannel(t, channel)
+	if t == "run" then
+		return GROUP_CHANNEL[channel] or channel == "WHISPER"
+	elseif t == "query" then
+		return GROUP_CHANNEL[channel] == true
+	end
+	return channel == "WHISPER"
+end
+
+function RunSync.OnMessage(msg, sender, channel)
+	local t = msg.type
+	if not rightChannel(t, channel) then
+		return
+	end
 	local rank = ns.Comm.GroupRank(sender)
 	if not rank.inGroup then
 		return
 	end
-	local t = msg.type
 	if t == "run" then
 		local lead = Sync.LeadName(RunSync.state)
 		RunSync.Step({ type = "run", from = sender, rank = rank, msg = msg,
@@ -349,9 +364,16 @@ function RunSync.Init()
 	end)
 	ns:On("PLAN_IMPORTED", RunSync, rematch)
 	ns:On("PLANS_CHANGED", RunSync, rematch)
+	-- Roster reads (every unit's name and rank) only when a lead is known or this player leads; idle, only whether the
+	-- player is in a group (to ask who leads while run mode is open).
 	ns:RegisterEvent("GROUP_ROSTER_UPDATE", function()
-		local lead = Sync.LeadName(RunSync.state)
-		RunSync.Step({ type = "roster", inGroup = ns.Comm.GroupChannel() ~= nil, self = ns.Comm.GroupRank(),
-			leadRank = lead and ns.Comm.GroupRank(lead) or nil, members = ns.Comm.GroupMembers(), shown = shown(), jitter = jitter() })
+		local event = { type = "roster", inGroup = ns.Comm.GroupChannel() ~= nil, shown = shown(), jitter = jitter() }
+		local s = RunSync.state
+		if s.mode == "leading" then
+			event.self, event.members = ns.Comm.GroupRank(), ns.Comm.GroupMembers()
+		elseif s.lead then
+			event.leadRank = ns.Comm.GroupRank(s.lead.name)
+		end
+		RunSync.Step(event)
 	end)
 end

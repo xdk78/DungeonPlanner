@@ -2,14 +2,14 @@
 -- UnitIsGroupLeader, ...); every answer goes through Util.Plain, and a secret or missing answer counts as "no". Comm and
 -- group sync use it for ranks, members and whisper targets.
 --
--- Player identity (docs/COMPATIBILITY.md, "Player names"). On WoW: Forever characters carry a surname: UnitName's second
--- return is the surname, not a realm, and addon-message senders read "First Surname" (Constants'
--- CHARACTERNAME_SURNAME_SEPARATOR, a space), with "-Realm" from another realm; a Forever realm may have no name at all.
--- Elsewhere a unit is "Name" (and its realm as UnitName's second return when it is from another one), and senders are
--- "Name-Realm". Roster.Id gives one form for both: "First Surname" where names carry surnames (unique there, so the realm
--- is left off, as the Forever addons that sync parties do), else "Name" on the player's realm and "Name-Realm" from
--- another. A sender is matched to a group unit by that whole identity, never by a first name, and two units with the
--- same identity make the sender untrusted.
+-- Player identity (docs/COMPATIBILITY.md, "Player names carry a surname", "Realm names are gone"). On WoW: Forever
+-- characters carry a surname: UnitName's second return is the surname, not a realm, and addon-message senders read
+-- "First Surname" (Constants' CHARACTERNAME_SURNAME_SEPARATOR, a space); realm names are empty. Elsewhere a unit is
+-- "Name" (with its realm as UnitName's second return when it is from another one), and senders are "Name-Realm".
+-- Roster.Id gives one form for both: the name with a realm suffix only when that suffix names another realm than ours
+-- (an empty suffix, or our own realm, is left off). A sender is matched to a group unit by that whole identity, never by
+-- a first name: a sender whose suffix names another realm matches no unit that lacks it. Zero or two units with the
+-- identity make the sender untrusted; nothing asks the client to resolve a bare name.
 
 local _, ns = ...
 local Roster = ns:NewModule("Roster")
@@ -39,11 +39,14 @@ local function separator()
 	return text(sep) or " "
 end
 
--- The player's realm without spaces or hyphens, as senders carry it; nil where the realm has no name (Forever).
+-- A realm as senders carry it: without spaces or hyphens; nil for none.
+local function realmKey(realm)
+	return text(realm) and text((realm:gsub("[%s%-]", ""))) or nil
+end
+
+-- The player's realm; nil where realms have no name (Forever).
 local function myRealm()
-	local realm = text((plainCall(rawget(_G, "GetNormalizedRealmName"))))
-		or text((plainCall(rawget(_G, "GetRealmName"))))
-	return realm and text((realm:gsub("[%s%-]", ""))) or nil
+	return realmKey((plainCall(rawget(_G, "GetNormalizedRealmName")))) or realmKey((plainCall(rawget(_G, "GetRealmName"))))
 end
 
 -- Do names carry surnames here? The player's own name tells: a second return from UnitNameUnmodified or UnitName (the
@@ -65,11 +68,10 @@ function Roster.Id(sender)
 		return nil
 	end
 	local name, realm = sender:match("^(.-)%-([^%-]*)$")
-	name = text(name) or sender
-	if Roster.Surnames() then
-		return name
+	if not text(name) then
+		return sender
 	end
-	realm = realm and text((realm:gsub("[%s%-]", ""))) or nil
+	realm = realmKey(realm)
 	if not realm or realm == myRealm() then
 		return name
 	end
@@ -89,6 +91,7 @@ function Roster.UnitId(unit)
 		end
 		return name .. separator() .. second
 	end
+	second = realmKey(second)
 	return second and Roster.Id(name .. "-" .. second) or name
 end
 
@@ -141,16 +144,6 @@ function Roster.Rank(id)
 				unit, found = u, found + 1
 			end
 		end
-		-- No unit reads as that name (one the client spells otherwise): ask the client which unit the sender, as it
-		-- arrived, is. Still exactly one.
-		if found == 0 then
-			local asked = Roster.WhisperTarget(id)
-			for _, u in ipairs(Roster.Units()) do
-				if plainCall(rawget(_G, "UnitIsUnit"), asked, u) == true then
-					unit, found = u, found + 1
-				end
-			end
-		end
 		if found ~= 1 then
 			unit = nil
 		end
@@ -163,20 +156,21 @@ function Roster.Rank(id)
 	return info
 end
 
--- Whisper targets: a reply goes to the sender's name exactly as it arrived (with its realm or surname), not to the
--- identity, which may have left the realm off. Remembered per identity, the last MAX_HEARD senders.
-local heard, heardCount = {}, 0
+-- Whisper targets: a reply goes to a group member's name exactly as it arrived (with its surname or realm), not to the
+-- identity, which may have left a suffix off. The last MAX_HEARD group members heard, least recently heard first out.
+local heard, order = {}, {}
 
 function Roster.Heard(id, raw)
 	if not (id and text(raw)) then
 		return
 	end
-	if not heard[id] then
-		if heardCount >= Roster.MAX_HEARD then
-			heard, heardCount = {}, 0
-		end
-		heardCount = heardCount + 1
+	local at = Util.IndexOf(order, id)
+	if at then
+		table.remove(order, at)
+	elseif #order >= Roster.MAX_HEARD then
+		heard[table.remove(order, 1)] = nil
 	end
+	order[#order + 1] = id
 	heard[id] = raw
 end
 

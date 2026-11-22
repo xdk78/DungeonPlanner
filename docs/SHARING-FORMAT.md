@@ -313,8 +313,10 @@ following, free, mismatch), `UI/RunSync.lua` the glue.
   still waiting, so the fight's end sends one current state. What waited goes out before anything newer, so an `R` that
   ended a lead in a fight still arrives before the `R` of a lead started right after it.
 - **Trust:** every message is taken only from a member of the group, matched by the sender's whole name against the
-  receiver's own roster (docs/COMPATIBILITY.md: "First Surname" on Forever, "Name-Realm" from another realm), never by
-  a first name; if two units have that name, the sender is untrusted. `R` only from the group's leader, or in a raid an
+  receiver's own roster (docs/COMPATIBILITY.md: "First Surname" on Forever, "Name-Realm" from another realm; a realm
+  suffix is dropped only when empty or our own), never by a first name; if no unit or two units have that name, the
+  sender is untrusted. Each message only on its own channel: `R` to the group or whispered, `F` and `W` whispered, `Q`
+  to the group; anything else is dropped. `R` only from the group's leader, or in a raid an
   assistant; while one is followed, another one takes over only when the first is no longer trusted, or when the
   group's leader takes over from an assistant. A roster change that demotes the followed leader ends following; a
   leader who loses the rank ends the lead. `F` and `W` only for the current session. Every field is range-checked in
@@ -322,11 +324,11 @@ following, free, mismatch), `UI/RunSync.lua` the glue.
   sender's name exactly as it arrived.
 - **Order:** within a session, a state whose `seq` is not above the last one is stale and ignored; a new session
   starts its own count (the leader reloaded or led again). An end counts only for the session being followed; once a
-  session has ended, nothing more of it is taken, whatever its `seq`.
+  session has ended, nothing more of it is taken, whatever its `seq` (the last 8 ended sessions are remembered).
 - **Which plan:** the member's plan with the leader's id (a recommended plan, the same account), else the newest copy
   received in game from it (`global.shareLinks`: for each plan received through a group member's transfer, the
   sender's plan id; pasted strings make no link), whose **steps revision** matches: the Adler-32 of the plan's steps in
-  order (`Sync.Signature`: each step's kind and its pull, boss, objective or marker id). Edits that leave the steps as
+  order (`Sync.Signature`: the step count, then each step's kind, its pull and boss, and its objective or marker id). Edits that leave the steps as
   they were (notes, strategies, gear, spots) keep the revision, so a leader who edits mid-run keeps the followers; an
   added, removed or reordered step makes another version, as the step numbers no longer mean the same steps. None:
   "Leader is on a plan you don't have: ask for it"; only other versions: "Leader is on another version of this plan:

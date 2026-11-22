@@ -916,4 +916,6 @@ ns.Locales.plPL = {
 	["out of sync"] = "poza synchronizacją",
 	["out of sync: %d"] = "poza synchronizacją: %d",
 	["steps on their own"] = "idzie samodzielnie",
+	["Too many messages are waiting for the boss fight to end: the page was not sent."] = "Zbyt wiele wiadomości czeka na koniec walki z bossem: strona nie została wysłana.",
+	["failed: too many messages were waiting for a boss fight to end"] = "nieudane: zbyt wiele wiadomości czekało na koniec walki z bossem",
 }

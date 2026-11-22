@@ -45,6 +45,13 @@ Compat.CHECKS = {
 	{ "Group roles", "UnitGroupRolesAssigned", "roles in the roster" },
 	{ "Group leader", "UnitIsGroupLeader", "sending raid pages (nobody counts as leader)" },
 	{ "Raid assistant", "UnitIsGroupAssistant", "raid assistants sending pages" },
+	-- Player names (Share/Roster.lua): who a message came from, by the whole name.
+	{ "Unit name, unmodified", "UnitNameUnmodified", "surnames told from the player's UnitName alone" },
+	{ "Surname separator", "Constants.CharacterNameSeparatorConsts.CHARACTERNAME_SURNAME_SEPARATOR",
+		"a space between first name and surname" },
+	{ "Realm name, normalized", "GetNormalizedRealmName", "the realm from GetRealmName" },
+	{ "Realm name", "GetRealmName", "no own realm: every realm suffix on a sender counts as another realm" },
+	{ "One-shot timers", "C_Timer.After", "group sync's timed sends (a change waits for the next one)" },
 	{ "Unit class", "UnitClass", "names in class colour on raid pages" },
 	{ "Class colours", "RAID_CLASS_COLORS", "names in class colour on raid pages" },
 	{ "Class icons", "CLASS_ICON_TCOORDS", "class icons on raid pages (class names instead)" },

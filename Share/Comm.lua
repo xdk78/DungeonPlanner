@@ -122,12 +122,16 @@ local function flushOutbox()
 	end
 end
 
--- A transfer whose message cannot wait: its queued messages go, it ends as failed (the other side times out).
+-- A transfer whose message cannot wait: its queued messages go, it ends as failed (the other side times out). One that
+-- has already ended (cancelled by the player, done) keeps its state; only its waiting messages go.
 local function abortTransfer(t)
 	for i = #Comm.outbox, 1, -1 do
 		if Comm.outbox[i].transfer == t then
 			table.remove(Comm.outbox, i)
 		end
+	end
+	if Transfer.IsFinished(t) then
+		return
 	end
 	t.state, t.reason = "failed", "outbox"
 	ns:Fire("SHARE_STATUS", t)
@@ -381,9 +385,14 @@ end
 
 -- A whisper finds its player whatever the case of the typed name, but replies carry the name as the game spells it:
 -- the first reply from that player fixes the transfer's target, so "anna" and "Anna" are one receiver.
+-- On Forever a typed first name ("ana") reaches "Ana Smith": a reply whose first name is the typed name adopts the
+-- whole name too (only the player the whisper reached has the transfer id).
 local function adoptTarget(out, sender)
-	if out and out.channel == "WHISPER" and out.target ~= sender and type(out.target) == "string"
-		and out.target:lower() == sender:lower() then
+	if not (out and out.channel == "WHISPER" and out.target ~= sender and type(out.target) == "string") then
+		return
+	end
+	local typed, first = out.target:lower(), (sender:match("^[^%s%-]+") or sender):lower()
+	if typed == sender:lower() or typed == first then
 		out.target = sender
 	end
 end
@@ -470,7 +479,9 @@ function Comm.SendPage(payload)
 	end
 	-- While the game holds addon messages (a boss fight), the outbox keeps it until the lockdown ends.
 	local waiting = Comm.IsLockedDown()
-	enqueue(Transfer.Encode({ type = "note", proto = ns.PROTOCOL_VERSION, data = data }), channel, nil, "ALERT")
+	if not enqueue(Transfer.Encode({ type = "note", proto = ns.PROTOCOL_VERSION, data = data }), channel, nil, "ALERT") then
+		return nil, ns.L["Too many messages are waiting for the boss fight to end: the page was not sent."]
+	end
 	return true, waiting
 end
 
@@ -555,7 +566,10 @@ function Comm.OnMessage(prefix, text, channel, sender)
 	if not msg then
 		return
 	end
-	Roster.Heard(sender, raw)
+	-- Replies to group members go to their name as it arrived (Roster.WhisperTarget).
+	if Roster.Rank(sender).inGroup then
+		Roster.Heard(sender, raw)
+	end
 
 	if msg.type == "hello" or msg.type == "helloReply" then
 		Comm.peers[sender] = { version = msg.version, proto = msg.proto, seen = t }

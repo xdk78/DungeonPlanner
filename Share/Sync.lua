@@ -15,7 +15,8 @@
 -- `lead` = { name, session, seq, plan, version, step, pull } as the leader last sent it. `version` is the plan's steps
 -- revision (Sync.Signature): edits that leave the steps as they were (notes, strategies, gear) keep it, so followers
 -- stay with a leader who edits mid-run. Kept across modes: `queriedAt` (when the player last asked the group who
--- leads, a rate limit) and `ended` = { name, session } (the last lead that ended: nothing more of it is taken).
+-- leads, a rate limit) and `ended` = { { name, session }, ... } (the last MAX_ENDED leads that ended, oldest first:
+-- nothing more of them is taken, so a delayed state of an older session cannot bring it back).
 --
 -- Events:
 --   leader:  lead { rank, session, plan, version, step, pull }  stop  moved { plan, version, step, pull }
@@ -46,6 +47,7 @@ Sync.MAX_VERSION = 2 ^ 32 - 1 -- an Adler-32
 Sync.MAX_STEP = 999
 Sync.MAX_PULL = 100
 Sync.MAX_FOLLOWERS = 40
+Sync.MAX_ENDED = 8 -- ended leads remembered
 
 -- The follow status a member reports (F^...^<code>).
 Sync.CODE = { following = "f", free = "u", missing = "m", version = "o" }
@@ -67,9 +69,11 @@ end
 -- A plan's steps revision: the Adler-32 of its steps in order (kind and what each one is: pull, boss, marker,
 -- objective). The step index means the same step on two clients exactly when this matches. steps = Steps.Build(plan).
 function Sync.Signature(steps)
-	local parts = {}
-	for i, s in ipairs(steps or {}) do
-		parts[i] = s.kind .. ":" .. tostring(s.pull or s.encounter or s.objective or s.marker or "")
+	steps = steps or {}
+	local parts = { tostring(#steps) }
+	for i, s in ipairs(steps) do
+		parts[i + 1] = s.kind .. ":" .. tostring(s.pull or "") .. "/" .. tostring(s.encounter or "") .. "/"
+			.. tostring(s.objective or s.marker or "")
 	end
 	return ns.Checksum.Adler32(table.concat(parts, ","))
 end
@@ -357,8 +361,10 @@ function member.run(s, e, now)
 	if s.mode == "leading" or type(m) ~= "table" or type(e.from) ~= "string" or not Sync.Trusted(e.rank) then
 		return {}
 	end
-	if s.ended and s.ended.name == e.from and s.ended.session == m.session then
-		return {} -- that lead ended: nothing more of it counts, whatever its number
+	for _, ended in ipairs(s.ended or {}) do
+		if ended.name == e.from and ended.session == m.session then
+			return {} -- that lead ended: nothing more of it counts, whatever its number
+		end
 	end
 	local lead = s.lead
 	if lead and lead.name ~= e.from then
@@ -377,7 +383,11 @@ function member.run(s, e, now)
 		if not lead or m.session ~= lead.session then
 			return {}
 		end
-		s.ended = { name = e.from, session = m.session }
+		s.ended = s.ended or {}
+		if #s.ended >= Sync.MAX_ENDED then
+			table.remove(s.ended, 1)
+		end
+		s.ended[#s.ended + 1] = { name = e.from, session = m.session }
 		enter(s, "idle")
 		return { { "status" } }
 	end
