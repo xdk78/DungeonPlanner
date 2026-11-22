@@ -203,7 +203,7 @@ function RunSync.LineState(plan)
 		local sum = RunSync.Summary(plan) or Sync.Summary(s, ns.Comm.GroupMembers())
 		local text = string.format(L["Leading: %d of %d following"], sum.following, sum.total)
 		if sum.outOfSync > 0 then
-			text = text .. " · " .. string.format(L["out of sync: %d"], sum.outOfSync)
+			text = text .. ", " .. string.format(L["out of sync: %d"], sum.outOfSync)
 		end
 		return { text = text, dot = "ok", button = L["Stop"], action = "stop", summary = sum }
 	elseif s.mode == "following" then
