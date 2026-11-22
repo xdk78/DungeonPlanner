@@ -209,6 +209,7 @@ T.case("Route bends: a bend's handle under a pin is left out, unless it is being
 	-- On the map: an own route being edited, a bend right beside a numbered stop.
 	boot()
 	local copy = ns.UI.CopyPlan(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns"))
+	copy.markers = {} -- no pin of the plan's own where the bends are
 	copy.routes = { { id = "rb", floor = 1, color = 1, points = {
 		{ 0.3, 0.5, step = 1 }, { 0.302, 0.502 }, { 0.5, 0.5 }, { 0.7, 0.5, step = 2 } } } }
 	ns.UI.ctx.tool, ns.UI.ctx.floor, ns.UI.ctx.activeRoute = "route", 1, "rb"
