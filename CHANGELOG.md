@@ -5,157 +5,143 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-22
+
+Highlights, upgrade notes, known limitations and the in-game test checklist: `docs/RELEASE-NOTES-0.2.0.md` in the
+source repository.
+
+**Restart the game after updating** (a `/reload` is not enough): this version adds files that WoW loads only when the
+client starts; until then the map draws no routes, and `/dp debug` says to restart.
+
 ### Added
-- **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" now follows your
-  game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other languages stay
-  English), and the language menu and Settings list all six. German, Spanish, French and Russian are a
-  machine-assisted first pass using the official WoW terms; native speakers are invited to correct them
-  (`Locales/README.md`, a "Translation" issue, or a pull request).
-- Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
-- A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
-- **Group sync for run mode.** The group's leader (in a raid also an assistant) clicks "Lead this run" in run mode;
-  members who have the same plan see "Following <leader>", and their run mode shows the leader's step, next pull and
-  boss as the leader moves on. Prev or Next steps on your own ("Unfollow" does the same); "Rejoin" snaps back. A member
-  without the plan, or with another version of it, sees "Leader is on a plan you don't have: ask for it": one click
-  asks, and the leader's Dungeon Planner offers the plan the usual way. The leader sees who follows and who is out of
-  sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
-  fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
-  older step. Older Dungeon Planners ignore them.
-- **Every floor on the map**: the map shows all the floors an instance has a map for, not only the plan's: Atal'Byzal,
-  the Maximum Security Unit and the Prismatic Talus are there now. A recommended plan shows such a floor as the map
-  alone; in your own plan, putting something on it adds it to the plan. The home table's Floors count agrees.
-- **Floor switcher on the map** (bottom-right corner): tabs for two to four floors, the floor's name between arrows for
-  more (the toolbar list stays for those); each floor's tooltip counts the markers on it; Shift + mouse wheel over the
-  map changes floor. Stairs and portals say "to <floor>" on the map and in the steps; in a recommended plan a click on
-  one, or a second click on its step, goes there. Run mode's mini map names its floor.
-- **The map follows you to another floor** inside an instance, where the game says which floor you are on (not yet
-  confirmed on WoW: Forever; `/dp scan` inside a dungeon records what the client gives). Run mode's mini map then says
-  which floor you are on.
-- **Out-of-date warning on recommended plans**: a plan researched more than 90 days before the game build you run says
-  "may be out of date" beside its steps, and its Notes give the data date, the build's date and the source, so you know
-  to check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
-- **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns, in
-  orange, who it is from and both dates: replacing would undo your newer changes. Keep both stays the first choice.
-- **Report a problem**: `/dp report`, the `!` button in the window's title bar or Settings (Troubleshooting) opens a
-  text to paste into a GitHub issue: versions, language, the plan, other addons, the `/dp debug` summary, recent
-  Dungeon Planner errors and blocked actions. Add what happened in your own words; "Short for Discord" fits it in one
-  message. Character, realm, guild, group and plan names are replaced with `<name>`, and chat is never included.
-- **What's new**: a card with the highlights, shown once after an update at a quiet moment (out of combat and
-  instances). A first install shows a short welcome instead. `/dp new` shows it again.
-- **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory. Nothing runs until
-  `/dp perf start`; `/dp perf stop` turns it off.
+- **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" follows your
+  game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other client languages stay
+  English), and the language menu and Settings list all six. The new languages are a machine-assisted first pass using
+  the official WoW terms; corrections from native speakers are welcome (`Locales/README.md`, a "Translation" issue or
+  a pull request). Each has its own plural rules, and a Russian interface uses the game's Cyrillic font, or the
+  bundled Alegreya Sans when the client has none.
+- **Group sync for run mode.** The group's leader (in a raid also an assistant) clicks "Lead this run"; members with
+  the same plan see "Following <leader>", and their run mode follows the leader's step, next pull and boss. Prev or
+  Next (or "Unfollow") steps on your own; "Rejoin" snaps back. A member without the plan, or with another version of
+  it, sees "Leader is on a plan you don't have: ask for it", and one click asks the leader for it. The leader sees who
+  follows and who is out of sync, in run mode and in the Share section's "Has this plan" line. Messages are small and
+  sent only on a change; during a boss fight they wait until addons may talk again, and a boss kill your own tracker
+  saw is not undone by the leader's older step. Older versions of Dungeon Planner ignore them.
+- **Every floor on the map**, not only the plan's: Atal'Byzal, the Maximum Security Unit and the Prismatic Talus are
+  there now. A recommended plan shows such a floor as the map alone; in your own plan, putting something on it adds it
+  to the plan. The home table's Floors count agrees.
+- **Floor switcher** in the map's bottom-right corner: a tab per floor for up to four floors, the floor's name between
+  arrows for more. Each floor's tooltip counts its markers, and Shift + mouse wheel over the map changes floor. Stairs
+  and portals say "to <floor>" on the map and in the steps; in a recommended plan a click on one, or a second click on
+  its step, goes there. Run mode's mini map names its floor.
+- **The map follows you to another floor** inside an instance where the game says which floor you are on (not yet
+  confirmed on WoW: Forever).
 - **Prep**, a new section for before you go in: the instance's quests (to pick up, in your log, too low, done; the
-  other faction's hidden; names in your language when the game has them; who gives each and where with Questie
-  installed), the keys and attunements it needs and whether you carry them or did the quest (Onyxia's Drakefire
-  Amulet, Upper Blackrock Spire's Seal of Ascension, the Dalaran Sewer Key, Scholomance's keys and more), your group's
-  levels against the level range and the roles still missing, and your own prep notes in an editable copy.
-- **Getting there**, in Prep and from the home table's new "Getting there" button (no plan needed): the zone, the
-  area the entrance lies in and whose territory it is, the entrance's coordinates, the nearest flight master for each
-  faction and the way from it, your faction's boats and zeppelins when you are on another continent, Forever's
-  summoning stones, and
-  outdoors your distance and direction to the entrance. "Show on world map" sets the game's map pin; "Navigate" hands
-  the entrance to Polestar or TomTom when installed, or to Shortest Path Forever when its API is present (each can be
-  switched off in Settings),
-  else to the game's own pin. "Pop out" keeps it in a small window.
-- Run mode shows "Prep: 3 quests to pick up" before the first step and updates it as you pick up quests or keys; a
-  click opens Prep.
-- The home table's preview names the instance's zone, in your game's language.
+  other faction's hidden; who gives each and where, with Questie installed), the keys and attunements it needs and
+  whether you have them (Onyxia's Drakefire Amulet, the Seal of Ascension, the Dalaran Sewer Key, Scholomance's keys
+  and more), your group's levels against the level range and the roles still missing, and your own prep notes in an
+  editable copy. Run mode shows "Prep: 3 quests to pick up" before the first step; a click opens Prep.
+- **Getting there**, in Prep and from the home table's "Getting there" button (no plan needed): the zone and area of
+  the entrance and whose territory it is, its coordinates, the nearest flight master for each faction and the way from
+  it, your faction's boats and zeppelins from another continent, Forever's summoning stones, and outdoors your distance
+  and direction. "Show on world map" sets the game's map pin; "Navigate" hands the entrance to Polestar, Shortest Path
+  Forever or TomTom, the first one installed (each can be switched off in Settings), else to the game's own pin. "Pop
+  out" keeps it in a small window.
 - **A live map in the Getting there window**, outdoors: the entrance's zone map with the entrance, the nearest flight
-  masters and a summoning stone, your position as an arrow turned the way you face, and the distance and direction,
-  updated ten times a second while the window is open and you are outside (the game gives no position inside
-  instances). Walking into that instance with the window open opens its plan and run mode, in every client language;
-  when the instance has no plan, the window just closes.
-- Dungeon Planner learns entrances as you play: the spot you stood on before a loading screen into an instance is kept
-  (per account) and used instead of the bundled one, when it lies within 400 yards of the bundled one. A summon,
-  portal or hearthstone from farther away teaches nothing; one taken near the entrance can be learned. A later spot
-  replaces a learned one only when it lies within 100 yards of it. `/dp entrances reset`, or "Forget learned
-  entrances" under Troubleshooting in the Settings panel, forgets them.
-- **Snap to corridors** in the route tool: with it on, a click adds a numbered stop and the line from the stop before
-  follows the dungeon's corridors instead of cutting through walls. Shift-click (or hold Shift while dropping a stop
-  dragged with the route tool) for a straight line. On by default; works on
-  every classic floor and Forever's caves and buildings. Open outdoor maps keep straight lines. Snapped routes are
-  ordinary route points, so shared plans work with older versions.
-- **Show location** in the window's header, right after the instance's name: a click shows the entrance on the world
-  map (the game's pin, as in Getting there), a right-click or Shift-click opens the Getting there window. Its tooltip
-  names the zone and what a click does; it is greyed out in combat, while dead and for instances without travel facts.
-- **The party strip fills from your group.** The side panel's Party seats and the Party section's card show the
-  people you are grouped with wherever the plan names nobody (you alone when solo): each by the role chosen in the
-  group finder, a damage-only class without a role in a damage seat, and a class that can also tank or heal in the
-  empty tank or healer seat it can fill, marked as a guess (a dimmer name; the tooltip says it was guessed from the
-  class). Anyone left over takes a free seat, and the tooltip says only that. Names are in class colour with the
-  level on the plate; offline and dead members are dimmed; the tooltip has the whole name (with the surname), the
-  class and how the seat was chosen. Names a plan stores keep their seats and are matched to members by the whole
-  name, or by a first name only one member has (plans filled before surnames were kept). Members past the five seats
-  show as "+1" with their names in the tooltip. A raid plan that sets no groups shows the raid's groups as they
-  stand. Nothing is saved: "Fill from my party" still stores the group into an own plan (in a raid, your own
-  group).
-- **Whole names across a plan.** "Fill from my party", "Fill from my raid" and the assignment targets store a
-  player's whole name (first name and surname on WoW: Forever), and the Party section, the assignments and the Notes
-  window show the short name. Names stored before still match a member when only one has that first name.
+  masters and a summoning stone, and your position as an arrow turned the way you face. Walking into that instance with
+  the window open opens its plan and run mode.
+- **Learned entrances**: the spot you stood on before a loading screen into an instance replaces the bundled entrance
+  when it lies within 400 yards of it, so the directions get better as you play. A summon, portal or hearthstone from
+  farther away teaches nothing. `/dp entrances reset`, or "Forget learned entrances" under Troubleshooting in Settings,
+  forgets them.
+- **Show location** in the window's header, after the instance's name: a click shows the entrance on the world map, a
+  right-click or Shift-click opens Getting there. It is greyed out in combat, while dead and for instances without
+  travel data.
+- **Snap to corridors** in the route tool (on by default): a click adds a numbered stop, and the line from the stop
+  before follows the dungeon's corridors instead of cutting through walls. Shift-click for a straight line. It works on
+  every classic floor and Forever's caves and buildings; open outdoor maps keep straight lines. Snapped routes are
+  ordinary route points, so shared plans still work with older versions.
+- **Follow a route by pointing at it**: the leg under the pointer stands out with its arrows while the rest of the
+  route dims to a greyer, still readable tone, and its tooltip names the two steps it joins. Pointing at a step in the
+  steps list does the same for the leg that leads to it, and run mode highlights its current leg.
+- **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, the two
+  directions are drawn slightly apart, each with its own arrows, and the way back is dashed.
+- **Routes settings**: a new Routes group in Settings sets the line width, opacity, outline and colour (each route's
+  own, or one for all), "Colour along the route", the arrows' density, size and arrowheads at stops, arrows only on the
+  focused step's leg, and the highlight under the pointer. Changes show at once on the map and in run mode.
+- **The party strip fills from your group.** The side panel's party seats and the Party section's card show the people
+  you are grouped with wherever the plan names nobody: each by the role chosen in the group finder, otherwise by class,
+  marked as a guess when a class could fill more than one role. Names are in class colour with the level; offline and
+  dead members are dimmed; members past the five seats show as "+1". A raid plan that sets no groups shows the raid's
+  groups as they stand. Nothing is saved until you click "Fill from my party".
+- **Whole names** (first name and surname on WoW: Forever) are stored by "Fill from my party", "Fill from my raid" and
+  the assignments; the Party section, the assignments and the Notes window show the short name. Names stored before
+  still match a member when only one has that first name.
+- **Out-of-date notice on recommended plans**: a plan researched more than 90 days before the game build you run says
+  "may be out of date", and its Notes give the data's date, the build's date and the source. Your copies of a
+  recommended plan say the same.
+- **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns who it
+  is from and gives both dates, since replacing would undo your newer changes.
+- **Report a problem**: `/dp report`, the `!` button in the window's title bar, or Settings > Troubleshooting opens a
+  text to paste into a GitHub issue: versions, language, the plan, other addons, the `/dp debug` summary and recent
+  Dungeon Planner errors. Character, realm, guild, group and plan names are replaced with `<name>`, and chat is never
+  included. "Short for Discord" fits it in one message.
+- **What's new**: a card with the highlights, shown once after an update at a quiet moment (out of combat and outside
+  instances); a first install gets a short welcome instead. `/dp new` shows it again.
+- **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory use. Nothing runs
+  until `/dp perf start`; `/dp perf stop` turns it off.
+- The home table's preview names the instance's zone, in your game's language.
 
 ### Changed
+- **Map toolbar with icons**: the map tools show the game's pictures beside their names; on a narrow window only the
+  pictures show, and the names stay in the tooltips. The drawing tools, colours and line widths fit one line of square
+  buttons, and Clear floor and Clear all share one menu button at its end.
+- **Routes that read in order**: lines are thinner, over a dark casing, and their colour shifts along the route from
+  its own colour to a partner colour (red runs through magenta to blue), so the earlier and later parts of a route that
+  doubles back read apart; numbered stops, the steps list's stop badges and the arrows take the colour at their place,
+  and the legend's swatch shows the colour the map draws. "Colour along the route" in the Routes settings turns the
+  shift off.
+- **Clearer route arrows**: smaller solid arrowheads in a lighter tone of the line with a thin dark edge, spaced
+  evenly along the route, and a larger arrowhead into each numbered stop and the route's end. Arrows keep clear of
+  stops, sharp bends, pins, labels and each other, so loops and paths that double back (Wailing Caverns) stay readable.
+- **Gear** uses the page's width: items stand side by side (up to three a line) under each boss.
+- **Notes**: the objectives follow right under the bosses; they stand side by side only when that does not fit. The
+  pull list of a recommended plan is as tall as its pulls.
+- **Home**: the preview's Open plan follows its content, a plan's preview lists its bosses in order, and My plans
+  explains double-click and the right-click menu under a short list.
+- Map labels keep clear of the "No map art" note and of the coordinate readout.
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the
-  plans' prep notes). An older Dungeon Planner opens it read-only instead of losing either on its next save.
-- The bug report form on GitHub is now an issue form.
-- **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
-  instead of one narrow column.
-- **Notes**: the objectives follow right under the bosses, each list as tall as its rows; they stand side by side
-  only when that does not fit (a raid's bosses). **Pulls** of a recommended plan: the list's box is as tall as its
-  pulls instead of an empty frame down to the bottom.
-- **Home**: the preview's Open plan follows its content instead of sitting at the bottom; a plan's preview lists its
-  bosses in order; My plans explains double-click and the right-click menu under a short list.
-- **Map toolbar with icons.** The map tools show the game's own pictures beside their names (the pointer for Select, a
-  map pin, a group, crossed swords, a directions scroll, a palette, a red X); on a narrow window the names give way to
-  the pictures and stay in the tooltips. The drawing tools, colours and line widths fit one line of square picture
-  buttons (a glyph of each shape, the game's broom and move cursors, a line of each width), named in their tooltips;
-  Clear floor and Clear all move into one menu button at the line's end. A picture the game lacks falls back to the
-  tool's name or a drawn glyph, and `/dp debug` lists it.
-- **Clearer route arrows.** Direction arrows are smaller solid arrowheads in a lighter tone of the line, with a thin
-  dark edge, spaced by distance on screen instead of per segment. A larger arrowhead points into each numbered stop
-  and the route's end. Arrows keep clear of stops, sharp bends, pins, labels and each other, and none sit where a route
-  crosses itself, so loops and paths that double back (Wailing Caverns) no longer turn into clutter.
-- **Route settings**: a new Routes group in Settings sets the line width, opacity, outline and colour (each route's own
-  or one colour for all) and the arrows' density (off, few, normal, many), size, arrowheads at stops, and arrows only
-  on the focused step's leg. Changes show at once on the map and in run mode.
-- Map labels keep clear of the "No map art" note on a map without art, and of the coordinate readout wherever it
-  sits (above the floor switcher on a map with several floors).
-- **Follow a route by pointing at it.** The leg under the pointer (between two numbered stops) stands out above the
-  rest with its arrows while the other routes dim, and a tooltip names the two steps it joins. Pointing at a step in
-  the steps list does the same for the leg that leads to it, and run mode highlights its current step's leg. A setting
-  in the Routes group turns it off.
-- **Two lanes for out-and-back corridors**: where a route goes down a corridor and comes back the same way, each
-  direction draws slightly apart from the other, so the two read as lanes with their own arrows.
-- **Routes easier to follow.** Lines are thinner with a dark casing, and their colour shifts along the route from its
-  own colour (red runs through magenta to blue), so the earlier and later parts of a route that doubles back read apart;
-  stop numbers and arrows take the colour at their place. The way back through a corridor is dashed. While a leg is
-  highlighted, the rest dims to a greyer, still readable tone instead of fading to pink. "Colour along the route" in the
-  Routes settings turns the colour shift off.
+  plans' prep notes). An older version of Dungeon Planner opens it read-only instead of losing either on its next save.
 
 ### Fixed
-- A marker's long title in the map's details panel no longer runs under its close button: it is cut after a word,
-  with the whole title in a tooltip, also the first time the panel opens. While a route is edited, a bend's handle
-  under a pin or stop gives way to it; one right beside a stop stays.
-- The map legend's route swatches show the colour the map draws the route in, also when the Routes settings give every
-  route one colour.
-- **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or
-  another addon as item IDs, and the class and role filters were not applied to them. A class shows the items it can
-  wear and wield at full level, by the current game rules (armor up to its heaviest type, the weapons and shields it
-  can use; rings, cloaks and trinkets for everyone); it does not account for the level at which mail or plate becomes
-  wearable. The item types for the class and slot filters are read from `C_Item.GetItemInfoInstant` first (the older
-  global after it), items the game has not loaded yet are requested and join the list when they arrive, and a
-  one-hand weapon is listed under the off hand too. The role filter applies to a plan's own entries; on a recommended
-  plan without such entries it is switched off and its tooltip says why, since drops name no role.
+- **Gear filters**: choosing a class or slot now changes the drop list. A class shows the items it can wear and wield
+  by the current game rules (armour up to its heaviest type, the weapons and shields it can use; rings, cloaks and
+  trinkets for everyone); the level at which mail or plate becomes wearable is not taken into account. Items the game
+  has not loaded yet join the list when they arrive, and a one-hand weapon is listed under the off hand too. On a
+  recommended plan without its own gear entries the role filter is switched off, and its tooltip says why.
+- **Gamepad interface style**: with it on, Dungeon Planner registers no slash command and leaves the game's Escape list
+  alone (both can freeze the client or get its windows closed by the gamepad menus). Open it from the minimap button,
+  the Addon Compartment or a key binding; `/dp debug` says when this is in effect, and Settings > Troubleshooting >
+  "Gamepad interface style" overrides the detection (after `/reload`).
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
-- **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
-- **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron
-  Ingress", "Anvilmar's Rest"): they move to a free side, and their dark plates are denser.
-- **Gamepad interface style**: with it on, Dungeon Planner registers no slash command and leaves the game's Escape
-  list alone (both can freeze the client or get its windows closed by the gamepad menus there). Open it from the
-  minimap button, the Addon Compartment or a key binding; `/dp debug` says when this is in effect. If it is detected
-  wrongly, Settings > Troubleshooting > "Gamepad interface style" sets it to On or Off (after `/reload`).
-- **Russian**: the separators between items read as a box with the game's Cyrillic font (it has no middle dot); they
-  are a bullet now, in every language.
+- **Bosses**: an ability with a short note no longer leaves empty lines under it.
+- **Map details panel**: a marker's long title no longer runs under the close button; it is cut after a word, with the
+  whole title in a tooltip. While a route is edited, a bend's handle under a pin or stop gives way to it.
+- **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron Ingress",
+  "Anvilmar's Rest"), and their dark plates are denser.
+- **Russian**: the separators between items showed as a box in the game's Cyrillic font; they are a bullet now, in every
+  language.
+
+### For contributors
+- `/dp scan` also records the client's floor and position answers inside an instance (`position.bestMap`,
+  `mapGroup`), to confirm floor detection on WoW: Forever.
+- Bug reports use a GitHub issue form; translations have their own issue template.
+- The README's clips are rendered offline (`tools/make_gifs.py`, `tools/gif_sequences.json`).
+- Travel facts are generated from `data-src/travel/` (`tools/gen_travel.lua`, `--check` in CI); route snapping uses
+  walk grids from `tools/walk_grids.py`.
+- The UI dump and layout lint run for all six languages in CI; `tools/locale_keys.lua --all` checks every locale, and
+  `tests/test_fonts.lua` checks that the bundled font has every character a locale uses.
 
 ## [0.1.0] - 2026-11-16
 

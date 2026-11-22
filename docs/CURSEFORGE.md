@@ -1,6 +1,6 @@
 # Dungeon Planner (CurseForge description)
 
-_The text below is the project description as published on CurseForge. Paste everything under the line._
+_The text below is the project description for CurseForge, as of 0.2.0. Paste everything under the line._
 
 ---
 
@@ -21,27 +21,32 @@ Dungeon Planner turns every dungeon and raid into a war table: the instance map 
 
 **Works on its own:** maps, boss portraits, abilities, loot, levels and dungeon quests are built in. Other addons only add extras (see below).
 
-> **Beta.** Everything works offline in tests, but the addon is new. Please report anything odd on GitHub and include the output of `/dp debug`.
+> **Beta.** Everything works offline in tests, but the addon is new. Please report anything odd on GitHub: `/dp report` builds the text for the issue.
 
 ## Features
 
 *   **43 ready-made plans** for every classic dungeon and raid and all 9 new Forever dungeons: boss order, routes along the corridors, pulls, strategies and party positions. Make an editable copy to tweak one.
 *   **A war table**: the map fills the window; the plan's steps (entrance, packs, bosses, objectives) and the party sit beside it, and clicking a step shows it on the map. Pick the instance and the plan from the header.
 *   **Run mode**: a small window to keep open while playing: the current step, the next pull, the next boss's key abilities and a mini map, with Prev / Next (also on the pull key bindings) and automatic progress when a boss dies. With the run recorder on, it shows your progress against the plan and warns when you take more pulls than planned before a boss or kill bosses out of order.
+*   **Group sync**: the leader clicks "Lead this run" and members with the same plan follow the leader's step; they can step on their own and rejoin, and a member without the plan asks for it in one click.
+*   **Prep**: the instance's quests and where they stand in your log, the keys and attunements it needs and whether you have them, your group's levels and missing roles, and your own prep notes.
+*   **Getting there**: the entrance's zone and coordinates, the nearest flight master and the way from it, boats, zeppelins and summoning stones, and outdoors a live map with your position. "Navigate" hands the way to Polestar, Shortest Path Forever or TomTom, else to the game's map pin; walking in with the window open opens the plan and run mode. "Show location" in the header pins the entrance.
 *   **Run recorder** (opt-in): pulls, boss kills and wipes of your runs; a run against the plan (extra and skipped pulls, boss order), two runs side by side, splits against your best and previous run, a run summary for Discord.
-*   **Maps**: the game's own dungeon maps for classic instances (multi-floor); for Forever's new dungeons, the hand-drawn maps by Santiago Reyes that come with the addon, used with his permission (or the game's own minimap pictures in the same parchment colours, if you prefer them).
+*   **Maps**: the game's own dungeon maps for classic instances, every floor with a floor switcher; for Forever's new dungeons, the hand-drawn maps by Santiago Reyes that come with the addon, used with his permission (or the game's own minimap pictures in the same parchment colours, if you prefer them).
 *   **Map planning**: markers of 17 kinds (bosses, rares, packs, patrols, loot, chests, quest items and givers, NPCs, objects, entrances, exits, shortcuts, stairs, hazards, party positions, notes); raid marks; labels and notes per marker; drag to move; zoom and pan; layers you can hide; an Enemies layer showing where the plans' research placed creatures. Undo and redo (50 steps) for every change.
 *   **Map drawing** on your own plans: pen, line, arrow, circle, box, text, eraser, eight colours and three widths; drawings can belong to a boss or a pull.
 *   **Pulls**: ordered, coloured groups of markers with notes, tags (Interrupt, Crowd control, Line of sight, Pull with next, Skip, Careful), planned cooldowns and Bloodlust, and the forces after each pull; a Pull tool to click packs into pulls.
-*   **Routes**: draw paths, build a route through your pulls, or let "Suggest order" find a short path.
+*   **Routes**: draw paths with Snap to corridors (lines follow the corridors instead of cutting through walls), build a route through your pulls, or let "Suggest order" find a short path. A colour that shifts along each route so you can tell which part comes first, a dashed way back, clear direction arrows, the leg under the pointer highlighted, and line and arrow styles in Settings.
 *   **Bosses**: portrait, level, key abilities (names and tooltips from the game), loot and strategy for every boss of the recommended plans; your own bosses and phases with triggers.
+*   **Party**: the seats fill from the people you are grouped with (by role, or a guess from the class).
 *   **Assignments**: per boss and phase, for a player, a role, a raid group or everyone; raid groups 1-8; post them to group chat.
 *   **Raid pages**: free-text assignment pages per boss with keywords (`{star}`, `{tank}`, `{group 2}`, `{mage}`), names in class colour; a small Notes window that opens on the boss's pull; the raid leader sends pages to the group.
-*   **Gear**: each boss's drops plus your own recommendations per class, role, slot and boss (item IDs or dragged items, names from the game).
+*   **Gear**: each boss's drops, filtered by class and slot, plus your own recommendations per class, role, slot and boss (item IDs or dragged items, names from the game).
 *   **Progress**: boss kills per run and lifetime (ENCOUNTER\_END, BOSS\_KILL, DBM/BigWigs as backup), an objective checklist per plan.
 *   **Many plans per instance** (strategies, difficulties), profiles, a colour-blind setting.
 *   **Sharing**: send to your group, guild or a player (accept/decline prompt, size and checksum checks); export and import strings; instance packs; Discord text split into 2000-character messages; a community plan repository; who in your group has the plan you sent, and whether their copy is outdated.
-*   **English and Polish**, minimap button, key bindings, Addon Compartment, options in the game's Settings panel, a public API for other addons and WeakAuras.
+*   **Six languages**: English, German, Spanish, French, Polish and Russian, following your game's language (German, Spanish, French and Russian are a first pass; corrections from native speakers are welcome).
+*   Minimap button, key bindings, Addon Compartment, options in the game's Settings panel, `/dp report` to report a problem, and a public API for other addons and WeakAuras.
 
 ## Optional companion addons
 
@@ -51,19 +56,20 @@ All optional. Dungeon Planner reads them in your game only (nothing is copied) a
 *   **[Forever Dungeon Routes](https://www.curseforge.com/wow/addons/forever-dungeon-routes)**: its routes as an extra map layer.
 *   **[OpenMap](https://www.curseforge.com/wow/addons/openmap)**: another map source; your plans appear on its dungeon cards.
 *   **[NeedRoll](https://www.curseforge.com/wow/addons/needroll)**: an "Open in NeedRoll" button in Gear.
-*   **[Questie](https://www.curseforge.com/wow/addons/questie) / [QuestieDB](https://www.curseforge.com/wow/addons/questiedb)**: the dungeon's quests in Runs.
+*   **[Questie](https://www.curseforge.com/wow/addons/questie) / [QuestieDB](https://www.curseforge.com/wow/addons/questiedb)**: the dungeon's quests in Runs, and who gives each in Prep.
+*   **Polestar**, **Shortest Path Forever** or **[TomTom](https://www.curseforge.com/wow/addons/tomtom)**: "Navigate" in Getting there hands them the way to the entrance.
 *   **[DBM](https://www.curseforge.com/wow/addons/deadly-boss-mods)** or **[BigWigs](https://www.curseforge.com/wow/addons/big-wigs)**: boss kills as a backup to the game's own events.
 *   **[WoW Po Polsku Forever](https://www.curseforge.com/wow/addons/forever-wowpopolsku-2-0)**: switches the interface to Polish automatically.
 
 ## Good to know
 
-*   WoW: Forever does not tell addons where you or any creature are inside an instance. Nothing is placed on the map automatically; the run recorder works from combat, nameplates and boss kills.
+*   WoW: Forever does not tell addons where you or any creature are inside an instance. Nothing is placed on the dungeon map automatically, and the live map in Getting there works outdoors only; the run recorder works from combat, nameplates and boss kills.
 *   The Adventure Guide is disabled on Forever, so Dungeon Planner brings its own boss data and maps.
 *   Your plans stay on your computer. Sharing sends only the plan you choose.
 
 ## Commands
 
-`/dp` opens the planner · `/dp run` run mode · `/dp notes` the Notes window · `/dp settings` options · `/dp debug` a report of what your client supports (please include it in bug reports).
+`/dp` opens the planner · `/dp run` run mode · `/dp notes` the Notes window · `/dp settings` options · `/dp new` what's new · `/dp report` a text for a bug report · `/dp debug` a report of what your client supports (please include it in bug reports).
 
 ## Credits
 

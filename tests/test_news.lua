@@ -19,9 +19,11 @@ local function changelogVersions()
 	local text = f:read("*a")
 	f:close()
 	local released, unreleased = {}, false
-	for heading in text:gmatch("\n## %[([^%]]+)%]") do
+	for start, heading in text:gmatch("\n()## %[([^%]]+)%]") do
 		if heading == "Unreleased" then
-			unreleased = true
+			-- Only an [Unreleased] section with entries needs a newer card; an empty one right after a release does not.
+			local body = text:sub(start):match("^[^\n]*\n(.-)\n## ") or text:sub(start)
+			unreleased = body:match("%S") ~= nil
 		elseif heading:match("^%d+%.%d+%.%d+$") then
 			released[#released + 1] = heading
 		end

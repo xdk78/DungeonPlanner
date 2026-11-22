@@ -16,7 +16,7 @@ end
 
 local function build()
 	local s = saved()
-	s.width, s.height = s.width or 460, s.height or 440
+	s.width, s.height = s.width or 460, s.height or 500 -- tall enough for a version's highlights without scrolling
 	local f = W.Window("DungeonPlannerNewsFrame", L["What's new"], s, MIN_W, MIN_H, { compact = true })
 	f:SetFrameStrata("DIALOG")
 	f:SetScale(ns.db.settings.scale or 1)
