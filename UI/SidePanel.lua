@@ -295,10 +295,9 @@ function SidePanel.Create(parent, ctx)
 		if not plan then
 			self.state:SetText(L["No plan for this instance yet"])
 		elseif bundled then
-			-- Researched before this game build: say so in orange (the Notes section has the dates and the source).
+			-- Researched well before this game build: say so (the Notes section has the dates and the source).
 			local stale = UI.StaleLine(plan) ~= nil
-			self.state:SetText(stale and ("|cffff9933" .. L["Recommended plan • may be out of date"] .. "|r")
-				or L["Recommended plan • read-only"])
+			self.state:SetText(stale and L["Recommended plan • may be out of date"] or L["Recommended plan • read-only"])
 		elseif plan.origin then
 			self.state:SetText(L["Your copy of a recommended plan"])
 		else

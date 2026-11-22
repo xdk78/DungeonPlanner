@@ -474,6 +474,22 @@ local function options()
 							ns.WhatsNew.Open()
 						end,
 					},
+					-- When the gamepad style is detected wrongly (Core/Compat.lua Gamepad; read once at login).
+					gamepad = {
+						type = "select",
+						order = 5,
+						name = L["Gamepad interface style"],
+						desc = L["Automatic follows the game. On: no slash commands; open the planner from the minimap button or a key binding. Takes effect after /reload."],
+						values = { auto = L["Automatic"], on = L["On"], off = L["Off"] },
+						sorting = { "auto", "on", "off" },
+						get = function()
+							local v = ns.db.settings.gamepad
+							return (v == "on" or v == "off") and v or "auto"
+						end,
+						set = function(_, v)
+							ns.db.settings.gamepad = v
+						end,
+					},
 				},
 			},
 		},

@@ -31,9 +31,9 @@ follow [Semantic Versioning](https://semver.org/).
 - **The map follows you to another floor** inside an instance, where the game says which floor you are on (not yet
   confirmed on WoW: Forever; `/dp scan` inside a dungeon records what the client gives). Run mode's mini map then says
   which floor you are on.
-- **Out-of-date warning on recommended plans**: a plan researched before the game build you run says "may be out of
-  date" in orange beside its steps, and its Notes give the data date, the build's date and the source, so you know to
-  check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
+- **Out-of-date warning on recommended plans**: a plan researched more than 90 days before the game build you run says
+  "may be out of date" beside its steps, and its Notes give the data date, the build's date and the source, so you know
+  to check its route and pulls in game. Your copies of a recommended plan say the same about the plan they came from.
 - **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns, in
   orange, who it is from and both dates: replacing would undo your newer changes. Keep both stays the first choice.
 
@@ -56,7 +56,8 @@ follow [Semantic Versioning](https://semver.org/).
   Ingress", "Anvilmar's Rest"): they move to a free side, and their dark plates are denser.
 - **Gamepad interface style**: with it on, Dungeon Planner registers no slash command and leaves the game's Escape
   list alone (both can freeze the client or get its windows closed by the gamepad menus there). Open it from the
-  minimap button, the Addon Compartment or a key binding; `/dp debug` says when this is in effect.
+  minimap button, the Addon Compartment or a key binding; `/dp debug` says when this is in effect. If it is detected
+  wrongly, Settings > Troubleshooting > "Gamepad interface style" sets it to On or Off (after `/reload`).
 - **Russian**: the separators between items read as a box with the game's Cyrillic font (it has no middle dot); they
   are a bullet now, in every language.
 

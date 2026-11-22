@@ -250,9 +250,9 @@ function Panel.Create(parent, ctx)
 		getFloor = function()
 			return ctx.floor
 		end,
-		-- The floor to put something on (a floor only the map had joins the plan first).
-		editFloor = function()
-			return ctx:EditFloor()
+		-- Put something on the current floor (a floor only the map had joins the plan first; ctx:AddOnFloor).
+		addOnFloor = function(add)
+			return ctx:AddOnFloor(add)
 		end,
 		-- A marker that leads to another floor (stairs, a portal) was clicked in a read-only plan: go there.
 		onGoToFloor = function(index)
@@ -344,7 +344,9 @@ function Panel.Create(parent, ctx)
 			end
 			local route = ctx.activeRoute and Util.FindById(p.routes, ctx.activeRoute)
 			if not route then
-				route = Plan.AddRoute(p, ctx:EditFloor(), string.format(L["Route %d"], #p.routes + 1), (#p.routes % Schema.COLOR_COUNT) + 1)
+				route = ctx:AddOnFloor(function(floor)
+					return Plan.AddRoute(p, floor, string.format(L["Route %d"], #p.routes + 1), (#p.routes % Schema.COLOR_COUNT) + 1)
+				end)
 				if not route then
 					ns:Print(L["Cannot add more routes."])
 					return
@@ -479,7 +481,9 @@ function Panel.Create(parent, ctx)
 			ns:Print(L["Put markers of at least two pulls on this floor first."])
 			return
 		end
-		local route = Plan.AddRoute(p, ctx:EditFloor(), L["Pull route"], 1)
+		local route = ctx:AddOnFloor(function(floor)
+			return Plan.AddRoute(p, floor, L["Pull route"], 1)
+		end)
 		if route then
 			for _, pt in ipairs(points) do
 				Plan.AddRoutePoint(p, route.id, pt[1], pt[2])

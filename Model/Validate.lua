@@ -174,6 +174,8 @@ function validatePlan(raw)
 			plan.floors[#plan.floors + 1] = {
 				uiMapID = int(floor.uiMapID, 1, 2 ^ 31),
 				name = text(floor.name, TEXT.name) or "",
+				-- Optional: the position of the instance's map art this floor shows (Data/Floors.lua).
+				art = int(floor.art, 1, MAX.floors),
 			}
 		else
 			drop(report, "floors")

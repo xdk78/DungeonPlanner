@@ -475,7 +475,8 @@ function RunMode.Refresh()
 	local several = #floors > 1 and floors[frame.floor] ~= nil
 	local floorText = several and ns.Names.Floor(floors[frame.floor], frame.floor) or ""
 	-- Where the player is, when the client says (Floors.PlayerFloor; unverified on Forever) and it is another floor.
-	local playerFloor = several and ns.Floors.PlayerFloor(plan)
+	local playerFloor = several and ns.Floors.PlayerFloor(plan) or nil
+	frame.playerFloor = playerFloor -- what the zone events compare with
 	if playerFloor and playerFloor ~= frame.floor and floors[playerFloor] then
 		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[playerFloor], playerFloor))
 	end
@@ -506,6 +507,20 @@ end
 -- that pull or boss, and those tied to no step), every one ("all"), or none ("off").
 RunMode.DRAWINGS = { "step", "all", "off" }
 RunMode.DRAWING_TEXT = { step = "Drawings: this step", all = "Drawings: all", off = "Drawings: hidden" }
+
+-- A zone event: the floor line again when the player's floor changed (one floor: nothing to say, nothing done).
+function RunMode.OnZoneChanged()
+	if not (frame and RunMode.IsShown()) then
+		return
+	end
+	local plan = ctx():Plan()
+	if not plan or #ns.Floors.For(plan) <= 1 then
+		return
+	end
+	if ns.Floors.PlayerFloor(plan) ~= frame.playerFloor then
+		RunMode.Refresh()
+	end
+end
 
 function RunMode.DrawingsMode()
 	local mode = saved().drawings
@@ -749,12 +764,11 @@ function RunMode.Init()
 	ns:On("BOSS_KILLED", RunMode, function(encounterID, name)
 		ns.SafeCall(RunMode.OnKill, encounterID, name)
 	end)
-	-- The mini map's floor line says where the player is (Floors.PlayerFloor), while the window is open.
+	-- The mini map's floor line says where the player is (Floors.PlayerFloor), while the window is open: refreshed only
+	-- when that floor changed, and never for an instance of one floor.
 	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS" }) do
 		ns:RegisterEvent(event, function()
-			if RunMode.IsShown() then
-				ns.SafeCall(RunMode.Refresh)
-			end
+			ns.SafeCall(RunMode.OnZoneChanged)
 		end)
 	end
 	if saved().shown then

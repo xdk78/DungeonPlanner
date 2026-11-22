@@ -97,7 +97,7 @@ function MinimapArt.FloorArt(plan, index)
 		return nil
 	end
 	local name = plan.instance and plan.instance.name
-	local pos = floor.artIndex or index -- a floor the map adds (Data/Floors.lua): its own position in the art
+	local pos = floor.art or index -- a floor with `art` (Data/Floors.lua): that position in the instance's art
 	local key = tostring(ns.GameFiles.Key(name or "")) .. ":" .. tostring(pos)
 	if cache[key] == nil then
 		local d = MinimapArt.Data(name, pos)

@@ -58,7 +58,7 @@ their own language). Coordinates are 0..1 over the floor's map art (0,0 top-left
 | `created`, `updated` | int | Unix time |
 | `tags` | list of string | 8 x 24 bytes |
 | `instance` | `{ name, kind = "dungeon"/"raid"/"other", origin?, ejInstanceID?, uiMapID?, levelMin?, levelMax? }` | IDs are the client's; levels 1-200 (v2), max never below min; `origin` (v2, optional) is `"forever"` for an instance new in WoW: Forever or `"classic"`, anything else is dropped |
-| `floors` | list of `{ uiMapID?, name }` | 16 |
+| `floors` | list of `{ uiMapID?, name, art? }` | 16; `art` (optional) 1-16: the position of the instance's map art the floor shows, set on a floor the map added from that art. Without it (or in a reader that drops it) a floor shows the art at its own position |
 | `markers` | list of markers (below) | 500 |
 | `routes` | list of `{ id, name, floor, color 1-8, optional?, points }` (below) | 20 routes, 200 points each |
 | `pulls` | list of `{ id, name, note, color 1-8, tags?, cd?, lust?, progress? }` (order = pull order; below) | 100 |

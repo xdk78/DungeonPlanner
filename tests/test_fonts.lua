@@ -113,12 +113,16 @@ end
 T.case("The separators the code builds and every locale string have glyphs in every face (no middle dot)", function()
 	local cmap = Cmap.Load(FACE)
 	local files = {}
-	local p = io.popen('find Core Model Share Config Data UI Tracker -name "*.lua" -not -path "Data/Plans/*"')
+	-- git ls-files, as tests/test_source.lua does: `find` is another program on Windows.
+	local p = io.popen("git ls-files -- Core Model Share Config Data UI Tracker")
+	T.ok(p, "git ls-files can run")
 	for path in p:lines() do
-		files[#files + 1] = path
+		if path:match("%.lua$") and not path:find("^Data/Plans/") then
+			files[#files + 1] = path
+		end
 	end
 	p:close()
-	T.ok(#files > 50, "the addon's files: " .. #files)
+	T.ok(#files > 50, "git ls-files listed the addon's Lua files (run the tests from a git checkout): " .. #files)
 	for _, path in ipairs(files) do
 		-- Discord export text is read in Discord, not in the game.
 		if not path:find("Discord", 1, true) then

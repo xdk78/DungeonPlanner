@@ -289,8 +289,10 @@ function Providers.PickFloor(plan, floor, list, describe)
 			return best, bestI
 		end
 	end
-	if type(floor) == "number" and list[floor] ~= nil then
-		return list[floor], floor
+	-- The same position: the floor's `art` when it has one (Data/Floors.lua), else its place in the plan.
+	local pos = type(f) == "table" and f.art or floor
+	if type(pos) == "number" and list[pos] ~= nil then
+		return list[pos], pos
 	end
 	return nil
 end

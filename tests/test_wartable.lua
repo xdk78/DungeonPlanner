@@ -467,7 +467,8 @@ T.case("Home: an instance table with a preview; a plate where the game has no pi
 	ns.UI.GoHome("dungeons")
 end)
 
--- A recommended plan researched before the game build (Bundled.Stale) says so in the side panel, in orange.
+-- A recommended plan researched well before the game build (Bundled.Stale) says so in the side panel, in its usual
+-- text colour.
 T.case("Side panel: a recommended plan older than the game build says it may be out of date", function()
 	boot()
 	local saved = mock.buildInfo
@@ -476,7 +477,7 @@ T.case("Side panel: a recommended plan older than the game build says it may be 
 		ns.UI.SelectPlan("b:hall-of-thanes")
 		local side = _G.DungeonPlannerMainFrame.instancePage.side
 		side:Refresh()
-		T.ok(side.state:GetText():find(ns.L["Recommended plan • may be out of date"], 1, true), side.state:GetText())
+		T.eq(side.state:GetText(), ns.L["Recommended plan • may be out of date"], "no colour code")
 	end)
 	mock.buildInfo = saved
 	assert(ok, err)

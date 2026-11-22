@@ -88,8 +88,9 @@ function ReyesMaps.Has(name)
 	return ReyesMaps.Floors(name) ~= nil
 end
 
--- The bundled floor for floor `index` of a plan: one named like it (label or names), else Providers.PickFloor (the
--- most words of its name, else the same position). nil for the zone outside (an unnamed floor with its own map ID).
+-- The bundled floor for floor `index` of a plan: the one at its `art` position when it names one (Data/Floors.lua),
+-- else one named like it (label or names), else Providers.PickFloor (the most words of its name, else the same
+-- position). nil for the zone outside (an unnamed floor with its own map ID).
 function ReyesMaps.Pick(plan, index)
 	local floor = type(plan) == "table" and type(plan.floors) == "table" and plan.floors[index]
 	if type(floor) ~= "table" or ((floor.name or "") == "" and floor.uiMapID) then
@@ -98,6 +99,9 @@ function ReyesMaps.Pick(plan, index)
 	local list = ReyesMaps.Floors(plan.instance and plan.instance.name)
 	if not list then
 		return nil
+	end
+	if floor.art then
+		return list[floor.art]
 	end
 	local want = ns.Match.StripArticle(floor.name or "")
 	if want ~= "" then

@@ -92,3 +92,50 @@ T.case("Gamepad style from the CVar when the API is missing; off: everything reg
 		T.eq(ns.Compat.Gamepad(), false)
 	end)
 end)
+
+T.case("Gamepad style: the CVar is read only against the game's own value; the setting overrides detection", function()
+	local cvar = function(name)
+		return name == "InputDeviceInterfaceStyle" and "1" or nil
+	end
+	-- Without Enum.InputInterfaceStyle, "1" means nothing known: not guessed.
+	withGlobals({ C_InputInterfaceStyle = false, Enum = {}, GetCVar = cvar, C_CVar = false }, function()
+		local on, how = ns.Compat.Gamepad()
+		T.eq(on, false, "no guess")
+		T.eq(how, "none")
+	end)
+	-- The game's value is not the CVar's: off.
+	withGlobals({ C_InputInterfaceStyle = false, GetCVar = cvar, C_CVar = false,
+		Enum = { InputInterfaceStyle = { KeyboardAndMouse = 0, Gamepad = 2 } } }, function()
+		T.eq(ns.Compat.Gamepad(), false, "1 is not the gamepad value here")
+	end)
+	T.eq(ns.Defaults.settings.gamepad, "auto", "automatic by default")
+	if not ns.db then
+		T.freshDB() -- run alone (lua tests/run.lua Gamepad): no addon boot before this file
+	end
+	local settings = ns.db.settings
+	local saved = settings.gamepad
+	local ok, err = pcall(function()
+		withGlobals({ C_InputInterfaceStyle = { GetCurrentStyle = function()
+			return GAMEPAD
+		end }, Enum = enum }, function()
+			settings.gamepad = "off"
+			ns.Compat.ResetGamepad()
+			local on, how = ns.Compat.Gamepad()
+			T.eq(on, false, "the setting says off")
+			T.eq(how, "setting")
+			settings.gamepad = "auto"
+			ns.Compat.ResetGamepad()
+			T.eq(ns.Compat.Gamepad(), true, "automatic: detected")
+		end)
+		withGlobals({ C_InputInterfaceStyle = false, Enum = {}, GetCVar = false, C_CVar = false }, function()
+			settings.gamepad = "on"
+			ns.Compat.ResetGamepad()
+			local on, how = ns.Compat.Gamepad()
+			T.eq(on, true, "the setting says on, nothing detected")
+			T.eq(how, "setting")
+		end)
+	end)
+	settings.gamepad = saved
+	ns.Compat.ResetGamepad()
+	assert(ok, err)
+end)

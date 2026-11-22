@@ -557,7 +557,8 @@ This round (0.2 polish):
 - The bullet separator (•) everywhere, in Russian especially (it was a box with the Cyrillic face).
 - With the gamepad interface style on: no `/dp`, the minimap button and key bindings open the window, the gamepad
   menus leave it alone; the Settings panel's debug button reports "Gamepad interface style: on".
-- A recommended plan's orange "may be out of date" line on a client whose build is newer than the plan's data.
+- A recommended plan's "may be out of date" line on a client whose build is more than 90 days newer than the plan's
+  data.
 
 Earlier:
 

@@ -207,7 +207,9 @@ function FloorBar.Build(f, ctx, canvas)
 
 	-- Inside an instance, the map follows the player to another floor when the client says which (Floors.PlayerFloor;
 	-- unverified on Forever, nil until a scan shows a map there). Only on a change of the player's floor, so a floor
-	-- the player picked by hand stays until they move.
+	-- the player picked by hand stays until they move. Not while a marker, route or drawing is selected (switching
+	-- floors would drop it): the map follows on the next change after that. Another plan, or a new instance
+	-- (PLAYER_ENTERING_WORLD), starts over.
 	local function follow()
 		local inInstance = rawget(_G, "IsInInstance")
 		local ok, inside = false, nil
@@ -217,7 +219,15 @@ function FloorBar.Build(f, ctx, canvas)
 		if not (ok and ns.Util.Plain(inside) == true and f:IsVisible()) then
 			return
 		end
-		local index = ns.Floors.PlayerFloor(ctx:Plan())
+		local plan = ctx:Plan()
+		local id = plan and plan.id
+		if bar.playerPlan ~= id then
+			bar.playerPlan, bar.playerFloor = id, nil
+		end
+		if ctx.selectedMarker or ctx.activeRoute or ctx.selectedShape then
+			return
+		end
+		local index = ns.Floors.PlayerFloor(plan)
 		if index and index ~= bar.playerFloor then
 			bar.playerFloor = index
 			f:GoToFloor(index)
@@ -226,6 +236,9 @@ function FloorBar.Build(f, ctx, canvas)
 	f.FollowPlayerFloor = follow
 	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "PLAYER_ENTERING_WORLD" }) do
 		ns:RegisterEvent(event, function()
+			if event == "PLAYER_ENTERING_WORLD" then
+				bar.playerFloor = nil
+			end
 			ns.SafeCall(follow)
 		end)
 	end

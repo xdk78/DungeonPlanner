@@ -314,7 +314,9 @@ function MapCanvas.InstallInput(view)
 						and self.cb.getFocusPull() or nil,
 				}
 			end
-			local m, err = Plan.AddMarker(plan, self:EditFloor(), x, y, kind, nil, extra)
+			local m, err = self:AddOnFloor(function(floor)
+				return Plan.AddMarker(plan, floor, x, y, kind, nil, extra)
+			end)
 			if m then
 				self.cb.onSelectMarker(m.id)
 				self.cb.onChanged("markers")

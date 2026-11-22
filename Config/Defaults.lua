@@ -9,6 +9,7 @@ Defaults.settings = {
 	scale = 1.0,
 	locale = "auto", -- "auto" | a code of ns.LOCALE_LIST ("enUS", "deDE", "esES", "frFR", "plPL", "ruRU")
 	debug = false,
+	gamepad = "auto", -- the gamepad interface style: "auto" (detected) | "on" | "off" (Core/Compat.lua Gamepad)
 	showCoordinates = true,
 	confirmDelete = true,
 	colorblind = false, -- colour-blind friendly colours for pulls, routes, drawings and roles (UI/Style.lua)

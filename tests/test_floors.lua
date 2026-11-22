@@ -32,8 +32,8 @@ T.case("Floors: merging keeps the plan's floors first and adds each art floor on
 	T.eq(#merged, 4, "two of the plan's, then art 2 and 3")
 	T.eq(merged[1].name, "Upper")
 	T.eq(merged[2].uiMapID, 9, "the plan's own floors keep their places (markers keep their numbers)")
-	T.ok(merged[3].extra and merged[3].artIndex == 2 and merged[3].name == "Lower", "art floor 2, named")
-	T.ok(merged[4].extra and merged[4].artIndex == 3 and merged[4].name == "", "art floor 3, unnamed")
+	T.ok(merged[3].extra and merged[3].art == 2 and merged[3].name == "Lower", "art floor 2, named")
+	T.ok(merged[4].extra and merged[4].art == 3 and merged[4].name == "", "art floor 3, unnamed")
 	-- A plan floor that shows a Reyes map elsewhere (picked by name) covers that map.
 	local reyes = { label = "Talus" }
 	merged = Floors.Merge({ { name = "Talus" } }, { { label = "Main" }, { label = "Talus", reyes = reyes } }, { reyes })
@@ -154,14 +154,96 @@ T.case("Floors only the map had join an own plan when something is put on them",
 	ns.UI.GoToFloor(3)
 	T.eq(ns.UI.ctx.floor, 3, "viewable")
 	T.eq(#plan.floors, 2, "looking changes nothing")
-	local index = ns.UI.ctx:EditFloor()
-	local m = ns.Plan.AddMarker(plan, index, 0.5, 0.5, "note")
+	-- An add that fails leaves the plan as it was.
+	local updated = plan.updated
+	local none, err = ns.UI.ctx:AddOnFloor(function()
+		return nil, "limit"
+	end)
+	T.eq(none, nil)
+	T.eq(err, "limit", "the add's error comes back")
+	T.eq(#plan.floors, 2, "a failed add: the floor stays the map's")
+	T.eq(plan.updated, updated, "and the plan is not touched")
+	local m = ns.UI.ctx:AddOnFloor(function(floor)
+		return ns.Plan.AddMarker(plan, floor, 0.5, 0.5, "note")
+	end)
 	ns.UI.ctx:Changed("markers")
 	T.eq(#plan.floors, 3, "the floor joined the plan")
 	T.eq(plan.floors[3].name, "Prismatic Talus")
+	T.eq(plan.floors[3].art, 2, "with the art it shows (the zone outside stands at 2)")
 	T.eq(m.floor, 3, "the marker is on it")
 	T.eq(#Floors.For(plan), 3, "and is not listed twice")
+	T.eq(ns.ReyesMaps.Pick(plan, 3).file, "ShapersTerracePrismaticTalus", "the Prismatic Talus' map")
+	-- Undo takes the floor back with the marker.
+	ns.UI.ctx:Undo()
+	plan = ns.UI.ctx:Plan()
+	T.eq(#plan.floors, 2, "undone: the floor is the map's again")
+	T.eq(#Floors.For(plan), 3)
 	ns.DB.DeletePlan(plan.id)
+end)
+
+T.case("Floors: a floor keeps the art it was added for when the zone outside stands before it", function()
+	boot()
+	-- Pure: art 2 stands at plan floor 3 (floor 2 is the zone outside); once floor 3 is the plan's, art 2 is not added
+	-- again, and art 3 is still added (floor 3 names art 2, so it does not stand for art 3 by its position).
+	local art = { { label = "Hall" }, { label = nil }, { label = nil } }
+	local floors = { { name = "Hall" }, { name = "", uiMapID = 9 } }
+	local merged = Floors.Merge(floors, art, {})
+	T.eq(#merged, 4)
+	T.eq(merged[3].art, 2, "floor 3 shows art 2")
+	T.eq(merged[4].art, 3, "floor 4 shows art 3")
+	floors[3] = { name = "", art = 2 }
+	merged = Floors.Merge(floors, art, {})
+	T.eq(#merged, 4, "art 2 once")
+	T.eq(merged[3], floors[3], "the plan's floor in its place")
+	T.eq(merged[4].art, 3, "art 3 still added")
+	-- The art lookups take the art the floor names (the old map tiles here: the Deadmines has two).
+	local plan = ns.Validate.Plan({ name = "Outside first", instance = { name = "The Deadmines", kind = "dungeon" },
+		floors = { { name = "Mine" }, { name = "", uiMapID = 9 }, { name = "", art = 2 } } })
+	T.eq(plan.floors[3].art, 2, "validation keeps art")
+	local tiles = ns.GameFiles.MapTiles("The Deadmines")
+	local saved = mock.files[("Interface\\WorldMap\\" .. tiles[2] .. "1"):lower()]
+	mock.files[("Interface\\WorldMap\\" .. tiles[2] .. "1"):lower()] = 1
+	ns.GameFiles.Reset()
+	local ok, e = pcall(function()
+		local tileArt = ns.GameFiles.FloorArt(plan, 3)
+		T.ok(tileArt, "floor 3 has tiles")
+		T.eq(tileArt.base, tiles[2], "the second floor's tiles, not a third")
+		T.eq(ns.GameFiles.FloorArt(plan, 2), nil, "the zone outside: none")
+	end)
+	mock.files[("Interface\\WorldMap\\" .. tiles[2] .. "1"):lower()] = saved
+	ns.GameFiles.Reset()
+	assert(ok, e)
+	-- Out of range or not a number: dropped, the floor shows the art at its own position.
+	T.eq(ns.Validate.Plan({ floors = { { name = "A", art = 99 } } }).floors[1].art, nil)
+	T.eq(ns.Validate.Plan({ floors = { { name = "A", art = "2" } } }).floors[1].art, nil)
+	-- An export string carries it.
+	local kind, back = ns.Codec.Decode(ns.Codec.ExportPlan(plan))
+	T.eq(kind, "plan")
+	T.eq(back.floors[3].art, 2, "export and import keep art")
+	-- Every recommended plan whose added floors stand after the zone outside shows each art once with the right map.
+	for _, id in ipairs({ "alcaz-prison", "shapers-terrace", "the-drowned-city" }) do
+		local copy = ns.Plan.Duplicate(ns.Bundled.Get(ns.Bundled.PREFIX .. id), "Copy")
+		local count = #Floors.For(copy)
+		local want = ns.ReyesMaps.Pick(Floors.View(copy), 3)
+		T.ok(want, id .. ": floor 3 has a map")
+		T.ok(Floors.Ensure(copy, 3), id .. ": floor 3 joins")
+		T.eq(copy.floors[3].art, 2, id .. ": art 2")
+		T.eq(#Floors.For(copy), count, id .. ": no floor added twice")
+		T.eq(ns.ReyesMaps.Pick(copy, 3), want, id .. ": the same map")
+	end
+end)
+
+T.case("Floors: art is an optional field; saved plans keep it, a plan without it shows art by position", function()
+	local DB = ns.DB
+	local global = { schema = DB.SCHEMA, plans = { p1 = { id = "p1", name = "Old",
+		instance = { name = "The Deadmines", kind = "dungeon" }, floors = { { name = "A" }, { name = "", art = 2 } } } } }
+	local info = DB.LoadGlobal(global)
+	T.ok(not info.readOnly and info.quarantined == 0, "loads as before")
+	T.eq(global.plans.p1.floors[2].art, 2, "art kept")
+	T.eq(global.plans.p1.floors[1].art, nil)
+	-- What an older reader leaves after dropping art: floor 2 stands for art 2 by its position, as before.
+	local list = Floors.Merge({ { name = "A" }, { name = "" } }, { {}, {} }, {})
+	T.eq(#list, 2, "nothing added twice")
 end)
 
 T.case("Floors: stairs and portals say where they lead; a second click on the step goes there", function()
@@ -239,11 +321,78 @@ T.case("Floors: the map follows the player's floor inside an instance when the c
 		map:GoToFloor(1)
 		map.FollowPlayerFloor()
 		T.eq(ns.UI.ctx.floor, 1, "a floor picked by hand stays while the player does not move")
+		-- A new instance starts over; a selected marker stays until it is let go.
+		local marker = ns.UI.ctx:Plan().markers[1]
+		ns.UI.ctx.selectedMarker = marker and marker.id or "m1"
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
+		T.eq(ns.UI.ctx.floor, 1, "something selected: the map stays")
+		T.eq(ns.UI.ctx.selectedMarker, marker and marker.id or "m1", "and keeps the selection")
+		ns.UI.ctx.selectedMarker = nil
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 2, "let go: the map follows")
+		-- Another plan starts over too: back on this one, the map follows the same floor again.
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "blackfathom-deeps")
+		ns.UI.SelectTab("map")
+		map.FollowPlayerFloor()
+		T.eq(map.floorBar.playerPlan, ns.Bundled.PREFIX .. "blackfathom-deeps")
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "the-deadmines")
+		ns.UI.SelectTab("map")
+		map:GoToFloor(1)
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 2, "a plan picked again: followed again")
+		map:GoToFloor(1)
 		inside, best = false, 501
 		map.floorBar.playerFloor = nil
 		map.FollowPlayerFloor()
 		T.eq(ns.UI.ctx.floor, 1, "outside an instance: never")
 	end)
 	_G.C_Map, _G.IsInInstance = saved.C_Map, saved.IsInInstance
+	assert(ok, err)
+end)
+
+T.case("Run mode: zone events redraw only when the player's floor changed, and never for one floor", function()
+	boot()
+	local savedMap, best = _G.C_Map, nil
+	_G.C_Map = setmetatable({
+		GetBestMapForUnit = function()
+			return best
+		end,
+		GetMapGroupID = function()
+			return 7
+		end,
+		GetMapGroupMembersInfo = function()
+			return { { mapID = 502, name = "Ironclad Cove", relativeHeightIndex = 0 } }
+		end,
+	}, { __index = savedMap })
+	local realRefresh, count = ns.RunMode.Refresh, 0
+	ns.RunMode.Refresh = function(...)
+		count = count + 1
+		return realRefresh(...)
+	end
+	local ok, err = pcall(function()
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "the-deadmines")
+		ns.db.ui.step = nil
+		ns.RunMode.Show()
+		local f = _G.DungeonPlannerRunFrame
+		realRefresh()
+		count = 0
+		mock.FireEvent("ZONE_CHANGED")
+		T.eq(count, 0, "no map from the client, as before: nothing redrawn")
+		best = 502
+		mock.FireEvent("ZONE_CHANGED_INDOORS")
+		T.eq(count, 1, "the player went to Ironclad Cove: redrawn")
+		local plan = ns.UI.ctx:Plan()
+		T.ok(f.mapFloor:GetText():find(ns.Names.Floor(plan.floors[2], 2), 1, true), f.mapFloor:GetText())
+		mock.FireEvent("ZONE_CHANGED")
+		T.eq(count, 1, "the same floor: nothing")
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+		realRefresh()
+		count = 0
+		best = 501
+		mock.FireEvent("ZONE_CHANGED")
+		T.eq(count, 0, "one floor: nothing")
+		ns.RunMode.Hide()
+	end)
+	ns.RunMode.Refresh, _G.C_Map = realRefresh, savedMap
 	assert(ok, err)
 end)

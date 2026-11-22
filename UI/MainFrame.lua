@@ -113,13 +113,16 @@ function ctx:Floors()
 	return ns.Floors.For(self:Plan())
 end
 
--- The floor to put something on: a floor the map adds becomes the own plan's first (Floors.Ensure).
-function ctx:EditFloor()
+-- Put something on the current floor: `add(floor)` adds it and returns it (or nil and an error). A floor the map adds
+-- becomes the own plan's first (Floors.Ensure), and stops being the plan's again when the add fails.
+function ctx:AddOnFloor(add)
 	local plan = self:Plan()
-	if plan and not self:ReadOnly() then
-		ns.Floors.Ensure(plan, self.floor)
+	local before = plan and not self:ReadOnly() and ns.Floors.Ensure(plan, self.floor) or nil
+	local result, err = add(self.floor)
+	if not result and before then
+		ns.Floors.Unensure(plan, before)
 	end
-	return self.floor
+	return result, err
 end
 
 -- The current step of the selected plan (index), or nil before one is chosen.
@@ -257,16 +260,16 @@ local function routeCredit(plan)
 	return nil
 end
 
--- A recommended plan researched before the game build the player runs (Bundled.Stale): one orange line that says so,
--- with the data's and the build's dates; nil otherwise (or when the client gives no build date).
+-- A recommended plan researched well before the game build the player runs (Bundled.Stale): one line that says so,
+-- with the build's date; nil otherwise, or when the client's build date cannot be read.
 function UI.StaleLine(plan)
-	local info = ns.Compat.ClientInfo()
-	local stale, build = ns.Bundled.Stale(plan and plan.updated, info.date)
-	if not stale then
+	local ok, stale, build = pcall(function()
+		return ns.Bundled.Stale(plan and plan.updated, ns.Compat.ClientInfo().date)
+	end)
+	if not (ok and stale) then
 		return nil
 	end
-	return "|cffff9933" .. string.format(L["Researched before this game build (%s): the route and pulls may have changed. Check them in game."],
-		build) .. "|r"
+	return string.format(L["Researched before this game build (%s): the route and pulls may have changed. Check them in game."], build)
 end
 
 function UI.PlanSource(plan)

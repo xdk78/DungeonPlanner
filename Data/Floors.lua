@@ -4,10 +4,12 @@
 -- plan) and the game's minimap pictures (Data/MinimapArt.lua). The map shows the merged list: the plan's floors first,
 -- in their order (so markers keep their floor numbers), then the art floors no plan floor stands for.
 --
--- An extra floor carries `artIndex` (its position in the instance's art) and `extra = true`; GameFiles.FloorArt and
--- MinimapArt.FloorArt take the art at `artIndex`, ReyesMaps.Pick finds it by its name. Floors.View(plan) is the plan as
--- the map draws it (the merged floors over the plan); Floors.Ensure adds the extra floors up to one to an own plan when
--- something is put on it.
+-- A floor that shows art other than the art at its own position carries `art` (that art's position in the instance's
+-- art): an extra floor always does (with `extra = true`), and keeps it when Floors.Ensure makes it the plan's own. The
+-- field is optional, so an older reader drops it and shows the art at the floor's position. GameFiles.FloorArt,
+-- MinimapArt.FloorArt, ReyesMaps.Pick and Providers.PickFloor take the art at `art` when it is set, else at the floor's
+-- position. Floors.View(plan) is the plan as the map draws it (the merged floors
+-- over the plan); Floors.Ensure adds the extra floors up to one to an own plan when something is put on it.
 
 local _, ns = ...
 local Floors = ns:NewModule("Floors")
@@ -36,22 +38,23 @@ function Floors.Art(name)
 end
 
 -- Pure: the plan's floors, then the art floors none of them stands for. `art` = Floors.Art(...); `picks[i]` = the
--- Reyes floor plan floor i shows (ReyesMaps.Pick), if any. An art floor at position i is the plan's when plan floor i is
--- a dungeon floor (not the zone outside), or when a plan floor already shows its Reyes map. Returns a new list; the
--- plan's own floor tables are in it unchanged.
+-- Reyes floor plan floor i shows (ReyesMaps.Pick), if any. An art floor at position i is the plan's when a dungeon
+-- floor of the plan (not the zone outside) names it (`art = i`), or has no `art` and stands at position i, or when a
+-- plan floor already shows its Reyes map. Returns a new list; the plan's own floor tables are in it unchanged.
 function Floors.Merge(planFloors, art, picks)
-	local out, shown = {}, {}
+	local out, shown, covered = {}, {}, {}
 	for i, f in ipairs(planFloors or {}) do
 		out[i] = f
 		if picks and picks[i] then
 			shown[picks[i]] = true
 		end
+		if not Floors.IsOutside(f) then
+			covered[f.art or i] = true
+		end
 	end
 	for i, a in ipairs(art or {}) do
-		local own = planFloors and planFloors[i]
-		local covered = (own ~= nil and not Floors.IsOutside(own)) or (a.reyes ~= nil and shown[a.reyes])
-		if not covered and #out < ns.Schema.MAX.floors then
-			out[#out + 1] = { name = a.label or "", extra = true, artIndex = i }
+		if not covered[i] and not (a.reyes ~= nil and shown[a.reyes]) and #out < ns.Schema.MAX.floors then
+			out[#out + 1] = { name = a.label or "", extra = true, art = i }
 		end
 	end
 	return out
@@ -102,19 +105,31 @@ function Floors.View(plan)
 end
 
 -- Before something is put on floor `index` of an own plan: the extra floors up to it become the plan's own (with their
--- names; an unnamed one shows as "Floor N"). Returns true when the plan changed.
+-- names and the art they show; an unnamed one shows as "Floor N"). Returns the number of floors the plan had before
+-- (for Floors.Unensure), or nil when the plan did not change.
 function Floors.Ensure(plan, index)
 	if type(plan) ~= "table" or type(index) ~= "number" or index <= #plan.floors then
-		return false
+		return nil
 	end
 	local list = Floors.For(plan)
 	if not list[index] then
-		return false
+		return nil
 	end
-	for k = #plan.floors + 1, index do
-		plan.floors[k] = { name = list[k].name or "" }
+	local before = #plan.floors
+	for k = before + 1, index do
+		plan.floors[k] = { name = list[k].name or "", art = list[k].art }
 	end
-	return true
+	return before
+end
+
+-- Undo Floors.Ensure when the add it was for failed: the plan keeps its first `before` floors.
+function Floors.Unensure(plan, before)
+	if type(plan) ~= "table" or type(before) ~= "number" then
+		return
+	end
+	for k = #plan.floors, before + 1, -1 do
+		plan.floors[k] = nil
+	end
 end
 
 -- The player's floor -------------------------------------------------------------------------------------------------

@@ -303,14 +303,14 @@ function GameFiles.TileArt(base)
 end
 
 -- The tile art for floor `index` of a plan, or nil. A named floor at position i gets the instance's i-th map; an
--- unnamed floor (the zone outside, stored with its own map ID) gets none. A floor the map adds (Data/Floors.lua) gets
--- the map at its own position in the instance's art (artIndex).
+-- unnamed floor (the zone outside, stored with its own map ID) gets none. A floor with `art` (Data/Floors.lua) gets the
+-- map at that position in the instance's art.
 function GameFiles.FloorArt(plan, index)
 	local floor = type(plan) == "table" and plan.floors and plan.floors[index]
 	if not floor then
 		return nil
 	end
-	local pos = floor.artIndex or index
+	local pos = floor.art or index
 	local tiles = GameFiles.MapTiles(plan.instance and plan.instance.name)
 	if not tiles or not tiles[pos] then
 		return nil

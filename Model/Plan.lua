@@ -248,6 +248,7 @@ function Plan.SetFloors(plan, floors)
 		clean[i] = {
 			uiMapID = Util.IsInteger(f.uiMapID) and f.uiMapID > 0 and f.uiMapID or nil,
 			name = Util.CleanText(f.name or "", TEXT.name) or "",
+			art = Util.IsInteger(f.art) and f.art >= 1 and f.art <= MAX.floors and f.art or nil,
 		}
 	end
 	plan.floors = clean
