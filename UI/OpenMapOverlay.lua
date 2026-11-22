@@ -120,8 +120,8 @@ end
 -- Step(state, event, ctx) -> new state, effects. ctx = { enabled, attached (the view was found), shown (it is shown),
 -- poll (its floor buttons were not found), now }. Events: "setting", "look" (a moment to look for the view), "search"
 -- (a sign of OpenMap's map: its callbacks, card or menu; starts or extends the search), "waitTick", "found",
--- "missing", "bad" (the view has another shape), "show", "hide", "change", "tick". Effects: "attach" (look for the view), "draw" (draw what changed), "drawSoon" (on the next frame:
--- OpenMap sets the floor just after showing its view), "clear", "hideNow" (hide, keep the drawing), "poll", "wait".
+-- "missing", "bad" (the view has another shape), "show", "hide", "change", "tick". Effects: "attach" (look for the
+-- view), "draw" (draw what changed), "drawSoon" (on the next frame: OpenMap sets the floor just after showing its view), "clear", "hideNow" (hide, keep the drawing), "poll", "wait".
 -- A tick of a phase that has ended changes nothing.
 function Overlay.Step(s, event, ctx)
 	local mode = s.mode
