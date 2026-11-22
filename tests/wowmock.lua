@@ -173,22 +173,6 @@ local coreInstall = M.Install
 -- (loading screens, old map tiles) are known only when a test puts them in M.files, as before.
 M.artFiles, M.missingFiles = {}, {}
 
--- Whether a frame takes the mouse: as last set with EnableMouse (true until then, as the harness answers).
-M.DEFAULTS.IsMouseEnabled = function(self)
-	return self._mouse ~= false
-end
-
--- Whether a font string's text is cut: only one given a width (SetWidth; the mock lays out no anchors), measured at
--- the mock's 6 units a letter.
-M.DEFAULTS.IsTruncated = function(self)
-	local w = self._w
-	return w ~= nil and w > 0 and self:GetUnboundedStringWidth() > w + 0.5
-end
-
--- Which mouse buttons a button takes (RegisterForClicks), for tests.
-M.DEFAULTS.RegisterForClicks = function(self, ...)
-	self._clicks = { ... }
-end
 function M.KnowArt(ns)
 	for _, spec in pairs(ns.Art.SPECS) do
 		if type(spec.file) == "string" then
@@ -544,29 +528,33 @@ function M.Install()
 			}
 		end,
 	}
-	-- The client's answer: itemID, itemType, itemSubType, equipLoc, icon, classID, subclassID (the API's seven values),
-	-- or nothing for an item the client has no data for. M.itemTypes[id] = { equipLoc, classID, subclassID } sets an
-	-- item's type, false makes it unknown; others are cloth (class 4, subclass 1), the journal's equip location or a head.
+	-- Item types for the harness's GetItemInfoInstant / C_Item.GetItemInfoInstant (the client's seven values, or nothing
+	-- for an item the client has no data for), looked up in mock.items when asked. M.itemTypes[id] = { equipLoc,
+	-- classID, subclassID } sets an item's type, false makes it unknown; others are cloth (class 4, subclass 1), the
+	-- journal's equip location or a head. Every item has the harness's question-mark icon (134400), so
+	-- C_Item.GetItemIconByID gives the same answer.
 	M.itemTypes = {}
-	local function itemInfoInstant(itemID)
+	local function cloth(equipLoc)
+		return { itemType = "Armor", itemSubType = "Cloth", itemEquipLoc = equipLoc, icon = 134400, classID = 4,
+			subClassID = 1 }
+	end
+	M.items = setmetatable({}, { __index = function(_, itemID)
 		local t = M.itemTypes[itemID]
-		if t == false then
+		if t == false or type(itemID) ~= "number" then
 			return nil
 		elseif t then
-			return itemID, "Type", "Subtype", t[1], 135000, t[2], t[3]
+			return { itemType = "Type", itemSubType = "Subtype", itemEquipLoc = t[1], icon = 134400, classID = t[2],
+				subClassID = t[3] }
 		end
 		for _, list in pairs(M.journal.loot) do
 			for _, item in ipairs(list) do
 				if item[1] == itemID then
-					return itemID, "Armor", "Cloth", item[4], 135000, 4, 1
+					return cloth(item[4])
 				end
 			end
 		end
-		return itemID, "Armor", "Cloth", "INVTYPE_HEAD", 135000, 4, 1
-	end
-	_G.GetItemInfoInstant = itemInfoInstant
-	_G.C_Item = _G.C_Item or {}
-	_G.C_Item.GetItemInfoInstant = itemInfoInstant
+		return cloth("INVTYPE_HEAD")
+	end })
 	-- Dungeon finder: one entry (id 5) for the test dungeon's instance map 9389, levels 13-18. The test instances' map
 	-- IDs are made up (no bundled instance has them), so they stay custom instances.
 	_G.GetLFGDungeonInfo = function(id)
