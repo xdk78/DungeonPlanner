@@ -45,6 +45,16 @@ function MapCanvas.ProviderRoutes(plan, floor, art)
 	return out, r
 end
 
+-- A map's painted names (art.keepOut: { x1, y1, x2, y2 } in 0..1 of the picture) as boxes in canvas units, added to
+-- `into` (a new list when nil). Pure.
+function MapCanvas.KeepOutRects(art, w, h, s, into)
+	local out = into or {}
+	for _, r in ipairs(art and art.keepOut or {}) do
+		out[#out + 1] = { r[1] * w * s, r[2] * h * s, r[3] * w * s, r[4] * h * s }
+	end
+	return out
+end
+
 function MapCanvas.Create(parent, cb)
 	local view = Art.CreateFrame("Frame", nil, parent, "BackdropTemplate")
 	if view.SetClipsChildren then
@@ -456,6 +466,9 @@ function MapCanvas.Install(view)
 				avoid = { { l * k - cl, ct - t * k, r * k - cl, ct - b * k } }
 			end
 		end
+		-- And the names painted on the map (a bundled map's keepOut, in the picture's 0..1), where another side is free.
+		local bw, bh = view:BaseSize()
+		avoid = MapCanvas.KeepOutRects(view.artInfo, bw, bh, view:Scale(), avoid)
 		-- Labels stay inside the visible part of the map (within the gold frame), in canvas units.
 		local bounds = { FRAME_INSET - view.ox, FRAME_INSET - view.oy, view:GetWidth() - FRAME_INSET - view.ox,
 			view:GetHeight() - FRAME_INSET - view.oy }

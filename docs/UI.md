@@ -611,7 +611,8 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   plates; "Open" under empty seats.
 - Run mode on a dungeon with a provider map: the framing at each step, the ring on the step, the step counter between
   Prev and Next, the "~" mark (plain ASCII: every face has it).
-- Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner.
+- Map labels on their plates over a provider map's painted names; the "Map: ..." chip in the corner. Hall of Thanes:
+  the labels beside (not over) the painted room names (`keepOut` in `Data/ReyesMaps.lua`), the denser plates (0.86).
 - Routes: the outlined line, the chevrons' size, spacing and direction at several zooms and icon sizes, the joints at
   bends, the focused segment brighter than the rest, stop numbers readable over the line. `Media/Chevron.tga` is a new
   file: until the game is restarted the older arrow shape stands in (where the client reports that a texture failed).

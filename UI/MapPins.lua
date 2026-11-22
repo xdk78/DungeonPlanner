@@ -113,7 +113,7 @@ function MapPins.New(view, parentFrame)
 	b.label:SetJustifyH("CENTER")
 	-- A dark plate behind the label: readable over a map's own painted names and art.
 	b.plate = b:CreateTexture(nil, "BACKGROUND", nil, -1)
-	b.plate:SetColorTexture(0.03, 0.035, 0.045, 0.72)
+	b.plate:SetColorTexture(0.03, 0.035, 0.045, 0.86) -- dense enough to hide a painted name under it
 	b.plate:SetPoint("TOPLEFT", b.label, "TOPLEFT", -PLATE_X, PLATE_Y)
 	b.plate:SetPoint("BOTTOMRIGHT", b.label, "BOTTOMRIGHT", PLATE_X, -PLATE_Y)
 	b.plate:Hide()

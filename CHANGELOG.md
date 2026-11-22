@@ -41,6 +41,8 @@ follow [Semantic Versioning](https://semver.org/).
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
   runs" when recording is already on.
 - **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
+- **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron
+  Ingress", "Anvilmar's Rest"): they move to a free side, and their dark plates are denser.
 
 ## [0.1.0] - 2026-11-16
 
