@@ -147,6 +147,50 @@ function Compat.Report()
 	return rows
 end
 
+-- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a
+-- client freeze (an empty slash command is enough), and the gamepad menus read and close the frames in UISpecialFrames
+-- (seen in another addon's shipped code, docs/COMPATIBILITY.md). Detected once (C_InputInterfaceStyle, else the CVar
+-- InputDeviceInterfaceStyle), every call guarded. While it is on, Dungeon Planner registers no slash command, puts
+-- nothing in UISpecialFrames, adds no entries to other addons' menus and opens no world map; the way in is the minimap
+-- button, the Addon Compartment and the key bindings. Returns on, how ("api" | "cvar" | "none").
+local gamepad
+function Compat.Gamepad()
+	if gamepad then
+		return gamepad.on, gamepad.how
+	end
+	local Plain = ns.Util.Plain
+	local on, how = false, "none"
+	local api, enum = rawget(_G, "C_InputInterfaceStyle"), rawget(_G, "Enum")
+	local styles = type(enum) == "table" and type(enum.InputInterfaceStyle) == "table" and enum.InputInterfaceStyle or nil
+	if type(api) == "table" and type(api.GetCurrentStyle) == "function" and styles and styles.Gamepad ~= nil then
+		local ok, style = pcall(api.GetCurrentStyle)
+		style = ok and Plain(style) or nil
+		if style ~= nil then
+			on, how = style == styles.Gamepad, "api"
+		end
+	end
+	if how == "none" then
+		local cvars = rawget(_G, "C_CVar")
+		local get = type(cvars) == "table" and cvars.GetCVar or rawget(_G, "GetCVar")
+		if type(get) == "function" then
+			local ok, value = pcall(get, "InputDeviceInterfaceStyle")
+			value = ok and Plain(value) or nil
+			if value ~= nil then
+				local n = tonumber(value)
+				local want = styles and tonumber(styles.Gamepad) or 1
+				on, how = (n ~= nil and n == want) or tostring(value):lower() == "gamepad", "cvar"
+			end
+		end
+	end
+	gamepad = { on = on, how = how }
+	return on, how
+end
+
+-- Detect again (tests).
+function Compat.ResetGamepad()
+	gamepad = nil
+end
+
 -- Client identity, for bug reports.
 function Compat.ClientInfo()
 	local version, build, date, toc = "?", "?", "?", 0

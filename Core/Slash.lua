@@ -41,6 +41,9 @@ function Slash.Debug()
 	for _, r in ipairs(ns.Compat.SelfTest()) do
 		print("  " .. line(r.ok, r.name .. (r.ok and "" or (": " .. r.detail))))
 	end
+	local pad, how = ns.Compat.Gamepad()
+	print("  " .. string.format("Gamepad interface style: %s (%s)%s", pad and "on" or "off", how,
+		pad and " - no slash commands, no UISpecialFrames, no menu entries; open from the minimap button, the Addon Compartment or a key binding" or ""))
 	local s = ns.Integrations.status
 	print("  " .. string.format("Integrations: launcher %s, OpenMap %s, Dungeon Journal %s, WoW Po Polsku %s, DBM %s, BigWigs %s",
 		tostring(s.launcher), tostring(s.openMap), tostring(s.dungeonJournal), tostring(s.polish),
@@ -280,7 +283,17 @@ function Slash.Handle(input)
 	end
 end
 
+-- Every slash command (all of /dp's subcommands go through Slash.Handle) is registered here and only here: with the
+-- gamepad interface style on, registering one ends in a client freeze (Compat.Gamepad), so none is.
+function Slash.Allowed()
+	return not ns.Compat.Gamepad()
+end
+
 function Slash.Init()
+	if not Slash.Allowed() then
+		Slash.registered = false
+		return
+	end
 	if ns.addon and ns.addon.RegisterChatCommand then
 		-- Through SafeCall, so an error in a command is kept for the report window (Core/Init.lua).
 		local function handle(input)
@@ -288,5 +301,6 @@ function Slash.Init()
 		end
 		ns.addon:RegisterChatCommand("dp", handle)
 		ns.addon:RegisterChatCommand("dplan", handle)
+		Slash.registered = true
 	end
 end
