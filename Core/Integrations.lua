@@ -162,7 +162,8 @@ function Integrations.PlansForOpenMap(info)
 				match = true
 			end
 		end
-		if names[ns.Names.Instance(plan.instance):lower()] or names[(plan.instance.name or ""):lower()] then
+		if names[ns.Names.Instance(plan.instance):lower()] or names[(plan.instance.name or ""):lower()]
+			or names[ns.Instances.CanonicalName(plan):lower()] then
 			match = true
 		end
 		if match then

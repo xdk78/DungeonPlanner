@@ -169,12 +169,17 @@ function UI.EntryForPlan(plan)
 	if resolved and score >= 75 then
 		return resolved
 	end
+	-- The bundled instance the plan is (its floors tell a wing; IDs a localized name), so the entry finds the same
+	-- recommended plans, pictures and travel facts.
+	local instanceMapID = ns.Instances.InstanceMapID(plan)
 	return {
 		key = key,
 		name = ns.Names.Instance(inst),
 		kind = inst.kind,
 		ejInstanceID = inst.ejInstanceID,
 		uiMapID = inst.uiMapID,
+		instanceMapID = instanceMapID,
+		canonicalKey = ns.Instances.ResolvedKey(plan),
 		levelMin = inst.levelMin,
 		levelMax = inst.levelMax,
 	}
@@ -327,12 +332,14 @@ function UI.OpenInstance(entry)
 		kind = entry.kind,
 		ejInstanceID = entry.ejInstanceID,
 		uiMapID = entry.uiMapID,
+		instanceMapID = entry.instanceMapID,
+		canonicalKey = entry.canonicalKey,
 		levelMin = entry.levelMin,
 		levelMax = entry.levelMax,
 	}
 	ns.db.ui.homeSelected = entry.key
 	local current = ctx:Plan()
-	if not (current and ns.Bundled.SameInstance(current.instance, entry)) then
+	if not (current and ns.Bundled.SameInstance(current, entry)) then
 		local pick = UI.DefaultPlanFor(entry) -- UI/Portraits.lua
 		UI.SelectPlan(pick and pick.id or nil, true)
 	end

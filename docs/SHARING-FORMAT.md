@@ -58,7 +58,7 @@ their own language). Coordinates are 0..1 over the floor's map art (0,0 top-left
 | `description`, `notes` | string | 2000 / 8000 bytes, multi-line |
 | `created`, `updated` | int | Unix time |
 | `tags` | list of string | 8 x 24 bytes |
-| `instance` | `{ name, kind = "dungeon"/"raid"/"other", origin?, ejInstanceID?, uiMapID?, levelMin?, levelMax? }` | IDs are the client's; levels 1-200 (v2), max never below min; `origin` (v2, optional) is `"forever"` for an instance new in WoW: Forever or `"classic"`, anything else is dropped |
+| `instance` | `{ name, kind = "dungeon"/"raid"/"other", origin?, ejInstanceID?, uiMapID?, instanceMapID?, levelMin?, levelMax? }` | IDs are the client's; levels 1-200 (v2), max never below min; `origin` (v2, optional) is `"forever"` for an instance new in WoW: Forever or `"classic"`, anything else is dropped; `instanceMapID` (optional, any version; older readers drop it) is the instance's map ID (`GetInstanceInfo`'s eighth return), the same in every client language, so a plan whose `name` is in another language finds the bundled data |
 | `floors` | list of `{ uiMapID?, name, art? }` | 16; `art` (optional) 1-16: the position of the instance's map art the floor shows, set on a floor the map added from that art. Without it (or in a reader that drops it) a floor shows the art at its own position |
 | `markers` | list of markers (below) | 500 |
 | `routes` | list of `{ id, name, floor, color 1-8, optional?, points }` (below) | 20 routes, 200 points each |
@@ -221,7 +221,8 @@ The IDs in the example only show the shape; real data uses the client's IDs. The
 `/dp debug`, together with anything that was dropped. Plans are matched to an instance by `ejInstanceID`, else the
 name (case, punctuation and a leading "The" ignored), else `uiMapID`, and in game to the client's Adventure Guide the
 same way (docs/ARCHITECTURE.md, "The Adventure Guide resolver"), so data written outside the game may carry only some
-of them. A plan's `name` says what it is ("Full clear", "Boss route", "Boss order"); the UI adds "(recommended)".
+of them. A player's plan is matched to a recommended plan's instance by its `instanceMapID` first, so the name may be
+in any language (`Data/InstanceIdentity.lua`). A plan's `name` says what it is ("Full clear", "Boss route", "Boss order"); the UI adds "(recommended)".
 In game a bundled plan has the id `b:<id>`; copies and exports carry `origin = { bundled = id, rev }`.
 
 The files in `Data/Plans/` are generated from `data-src/dungeons/*.json` by `tools/gen_plans.lua` (see

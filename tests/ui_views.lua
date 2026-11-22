@@ -836,6 +836,32 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- A plan made through New plan inside the Deadmines on a German client (the instance's name in German, its map ID):
+	-- the same map tiles, enemies and floors as the English plan (Data/InstanceIdentity.lua).
+	{
+		name = "map-localized",
+		setup = function()
+			closeAll()
+			V.saved = { info = _G.GetInstanceInfo, best = _G.C_Map.GetBestMapForUnit }
+			_G.GetInstanceInfo = function()
+				return "Die Todesminen", "party", 1, "Normal", 5, 0, false, ns.TravelData.instances["The Deadmines"].iid
+			end
+			_G.C_Map.GetBestMapForUnit = function()
+				return nil
+			end
+			ns.db.settings.preferProviderMaps = true
+			ns.MinimapArt.Reset()
+			V.localized = ns.Home.CreatePlan("blank", "Neuer Plan", nil)
+			ns.UI.SelectTab("map")
+			ns.UI.RefreshPage()
+		end,
+		window = window,
+		teardown = function()
+			_G.GetInstanceInfo, _G.C_Map.GetBestMapForUnit = V.saved.info, V.saved.best
+			ns.DB.DeletePlan(V.localized.id)
+			V.localized = nil
+		end,
+	},
 	{
 		name = "map-minimap",
 		setup = function()

@@ -33,8 +33,9 @@ function UI.CurrentEntry()
 		return entry, cur
 	end
 	local info = { name = cur.name or "", kind = cur.kind, ejInstanceID = cur.ejInstanceID, uiMapID = cur.uiMapID }
+	-- The instance's map ID finds its recommended plans in any client language (Data/InstanceIdentity.lua).
 	return { key = ns.DB.InstanceKey(info), name = info.name, kind = info.kind, ejInstanceID = info.ejInstanceID,
-		uiMapID = info.uiMapID }, cur
+		uiMapID = info.uiMapID, instanceMapID = cur.inInstance and cur.instanceID or nil }, cur
 end
 
 -- Entering a dungeon or raid: the plan it would open with starts loading its portraits (outside instances, nothing).

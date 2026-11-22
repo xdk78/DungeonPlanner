@@ -65,7 +65,7 @@ function A.EnumNames(name)
 end
 
 function A.AreaFor(lib, plan)
-	for _, n in ipairs(A.EnumNames(plan.instance and plan.instance.name)) do
+	for _, n in ipairs(A.EnumNames(plan.instance and ns.Instances.CanonicalName(plan))) do
 		local id = lib.Enum.zoneIDs[n]
 		if Util.IsInteger(id) and id > 0 then
 			return id

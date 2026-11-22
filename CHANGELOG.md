@@ -146,6 +146,12 @@ client starts; until then the map draws no routes, and `/dp debug` says to resta
   something was put on the extra copy, that copy stays as a second, numbered floor ("The Deadmines (2)").
 - **Font test** (`/dp debug`): a font whose addon is not installed or is switched off (WoW Po Polsku's) is listed as
   "not installed" instead of being drawn as boxes.
+- **Plans made in another game language**: a plan saved under the instance's German, Spanish, French or Russian name
+  ("Die Todesminen") now gets the same map, enemies, boss facts, prep and Getting there facts, route snapping and
+  recommended plan as an English one, on every client. New plans store the instance's ID, which is the same in every
+  language; plans saved earlier are matched by their floors or the client's own names. A wing of Scarlet Monastery,
+  Dire Maul, Stratholme or Blackrock Spire is never guessed: when nothing tells which wing a plan is, it keeps the
+  parchment, and `/dp debug` lists such plans.
 
 ### For contributors
 - `/dp scan` also records the client's floor and position answers inside an instance (`position.bestMap`,

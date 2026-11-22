@@ -102,7 +102,7 @@ function Names.Floor(floor, index, plan)
 	end
 	if type(plan) == "table" and type(plan.instance) == "table" then
 		local pos = floor and floor.art or index or 1
-		local art = ns.Floors.Art(plan.instance.name)[pos]
+		local art = ns.Floors.Art(ns.Instances.CanonicalName(plan))[pos]
 		local name = art and art.label
 		if not name and #ns.Floors.For(plan) == 1 then
 			name = Names.Instance(plan.instance)

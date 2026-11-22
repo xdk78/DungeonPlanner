@@ -28,6 +28,7 @@ local function isZoneMap(uiMapID)
 	end
 	return zoneMaps[uiMapID] == true
 end
+Floors.IsZoneMap = isZoneMap
 
 -- A plan floor that stands for the zone outside: no name, and its map is an entrance zone in our travel data. It has
 -- no dungeon art. An unnamed floor on any other map (the instance's own map, which WoW: Forever's client does not name:
@@ -80,16 +81,19 @@ function Floors.Art(name)
 	return out
 end
 
--- The recommended plan for a new plan's instance: by the instance's map ID (GetInstanceInfo's eighth return; the
--- travel data's `iid`) when it names one instance, so a client in another language finds it too; else by name or map.
+-- The recommended plan for a new plan's instance: by its identity (Instances.Resolve: the instance's map ID, which is
+-- GetInstanceInfo's eighth return and the travel data's `iid`, its maps, else its name), so a client in another
+-- language finds it too; a wing that cannot be told apart gets none.
 local function recommendedFor(instance, instanceID)
-	if ns.Util.IsInteger(instanceID) then
-		local recs = ns.Travel.Here(instanceID, instance.uiMapID)
-		if #recs == 1 then
-			for _, plan in ipairs(ns.Bundled.All()) do
-				if ns.Providers.Key(plan.instance.name) == recs[1].key then
-					return plan
-				end
+	local probe = instance
+	if ns.Util.IsInteger(instanceID) and not instance.instanceMapID then
+		probe = setmetatable({ instanceMapID = instanceID }, { __index = instance })
+	end
+	local key = ns.Instances.ResolvedKey(probe)
+	if key then
+		for _, plan in ipairs(ns.Bundled.All()) do
+			if ns.Providers.Key(plan.instance.name) == key then
+				return plan
 			end
 		end
 	end
@@ -167,7 +171,7 @@ function Floors.For(plan)
 	if c and c.stamp == stamp then
 		return c.list
 	end
-	local name = plan.instance and plan.instance.name
+	local name = plan.instance and ns.Instances.CanonicalName(plan)
 	local picks = {}
 	for i = 1, #plan.floors do
 		picks[i] = ns.ReyesMaps.Pick(plan, i)

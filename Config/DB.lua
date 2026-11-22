@@ -330,7 +330,7 @@ end
 function DB.PlansFor(entry)
 	local out = {}
 	for _, plan in ipairs(DB.Plans()) do
-		if ns.Bundled.SameInstance(plan.instance, entry) then
+		if ns.Bundled.SameInstance(plan, entry) then
 			out[#out + 1] = plan
 		end
 	end
@@ -349,7 +349,7 @@ end
 function DB.RememberedPlan(entry)
 	local id = entry and entry.key and ns.db.ui.lastPlans[entry.key]
 	local plan = id and DB.GetPlan(id)
-	if plan and ns.Bundled.SameInstance(plan.instance, entry) then
+	if plan and ns.Bundled.SameInstance(plan, entry) then
 		return plan
 	end
 	return nil

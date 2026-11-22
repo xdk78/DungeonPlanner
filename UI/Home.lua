@@ -344,7 +344,7 @@ local function buildPreview(f)
 			Home.LevelText(entry),
 			tostring(#plans),
 			entry.killed and (entry.killed .. "/" .. entry.bosses) or (entry.bosses and tostring(entry.bosses) or "-"),
-			tostring(plans[1] and ns.Floors.Count(plans[1]) or #ns.Floors.Art(entry.name)), -- as many as the map shows
+			tostring(plans[1] and ns.Floors.Count(plans[1]) or #ns.Floors.Art(ns.Instances.CanonicalName(entry))), -- as many as the map shows
 		}
 		for i, cell in ipairs(self.facts) do
 			cell.value:SetText(values[i])

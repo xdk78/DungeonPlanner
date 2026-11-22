@@ -94,9 +94,15 @@ end
 -- offline validator has no journal). Used when a plan has no journal ID and the other side has one.
 Bundled.journalID = nil
 
--- Does a plan's instance describe the same instance as `entry` ({ ejInstanceID?, uiMapID?, name? })? Journal ID first,
--- then map ID, then name: recommended plans are written outside the game and may carry only some of them.
-function Bundled.SameInstance(planInstance, entry)
+-- Optional: function(planOrInstance) -> the key of the bundled instance it surely is, in any client language
+-- (Data/InstanceIdentity.lua sets it in game; the offline validator compares as before).
+Bundled.canonicalKey = nil
+
+-- Does a plan (or a plan's instance) describe the same instance as `entry` ({ ejInstanceID?, uiMapID?, name? })?
+-- Journal ID first, then map ID, then the bundled instance both are (a plan's floors tell a wing; a localized name
+-- finds its instance by ID), then name: recommended plans are written outside the game and may carry only some of them.
+function Bundled.SameInstance(plan, entry)
+	local planInstance = type(plan) == "table" and type(plan.instance) == "table" and plan.instance or plan
 	if type(planInstance) ~= "table" or type(entry) ~= "table" then
 		return false
 	end
@@ -105,6 +111,13 @@ function Bundled.SameInstance(planInstance, entry)
 	end
 	if planInstance.uiMapID and entry.uiMapID and planInstance.uiMapID == entry.uiMapID then
 		return true
+	end
+	local canonical = Bundled.canonicalKey
+	if canonical then
+		local a, b = canonical(plan), canonical(entry)
+		if a and b then
+			return a == b
+		end
 	end
 	-- Names compare without case, spaces, punctuation and a leading article ("The Hall of Thanes" ~ "hall of thanes").
 	if ns.Match.NameScore(planInstance.name, entry.name) >= 85 then
@@ -123,7 +136,7 @@ end
 function Bundled.ForInstance(entry)
 	local out = {}
 	for _, plan in ipairs(get().list) do
-		if Bundled.SameInstance(plan.instance, entry) then
+		if Bundled.SameInstance(plan, entry) then
 			out[#out + 1] = plan
 		end
 	end

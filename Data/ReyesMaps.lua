@@ -96,7 +96,7 @@ function ReyesMaps.Pick(plan, index)
 	if type(floor) ~= "table" or ns.Floors.IsOutside(floor) then
 		return nil
 	end
-	local list = ReyesMaps.Floors(plan.instance and plan.instance.name)
+	local list = ReyesMaps.Floors(plan.instance and ns.Instances.CanonicalName(plan))
 	if not list then
 		return nil
 	end

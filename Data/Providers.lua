@@ -212,8 +212,11 @@ function Providers.Key(name)
 	return k
 end
 
+-- The key of a plan's instance: its English name's (Instances.CanonicalName, so a plan saved under a localized name
+-- finds the same data), else its stored name's.
 function Providers.PlanKey(plan)
-	return type(plan) == "table" and type(plan.instance) == "table" and Providers.Key(plan.instance.name) or nil
+	return type(plan) == "table" and type(plan.instance) == "table" and Providers.Key(ns.Instances.CanonicalName(plan))
+		or nil
 end
 
 -- A boss's name for matching: the plan's stored name, else the display name.

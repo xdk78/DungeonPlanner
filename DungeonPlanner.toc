@@ -95,6 +95,7 @@ Data\BossInfo.lua
 Data\Templates.lua
 Data\TravelData.lua
 Data\Travel.lua
+Data\InstanceIdentity.lua
 Data\PrepInfo.lua
 Data\PartyInfo.lua
 Data\Navigation.lua

@@ -159,6 +159,9 @@ function validatePlan(raw)
 		kind = Schema.INSTANCE_KINDS[inst.kind] and inst.kind or "other",
 		ejInstanceID = int(inst.ejInstanceID, 1, 2 ^ 31),
 		uiMapID = int(inst.uiMapID, 1, 2 ^ 31),
+		-- Optional: the instance's map ID (GetInstanceInfo's eighth return), the same in every client language, so the
+		-- bundled data finds a plan saved under a localized name (Data/InstanceIdentity.lua). Older readers drop it.
+		instanceMapID = int(inst.instanceMapID, 1, 2 ^ 31),
 		-- Level range (version 2): from a recommended plan's data or the author; the UI prefers the client's own.
 		levelMin = int(inst.levelMin, 1, Schema.MAX_LEVEL),
 		levelMax = int(inst.levelMax, 1, Schema.MAX_LEVEL),

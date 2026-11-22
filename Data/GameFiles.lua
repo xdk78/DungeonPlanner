@@ -194,7 +194,7 @@ end
 
 -- The file ID of a plan floor's first map tile (nil without tiles or without the client's answer).
 function GameFiles.FloorTileID(plan, index)
-	local tiles = type(plan) == "table" and plan.instance and GameFiles.MapTiles(plan.instance.name)
+	local tiles = type(plan) == "table" and plan.instance and GameFiles.MapTiles(ns.Instances.CanonicalName(plan))
 	local base = tiles and tiles[index]
 	return base and GameFiles.FileID(WORLDMAP .. base .. "1") or nil
 end
@@ -237,7 +237,8 @@ local function providerEpoch()
 	return ns.Providers and ns.Providers.epoch or 0
 end
 function GameFiles.InstancePictures(inst)
-	local name = type(inst) == "table" and inst.name or nil
+	-- By the instance's English name (Instances.CanonicalName), else the stored one.
+	local name = type(inst) == "table" and ns.Instances.CanonicalName(inst) or nil
 	local k = key(name)
 	if not k then
 		return {}
@@ -311,7 +312,7 @@ function GameFiles.FloorArt(plan, index)
 		return nil
 	end
 	local pos = floor.art or index
-	local tiles = GameFiles.MapTiles(plan.instance and plan.instance.name)
+	local tiles = plan.instance and GameFiles.MapTiles(ns.Instances.CanonicalName(plan))
 	if not tiles or not tiles[pos] then
 		return nil
 	end

@@ -96,7 +96,7 @@ end
 -- The data key of a plan's instance (nil when there is no data for it).
 function Spawns.KeyFor(plan)
 	local GameFiles = ns.GameFiles
-	local name = type(plan) == "table" and type(plan.instance) == "table" and plan.instance.name
+	local name = type(plan) == "table" and type(plan.instance) == "table" and ns.Instances.CanonicalName(plan)
 	local key = GameFiles and type(name) == "string" and GameFiles.Key(name)
 	if not key then
 		return nil
