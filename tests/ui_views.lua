@@ -155,14 +155,14 @@ local function standNear(slug)
 	mock.playerPos = ent and ent.uiMapID and { map = ent.uiMapID, x = ent.x + 0.3, y = ent.y - 0.25 } or nil
 end
 
-local function prepView(name, slug, own)
+local function prepView(name, slug, copyIt)
 	return {
 		name = name,
 		setup = function()
 			prepWorld(true)
 			closeAll()
 			ns.UI.SelectPlan(ns.Bundled.PREFIX .. slug)
-			if own then
+			if copyIt then
 				local copy = ns.UI.CopyPlan(ns.UI.ctx:Plan())
 				ns.Plan.SetField(copy, "prep", "Flasks and food for everyone\nRepair before the run")
 				ns.UI.SelectPlan(copy.id)

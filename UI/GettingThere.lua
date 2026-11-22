@@ -183,7 +183,10 @@ local function points(f, withFlight)
 	local list = {}
 	if withFlight and f.rec then
 		local near = ns.Travel.Nearest(f.rec, ns.PrepInfo.Faction(), 1)[1]
-		local map, x, y = near and ns.Travel.NodeOnMap(near.id)
+		local map, x, y
+		if near then
+			map, x, y = ns.Travel.NodeOnMap(near.id)
+		end
 		if map and x >= 0 and x <= 1 and y >= 0 and y <= 1 then
 			list[#list + 1] = { map, x, y, near.name }
 		end

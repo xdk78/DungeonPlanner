@@ -331,6 +331,11 @@ T.case("Prep UI: the section, the Getting there window, run mode's prep line, th
 	T.ok(text:find("Sentinel Hill", 1, true), "the Alliance flight master")
 	T.ok(text:find("outdoors", 1, true), "no position: says where distances show")
 	T.ok(page.panels.prep.bar.nav:IsShown())
+	-- TomTom's chain: the nearest flight master, then the entrance.
+	local pts = ns.GettingThere.Points(ns.GettingThere.Facts(bundled("the-deadmines")), true)
+	T.eq(#pts, 2)
+	T.ok(pts[1][4]:find("Sentinel Hill", 1, true))
+	T.eq(#ns.GettingThere.Points(ns.GettingThere.Facts(bundled("the-deadmines"))), 1, "the entrance alone")
 	-- The window opens from the home preview without a plan.
 	local w = ns.GettingThere.Open({ name = "Deadmines", kind = "dungeon" })
 	T.ok(w:IsShown())
