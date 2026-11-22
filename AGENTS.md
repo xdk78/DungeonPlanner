@@ -104,6 +104,8 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   (`docs/licenses/SantiagoReyes-maps.md`). Make them only with `tools/reyes_maps.py` from his published files; never
   edit, recolour or crop them or remove his signature, and keep "Map by Santiago Reyes" on the map and his credits in
   the docs.
+- Screenshots and GIFs in `docs/media/` and on the addon's pages use the game's own map art, not Santiago Reyes' maps.
+  They contain Blizzard Entertainment art and are not under the MIT licence (`docs/media/README.md`).
 
 ## UI
 
@@ -172,6 +174,26 @@ runs), `party-pages` and `party-pages-min` (raid pages), `notes-window`, `share-
 `confirm`; `--only a,b` draws some of them.
 Textures, atlases and fonts are the game's; the Settings panel and Blizzard templates are not drawn (use `/dp shots`).
 A grey placeholder is a game file this install has not downloaded; magenta, a file the client does not have.
+More views: `report` (the Report a problem window), `news-welcome` and `news-update` (the first-run welcome and the
+What's new card).
+
+**GIFs for the README and CurseForge, offline** (no game needed). `tests/ui_views.lua` has sequences: views named
+`seq-<name>-NN`, one per frame, each the state after the next step of one interaction (`steps`: clicking steps and the
+map following; `runmode`: Next, Next; `route`: drawing a route with a numbered stop; `picker`: searching the instance
+picker). Dump and render them like any view, then build the GIFs; keep `<work>` outside the repository:
+
+```sh
+# after the `lua tests/ui_dump.lua ... --files $W/files.txt` dump above:
+uv run --script $H/python/wowui.py render --game "$G" --dump $W/dump --out $W/png --addon DungeonPlanner=. --only seq-steps-01,seq-steps-02,...
+uv run --script tools/make_gifs.py --png $W/png --out docs/media     # --only steps,route; --width 720; --max-mb 3
+```
+
+`tools/make_gifs.py` (PEP 723, Pillow) crops, scales to about 720 px, captions (the bundled Alegreya Sans) and writes
+`docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops, delays and captions
+are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. Check
+every frame before committing: no renderer placeholders (grey loading-screen boxes, missing scroll bars, unrotated
+chevrons) and no layout lint findings. Stub the texture in the view's setup or leave the frame out. In-game screenshots
+(`/dp shots`) go in `docs/screenshots/`.
 
 ## What is verified where
 

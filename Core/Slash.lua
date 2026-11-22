@@ -194,6 +194,9 @@ local HELP = {
 	"/dp minimap - show or hide the minimap button",
 	"/dp reset - reset the window position",
 	"/dp debug - API report and self-test",
+	"/dp report - report a problem: a text to paste into a GitHub issue (no character, realm, guild or group details)",
+	"/dp new - what's new in this version",
+	"/dp perf [start|stop|reset] - opt-in timing of the addon's handlers and redraws, and its memory",
 	"/dp mapid - print the current map ID",
 	"/dp scan - save what the Adventure Guide, Group Finder, maps and game files return into DungeonPlannerDB.diagnostics (written on /reload)",
 	"/dp scan clear - remove those diagnostics",
@@ -259,6 +262,12 @@ function Slash.Handle(input)
 		Slash.Scan((input or ""):match("^%s*%S+%s+(%S+)"))
 	elseif cmd == "shots" then
 		ns.Shots.Run((input or ""):match("^%s*%S+%s+(%S+)"))
+	elseif cmd == "report" or cmd == "bug" then
+		ns.Report.Open()
+	elseif cmd == "new" or cmd == "whatsnew" then
+		ns.WhatsNew.Open()
+	elseif cmd == "perf" then
+		ns.Perf.Command((input or ""):match("^%s*%S+%s+(%S+)"))
 	elseif cmd == "mapid" then
 		local cur = ns.Instances.Current()
 		ns:Print(string.format("uiMapID %s, journal instance %s, %s", tostring(cur.uiMapID), tostring(cur.ejInstanceID),
@@ -273,7 +282,11 @@ end
 
 function Slash.Init()
 	if ns.addon and ns.addon.RegisterChatCommand then
-		ns.addon:RegisterChatCommand("dp", Slash.Handle)
-		ns.addon:RegisterChatCommand("dplan", Slash.Handle)
+		-- Through SafeCall, so an error in a command is kept for the report window (Core/Init.lua).
+		local function handle(input)
+			ns.SafeCall(Slash.Handle, input)
+		end
+		ns.addon:RegisterChatCommand("dp", handle)
+		ns.addon:RegisterChatCommand("dplan", handle)
 	end
 end

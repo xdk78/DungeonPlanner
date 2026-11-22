@@ -1,0 +1,43 @@
+{
+  "steps": {
+    "crop": [10, 12, 1020, 734],
+    "delay": 1500,
+    "captions": [
+      "Click a step in the list: the entrance",
+      "A boss: the view centres on it",
+      "A move step: that stretch of the route",
+      "The next stretch, one click away",
+      "The last boss: one click per step"
+    ]
+  },
+  "runmode": {
+    "crop": [14, 12, 1405, 700],
+    "delay": 1700,
+    "captions": [
+      "Run mode follows your plan step by step",
+      "Next: the next stretch of the route",
+      "Next again: the map behind it moves on"
+    ]
+  },
+  "route": {
+    "crop": [10, 12, 1020, 734],
+    "delay": 1200,
+    "captions": [
+      "Your own copy: pick the Route tool",
+      "Click the map to add a bend; Shift-click makes a numbered stop",
+      "Each click extends the route",
+      "Bends follow the corridors",
+      "Right-click ends the route",
+      "The route shows up as steps for run mode"
+    ]
+  },
+  "picker": {
+    "crop": [90, 12, 760, 530],
+    "delay": 1700,
+    "captions": [
+      "Type \"forever\" to see Forever's new dungeons",
+      "Or a few letters of a name",
+      "Narrow it down to one dungeon"
+    ]
+  }
+}

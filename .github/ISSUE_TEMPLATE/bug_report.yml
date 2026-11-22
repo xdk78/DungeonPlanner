@@ -1,0 +1,59 @@
+name: Bug report
+description: Something does not work in game
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The quickest way to a good report: in game type `/dp report` (or click the `!` button in the planner's title bar),
+        copy the link it shows into a browser (it fills the first fields for you), and paste the report text into the
+        last field. The report holds versions, language, your plan's id and size, the other addons and the latest
+        Dungeon Planner Lua errors. It never holds your character name, realm, guild, group members or chat.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did and what you saw instead.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+  - type: input
+    id: version
+    attributes:
+      label: Dungeon Planner version
+      description: Shown at the top of the report ("Addon:").
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: Game client
+      description: Version and build, from the report ("Client:").
+  - type: input
+    id: language
+    attributes:
+      label: Dungeon Planner language
+      description: enUS, plPL, deDE, esES, frFR or ruRU, from the report ("Language:").
+  - type: textarea
+    id: report
+    attributes:
+      label: Report from /dp report
+      description: Paste the whole text. It holds the `/dp debug` summary, the other addons and the latest Lua errors. Without it, paste the output of `/dp debug` and any error from BugSack or the error frame.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: other
+    attributes:
+      label: Anything else
+      description: Other addons that might matter (map, journal, translation, UI replacements), screenshots.

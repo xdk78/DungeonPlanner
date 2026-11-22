@@ -629,6 +629,14 @@ local function buildHeader(f)
 	W.SetTooltip(f.settings, L["Settings"],
 		L["Options and language. Automatic uses Polish when WoW Po Polsku is set to Polish, otherwise the game's language."],
 		"below")
+	-- Report a problem: left of the settings button (the page's own header controls end at this one).
+	f.bug = W.IconButton(f.bar, "!", L["Report a problem"], function()
+		ns.Report.Open()
+	end)
+	f.bug:SetPoint("RIGHT", f.settings, "LEFT", -SP.xs, 0)
+	W.SetTooltip(f.bug, L["Report a problem"],
+		L["Builds a text with your version, plan and the latest errors, to paste into a GitHub issue. No character, realm, guild or group details."],
+		"below")
 end
 
 -- Build ------------------------------------------------------------------------------------------------------------------

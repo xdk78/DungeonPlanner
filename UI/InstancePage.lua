@@ -18,7 +18,7 @@ local SIDE_W = 236
 local function buildChrome(f, ctx, window)
 	local chrome = CreateFrame("Frame", nil, window.bar)
 	chrome:SetPoint("LEFT", window.barStart, "RIGHT", SP.md, 0)
-	chrome:SetPoint("RIGHT", window.settings, "LEFT", -SP.sm, 0)
+	chrome:SetPoint("RIGHT", window.bug or window.settings, "LEFT", -SP.sm, 0)
 	chrome:SetHeight(SZ.header)
 	f.chrome = chrome
 

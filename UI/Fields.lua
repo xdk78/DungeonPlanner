@@ -132,7 +132,7 @@ function W.Input(parent, opts)
 
 	local edit = CreateFrame("EditBox", nil, holder)
 	edit:SetPoint("TOPLEFT", left, 0)
-	edit:SetPoint("BOTTOMRIGHT", -(opts.search and SZ.small or SP.sm), 0)
+	edit:SetPoint("BOTTOMRIGHT", -(opts.search and SZ.small + 2 or SP.sm), 0) -- left of the clear button (it keeps 2 px)
 	edit:SetFontObject(S.fonts.body)
 	S.TextColor(edit, "white")
 	edit:SetAutoFocus(false)

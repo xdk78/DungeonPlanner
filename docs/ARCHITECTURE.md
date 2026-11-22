@@ -378,6 +378,9 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Core/Compat.lua | API checks and in-game self-tests (`/dp debug`) |
 | Core/Integrations.lua | WoW Po Polsku detection, Dungeon Journal, OpenMap, launcher + minimap button |
 | Core/API.lua | public API and CallbackHandler events |
+| Core/Report.lua, UI/ReportFrame.lua | the problem report (`/dp report`, the title bar's `!`): facts about the addon, client, plan and other addons, the `/dp debug` summary and the last Lua errors (`ns.Errors` in Core/Init.lua, filled by `ns.SafeCall`; BugGrabber read only), the new-issue link for `.github/ISSUE_TEMPLATE/bug_report.yml`; never character, realm, guild, group, chat or plan names |
+| Core/WhatsNew.lua, UI/NewsFrame.lua | the What's new card and the first-run welcome: highlights per version (kept in step with CHANGELOG.md by a test), shown once when `global.news.seen` differs from the running version, never on a first install |
+| Core/Perf.lua | `/dp perf`: opt-in timing. `start` registers a timed event dispatcher and swaps `ns.Fire` and `ns.SafeCall` for timed versions (own against total time with a depth stack, spike ring, frames and hitches, the game profiler sampled every 5 s); `stop` puts them back. Nothing runs or is wrapped while it is off |
 | Core/Actions.lua, Core/Slash.lua, Core/Boot.lua | key bindings, slash commands, lifecycle |
 | Locales/ | English (keys) and Polish |
 | Model/ | plan schema, validation, operations, routes ("suggest order": nearest neighbour + 2-opt), progress, recommended (bundled) plans |

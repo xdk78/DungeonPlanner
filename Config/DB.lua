@@ -220,6 +220,8 @@ end
 function DB.Init()
 	-- Look before AceDB touches anything: newer data must stay as it is.
 	local raw = _G.DungeonPlannerDB
+	-- No saved data at all: the first session on this install (Core/WhatsNew.lua shows the welcome, not "what's new").
+	ns.freshInstall = type(raw) ~= "table" or type(raw.global) ~= "table"
 	local newer = type(raw) == "table" and type(raw.global) == "table" and (tonumber(raw.global.schema) or 0) > DB.SCHEMA
 	if type(raw) == "table" and not newer then
 		DB.ProviderMapsFirst(raw)
