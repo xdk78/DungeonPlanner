@@ -918,3 +918,55 @@ T.case("Approximate spots: '(approx.)' becomes a small mark in step text and too
 	T.eq(lines[1], "Kill the Summoner first.")
 	T.ok(lines[2] and lines[2]:find(ns.Style.APPROX, 1, true), "the estimate line")
 end)
+
+-- An update that splits a file adds a file the running client has not read (docs/COMPATIBILITY.md section 7): until
+-- the game restarts, what moved there is missing, and the rest goes on without it.
+T.case("Split-off files missing until a restart: run mode without UI/RunLines.lua, /dp debug and scan without UI/FontTest.lua", function()
+	boot()
+	local RM, S = ns.RunMode, ns.Style
+	local moved = {
+		[RM] = { "RecorderText", "Drift", "DriftText", "PrepText", "GoToEstimate" },
+		[S] = { "FontTest", "FontTestAgain", "FontTestLines", "FontTestRecord", "FontTestPanel", "ShowFontTest", "MarkFontTest",
+			"RunFontTest", "DescribeProbe" },
+	}
+	local saved = {}
+	for owner, names in pairs(moved) do
+		saved[owner] = {}
+		for _, name in ipairs(names) do
+			saved[owner][name], owner[name] = owner[name], nil
+		end
+	end
+	local rows
+	local ok, err = pcall(function()
+		ns.UI.SelectPlan("b:hall-of-thanes")
+		RM.Show()
+		RM.Refresh()
+		local f = _G.DungeonPlannerRunFrame
+		T.ok(not f.drift:IsShown() and not f.prep:IsShown(), "no drift or prep line")
+		T.eq(f.rec.text:GetText(), "", "an empty recorder line")
+		RM.Hide()
+		closeAllDialogs()
+		ns.Slash.Handle("debug")
+		T.ok(_G.DungeonPlannerDialog:IsShown(), "the debug dialog without the font test")
+		closeAllDialogs()
+		ns.Slash.Handle("scan")
+		local d = _G.DungeonPlannerDB.diagnostics
+		T.ok(d and d.fonts and d.fontTest == nil, "the scan saves the fonts line, no font test")
+		rows = ns.Compat.Report()
+	end)
+	for owner, names in pairs(saved) do
+		for name, fn in pairs(names) do
+			owner[name] = fn
+		end
+	end
+	ns.Slash.Handle("scan clear")
+	T.ok(ok, tostring(err))
+	local missing = {}
+	for _, row in ipairs(rows) do
+		if row.path == "(file)" and not row.ok then
+			missing[#missing + 1] = row.name
+		end
+	end
+	table.sort(missing)
+	T.eq(table.concat(missing, ", "), "Addon file UI/FontTest.lua, Addon file UI/RunLines.lua", "both reported by /dp debug")
+end)

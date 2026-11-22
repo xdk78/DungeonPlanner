@@ -212,7 +212,8 @@ local function portraits(out)
 	out.portraits = p
 end
 
--- The UI face and the font test (UI/Fonts.lua): each Polish face's SetFont, GetFont and Polish-letter widths, directly
+-- The UI face and the font test (UI/FontTest.lua, missing until the game restarts after the update that added it):
+-- each Polish face's SetFont, GetFont and Polish-letter widths, directly
 -- and through a Font object; this session's first probe; the game face and other addons' fonts as controls; one of our
 -- textures. fontTest is written now and again 2 seconds later with the second look (fontTest.faces[*].later).
 local function fonts(out)
@@ -223,6 +224,9 @@ local function fonts(out)
 	end
 	out.fonts = { file = v(S.fontFile), polish = v(S.polishFace), faces = table.concat(faces, " "),
 		locale = v(ns.activeLocale), setting = v(ns.db and ns.db.settings.locale) }
+	if not S.RunFontTest then
+		return
+	end
 	local test = S.RunFontTest({
 		delay = 2,
 		done = function(t)

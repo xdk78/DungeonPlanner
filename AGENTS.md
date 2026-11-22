@@ -60,8 +60,9 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   drift in its own pull request (`data-src/routes/README.md`, "When to run the `--check`s").
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
   `wowui check` enforces 800 for addon code. Exceptions, in `.wowui-check.json`: `Locales/` (one string per line,
-  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked), and
-  `UI/Fonts.lua` and `UI/RunMode.lua`, capped at about their size until they are split (they may not grow).
+  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked).
+  A file split off an existing one is new to a running client: list it in `Compat.FILES` and let its callers do
+  without it until the game restarts (docs/COMPATIBILITY.md section 7).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
   otherwise). Format strings must keep the same `%s`/`%d` order (a test checks).

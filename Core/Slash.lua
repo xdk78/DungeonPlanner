@@ -188,12 +188,14 @@ function Slash.Debug()
 	if polishKind == "game" then
 		notes[#notes + 1] = line(false, L["No font with Polish letters could be loaded; text uses the game font (boxes for some letters)."])
 	end
-	notes[#notes + 1] = L["The font test below draws each face; its result follows in chat in a few seconds."]
+	if S.RunFontTest then -- UI/FontTest.lua (missing until the game restarts after the update that added it)
+		notes[#notes + 1] = L["The font test below draws each face; its result follows in chat in a few seconds."]
+	end
 	for _, note in ipairs(notes) do
 		print("    " .. note)
 	end
 	if ns.Widgets and ns.Widgets.ShowDialog then
-		-- One dialog: the font test (UI/Fonts.lua) is its body, under the Polish letters test.
+		-- One dialog: the font test (UI/FontTest.lua) is its body, under the Polish letters test.
 		ns.Widgets.ShowDialog({
 			body = S.FontTestPanel and S.FontTestPanel() or nil,
 			title = L["Polish letters test:"],
@@ -206,7 +208,9 @@ function Slash.Debug()
 			buttons = { { L["Close"] } },
 		})
 	end
-	S.RunFontTest({ show = true, print = true })
+	if S.RunFontTest then
+		S.RunFontTest({ show = true, print = true })
+	end
 end
 
 local HELP = {

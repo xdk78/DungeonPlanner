@@ -60,11 +60,9 @@
       ]
     },
     "file-length": {
-      "_overrides": "Addon code stays under 800 lines (AGENTS.md, \"Keep files under ~800 lines\"). Two UI files are past that and capped at about their size until they are split: they may not grow. Translation tables keep one string per line; development tools never ship. Tests are off (disable above); the vendored harness and libraries are excluded. The first matching glob wins.",
+      "_overrides": "Addon code stays under 800 lines (AGENTS.md, \"Keep files under ~800 lines\"). Translation tables keep one string per line; development tools never ship. Tests are off (disable above); the vendored harness and libraries are excluded. The first matching glob wins.",
       "maxLines": 800,
       "overrides": {
-        "UI/Fonts.lua": 830,
-        "UI/RunMode.lua": 845,
         "Locales/**": 1500,
         "tools/**": 1200
       }
