@@ -962,5 +962,7 @@ ns.Locales.plPL = {
 	["Perf probe stopped; its numbers stay until /dp perf reset."] = "Sonda wydajności wyłączona; wyniki zostają do /dp perf reset.",
 	["The perf probe is not running."] = "Sonda wydajności nie działa.",
 	["Perf numbers cleared."] = "Wyniki sondy wyczyszczone.",
+	["Open Settings"] = "Otwórz ustawienia",
+	["Short for Discord (2000 characters)"] = "Krótko na Discorda (2000 znaków)",
 	["Start it with /dp perf start (off by default; stop it with /dp perf stop)."] = "Włącz ją poleceniem /dp perf start (domyślnie wyłączona; /dp perf stop ją wyłącza).",
 }

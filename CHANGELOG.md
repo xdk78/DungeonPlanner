@@ -24,15 +24,20 @@ follow [Semantic Versioning](https://semver.org/).
 - **Report a problem**: `/dp report`, a `!` button in the window's title bar and a button in Settings (Troubleshooting)
   open a window with one text to paste into a GitHub issue: addon and game versions, language, the instance, your plan's
   id, revision and step, the other addons it works with and whether each is loaded, the `/dp debug` summary and the
-  last ten Lua errors from Dungeon Planner (also read from BugGrabber when it is installed). A "What happened?" field
-  goes into the text, and the window shows the new-issue link to copy, with the first fields filled in. It never holds
-  your character, realm, guild, group members or chat, and none of your plans' names or notes. The GitHub bug form now
-  has the matching fields.
+  last ten Lua errors from Dungeon Planner (also read from BugGrabber when it is installed) and the actions the game
+  blocked (taint, with where it happened), the last log lines, the settings that differ from the defaults and the input
+  style (gamepad or keyboard). A "What happened?" field goes into the text; "Short for Discord" fits it in 2000
+  characters, dropping details in a fixed order and keeping your words whole. The window shows the new-issue link to
+  copy (short, with the first fields filled in). It never holds your character, realm, guild, group members or chat, and
+  none of your plans' names or notes. The GitHub bug form now has the matching fields.
 - **What's new**: a card with the highlights, shown once after the addon is updated (never on a first install, where a
-  short welcome with `/dp`, run mode and three tips shows instead). `/dp new` and a Settings button show it again. In
-  English and Polish.
-- **`/dp perf`**: an opt-in probe that times the addon's event handlers, listeners and main redraws, counts the calls,
-  lists the ones over 5 ms and shows the addon's memory. Off until `/dp perf start`; `/dp perf stop` removes it.
+  short welcome with `/dp`, run mode and three tips shows instead). It waits for a quiet moment: no combat, cinematic,
+  instance or open Dungeon Planner window. `/dp new` and a Settings button show it again; a note can open its Settings
+  group. In all six languages.
+- **`/dp perf`**: an opt-in probe that times the addon's events, internal messages and callbacks (own time against
+  total, so nested calls are not counted twice), the frames and hitches that were ours, spikes over 5 ms with what called
+  them, and the addon's memory and the game's own profiler. Off until `/dp perf start`: nothing is swapped or running
+  before that; `/dp perf stop` puts everything back.
 
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older

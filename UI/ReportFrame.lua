@@ -102,7 +102,7 @@ local function build()
 	f.linkLabel:SetJustifyH("LEFT")
 
 	f.report = W.MultiLine(inner, { readOnly = true, maxBytes = 30000 })
-	f.report:SetPoint("TOPLEFT", f.reportLabel, "BOTTOMLEFT", 0, -SP.xs)
+	f.report:SetPoint("TOPLEFT", f.reportLabel, "BOTTOMLEFT", 0, -S.SIZE.small) -- clear of the check box beside the label
 	f.report:SetPoint("BOTTOMRIGHT", f.linkLabel, "TOPRIGHT", 0, SP.sm)
 	f:Hide()
 	frame = f
