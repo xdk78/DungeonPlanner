@@ -10,6 +10,9 @@ follow [Semantic Versioning](https://semver.org/).
 Highlights, upgrade notes, known limitations and the in-game test checklist: `docs/RELEASE-NOTES-0.2.0.md` in the
 source repository.
 
+**Restart the game after updating** (a `/reload` is not enough): this version adds files that WoW loads only when the
+client starts.
+
 ### Added
 - **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" follows your
   game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other client languages stay

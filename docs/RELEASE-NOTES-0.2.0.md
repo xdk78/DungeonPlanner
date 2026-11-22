@@ -30,8 +30,10 @@ follow the corridors. The full list of changes is in [CHANGELOG.md](../CHANGELOG
 
 ## Upgrade notes
 
-- **Nothing to do.** Your plans, settings and recorded runs carry over. On the first login the saved data moves to
-  schema 6 (it remembers which plan a received copy came from, for group sync, and keeps prep notes).
+- **Restart the game after updating**, not just `/reload`: 0.2.0 adds new files to the addon, and WoW reads an addon's
+  file list only when the client starts, so without a restart parts of the addon are missing.
+- **Your data carries over.** Plans, settings and recorded runs need nothing from you. On the first login the saved
+  data moves to schema 6 (it remembers which plan a received copy came from, for group sync, and keeps prep notes).
 - **Going back to 0.1.0** after this update opens the newer data read-only, so the older version cannot lose what it
   does not know. Update again to edit.
 - **Sharing between 0.1.0 and 0.2.0 works** (in-game protocol 2, export strings `!DP2!`). Group sync needs 0.2.0 on
@@ -117,7 +119,7 @@ what to look for.
     doubles back, two lanes with their own arrows. Run mode highlights its current leg.
 19. **Routes settings.** Settings > Routes: width, opacity, outline, colour and arrow options change the map and run
     mode at once; "Highlight the route under the pointer" off stops the hover.
-20. **What's new.** Update from 0.1.0 (or clear `news` in the saved data) and log in outside an instance: the card shows
+20. **What's new.** Update from 0.1.0 (or clear `news` in the saved data), restart the game and log in outside an instance: the card shows
     once, after combat if you log in fighting; "Open Settings" goes to Routes; `/dp new` shows it again. A first
     install shows the welcome instead.
 21. **`/dp report`** and the title bar's `!`: the text holds versions, plan and recent errors, no character, realm,
