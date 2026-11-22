@@ -109,6 +109,29 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `GetMinimapZoneText`, `GetSubZoneText` | Inferred, guarded | Retail 12.1.5 API | Sub-zone names of recorded pulls |
 | `GetPlayerFacing`, `Minimap:IsProtected`, `GetZoom`, `GetZoomLevels`, `GetPingPosition` | Inferred, guarded, `/dp scan` only | Retail 12.1.5 API | Recorded by `/dp scan` (section 10); nothing is built on them |
 | `COMBAT_LOG_EVENT_UNFILTERED` | **Not available** | ForeverDungeonJournal RunLog | Not used |
+| `C_QuestLog.IsQuestFlaggedCompleted`, `IsOnQuest`, `GetLogIndexForQuestID`, `GetTitleForQuestID` | Verified, guarded | DataStore_Quests, GearQuestForever, Attune, ForeverDungeonJournal | Prep's quest states and attunement quests; titles in the player's language when cached, else the bundled English name |
+| `C_Item.GetItemCount` (bank included), `GetItemCount` | Verified, guarded | Attune, BuffRadar, Altoholic | Prep's keys: carried or not; "Unknown" without |
+| `UnitFactionGroup`, `GetNumGroupMembers`, `IsInRaid`, `UnitExists`, `UnitIsUnit`, `UnitGroupRolesAssigned` | Verified, guarded | Altoholic, Attune, DBM | The other faction's quests hidden; the group's levels and roles |
+| `C_Map.GetMapPosFromWorldPos`, `C_Map.GetWorldPosFromMapPos`, `CreateVector2D` | Verified, guarded | GearQuestForever `Guide.lua`, `Pins.lua` (pcall; "GetMapPosFromWorldPos leads with the map id, then the position"), ForeverFishing | The entrance from world yards to its zone map and back, distances, flight masters near Forever's new dungeons |
+| `C_Map.GetPlayerMapPosition` + `GetBestMapForUnit` | Verified, guarded; **outdoors only** (section 10) | GearQuestForever, ForeverFishing, TomTom | Getting there: distance and direction to the entrance; inside an instance the card says where distances show |
+| `C_Map.SetUserWaypoint`, `C_Map.CanSetUserWaypointOnMap`, `UiMapPoint.CreateFromCoordinates`, `C_SuperTrack.SetSuperTrackedUserWaypoint` | Verified, guarded | Attune `Attune.lua`, GearQuestForever `Map.lua`, AllTheThings | The game's own map pin on the entrance (the baseline of "Navigate") |
+| `C_Map.OpenWorldMap` | Verified, guarded | GearQuestForever `Map.lua`, Polestar `Core/Compat.lua` | "Show on world map". The global `OpenWorldMap` is never called (below) |
+| `C_Map.GetAreaInfo` | Verified, guarded | WhatsTraining, OpenMap | Zone names of Questie's quest givers |
+
+### Navigation and the world map (rules from Polestar's shipped code)
+
+- The world map opens only through `C_Map.OpenWorldMap(uiMapID)`. The global `OpenWorldMap` called from addon code
+  leaves the map frame tainted (later opens in combat are blocked, quest pins lost until a reload); `QuestMapFrame_*`
+  is never called. Never in combat, never under the gamepad interface style (`Compat.Gamepad`, section 1: the map
+  joins the gamepad's focus in the calling addon's name and its close is blocked).
+- Nothing is sent to a navigator (Polestar, Shortest Path Forever, TomTom, the game's pin) in combat or while dead.
+- Dungeon Planner draws nothing on the world map or the minimap and writes nothing into `WorldMapFrame`, its data
+  providers or pin pools. Forever's gamepad navigation hooks `CreateFrame`: a frame created with a parent inside an
+  open Blizzard panel taints it, so Dungeon Planner's frames are parented to its own frames or `UIParent` only.
+- Polestar can install a stand-in global `TomTom`; the TomTom adapter checks that the TomTom addon itself is loaded.
+- Four Forever zone maps use map-percent frames different from Classic Era's (Mulgore, Eastern Plaguelands, Redridge,
+  Stormwind City): the bundled entrances are world yards from the game's tables or Forever map percent, never Classic
+  percent.
 
 ## 4. Installed addons and libraries (inventory, 2026-11-15)
 
@@ -196,7 +219,8 @@ Integration (optional, guarded, public entry points only):
 | WeakAuras | no | Can read plans via `DungeonPlanner.API` and its callbacks (docs/API.md) | Untested |
 | ElvUI / AddOnSkins / Masque | no | Stable frame names (`DungeonPlannerMainFrame`, `DungeonPlannerDialog`), `API.GetFrames()`; DP never touches the game's font objects, so ElvUI's "Replace Blizzard Fonts" cannot break it; no Masque groups (DP has no action buttons) | Untested |
 | Questie / RXPGuides / AllTheThings | yes | Nothing; no conflict | — |
-| HandyNotes / TomTom | yes | Nothing (DP never draws on the world map) | — |
+| TomTom, Polestar, Shortest Path Forever | TomTom and Polestar yes; Shortest Path Forever no | Prep's "Navigate" sends the instance entrance through their public calls (data providers below); DP never draws on the world map | Offline tests with fake APIs; in game untested |
+| HandyNotes | yes | Nothing: a pin collection, no destination API worth a hand-off | — |
 | MinimapButtonButton | yes | DP's minimap button is a LibDBIcon button, which collectors pick up | In-game untested |
 | WoW Po Polsku Forever | yes | Section 8 | Code path verified offline; in-game untested |
 | NeedRoll, GearQuestForever, Pawn | yes | Overlap only in topic (loot/gear); DP stores your own gear lists, no item database. NeedRoll: "Open in NeedRoll" (data providers below) | — |
@@ -215,7 +239,13 @@ debug` lists each one as active or inactive with counts.
 | `foreverDungeonRoutes` | Forever Dungeon Routes 1.2.4 (MIT code; its map pictures are Santiago Reyes', used with his permission, not MIT) | Its routes as an extra map layer, "Routes: Forever Dungeon Routes" (main path teal, side paths fainter; off until ticked in the legend, never in run mode), drawn only on a map its coordinates fit: the game's map art for a classic floor (floors matched by the first tile's file ID, `GameFiles.FloorTileID`), Dungeon Journal's or its own picture for a Forever floor (the same pictures, same crop, checked offline). Its maps of Forever's new dungeons where neither the game nor Dungeon Journal has one, with its boss stops as pins | `_G.ForeverDungeonRoutes` (its namespace, `Core.lua`): `Dungeons`, `Floors` (map tables; the picture floors that `Pictures.lua` adds carry `image`), `DefaultRoutes` (of several, the variant named like the plan, else the full clear), `Rooms` (counted only). Lines with an odd count or a value outside 0..1 are skipped; at most 20 lines a floor | **No**: internal tables (it has no data API) | Shapes read from its source (1.2.4); offline tests with fake data; in game untested |
 | `openMap` | OpenMap 0.8.9 (MIT code; the drawn maps credit their artists) | Players' drawn maps of Forever's new dungeons (4 x 3 tiles), boss pins per floor, the instance list | `_G.OpenMap` (its namespace): `MapPlaces.instances`, `MapDungeonDrawn`, `MapDungeonBosses` | **No**: `OpenMapAPI` has no data calls; internal tables | Same |
 | `needRoll` | NeedRoll 1.7.0 (GPL-3.0) | "Open in NeedRoll" for a boss's loot | `NeedRoll_ShowLoot(instance, boss)` (documented in its `docs/API.md`) | **Yes** | Same. Its spots and loot tables live on a private namespace it does not publish, so they cannot be read; nothing feeds the Enemies layer from it |
-| `questie` | QuestieDB 1.1.1 (GPL-3.0) | Quests filed under the dungeon's area, with level and quest giver (Runs section) | `LibQuestieDB` contract 4: `RequireContract`, `Enum.zoneIDs`, `Quest.GetAllIds/zoneOrSort/name/questLevel/startedBy`, `Npc.name` | **Yes** (its data contract) | Same. Scans all quest IDs once per dungeon in slices of 400 per frame, on demand. Its instance NPCs have no coordinates inside dungeons, so nothing goes on the map |
+| `questie` | QuestieDB 1.1.1 (GPL-3.0) | Quests filed under the dungeon's area, with level and quest giver (Runs section) | `LibQuestieDB` contract 4: `RequireContract`, `Enum.zoneIDs`, `Quest.GetAllIds/zoneOrSort/name/questLevel/startedBy`, `Npc.name`, `Npc.spawns` | **Yes** (its data contract) | Same. Scans all quest IDs once per dungeon in slices of 400 per frame, on demand. Its instance NPCs have no coordinates inside dungeons, so nothing goes on the map. Prep asks `Givers(questIDs)`: each quest's first starting NPC, its name and its first spawn (area ID and 0-100 position; the zone's name from `C_Map.GetAreaInfo`), a few lookups per quest. Its Forever data is taken as Forever coordinates (its `EraToForever` is for Era points only) |
+| `tomtom` | TomTom (all rights reserved) | Navigate: the nearest flight master, then the entrance, as waypoints | `TomTom:AddWaypoint(uiMapID, x, y, { title, from, persistent = false })`, only when `C_AddOns` says TomTom is loaded (Polestar can install a stand-in `TomTom`) | **Yes** | Signature read from its installed `core/waypoints.lua`; offline tests with a fake; in game untested |
+| `polestar` | Polestar (GPL-3.0) | Navigate: the entrance as its arrow's target (it plans flights and boats itself); "About 6 min with Polestar" from its estimate | `Polestar.Nav.API` version 1: `Navigate(owner, uiMapID, x, y, title)`, `Estimate(nil, nil, nil, toMap, x, y)` (nil on "busy" or "unknown"), `Cancel(owner)`; it refuses instance maps, so only the outdoor entrance goes | **Yes** (its documented API) | API read from its installed `Nav/Journey.lua`; offline tests with a fake; in game untested |
+| `shortestPath` | Shortest Path Forever (GPL-3.0-or-later) | Navigate: the entrance as its route's target | `ShortestPathForever.API` version 1 or 2: `Navigate(owner, uiMapID, x, y, title)`, `Cancel` checked present | **Yes** | **Inferred** from Polestar's integration (how its `Nav/Handoff.lua` calls it); not yet verified against Shortest Path Forever itself. Polestar includes its walking router |
+
+**Navigate** picks the first active of Polestar, Shortest Path Forever and TomTom, else the game's own map pin
+(`Data/Navigation.lua`); its "..." menu lists every available way. Each adapter can be switched off in Settings.
 
 **Map priority** for a plan floor: the game's own map art (a UiMap's art, else the old dungeon map tiles, Data/GameFiles.lua),
 then Santiago Reyes' bundled map of a Forever floor (`Data/ReyesMaps.lua`, with his permission), then the first adapter

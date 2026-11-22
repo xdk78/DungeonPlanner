@@ -26,6 +26,7 @@ UI.HOME_TABS = {
 -- Sections of an instance page, in bar order. Old tab names (saved by earlier versions) map onto them.
 UI.SECTIONS = {
 	{ id = "map", text = "Map", art = "sectionMap" },
+	{ id = "prep", text = "Prep", art = "sectionPrep" },
 	{ id = "encounters", text = "Bosses", art = "sectionBosses" },
 	{ id = "pulls", text = "Pulls", art = "sectionPulls" },
 	{ id = "assignments", text = "Party", art = "sectionAssignments" },

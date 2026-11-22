@@ -44,6 +44,19 @@ follow [Semantic Versioning](https://semver.org/).
   instances). A first install shows a short welcome instead. `/dp new` shows it again.
 - **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory. Nothing runs until
   `/dp perf start`; `/dp perf stop` turns it off.
+- **Prep**, a new section for before you go in: the instance's quests (to pick up, in your log, too low, done; the
+  other faction's hidden; names in your language when the game has them; who gives each and where with Questie
+  installed), the keys and attunements it needs and whether you carry them or did the quest (Onyxia's Drakefire
+  Amulet, Upper Blackrock Spire's Seal of Ascension, the Dalaran Sewer Key, Scholomance's keys and more), your group's
+  levels against the level range and the roles still missing, and your own prep notes in an editable copy.
+- **Getting there**, in Prep and from the home table's new "Getting there" button (no plan needed): the zone, the
+  area the entrance lies in and whose territory it is, the entrance's coordinates, the nearest flight master for each
+  faction and the way from it, boats and zeppelins when you are on another continent, Forever's summoning stones, and
+  outdoors your distance and direction to the entrance. "Show on world map" sets the game's map pin; "Navigate" hands
+  the entrance to Polestar, Shortest Path Forever or TomTom when installed (each can be switched off in Settings),
+  else to the game's own pin. "Pop out" keeps it in a small window.
+- Run mode shows "Prep: 3 quests to pick up" before the first step; a click opens Prep.
+- The home table's preview names the instance's zone.
 
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older

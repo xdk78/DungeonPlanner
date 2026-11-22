@@ -108,6 +108,100 @@ local function openOwn(section, tool)
 	ns.UI.RefreshPage()
 end
 
+-- Prep (UI/Panels/PrepPanel.lua) as it reads in a party outdoors: an Alliance player at level 18 with two quests done
+-- or in the log, a party of three (one too low), standing in Westfall, TomTom and Polestar installed; an own copy so the
+-- prep notes are editable. The made-up world (tests/wowmock.lua) gives the distance.
+local prepGlobals = {}
+local function prepWorld(on)
+	local names = { "UnitGroupRolesAssigned", "TomTom", "Polestar" }
+	if on then
+		for _, n in ipairs(names) do
+			prepGlobals[n] = rawget(_G, n)
+		end
+		mock.inGroup = true
+		mock.units = {
+			player = { level = 18 },
+			party1 = { name = "Aldra", level = 19 },
+			party2 = { name = "Tamsin", level = 13 },
+		}
+		local roles = { player = "TANK", party1 = "HEALER", party2 = "DAMAGER" }
+		_G.UnitGroupRolesAssigned = function(unit)
+			return roles[unit] or "NONE"
+		end
+		mock.questsDone, mock.questLog = { [166] = true }, { [214] = true }
+		mock.loadedAddons = { TomTom = true }
+		_G.TomTom = { AddWaypoint = function()
+			return 1
+		end }
+		_G.Polestar = { Nav = { API = { version = 1, Navigate = function()
+			return true
+		end, Estimate = function()
+			return 340
+		end } } }
+	else
+		for _, n in ipairs(names) do
+			_G[n] = prepGlobals[n]
+		end
+		mock.inGroup, mock.units = false, {}
+		mock.questsDone, mock.questLog, mock.loadedAddons, mock.playerPos = {}, {}, nil, nil
+	end
+	ns.Providers.Reset()
+	ns.Travel.Reset()
+end
+
+-- The player outdoors, a little north-east of the instance's entrance on its map.
+local function standNear(slug)
+	local ent = ns.Travel.Entrance(ns.Travel.For(ns.Bundled.Get(ns.Bundled.PREFIX .. slug)))
+	mock.playerPos = ent and ent.uiMapID and { map = ent.uiMapID, x = ent.x + 0.3, y = ent.y - 0.25 } or nil
+end
+
+local function prepView(name, slug, own)
+	return {
+		name = name,
+		setup = function()
+			prepWorld(true)
+			closeAll()
+			ns.UI.SelectPlan(ns.Bundled.PREFIX .. slug)
+			if own then
+				local copy = ns.UI.CopyPlan(ns.UI.ctx:Plan())
+				ns.Plan.SetField(copy, "prep", "Flasks and food for everyone\nRepair before the run")
+				ns.UI.SelectPlan(copy.id)
+			end
+			standNear(slug)
+			ns.UI.SelectTab("prep")
+			ns.UI.RefreshPage()
+		end,
+		window = window,
+		teardown = function()
+			prepWorld(false)
+		end,
+	}
+end
+
+-- The Getting there window, opened from the home preview (no plan needed).
+local function travelWindow()
+	return {
+		name = "travel-window",
+		setup = function()
+			prepWorld(true)
+			closeAll()
+			ns.UI.GoHome("dungeons")
+			standNear("the-deadmines")
+			ns.GettingThere.Open({ name = "The Deadmines", kind = "dungeon" })
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerTravelFrame")
+		end,
+		teardown = function()
+			local w = rawget(_G, "DungeonPlannerTravelFrame")
+			if w then
+				w:Hide()
+			end
+			prepWorld(false)
+		end,
+	}
+end
+
 -- Run mode at step `which` ("first", "middle", "last") of Hall of Thanes.
 local function runMode(which)
 	return {
@@ -449,6 +543,10 @@ V.views = {
 	sectionView("runs"),
 	sectionView("share"),
 	sectionView("plan"),
+	sectionView("prep"),
+	prepView("prep-party", "the-deadmines", true),
+	prepView("prep-keys", "upper-blackrock-spire", false),
+	travelWindow(),
 	runsView("runs-plan", "plan"),
 	runsView("runs-compare", "compare"),
 	-- Recording on, no run of this instance yet: the Run column says the next run will appear.

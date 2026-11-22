@@ -66,6 +66,7 @@ Art.SPECS = {
 	sectionGear = { file = ICONS .. "INV_Chest_Plate01", round = true },
 	sectionRuns = { file = ICONS .. "INV_Misc_PocketWatch_01", round = true },
 	sectionShare = { file = ICONS .. "INV_Scroll_03", round = true },
+	sectionPrep = { file = ICONS .. "INV_Misc_Bag_08", round = true },
 	-- Marker kinds on the map (bosses use their journal portrait; packs and patrols are pull-coloured discs)
 	kind_boss = { file = ICONS .. "INV_Misc_Bone_HumanSkull_01", round = true },
 	kind_rare = { file = ICONS .. "INV_Misc_Head_Dragon_01", round = true },

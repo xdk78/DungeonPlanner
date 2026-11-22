@@ -1,0 +1,461 @@
+{
+ "schema": 1,
+ "updated": "2026-11-22",
+ "sources": [
+  {
+   "id": 1,
+   "name": "Warcraft Wiki: World of Warcraft: Forever",
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "licence": "CC BY-SA 4.0, facts only; no text copied",
+   "what": "The outside zone of every Forever dungeon and raid; summoning stones the Forever dungeon pages name"
+  },
+  {
+   "id": 2,
+   "name": "Warcraft Wiki: instance pages",
+   "url": "https://warcraft.wiki.gg/",
+   "licence": "CC BY-SA 4.0, facts only; no text copied",
+   "what": "The area each entrance lies in, how it is entered (cave, underwater, building); hints in our own words"
+  },
+  {
+   "id": 3,
+   "name": "Warcraft Wiki: zone pages",
+   "url": "https://warcraft.wiki.gg/",
+   "licence": "CC BY-SA 4.0, facts only",
+   "what": "Which faction controls a zone (the infobox's faction field)"
+  }
+ ],
+ "places": {
+  "alcaz-prison": {
+   "zone": "Dustwallow Marsh",
+   "subzone": "Alcaz Island",
+   "zoneFaction": "contested",
+   "approach": "building",
+   "hint": "Island off the north-east coast; go in the keep, down to the basement",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "blackfathom-deeps": {
+   "zone": "Ashenvale",
+   "subzone": "The Zoram Strand",
+   "approach": "underwater",
+   "hint": "Swim down an underwater shaft on the Zoram Strand coast",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "blackmaw-hold": {
+   "zone": "Azshara",
+   "zoneFaction": "neutral",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "blackrock-depths": {
+   "zone": "Blackrock Mountain",
+   "subzone": "Blackrock Mountain",
+   "zoneFaction": "neutral",
+   "approach": "mountain",
+   "hint": "Cross the chain to the central island, then down past Grinding Quarry",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "blackwing-lair": {
+   "zone": "Blackrock Mountain",
+   "subzone": "Upper Blackrock Spire",
+   "zoneFaction": "neutral",
+   "approach": "mountain",
+   "hint": "Orb of Command at the end of the right-hand hall by the Spire entrance",
+   "src": [
+    2
+   ]
+  },
+  "city-of-dalaran": {
+   "zone": "Alterac Mountains",
+   "subzone": "Dalaran",
+   "stone": {
+    "zone": "Alterac Mountains",
+    "x": 8,
+    "y": 61
+   },
+   "hint": "Sewer grate on Dalaran's west wall; needs the Dalaran Sewer Key",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "dire-maul-east": {
+   "zone": "Feralas",
+   "subzone": "High Wilderness",
+   "zoneFaction": "contested",
+   "hint": "Warpwood Quarter is the east wing, in north-central Feralas",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "dire-maul-north": {
+   "zone": "Feralas",
+   "subzone": "High Wilderness",
+   "zoneFaction": "contested",
+   "hint": "Gordok Commons is the north wing, in north-central Feralas",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "dire-maul-west": {
+   "zone": "Feralas",
+   "subzone": "High Wilderness",
+   "zoneFaction": "contested",
+   "hint": "Capital Gardens is the west wing, in north-central Feralas",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "excavation-site-wetlands": {
+   "zone": "Wetlands",
+   "subzone": "Whelgar's Excavation Site",
+   "zoneFaction": "contested",
+   "stone": {
+    "zone": "Wetlands",
+    "x": 53.4,
+    "y": 65.3
+   },
+   "hint": "Stone and instance line are together at Whelgar's Excavation Site",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "gnomeregan": {
+   "zone": "Dun Morogh",
+   "subzone": "Gnomeregan",
+   "zoneFaction": "alliance",
+   "hint": "Elevator down to the Train Depot; front door south, back door north",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "hall-of-thanes": {
+   "zone": "Ironforge",
+   "subzone": "High Seat (beneath)",
+   "zoneFaction": "alliance",
+   "hint": "Below the High Seat; stairs down from a left turn by Deliana",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "hyjal-summit": {
+   "zone": "Mount Hyjal",
+   "zoneFaction": "neutral",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "kroldok-stronghold": {
+   "zone": "Riverglades",
+   "subzone": "Sunnyglade (north of it)",
+   "zoneFaction": "neutral",
+   "hint": "North of Sunnyglade, near the Badlands / Redridge way into the zone",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "lower-blackrock-spire": {
+   "zone": "Blackrock Mountain",
+   "subzone": "Blackrock Spire",
+   "zoneFaction": "neutral",
+   "approach": "mountain",
+   "hint": "South side of the Hall of Blackhand, opposite the Upper Spire",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "maraudon": {
+   "zone": "Desolace",
+   "subzone": "Valley of Spears",
+   "zoneFaction": "neutral",
+   "approach": "cave",
+   "hint": "Tunnel to Zaetar's Choice; three wing portals, one in an alcove",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "molten-core": {
+   "zone": "Blackrock Mountain",
+   "subzone": "Blackrock Depths",
+   "zoneFaction": "neutral",
+   "approach": "mountain",
+   "hint": "Portal at the far bottom of Blackrock Depths",
+   "src": [
+    2
+   ]
+  },
+  "naxxramas": {
+   "zone": "Eastern Plaguelands",
+   "subzone": "Plaguewood",
+   "hint": "Classic necropolis floated above the Eastern Plaguelands",
+   "src": [
+    2
+   ]
+  },
+  "onyxias-lair": {
+   "zone": "Dustwallow Marsh",
+   "subzone": "Wyrmbog",
+   "zoneFaction": "contested",
+   "approach": "cave",
+   "hint": "Cave mouth carved like a dragon's maw in the Wyrmbog",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "ragefire-chasm": {
+   "zone": "Orgrimmar",
+   "subzone": "Cleft of Shadow",
+   "zoneFaction": "horde",
+   "hint": "Portal is beside Neeru Fireblade's tent",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "razorfen-downs": {
+   "zone": "Barrens",
+   "subzone": "The Barrens (south-east)",
+   "zoneFaction": "neutral",
+   "hint": "Far southern edge of the Barrens, east side, in brambles",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "razorfen-kraul": {
+   "zone": "Barrens",
+   "subzone": "Southern Barrens",
+   "zoneFaction": "neutral",
+   "hint": "Far southern edge of the Barrens, west side",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "ruins-of-ahnqiraj": {
+   "zone": "Silithus",
+   "subzone": "Gates of Ahn'Qiraj",
+   "zoneFaction": "neutral",
+   "hint": "Through the Gates, take the left portal",
+   "src": [
+    2
+   ]
+  },
+  "ruins-of-lordaeron": {
+   "zone": "Tirisfal Glades",
+   "subzone": "Ruins of Lordaeron",
+   "zoneFaction": "horde",
+   "approach": "open",
+   "hint": "Ruins above Undercity, near the entrance used from Brill",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "scarlet-monastery-armory": {
+   "zone": "Tirisfal Glades",
+   "subzone": "Whispering Gardens",
+   "zoneFaction": "horde",
+   "hint": "North-east corner of Tirisfal Glades",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "scarlet-monastery-cathedral": {
+   "zone": "Tirisfal Glades",
+   "subzone": "Whispering Gardens",
+   "zoneFaction": "horde",
+   "hint": "North-east corner of Tirisfal Glades",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "scarlet-monastery-graveyard": {
+   "zone": "Tirisfal Glades",
+   "subzone": "Whispering Gardens",
+   "zoneFaction": "horde",
+   "hint": "North-east corner of Tirisfal Glades",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "scarlet-monastery-library": {
+   "zone": "Tirisfal Glades",
+   "subzone": "Whispering Gardens",
+   "zoneFaction": "horde",
+   "hint": "North-east corner of Tirisfal Glades",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "scholomance": {
+   "zone": "Western Plaguelands",
+   "subzone": "Caer Darrow",
+   "hint": "Barov house ruins on a rise above Caer Darrow",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "shadowfang-keep": {
+   "zone": "Silverpine Forest",
+   "subzone": "Shadowfang Keep",
+   "zoneFaction": "horde",
+   "hint": "Keep on a high bluff above Pyrewood Village",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "shapers-terrace": {
+   "zone": "Un'Goro Crater",
+   "subzone": "Northern pylon",
+   "hint": "Instance line is at the crater's northern pylon",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "stratholme-live": {
+   "zone": "Eastern Plaguelands",
+   "subzone": "Plaguewood",
+   "hint": "Main gate of the city, north of the Plaguewood",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "stratholme-undead": {
+   "zone": "Eastern Plaguelands",
+   "subzone": "Plaguewood",
+   "hint": "Back door; its own portal sits inside the Eastwall Gate (retail text)",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "temple-of-ahnqiraj": {
+   "zone": "Silithus",
+   "subzone": "Gates of Ahn'Qiraj",
+   "zoneFaction": "neutral",
+   "hint": "Through the Gates, take the right portal",
+   "src": [
+    2
+   ]
+  },
+  "temple-of-atalhakkar": {
+   "zone": "Swamp of Sorrows",
+   "subzone": "Pool of Tears",
+   "hint": "Portal is in the Hall of Masks, past the flooded Broken Hall",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "the-deadmines": {
+   "zone": "Westfall",
+   "subzone": "Moonbrook",
+   "zoneFaction": "alliance",
+   "hint": "Entered from the town of Moonbrook, south-west Westfall",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "the-drowned-city": {
+   "zone": "Stranglethorn Vale",
+   "approach": "underwater",
+   "hint": "Underwater, south of Haunted Isle and due west of Grom'gol",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "the-stockade": {
+   "zone": "Stormwind City",
+   "subzone": "Canals",
+   "zoneFaction": "alliance",
+   "approach": "building",
+   "hint": "Building on the north canal by the Mage Quarter, stairs down",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "uldaman": {
+   "zone": "Badlands",
+   "subzone": "The Maker's Terrace",
+   "hint": "A side entrance lies between Fuselight and Tomb of the Watchers",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "upper-blackrock-spire": {
+   "zone": "Blackrock Mountain",
+   "subzone": "Blackrock Spire",
+   "zoneFaction": "neutral",
+   "approach": "mountain",
+   "hint": "Same portal as the Lower Spire; keep to the left wall",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "wailing-caverns": {
+   "zone": "Barrens",
+   "subzone": "Lushwater Oasis",
+   "zoneFaction": "neutral",
+   "approach": "cave",
+   "hint": "North side of the Lushwater Oasis, south of the Crossroads",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "zulfarrak": {
+   "zone": "Tanaris",
+   "subzone": "Sandsorrow Watch",
+   "zoneFaction": "neutral",
+   "hint": "Troll city in north-west Tanaris",
+   "src": [
+    1,
+    2
+   ]
+  },
+  "zulgurub": {
+   "zone": "Stranglethorn Vale",
+   "subzone": "Zul'Gurub",
+   "approach": "open",
+   "hint": "North-east Stranglethorn; the raid is an outdoor zone",
+   "src": [
+    2
+   ]
+  }
+ }
+}

@@ -19,6 +19,13 @@
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
    "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+  },
+  {
+   "id": 4,
+   "name": "Warcraft Wiki: World of Warcraft: Forever",
+   "url": "https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever",
+   "licence": "CC BY-SA 4.0, facts only; no text copied",
+   "what": "The raid attunements Forever keeps (Seal of Ascension, Drakefire Amulet)"
   }
  ],
  "bosses": [
@@ -870,6 +877,29 @@
    "src": 1,
    "giver": 16033,
    "shared": true
+  }
+ ],
+ "keys": [
+  {
+   "item": 12344,
+   "name": "Seal of Ascension",
+   "kind": "key",
+   "required": true,
+   "quests": [
+    4743
+   ],
+   "note": "One group member opens the door from Lower Spire with it.",
+   "forever": true,
+   "src": 4
+  },
+  {
+   "quest": 4742,
+   "name": "Seal of Ascension",
+   "kind": "attunement",
+   "required": true,
+   "note": "First part: three gemstones for the unadorned seal.",
+   "forever": true,
+   "src": 4
   }
  ]
 }

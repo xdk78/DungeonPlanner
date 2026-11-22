@@ -10,8 +10,8 @@ local Schema = ns:NewModule("Schema")
 -- numbers, optional routes, instance level range, instance origin (new in WoW: Forever or classic), origin of a
 -- duplicated recommended plan. 3: optional fields older readers drop without harm: map drawings (Model/Drawing.lua),
 -- pull tags, planned cooldowns and Bloodlust, planned progress per pull. 4: raid assignment pages (Model/Pages.lua), also
--- optional. Validate.Plan reads all four.
-Schema.PLAN_VERSION = 4
+-- optional. 5: prep notes (the Prep section's free text), optional. Validate.Plan reads all five.
+Schema.PLAN_VERSION = 5
 
 -- Byte limits for text fields (UTF-8, cut on a character boundary).
 Schema.TEXT = {
@@ -23,6 +23,7 @@ Schema.TEXT = {
 	strategy = 4000,
 	description = 2000,
 	notes = 8000,
+	prep = 2000, -- prep notes (format 5): consumables, reminders before going in
 	author = 48,
 	difficulty = 32,
 	player = 48,

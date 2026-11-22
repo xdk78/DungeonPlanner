@@ -500,5 +500,16 @@
    "src": 1,
    "giver": 15362
   }
+ ],
+ "keys": [
+  {
+   "item": 10818,
+   "name": "Yeh'kinya's Scroll",
+   "kind": "summon",
+   "required": false,
+   "note": "Calls the Avatar of Hakkar again after the first time.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

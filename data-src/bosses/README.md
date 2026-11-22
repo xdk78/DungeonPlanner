@@ -31,8 +31,23 @@ Rules (docs/DATA-SOURCES.md has the credits):
                 "src": { "npcID": 1, "displayID": 1, "level": 1, "class": 1 },
                 "gap": "only when the entry has no data at all" } ],
   "quests": [ { "id": 166, "name": "The Defias Brotherhood", "level": 22, "req": 14, "side": "alliance",
-                "giver": 234, "items": [3637], "shared": true, "src": 1 } ] }
+                "giver": 234, "items": [3637], "shared": true, "src": 1 } ],
+  "keys": [ { "item": 16309, "name": "Drakefire Amulet", "kind": "attunement", "required": true,
+              "quests": [6502, 6602], "note": "Every raid member needs it to enter.", "forever": true, "src": 3 },
+            { "quest": 4182, "name": "Dragonkin Menace", "kind": "attunement", "required": true, "side": "alliance",
+              "forever": true, "src": 3 } ] }
 ```
+
+- `keys` (Prep's "Keys and attunements", at most 8): one of `item` (an item to carry; the client counts it) or `quest`
+  (a quest to have done), its English `name` (the client's item name is shown when it has one), `kind` (`key` opens a
+  door or entrance, `attunement` lets you in, `summon` calls or opens something optional), `required`, `side`,
+  `quests` (the quests that give the item), a `note` of our own (at most 160 characters), and `forever`: true only
+  where a Forever page confirms it (Onyxia's Drakefire Amulet and Upper Blackrock Spire's Seal of Ascension on the
+  wiki's World of Warcraft: Forever page; the Dalaran Sewer Key and Krol'dok Compound Key on their item pages); the
+  classic keys are classic facts, shown with "(classic fact; not checked on Forever)". Researched on warcraft.wiki.gg
+  item, quest and instance pages (2026-11-22); left out: Aqual Quintessence and Alcaz Prison's Overseer's Keyring (no
+  ID on an allowed page), the Krol'dok Ogre Key (no known use), the Scarab Coffer keys (loot chests, not doors), the
+  Scarlet Key for Stratholme (no longer needed).
 
 - `slug`, `name`, `kind`, `origin` equal the plan's (`data-src/dungeons/<slug>.json`); `updated` is the date the research
   changed. `sources` lists what the values come from (`licence` says what may be taken).
@@ -76,7 +91,8 @@ Counts per field are printed by `lua tools/gen_bosses.lua --report`. The known g
   start; none when it starts from an item or an object); objective items are left out there because the pages do not
   separate them from related items. Forever's new dungeons list the quests of the Wowhead journal and guides (IDs, names, sides,
   givers); objective items only where a guide spells them out.
-- **Attunement and key items** are not collected (raids list only their attunement quests); the dungeon key items are a gap.
+- **Attunement and key items** are in `keys` (19 instances, 32 entries; `--report` counts them). Whether each classic key
+  still works the same on Forever is not confirmed by a source, except the two raid attunements Forever's page names.
 - Group fights keep the lead creature's display ID.
 
 ## Regenerating

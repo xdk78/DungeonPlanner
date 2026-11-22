@@ -123,6 +123,8 @@ function validatePlan(raw)
 		description = text(raw.description, TEXT.description, true) or "",
 		difficulty = text(raw.difficulty, TEXT.difficulty) or "",
 		notes = text(raw.notes, TEXT.notes, true) or "",
+		-- Prep notes (format 5, optional): left out when empty, so older readers see nothing new.
+		prep = text(raw.prep, TEXT.prep, true),
 		created = int(raw.created, 0) or 0,
 		updated = int(raw.updated, 0) or 0,
 		tags = {},
@@ -138,6 +140,9 @@ function validatePlan(raw)
 	}
 	if plan.name == "" then
 		plan.name = "Untitled plan"
+	end
+	if plan.prep == "" then
+		plan.prep = nil
 	end
 
 	for _, tag in ipairs(list(raw.tags)) do

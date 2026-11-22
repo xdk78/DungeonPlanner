@@ -114,4 +114,8 @@ ns.BossData.Add({
 		{ id = 7068, name = "Shadowshard Fragments", lv = 42, req = 39, side = "h", giver = 7311 },
 		{ id = 7070, name = "Shadowshard Fragments", lv = 42, req = 39, side = "a", giver = 4967 },
 	},
+	keys = {
+		{ item = 17191, name = "Scepter of Celebras", kind = "summon", quests = { 7046 },
+			note = "Opens a portal to the inner part." },
+	},
 })

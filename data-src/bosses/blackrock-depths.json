@@ -1808,5 +1808,46 @@
    "src": 1,
    "giver": 16032
   }
+ ],
+ "keys": [
+  {
+   "item": 11000,
+   "name": "Shadowforge Key",
+   "kind": "key",
+   "required": false,
+   "quests": [
+    3802
+   ],
+   "note": "Shadowforge gates and the east garrison door; skips the Ring of Law.",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 11140,
+   "name": "Prison Cell Key",
+   "kind": "key",
+   "required": false,
+   "note": "Opens the prison cells of quest NPCs.",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 11078,
+   "name": "Relic Coffer Key",
+   "kind": "key",
+   "required": false,
+   "note": "Relic coffers in the vault (12 open them all).",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 11197,
+   "name": "Dark Keeper Key",
+   "kind": "key",
+   "required": false,
+   "note": "Opens the Dark Coffer in the Black Vault.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

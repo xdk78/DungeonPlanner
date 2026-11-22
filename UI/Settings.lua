@@ -321,6 +321,9 @@ local function options()
 						openMap = L["more drawn dungeon maps, and your plans on its dungeon cards"],
 						needRoll = L["\"Open in NeedRoll\" in Gear"],
 						questie = L["the dungeon's quests in Runs"],
+						tomtom = L["\"Navigate\" in Prep sets TomTom's arrow"],
+						polestar = L["\"Navigate\" in Prep hands the way to Polestar"],
+						shortestPath = L["\"Navigate\" in Prep hands the way to Shortest Path Forever"],
 					}
 					args.missing = {
 						type = "description",

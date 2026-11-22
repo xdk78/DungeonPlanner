@@ -243,6 +243,20 @@ local function build()
 			tt:Hide()
 		end
 	end)
+	-- Before the first step: what is left to prepare ("Prep: 3 quests to pick up"); a click opens the Prep section.
+	-- In the drift line's place (that one shows only once a run is recorded, so after the start).
+	f.prep = CreateFrame("Button", nil, inner)
+	f.prep:SetPoint("TOPLEFT", f.rec, "BOTTOMLEFT", 0, -SP.xxs)
+	f.prep:SetPoint("RIGHT")
+	f.prep:SetHeight(14)
+	f.prep.text = W.Text(f.prep, "caption", "gold")
+	f.prep.text:SetPoint("LEFT")
+	f.prep.text:SetPoint("RIGHT")
+	f.prep:SetScript("OnClick", function()
+		UI.Show("prep")
+	end)
+	W.SetTooltip(f.prep, L["Prep"], L["Quests, keys, the group and the way there. Click to open the Prep section."])
+	f.prep:Hide()
 	f.step = block(inner, L["Step"], 2)
 	f.step:SetPoint("TOPLEFT", f.rec, "BOTTOMLEFT", 0, -SP.sm)
 	f.step:SetPoint("RIGHT")
@@ -607,6 +621,27 @@ function RunMode.DriftText(plan)
 	return text, false, lines, d
 end
 
+-- The prep line before the first step (not started, or on step 1): "Prep: 3 quests to pick up · 1 key missing", nil
+-- when there is nothing left to do.
+function RunMode.PrepText(plan)
+	local index = ctx():StepIndex()
+	if not plan or (index and index > 1) then
+		return nil
+	end
+	local sum = ns.PrepInfo.Summary(plan)
+	if not sum then
+		return nil
+	end
+	local parts = {}
+	if sum.quests > 0 then
+		parts[#parts + 1] = ns.Plural(sum.quests, L["%d quest to pick up|%d quests to pick up"])
+	end
+	if sum.keys > 0 then
+		parts[#parts + 1] = ns.Plural(sum.keys, L["%d key missing|%d keys missing"])
+	end
+	return string.format(L["Prep: %s"], table.concat(parts, "  ·  "))
+end
+
 -- Go to the step the run is probably at (the drift line's click).
 function RunMode.GoToEstimate()
 	local plan = ctx():Plan()
@@ -641,8 +676,14 @@ function RunMode.RefreshRecorder(plan)
 		W.FitText(frame.drift.text, (warns and "! " or "") .. driftText)
 		S.TextColor(frame.drift.text, warns and "warning" or "muted")
 	end
+	local prepText = not driftText and RunMode.PrepText(plan) or nil
+	frame.prep:SetShown(prepText ~= nil)
+	if prepText then
+		W.FitText(frame.prep.text, prepText)
+	end
 	frame.step:ClearAllPoints()
-	frame.step:SetPoint("TOPLEFT", driftText and frame.drift or frame.rec, "BOTTOMLEFT", 0, -SP.sm)
+	frame.step:SetPoint("TOPLEFT", (driftText and frame.drift) or (prepText and frame.prep) or frame.rec, "BOTTOMLEFT",
+		0, -SP.sm)
 	frame.step:SetPoint("RIGHT")
 	local text, on = RunMode.RecorderText(plan)
 	frame.rec.text:SetText(text)

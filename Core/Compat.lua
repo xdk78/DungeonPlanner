@@ -112,6 +112,26 @@ Compat.CHECKS = {
 	{ "Interface style", "C_InputInterfaceStyle.GetCurrentStyle", "gamepad detection from the CVar (or the setting)" },
 	{ "Interface style values", "Enum.InputInterfaceStyle.Gamepad", "gamepad detection only from the setting" },
 	{ "Console variables", "C_CVar.GetCVar", "gamepad detection without the CVar (GetCVar tried)" },
+	-- Prep (Data/PrepInfo.lua): quests, keys, the group.
+	{ "Quest completed", "C_QuestLog.IsQuestFlaggedCompleted", "Prep's done quests and attunements (shown as unknown)" },
+	{ "Quest in log", "C_QuestLog.IsOnQuest", "Prep's \"In your log\" (the log index is tried instead)" },
+	{ "Quest log index", "C_QuestLog.GetLogIndexForQuestID", "Prep's \"In your log\"" },
+	{ "Quest titles", "C_QuestLog.GetTitleForQuestID", "quest names in your language (the bundled English names instead)" },
+	{ "Item counts", "C_Item.GetItemCount", "Prep's keys you carry (GetItemCount is tried instead)" },
+	{ "Faction", "UnitFactionGroup", "hiding the other faction's quests" },
+	{ "Group size", "GetNumGroupMembers", "Prep's raid members" },
+	{ "Unit exists", "UnitExists", "Prep's party members" },
+	{ "Area names", "C_Map.GetAreaInfo", "zone names of Questie's quest givers" },
+	-- Getting there (Data/Travel.lua, Data/Navigation.lua): outdoors only.
+	{ "World to map", "C_Map.GetMapPosFromWorldPos", "the entrance's coordinates on its zone map" },
+	{ "Map to world", "C_Map.GetWorldPosFromMapPos", "distances, flight masters near Forever's new dungeons" },
+	{ "Player map position", "C_Map.GetPlayerMapPosition", "distance and direction to the entrance" },
+	{ "Map vectors", "CreateVector2D", "the world and map conversions (a plain table instead)" },
+	{ "Map pin", "C_Map.SetUserWaypoint", "the game's own waypoint (another navigation addon still works)" },
+	{ "Map pin check", "C_Map.CanSetUserWaypointOnMap", "checking a zone takes a pin" },
+	{ "Map points", "UiMapPoint.CreateFromCoordinates", "the game's own waypoint" },
+	{ "Super-tracking", "C_SuperTrack.SetSuperTrackedUserWaypoint", "the pin's arrow on screen (the pin still shows)" },
+	{ "Open world map", "C_Map.OpenWorldMap", "\"Show on world map\" opening the map (the pin is still set)" },
 }
 
 function Compat.Has(path)

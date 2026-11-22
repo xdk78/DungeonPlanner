@@ -284,4 +284,14 @@ ns.BossData.Add({
 		{ id = 7604, name = "A Binding Contract", lv = 60, req = 60 },
 		{ id = 9015, name = "The Challenge", lv = 60, req = 58, giver = 16032 },
 	},
+	keys = {
+		{ item = 11000, name = "Shadowforge Key", kind = "key", quests = { 3802 },
+			note = "Shadowforge gates and the east garrison door; skips the Ring of Law." },
+		{ item = 11140, name = "Prison Cell Key", kind = "key",
+			note = "Opens the prison cells of quest NPCs." },
+		{ item = 11078, name = "Relic Coffer Key", kind = "key",
+			note = "Relic coffers in the vault (12 open them all)." },
+		{ item = 11197, name = "Dark Keeper Key", kind = "key",
+			note = "Opens the Dark Coffer in the Black Vault." },
+	},
 })

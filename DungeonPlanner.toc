@@ -11,7 +11,7 @@
 ## Version: @project-version@
 ## IconTexture: Interface\AddOns\DungeonPlanner\Media\LogoIcon
 ## SavedVariables: DungeonPlannerDB
-## OptionalDeps: ForeverDungeonJournal, OpenMap, NeedRoll, QuestieDB, DBM-Core, BigWigs, LibSharedMedia-3.0
+## OptionalDeps: ForeverDungeonJournal, OpenMap, NeedRoll, QuestieDB, TomTom, Polestar, DBM-Core, BigWigs, LibSharedMedia-3.0
 ## AddonCompartmentFunc: DungeonPlanner_OnAddonCompartmentClick
 ## Category: Dungeons & Raids
 ## X-Category: Dungeons & Raids
@@ -49,6 +49,7 @@ Model\Picker.lua
 Model\Progress.lua
 Model\RunLog.lua
 Model\RunCompare.lua
+Model\Prep.lua
 
 Share\Checksum.lua
 Share\Inflate.lua
@@ -75,11 +76,18 @@ Data\Providers\ForeverDungeonRoutes.lua
 Data\Providers\OpenMap.lua
 Data\Providers\NeedRoll.lua
 Data\Providers\Questie.lua
+Data\Providers\TomTom.lua
+Data\Providers\Polestar.lua
+Data\Providers\ShortestPathForever.lua
 Data\ReyesMaps.lua
 Data\Floors.lua
 Data\BossData.lua
 Data\BossInfo.lua
 Data\Templates.lua
+Data\TravelData.lua
+Data\Travel.lua
+Data\PrepInfo.lua
+Data\Navigation.lua
 
 # BEGIN generated plans (tools/gen_plans.lua)
 Data\Plans\alcaz-prison.lua
@@ -251,6 +259,7 @@ UI\PlanActions.lua
 UI\InstancePicker.lua
 UI\SidePanel.lua
 UI\InstancePage.lua
+UI\GettingThere.lua
 UI\Panels\MapEditor.lua
 UI\Panels\DrawBar.lua
 UI\Panels\FloorBar.lua
@@ -268,6 +277,7 @@ UI\Panels\NotesPanel.lua
 UI\Panels\ProgressPanel.lua
 UI\Panels\PlanPanel.lua
 UI\Panels\SharePanel.lua
+UI\Panels\PrepPanel.lua
 UI\RunMode.lua
 UI\RunSync.lua
 UI\NotesFrame.lua

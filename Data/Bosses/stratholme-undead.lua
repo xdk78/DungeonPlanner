@@ -106,4 +106,8 @@ ns.BossData.Add({
 		{ id = 8968, name = "The Left Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 		{ id = 8991, name = "The Right Piece of Lord Valthalak's Amulet", lv = 60, req = 58, giver = 16033 },
 	},
+	keys = {
+		{ item = 12382, name = "Key to the City", kind = "key",
+			note = "Service gate and inner gates; Magistrate Barthilas drops it." },
+	},
 })

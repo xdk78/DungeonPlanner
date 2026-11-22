@@ -766,5 +766,16 @@
    "src": 1,
    "shared": true
   }
+ ],
+ "keys": [
+  {
+   "item": 18249,
+   "name": "Crescent Key",
+   "kind": "key",
+   "required": true,
+   "note": "Opens the door to this wing (or Lockpicking 300).",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

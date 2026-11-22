@@ -144,6 +144,23 @@ function Instances.FindArtMapByName(name)
 	return found or nil
 end
 
+-- An outdoor zone's map by its name (the client's language): the first map of that name the client calls a zone.
+local ZONE_TYPE = 3 -- Enum.UIMapType.Zone
+function Instances.ZoneMapByName(name)
+	local key = normName(name)
+	if not key or key == "" or not (C_Map and C_Map.GetMapInfo) then
+		return nil
+	end
+	local zone = (Enum and Enum.UIMapType and Enum.UIMapType.Zone) or ZONE_TYPE
+	for _, id in ipairs(nameIndex()[key] or {}) do
+		local ok, info = pcall(C_Map.GetMapInfo, id)
+		if ok and type(info) == "table" and Util.Plain(info.mapType) == zone then
+			return id
+		end
+	end
+	return nil
+end
+
 -- For tests: forget the name index and its answers.
 function Instances.ForgetMapNames()
 	artByName, mapsByName = {}, nil

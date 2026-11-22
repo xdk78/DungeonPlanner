@@ -93,7 +93,7 @@ function Plan.SetField(plan, field, value)
 		author = TEXT.author,
 		difficulty = TEXT.difficulty,
 	}
-	local multiline = { description = TEXT.description, notes = TEXT.notes }
+	local multiline = { description = TEXT.description, notes = TEXT.notes, prep = TEXT.prep }
 	if limits[field] then
 		plan[field] = Util.CleanText(value, limits[field]) or ""
 	elseif multiline[field] then

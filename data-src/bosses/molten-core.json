@@ -1205,5 +1205,25 @@
    "side": "both",
    "src": 1
   }
+ ],
+ "keys": [
+  {
+   "quest": 7487,
+   "name": "Attunement to the Core",
+   "kind": "attunement",
+   "required": false,
+   "note": "Lets Lothos Riftwaker port you to the raid's entrance.",
+   "forever": false,
+   "src": 2
+  },
+  {
+   "item": 22754,
+   "name": "Eternal Quintessence",
+   "kind": "summon",
+   "required": false,
+   "note": "Douses the runes so Majordomo Executus appears.",
+   "forever": false,
+   "src": 2
+  }
  ]
 }

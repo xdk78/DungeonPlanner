@@ -4,7 +4,8 @@
 --                                       (data-src/dungeons/*.json) has no entry, or a file on disk differs
 --   lua tools/gen_bosses.lua --report   also prints the coverage per field
 -- Plain Lua 5.1, run from the repository root. The output is deterministic. Only IDs, numbers and short tags ship (the
--- game supplies spell, item and creature text); quest titles and the researcher's own ability notes are the exceptions.
+-- game supplies spell, item and creature text); quest titles, key names and the researcher's own notes on abilities
+-- and keys are the exceptions.
 
 local OUT_DIR = "Data/Bosses"
 local IN_DIR = "data-src/bosses"
@@ -20,6 +21,8 @@ M.TAGS = { interrupt = true, dispel = true, tank = true, healer = true, enrage =
 	control = true, aoe = true, adds = true }
 M.SIDES = { both = "b", alliance = "a", horde = "h" }
 M.MAX_ABILITIES, M.MAX_LOOT, M.MAX_NOTE = 8, 16, 160
+M.KEY_KINDS = { key = true, attunement = true, summon = true }
+M.MAX_KEYS = 8
 
 local function readFile(path)
 	local f = io.open(path, "rb")
@@ -190,6 +193,55 @@ function M.Validate(doc, file, plan)
 		end
 		src(q.src, at)
 	end
+	-- The outdoor entrance: a world position on a continent ({ continent, x, y } in yards) or a spot on a zone's map
+	-- ({ map = uiMapID, x, y } in 0..1).
+	local e = doc.entrance
+	if e ~= nil then
+		local fine = type(e) == "table" and type(e.x) == "number" and type(e.y) == "number"
+		if fine and e.map ~= nil then
+			fine = isInt(e.map) and e.continent == nil and e.x >= 0 and e.x <= 1 and e.y >= 0 and e.y <= 1
+		elseif fine then
+			fine = type(e.continent) == "number" and e.continent >= 0 and e.continent == math.floor(e.continent)
+				and math.abs(e.x) < 100000 and math.abs(e.y) < 100000
+		end
+		if not fine then
+			err("entrance must be { continent, x, y } or { map, x, y } (0..1)")
+		else
+			src(e.src, "entrance")
+		end
+	end
+	-- Keys and attunements: an item (its count is checked) or a quest (completed or not).
+	local keys = type(doc.keys) == "table" and doc.keys or {}
+	if #keys > M.MAX_KEYS then
+		err("more than %d keys", M.MAX_KEYS)
+	end
+	for i, k in ipairs(keys) do
+		local at = "key " .. i .. " (" .. tostring(k.name) .. ")"
+		if (k.item ~= nil) == (k.quest ~= nil) or not isInt(k.item or k.quest) then
+			err("%s: needs one of item or quest (an integer)", at)
+		end
+		if type(k.name) ~= "string" or k.name == "" or k.name:find("[|%c]") then
+			err("%s: name is required", at)
+		end
+		if not M.KEY_KINDS[k.kind] then
+			err("%s: unknown kind %s", at, tostring(k.kind))
+		end
+		if type(k.required) ~= "boolean" or type(k.forever) ~= "boolean" then
+			err("%s: required and forever must be true or false", at)
+		end
+		if not M.SIDES[k.side or "both"] then
+			err("%s: unknown side", at)
+		end
+		for _, id in ipairs(k.quests or {}) do
+			if not isInt(id) then
+				err("%s: quests must be integers", at)
+			end
+		end
+		if k.note ~= nil and (type(k.note) ~= "string" or #k.note > M.MAX_NOTE or k.note:find("[|%c]")) then
+			err("%s: bad note", at)
+		end
+		src(k.src, at)
+	end
 	return errs
 end
 
@@ -294,6 +346,42 @@ local function renderQuest(x)
 	return "\t\t{ " .. table.concat(f, ", ") .. " },\n"
 end
 
+local function num(v)
+	if v == math.floor(v) then
+		return string.format("%d", v)
+	end
+	return (string.format("%.4f", v):gsub("0+$", ""))
+end
+
+local function renderEntrance(e)
+	if e.map then
+		return string.format("\tentrance = { map = %d, x = %s, y = %s },", e.map, num(e.x), num(e.y))
+	end
+	return string.format("\tentrance = { c = %d, x = %s, y = %s },", e.continent, num(e.x), num(e.y))
+end
+
+local function renderKey(k)
+	local f = { k.item and string.format("item = %d", k.item) or string.format("quest = %d", k.quest),
+		"name = " .. q(k.name), "kind = " .. q(k.kind) }
+	if k.required then
+		f[#f + 1] = "req = true"
+	end
+	if k.side and k.side ~= "both" then
+		f[#f + 1] = "side = " .. q(M.SIDES[k.side])
+	end
+	if k.quests and #k.quests > 0 then
+		f[#f + 1] = "quests = " .. ints(k.quests)
+	end
+	if k.forever then
+		f[#f + 1] = "fv = true"
+	end
+	local line = "\t\t{ " .. table.concat(f, ", ")
+	if k.note then
+		line = line .. ",\n\t\t\tnote = " .. q(k.note)
+	end
+	return line .. " },"
+end
+
 function M.Render(doc, file)
 	local names = {}
 	for _, s in ipairs(doc.sources) do
@@ -320,6 +408,16 @@ function M.Render(doc, file)
 		out[#out + 1] = "\tquests = {"
 		for _, x in ipairs(doc.quests) do
 			out[#out + 1] = (renderQuest(x):gsub("\n$", ""))
+		end
+		out[#out + 1] = "\t},"
+	end
+	if doc.entrance then
+		out[#out + 1] = renderEntrance(doc.entrance)
+	end
+	if doc.keys and #doc.keys > 0 then
+		out[#out + 1] = "\tkeys = {"
+		for _, k in ipairs(doc.keys) do
+			out[#out + 1] = renderKey(k)
 		end
 		out[#out + 1] = "\t},"
 	end
@@ -367,7 +465,7 @@ local function main(args)
 		os.exit(1)
 	end
 	local differs, tocLines, bytes, wanted = {}, {}, 0, {}
-	local cov = { bosses = 0, npc = 0, disp = 0, level = 0, ab = 0, loot = 0, quests = 0 }
+	local cov = { bosses = 0, npc = 0, disp = 0, level = 0, ab = 0, loot = 0, quests = 0, entrances = 0, keys = 0 }
 	for _, d in ipairs(docs) do
 		local slug = d.doc.slug
 		local text = M.Render(d.doc, d.file)
@@ -384,6 +482,8 @@ local function main(args)
 			cov.loot = cov.loot + ((b.loot and #b.loot > 0) and 1 or 0)
 		end
 		cov.quests = cov.quests + #(d.doc.quests or {})
+		cov.entrances = cov.entrances + (d.doc.entrance and 1 or 0)
+		cov.keys = cov.keys + #(d.doc.keys or {})
 		if readFile(path) ~= text then
 			differs[#differs + 1] = path
 			if not check then
@@ -424,8 +524,9 @@ local function main(args)
 		end
 	end
 	if report then
-		print(string.format("bosses %d, npc %d, display %d, level %d, abilities %d, loot %d, quests %d, bytes %d",
-			cov.bosses, cov.npc, cov.disp, cov.level, cov.ab, cov.loot, cov.quests, bytes))
+		print(string.format("bosses %d, npc %d, display %d, level %d, abilities %d, loot %d, quests %d, entrances %d, "
+			.. "keys %d, bytes %d", cov.bosses, cov.npc, cov.disp, cov.level, cov.ab, cov.loot, cov.quests,
+			cov.entrances, cov.keys, bytes))
 	end
 	if check then
 		if #differs > 0 then

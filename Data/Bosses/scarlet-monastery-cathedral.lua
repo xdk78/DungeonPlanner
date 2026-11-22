@@ -67,4 +67,8 @@ ns.BossData.Add({
 		{ id = 1113, name = "Hearts of Zeal", lv = 33, req = 30, side = "h", giver = 2055 },
 		{ id = 1160, name = "Test of Lore", lv = 36, req = 26, side = "h", giver = 4488 },
 	},
+	keys = {
+		{ item = 7146, name = "The Scarlet Key", kind = "key", req = true,
+			note = "Opens the locked doors to this wing (or Lockpicking 175)." },
+	},
 })
