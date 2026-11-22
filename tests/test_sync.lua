@@ -278,14 +278,24 @@ T.case("Sync: the leader's view of who follows; answers to who leads are rate-li
 	-- Cara left the group: pruned.
 	Sync.Step(l, { type = "roster", inGroup = true, self = LEADER, members = { "Anna", "Bram" } }, 2)
 	T.eq(l.followers.Cara, nil)
-	-- Who leads? The state, whispered, at most every ANSWER_INTERVAL per member.
+	-- Who leads? One asker within ANSWER_DELAY: the state, whispered; at most every ANSWER_INTERVAL per member.
 	local fx = Sync.Step(l, { type = "query", from = "Fay", rank = MEMBER }, 3)
-	local send = find(fx, "send")
+	T.eq(find(fx, "timer")[2], Sync.ANSWER_DELAY)
+	T.eq(count(fx, "send"), 0, "waits for more questions")
+	T.eq(#Sync.Step(l, { type = "query", from = "Fay", rank = MEMBER }, 3.5), 0)
+	T.eq(#Sync.Step(l, { type = "query", from = "Out", rank = OUTSIDER }, 3.5), 0)
+	local send = find(Sync.Step(l, { type = "tick" }, 4), "send")
 	T.eq(send[3], "WHISPER")
 	T.eq(send[4], "Fay")
 	T.eq(send[2].plan, "p1")
-	T.eq(#Sync.Step(l, { type = "query", from = "Fay", rank = MEMBER }, 4), 0)
-	T.eq(#Sync.Step(l, { type = "query", from = "Out", rank = OUTSIDER }, 4), 0)
+	-- A raid's burst: several askers within the second get one group message, not a whisper each.
+	for i = 1, 6 do
+		Sync.Step(l, { type = "query", from = "R" .. i, rank = MEMBER }, 6 + i / 10)
+	end
+	fx = Sync.Step(l, { type = "tick" }, 7.1)
+	T.eq(count(fx, "send"), 1)
+	T.eq(find(fx, "send")[3], "GROUP")
+	T.eq(#Sync.Step(l, { type = "tick" }, 8), 0, "answered")
 	-- Bounded.
 	for i = 1, Sync.MAX_FOLLOWERS + 5 do
 		Sync.Step(l, { type = "report", from = "M" .. i, rank = MEMBER, session = "s1", status = "f" }, 10 + i)
@@ -295,46 +305,64 @@ T.case("Sync: the leader's view of who follows; answers to who leads are rate-li
 		n = n + 1
 	end
 	T.ok(n <= Sync.MAX_FOLLOWERS)
-	-- A member asks the group who leads once per QUERY_INTERVAL, only in a group.
+	-- A member asks the group who leads once per QUERY_INTERVAL, only in a group, after its random wait.
 	local m = Sync.New()
 	T.eq(#Sync.Step(m, { type = "show", inGroup = false }, 0), 0)
-	T.eq(find(Sync.Step(m, { type = "show", inGroup = true }, 0), "send")[2].type, "query")
-	T.eq(#Sync.Step(m, { type = "show", inGroup = true }, 10), 0)
-	T.ok(find(Sync.Step(m, { type = "roster", inGroup = true, shown = true }, 40), "send"))
+	fx = Sync.Step(m, { type = "show", inGroup = true, jitter = 1.5 }, 0)
+	T.eq(find(fx, "timer")[2], 1.5)
+	T.eq(count(fx, "send"), 0)
+	T.eq(#Sync.Step(m, { type = "tick" }, 1), 0, "still waiting")
+	T.eq(find(Sync.Step(m, { type = "tick" }, 1.5), "send")[2].type, "query")
+	T.eq(#Sync.Step(m, { type = "tick" }, 2), 0, "asked once")
+	T.eq(#Sync.Step(m, { type = "show", inGroup = true, jitter = 9 }, 10), 0)
+	T.eq(find(Sync.Step(m, { type = "roster", inGroup = true, shown = true, jitter = 9 }, 40), "timer")[2],
+		Sync.QUERY_JITTER, "the wait is capped")
+	-- A lead heard while waiting: the question is not asked.
+	Sync.Step(m, runEvent("Lead", LEADER, runMsg("s9", 1, 2)), 41)
+	T.eq(count(Sync.Step(m, { type = "tick" }, 43), "send"), 0)
 end)
 
 T.case("Sync: the leader's plan is matched to a local plan, a received copy, or neither", function()
+	-- sig stands in for each plan's steps revision.
 	local plans = {
-		["b:hall"] = { id = "b:hall", updated = 500 },
-		mine = { id = "mine", updated = 900 },
-		copy1 = { id = "copy1", updated = 1000 },
-		copy2 = { id = "copy2", updated = 2000 },
-		edited = { id = "edited", updated = 3000 },
+		["b:hall"] = { id = "b:hall", sig = 500 },
+		copy1 = { id = "copy1", sig = 700 },
+		copy2 = { id = "copy2", sig = 800 },
+		newer = { id = "newer", sig = 800 },
 	}
 	local function get(id)
 		return plans[id]
 	end
+	local function sigOf(p)
+		return p.sig
+	end
 	local links = {
-		copy1 = { plan = "pLead", v = 700, u = 1000, at = 1 },
-		copy2 = { plan = "pLead", v = 800, u = 2000, at = 2 },
-		edited = { plan = "pLead", v = 800, u = 2500, at = 3 }, -- edited after it arrived
-		gone = { plan = "pLead", v = 800, u = 1, at = 4 }, -- deleted since
+		copy1 = { plan = "pLead", at = 1 },
+		copy2 = { plan = "pLead", at = 2 },
+		newer = { plan = "pLead", at = 3 },
+		gone = { plan = "pLead", at = 4 }, -- deleted since
 	}
-	T.eq(Sync.Resolve("b:hall", 500, get, links).id, "b:hall", "a recommended plan by its id")
-	T.eq(Sync.Resolve("b:hall", 400, get, links).status, "version", "another data revision")
-	T.eq(Sync.Resolve("pLead", 800, get, links).id, "copy2", "the copy of that version, as it arrived")
-	T.eq(Sync.Resolve("pLead", 700, get, links).id, "copy1")
-	T.eq(Sync.Resolve("pLead", 999, get, links).status, "version")
-	T.eq(Sync.Resolve("pNone", 1, get, links).status, "missing")
-	T.eq(Sync.Resolve("pNone", 1, get, nil).status, "missing")
+	T.eq(Sync.Resolve("b:hall", 500, get, links, sigOf).id, "b:hall", "a recommended plan by its id")
+	T.eq(Sync.Resolve("b:hall", 400, get, links, sigOf).status, "version", "its steps differ")
+	T.eq(Sync.Resolve("pLead", 800, get, links, sigOf).id, "newer", "the newest copy with those steps")
+	T.eq(Sync.Resolve("pLead", 700, get, links, sigOf).id, "copy1")
+	T.eq(Sync.Resolve("pLead", 999, get, links, sigOf).status, "version")
+	T.eq(Sync.Resolve("pNone", 1, get, links, sigOf).status, "missing")
+	T.eq(Sync.Resolve("pNone", 1, get, nil, sigOf).status, "missing")
+	-- The steps revision: the steps' kinds and what they are, in order; nothing else.
+	local a = { { kind = "pull", pull = "u1" }, { kind = "boss", encounter = "e1" } }
+	local b = { { kind = "pull", pull = "u1", note = "changed", x = 0.5 }, { kind = "boss", encounter = "e1" } }
+	T.eq(Sync.Signature(a), Sync.Signature(b), "notes and spots do not change it")
+	T.ok(Sync.Signature(a) ~= Sync.Signature({ a[2], a[1] }), "the order does")
+	T.ok(Sync.Signature(a) ~= Sync.Signature({ a[1], a[2], { kind = "pull", pull = "u2" } }), "a new step does")
 	-- The link store: bounded, repaired.
-	local store = ns.Acks.NormalizeLinks({ a1 = { plan = "p1", v = 1, u = 2 }, ["bad id"] = {}, b1 = { plan = "p 1", v = 1, u = 1 } })
+	local store = ns.Acks.NormalizeLinks({ a1 = { plan = "p1", at = 2 }, ["bad id"] = {}, b1 = { plan = "p 1" } })
 	T.eq(ns.Util.Count(store), 1)
 	for i = 1, ns.Acks.MAX_LINKS + 3 do
-		ns.Acks.Link(store, "c" .. i, "p1", 1, 1, i)
+		ns.Acks.Link(store, "c" .. i, "p1", i)
 	end
 	T.eq(ns.Util.Count(store), ns.Acks.MAX_LINKS)
-	T.eq(ns.Acks.Link(store, "x1", "bad id", 1, 1, 1), false)
+	T.eq(ns.Acks.Link(store, "x1", "bad id", 1), false)
 end)
 
 -- Two clients through the real Comm, AceComm and outbox: this client runs UI/RunSync.lua, the other side runs the same
@@ -394,6 +422,7 @@ T.case("Sync, two clients: a member follows the leader's run mode, unfollows, re
 	withGroup("party1", function(outgoing)
 		local plan = ns.DB.GetPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
 		T.ok(plan, "the recommended plan is here")
+		local sig = ns.RunSync.Signature(plan)
 		ns.UI.SelectPlan(plan.id, true)
 		ns.UI.FocusStep(1, { stay = true })
 		ns.RunMode.Show()
@@ -409,7 +438,7 @@ T.case("Sync, two clients: a member follows the leader's run mode, unfollows, re
 			end
 		end
 		deliver(Sync.Step(leader, { type = "lead", rank = LEADER, session = "ld1", plan = plan.id,
-			version = plan.updated or 0, step = 4, pull = 2 }, now))
+			version = sig, step = 4, pull = 2 }, now))
 		T.eq(ns.RunSync.state.mode, "following")
 		T.eq(ns.UI.ctx:StepIndex(), 4, "run mode shows the leader's step")
 		-- The member's report reaches the leader.
@@ -421,7 +450,7 @@ T.case("Sync, two clients: a member follows the leader's run mode, unfollows, re
 			status = sent[1].msg.status }, now)
 		T.eq(leader.followers.Tester.status, "following")
 		-- The leader moves on.
-		deliver(Sync.Step(leader, { type = "moved", plan = plan.id, version = plan.updated or 0, step = 6, pull = 3 }, now + 5))
+		deliver(Sync.Step(leader, { type = "moved", plan = plan.id, version = sig, step = 6, pull = 3 }, now + 5))
 		T.eq(ns.UI.ctx:StepIndex(), 6)
 		T.eq(#drain(outgoing), 0, "nothing to report")
 		-- The player presses Next: stepping on their own.
@@ -430,14 +459,14 @@ T.case("Sync, two clients: a member follows the leader's run mode, unfollows, re
 		T.eq(ns.UI.ctx:StepIndex(), 7)
 		sent = drain(outgoing)
 		T.eq(sent[1].msg.status, "u")
-		deliver(Sync.Step(leader, { type = "moved", plan = plan.id, version = plan.updated or 0, step = 8, pull = 4 }, now + 10))
+		deliver(Sync.Step(leader, { type = "moved", plan = plan.id, version = sig, step = 8, pull = 4 }, now + 10))
 		T.eq(ns.UI.ctx:StepIndex(), 7, "free: the leader's step does not move it")
 		-- Rejoin.
 		ns.RunSync.Act("rejoin")
 		T.eq(ns.UI.ctx:StepIndex(), 8)
 		-- Someone who is not the leader, and someone not in the group, cannot drive it.
-		ns.Comm.OnMessage(ns.prefix, "R^2^zz1^1^" .. plan.id .. "^" .. (plan.updated or 0) .. "^2^1", "PARTY", "Mem")
-		ns.Comm.OnMessage(ns.prefix, "R^2^zz2^1^" .. plan.id .. "^" .. (plan.updated or 0) .. "^2^1", "WHISPER", "Stranger")
+		ns.Comm.OnMessage(ns.prefix, "R^2^zz1^1^" .. plan.id .. "^" .. sig .. "^2^1", "PARTY", "Mem")
+		ns.Comm.OnMessage(ns.prefix, "R^2^zz2^1^" .. plan.id .. "^" .. sig .. "^2^1", "WHISPER", "Stranger")
 		T.eq(ns.UI.ctx:StepIndex(), 8)
 		T.eq(ns.RunSync.state.lead.name, "Lead")
 		-- An older Dungeon Planner's unknown tag and junk are ignored without an error.
@@ -461,10 +490,10 @@ T.case("Sync, two clients: a member follows the leader's run mode, unfollows, re
 		-- The leader's own plan, sent and imported here: the copy is linked to the leader's id and version, and followed.
 		local theirs = ns.DB.AddPlan(ns.Validate.Plan({ name = "Their route", instance = { name = "Test Keep", kind = "dungeon" },
 			pulls = { { id = "u1", name = "First" }, { id = "u2", name = "Second" } } }))
-		theirs.updated = 777
+		local theirSig = ns.RunSync.Signature(theirs)
 		local data = ns.Codec.ExportPlan(theirs)
 		ns.DB.DeletePlan(theirs.id) -- the leader's, not here
-		deliver(Sync.Step(leader, { type = "lead", rank = LEADER, session = "ld3", plan = theirs.id, version = 777, step = 2,
+		deliver(Sync.Step(leader, { type = "lead", rank = LEADER, session = "ld3", plan = theirs.id, version = theirSig, step = 2,
 			pull = 2 }, now + 40))
 		T.eq(ns.RunSync.state.mode, "mismatch")
 		T.ok(ns.DB.ImportString(data, { from = "Lead", kind = "received" }))
@@ -500,7 +529,7 @@ T.case("Sync, two clients: the leader's states wait out a lockdown as one messag
 		local function toMember(list, t)
 			local fx = {}
 			for _, m in ipairs(list) do
-				local match = m.msg.plan and Sync.Resolve(m.msg.plan, m.msg.version, get, {}) or nil
+				local match = m.msg.plan and Sync.Resolve(m.msg.plan, m.msg.version, get, {}, ns.RunSync.Signature) or nil
 				for _, e in ipairs(Sync.Step(member, runEvent("Tester", LEADER, m.msg, match, LEADER), t)) do
 					fx[#fx + 1] = e
 				end
@@ -565,32 +594,262 @@ T.case("Sync: saved data moves to schema 5 with the link store; data from a newe
 	T.eq(ns.Util.Count(global.shareLinks), 0)
 	T.eq(global.plans.p1.name, "Old")
 	-- A store already there (written by a pre-release build) is repaired, not dropped.
-	global = { schema = 4, plans = {}, shareLinks = { c1 = { plan = "p9", v = 5, u = 6, at = 1 }, ["bad id"] = { plan = "p9" } } }
+	global = { schema = 4, plans = {}, shareLinks = { c1 = { plan = "p9", at = 1 }, ["bad id"] = { plan = "p9" } } }
 	DB.LoadGlobal(global)
 	T.eq(global.shareLinks.c1.plan, "p9")
 	T.eq(global.shareLinks["bad id"], nil)
 	-- Saved by a newer version: read-only, the links untouched.
-	local links = { c1 = { plan = "p9", v = 5, u = 6, at = 1 } }
+	local links = { c1 = { plan = "p9", at = 1 } }
 	local newer = { schema = DB.SCHEMA + 1, plans = {}, shareLinks = links }
 	T.ok(DB.LoadGlobal(newer).readOnly)
 	T.eq(newer.shareLinks, links)
 end)
 
-T.case("Sync: a received plan is linked to its sender's id and version; deleting it drops the link", function()
+T.case("Sync: a plan received in game is linked to its sender's plan, a pasted one is not; deleting drops the link", function()
 	boot()
-	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Linked", instance = { name = "Test Keep", kind = "dungeon" } }))
-	plan.updated = 4242
+	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Linked", instance = { name = "Test Keep", kind = "dungeon" },
+		pulls = { { id = "u1", name = "One" } } }))
 	local data = ns.Codec.ExportPlan(plan)
 	local ok, _, added = ns.DB.ImportString(data, { from = "Lead", kind = "received" })
 	T.ok(ok)
 	local copy = added[1]
-	local link = ns.db.shareLinks[copy.id]
-	T.eq(link.plan, plan.id)
-	T.eq(link.v, 4242)
-	T.eq(Sync.Resolve(plan.id, 4242, function(id)
+	T.eq(ns.db.shareLinks[copy.id].plan, plan.id)
+	local function others(id)
 		return id ~= plan.id and ns.DB.GetPlan(id) or nil
-	end, ns.db.shareLinks).id, copy.id)
+	end
+	T.eq(Sync.Resolve(plan.id, ns.RunSync.Signature(plan), others, ns.db.shareLinks, ns.RunSync.Signature).id, copy.id)
+	local _, _, pasted = ns.DB.ImportString(data, { kind = "import" })
+	T.eq(ns.db.shareLinks[pasted[1].id], nil, "a pasted string makes no link")
 	ns.DB.DeletePlan(copy.id)
 	T.eq(ns.db.shareLinks[copy.id], nil)
+	ns.DB.DeletePlan(pasted[1].id)
+	ns.DB.DeletePlan(plan.id)
+end)
+
+T.case("Sync: an end held in an outbox does not end a newer lead; an ended session stays ended", function()
+	local s = Sync.New()
+	Sync.Step(s, runEvent("Lead", LEADER, runMsg("s1", 1, 2)), 0)
+	-- The leader stopped s1 in a fight and led again as s2; s2's state arrives before s1's end.
+	Sync.Step(s, runEvent("Lead", LEADER, runMsg("s2", 1, 3), OK, LEADER), 1)
+	T.eq(#Sync.Step(s, runEvent("Lead", LEADER, { type = "run", session = "s1", seq = 9 }, nil, LEADER), 2), 0)
+	T.eq(s.mode, "following")
+	T.eq(s.lead.session, "s2")
+	-- s2 ends: nothing more of s2 counts, whatever its number.
+	Sync.Step(s, runEvent("Lead", LEADER, { type = "run", session = "s2", seq = 2 }, nil, LEADER), 3)
+	T.eq(s.mode, "idle")
+	T.eq(#Sync.Step(s, runEvent("Lead", LEADER, runMsg("s2", 50, 4), OK, LEADER), 4), 0)
+	T.eq(s.mode, "idle")
+	Sync.Step(s, runEvent("Lead", LEADER, runMsg("s3", 1, 4), OK, LEADER), 5)
+	T.eq(s.mode, "following", "a new lead is taken")
+end)
+
+T.case("Sync, Comm: after a lockdown, what waited goes before anything newer (R and F keep their order)", function()
+	boot()
+	withGroup("player", function(outgoing)
+		local plan = ns.DB.GetPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+		ns.UI.SelectPlan(plan.id, true)
+		ns.UI.FocusStep(2, { stay = true })
+		ns.RunMode.Show()
+		drain(outgoing)
+		ns.RunSync.Act("lead")
+		local member = Sync.New()
+		local function toMember(list)
+			for _, m in ipairs(list) do
+				local match = m.msg.plan and Sync.Resolve(m.msg.plan, m.msg.version, ns.DB.GetPlan, {}, ns.RunSync.Signature)
+				Sync.Step(member, runEvent("Tester", LEADER, m.msg, match, LEADER), 0)
+			end
+		end
+		toMember(drain(outgoing))
+		T.eq(member.mode, "following")
+		-- Stop in a fight: the end waits. The fight ends, and the leader leads again before the next tick.
+		mock.lockdown = true
+		ns.RunSync.Act("stop")
+		T.eq(#outgoing, 0)
+		mock.lockdown = false
+		ns.RunSync.Act("lead")
+		local sent = drain(outgoing)
+		T.eq(#sent, 2, "the waiting end, then the new lead")
+		T.eq(sent[1].msg.plan, nil)
+		T.eq(sent[2].msg.plan, plan.id)
+		toMember(sent)
+		mock.Advance(1)
+		toMember(drain(outgoing))
+		T.eq(member.mode, "following", "the new lead is followed")
+	end)
+	-- The member side: a status that waited ("u") goes before the newer one ("f"), so the leader ends with "f".
+	withGroup("party1", function(outgoing)
+		local plan = ns.DB.GetPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+		ns.UI.SelectPlan(plan.id, true)
+		ns.RunMode.Show()
+		local sig = ns.RunSync.Signature(plan)
+		ns.Comm.OnMessage(ns.prefix, "R^2^ld9^1^" .. plan.id .. "^" .. sig .. "^3^1", "PARTY", "Lead")
+		drain(outgoing)
+		mock.lockdown = true
+		ns.RunSync.Act("unfollow")
+		mock.lockdown = false
+		ns.RunSync.Act("rejoin")
+		local sent = drain(outgoing)
+		T.eq(#sent, 2)
+		T.eq(sent[1].msg.status, "u")
+		T.eq(sent[2].msg.status, "f", "the newest last")
+	end)
+end)
+
+T.case("Sync, Roster: a sender is matched by its whole name; a namesake from elsewhere gets no rank", function()
+	boot()
+	local realName, realLeader = _G.UnitName, _G.UnitIsGroupLeader
+	local realm = mock.realm
+	mock.inGroup = true
+	_G.UnitIsGroupLeader = function(unit)
+		return unit == "party1"
+	end
+	-- Named realms (as elsewhere): the leader "Lead" on our realm, a "Lead" from another realm in the group too.
+	mock.realm = "Home Realm"
+	mock.units = { party1 = { name = "Lead" }, party2 = { name = "Lead", realm = "Other Realm" } }
+	_G.UnitName = function(unit)
+		if unit == "player" then
+			return "Tester"
+		end
+		local u = mock.units[unit]
+		return u and u.name, u and u.realm
+	end
+	local R = ns.Roster
+	T.eq(R.Id("Lead-HomeRealm"), "Lead", "our realm is left off")
+	T.eq(R.Id("Lead-OtherRealm"), "Lead-OtherRealm")
+	T.eq(R.UnitId("party2"), "Lead-OtherRealm")
+	T.ok(ns.Comm.GroupRank(R.Id("Lead-HomeRealm")).leader, "the leader")
+	T.eq(ns.Comm.GroupRank(R.Id("Lead-OtherRealm")).leader, false, "the namesake is not the leader")
+	T.eq(ns.Comm.GroupRank(R.Id("Lead-OtherRealm")).inGroup, true)
+	-- WoW: Forever: surnames. UnitName's second return is the surname; senders read "First Surname".
+	mock.realm = ""
+	mock.units = { party1 = { name = "Ana", realm = "Smith" }, party2 = { name = "Ana", realm = "Jones" } }
+	_G.UnitName = function(unit)
+		if unit == "player" then
+			return "Tess", "Tester"
+		end
+		local u = mock.units[unit]
+		return u and u.name, u and u.realm
+	end
+	T.ok(R.Surnames())
+	T.eq(R.Me(), "Tess Tester")
+	T.eq(R.Id("Ana Smith"), "Ana Smith")
+	T.eq(R.Id("Ana Smith-SomeRealm"), "Ana Smith", "names with surnames are unique: the realm is left off")
+	T.ok(ns.Comm.GroupRank("Ana Smith").leader)
+	T.eq(ns.Comm.GroupRank("Ana Jones").leader, false, "same first name, another player")
+	T.eq(ns.Comm.GroupRank("Ana").inGroup, false, "a first name alone is nobody")
+	-- Two units the client cannot tell apart: untrusted.
+	mock.units.party2 = { name = "Ana", realm = "Smith" }
+	T.eq(ns.Comm.GroupRank("Ana Smith").inGroup, false)
+	-- A unit the client names otherwise than the sender (no surname given): the client is asked which unit the sender,
+	-- as it arrived, is (UnitIsUnit).
+	mock.units.party2, mock.units.party3 = { name = "Ana", realm = "Jones" }, { name = "Bo" }
+	local realIsUnit = _G.UnitIsUnit
+	_G.UnitIsUnit = function(a, b)
+		return a == "Bo Long-FarRealm" and b == "party3"
+	end
+	T.eq(ns.Comm.GroupRank("Bo Long").inGroup, false, "never heard: nothing to ask with but the name")
+	R.Heard("Bo Long", "Bo Long-FarRealm")
+	T.eq(ns.Comm.GroupRank("Bo Long").unit, "party3")
+	_G.UnitIsUnit = realIsUnit
+	mock.units.party3 = nil
+	-- Through Comm: a run state from the namesake is not followed; replies go to the name as it arrived.
+	mock.units.party2 = { name = "Ana", realm = "Jones" }
+	local outgoing = {}
+	local realSend = ns.addon.SendCommMessage
+	ns.addon.SendCommMessage = function(_, _, text, channel, target)
+		outgoing[#outgoing + 1] = { text = text, channel = channel, target = target }
+	end
+	local plan = ns.DB.GetPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+	ns.UI.SelectPlan(plan.id, true)
+	ns.RunMode.Show()
+	local msg = "R^2^nm1^1^" .. plan.id .. "^" .. ns.RunSync.Signature(plan) .. "^3^1"
+	ns.Comm.OnMessage(ns.prefix, msg, "PARTY", "Ana Jones-FarRealm")
+	T.eq(ns.RunSync.state.mode, "idle", "not the leader")
+	ns.Comm.OnMessage(ns.prefix, msg, "PARTY", "Ana Smith-FarRealm")
+	T.eq(ns.RunSync.state.mode, "following")
+	T.eq(ns.RunSync.state.lead.name, "Ana Smith")
+	local report
+	for _, m in ipairs(outgoing) do
+		if m.text:sub(1, 2) == "F^" then
+			report = m
+		end
+	end
+	T.eq(report.target, "Ana Smith-FarRealm", "whispered to the full name it came from")
+	ns.addon.SendCommMessage = realSend
+	ns.RunMode.Hide()
+	ns.RunSync.state = Sync.New()
+	_G.UnitName, _G.UnitIsGroupLeader, mock.realm = realName, realLeader, realm
+	mock.inGroup, mock.units = false, {}
+end)
+
+T.case("Sync: a leader's edits that leave the steps as they were keep followers; new steps make another version", function()
+	boot()
+	local own = ns.DB.AddPlan(ns.Validate.Plan({ name = "Edited", instance = { name = "Test Keep", kind = "dungeon" },
+		pulls = { { id = "u1", name = "One", note = "" }, { id = "u2", name = "Two" } } }))
+	local sig = ns.RunSync.Signature(own)
+	ns.Plan.UpdatePull(own, "u1", { note = "Wait for the patrol" })
+	ns.DB.Changed(own, "pull")
+	T.ok(own.updated ~= nil)
+	T.eq(ns.RunSync.Signature(own), sig, "a note: same steps, the followers stay")
+	ns.Plan.AddPull(own, "Three")
+	ns.DB.Changed(own, "pull")
+	T.ok(ns.RunSync.Signature(own) ~= sig, "a new pull: another version")
+	ns.DB.DeletePlan(own.id)
+end)
+
+T.case("Comm: the outbox is bounded; acks and hellos go first; a transfer is aborted, never cut", function()
+	boot()
+	local Comm = ns.Comm
+	local realMax, realSend = Comm.MAX_OUTBOX, ns.addon.SendCommMessage
+	local sent = {}
+	ns.addon.SendCommMessage = function(_, _, text)
+		sent[#sent + 1] = text
+	end
+	Comm.MAX_OUTBOX = 4
+	mock.inGroup = true
+	mock.units = { party1 = { name = "Anna" } }
+	mock.lockdown = true
+	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Boxed", instance = { name = "Test Keep", kind = "dungeon" } }))
+	local data = ns.Codec.ExportPlan(plan)
+	local function ack(i)
+		return Comm.SendAck({ kind = "plan", sender = "Anna", tid = "ob" .. i }, data)
+	end
+	ack(1)
+	ack(2)
+	local t1 = assert(Comm.SharePlan(plan, "GROUP")) -- its offer waits
+	ack(3)
+	T.eq(#Comm.outbox, 4)
+	-- Full: the oldest ack goes for a new one.
+	ack(4)
+	T.eq(#Comm.outbox, 4)
+	T.eq(Transfer.Parse(Comm.outbox[1][1]).tid, "ob2", "ack 1 dropped")
+	-- Three more transfers take the acks' room; then nothing can go: the newest transfer is aborted, the others kept.
+	local t2 = assert(Comm.SharePlan(plan, "GROUP"))
+	local t3 = assert(Comm.SharePlan(plan, "GROUP"))
+	local t4 = assert(Comm.SharePlan(plan, "GROUP")) -- the last ack makes room
+	local t5 = Comm.SharePlan(plan, "GROUP")
+	T.eq(t5.state, "failed", "no room: aborted")
+	T.eq(t5.reason, "outbox")
+	T.eq(t1.state, "offering")
+	T.eq(t2.state, "offering")
+	T.eq(t3.state, "offering")
+	T.eq(t4.state, "offering")
+	for _, item in ipairs(Comm.outbox) do
+		T.ok(item.transfer ~= t5, "nothing of the aborted transfer waits")
+		T.ok(item.kind ~= "ack", "every ack made room")
+	end
+	-- Keyed messages replace each other and do not count.
+	Comm.SendSync("Q^2", "PARTY", nil, "query:")
+	Comm.SendSync("Q^2", "PARTY", nil, "query:")
+	T.eq(#Comm.outbox, 5)
+	mock.lockdown = false
+	mock.Advance(1)
+	T.eq(#Comm.outbox, 0)
+	T.ok(#sent >= 5, "all sent after the lockdown")
+	for _, t in ipairs({ t1, t2, t3, t4 }) do
+		Comm.Cancel(t)
+	end
+	Comm.MAX_OUTBOX, ns.addon.SendCommMessage = realMax, realSend
+	mock.inGroup, mock.units = false, {}
 	ns.DB.DeletePlan(plan.id)
 end)

@@ -443,9 +443,9 @@ function DB.ImportString(text, source, opts)
 	local plans = kind == "plan" and { value } or value.plans
 	local added, replaced, from = {}, {}, {}
 	for _, plan in ipairs(plans) do
-		-- The sender's id and version, for the link (Acks.Link): a recommended plan travels without its id.
-		local srcId = plan.id or (plan.origin and plan.origin.bundled and (ns.Bundled.PREFIX .. plan.origin.bundled))
-		from[#from + 1] = { id = srcId, v = plan.updated }
+		-- The sender's id, for the link (Acks.Link): a recommended plan travels without its id.
+		from[#from + 1] = plan.id or (plan.origin and plan.origin.bundled and (ns.Bundled.PREFIX .. plan.origin.bundled))
+			or false
 		plan.id = nil
 		plan.source = {
 			from = source and source.from or nil,
@@ -470,11 +470,11 @@ function DB.ImportString(text, source, opts)
 			added[#added + 1] = DB.AddPlan(plan)
 		end
 	end
-	local links = ns.db.shareLinks
+	-- Only a plan received in game from a group member's transfer is linked (group sync); pasted strings are not.
+	local links = source and source.kind == "received" and ns.db.shareLinks
 	for i, plan in ipairs(added) do
-		local src = from[i]
-		if links and src.id and src.v then
-			ns.Acks.Link(links, plan.id, src.id, src.v, plan.updated or 0, ns.Now())
+		if links and from[i] then
+			ns.Acks.Link(links, plan.id, from[i], ns.Now())
 		end
 	end
 	local summary = Validate.Summary(report)

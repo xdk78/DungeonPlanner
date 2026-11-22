@@ -217,6 +217,7 @@ Data\Bosses\zulgurub.lua
 # END generated bosses
 
 Core\API.lua
+Share\Roster.lua
 Share\Comm.lua
 Share\Discord.lua
 Tracker\Tracker.lua

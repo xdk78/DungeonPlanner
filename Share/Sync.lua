@@ -11,16 +11,20 @@
 --   free       the same lead, but the player steps on their own ("Rejoin" goes back): lead, localId, reported
 --   mismatch   the leader is on a plan the player lacks ("missing") or has in another version ("version"): lead, why,
 --              askedAt, reported
--- `lead` = { name, session, seq, plan, version, step, pull } as the leader last sent it. `queriedAt` (when the player
--- last asked the group who leads) is a rate limit kept across modes.
+--   (leading also carries askers and answerAt while answering "who leads?"; idle, queryAt while its question waits)
+-- `lead` = { name, session, seq, plan, version, step, pull } as the leader last sent it. `version` is the plan's steps
+-- revision (Sync.Signature): edits that leave the steps as they were (notes, strategies, gear) keep it, so followers
+-- stay with a leader who edits mid-run. Kept across modes: `queriedAt` (when the player last asked the group who
+-- leads, a rate limit) and `ended` = { name, session } (the last lead that ended: nothing more of it is taken).
 --
 -- Events:
 --   leader:  lead { rank, session, plan, version, step, pull }  stop  moved { plan, version, step, pull }
 --            report { from, rank, session, status }  query { from, rank }  want { from, rank, session }
 --   member:  run { from, rank, leadRank, msg, match }  unfollow  rejoin  request  localStep { plan, index }
---            localKill { plan, index }  show { inGroup }  resolve { match }
---   both:    tick  roster { inGroup, self, leadRank, members, shown }  leave
--- `rank` = Comm.GroupRank of the sender as the receiver's own roster has it; `match` = Sync.Resolve of the leader's plan.
+--            localKill { plan, index }  show { inGroup, jitter }  resolve { match }
+--   both:    tick  roster { inGroup, self, leadRank, members, shown, jitter }  leave
+-- `rank` = Comm.GroupRank of the sender as the receiver's own roster has it; `match` = Sync.Resolve of the leader's plan;
+-- `jitter` = 0..QUERY_JITTER seconds the glue draws, so a raid's members do not all ask at once.
 --
 -- Effects: { "send", msg, "GROUP" | "WHISPER", target, key }  (key: a newer message with the same key replaces an
 -- older one still waiting in the outbox), { "timer", seconds }, { "focus", local plan id, step (0: not started) },
@@ -32,11 +36,13 @@ local Sync = ns:NewModule("Sync")
 Sync.MIN_INTERVAL = 1 -- seconds between two run states from the leader: changes in between go out as one
 Sync.KILL_HOLD = 10 -- seconds a boss kill seen here wins over an older step from the leader (held in a boss fight)
 Sync.QUERY_INTERVAL = 30 -- a member asks the group who leads at most this often
+Sync.QUERY_JITTER = 2 -- a member's question waits up to this long, drawn at random (a raid's members join at once)
 Sync.ANSWER_INTERVAL = 5 -- the leader answers one member's question at most this often
+Sync.ANSWER_DELAY = 1 -- questions within this long get one answer: a whisper to one asker, else one group message
 Sync.OFFER_INTERVAL = 60 -- the leader offers the plan to one member at most this often
 Sync.ASK_INTERVAL = 20 -- a member asks the leader for the plan at most this often
 Sync.MAX_SEQ = 2 ^ 31 - 1
-Sync.MAX_VERSION = 2 ^ 31 - 1
+Sync.MAX_VERSION = 2 ^ 32 - 1 -- an Adler-32
 Sync.MAX_STEP = 999
 Sync.MAX_PULL = 100
 Sync.MAX_FOLLOWERS = 40
@@ -58,38 +64,51 @@ function Sync.LeadName(state)
 	return state.lead and state.lead.name or nil
 end
 
--- The local plan that is the leader's plan `planId` at `version`: the plan with that id (a recommended plan, or the
--- same account) at that version, else a received copy linked to it (Acks.Link) that is still as it arrived.
--- get(id) -> plan or nil; links = { [local id] = { plan, v, u, at } }. Returns { status = "ok", id } or
--- { status = "version" } (only other versions here) or { status = "missing" }.
-function Sync.Resolve(planId, version, get, links)
-	local direct = get(planId)
-	if direct and (direct.updated or 0) == version then
-		return { status = "ok", id = direct.id }
+-- A plan's steps revision: the Adler-32 of its steps in order (kind and what each one is: pull, boss, marker,
+-- objective). The step index means the same step on two clients exactly when this matches. steps = Steps.Build(plan).
+function Sync.Signature(steps)
+	local parts = {}
+	for i, s in ipairs(steps or {}) do
+		parts[i] = s.kind .. ":" .. tostring(s.pull or s.encounter or s.objective or s.marker or "")
 	end
-	local best, bestAt, other = nil, nil, direct ~= nil
+	return ns.Checksum.Adler32(table.concat(parts, ","))
+end
+
+-- The local plan that is the leader's plan `planId` with steps revision `version`: the plan with that id (a recommended
+-- plan, or the same account), else the newest copy received from it (Acks.Link). get(id) -> plan or nil; links =
+-- { [local id] = { plan, at } }; sigOf(plan) -> its Sync.Signature. Returns { status = "ok", id } or
+-- { status = "version" } (only copies whose steps differ) or { status = "missing" }.
+function Sync.Resolve(planId, version, get, links, sigOf)
+	local candidates = {}
+	local direct = get(planId)
+	if direct then
+		candidates[1] = { id = direct.id, plan = direct, at = math.huge }
+	end
 	for localId, l in pairs(links or {}) do
 		local p = l.plan == planId and get(localId)
 		if p then
-			if l.v == version and (p.updated or 0) <= l.u then
-				if not best or l.at > bestAt or (l.at == bestAt and localId < best) then
-					best, bestAt = localId, l.at
-				end
-			else
-				other = true
-			end
+			candidates[#candidates + 1] = { id = localId, plan = p, at = l.at }
 		end
 	end
-	if best then
-		return { status = "ok", id = best }
+	table.sort(candidates, function(a, b)
+		if a.at ~= b.at then
+			return a.at > b.at
+		end
+		return a.id < b.id
+	end)
+	for _, c in ipairs(candidates) do
+		if sigOf(c.plan) == version then
+			return { status = "ok", id = c.id }
+		end
 	end
-	return { status = other and "version" or "missing" }
+	return { status = #candidates > 0 and "version" or "missing" }
 end
 
--- Mode changes: everything but the cross-mode rate limit goes; `fields` are the new mode's data.
+-- Mode changes: everything but what is kept across modes goes; `fields` are the new mode's data.
+local KEEP = { queriedAt = true, ended = true }
 local function enter(state, mode, fields)
 	for k in pairs(state) do
-		if k ~= "queriedAt" then
+		if not KEEP[k] then
 			state[k] = nil
 		end
 	end
@@ -178,6 +197,21 @@ end
 
 function leader.tick(s, _, now)
 	local effects = {}
+	if s.answerAt and now >= s.answerAt then
+		-- The questions of the last ANSWER_DELAY: one asker gets a whisper, several one group message.
+		local only, n = nil, 0
+		for name in pairs(s.askers) do
+			only, n = name, n + 1
+		end
+		s.askers, s.answerAt = {}, nil
+		if n > 1 then
+			broadcast(s, now, effects)
+		elseif only then
+			s.seq = s.seq + 1
+			effects[#effects + 1] = { "send", { type = "run", proto = proto(), session = s.session, seq = s.seq,
+				plan = s.plan, version = s.version, step = s.step, pull = s.pull }, "WHISPER", only, "run" }
+		end
+	end
 	if s.pending and now >= s.sentAt + Sync.MIN_INTERVAL then
 		broadcast(s, now, effects)
 	end
@@ -220,9 +254,12 @@ function leader.query(s, e, now)
 		bound(s.answered)
 	end
 	s.answered[e.from] = now
-	s.seq = s.seq + 1
-	return { { "send", { type = "run", proto = proto(), session = s.session, seq = s.seq, plan = s.plan,
-		version = s.version, step = s.step, pull = s.pull }, "WHISPER", e.from, "run" } }
+	s.askers[e.from] = true
+	if s.answerAt then
+		return {}
+	end
+	s.answerAt = now + Sync.ANSWER_DELAY
+	return { { "timer", Sync.ANSWER_DELAY } }
 end
 
 -- A member without the plan (or with another version) asks for it: the normal share offer, whispered.
@@ -303,10 +340,13 @@ local function follow(s, lead, localId, reported, now, effects)
 	focusLead(s, now, effects)
 end
 
+-- Ask the group who leads, after a random wait (a raid's members open run mode or join at once): the question goes on
+-- the tick at queryAt, unless a lead was heard meanwhile (a mode change drops queryAt).
 local function maybeQuery(s, e, now, effects)
 	if e.inGroup and (not s.queriedAt or now - s.queriedAt >= Sync.QUERY_INTERVAL) then
-		s.queriedAt = now
-		effects[#effects + 1] = { "send", { type = "query", proto = proto() }, "GROUP", nil, "query" }
+		local wait = math.max(0, math.min(Sync.QUERY_JITTER, tonumber(e.jitter) or 0))
+		s.queriedAt, s.queryAt = now, now + wait
+		effects[#effects + 1] = { "timer", wait }
 	end
 end
 
@@ -316,6 +356,9 @@ function member.run(s, e, now)
 	local m = e.msg
 	if s.mode == "leading" or type(m) ~= "table" or type(e.from) ~= "string" or not Sync.Trusted(e.rank) then
 		return {}
+	end
+	if s.ended and s.ended.name == e.from and s.ended.session == m.session then
+		return {} -- that lead ended: nothing more of it counts, whatever its number
 	end
 	local lead = s.lead
 	if lead and lead.name ~= e.from then
@@ -330,9 +373,11 @@ function member.run(s, e, now)
 		return {} -- stale or repeated
 	end
 	if not m.plan then
-		if not lead then
+		-- Only the followed lead's own end counts: an end of an older session (held in an outbox) leaves a new one be.
+		if not lead or m.session ~= lead.session then
 			return {}
 		end
+		s.ended = { name = e.from, session = m.session }
 		enter(s, "idle")
 		return { { "status" } }
 	end
@@ -453,6 +498,9 @@ function member.tick(s, _, now)
 	local effects = {}
 	if s.mode == "following" and s.hold and now >= s.hold.untilT then
 		focusLead(s, now, effects)
+	elseif s.mode == "idle" and s.queryAt and now >= s.queryAt then
+		s.queryAt = nil
+		effects[1] = { "send", { type = "query", proto = proto() }, "GROUP", nil, "query" }
 	end
 	return effects
 end
@@ -491,7 +539,7 @@ function Sync.Step(s, e, now)
 		if not (Sync.Trusted(e.rank) and e.plan and type(e.session) == "string") then
 			return { { "refused" } }
 		end
-		enter(s, "leading", { session = e.session, seq = 0, sentAt = now, followers = {}, answered = {}, offered = {},
+		enter(s, "leading", { session = e.session, seq = 0, sentAt = now, followers = {}, answered = {}, offered = {}, askers = {},
 			plan = e.plan, version = clamp(e.version, Sync.MAX_VERSION), step = clamp(e.step, Sync.MAX_STEP),
 			pull = clamp(e.pull, Sync.MAX_PULL) })
 		local effects = {}

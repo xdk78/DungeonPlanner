@@ -8,7 +8,7 @@ Bindings.xml, /dp, minimap, compartment  ->  Core/Actions, Core/Slash
                          |  reads/writes plans only through Model/Plan and Config/DB
 Model/  (Schema, Validate, Plan, PlanLists, PlanBosses, Drawing, Pages, History, Bundled, Route, Progress, RunLog, RunCompare)
         pure Lua 5.1, no game API
-Share/  (Checksum, Inflate, Codec, Transfer, Acks, Sync, Discord)  pure, plus Comm (AceComm glue)
+Share/  (Checksum, Inflate, Codec, Transfer, Acks, Sync, Discord)  pure, plus Roster and Comm (game glue)
 Config/ (Defaults, DB: AceDB, migrations, quarantine)       LoadGlobal is pure
 Data/   (Instances, Journal, Loot, Names, Templates)         runtime game data only, no bundled IDs
         (Providers + Providers/*)                          optional adapters reading other installed addons
@@ -60,9 +60,9 @@ Rules:
   repairs it on load). Additive, like the recorder.
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
   `Acks.Normalize` on load). Additive.
-- `global.shareLinks[local plan id]` - which plan a received or imported copy came from: the sender's plan id, its
-  version and the copy's own `updated` after the import (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync
-  matches a leader's plan to the copy. Schema 5 (migration 5 starts it); a link goes with its plan.
+- `global.shareLinks[local plan id]` - which plan a copy received in game came from: `{ plan = the sender's plan id,
+  at }` (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync matches a leader's plan to the copy (by its steps
+  revision, `Sync.Signature`). Pasted strings make none. Schema 5 (migration 5 starts it); a link goes with its plan.
 
 Migrations: `DB.migrations[n]` upgrades `global` from schema n-1 to n. Data from a newer schema puts the addon in
 read-only mode instead of being rewritten.
@@ -405,7 +405,8 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | UI/MapCanvas.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing; pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
 | UI/RunMode.lua | the run window (with the recorder line and the drift line) |
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
-| Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch) and plan matching; the glue (messages, timers, step focus) and run mode's sync line |
+| Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
+| Share/Roster.lua | the group's units and members, a sender's rank by its whole name (surnames on Forever), whisper targets as names arrived |
 | Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua | raid pages: data, validation, keywords, permissions, the Notes window's state machine; the Party section's editor; the Notes window, sending and chat posting |
 | UI/Panels/ | sections (map + legend, marker editor and menus, plan, bosses, pulls, assignments, gear, runs, notes, progress, share) |
 | UI/Prompts.lua, UI/Settings.lua | share prompts, options page |

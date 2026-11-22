@@ -270,7 +270,7 @@ local function shareTracking(leading)
 				local s = ns.Sync.New()
 				ns.RunSync.state = s
 				ns.Sync.Step(s, { type = "lead", rank = { inGroup = true, leader = true }, session = "v1", plan = plan.id,
-					version = plan.updated, step = 1, pull = 1 }, 0)
+					version = ns.RunSync.Signature(plan), step = 1, pull = 1 }, 0)
 				ns.Sync.Step(s, { type = "report", from = "Aldra", rank = { inGroup = true }, session = "v1", status = "f" }, 1)
 			end
 			openOwn("share", "select")
@@ -377,14 +377,14 @@ local function runModeSync(which)
 			ns.RunSync.state = s
 			ns.UI.FocusStep(5, { stay = true })
 			if which == "lead" then
-				Sync.Step(s, { type = "lead", rank = LEADER_RANK, session = "v1", plan = plan.id, version = plan.updated or 0,
+				Sync.Step(s, { type = "lead", rank = LEADER_RANK, session = "v1", plan = plan.id, version = ns.RunSync.Signature(plan),
 					step = 5, pull = 3 }, 0)
 				for name, status in pairs({ Bram = "f", Corin = "f", Dessa = "m" }) do
 					Sync.Step(s, { type = "report", from = name, rank = { inGroup = true }, session = "v1", status = status }, 1)
 				end
 			else
 				local msg = { type = "run", proto = ns.PROTOCOL_VERSION, session = "v1", seq = 1, plan = plan.id,
-					version = plan.updated or 0, step = 5, pull = 3 }
+					version = ns.RunSync.Signature(plan), step = 5, pull = 3 }
 				local match = which == "ask" and { status = "missing" } or { status = "ok", id = plan.id }
 				Sync.Step(s, { type = "run", from = "Aldra", rank = LEADER_RANK, msg = msg, match = match }, 0)
 			end

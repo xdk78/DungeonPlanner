@@ -25,11 +25,23 @@ local function shown()
 	return ns.RunMode ~= nil and ns.RunMode.IsShown()
 end
 
-local function resolve(planId, version)
-	return Sync.Resolve(planId, version, ns.DB.GetPlan, ns.db.shareLinks)
+-- A plan's steps revision (Sync.Signature), cached per plan until it changes (DB.Revision).
+local signatures = setmetatable({}, { __mode = "k" })
+function RunSync.Signature(plan)
+	local rev = ns.DB.Revision(plan)
+	local c = signatures[plan]
+	if not c or c.rev ~= rev then
+		c = { rev = rev, sig = Sync.Signature(ns.Steps.Build(plan)) }
+		signatures[plan] = c
+	end
+	return c.sig
 end
 
--- The selected plan as the leader sends it: id, version, step (0 before the first) and the next pull's number.
+local function resolve(planId, version)
+	return Sync.Resolve(planId, version, ns.DB.GetPlan, ns.db.shareLinks, RunSync.Signature)
+end
+
+-- The selected plan as the leader sends it: id, steps revision, step (0 before the first) and the next pull's number.
 function RunSync.Position()
 	local ctx = ns.UI.ctx
 	local plan = ctx:Plan()
@@ -39,7 +51,12 @@ function RunSync.Position()
 	local index = ctx:StepIndex() or 0
 	local _, pullStep = ns.Steps.Next(ctx:Steps(), math.max(1, index), "pull")
 	local pull = pullStep and ns.Plan.PullIndex(plan, pullStep.pull) or 0
-	return { plan = plan.id, version = plan.updated or 0, step = index, pull = pull }
+	return { plan = plan.id, version = RunSync.Signature(plan), step = index, pull = pull }
+end
+
+-- A random wait before asking the group who leads (Sync.QUERY_JITTER).
+local function jitter()
+	return math.random() * Sync.QUERY_JITTER
 end
 
 local apply
@@ -164,7 +181,7 @@ function RunSync.LocalKill(planId, index)
 end
 
 function RunSync.OnShow()
-	RunSync.Step({ type = "show", inGroup = ns.Comm.GroupChannel() ~= nil })
+	RunSync.Step({ type = "show", inGroup = ns.Comm.GroupChannel() ~= nil, jitter = jitter() })
 end
 
 -- The leader's view of the group for this plan (nil unless leading it): Sync.Summary over the members and acks.
@@ -335,6 +352,6 @@ function RunSync.Init()
 	ns:RegisterEvent("GROUP_ROSTER_UPDATE", function()
 		local lead = Sync.LeadName(RunSync.state)
 		RunSync.Step({ type = "roster", inGroup = ns.Comm.GroupChannel() ~= nil, self = ns.Comm.GroupRank(),
-			leadRank = lead and ns.Comm.GroupRank(lead) or nil, members = ns.Comm.GroupMembers(), shown = shown() })
+			leadRank = lead and ns.Comm.GroupRank(lead) or nil, members = ns.Comm.GroupMembers(), shown = shown(), jitter = jitter() })
 	end)
 end
