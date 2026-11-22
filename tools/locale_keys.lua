@@ -38,9 +38,9 @@ local DYNAMIC = {
 	"Click a marker or route point to delete it.",
 	"Create a plan: mark bosses and pulls on the map, draw the route, write strategies, assign players and list gear. Share it with your group or as a string.",
 	"A recommended plan. Hover markers for notes; make an editable copy to change it.",
-	"Click a dungeon to open it  ·  Right-click a plan for more  ·  /dp help",
-	"Drag to pan  ·  Scroll to zoom  ·  Hover a marker for its note",
-	"Right-click a row for more  ·  Changes are saved as you make them",
+	"Click a dungeon to open it  •  Right-click a plan for more  •  /dp help",
+	"Drag to pan  •  Scroll to zoom  •  Hover a marker for its note",
+	"Right-click a row for more  •  Changes are saved as you make them",
 	-- pull tags and planned marks as "tag:<tag>" and "tagShort:<tag>" (Schema.PULL_TAGS, cd, lust)
 	"tag:interrupt", "tag:cc", "tag:los", "tag:next", "tag:skip", "tag:careful", "tag:cd", "tag:lust",
 	"tagShort:interrupt", "tagShort:cc", "tagShort:los", "tagShort:next", "tagShort:skip", "tagShort:careful",
@@ -112,7 +112,7 @@ for _, path in ipairs(FILES) do
 			end
 		end
 		if src:sub(i + 1, i + 1) == "]" then
-			local k = table.concat(buf):gsub('\\"', '"'):gsub("\\194\\183", "\194\183")
+			local k = table.concat(buf):gsub('\\"', '"'):gsub("\\194\\183", "\226\128\162")
 			add(k)
 		end
 		pos = i + 1

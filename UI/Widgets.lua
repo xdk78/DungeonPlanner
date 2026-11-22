@@ -34,19 +34,19 @@ function W.Text(parent, font, role, layer)
 end
 
 -- One line of text that may be longer than its room: shown whole when it fits, else cut after the last whole word that
--- fits, with "..." (never inside a word; a separator such as ",", "+" or "·" left at the end goes too). Needs the
+-- fits, with "..." (never inside a word; a separator such as ",", "+" or "•" left at the end goes too). Needs the
 -- string's width (its anchors or SetWidth); without one yet, the text is set whole. Returns the text shown, and
 -- whether it was shortened; fs.dpFullText then holds the whole text, for a tooltip (W.FullTextTooltip).
 local TRAIL = { [" "] = true, [","] = true, [":"] = true, [";"] = true, ["+"] = true, ["-"] = true, ["("] = true,
 	["/"] = true, ["&"] = true }
-local MIDDOT = "\194\183"
+local MIDDOT = "\226\128\162" -- the separator (a bullet: the Cyrillic game face has no middle dot)
 local function trimEnd(t)
 	while #t > 0 do
 		local last = t:sub(-1)
 		if TRAIL[last] then
 			t = t:sub(1, -2)
-		elseif t:sub(-2) == MIDDOT then
-			t = t:sub(1, -3)
+		elseif t:sub(-#MIDDOT) == MIDDOT then
+			t = t:sub(1, -(#MIDDOT + 1))
 		else
 			break
 		end

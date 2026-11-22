@@ -395,7 +395,7 @@ function RunMode.Refresh()
 	local plan = c:Plan()
 	local steps = c:Steps()
 	local index = c:StepIndex()
-	frame.planName:SetText(plan and (ns.Names.Instance(plan.instance) .. "  ·  " .. plan.name) or L["Select a plan first."])
+	frame.planName:SetText(plan and (ns.Names.Instance(plan.instance) .. "  •  " .. plan.name) or L["Select a plan first."])
 	RunMode.RefreshSync(plan)
 	RunMode.RefreshRecorder(plan)
 	frame.prev:SetDisabled(not index or index <= 1)
@@ -418,16 +418,16 @@ function RunMode.Refresh()
 	if step.kind == "pull" then
 		local marks = UI.PullMarks((ns.Util.FindById(plan.pulls, step.pull)))
 		if marks ~= "" then
-			text = text .. "  ·  " .. marks
+			text = text .. "  •  " .. marks
 		end
 	end
 	-- Planned progress: the last pull so far that has one (a boss step shows the pull before it).
 	local progress = ns.Steps.ProgressAt(plan, steps, index or 1)
 	if progress then
-		text = text .. "  ·  " .. string.format(L["Forces %d%%"], progress)
+		text = text .. "  •  " .. string.format(L["Forces %d%%"], progress)
 	end
 	if note and note ~= "" and note ~= title then
-		text = text .. "  ·  " .. note
+		text = text .. "  •  " .. note
 	end
 	frame.step:Set(title, S.WithApprox(text, approx))
 	-- As tall as its lines; the map below takes what is left of the block's room (the blocks under it stay put).
@@ -443,7 +443,7 @@ function RunMode.Refresh()
 		local pullNote, pullApprox = ns.Util.SplitApprox(pull.note)
 		local marks = UI.PullMarks(pull, { progress = true })
 		if marks ~= "" then
-			pullNote = marks .. ((pullNote and pullNote ~= "") and ("  ·  " .. pullNote) or "")
+			pullNote = marks .. ((pullNote and pullNote ~= "") and ("  •  " .. pullNote) or "")
 		end
 		frame.pull:Set(string.format(L["Pull %d"], ns.Plan.PullIndex(plan, pull.id) or pi) .. ": " .. pull.name,
 			S.WithApprox(pullNote, pullApprox))
@@ -456,7 +456,7 @@ function RunMode.Refresh()
 		-- The level (bundled data, else the provider's) leads the line under the name.
 		local level = ns.BossInfo.RunMeta(plan, enc)
 		local strategy = excerpt(enc.strategy, 220)
-		frame.boss:Set(ns.Names.Encounter(enc), level and (strategy ~= "" and (level .. "  \194\183  " .. strategy) or level) or strategy)
+		frame.boss:Set(ns.Names.Encounter(enc), level and (strategy ~= "" and (level .. "  \226\128\162  " .. strategy) or level) or strategy)
 		setAbilityIcons(frame.boss, plan, enc)
 	elseif bossStep then
 		frame.boss:Set(UI.StepText(plan, bossStep), "")
@@ -473,7 +473,13 @@ function RunMode.Refresh()
 	frame.mapCredit:SetText(frame.map.creditText or "")
 	local floors = ns.Floors.For(plan)
 	local several = #floors > 1 and floors[frame.floor] ~= nil
-	frame.mapFloor:SetText(several and ns.Names.Floor(floors[frame.floor], frame.floor) or "")
+	local floorText = several and ns.Names.Floor(floors[frame.floor], frame.floor) or ""
+	-- Where the player is, when the client says (Floors.PlayerFloor; unverified on Forever) and it is another floor.
+	local here = several and ns.Floors.PlayerFloor(plan)
+	if here and here ~= frame.floor and floors[here] then
+		floorText = string.format(L["%s (you are on %s)"], floorText, ns.Names.Floor(floors[here], here))
+	end
+	frame.mapFloor:SetText(floorText)
 	frame.mapFloor:SetShown(several)
 	frame.mapFloorPlate:SetShown(several)
 	local hasDrawings = ns.Drawing.Count(plan) > 0
@@ -517,7 +523,7 @@ function RunMode.CycleDrawings()
 	RunMode.Refresh()
 end
 
--- The recorder line: "Recording · pull 3 of 9 planned", or how to start it.
+-- The recorder line: "Recording • pull 3 of 9 planned", or how to start it.
 function RunMode.RecorderText(plan)
 	local R = ns.Recorder
 	if not R.Enabled() then
@@ -530,12 +536,12 @@ function RunMode.RecorderText(plan)
 	end
 	local pulls = #run.p
 	local open = ns.RunLog.OpenPull(run) ~= nil
-	local text = L["Recording"] .. " · " .. (open and string.format(L["pull %d (in combat)"], pulls) or ns.Plural(pulls, L["%d pull|%d pulls"]))
+	local text = L["Recording"] .. " • " .. (open and string.format(L["pull %d (in combat)"], pulls) or ns.Plural(pulls, L["%d pull|%d pulls"]))
 	if plan and #plan.pulls > 0 then
-		text = text .. " · " .. string.format(L["plan: %d"], #plan.pulls)
+		text = text .. " • " .. string.format(L["plan: %d"], #plan.pulls)
 	end
 	if #run.b > 0 then
-		text = text .. " · " .. ns.Plural(#run.b, L["%d boss|%d bosses"])
+		text = text .. " • " .. ns.Plural(#run.b, L["%d boss|%d bosses"])
 	end
 	return text, true
 end
@@ -581,7 +587,7 @@ function RunMode.DriftText(plan)
 	end
 	local text = L["On plan"]
 	if d.step then
-		text = text .. " · " .. string.format(L["step ~ %d"], d.step)
+		text = text .. " • " .. string.format(L["step ~ %d"], d.step)
 	end
 	return text, false, lines, d
 end
@@ -743,6 +749,14 @@ function RunMode.Init()
 	ns:On("BOSS_KILLED", RunMode, function(encounterID, name)
 		ns.SafeCall(RunMode.OnKill, encounterID, name)
 	end)
+	-- The mini map's floor line says where the player is (Floors.PlayerFloor), while the window is open.
+	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS" }) do
+		ns:RegisterEvent(event, function()
+			if RunMode.IsShown() then
+				ns.SafeCall(RunMode.Refresh)
+			end
+		end)
+	end
 	if saved().shown then
 		RunMode.Show()
 	end

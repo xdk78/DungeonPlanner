@@ -20,6 +20,9 @@ follow [Semantic Versioning](https://semver.org/).
   more (the toolbar list stays for those); each floor's tooltip counts the markers on it; Shift + mouse wheel over the
   map changes floor. Stairs and portals say "to <floor>" on the map and in the steps; in a recommended plan a click on
   one, or a second click on its step, goes there. Run mode's mini map names its floor.
+- **The map follows you to another floor** inside an instance, where the game says which floor you are on (not yet
+  confirmed on WoW: Forever; `/dp scan` inside a dungeon records what the client gives). Run mode's mini map then says
+  which floor you are on.
 
 ## [Unreleased]
 
@@ -41,6 +44,11 @@ follow [Semantic Versioning](https://semver.org/).
 - **Bosses**: an ability with a short note no longer leaves empty lines under it; each row is as tall as its note.
 - **Map labels** no longer cover the map's painted names on Hall of Thanes ("Reliquary of Kings", "Dark Iron
   Ingress", "Anvilmar's Rest"): they move to a free side, and their dark plates are denser.
+- **Gamepad interface style**: with it on, Dungeon Planner registers no slash command and leaves the game's Escape
+  list alone (both can freeze the client or get its windows closed by the gamepad menus there). Open it from the
+  minimap button, the Addon Compartment or a key binding; `/dp debug` says when this is in effect.
+- **Russian**: the separators between items read as a box with the game's Cyrillic font (it has no middle dot); they
+  are a bullet now, in every language.
 
 ## [0.1.0] - 2026-11-16
 

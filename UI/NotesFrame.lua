@@ -331,10 +331,10 @@ function NotesFrame.Refresh()
 		W.FitText(frame.pageTitle, page.title ~= "" and page.title or L["Page"])
 		local src
 		if current.from then
-			src = string.format(L["From %s"], current.from) .. (page.boss and (" · " .. page.boss) or "")
+			src = string.format(L["From %s"], current.from) .. (page.boss and (" • " .. page.boss) or "")
 		elseif current.plan then
 			local enc = page.encounter and Util.FindById(current.plan.encounters, page.encounter)
-			src = current.plan.name .. (enc and (" · " .. ns.Names.Encounter(enc)) or "")
+			src = current.plan.name .. (enc and (" • " .. ns.Names.Encounter(enc)) or "")
 		end
 		W.FitText(frame.source, src or "")
 		local text = Pages.Expand(page.text, NotesFrame.Env(current.plan and current.plan.groups))

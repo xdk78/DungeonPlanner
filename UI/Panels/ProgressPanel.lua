@@ -209,7 +209,7 @@ function Panel.Create(parent, ctx)
 		local sum = Progress.PlanSummary(store(), p, gameID)
 		local text = string.format(L["Bosses %d/%d"], sum.bossesKilled, sum.bosses)
 		if sum.objectives > 0 then
-			text = text .. "  \194\183  " .. string.format(L["objectives %d/%d"], sum.objectivesDone, sum.objectives)
+			text = text .. "  \226\128\162  " .. string.format(L["objectives %d/%d"], sum.objectivesDone, sum.objectives)
 		end
 		self.summary:SetText(text)
 		local run = store().run

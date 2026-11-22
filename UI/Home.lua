@@ -131,7 +131,7 @@ local function planMeta(plan)
 	elseif plan.author ~= "" then
 		parts[#parts + 1] = string.format(L["by %s"], plan.author)
 	end
-	return table.concat(parts, "  ·  ")
+	return table.concat(parts, "  •  ")
 end
 
 local function planRowUpdate(row, plan)
@@ -355,7 +355,7 @@ local function buildPreview(f)
 			self.plansHeading:SetText(L["Plans"])
 			for i, line in ipairs(self.planLines) do
 				local pl = plans[i]
-				line:SetText(pl and ("· " .. UI.PlanTitle(pl)) or "")
+				line:SetText(pl and ("• " .. UI.PlanTitle(pl)) or "")
 			end
 			self.note:SetText(#plans == 0 and L["No plan for this instance yet"] or "")
 			self.open:SetLabel(#plans > 0 and L["Open plan"] or L["Open"])

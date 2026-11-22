@@ -196,3 +196,54 @@ T.case("Floors: stairs and portals say where they lead; a second click on the st
 	local bar = _G.DungeonPlannerMainFrame.instancePage.panels.map.floorBar
 	T.ok(bar.name.label:GetText():find("1/" .. #ctx:Floors(), 1, true), "the switcher follows: " .. bar.name.label:GetText())
 end)
+
+-- Unverified on Forever (the 2026-11-15 scan found no map inside); built so that a client that gives one is followed.
+T.case("Floors: the map follows the player's floor inside an instance when the client names it", function()
+	boot()
+	local floors = { { name = "The Pool of Ask'Ar" }, { name = "Moonshrine Sanctum", uiMapID = 222 }, { name = "The Forgotten Pool" } }
+	T.eq(Floors.Match(floors, { map = 222, members = {} }), 2, "by map ID")
+	T.eq(Floors.Match(floors, { map = 9, members = { { uiMapID = 9, name = "Forgotten Pool", relativeHeightIndex = 0 } } }),
+		3, "by the group member's name")
+	T.eq(Floors.Match(floors, nil), nil, "no map: nothing")
+	T.eq(Floors.Match(floors, { map = 5, members = {} }), nil)
+	local saved = { C_Map = _G.C_Map, IsInInstance = rawget(_G, "IsInInstance") }
+	local best, inside = nil, true
+	_G.C_Map = setmetatable({
+		GetBestMapForUnit = function()
+			return best
+		end,
+		GetMapGroupID = function()
+			return 7
+		end,
+		GetMapGroupMembersInfo = function()
+			return { { mapID = 501, name = "Upper", relativeHeightIndex = 1 }, { mapID = 502, name = "Ironclad Cove", relativeHeightIndex = 0 } }
+		end,
+	}, { __index = saved.C_Map })
+	_G.IsInInstance = function()
+		return inside, "party"
+	end
+	local ok, err = pcall(function()
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "the-deadmines")
+		ns.UI.SelectTab("map")
+		local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+		map:GoToFloor(1)
+		map.floorBar.playerFloor = nil
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 1, "no map: the map stays")
+		best = 502
+		local where = Floors.PlayerMap()
+		T.eq(where.group, 7)
+		T.eq(where.members[2].relativeHeightIndex, 0)
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 2, "the player's floor (Ironclad Cove)")
+		map:GoToFloor(1)
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 1, "a floor picked by hand stays while the player does not move")
+		inside, best = false, 501
+		map.floorBar.playerFloor = nil
+		map.FollowPlayerFloor()
+		T.eq(ns.UI.ctx.floor, 1, "outside an instance: never")
+	end)
+	_G.C_Map, _G.IsInInstance = saved.C_Map, saved.IsInInstance
+	assert(ok, err)
+end)

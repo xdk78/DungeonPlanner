@@ -205,6 +205,31 @@ function FloorBar.Build(f, ctx, canvas)
 		return { r - (self:GetWidth() or 0), b - (self:GetHeight() or 0), r, b }
 	end
 
+	-- Inside an instance, the map follows the player to another floor when the client says which (Floors.PlayerFloor;
+	-- unverified on Forever, nil until a scan shows a map there). Only on a change of the player's floor, so a floor
+	-- the player picked by hand stays until they move.
+	local function follow()
+		local inInstance = rawget(_G, "IsInInstance")
+		local ok, inside = false, nil
+		if type(inInstance) == "function" then
+			ok, inside = pcall(inInstance)
+		end
+		if not (ok and ns.Util.Plain(inside) == true and f:IsVisible()) then
+			return
+		end
+		local index = ns.Floors.PlayerFloor(ctx:Plan())
+		if index and index ~= bar.playerFloor then
+			bar.playerFloor = index
+			f:GoToFloor(index)
+		end
+	end
+	f.FollowPlayerFloor = follow
+	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "PLAYER_ENTERING_WORLD" }) do
+		ns:RegisterEvent(event, function()
+			ns.SafeCall(follow)
+		end)
+	end
+
 	-- Shift + mouse wheel over the map: the next or previous floor (the wheel alone zooms).
 	local zoom = canvas:GetScript("OnMouseWheel")
 	canvas:SetScript("OnMouseWheel", function(self, delta)

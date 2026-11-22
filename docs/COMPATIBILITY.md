@@ -474,6 +474,7 @@ in the diagnostics).
 | Reading | Inside an instance | Evidence | Used for |
 |---|---|---|---|
 | Player map position (`C_Map.GetBestMapForUnit`, `GetPlayerMapPosition`) | nil | In game, 2026-11-15 | Nothing |
+| The player's floor (`GetBestMapForUnit`, its `C_Map.GetMapGroupID` and the group members' `relativeHeightIndex`, `GetInstanceInfo`'s 8th value, `IsIndoors`) | **Unverified.** Our 2026-11-15 scan in Hall of Thanes found no best map; another addon's shipped recorder expects a uiMap inside Forever's new dungeons and logs the map group and height index as they change | `/dp scan` records all of them inside any instance (`position`: `bestMap`, `mapGroup`, `mapGroupMembers`, `instanceMapID`, `indoors`) | When a map comes back: the map section switches to the player's floor (on a change of floor only, inside an instance; `Floors.PlayerFloor`, `UI/Panels/FloorBar.lua`), and run mode's mini map says which floor the player is on. Until a scan shows one, nothing switches |
 | World position (`UnitPosition`) | x and y nil, only the instance ID | In game | Nothing |
 | Creature GUID and name (`UnitGUID`, `UnitName` on an enemy) | secret | In game; Fellowship Ledger's check | Names are stored only when plain |
 | Hostility, level, classification (`UnitCanAttack`, `UnitLevel`, `UnitClassification`) | readable | In game | The run recorder's pull make-up |

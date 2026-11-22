@@ -117,6 +117,76 @@ function Floors.Ensure(plan, index)
 	return true
 end
 
+-- The player's floor -------------------------------------------------------------------------------------------------
+-- UNVERIFIED on Forever: the 2026-11-15 scan in Hall of Thanes found C_Map.GetBestMapForUnit nil inside, but another
+-- addon's recorder expects a uiMap inside Forever's new dungeons (it logs C_Map.GetMapGroupID and each group member's
+-- relativeHeightIndex). /dp scan records all of it (Data/Diagnostics.lua position); until a scan shows a map, this
+-- finds nothing and nothing switches.
+
+-- The player's map and its floor group: { map = uiMapID, group = id or nil, members = { { uiMapID, name,
+-- relativeHeightIndex } } }, or nil when the client gives no map (every call guarded, secret values dropped).
+function Floors.PlayerMap()
+	local api = rawget(_G, "C_Map")
+	local Plain = ns.Util.Plain
+	if type(api) ~= "table" or type(api.GetBestMapForUnit) ~= "function" then
+		return nil
+	end
+	local ok, map = pcall(api.GetBestMapForUnit, "player")
+	map = ok and Plain(map) or nil
+	if type(map) ~= "number" then
+		return nil
+	end
+	local out = { map = map, members = {} }
+	if type(api.GetMapGroupID) == "function" then
+		local okG, group = pcall(api.GetMapGroupID, map)
+		group = okG and Plain(group) or nil
+		out.group = type(group) == "number" and group or nil
+	end
+	if out.group and type(api.GetMapGroupMembersInfo) == "function" then
+		local okM, members = pcall(api.GetMapGroupMembersInfo, out.group)
+		members = okM and Plain(members) or nil
+		for _, m in ipairs(type(members) == "table" and members or {}) do
+			if type(m) == "table" and type(Plain(m.mapID)) == "number" then
+				out.members[#out.members + 1] = { uiMapID = Plain(m.mapID), name = Plain(m.name),
+					relativeHeightIndex = Plain(m.relativeHeightIndex) }
+			end
+		end
+	end
+	return out
+end
+
+-- Pure: which of `floors` (Floors.For) the player stands on, given `where` (Floors.PlayerMap): the floor with that
+-- uiMapID, else the one named like the map's group member. nil when none.
+function Floors.Match(floors, where)
+	if type(where) ~= "table" then
+		return nil
+	end
+	for i, f in ipairs(floors or {}) do
+		if f.uiMapID ~= nil and f.uiMapID == where.map then
+			return i
+		end
+	end
+	local name
+	for _, m in ipairs(where.members or {}) do
+		if m.uiMapID == where.map and type(m.name) == "string" then
+			name = ns.Match.StripArticle(m.name)
+		end
+	end
+	if name and name ~= "" then
+		for i, f in ipairs(floors or {}) do
+			if ns.Match.StripArticle(f.name or "") == name then
+				return i
+			end
+		end
+	end
+	return nil
+end
+
+-- The floor of `plan` the player is on, or nil.
+function Floors.PlayerFloor(plan)
+	return Floors.Match(Floors.For(plan), Floors.PlayerMap())
+end
+
 function Floors.Reset()
 	cache = setmetatable({}, { __mode = "k" })
 end

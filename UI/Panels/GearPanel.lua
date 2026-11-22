@@ -305,7 +305,7 @@ function Panel.Create(parent, ctx)
 			if g.note ~= "" then
 				meta[#meta + 1] = g.note
 			end
-			cell.meta:SetText(table.concat(meta, " \194\183 "))
+			cell.meta:SetText(table.concat(meta, " \226\128\162 "))
 			cell.badge:SetText(string.format(L["Priority %d"], g.priority))
 		else
 			local it = entry.loot

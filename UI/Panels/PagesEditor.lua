@@ -75,7 +75,7 @@ function Editor.Create(parent, ctx)
 				local name = pageName(page, i)
 				-- The boss after the title, unless the title already is the boss's name.
 				if boss and ns.Match.Norm(boss) ~= ns.Match.Norm(name) then
-					name = name .. " · " .. boss
+					name = name .. " • " .. boss
 				end
 				out[#out + 1] = { text = name, value = page.id }
 			end

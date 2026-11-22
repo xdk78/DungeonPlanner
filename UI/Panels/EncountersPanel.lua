@@ -94,7 +94,7 @@ function Panel.Create(parent, ctx)
 			S.TextColor(row.title, enc.id == selectedId and "white" or "ink")
 			local meta = #enc.phases > 0 and ns.Plural(#enc.phases, L["%d phase|%d phases"]) or ""
 			if killed then
-				meta = (meta ~= "" and (meta .. " \194\183 ") or "") .. L["killed this run"]
+				meta = (meta ~= "" and (meta .. " \226\128\162 ") or "") .. L["killed this run"]
 			end
 			row.meta:SetText(meta)
 			-- Without a second line the name sits in the middle of the row.
@@ -333,7 +333,7 @@ function Panel.Create(parent, ctx)
 		if dungeonID and ns.Progress.IsKilledInRun(ns.char.progress, dungeonID) then
 			meta[#meta + 1] = L["killed this run"]
 		end
-		head.meta:SetText(table.concat(meta, "  \194\183  "))
+		head.meta:SetText(table.concat(meta, "  \226\128\162  "))
 		doc:Place(head, 72 + 2 * SP.md)
 		doc:Add("heading", L["Strategy"])
 		doc:Add("text", enc.strategy ~= "" and enc.strategy or L["No strategy written for this boss."])
@@ -363,12 +363,12 @@ function Panel.Create(parent, ctx)
 			local out = {}
 			for _, g in ipairs(gear) do
 				local name = ns.Names.ItemInfo(g)
-				out[#out + 1] = "\194\183 " .. name .. (g.slot and ("  |cff9d9d9d" .. L["slot:" .. g.slot] .. "|r") or "")
+				out[#out + 1] = "\226\128\162 " .. name .. (g.slot and ("  |cff9d9d9d" .. L["slot:" .. g.slot] .. "|r") or "")
 			end
 			for _, it in ipairs(drops) do
 				local name = it.link or it.name or ns.Names.ItemInfo({ itemID = it.itemID, label = "" })
 				local slot = it.slot and L["slot:" .. it.slot] or it.slotText
-				out[#out + 1] = "\194\183 " .. name .. (slot and ("  |cff9d9d9d" .. slot .. "|r") or "")
+				out[#out + 1] = "\226\128\162 " .. name .. (slot and ("  |cff9d9d9d" .. slot .. "|r") or "")
 			end
 			doc:Add("text", table.concat(out, "\n"))
 			if #drops > 0 then
@@ -430,7 +430,7 @@ function Panel.Create(parent, ctx)
 		c.name.placeholder:SetText(ns.Names.Encounter(enc))
 		local ejID, dungeonID = ns.Journal.EncounterIds(p, enc)
 		if ejID or dungeonID then
-			c.ids:SetText(string.format(L["Journal ID %s \194\183 encounter ID %s"], tostring(ejID or "-"),
+			c.ids:SetText(string.format(L["Journal ID %s • encounter ID %s"], tostring(ejID or "-"),
 				tostring(dungeonID or "-")))
 		else
 			c.ids:SetText(L["Not linked to the journal: kills of this boss are not tracked automatically."])
@@ -494,7 +494,7 @@ function Panel.Create(parent, ctx)
 				row.name:SetTextColor(r, gg, b)
 				local slot = g.slot and L["slot:" .. g.slot] or ""
 				if g.note ~= "" then
-					slot = slot ~= "" and (slot .. "  \194\183  " .. g.note) or g.note
+					slot = slot ~= "" and (slot .. "  \226\128\162  " .. g.note) or g.note
 				end
 				row.slot:SetText(slot)
 			end

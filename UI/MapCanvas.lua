@@ -652,7 +652,7 @@ function MapCanvas.Install(view)
 						if not compact and m.toFloor and plan.floors[m.toFloor] then
 							local to = string.format(L["to %s"], ns.Names.Floor(plan.floors[m.toFloor], m.toFloor))
 							local text = b.label:GetText() or ""
-							b.label:SetText(text ~= "" and (text .. "  \194\183  " .. to) or to)
+							b.label:SetText(text ~= "" and (text .. "  \226\128\162  " .. to) or to)
 							S.TextColor(b.label, "goldBright")
 						end
 						b:Show()

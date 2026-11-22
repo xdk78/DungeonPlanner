@@ -49,13 +49,13 @@ function UI.StepText(plan, step)
 	if step.floor and #plan.floors > 1 and plan.floors[step.floor] then
 		local floorName = ns.Names.Floor(plan.floors[step.floor], step.floor)
 		if floorName ~= ns.Names.Instance(plan.instance) and floorName ~= plan.instance.name then
-			caption = caption .. "  ·  " .. floorName
+			caption = caption .. "  •  " .. floorName
 		end
 	end
 	-- Stairs or a portal on the way: where it leads (a second click on the step goes there, UI/SidePanel.lua).
 	local link = UI.StepLink(plan, step)
 	if link then
-		caption = caption .. "  ·  " .. string.format(L["to %s"], ns.Names.Floor(plan.floors[link], link))
+		caption = caption .. "  •  " .. string.format(L["to %s"], ns.Names.Floor(plan.floors[link], link))
 	end
 	return title, caption, approx, note
 end
@@ -66,7 +66,7 @@ function UI.StepLink(plan, step)
 	return m and m.toFloor and m.toFloor ~= step.floor and plan.floors[m.toFloor] and m.toFloor or nil
 end
 
--- A pull's plan marks as one short line: its tags, planned cooldowns and Bloodlust ("Interrupt · CC · CDs · Lust"),
+-- A pull's plan marks as one short line: its tags, planned cooldowns and Bloodlust ("Interrupt • CC • CDs • Lust"),
 -- and with opts.progress its planned forces ("34%"). "" when it has none. opts.long uses the full names.
 function UI.PullMarks(pull, opts)
 	opts = opts or {}
@@ -87,6 +87,6 @@ function UI.PullMarks(pull, opts)
 	if opts.progress and pull.progress then
 		parts[#parts + 1] = string.format(L["%d%%"], pull.progress)
 	end
-	return table.concat(parts, "  ·  ")
+	return table.concat(parts, "  •  ")
 end
 

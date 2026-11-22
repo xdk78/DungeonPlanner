@@ -185,7 +185,7 @@ T.case("Boss info: level text, the line under a name, and the sections in readin
 	T.eq(BI.LevelText("??"), "Level ??")
 	T.eq(BI.LevelText("x"), nil)
 	T.eq(BI.LevelText(16), nil)
-	T.eq(BI.Meta({ level = "16", rare = true }), "Level 16 \194\183 Rare")
+	T.eq(BI.Meta({ level = "16", rare = true }), "Level 16 \226\128\162 Rare")
 	T.eq(BI.Meta({ rare = true }), "Rare")
 	T.eq(BI.Meta({}), nil)
 	T.eq(BI.Meta(nil), nil)

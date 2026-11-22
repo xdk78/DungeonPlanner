@@ -161,7 +161,7 @@ function SidePanel.Create(parent, ctx)
 			if step.kind == "pull" then
 				local marks = UI.PullMarks(ns.Util.FindById(plan.pulls, step.pull), { progress = true })
 				if marks ~= "" then
-					caption = caption .. "  ·  " .. marks
+					caption = caption .. "  •  " .. marks
 				end
 			end
 			-- Cut after a whole word when the floor name and marks do not fit (the tooltip has it whole).
@@ -295,7 +295,7 @@ function SidePanel.Create(parent, ctx)
 		if not plan then
 			self.state:SetText(L["No plan for this instance yet"])
 		elseif bundled then
-			self.state:SetText(L["Recommended plan · read-only"])
+			self.state:SetText(L["Recommended plan • read-only"])
 		elseif plan.origin then
 			self.state:SetText(L["Your copy of a recommended plan"])
 		else

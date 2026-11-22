@@ -163,7 +163,7 @@ function Panel.Create(parent, ctx)
 			local enc = a.encounter and Util.FindById(plan().encounters, a.encounter)
 			local meta = enc and ns.Names.Encounter(enc) or L["General"]
 			if a.phase and enc and enc.phases[a.phase] then
-				meta = meta .. " \194\183 " .. (enc.phases[a.phase].name ~= "" and enc.phases[a.phase].name or (L["Phase"] .. " " .. a.phase))
+				meta = meta .. " \226\128\162 " .. (enc.phases[a.phase].name ~= "" and enc.phases[a.phase].name or (L["Phase"] .. " " .. a.phase))
 			end
 			row.meta:SetText(meta)
 		end,

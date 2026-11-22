@@ -1,5 +1,5 @@
 -- The main window: a war table, as a raid leader would brief from.
---   header      emblem and title · (instance page) back, instance and plan pickers, plan menu, undo · settings, close
+--   header      emblem and title • (instance page) back, instance and plan pickers, plan menu, undo • settings, close
 --   body        Home (UI/Home.lua): the instance table and a preview of the selected instance
 --               Instance page (UI/InstancePage.lua): the plan's steps and party on the left, the section (the map by
 --               default) filling the rest
@@ -269,8 +269,8 @@ function UI.PlanSource(plan)
 			confidence = confidence or tag:match("^confidence: (%a+)$")
 		end
 		local when = day(plan.updated)
-		short = when and string.format(L["Recommended plan · revision %d · data from %s"], plan.rev or 1, when)
-			or string.format(L["Recommended plan · revision %d"], plan.rev or 1)
+		short = when and string.format(L["Recommended plan • revision %d • data from %s"], plan.rev or 1, when)
+			or string.format(L["Recommended plan • revision %d"], plan.rev or 1)
 		lines[#lines + 1] = string.format(L["Source: %s, community research with approximate positions."], plan.author)
 		if confidence then
 			lines[#lines + 1] = string.format(L["Confidence: %s"], L["confidence:" .. confidence])
@@ -504,7 +504,7 @@ function UI.RefreshFooter()
 	-- The same number the "My plans" list shows (recommended plans are not counted: they are not yours).
 	parts[#parts + 1] = string.format(L["My plans: %d"], #ns.DB.Plans())
 	local status = frame.footer.status
-	status:SetText(table.concat(parts, "  ·  "))
+	status:SetText(table.concat(parts, "  •  "))
 	-- On a narrow window the sections and Run mode need the line: the status gives way.
 	local page = frame.instancePage
 	-- The game's window tabs hang under the window; only the drawn section bar shares this line.
