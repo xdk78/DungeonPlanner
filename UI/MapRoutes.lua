@@ -18,8 +18,10 @@
 --
 -- Everything comes from pools on the view (casings, lines, joints, arrows) and is redrawn only when the map redraws
 -- (plan, view, focus or setting changes), never per frame; the pieces, dashes and colours are worked out in that
--- redraw and bounded (ROUTE.ramp.pieces per route, ROUTE.maxDashes in all). The map places the arrows after its pins
--- and labels (DrawRouteArrows), so they keep clear of them; a draw without them places the arrows at once.
+-- redraw and bounded (ROUTE.ramp.pieces per route; ROUTE.maxDashes in all, only on the visible map and its margin).
+-- While the map is busy (a drag or resize) the lines are drawn plain, and the full look comes when that ends. The map
+-- places the arrows after its pins and labels (DrawRouteArrows), so they keep clear of them; a draw without them places
+-- the arrows at once.
 
 local _, ns = ...
 local MapRoutes = ns:NewModule("MapRoutes")
@@ -85,12 +87,19 @@ function MapRoutes.Ramp(r, g, b)
 	return ramp
 end
 
+-- A route's colours under one Look (worked out once per route and redraw): its colour, and its ramp while the colour
+-- runs along the route (nil otherwise).
+local function routeColors(route, own, look)
+	local r, g, b = S.PaletteColor(own and look.color or route.color)
+	return r, g, b, own and look.ramp and MapRoutes.Ramp(r, g, b) or nil
+end
+
 -- A route's colour at t (0 = its start, 1 = its end): the ramp's for the plan's own routes while "Colour along the
 -- route" is on, else its one colour.
 function MapRoutes.ColorAt(route, own, t)
-	local r, g, b = MapRoutes.Color(route, own)
-	if own and MapRoutes.Look(1).ramp then
-		return RouteLook.At(MapRoutes.Ramp(r, g, b), t)
+	local r, g, b, ramp = routeColors(route, own, MapRoutes.Look(1))
+	if ramp then
+		return RouteLook.At(ramp, t)
 	end
 	return r, g, b
 end
@@ -153,11 +162,23 @@ function MapRoutes.Install(view)
 	-- frames above all of these.
 	local OUTLINE, LINE, TOP_OUTLINE, TOP_LINE = 0, 1, 2, 3
 
+	-- While a marker or route point is dragged, or a window is being resized, the map redraws on every pointer move: the
+	-- paths are drawn plain then and the arrows wait (settle, below).
+	local function busy(v)
+		local mode = v.drag and v.drag.mode
+		-- No button held any more: the size grip's release was lost, so the resize is over (UI/Window.lua).
+		if ns.sizingWindow and IsMouseButtonDown and not IsMouseButtonDown() then
+			ns.sizingWindow = nil
+		end
+		return mode == "marker" or mode == "point" or ns.sizingWindow ~= nil
+	end
+
 	-- Draw every route path on `floor`. px, py: plan coordinates to canvas offsets (py negative downwards). o = { scale
 	-- (icon size), seg (the focused step's { route, from, to } or nil), highlight (a leg { route, from, to } drawn as the
 	-- hover highlight: run mode's current step), activeRoute, extra (more routes in the map's own coordinates: another
 	-- addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows (the caller places the
-	-- arrows with PlaceRouteArrows once its pins are laid out), restyle (a hover change: same paths, new looks) }.
+	-- arrows with PlaceRouteArrows once its pins are laid out), bounds (where dashes are made, canvas offsets y up: the
+	-- visible map and its margin; nil: everywhere), restyle (a hover change: same paths, new looks) }.
 	-- view.routeHover, the leg under the pointer or a hovered step (SetRouteHover), wins over o.highlight; either counts
 	-- only when its route is among the routes drawn. Returns the counts drawn.
 	function view:DrawRoutePaths(plan, floor, px, py, o)
@@ -195,14 +216,16 @@ function MapRoutes.Install(view)
 		local jobs = { paths = {}, styles = {}, routes = {}, raw = {}, ranges = {}, look = look, u = u, counts = n, hl = hl }
 		self.routeJobs = jobs
 		local casing = R.casing
-		local dashBudget = R.maxDashes
+		-- While a marker or route point is dragged or a window resized (busy), one plain piece per segment and no dashes;
+		-- the full look comes when that ends (settle).
+		local lite = busy(self)
+		self.routesLite = lite or nil
+		-- First every route's drawn path, so all routes share the dashes' budget: one scale for every route, from the
+		-- length of their ways back inside o.bounds (the visible map and the arrows' margin).
+		local need = 0
 		for _, entry in ipairs(all) do
 			local route = entry.route
 			if drawn(route) then
-				local r, g, b = MapRoutes.Color(route, entry.own)
-				local ramp = entry.own and look.ramp and MapRoutes.Ramp(r, g, b) or nil
-				local alpha = (route.optional and 0.55 or 1) * look.opacity
-				local thickness = look.width + (route.id == o.activeRoute and u or 0)
 				local fx, fy = px, py
 				if route.mapSpace then
 					fx, fy = o.mx or px, o.my or py
@@ -213,8 +236,25 @@ function MapRoutes.Install(view)
 				end
 				-- A corridor walked out and back draws as two lanes, the two directions moved apart
 				-- (Model/RouteLegs.lua); lanes[k].seg is the route's own segment for drawn segment k.
-				local wide = thickness + look.outline
-				local lanes = ns.RouteLegs.Lanes(raw, { shift = wide * R.lane, near = wide * 1.2, yUp = true })
+				entry.thickness = look.width + (route.id == o.activeRoute and u or 0)
+				entry.wide = entry.thickness + look.outline
+				entry.raw = raw
+				entry.lanes = ns.RouteLegs.Lanes(raw, { shift = entry.wide * R.lane, near = entry.wide * 1.2, yUp = true })
+				if not lite then
+					-- A dash and its gap per period, and up to two more per segment of the way back (a dash cut where the
+					-- segment or the bounds begin and end): so the scale below keeps the count within maxDashes.
+					local len, parts = RouteLook.BackLength(entry.lanes, o.bounds)
+					need = need + len / ((R.dash[1] + R.dash[2]) * entry.wide) + 2 * parts
+				end
+			end
+		end
+		local dashScale = math.max(1, need / R.maxDashes)
+		for _, entry in ipairs(all) do
+			local route = entry.route
+			if drawn(route) then
+				local r, g, b, ramp = routeColors(route, entry.own, look)
+				local alpha = (route.optional and 0.55 or 1) * look.opacity
+				local thickness, wide, raw, lanes = entry.thickness, entry.wide, entry.raw, entry.lanes
 				local along = ramp and RouteLook.Along(route.points)
 				local focusHere = seg and seg.route == route.id
 				-- Where (x, y) on drawn segment k lies along the route, 0..1: between its own segment's two points.
@@ -253,14 +293,10 @@ function MapRoutes.Install(view)
 					x, y = x or (a[1] + c[1]) / 2, y or (a[2] + c[2]) / 2
 					return segLook(lanes[k].seg or k, tAt(k, x, y))
 				end
-				-- The pieces to draw: a long stretch cut so its colour flows, the way back as dashes.
-				local dash
-				if dashBudget >= 8 then
-					dash = { on = R.dash[1] * wide, off = R.dash[2] * wide }
-				end
-				local pieces, dashes = RouteLook.Pieces(lanes, { steps = ramp and R.ramp.pieces or nil, dash = dash,
-					limit = dashBudget })
-				dashBudget = dashBudget - dashes
+				-- The pieces to draw: a long stretch cut so its colour flows, the way back as dashes (inside o.bounds).
+				local dash = not lite and { on = R.dash[1] * wide * dashScale, off = R.dash[2] * wide * dashScale } or nil
+				local pieces, dashes = RouteLook.Pieces(lanes, { steps = not lite and ramp and R.ramp.pieces or nil,
+					dash = dash, bounds = o.bounds })
 				n.dashes = n.dashes + dashes
 				-- The dark casing under a piece: x0, y0 .. x1, y1 for a line `th` wide at alpha `ca`.
 				local function case(x0, y0, x1, y1, th, ca, top)
@@ -284,13 +320,14 @@ function MapRoutes.Install(view)
 						l:SetThickness(th)
 						l:SetVertexColor(cr, cg, cb, ca)
 						l:Show()
+						l.dpDash = p.dash and route.id or nil -- a dash of this route's way back (for the tests)
 						if not p.dash then
 							case(p[1], p[2], p[3], p[4], th, ca, top)
 						end
 					end
 				end
 				-- The way back: its casing runs on under the dashes, so it reads as one dashed line.
-				for k = 2, dashes > 0 and #lanes or 0 do
+				for k = 2, dash and #lanes or 0 do
 					if lanes[k].back then
 						local a, c = lanes[k - 1], lanes[k]
 						local _, _, _, ca, th, _, top = laneLook(k)
@@ -300,7 +337,7 @@ function MapRoutes.Install(view)
 				-- A joint takes the look of the segment that arrives at the bend; inside a dashed stretch only its casing.
 				for _, k in ipairs(ns.RouteArrows.Joints(lanes)) do
 					local p = lanes[k]
-					local dashed = dashes > 0 and p.back and lanes[k + 1] and lanes[k + 1].back
+					local dashed = dash and p.back and lanes[k + 1] and lanes[k + 1].back
 					local cr, cg, cb, ca, th, _, top = laneLook(k, p[1], p[2])
 					n.joints = n.joints + 1
 					local outer, inner = disc(pools.jointOutlines, n.joints, OUTLINE), disc(pools.joints, n.joints, LINE)
@@ -377,13 +414,18 @@ function MapRoutes.Install(view)
 		local scale, seg = c.scale, c.seg
 		local u = math.max(0.75, scale)
 		local drag = self.drag and self.drag.mode == "point" and self.drag or nil
+		local look = MapRoutes.Look(1) -- once per redraw: the colours below need only its colour and ramp
 		for _, route in ipairs(plan.routes) do
 			if route.floor == floor then
-				local along = RouteLook.Along(route.points)
+				local r0, g0, b0, ramp = routeColors(route, true, look)
+				local along = ramp and RouteLook.Along(route.points)
 				local active = route.id == c.activeRoute
 				for i, pt in ipairs(route.points) do
 					if (pt.step and not c.compact) or active or c.editing then
-						local r, g, b = MapRoutes.ColorAt(route, true, along[i])
+						local r, g, b = r0, g0, b0
+						if ramp then
+							r, g, b = RouteLook.At(ramp, along[i])
+						end
 						count = count + 1
 						local p = c.getPoint(count)
 						p.routeId, p.pointIndex = route.id, i
@@ -527,16 +569,19 @@ function MapRoutes.Install(view)
 		return drawMarks(self, marks)
 	end
 
-	-- While a marker or route point is dragged, or a window is being resized, the map redraws on every pointer move:
-	-- the arrows hide then and are placed once the drag or resize ends (a short timer checks; a stale tick does nothing).
-	local function busy(v)
-		local mode = v.drag and v.drag.mode
-		-- No button held any more: the size grip's release was lost, so the resize is over (UI/Window.lua).
-		if ns.sizingWindow and IsMouseButtonDown and not IsMouseButtonDown() then
-			ns.sizingWindow = nil
+	-- The paths DrawRoutePaths drew last, drawn again in a new look (a hover change, or the end of a drag).
+	local function redrawPaths(v)
+		local args = v.routeArgs
+		local o = {}
+		for k, value in pairs(args[5]) do
+			o[k] = value
 		end
-		return mode == "marker" or mode == "point" or ns.sizingWindow ~= nil
+		o.restyle = true
+		return v:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
 	end
+
+	-- While the map is busy (a drag or resize) its arrows hide and are placed once that ends (a short timer checks; a
+	-- stale tick does nothing), with the paths' full look when they were drawn plain meanwhile.
 	local function settle()
 		view.arrowTimer = nil
 		if not view.arrowsPending then
@@ -549,6 +594,9 @@ function MapRoutes.Install(view)
 		end
 		view.arrowsPending = nil
 		if view:IsVisible() then
+			if view.routesLite and view.routeArgs then
+				view.routeCounts = redrawPaths(view)
+			end
 			local n = view:DrawRouteArrows(view.arrowObstacles)
 			if view.counts then
 				view.counts.arrows = n
@@ -587,14 +635,8 @@ function MapRoutes.Install(view)
 			return false
 		end
 		self.routeHover, self.routeHoverSource = leg, leg and source or nil
-		local args = self.routeArgs
-		if args and self:IsVisible() then
-			local o = {}
-			for k, v in pairs(args[5]) do
-				o[k] = v
-			end
-			o.restyle = true
-			self:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
+		if self.routeArgs and self:IsVisible() then
+			redrawPaths(self)
 			local n = drawMarks(self, self.routeMarks)
 			if self.counts then
 				self.counts.arrows = n

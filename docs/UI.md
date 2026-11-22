@@ -490,10 +490,13 @@ tritanopia. A stretch longer than 1/48 of the route is drawn in pieces so its co
 the steps list's stop badges and the arrows take the colour at their place. With "one colour for every route" the ramp
 starts on that colour; with the setting off a route has one colour. Another addon's routes keep their one colour.
 
-**The way back is dashed.** Of the two lanes of a corridor walked out and back (below), the second pass is drawn as
-dashes over a continuous casing, so the two lanes read as "there" (solid) and "back" (dashed). Dashes are two outlined
-widths long with gaps of 1.2; they are worked out with the redraw, at most 600 per redraw (longer dashes and gaps
-beyond that).
+**The way back is dashed.** Of the two lanes of a corridor walked out and back (below), the pass that runs against
+the corridor's first pass is drawn as dashes over a continuous casing, so the two lanes read as "there" (solid) and
+"back" (dashed). A third pass the first pass's way is solid again and shares its lane (the same direction, the same
+side). Dashes are two outlined widths long with gaps of 1.2; they are worked out with the redraw, only on the visible
+map and the arrows' margin (below), spaced as if drawn all along so a pan inside the margin shows the same dashes. All
+routes share one budget of 600 per redraw: when their ways back inside that area would need more, every route's
+dashes and gaps grow by the same factor.
 
 Direction arrows are small solid arrowheads (`Media/RouteArrowEdge.tga`, with a thin dark edge baked in;
 `Media/RouteArrow.tga` without it), tinted a lighter tone of the line and a little wider than the outlined line, so they
@@ -507,14 +510,16 @@ map redraw, after the pins and labels are laid out, only on the visible part of 
 on every side (at most 200 per route and 400 in all), never per frame. A pan moves the canvas without a redraw, so the
 margin's arrows show on the map it reveals; past that margin they come with the redraw on release. The margin costs
 up to a fifth more per redraw than the visible part alone (measured with the instruction count of `tests/test_perf.lua`
-on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide, and
-they are placed once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its
-release, when the window hides, or when the timer finds no mouse button held). Every
+on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide and the
+lines are drawn plain (one piece per segment, the way back solid), and the full look and the arrows come once when that
+ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its release, when the window
+hides, or when the timer finds no mouse button held). Every
 part of a route takes its colour from `MapRoutes.ColorAt`: lines, arrows, stop rings and bend discs. While a step
 is in focus its leg is brighter and wider and the rest of the path dims (as with the hover highlight, below). Numbered
 stops are dark discs with a ring in the route's colour at that stop, drawn above the path. While a route is edited,
-a bend's small handle that a pin or stop covers is left out (`MapLayout.Nudge` marks it), so a click there takes the
-pin and the two never overlap; zooming in shows it again, and the point being dragged always shows. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
+a bend's small handle whose centre lies inside a pin's or stop's click area is left out (`MapLayout.Nudge` marks it),
+since a click there takes the pin; a bend that only touches a pin stays, zooming in shows a covered one again, and the
+point being dragged always shows. Arrows are turned in their texture coordinates (`MapPins.TurnedCoords`), not
 with `SetRotation`, which left every arrow pointing up in game.
 
 **Route settings.** The Routes group in the Settings panel changes the look at once, on the map and in run mode: line

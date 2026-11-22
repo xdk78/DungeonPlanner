@@ -218,7 +218,7 @@ local function layoutItem(list, b, x, y, size, kind, prio)
 	local text = b.label:GetText()
 	local w = (text and text ~= "") and math.ceil(b.label:GetStringWidth() or 0) + 2 * PLATE_X or 0
 	local r = (b.dpRingKey == "pinRing" and b.ring:IsShown()) and size * RING_REACH or size / 2
-	list[#list + 1] = { b = b, x = x, y = y, r = r, kind = kind, w = w, h = LABEL_H, prio = prio }
+	list[#list + 1] = { b = b, x = x, y = y, r = r, hit = size / 2, kind = kind, w = w, h = LABEL_H, prio = prio }
 end
 local function applyLayout(list, canvas, avoid, bounds)
 	ns.MapLayout.Nudge(list)

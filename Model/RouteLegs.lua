@@ -47,8 +47,9 @@ end
 -- o: { shift (how far each lane moves aside), near (segments closer than this, running opposite ways, are an
 -- out-and-back stretch), yUp (true when y grows upwards, as in canvas offsets: decides which side is right) }.
 -- Returns a new list of points { x, y, stop, i (the original point; nil for a point added inside a segment), seg (the
--- original segment ending here), lane (moved onto a lane), back (the drawn segment ending here lies on the lane of
--- the second pass through a corridor: the way back) } and whether any segment moved. Each segment of such a stretch moves away from its
+-- original segment ending here), lane (moved onto a lane), back (the drawn segment ending here lies on a lane that
+-- runs against the corridor's first pass: the way back; a third pass the first's way is not, and shares its lane) }
+-- and whether any segment moved. Each segment of such a stretch moves away from its
 -- partner (the opposite segment it runs alongside the longest), to its own right when the two lie on one line. Only
 -- the part a segment shares with its partner moves: a long segment with a short way back is split, with a short
 -- slant to the lane where the shared part begins and back where it ends. Where the path turns back on a shifted
@@ -82,12 +83,20 @@ function RouteLegs.Lanes(pts, o)
 	for i = 2, n do
 		local s = segs[i]
 		if s then
-			local partner, shared = nil, 0
+			-- partner: the opposite segment s runs alongside the longest; first: the earliest segment before s that runs
+			-- alongside it either way (the corridor's first pass).
+			local partner, shared, first = nil, 0, nil
 			G.GridAny(grid, min(s.ax, s.bx), min(s.ay, s.by), max(s.ax, s.bx), max(s.ay, s.by), function(t)
-				if t ~= s and s.ux * t.ux + s.uy * t.uy < -ANTI then
+				local dot = s.ux * t.ux + s.uy * t.uy
+				if t ~= s and (dot < -ANTI or (dot > ANTI and t.i < s.i)) then
 					local ov = overlap(s, t)
-					if ov > shared and ov > min(near, s.len / 3) and segSegDist(s, t) < near then
-						partner, shared = t, ov
+					if ov > min(near, s.len / 3) and segSegDist(s, t) < near then
+						if dot < -ANTI and ov > shared then
+							partner, shared = t, ov
+						end
+						if t.i < s.i and (not first or t.i < first.i) then
+							first = t
+						end
 					end
 				end
 				return false
@@ -101,7 +110,9 @@ function RouteLegs.Lanes(pts, o)
 				s.lo = lo > ramp and lo or 0
 				s.hi = s.len - hi > ramp and hi or s.len
 				s.sx, s.sy = s.rx * side, s.ry * side -- the unit step towards its lane
-				s.back = partner.i < s.i -- the second pass through the corridor: the way back
+				-- The way back: against the direction of the corridor's first pass. A third pass that goes the first's
+				-- way is solid again, in the first's lane (the same side of the corridor).
+				s.back = first ~= nil and s.ux * first.ux + s.uy * first.uy < 0
 				moved = true
 			end
 		end

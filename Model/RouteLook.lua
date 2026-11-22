@@ -10,6 +10,8 @@
 --   RouteLook.Desaturate(r, g, b, k)  the colour moved towards a grey of its own lightness by k (0..1).
 --   RouteLook.Along(points)           each point's place along the route, 0..1, by distance.
 --   RouteLook.Pieces(pts, o)          the pieces to draw a path (Model/RouteLegs.lua Lanes) in.
+--   RouteLook.BackLength(pts, bounds) how long a path's way back is inside bounds (what its dashes cost).
+--   RouteLook.Clip(ax, ay, bx, by, b) the part of a segment inside a rectangle, t0 and t1 along it.
 --
 -- The ramp runs in Oklch (Oklab's lightness, chroma and hue). o (UI/Style.lua ROUTE.ramp) = { turn (degrees of hue
 -- from the start to the end), lift (how far the end's lightness moves: lighter when the start is darker than mid,
@@ -171,35 +173,84 @@ function RouteLook.Along(points)
 	return out
 end
 
+-- The part of segment (ax, ay)..(bx, by) inside the rectangle b = { x1, y1, x2, y2 }: t0, t1 (0..1 along it), or nil
+-- when it lies outside (Liang-Barsky).
+local function clip(ax, ay, bx, by, b)
+	local t0, t1 = 0, 1
+	local dx, dy = bx - ax, by - ay
+	for _, pq in ipairs({ { -dx, ax - b[1] }, { dx, b[3] - ax }, { -dy, ay - b[2] }, { dy, b[4] - ay } }) do
+		local p, q = pq[1], pq[2]
+		if p == 0 then
+			if q < 0 then
+				return nil
+			end
+		else
+			local r = q / p
+			if p < 0 then
+				if r > t1 then
+					return nil
+				end
+				t0 = max(t0, r)
+			else
+				if r < t0 then
+					return nil
+				end
+				t1 = min(t1, r)
+			end
+		end
+	end
+	return t0, t1
+end
+RouteLook.Clip = clip
+
+-- The length of a drawn path's way back (pts as for Pieces) inside bounds ({ x1, y1, x2, y2 }; nil: all of it), and
+-- how many of its segments lie (partly) inside.
+function RouteLook.BackLength(pts, bounds)
+	local total, parts = 0, 0
+	for k = 2, #pts do
+		if pts[k].back then
+			local a, b = pts[k - 1], pts[k]
+			local len = sqrt((b[1] - a[1]) ^ 2 + (b[2] - a[2]) ^ 2)
+			local t0, t1 = 0, 1
+			if bounds then
+				t0, t1 = clip(a[1], a[2], b[1], b[2], bounds)
+			end
+			if t0 then
+				total, parts = total + len * (t1 - t0), parts + 1
+			end
+		end
+	end
+	return total, parts
+end
+
 -- pts: a drawn path (RouteLegs.Lanes: points { x, y, seg, back }), segment k joining pts[k - 1] and pts[k]; a point
 -- with `back` ends a stretch on a corridor's way back. o = { steps (a stretch longer than 1/steps of the path is cut
 -- into pieces that long, at most `split` pieces; nil: one piece per segment), split, dash = { on, off } (dash and gap
--- lengths on the way back; nil: no dashes), limit (most dashes in all: longer dashes and gaps when there would be more) }.
--- Returns the pieces { x0, y0, x1, y1, k, dash = true? } in path order, and how many of them are dashes.
+-- lengths on the way back; nil: no dashes), bounds ({ x1, y1, x2, y2 }: dashes only inside it, their spacing kept as
+-- if drawn all along; nil: everywhere), limit (most dashes inside the bounds: longer dashes and gaps when there would
+-- be more; nil: as given) }. Returns the pieces { x0, y0, x1, y1, k, dash = true? } in path order, and how many of
+-- them are dashes.
 local TINY = 1e-6 -- screen units: a rest shorter than this is no dash or gap
 function RouteLook.Pieces(pts, o)
 	o = o or {}
 	local n = #pts
-	local lens, total, backLen = {}, 0, 0
+	local lens, total = {}, 0
 	for k = 2, n do
 		local a, b = pts[k - 1], pts[k]
 		local len = sqrt((b[1] - a[1]) ^ 2 + (b[2] - a[2]) ^ 2)
 		lens[k] = len
 		total = total + len
-		if pts[k].back then
-			backLen = backLen + len
-		end
 	end
-	local dash = o.dash
+	local dash, bounds = o.dash, o.bounds
 	local on, off
-	if dash and backLen > 0 then
+	if dash then
 		on, off = dash.on, dash.off
-		local limit = o.limit or 400
-		local count = backLen / (on + off)
-		if count > limit then
-			on, off = on * count / limit, off * count / limit
+		local count = o.limit and RouteLook.BackLength(pts, bounds) / (on + off) or 0
+		if o.limit and count > o.limit then
+			on, off = on * count / o.limit, off * count / o.limit
 		end
 	end
+	local period = on and on + off
 	local step = o.steps and total > 0 and total / o.steps or nil
 	local split = o.split or 8
 	local out, dashes = {}, 0
@@ -214,21 +265,32 @@ function RouteLook.Pieces(pts, o)
 				if not pts[k - 1].back then
 					phase = 0 -- a new stretch starts with a dash
 				end
-				local pos = 0
-				while pos < len - TINY do
-					if phase < on - TINY then
-						local e = min(len, pos + on - phase)
-						out[#out + 1] = { a[1] + dx * pos, a[2] + dy * pos, a[1] + dx * e, a[2] + dy * e, k, dash = true }
-						dashes = dashes + 1
-						phase = phase + (e - pos)
-						pos = e
-					elseif phase < on + off - TINY then
-						local e = min(len, pos + on + off - phase)
-						phase = phase + (e - pos)
-						pos = e
-					else
-						phase = 0
+				-- Only the part inside the bounds gets dashes; the rest moves the phase on.
+				local t0, t1 = 0, 1
+				if bounds then
+					t0, t1 = clip(a[1], a[2], b[1], b[2], bounds)
+				end
+				if not t0 then
+					phase = (phase + len) % period
+				else
+					local pos, stop = len * t0, len * t1
+					phase = (phase + pos) % period
+					while pos < stop - TINY do
+						if phase < on - TINY then
+							local e = min(stop, pos + on - phase)
+							out[#out + 1] = { a[1] + dx * pos, a[2] + dy * pos, a[1] + dx * e, a[2] + dy * e, k, dash = true }
+							dashes = dashes + 1
+							phase = phase + (e - pos)
+							pos = e
+						elseif phase < period - TINY then
+							local e = min(stop, pos + period - phase)
+							phase = phase + (e - pos)
+							pos = e
+						else
+							phase = 0
+						end
 					end
+					phase = (phase + (len - pos)) % period
 				end
 			else
 				local m = step and max(1, min(split, ceil(len / step - 1e-9))) or 1

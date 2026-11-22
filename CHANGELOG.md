@@ -133,7 +133,10 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 - A marker's long title in the map's details panel no longer runs under its close button: it is cut after a word,
-  with the whole title in a tooltip. While a route is edited, a bend's handle no longer overlaps a pin or stop.
+  with the whole title in a tooltip, also the first time the panel opens. While a route is edited, a bend's handle
+  under a pin or stop gives way to it; one right beside a stop stays.
+- The map legend's route swatches show the colour the map draws the route in, also when the Routes settings give every
+  route one colour.
 - **Gear filters**: choosing a class now changes the drop list. The drops come from Dungeon Planner's boss data or
   another addon as item IDs, and the class and role filters were not applied to them. A class shows the items it can
   wear and wield at full level, by the current game rules (armor up to its heaviest type, the weapons and shields it

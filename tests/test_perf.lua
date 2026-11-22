@@ -226,3 +226,68 @@ T.case("Perf: the Enemies layer and boss portraits are computed once per plan re
 	T.ok(pairs_ > before, "and again after a change")
 	ns.Journal.EncounterFor = realFor
 end)
+
+T.case("Perf: a route point drag redraws Wailing Caverns' routes in their plain look", function()
+	boot()
+	local copy = ns.UI.CopyPlan(ns.Bundled.Get(ns.Bundled.PREFIX .. "wailing-caverns"))
+	local route = copy.routes[1]
+	ns.UI.ctx.tool, ns.UI.ctx.floor, ns.UI.ctx.activeRoute = "route", route.floor, route.id
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+	local view = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
+	local function paths()
+		local a = view.routeArgs
+		return view:DrawRoutePaths(a[1], a[2], a[3], a[4], a[5])
+	end
+	-- One redraw at rest and one while the point is dragged, at a zoom (centred), after a warm-up redraw.
+	local function measure(zoom)
+		view.zoom = zoom
+		view:Layout()
+		view.ox = (view:GetWidth() - view.canvas:GetWidth()) / 2
+		view.oy = (view:GetHeight() - view.canvas:GetHeight()) / 2
+		view:Layout()
+		local m = {}
+		m.still = cost(function()
+			view:DrawContent()
+		end)
+		m.stillPaths, m.full = cost(paths), view.routeCounts
+		view.drag = { mode = "point", routeId = route.id, index = 2 }
+		m.dragged = cost(function()
+			view:DrawContent()
+		end)
+		m.draggedPaths = cost(paths)
+		m.segments = 0
+		for _, path in ipairs(view.routeJobs.paths) do
+			m.segments = m.segments + #path.pts - 1
+		end
+		m.drag = { dashes = view.routeCounts.dashes, lines = view.routeCounts.lines, arrows = view.counts.arrows }
+		-- Released: the full look again once the settle timer runs.
+		view.drag = { mode = "idle" }
+		mock.Advance(0.2)
+		m.released = { dashes = view.routeCounts.dashes, arrows = view.counts.arrows }
+		return m
+	end
+	view:DrawContent()
+	local whole, close = measure(1), measure(4)
+	for _, m in ipairs({ whole, close }) do
+		-- While dragging: one piece per drawn segment, no dashes, no arrows; the full look on release.
+		T.eq(m.drag.dashes, 0, "no dashes while dragging")
+		T.eq(m.drag.lines, m.segments, "one piece per segment")
+		T.eq(m.drag.arrows, 0, "no arrows while dragging")
+		T.eq(m.released.dashes, m.full.dashes, "dashed again on release")
+		T.ok(m.released.arrows > 0, "arrows again on release")
+	end
+	T.ok(whole.full.dashes > 0 and close.full.dashes > whole.full.dashes, "at rest: the way back dashed")
+	-- Counted alone (lua tests/run.lua "Perf: a route point"), whole map / zoom 4: a redraw while dragging 3660k / 2760k
+	-- (before the plain look 3706k / 2820k), its route paths 543k / 806k (554k / 830k). Most of a path's cost is the
+	-- lane split (RouteLegs.Lanes, about 60%), which the plain look keeps; the rest of the redraw is pins and labels.
+	for _, m in ipairs({ whole, close }) do
+		T.ok(m.draggedPaths < m.stillPaths and m.drag.lines < m.full.lines, string.format(
+			"paths while dragging: %dk in %d pieces against %dk in %d", m.draggedPaths, m.drag.lines, m.stillPaths,
+			m.full.lines))
+	end
+	view.zoom = 1
+	view:Layout()
+	ns.UI.ctx.tool, ns.UI.ctx.activeRoute = "select", nil
+	ns.DB.DeletePlan(copy.id)
+end)

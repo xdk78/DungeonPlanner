@@ -48,11 +48,19 @@ function MapEditor.Build(f, ctx, rail, h)
 			tt:Hide()
 		end
 	end)
+	ed.headTip = headTip
 	-- Set the title (cut to fit; the tooltip only while it is cut).
 	function ed:SetTitle(text)
+		self.title = text
 		local _, cut = W.FitText(self.heading, text)
 		headTip:EnableMouse(cut)
 	end
+	-- Fitted again when the pane's size changes: on first open the heading has no width yet when the title is set.
+	ed:HookScript("OnSizeChanged", function(self)
+		if self.title then
+			self:SetTitle(self.title)
+		end
+	end)
 	-- Details of a recommended plan's marker: a scrolling document (a boss: portrait, name and level, then what Dungeon
 	-- Journal states about it, the plan's strategy and the note).
 	ed.details = W.Document(ed)

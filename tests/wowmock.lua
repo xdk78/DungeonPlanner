@@ -173,6 +173,18 @@ local coreInstall = M.Install
 -- (loading screens, old map tiles) are known only when a test puts them in M.files, as before.
 M.artFiles, M.missingFiles = {}, {}
 
+-- Whether a frame takes the mouse: as last set with EnableMouse (true until then, as the harness answers).
+M.DEFAULTS.IsMouseEnabled = function(self)
+	return self._mouse ~= false
+end
+
+-- Whether a font string's text is cut: only one given a width (SetWidth; the mock lays out no anchors), measured at
+-- the mock's 6 units a letter.
+M.DEFAULTS.IsTruncated = function(self)
+	local w = self._w
+	return w ~= nil and w > 0 and self:GetUnboundedStringWidth() > w + 0.5
+end
+
 -- Which mouse buttons a button takes (RegisterForClicks), for tests.
 M.DEFAULTS.RegisterForClicks = function(self, ...)
 	self._clicks = { ... }

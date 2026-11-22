@@ -159,7 +159,23 @@ function MapCanvas.Create(parent, cb)
 	MapCanvas.Install(view)
 	MapCanvas.InstallArt(view) -- UI/MapArt.lua
 	ns.MapSpawns.Install(view)
-	ns.MapRoutes.Install(view)
+	if ns.MapRoutes then
+		ns.MapRoutes.Install(view)
+	else
+		-- UI/MapRoutes.lua came with an update while the game ran: the client reads an addon's files at start, so it
+		-- loads after a restart (docs/COMPATIBILITY.md section 7; `/dp debug` says so). Until then the map has no routes.
+		local none = { lines = 0, outlines = 0, joints = 0, arrows = 0, dashes = 0 }
+		view.DrawRoutePaths = function()
+			return none
+		end
+		view.DrawRouteStops = function()
+			return 0
+		end
+		view.DrawRouteArrows, view.PlaceRouteArrows = view.DrawRouteStops, view.DrawRouteStops
+		view.SetRouteHover = function()
+			return false
+		end
+	end
 	ns.MapDraw.Install(view)
 	return view
 end
@@ -458,6 +474,23 @@ function MapCanvas.Install(view)
 		return b
 	end
 
+	-- The visible part of the map (within the gold frame) in canvas units (y down), or nil before it is laid out.
+	local function visibleBox()
+		local box = { FRAME_INSET - view.ox, FRAME_INSET - view.oy, view:GetWidth() - FRAME_INSET - view.ox,
+			view:GetHeight() - FRAME_INSET - view.oy }
+		if box[3] - box[1] < 40 or box[4] - box[2] < 40 then
+			return nil -- not laid out yet
+		end
+		return box
+	end
+	-- Where route arrows and dashes are made: the visible map and a margin of one view size on every side, in canvas
+	-- offsets (y up), so a pan (which moves the canvas without a redraw) shows them on the map it reveals; beyond that
+	-- they come with the redraw on release.
+	local function routeBounds(shown)
+		local mw, mh = shown and shown[3] - shown[1], shown and shown[4] - shown[2]
+		return shown and { shown[1] - mw, -shown[4] - mh, shown[3] + mw, -shown[2] + mh }
+	end
+
 	-- Labels keep clear of what floats over the map (the legend: view.avoidFrame, set by the map section; the note shown
 	-- when a map has no art).
 	local function applyLayout(list)
@@ -479,11 +512,7 @@ function MapCanvas.Install(view)
 		local bw, bh = view:BaseSize()
 		avoid = MapCanvas.KeepOutRects(view.artInfo, bw, bh, view:Scale(), avoid)
 		-- Labels stay inside the visible part of the map (within the gold frame), in canvas units.
-		local bounds = { FRAME_INSET - view.ox, FRAME_INSET - view.oy, view:GetWidth() - FRAME_INSET - view.ox,
-			view:GetHeight() - FRAME_INSET - view.oy }
-		if bounds[3] - bounds[1] < 40 or bounds[4] - bounds[2] < 40 then
-			bounds = nil -- not laid out yet
-		end
+		local bounds = visibleBox()
 		-- And the coordinate readout (shown while the pointer is over the map) where it is anchored: the bottom-right
 		-- corner, or above the floor switcher (UI/Panels/FloorBar.lua). Its right and bottom edges from its anchor, the
 		-- room its widest text takes measured once per font. view.coordsBox: that rectangle in canvas units.
@@ -586,7 +615,7 @@ function MapCanvas.Install(view)
 			if layerShown("route") or extra then
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
-					extra = extra, mx = mx, my = my, deferArrows = true,
+					extra = extra, mx = mx, my = my, deferArrows = true, bounds = routeBounds(visibleBox()),
 					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapRoutes.lua SetRouteHover).
 					highlight = self.cb.highlightFocus and self.cb.highlightFocus() and seg or nil })
 				nLines, pathsDrawn = drawn.lines, true
@@ -726,12 +755,9 @@ function MapCanvas.Install(view)
 			end
 			local shown = applyLayout(layout)
 			if pathsDrawn then
-				-- Arrows clear of the pins and labels, only on the visible map and a margin of one view size on every
-				-- side (canvas offsets, y up), so a pan (which moves the canvas without a redraw) shows arrows on the
-				-- map it reveals; beyond that they come with the redraw on release.
+				-- Arrows clear of the pins and labels, only on the visible map and its margin (routeBounds).
 				local obstacles = ns.RouteArrows.Obstacles(layout, true)
-				local mw, mh = shown and shown[3] - shown[1], shown and shown[4] - shown[2]
-				obstacles.bounds = shown and { shown[1] - mw, -shown[4] - mh, shown[3] + mw, -shown[2] + mh }
+				obstacles.bounds = routeBounds(shown)
 				nArrows = self:PlaceRouteArrows(obstacles)
 			end
 		end

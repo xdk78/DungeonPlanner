@@ -286,6 +286,9 @@ SetBinding; no secure frames; nothing protected in combat; every integration beh
 4. Never touch secure frames, hook Blizzard functions, act in combat lockdown, parse the combat log, or compare a value
    that could be secret without `Util.Plain`.
 5. Sharing must survive lockdowns and throttling and treat every received byte as hostile.
+6. An update that adds files needs a full game restart, not `/reload`: the client reads an addon's file list from its
+   TOC only when the game starts (true of every addon). Until then the new files' features stay off without an error
+   (`Compat.FILES`, reported by `/dp debug` with "restart the game after updating").
 
 ## 8. Polish translation (WoW Po Polsku)
 
