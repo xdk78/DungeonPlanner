@@ -55,6 +55,7 @@ Share\Inflate.lua
 Share\Codec.lua
 Share\Transfer.lua
 Share\Acks.lua
+Share\Sync.lua
 
 Config\Defaults.lua
 Config\DB.lua
@@ -260,6 +261,7 @@ UI\Panels\ProgressPanel.lua
 UI\Panels\PlanPanel.lua
 UI\Panels\SharePanel.lua
 UI\RunMode.lua
+UI\RunSync.lua
 UI\NotesFrame.lua
 UI\Shots.lua
 UI\Prompts.lua

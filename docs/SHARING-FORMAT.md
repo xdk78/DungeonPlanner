@@ -244,6 +244,10 @@ Fields are joined with `^`.
 | `P^<tid>^<export string>` | The payload, sent only after an accept |
 | `N^<proto>^<note string>` | A raid page pushed to the group by its leader or a raid assistant (below) |
 | `K^<tid>^<plan id>^<version>` | Ack, whispered to the sender after a received plan was imported (below); `-` for no plan id |
+| `R^<proto>^<session>^<seq>^<plan id>^<version>^<step>^<pull>` | Run state of a leader's run mode (group sync, below); plan id `-` ends the lead |
+| `F^<proto>^<session>^<status>` | A member's follow status, whispered to the leader (group sync) |
+| `Q^<proto>` | Who leads the run? (to the group; group sync) |
+| `W^<proto>^<session>` | A member asks the leader for the plan it leads (whispered; group sync) |
 
 Flow: the sender offers (to a player by whisper, or to the group/guild channel). Each receiver whose setting allows the
 sender (default: group and guild) gets a prompt, out of combat; Escape or 90 s without an answer declines. A whispered
@@ -285,3 +289,47 @@ string and `Pages.ValidatePush` rebuilds it. `Codec.Decode` (imports) refuses ki
   page with the same title from the same sender replaces the older one); the Notes window opens on it.
 - During an addon-message lockdown (boss fights) the message waits in the outbox; the per-sender flood limit applies.
 - Older Dungeon Planners ignore `N` messages (an unknown tag), so the protocol number stays 2.
+
+### Group sync for run mode
+
+The group's leader (in a raid also an assistant) clicks "Lead this run" in run mode; members who have the same plan
+then see "Following <leader>", and their run mode shows the leader's step (and with it the next pull and the boss in
+focus). `Share/Sync.lua` is the state machine (`Sync.Step(state, event, now)` -> effects; modes idle, leading,
+following, free, mismatch), `UI/RunSync.lua` the glue.
+
+| Message | Fields |
+|---|---|
+| `R^<proto>^<session>^<seq>^<plan id>^<version>^<step>^<pull>` | `session`: the lead's id (`[a-z0-9]{1,8}`, new each time a lead starts); `seq`: 1 up, per session; `plan id`: the leader's (`b:<id>` for a recommended plan), or `-` when the lead ends (the other numbers are then 0); `version`: the plan's `updated`; `step`: run mode's step, 0 before the first (0-999); `pull`: the next pull's number (0-100, 0 none). To the group; whispered as the answer to `Q` |
+| `F^<proto>^<session>^<status>` | `status`: `f` following, `u` stepping on their own, `m` does not have the plan, `o` has another version. Whispered to the leader when it changes, and once for each new session |
+| `Q^<proto>` | Sent to the group by a member whose run mode opens (or who joins) while nobody's lead is known; at most every 30 s. The leader whispers its `R` back (at most every 5 s per member) |
+| `W^<proto>^<session>` | "Ask for it": whispered to the leader, at most every 20 s. The leader offers its plan by whisper, the normal transfer with its prompt (at most once a minute per member) |
+
+- **Sending:** on change only. A state goes out at once when the last one left at least 1 s ago; changes within that
+  second go out as one message when it ends (a timer event). Nothing is sent while the step, pull and plan stay the
+  same; there is no heartbeat. All four go through the outbox at ChatThrottleLib's NORMAL priority: during a lockdown
+  (a boss fight) a newer `R` replaces the one still waiting, so the fight's end sends one current state.
+- **Trust:** every message is taken only from a member of the group (the receiver's own roster). `R` only from the
+  group's leader, or in a raid an assistant; while one is followed, another one takes over only when the first is no
+  longer trusted, or when the group's leader takes over from an assistant. A roster change that demotes the followed
+  leader ends following; a leader who loses the rank ends the lead. `F` and `W` only for the current session. Every
+  field is range-checked in `Transfer.Parse`; anything malformed is dropped. The per-sender flood limit applies.
+- **Order:** within a session, a state whose `seq` is not above the last one is stale and ignored; a new session
+  starts its own count (the leader reloaded or led again).
+- **Which plan:** the member's plan with the leader's id at that version (a recommended plan, the same account), else a
+  copy received or imported from it (`global.shareLinks`, written by every import: the sender's id and version, and
+  the copy's own `updated`; a copy edited since is another version). None: "Leader is on a plan you don't have: ask
+  for it"; only other versions: "Leader is on another version of this plan: ask for it". Once the offered plan is
+  imported, the member follows.
+- **Boss kills:** each client's tracker moves run mode past a killed boss as before. On a follower that move starts a
+  10 s hold in which an older step from the leader (its state from before the kill, held in the fight's lockdown) does
+  not pull the member back; the leader's state at or past the kill ends the hold, and when the hold ends with the
+  leader still behind, the leader's step wins.
+- **Free:** Prev / Next, a step clicked or another plan chosen while following means "step on your own": the member
+  stays free until "Rejoin", which goes to the leader's current step. Following moves the step only while run mode is
+  open; opening it shows the leader's current step.
+- **Display:** run mode's line under the plan's name (leading: "Leading: N of M following · out of sync: X", with each
+  member in its tooltip; following; free; mismatch with "Ask for it"), and the Share section's "Has this plan" line
+  adds "following: N, out of sync: X" while you lead that plan. A member without a report counts as out of sync when
+  their ack is for an older version, else as no answer.
+- **Older versions:** Dungeon Planner 0.1.0 parses `R`, `F`, `Q` and `W` as nothing (unknown tags) and drops them, so
+  the protocol number stays 2. Its players show as "no answer".

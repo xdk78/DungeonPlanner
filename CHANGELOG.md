@@ -13,6 +13,14 @@ follow [Semantic Versioning](https://semver.org/).
   (`Locales/README.md`, a "Translation" issue, or a pull request).
 - Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
 - A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
+- **Group sync for run mode.** The group's leader (in a raid also an assistant) clicks "Lead this run" in run mode;
+  members who have the same plan see "Following <leader>", and their run mode shows the leader's step, next pull and
+  boss as the leader moves on. Prev or Next steps on your own ("Unfollow" does the same); "Rejoin" snaps back. A member
+  without the plan, or with another version of it, sees "Leader is on a plan you don't have: ask for it": one click
+  asks, and the leader's Dungeon Planner offers the plan the usual way. The leader sees who follows and who is out of
+  sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
+  fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
+  older step. Older Dungeon Planners ignore them.
 
 ## [0.1.0] - 2026-11-16
 

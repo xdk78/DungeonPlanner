@@ -12,6 +12,11 @@
 --   P^<tid>^<export string>                                the payload, sent after an accept
 --   N^<proto>^<note string>                                a raid assignment page pushed to the group (leader or assist)
 --   K^<tid>^<plan id>^<version>                            ack: the plan of transfer tid was imported (Share/Acks.lua)
+--   R^<proto>^<session>^<seq>^<plan id>^<version>^<step>^<pull>   a leader's run mode (Share/Sync.lua); plan id "-":
+--                                                          the lead ended
+--   F^<proto>^<session>^<status>                           a member's follow status, whispered to the leader
+--   Q^<proto>                                              who leads the run? (to the group)
+--   W^<proto>^<session>                                    a member asks the leader for the plan (whispered)
 -- AceComm splits long messages into parts and ChatThrottleLib paces them; we only bound sizes and check sums.
 -- See docs/SHARING-FORMAT.md.
 
@@ -72,8 +77,64 @@ function Transfer.Encode(msg)
 		return "N" .. SEP .. msg.proto .. SEP .. msg.data
 	elseif t == "ack" then
 		return "K" .. SEP .. msg.tid .. SEP .. field(msg.plan or "-") .. SEP .. math.floor(tonumber(msg.version) or 0)
+	elseif t == "run" then
+		local on = msg.plan ~= nil
+		return table.concat({ "R", msg.proto, msg.session, msg.seq, on and field(msg.plan) or "-", on and msg.version or 0,
+			on and msg.step or 0, on and msg.pull or 0 }, SEP)
+	elseif t == "follow" then
+		return table.concat({ "F", msg.proto, msg.session, msg.status }, SEP)
+	elseif t == "query" then
+		return "Q" .. SEP .. msg.proto
+	elseif t == "want" then
+		return "W" .. SEP .. msg.proto .. SEP .. msg.session
 	end
 	error("unknown message type " .. tostring(t))
+end
+
+-- An integer within lo..hi, else nil.
+local function intIn(s, lo, hi)
+	local n = tonumber(s)
+	return Util.IsInteger(n) and n >= lo and n <= hi and n or nil
+end
+
+-- Run sync (Share/Sync.lua): each field is checked here; who may send and which plan it is, in Sync.Step.
+local FOLLOW_STATUS = { f = true, u = true, m = true, o = true }
+local function parseSync(tag, parts)
+	local proto = intIn(parts[2], 0, 999)
+	if not proto then
+		return nil
+	end
+	if tag == "Q" then
+		return #parts == 2 and { type = "query", proto = proto } or nil
+	end
+	if not validTid(parts[3]) then
+		return nil
+	end
+	if tag == "W" then
+		return #parts == 3 and { type = "want", proto = proto, session = parts[3] } or nil
+	elseif tag == "F" then
+		if #parts ~= 4 or not FOLLOW_STATUS[parts[4]] then
+			return nil
+		end
+		return { type = "follow", proto = proto, session = parts[3], status = parts[4] }
+	end
+	if #parts ~= 8 then
+		return nil
+	end
+	local Sync = ns.Sync
+	local seq, version = intIn(parts[4], 1, Sync.MAX_SEQ), intIn(parts[6], 0, Sync.MAX_VERSION)
+	local step, pull = intIn(parts[7], 0, Sync.MAX_STEP), intIn(parts[8], 0, Sync.MAX_PULL)
+	if not (seq and version and step and pull) then
+		return nil
+	end
+	local plan = parts[5]
+	if plan == "-" then
+		return { type = "run", proto = proto, session = parts[3], seq = seq }
+	elseif not ns.Acks.ValidPlanId(plan) then
+		return nil
+	end
+	return { type = "run", proto = proto, session = parts[3], seq = seq, plan = plan, version = version, step = step,
+		pull = pull }
 end
 
 -- Returns a message table or nil for anything malformed. Never raises.
@@ -137,6 +198,8 @@ function Transfer.Parse(text)
 		end
 		local plan = parts[3] ~= "-" and ns.Acks.ValidPlanId(parts[3]) and parts[3] or nil
 		return { type = "ack", tid = parts[2], plan = plan, version = version }
+	elseif tag == "R" or tag == "F" or tag == "Q" or tag == "W" then
+		return parseSync(tag, parts)
 	elseif tag == "A" or tag == "D" or tag == "X" then
 		if #parts ~= 2 or not validTid(parts[2]) then
 			return nil

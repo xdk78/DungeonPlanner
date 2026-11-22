@@ -170,6 +170,15 @@ local function makeView(adb, readOnlyPlans)
 			elseif key == "quarantine" then
 				local q = adb.global.quarantine
 				return type(q) == "table" and q or noQuarantine
+			elseif key == "shareLinks" then
+				-- Which plan each received copy came from (Acks.Link); none while the data is read-only.
+				if readOnlyPlans then
+					return nil
+				end
+				if type(adb.global.shareLinks) ~= "table" then
+					adb.global.shareLinks = {}
+				end
+				return adb.global.shareLinks
 			end
 			return nil
 		end,
@@ -218,6 +227,9 @@ function DB.Init()
 	adb.char.recorder = ns.RunLog.Normalize(adb.char.recorder)
 	adb.char.notes = ns.Pages.NormalizeReceived(adb.char.notes)
 	adb.char.shareAcks = ns.Acks.Normalize(adb.char.shareAcks)
+	if not newer then
+		adb.global.shareLinks = ns.Acks.NormalizeLinks(adb.global.shareLinks)
+	end
 	ns.db = makeView(adb, newer and DB.ReadOnlyPlans(adb.global) or nil)
 	ns.char = setmetatable({}, {
 		__index = function(_, key)
@@ -344,6 +356,9 @@ function DB.DeletePlan(id)
 	end
 	ns.db.plans[id] = nil
 	ns.char.progress.objectives[id] = nil
+	if ns.db.shareLinks then
+		ns.db.shareLinks[id] = nil
+	end
 	if ns.db.ui.selectedPlan == id then
 		ns.db.ui.selectedPlan = nil
 	end
@@ -421,8 +436,11 @@ function DB.ImportString(text, source, opts)
 		return false, value
 	end
 	local plans = kind == "plan" and { value } or value.plans
-	local added, replaced = {}, {}
+	local added, replaced, from = {}, {}, {}
 	for _, plan in ipairs(plans) do
+		-- The sender's id and version, for the link (Acks.Link): a recommended plan travels without its id.
+		local srcId = plan.id or (plan.origin and plan.origin.bundled and (ns.Bundled.PREFIX .. plan.origin.bundled))
+		from[#from + 1] = { id = srcId, v = plan.updated }
 		plan.id = nil
 		plan.source = {
 			from = source and source.from or nil,
@@ -445,6 +463,13 @@ function DB.ImportString(text, source, opts)
 			DB.Changed(existing, "import")
 		else
 			added[#added + 1] = DB.AddPlan(plan)
+		end
+	end
+	local links = ns.db.shareLinks
+	for i, plan in ipairs(added) do
+		local src = from[i]
+		if links and src.id and src.v then
+			ns.Acks.Link(links, plan.id, src.id, src.v, plan.updated or 0, ns.Now())
 		end
 	end
 	local summary = Validate.Summary(report)

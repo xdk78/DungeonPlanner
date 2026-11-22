@@ -167,8 +167,8 @@ uv run --script $H/python/wowui.py render --game "$G" --dump $W/dump --out $W/pn
 `home-shared`, `picker`, `plan-dropdown`, `gear-dropdown`, `section-<id>` for every section of Hall of Thanes,
 `section-share-advanced`, `party-raid`, `boss-detail` (a boss marker's details), `map-classic` (the Deadmines), `map-reyes` (Hall of Thanes on Santiago Reyes' bundled map, no other addon installed: the "Map by Santiago Reyes" chip), `map-minimap` (Hall of Thanes on the game's minimap pictures, in the parchment colours), `map-ragefire` (Ragefire Chasm: every kind of step, labels at the map's edge), `map-outdoor` (Ruins of Lordaeron, minimap terrain), `map-building` (Blackmaw Hold floor 2, minimap building pictures), `map-raid` (Molten Core), `map-draw` (an own copy
 with drawings and the drawing tools), `map-min` (880 x 560), `map-large`, `notes-min`, `notes-own`, `runmode-first`,
-`runmode-middle`, `runmode-last`, `runmode-drift` (recording, off plan), `runs-plan` and `runs-compare` (two recorded
-runs), `party-pages` and `party-pages-min` (raid pages), `notes-window`, `share-tracking` (who has the plan), `debug`,
+`runmode-middle`, `runmode-last`, `runmode-drift` (recording, off plan), `runmode-follow`, `runmode-lead` and `runmode-ask` (group sync: following the leader, leading, a plan the member lacks), `runs-plan` and `runs-compare` (two recorded
+runs), `party-pages` and `party-pages-min` (raid pages), `notes-window`, `share-tracking` (who has the plan), `share-sync` (the same while leading its run), `debug`,
 `confirm`; `--only a,b` draws some of them.
 Textures, atlases and fonts are the game's; the Settings panel and Blizzard templates are not drawn (use `/dp shots`).
 A grey placeholder is a game file this install has not downloaded; magenta, a file the client does not have.

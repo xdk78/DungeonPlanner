@@ -104,9 +104,20 @@ local function send(msg, channel, target, prio, callback, arg)
 	ns.addon:SendCommMessage(ns.prefix, msg, channel, target, prio or "NORMAL", callback, arg)
 end
 
-local function enqueue(msg, channel, target, prio, callback, arg)
+-- key (optional): a message that only the newest of its kind matters for (run sync's state): one still waiting in the
+-- outbox under the same key is replaced in place, so a lockdown sends one current message, not every one before it.
+local function enqueue(msg, channel, target, prio, callback, arg, key)
 	if Comm.IsLockedDown() then
-		Comm.outbox[#Comm.outbox + 1] = { msg, channel, target, prio, callback, arg }
+		local item = { msg, channel, target, prio, callback, arg, key = key }
+		if key then
+			for i, old in ipairs(Comm.outbox) do
+				if old.key == key then
+					Comm.outbox[i] = item
+					return
+				end
+			end
+		end
+		Comm.outbox[#Comm.outbox + 1] = item
 		ensureTicker()
 	else
 		send(msg, channel, target, prio, callback, arg)
@@ -418,6 +429,16 @@ function Comm.PlanStatus(plan)
 	return ns.Acks.Status(Comm.AcksStore(), plan.id, plan.updated, Comm.GroupMembers(), Comm.peers)
 end
 
+-- Run sync (Share/Sync.lua, UI/RunSync.lua): small state messages at NORMAL priority, through the outbox; `key` keeps
+-- only the newest one of a kind waiting in a lockdown. Returns false when addon messages are not available.
+function Comm.SendSync(msg, channel, target, key)
+	if not Comm.IsAvailable() or not channel then
+		return false
+	end
+	enqueue(msg, channel, target, "NORMAL", nil, nil, key)
+	return true
+end
+
 -- Raid assignment pages ----------------------------------------------------------------------------------------------------
 
 -- The pages received from the group's leader (DungeonPlannerDB.char[key].notes).
@@ -557,6 +578,13 @@ function Comm.OnMessage(prefix, text, channel, sender)
 	end
 	if msg.type == "ack" then
 		onAck(msg, sender)
+		return
+	end
+	-- Run sync: older Dungeon Planners parse these tags as nothing and drop them (Transfer.Parse returns nil).
+	if msg.type == "run" or msg.type == "follow" or msg.type == "query" or msg.type == "want" then
+		if msg.proto == ns.PROTOCOL_VERSION and ns.RunSync then
+			ns.RunSync.OnMessage(msg, sender, channel)
+		end
 		return
 	end
 
