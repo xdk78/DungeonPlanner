@@ -198,7 +198,7 @@ T.case("Route paths: outlined lines, joints at bends, arrows; the focused step's
 	T.ok(or1 < 0.1 and og1 < 0.1 and ob1 < 0.1, "the casing is dark")
 	-- Focus on the step reached by segments 2..4 (points 1 -> 4): brighter there, dimmed after: less opaque and
 	-- greyer, not paler.
-	n = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, seg = { route = "rx", from = 1, to = 4 } })
+	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, seg = { route = "rx", from = 1, to = 4 } })
 	local _, g1, b1, a1 = pools.lines[1]:GetVertexColor()
 	local r4, g4, b4, a4 = pools.lines[4]:GetVertexColor()
 	local base = { ns.Style.PaletteColor(1) }
