@@ -6,6 +6,7 @@ local ns, mock = T.ns, T.mock
 local RA = ns.RouteArrows
 
 local function boot()
+	mock.ResetInput() -- no button or key left held by a case that failed
 	if not _G.DungeonPlannerDB then
 		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 		mock.loggedIn = true

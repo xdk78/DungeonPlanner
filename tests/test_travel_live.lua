@@ -335,7 +335,7 @@ T.case("Live map: the arrow off the entrance's map, no redraw without a change, 
 		sized = sized + 1
 	end)
 	w:SetSize(ns.GettingThere.MIN_W + 40, 600)
-	T.eq(sized, 1, "the size scripts ran")
+	T.eq(sized, 1, "SetSize fired OnSizeChanged once (the window's fit runs with it; checked below)")
 	Layout.SettleSizes(mock)
 	ns.Travel.Nearest = realNearest
 	T.eq(nearest, 0, "no flight masters looked up on resize")
