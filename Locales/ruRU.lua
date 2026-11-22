@@ -1050,4 +1050,6 @@ ns.Locales.ruRU = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "«Вести» в «Подготовке» ставит стрелку TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "«Вести» в «Подготовке» передает путь в Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "«Вести» в «Подготовке» передает путь в Shortest Path Forever",
+	["No map art for this zone."] = "Нет карты этой зоны.",
+	["(you are in %s)"] = "(вы в: %s)",
 }

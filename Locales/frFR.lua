@@ -1050,4 +1050,6 @@ ns.Locales.frFR = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "« Guider » dans Préparation règle la flèche de TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "« Guider » dans Préparation confie le trajet à Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "« Guider » dans Préparation confie le trajet à Shortest Path Forever",
+	["No map art for this zone."] = "Pas de carte pour cette zone.",
+	["(you are in %s)"] = "(vous êtes en %s)",
 }

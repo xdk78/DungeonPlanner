@@ -1050,4 +1050,6 @@ ns.Locales.deDE = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "„Navigieren“ in Vorbereitung setzt TomToms Pfeil",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "„Navigieren“ in Vorbereitung übergibt den Weg an Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "„Navigieren“ in Vorbereitung übergibt den Weg an Shortest Path Forever",
+	["No map art for this zone."] = "Keine Karte für diese Zone.",
+	["(you are in %s)"] = "(du bist in %s)",
 }

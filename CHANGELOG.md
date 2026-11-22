@@ -60,6 +60,12 @@ follow [Semantic Versioning](https://semver.org/).
 - Run mode shows "Prep: 3 quests to pick up" before the first step and updates it as you pick up quests or keys; a
   click opens Prep.
 - The home table's preview names the instance's zone, in your game's language.
+- **A live map in the Getting there window**, outdoors: the entrance's zone map with the entrance, the nearest flight
+  masters and a summoning stone, your position as an arrow turned the way you face, and the distance and direction,
+  updated ten times a second while the window is open and you are outside (the game gives no position inside
+  instances). Entering that instance opens its plan and run mode.
+- Dungeon Planner learns entrances as you play: the spot you stood on before a loading screen into an instance is kept
+  (per account) and used instead of the bundled one.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the

@@ -107,7 +107,9 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `Texture:SetRotation` | Inferred, guarded | — | Route direction arrows, the Share section's Advanced caret; without it arrows point up and the caret down |
 | `C_NamePlate.GetNamePlates`, `UnitAffectingCombat`, `UnitIsDead`, `UnitIsDeadOrGhost`, `UnitLevel`, `UnitClassification`, `UnitCanAttack` | Inferred, guarded (each value through `Util.Plain`) | Retail 12.1.5 API; hostility, level and classification **checked in game** inside Hall of Thanes | The run recorder's enemy counts (`Tracker/Recorder.lua`); without nameplates pulls are only timed |
 | `GetMinimapZoneText`, `GetSubZoneText` | Inferred, guarded | Retail 12.1.5 API | Sub-zone names of recorded pulls |
-| `GetPlayerFacing`, `Minimap:IsProtected`, `GetZoom`, `GetZoomLevels`, `GetPingPosition` | Inferred, guarded, `/dp scan` only | Retail 12.1.5 API | Recorded by `/dp scan` (section 10); nothing is built on them |
+| `GetPlayerFacing` | Inferred, guarded | Retail 12.1.5 API | The live Getting there map's arrow, outdoors (`/dp scan` records it too); the arrow points up without it |
+| `PLAYER_LEAVING_WORLD` | Inferred | Retail event | The last outdoor spot before a loading screen, for learned entrances |
+| `Minimap:IsProtected`, `GetZoom`, `GetZoomLevels`, `GetPingPosition` | Inferred, guarded, `/dp scan` only | Retail 12.1.5 API | Recorded by `/dp scan` (section 10); nothing is built on them |
 | `COMBAT_LOG_EVENT_UNFILTERED` | **Not available** | ForeverDungeonJournal RunLog | Not used |
 | `C_QuestLog.IsQuestFlaggedCompleted`, `IsOnQuest`, `GetLogIndexForQuestID`, `GetTitleForQuestID` | Verified, guarded | DataStore_Quests, GearQuestForever, Attune, ForeverDungeonJournal | Prep's quest states and attunement quests; titles in the player's language when cached, else the bundled English name |
 | `C_Item.GetItemCount` (bank included), `GetItemCount` | Verified, guarded | Attune, BuffRadar, Altoholic | Prep's keys: carried or not; "Unknown" without |

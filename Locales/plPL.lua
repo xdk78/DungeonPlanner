@@ -1076,4 +1076,6 @@ ns.Locales.plPL = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "„Prowadź” w Przygotowaniu ustawia strzałkę TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "„Prowadź” w Przygotowaniu przekazuje drogę do Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "„Prowadź” w Przygotowaniu przekazuje drogę do Shortest Path Forever",
+	["No map art for this zone."] = "Brak mapy dla tej strefy.",
+	["(you are in %s)"] = "(jesteś w: %s)",
 }

@@ -1050,4 +1050,6 @@ ns.Locales.esES = {
 	["\"Navigate\" in Prep sets TomTom's arrow"] = "«Navegar» en Preparación pone la flecha de TomTom",
 	["\"Navigate\" in Prep hands the way to Polestar"] = "«Navegar» en Preparación pasa el camino a Polestar",
 	["\"Navigate\" in Prep hands the way to Shortest Path Forever"] = "«Navegar» en Preparación pasa el camino a Shortest Path Forever",
+	["No map art for this zone."] = "No hay mapa de esta zona.",
+	["(you are in %s)"] = "(estás en %s)",
 }

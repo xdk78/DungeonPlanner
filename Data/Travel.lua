@@ -46,12 +46,19 @@ function Travel.For(target)
 			local k = ns.Providers.Key(name)
 			if k then
 				index[k] = rec
+				rec.key = k
 			end
 		end
 	end
 	local name = type(target.instance) == "table" and target.instance.name or target.name
 	local k = ns.Providers.Key(name)
 	return k and index[k] or nil
+end
+
+-- The record of an instance key (Providers.Key), or nil.
+function Travel.ByKey(key)
+	Travel.For({ name = "" }) -- builds the index
+	return key and index[key] or nil
 end
 
 local function xy(v)
@@ -146,7 +153,7 @@ end
 
 -- The entrance on its zone's map and in the world, as far as the client can say; cached per session.
 function Travel.Entrance(rec)
-	if type(rec) ~= "table" or type(rec.e) ~= "table" then
+	if type(rec) ~= "table" then
 		return nil
 	end
 	local hit = resolved[rec]
@@ -154,6 +161,14 @@ function Travel.Entrance(rec)
 		return hit
 	end
 	local e, out = rec.e, {}
+	-- The player's own observation (Model/TravelLive.lua Learn) beats the bundled spot once it exists.
+	local learned = rec.key and ns.db and ns.db.entrances and ns.db.entrances[rec.key]
+	if learned then
+		e, out.learned = { map = learned.map, x = learned.x, y = learned.y }, true
+	end
+	if type(e) ~= "table" then
+		return nil
+	end
 	if e.map then
 		out.uiMapID, out.x, out.y = e.map, e.x, e.y
 		out.continent, out.wx, out.wy = Travel.ToWorld(e.map, e.x, e.y)

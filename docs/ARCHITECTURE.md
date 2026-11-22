@@ -61,6 +61,8 @@ Rules:
   repairs it on load). Additive, like the recorder.
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
   `Acks.Normalize` on load). Additive.
+- `global.entrances` - instance entrances learned from play (`Model/TravelLive.lua`): `[instance key] = { map, x, y,
+  at }`, at most 100. Additive.
 - `global.shareLinks[local plan id]` - which plan a copy received in game came from: `{ plan = the sender's plan id,
   at }` (`Acks.Link`; `Acks.NormalizeLinks` on load), so group sync matches a leader's plan to the copy (by its steps
   revision, `Sync.Signature`). Pasted strings make none. Schema 5 (migration 5 starts it); a link goes with its plan.
@@ -307,7 +309,23 @@ UI/Panels/PrepPanel.lua the section; RunMode.PrepText the run window's line
 ```
 
 Prep notes are a plan field (`prep`, format 5, optional; `DB.SCHEMA` 6 only marks the data). Idle cost: event
-handlers that return at once unless a watcher shows prep; no ticker.
+handlers that return at once unless a watcher shows prep.
+
+The live map (`UI/TravelMap.lua`) runs on a state machine, `Model/TravelLive.lua`:
+
+```
+hidden  --show (outdoors)-->  live     [start ticker, draw]       ticker: C_Timer.NewTicker(0.1) -> tick event
+hidden  --show (inside)--->   waiting  [draw]
+live    --tick (no position)-> waiting [stop, draw]
+waiting --world (outdoors)-->  live    [start, draw]              world: PLAYER_ENTERING_WORLD, ZONE_CHANGED_NEW_AREA
+any     --world (in the target instance)--> waiting [stop, arrived: its plan and run mode open, the window closes]
+any     --hide-->              hidden  [stop]                     a tick while hidden or waiting changes nothing
+```
+
+Learned entrances: `PLAYER_LEAVING_WORLD` keeps the outdoor spot; when the next `PLAYER_ENTERING_WORLD` ends inside an
+instance with travel facts, `TravelLive.Learn` files that spot (at most two minutes old) under the instance in
+`global.entrances` (per account, at most 100, `NormalizeLearned` on load; additive, no schema change), and
+`Travel.Entrance` prefers it over the bundled one.
 
 ## Raid pages (Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua)
 

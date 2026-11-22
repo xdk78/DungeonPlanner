@@ -50,6 +50,7 @@ Model\Progress.lua
 Model\RunLog.lua
 Model\RunCompare.lua
 Model\Prep.lua
+Model\TravelLive.lua
 
 Share\Checksum.lua
 Share\Inflate.lua
@@ -260,6 +261,7 @@ UI\InstancePicker.lua
 UI\SidePanel.lua
 UI\InstancePage.lua
 UI\GettingThere.lua
+UI\TravelMap.lua
 UI\Panels\MapEditor.lua
 UI\Panels\DrawBar.lua
 UI\Panels\FloorBar.lua

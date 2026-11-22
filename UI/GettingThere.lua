@@ -280,8 +280,21 @@ function GT.Open(target)
 		-- Over the planner it was opened from (both are movable; Escape closes this one first).
 		window:SetFrameStrata("DIALOG")
 		local ins = window.insets
+		-- The live map (UI/TravelMap.lua): outdoors, the player's arrow on the entrance's zone map, updated while shown.
+		window.map = ns.TravelMap.Create(window)
+		window.map:SetPoint("TOPLEFT", ins.left + SP.md, -(ins.top + SP.sm))
+		-- A fixed width from the window's (not a second anchor), so pins are placed right on the first draw.
+		local function fit()
+			window.map:SetWidth(math.max(100, (window:GetWidth() or 0) - ins.left - ins.right - 2 * SP.md))
+		end
+		fit()
+		window:HookScript("OnSizeChanged", fit)
+		window.live = W.Text(window, "caption", "ink")
+		window.live:SetPoint("TOPLEFT", window.map, "BOTTOMLEFT", 0, -SP.xs)
+		window.live:SetPoint("RIGHT", window.map, "RIGHT")
+		ns.TravelMap.Attach(window.map, window.live)
 		window.doc = W.Document(window)
-		window.doc:SetPoint("TOPLEFT", ins.left + SP.md, -(ins.top + SP.sm))
+		window.doc:SetPoint("TOPLEFT", window.live, "BOTTOMLEFT", 0, -SP.sm)
 		window.doc:SetPoint("BOTTOMRIGHT", -(ins.right + SP.sm), ins.bottom + SP.md)
 		window.bar = GT.Actions(window.doc.content)
 		ns.PrepInfo.Watch(window, function()
@@ -292,9 +305,18 @@ function GT.Open(target)
 				GT.Refresh()
 			end
 		end)
+		window:HookScript("OnShow", function(self)
+			ns.TravelMap.Show(self.target)
+		end)
+		window:HookScript("OnHide", function()
+			ns.TravelMap.Hide()
+		end)
 	end
 	window.target = target
 	GT.Refresh()
+	if window:IsShown() then
+		ns.TravelMap.Show(target)
+	end
 	window:Show()
 	return window
 end

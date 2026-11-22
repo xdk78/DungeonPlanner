@@ -276,6 +276,13 @@ Run mode, before the first step (not started or on step 1), shows a gold line in
 quests to pick up · 1 key missing"; a click opens the Prep section. It hides once there is nothing left or the run
 moves on.
 
+The Getting there window (`UI/GettingThere.lua`, 380 x 560 by default) has a live map on top (`UI/TravelMap.lua`,
+170 px tall, as wide as the window): the entrance's zone map from the game's map art, fitted and centred on the
+inset's dark fill, with the entrance (the `Dungeon` mark), the nearest flight masters of both factions on that map,
+a summoning stone, and the player as the minimap arrow turned to `GetPlayerFacing`. Under it one live line: the
+distance and direction ("You are 870 yd away; it lies south-west."), "(you are in Elwynn Forest)" when the player is
+on another map, or the outdoors-only line. The map has no input; the world map and minimap are not touched.
+
 ### Raid pages and the Notes window
 
 The Party section (`UI/Panels/AssignmentsPanel.lua`, the people in `UI/Panels/PartyGroups.lua`) has a switch at its
@@ -587,6 +594,9 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   dungeon; the zone name in the client's language), inside an instance (the "outdoors" line), Show on world map (the
   pin, super-tracking, the map opening; nothing in combat), Navigate with Polestar, TomTom and none; the Pop out window
   and the home preview's button; run mode's prep line on step 1 and its click.
+- The live map in the Getting there window: the zone's art, the arrow's place and turn while walking and riding, the
+  flight master and stone pins, the live line; that it stops inside an instance and starts again outside; entering the
+  target instance opening its plan and run mode; a learned entrance replacing the bundled one after a loading screen.
 
 Since 0.1.0:
 
