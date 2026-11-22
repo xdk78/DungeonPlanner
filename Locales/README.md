@@ -42,6 +42,9 @@ You can also open a "Translation" issue with the string and your proposed wordin
 - **Keep it short.** The window has fixed-width buttons, tabs and columns. A word or two stays a word or two. The CI
   runs a layout lint for every locale (`lua tests/ui_dump.lua --out <dir> --locale deDE --prefix deDE/`): it fails on
   text that is cut off or overlaps. Prefer a shorter natural word over a smaller font.
+- **French spacing.** The space inside « » and before ; : ! ? is a no-break space, written `\194\160` (U+00A0), so a
+  guillemet or a colon never starts a line alone. The narrow no-break space U+202F is not used: the game's faces and
+  the bundled font lack it.
 - **Leave unchanged:** `/dp ...` commands, `Dungeon Planner`, the names of other addons, file names and API names,
   `{tank}`-style keywords. Boss, dungeon and item names are never in these files: they come from the game.
 - **Fonts.** German, French and Spanish letters are in the game's own face. Russian uses the game's Cyrillic face
