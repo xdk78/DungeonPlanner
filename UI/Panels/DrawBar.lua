@@ -1,8 +1,10 @@
--- The map's drawing tools (own plans): a second toolbar line under the map tools while "Draw" is the active tool.
---   tools    Pen, Line, Arrow, Circle, Box, Text, Eraser, Move
---   style    the 8 pull colours (the colour-blind setting switches them, drawings included) and 3 line widths; with a
---            drawing selected (Move tool) they restyle it
---   clear    Clear floor, Clear all: each asks first; Undo brings drawings back
+-- The map's drawing tools (own plans): a second toolbar line under the map tools while "Draw" is the active tool, one
+-- line of square picture buttons (names and hints in their tooltips), wrapping only on a table narrower than it.
+--   tools    Pen, Line, Arrow, Circle, Box, Text (glyphs of what they draw), Eraser, Move (the game's broom and move
+--            cursors, else glyphs)
+--   style    the 8 pull colours (the colour-blind setting switches them, drawings included) and 3 line widths (a line
+--            of each width); with a drawing selected (Move tool) they restyle it
+--   clear    a menu: Clear floor, Clear all; each asks first; Undo brings drawings back
 -- It wires the map canvas's drawing callbacks (UI/MapDraw.lua): the active tool, colour and width, which step new
 -- drawings belong to (the boss or pull in focus, like party positions), the text field, and a drawing's right-click
 -- menu. All changes go through ctx:Changed, so they share the plan's undo history. Recommended plans have no tools.
@@ -23,6 +25,74 @@ local TOOL_HELP = {
 	erase = "Click or drag over drawings to erase them.",
 	move = "Drag a drawing to move it; click one to restyle it with the colours and widths.",
 }
+
+-- Glyphs: small pictures drawn with lines in a button's glyph frame (W.Button SetGlyph), in fractions of its size
+-- from the top left. Each returns the regions it made, which take the button's text colour.
+local function lines(holder, size, thickness, ...)
+	local parts, pts = {}, { ... }
+	if not holder.CreateLine then
+		return parts
+	end
+	for i = 1, #pts - 3, 4 do
+		local l = holder:CreateLine(nil, "ARTWORK")
+		l:SetColorTexture(1, 1, 1, 1)
+		l:SetThickness(thickness)
+		l:SetStartPoint("TOPLEFT", holder, pts[i] * size, -pts[i + 1] * size)
+		l:SetEndPoint("TOPLEFT", holder, pts[i + 2] * size, -pts[i + 3] * size)
+		parts[#parts + 1] = l
+	end
+	return parts
+end
+-- A polyline through the points (x1, y1, x2, y2, ...).
+local function path(holder, size, thickness, ...)
+	local pts, segs = { ... }, {}
+	for i = 1, #pts - 3, 2 do
+		segs[#segs + 1], segs[#segs + 2], segs[#segs + 3], segs[#segs + 4] = pts[i], pts[i + 1], pts[i + 2], pts[i + 3]
+	end
+	return lines(holder, size, thickness, unpack(segs))
+end
+local GLYPHS = {
+	pen = function(h, s)
+		return path(h, s, 2, 0.1, 0.72, 0.28, 0.4, 0.46, 0.66, 0.64, 0.34, 0.9, 0.52)
+	end,
+	line = function(h, s)
+		return lines(h, s, 2, 0.15, 0.85, 0.85, 0.15)
+	end,
+	arrow = function(h, s)
+		return lines(h, s, 2, 0.15, 0.85, 0.85, 0.15, 0.85, 0.15, 0.45, 0.17, 0.85, 0.15, 0.83, 0.55)
+	end,
+	circle = function(h, s)
+		local pts, n = {}, 16
+		for i = 0, n do
+			local a = 2 * math.pi * i / n
+			pts[#pts + 1], pts[#pts + 2] = 0.5 + 0.38 * math.cos(a), 0.5 + 0.38 * math.sin(a)
+		end
+		return path(h, s, 2, unpack(pts))
+	end,
+	rect = function(h, s)
+		return path(h, s, 2, 0.12, 0.25, 0.88, 0.25, 0.88, 0.75, 0.12, 0.75, 0.12, 0.25)
+	end,
+	text = function(h)
+		local t = h:CreateFontString(nil, "ARTWORK")
+		t:SetFontObject(S.fonts.title)
+		t:SetPoint("CENTER")
+		t:SetText("T")
+		return { t }
+	end,
+	erase = function(h, s)
+		return lines(h, s, 2, 0.2, 0.2, 0.8, 0.8, 0.2, 0.8, 0.8, 0.2)
+	end,
+	move = function(h, s)
+		return lines(h, s, 2, 0.5, 0.1, 0.5, 0.9, 0.1, 0.5, 0.9, 0.5)
+	end,
+	clear = function(h, s) -- a bin: lid, handle, sides, bottom
+		return lines(h, s, 2, 0.16, 0.28, 0.84, 0.28, 0.4, 0.16, 0.6, 0.16, 0.28, 0.36, 0.33, 0.86, 0.72, 0.36, 0.67,
+			0.86, 0.33, 0.86, 0.67, 0.86)
+	end,
+}
+DrawBar.GLYPHS = GLYPHS
+-- The game's picture for a tool where one fits (UI/Art.lua); the others are glyphs only.
+local TOOL_ART = { erase = "draw_erase", move = "draw_move" }
 
 -- Build the bar in the map section `f` (UI/Panels/MapPanel.lua) under its toolbar `bar`, and wire `canvas`.
 function DrawBar.Build(f, ctx, bar, canvas)
@@ -58,7 +128,7 @@ function DrawBar.Build(f, ctx, bar, canvas)
 	-- Tools.
 	db.tools = {}
 	for _, tool in ipairs(ns.MapDraw.TOOLS) do
-		local b = W.Button(db, L["draw:" .. tool], "outline", function()
+		local b = W.ToolButton(db, TOOL_ART[tool], GLYPHS[tool], L["draw:" .. tool], L[TOOL_HELP[tool]], function()
 			ctx.drawTool = tool
 			if tool ~= "move" then
 				ctx.selectedShape = nil
@@ -66,7 +136,6 @@ function DrawBar.Build(f, ctx, bar, canvas)
 			f:Refresh()
 		end)
 		b.dpGround = "surface"
-		W.SetTooltip(b, L["draw:" .. tool], L[TOOL_HELP[tool]])
 		db.tools[tool] = b
 		add(b)
 	end
@@ -94,21 +163,24 @@ function DrawBar.Build(f, ctx, bar, canvas)
 		add(b, i == 1)
 	end
 
-	-- Widths.
+	-- Widths: a line as thick as the drawings' (MapDraw.THICKNESS at icon size 100%).
 	db.widths = {}
 	for i = 1, Drawing.WIDTHS do
-		local b = W.Button(db, L["width:" .. i], "outline", function()
-			ctx.drawWidth = i
-			local p, s = plan(), selectedShape()
-			if p and s then
-				Drawing.Update(p, s.id, { width = i })
-				changed()
-			else
-				f:Refresh()
-			end
-		end)
+		local function glyph(h, s)
+			return lines(h, s, ns.MapDraw.THICKNESS[i], 0.1, 0.5, 0.9, 0.5)
+		end
+		local b = W.ToolButton(db, nil, glyph, L["width:" .. i],
+			L["The line width of new drawings (and of the selected one); for text, its size."], function()
+				ctx.drawWidth = i
+				local p, s = plan(), selectedShape()
+				if p and s then
+					Drawing.Update(p, s.id, { width = i })
+					changed()
+				else
+					f:Refresh()
+				end
+			end)
 		b.dpGround = "surface"
-		W.SetTooltip(b, L["width:" .. i], L["The line width of new drawings (and of the selected one); for text, its size."])
 		db.widths[i] = b
 		add(b, i == 1)
 	end
@@ -146,16 +218,32 @@ function DrawBar.Build(f, ctx, bar, canvas)
 				end
 			end)
 	end
-	db.clearFloor = add(W.Button(db, L["Clear floor"], "outline", function()
-		db:ClearFloor()
-	end), true)
-	db.clearFloor.dpGround = "surface"
-	W.SetTooltip(db.clearFloor, L["Clear floor"], L["Remove every drawing on this floor (asks first)."])
-	db.clearAll = add(W.Button(db, L["Clear all"], "outline", function()
-		db:ClearAll()
-	end))
-	db.clearAll.dpGround = "surface"
-	W.SetTooltip(db.clearAll, L["Clear all"], L["Remove every drawing of this plan, on every floor (asks first)."])
+	-- One button at the line's end opens the choice (W.Menu), so clearing takes no room of its own.
+	function db:ClearItems()
+		local p = plan()
+		return {
+			{ title = L["Clear drawings"] },
+			{
+				L["Clear floor"],
+				function()
+					db:ClearFloor()
+				end,
+				disabled = not p or Drawing.Count(p, ctx.floor) == 0,
+			},
+			{
+				L["Clear all"],
+				function()
+					db:ClearAll()
+				end,
+				disabled = not p or Drawing.Count(p) == 0,
+			},
+		}
+	end
+	db.clear = add(W.ToolButton(db, "draw_clear", GLYPHS.clear, L["Clear drawings"],
+		L["Clear this floor's drawings or every drawing of the plan. Each asks first; Undo brings them back."], function(b)
+			W.Menu(b, db:ClearItems())
+		end), true)
+	db.clear.dpGround = "surface"
 
 	-- Lay the items out in lines as wide as the section, a group (the tools, the colours, the widths, clearing) at a
 	-- time: a group that does not fit the rest of a line starts the next one, so no group is split unless it is wider
@@ -219,8 +307,7 @@ function DrawBar.Build(f, ctx, bar, canvas)
 		for i, b in ipairs(self.widths) do
 			b:SetActive(width == i)
 		end
-		self.clearFloor:SetDisabled(not p or Drawing.Count(p, ctx.floor) == 0)
-		self.clearAll:SetDisabled(not p or Drawing.Count(p) == 0)
+		self.clear:SetDisabled(not p or Drawing.Count(p) == 0)
 		self:Flow()
 	end
 

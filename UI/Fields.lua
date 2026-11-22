@@ -415,7 +415,8 @@ function W.Dropdown(parent, opts)
 	return b
 end
 
--- A menu of actions at the cursor: items = { { text, fn } | "-" | { title = text } }.
+-- A menu of actions at the cursor: items = { { text, fn, disabled = bool } | "-" | { title = text } }; a disabled
+-- action shows greyed out.
 function W.Menu(owner, items)
 	if MenuUtil and MenuUtil.CreateContextMenu then
 		MenuUtil.CreateContextMenu(owner, function(_, root)
@@ -425,9 +426,12 @@ function W.Menu(owner, items)
 				elseif item.title then
 					menuFont(root:CreateTitle(item.title))
 				else
-					menuFont(root:CreateButton(item[1], function()
+					local desc = menuFont(root:CreateButton(item[1], function()
 						ns.SafeCall(item[2])
 					end))
+					if item.disabled and type(desc) == "table" and desc.SetEnabled then
+						pcall(desc.SetEnabled, desc, false)
+					end
 				end
 			end
 		end)

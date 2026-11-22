@@ -93,6 +93,20 @@ Art.SPECS = {
 	kind_note = { file = ICONS .. "INV_Misc_Note_01", round = true },
 	-- The legend's drawings layer (map drawings, UI/MapDraw.lua): a quill and parchment, classic
 	drawings = { file = ICONS .. "INV_Misc_Note_02", round = true },
+	-- The map's toolbar (UI/Panels/MapToolbar.lua) and drawing tools (UI/Panels/DrawBar.lua): the game's own cursors
+	-- where one fits (the pointer, the map-pin cursor, the missions cursor's crossed swords, the directions scroll, the
+	-- palette, the broom, the move arrows), the social queue's group, the red X and the delete button's bin; all in this
+	-- client's atlas table. Atlases only: without one a tool shows its name, a drawing tool its glyph drawn by the addon.
+	tool_select = { atlas = "crosshair_point_32" },
+	tool_marker = { atlas = "crosshair_mappincursor_32" },
+	tool_position = { atlas = "socialqueuing-icon-group" },
+	tool_pull = { atlas = "crosshair_missions_32" },
+	tool_route = { atlas = "crosshair_directions_32" },
+	tool_draw = { atlas = "crosshair_palette_32" },
+	tool_erase = { atlas = "common-icon-redx" },
+	draw_erase = { atlas = "crosshair_broom_32" },
+	draw_move = { atlas = "crosshair_ui-cursor-move_32" },
+	draw_clear = { atlas = "128-redbutton-delete" },
 	-- Party roles
 	role_TANK = { file = ICONS .. "Ability_Warrior_DefensiveStance", round = true },
 	role_HEALER = { file = ICONS .. "Spell_Holy_FlashHeal", round = true },
@@ -182,10 +196,12 @@ function Art.FileExists(path)
 	return ok and id ~= nil
 end
 
--- The answers per path for the session (a file does not appear while the game runs). Art.ForgetFiles: for tests.
+-- The answers per path for the session (a file does not appear while the game runs). Art.ForgetFiles: for tests (the
+-- atlas answers go too).
 local fileKnown = {}
 function Art.ForgetFiles()
 	fileKnown = {}
+	atlasCache = {}
 end
 
 -- Set a file on a texture when the client has it: true when set, false (the texture untouched) when it is missing, so

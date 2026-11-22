@@ -399,6 +399,14 @@ local function paintButton(b)
 			role = (hover or b.dpActive) and "white" or (v == "ghost" and "ink" or "gold")
 		end
 		S.TextColor(b.label, role)
+		-- A drawn glyph (SetGlyph) takes the label's colour: gold, white on hover and when chosen, grey when disabled.
+		for _, part in ipairs(b.glyph and b.glyph.parts or {}) do
+			if part:GetObjectType() == "FontString" then
+				part:SetTextColor(S.Color(role))
+			else
+				part:SetVertexColor(S.Color(role))
+			end
+		end
 	end
 	if b.icon then
 		b.icon:SetDesaturated(not enabled or (v == "segment" and not b.dpActive and not hover))
@@ -453,13 +461,47 @@ function W.Button(parent, text, variant, onClick, width)
 	b:RegisterForClicks("LeftButtonUp")
 	S.Register(b, paintButton)
 
+	-- The button's picture: its icon (SetIcon) where the client has the art, else its glyph (SetGlyph), else none.
+	local function picture(self)
+		if self.icon and self.icon:IsShown() then
+			return self.icon
+		elseif self.glyph and self.glyph:IsShown() then
+			return self.glyph
+		end
+	end
+	-- The picture left of the label, or alone in the middle when the button is compact (SetCompact); no picture: the
+	-- label alone, so a client without the art still names the button.
+	local function place(self)
+		local pic = picture(self)
+		self.label:ClearAllPoints()
+		if pic then
+			pic:ClearAllPoints()
+			if self.dpCompact then
+				pic:SetPoint("CENTER")
+			else
+				pic:SetPoint("LEFT", SP.sm, 0)
+				self.label:SetPoint("LEFT", pic, "RIGHT", SP.xs, 0)
+				self.label:SetPoint("RIGHT", -SP.sm, 0)
+				self.label:SetJustifyH("CENTER")
+			end
+		else
+			self.label:SetPoint("CENTER")
+		end
+		self.label:SetShown(not (pic and self.dpCompact))
+	end
 	local function fit(self)
 		if self.dpFixedWidth then
 			return
 		end
-		local w = math.ceil(self.label:GetStringWidth()) + 2 * SP.md
-		if self.icon then
-			w = w + self.icon:GetWidth() + SP.xs
+		local pic = picture(self)
+		local w
+		if pic and self.dpCompact then
+			w = SZ.control
+		else
+			w = math.ceil(self.label:GetStringWidth()) + 2 * SP.md
+			if pic then
+				w = w + pic:GetWidth() + SP.xs
+			end
 		end
 		self:SetWidth(math.max(SZ.control, w))
 	end
@@ -475,7 +517,8 @@ function W.Button(parent, text, variant, onClick, width)
 		self:SetEnabled(not disabled)
 		paintButton(self)
 	end
-	-- An icon left of the label: an Art key.
+	-- An icon left of the label: an Art key. Returns whether the client has the art; without it the icon hides and the
+	-- glyph (SetGlyph) or the label stands in.
 	function b:SetIcon(key, size)
 		if not self.icon then
 			local round = Art.SPECS[key] and Art.SPECS[key].round
@@ -483,15 +526,34 @@ function W.Button(parent, text, variant, onClick, width)
 		end
 		size = size or (SZ.control - 6)
 		self.icon:SetSize(size, size)
-		self.icon:ClearAllPoints()
-		self.icon:SetPoint("LEFT", SP.sm, 0)
-		Art.Set(self.icon, key)
-		self.label:ClearAllPoints()
-		self.label:SetPoint("LEFT", self.icon, "RIGHT", SP.xs, 0)
-		self.label:SetPoint("RIGHT", -SP.sm, 0)
-		self.label:SetJustifyH("CENTER")
+		local ok = Art.Set(self.icon, key)
+		self.icon:SetShown(ok)
+		if self.glyph then
+			self.glyph:SetShown(not ok)
+		end
+		place(self)
 		fit(self)
 		paintButton(self)
+		return ok
+	end
+	-- A picture drawn by the addon (lines, a letter) where no game art fits or the client lacks it: draw(holder, size)
+	-- adds the regions to `holder` and returns them; they take the label's colour. An icon that shows wins over it.
+	function b:SetGlyph(draw, size)
+		size = size or (SZ.control - 6)
+		self.glyph = CreateFrame("Frame", nil, self)
+		self.glyph:SetSize(size, size)
+		self.glyph.parts = draw(self.glyph, size) or {}
+		self.glyph:SetShown(not (self.icon and self.icon:IsShown()))
+		place(self)
+		fit(self)
+		paintButton(self)
+	end
+	-- Compact: the picture alone on a square button, the label left to the tooltip (narrow toolbars). A button without
+	-- a picture keeps its label.
+	function b:SetCompact(compact)
+		self.dpCompact = compact and true or nil
+		place(self)
+		fit(self)
 	end
 
 	if width then
@@ -544,6 +606,22 @@ function W.IconButton(parent, glyph, tooltip, onClick)
 	if tooltip then
 		W.SetTooltip(b, tooltip)
 	end
+	return b
+end
+
+-- A square toolbar button with a picture and no words: art `key` (an Art key, or nil) where the client has it, else
+-- the addon's glyph `draw` (b:SetGlyph, or nil), else `text` as its label. The tooltip names it (`text`) under `hint`.
+-- The chosen one is lit with SetActive, as every outline button.
+function W.ToolButton(parent, key, draw, text, hint, onClick)
+	local b = W.Button(parent, text, "outline", onClick)
+	if draw then
+		b:SetGlyph(draw)
+	end
+	if key then
+		b:SetIcon(key)
+	end
+	b:SetCompact(true)
+	W.SetTooltip(b, text, hint)
 	return b
 end
 

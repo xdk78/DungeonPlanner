@@ -366,6 +366,8 @@ this API family and is guarded.
 | Run mode button | `Ability_Rogue_Sprint` | | Classic icon |
 | Page arrows (the Notes window) | `Interface\Buttons\UI-SpellbookIcon-PrevPage-*` / `-NextPage-*` (up, down, disabled), the highlight `UI-Common-MouseHilight` (added), 32 px, as the game's `PagingControlsPrevPageButtonTemplate` and `PagedList.xml` have them; the page label ("1 of 3", "No pages") between them | drawn "<" and ">" buttons | Seen (Dungeon Journal, OpenMap, NeedRoll, Leatrix Plus) |
 | Enemies layer | our `Circle`/`Ring` textures tinted, the game's raid skull for bosses | | Drawn |
+| Map tools (`tool_*`) | the game's cursors `crosshair_point_32` (Select), `crosshair_mappincursor_32` (Marker), `crosshair_missions_32` (Pull), `crosshair_directions_32` (Route), `crosshair_palette_32` (Draw); `socialqueuing-icon-group` (Position), `common-icon-redx` (Erase); 18 px left of the name | the name alone | In this client's atlas table, guarded |
+| Drawing tools (`draw_*`) | `crosshair_broom_32` (Eraser), `crosshair_ui-cursor-move_32` (Move), `128-redbutton-delete` (the clear menu) | glyphs drawn with lines in the text colour: an X, a cross, a bin; Pen, Line, Arrow, Circle, Box, Text and the widths are always glyphs | In this client's atlas table, guarded |
 
 Libraries: the game's own templates and mixins above do the work (nine-slice layouts, `ScrollUtil`, the scroll bar, the
 tab helpers); LibSharedMedia (vendored) offers its registered fonts in the font setting. No textures come from a
@@ -385,8 +387,10 @@ centre: `LEFT` on one frame and `RIGHT` on another at a different height gives i
 
 ## The map
 
-The map section's toolbar holds the tools (own plans): Select, Marker, Position, Pull, Route, Draw, Erase, with the
-kind, role or pull picker of the active tool; on the right Legend, Fit, Focus and Floor (Focus gives way on a narrow window).
+The map section's toolbar holds the tools (own plans): Select, Marker, Position, Pull, Route, Draw, Erase, each the
+game's picture and its name (`UI/Panels/MapToolbar.lua`), with the kind, role or pull picker of the active tool; on the
+right Legend, Fit, Focus and Floor. On a narrow window Focus gives way first, then the tools' names (the pictures stay,
+square, the names in their tooltips), then Fit; a tool without its picture keeps its name.
 Labels and the icon-size stepper sit in the map's bottom-left corner, inside the gold frame with a margin of their own
 (as the legend in the other corner); with the Route tool the "Snap to corridors" switch sits above them, faded on a
 floor without corridor data (`UI/Panels/MapControls.lua`). The **legend** floats over the top-right corner:
@@ -544,16 +548,21 @@ and never drawn in run mode's mini map.
 ### Drawing
 
 ```
-[Select][Marker][Position][Pull][Route][Draw][Erase]        [Legend][Fit][Focus][Floor]
-[Pen][Line][Arrow][Circle][Box][Text][Eraser][Move]  [#][#][#][#][#][#][#][#]  [Thin][Medium][Thick]  [Clear floor][Clear all]
+[(pointer) Select][(pin) Marker][(group) Position][(swords) Pull][(scroll) Route][(palette) Draw][(X) Erase]  [Legend][Fit]
+[~][/][/>][o][#][T][(broom)][(arrows)]  [c][c][c][c][c][c][c][c]  [thin][medium][thick]  [(bin)]
 ```
 
-The Draw tool opens a second line under the toolbar (`UI/Panels/DrawBar.lua`, wrapping on a narrow window) and the map
-moves down under it. Tools, swatches and widths are the kit's outline buttons, the active one lit; swatches are the
-pull palette (so the colour-blind setting recolours them and every drawing). With the Move tool a click selects a
-drawing (a light halo under it) and the swatches and widths restyle it. Right-click a drawing: change the text, use the
-chosen colour and width, show it with the boss or pull in focus or on every step, delete. Clear floor and Clear all ask
-first in the game's dialog; Undo brings drawings back. Drawings sit over the map art and the route and under every pin,
+The Draw tool opens a second line under the toolbar (`UI/Panels/DrawBar.lua`) and the map moves down under it: one
+line of square picture buttons (`W.ToolButton`), each named in its tooltip with its hint, which fits the minimum window
+(880) in every language and wraps only on a narrower table. Pen, Line, Arrow, Circle, Box and Text show a glyph of what
+they draw, the widths a line of each width (drawn with lines in the button's text colour: gold, white when lit, grey
+when disabled); Eraser and Move the game's broom and move cursors, with a glyph where the client lacks them. The active
+tool, colour and width are lit; swatches are the pull palette (so the colour-blind setting recolours them and every
+drawing). With the Move tool a click selects a drawing (a light halo under it) and the swatches and widths restyle it.
+Right-click a drawing: change the text, use the chosen colour and width, show it with the boss or pull in focus or on
+every step, delete. The bin at the line's end opens a menu, Clear floor and Clear all (greyed out when there is nothing
+to clear; the bin itself while the plan has no drawings); each asks first in the game's dialog; Undo brings drawings
+back. Drawings sit over the map art and the route and under every pin,
 text labels on the same dark plate as map labels; the legend's "Drawings" row switches them. Nothing can be drawn in
 combat ("Drawing is not available in combat.").
 
@@ -653,8 +662,12 @@ From 0.1.0:
 
 - Drawing: strokes follow the pointer smoothly at several zooms; thick strokes have no gaps at sharp bends and no
   blobs on gentle curves; arrow heads; circles and boxes; text labels on their plates; the Move halo; the eraser
-  dragged across several drawings; the right-click menu; the draw bar wrapping at the minimum width (880); the map
-  starting a stroke over a pin; "Drawing is not available in combat."; the Drawings row's icon (`INV_Misc_Note_02`).
+  dragged across several drawings; the right-click menu; the map starting a stroke over a pin; "Drawing is not
+  available in combat."; the Drawings row's icon (`INV_Misc_Note_02`).
+- Map toolbar: the tools' cursor pictures (size, centring, against the gold names), the names giving way to the
+  pictures on a narrow window, the draw line on one line at the minimum width (880); the glyphs' lines (crisp at UI
+  scales other than 1, the "T" in the title font), the disabled bin, the clear menu with a greyed-out item, tooltips
+  beside the square buttons.
 - Header: Undo and Redo after the plan menu at the minimum width.
 - Pulls editor: the tag toggles wrapping, their lit state, the progress field; the marks in the steps' captions and
   in run mode (do they fit?).
