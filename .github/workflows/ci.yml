@@ -37,6 +37,8 @@ jobs:
           find . -type f -name '*.lua' -not -path './.git/*' -not -path './.lua/*' -not -path './.luarocks/*' -print0 | xargs -0 -n1 luac -p
       - name: Offline tests
         run: lua tests/run.lua
+      - name: The newest CHANGELOG.md section extracts as the release workflow packages it
+        run: lua tools/release_changelog.lua --latest --out "$RUNNER_TEMP/CHANGELOG-release.md"
       - name: Every locale covers every key (0 missing, 0 unused; the log names the keys a new string still needs)
         run: lua tools/locale_keys.lua --all
       - name: Community plans validate

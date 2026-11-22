@@ -48,6 +48,10 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   plans).
 - After a pull request is merged, delete its branch and remove any worktree and work folder used for it.
 - Every change that players can see gets a line under `## [Unreleased]` in `CHANGELOG.md`.
+- A release: rename `## [Unreleased]` to `## [X.Y.Z] - <date>` (add a new empty `[Unreleased]` above it), merge, then
+  push the tag `vX.Y.Z`. The release workflow packages only that section (`lua tools/release_changelog.lua vX.Y.Z`:
+  the repository's paths in it become links to the tag) as the CurseForge file's changelog and the GitHub release's
+  text, and fails when the tag has no section. Write the section for players; paths are fine, they become links.
 - The checks that need a local game install do not run in CI: `tools/route_paths.py`, `tools/walk_grids.py`,
   `tools/minimap_art.py` and `tools/reyes_maps.py` with `--check` (commands above). Run them before every release and
   after a client patch or an update of ForeverDungeonJournal, OpenMap or Forever Dungeon Routes in the install; fix a
