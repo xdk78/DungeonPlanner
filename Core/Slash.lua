@@ -144,8 +144,8 @@ function Slash.Debug()
 	-- instance has and without an instance ID (made in another language by an older version), or for a wing that
 	-- cannot be told apart, gets no bundled maps, enemies or travel facts.
 	if ns.db then
-		local matched, total, unknown, unclear = ns.Instances.IdentityReport(ns.DB.Plans())
-		print("  " .. string.format(L["Own plans matched to an instance's bundled data: %d of %d."], matched, total))
+		local placed, total, unknown, unclear = ns.Instances.IdentityReport(ns.DB.Plans())
+		print("  " .. string.format(L["Own plans matched to an instance's bundled data: %d of %d."], placed, total))
 		for _, row in ipairs({ { L["Not matched:"], unknown }, { L["Wing unclear:"], unclear } }) do
 			if #row[2] > 0 then
 				print("    " .. row[1] .. " " .. table.concat(row[2], ", ", 1, math.min(#row[2], 10)))
