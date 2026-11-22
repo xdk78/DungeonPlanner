@@ -480,8 +480,8 @@ function Report.Text(data, what, opts)
 		parts[#parts + 1] = tail
 		return table.concat(parts, "\n")
 	end
-	local dropped, text = {}, nil
-	text = compose(dropped)
+	local dropped = {}
+	local text = compose(dropped)
 	local limit = opts and opts.limit
 	for _, name in ipairs(Report.DROP_ORDER) do
 		if not limit or Report.CharCount(text) <= limit then
