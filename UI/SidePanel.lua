@@ -209,15 +209,41 @@ function SidePanel.Create(parent, ctx)
 	party:SetScript("OnClick", function()
 		UI.SelectTab("assignments")
 	end)
-	W.SetTooltip(party, L["Party"], L["Who plays which role. Click to edit the party and the assignments."])
+	-- The strip's tooltip (its text set by RefreshParty: the extras, or where raid counts come from), shown beside the
+	-- strip or beside an open seat.
+	party.tipTitle = L["Party"]
+	party.tipText = L["Who plays which role. Click to edit the party and the assignments."]
+	local function stripTip(owner)
+		local tt = W.Tip()
+		if tt then
+			W.TipBeside(tt, owner)
+			tt:SetText(party.tipTitle, 1, 0.82, 0, 1, true)
+			tt:AddLine(party.tipText, 1, 1, 1, true)
+			W.TipShow(tt)
+		end
+	end
+	party:SetScript("OnEnter", stripTip)
+	party:SetScript("OnLeave", ns.PartySeats.HideTip)
 	f.party = party
 	party.heading = W.SectionHeader(party, L["Party"])
 	party.heading:SetPoint("TOPLEFT")
 	party.heading:SetPoint("TOPRIGHT")
 	party.slots = {}
+	local function openParty()
+		UI.SelectTab("assignments")
+	end
 	for i = 1, 8 do
-		local slot = CreateFrame("Frame", nil, party)
+		-- A button of its own for the seat's tooltip; a click opens the Party section as the strip does.
+		local slot = CreateFrame("Button", nil, party)
 		slot:SetSize(40, SLOT_DISC + 16)
+		slot:RegisterForClicks("LeftButtonUp")
+		slot:SetScript("OnClick", openParty)
+		slot:SetScript("OnEnter", function(self)
+			if not (self.seat and ns.PartySeats.Tooltip(self, self.seat, self.inGroup)) then
+				stripTip(self)
+			end
+		end)
+		slot:SetScript("OnLeave", ns.PartySeats.HideTip)
 		-- A slate plate in a bronze ring with the role's glyph (or, for a raid, the group number) on it. The ring stays
 		-- bronze for every role: a red ring around a slanted sword reads as a "no entry" sign.
 		slot.icon = slot:CreateTexture(nil, "ARTWORK", nil, 0)
@@ -238,6 +264,10 @@ function SidePanel.Create(parent, ctx)
 		slot.name:SetPoint("TOP", slot.icon, "BOTTOM", 0, -2)
 		slot.name:SetWidth(40)
 		slot.name:SetJustifyH("CENTER")
+		slot.name:SetWordWrap(false)
+		-- A member's level on the plate's lower right, as the game's party frames show it.
+		slot.level = W.Text(slot, "caption", "ink")
+		slot.level:SetPoint("BOTTOMRIGHT", slot.icon, "BOTTOMRIGHT", 5, -2)
 		party.slots[i] = slot
 	end
 
@@ -245,14 +275,35 @@ function SidePanel.Create(parent, ctx)
 		return plan and plan.instance.kind == "raid"
 	end
 
+	-- The strip as the plan stores it, with the group filled in where it stores nobody (UI/PartySeats.lua).
 	function f:RefreshParty(plan)
 		local raid = isRaid(plan)
 		party.heading:SetText(raid and L["Raid groups"] or L["Party"])
 		local w = math.max(10, party:GetWidth())
 		local n = raid and 8 or #PARTY
 		local slotW = w / n
+		local fill = plan and not raid and ns.PartySeats.Fill(plan)
+		local counts, live = nil, false
+		if plan and raid then
+			counts, live = ns.PartySeats.RaidCounts(plan, n)
+		end
+		-- Members beyond the five seats (a raid on a dungeon plan) are named in the strip's tooltip.
+		local extra = fill and #fill.extra or 0
+		party.heading:SetCount(extra > 0 and ("+" .. extra) or nil)
+		local tip = L["Who plays which role. Click to edit the party and the assignments."]
+		if extra > 0 then
+			tip = tip .. "\n\n" .. L["Also in your group:"] .. "\n" .. table.concat(ns.PartySeats.ExtraLines(fill.extra), "\n")
+		elseif live then
+			tip = tip .. "\n\n" .. L["Groups as your raid stands now: the plan sets none."]
+		end
+		party.tipTitle, party.tipText = raid and L["Raid groups"] or L["Party"], tip
 		for i, slot in ipairs(party.slots) do
 			slot:ClearAllPoints()
+			slot.seat, slot.inGroup = nil, nil
+			slot.level:SetText("")
+			slot.icon:SetAlpha(1)
+			slot.role:SetAlpha(1)
+			slot.name:SetAlpha(1)
 			if i <= n and plan then
 				slot:SetWidth(slotW)
 				slot:SetPoint("TOPLEFT", party, "TOPLEFT", (i - 1) * slotW, -((SZ.row - 4) + SP.sm))
@@ -262,25 +313,31 @@ function SidePanel.Create(parent, ctx)
 				slot.icon:Show()
 				slot.ring:Show()
 				if raid then
-					local members = plan.groups[i] or {}
+					local count = counts[i] or 0
 					slot.role:Hide()
 					slot.num:SetText(tostring(i))
-					slot.ring:SetVertexColor(S.Color(#members > 0 and "borderHover" or "border"))
-					slot.name:SetText(#members .. "/5")
-					S.TextColor(slot.name, "ink")
+					slot.ring:SetVertexColor(S.Color(count > 0 and "borderHover" or "border"))
+					slot.name:SetText(count .. "/5")
+					S.TextColor(slot.name, live and "muted" or "ink")
 				else
 					local spec = PARTY[i]
+					local seat = fill.seats[i]
+					slot.seat, slot.inGroup = seat, fill.inGroup
 					slot.num:SetText("")
 					slot.role:Show()
 					slot.role:SetVertexColor(1, 1, 1, 1)
 					if not Art.Set(slot.role, ROLE_ART[spec[1]]) then
 						Art.Set(slot.role, ROLE_ART_DISC[spec[1]])
 					end
-					local name = (plan.groups[spec[2]] or {})[spec[3]]
-					slot.ring:SetVertexColor(S.Color(name and "borderHover" or "border"))
+					local taken = seat.member or seat.stored
+					slot.ring:SetVertexColor(S.Color(taken and "borderHover" or "border"))
 					-- An empty seat says so (muted), so the strip never shows a bare dash.
-					slot.name:SetText(name and ns.Util.ShortName(name) or L["party:open"])
-					S.TextColor(slot.name, name and "ink" or "muted")
+					local plate = ns.PartySeats.Paint(slot.name, seat)
+					slot.icon:SetAlpha(plate)
+					slot.role:SetAlpha(plate)
+					local level = seat.member and seat.member.level
+					slot.level:SetText(level and tostring(level) or "")
+					slot.level:SetAlpha(plate)
 				end
 			else
 				slot:Hide()
@@ -334,6 +391,16 @@ function SidePanel.Create(parent, ctx)
 	end
 
 	f:HookScript("OnSizeChanged", function(self)
+		self:RefreshParty(ctx:Plan())
+	end)
+	-- The group changes while the strip is shown: redraw it (coalesced in Data/PartyInfo.lua); hidden, nothing.
+	local function partyShown()
+		return f:IsVisible() and party:IsShown()
+	end
+	ns.PartySeats.Watch(f, partyShown, function()
+		f:RefreshParty(ctx:Plan())
+	end)
+	f:HookScript("OnShow", function(self)
 		self:RefreshParty(ctx:Plan())
 	end)
 	return f

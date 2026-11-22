@@ -6,7 +6,7 @@
 
 local _, ns = ...
 local S, W, L, Art = ns.Style, ns.Widgets, ns.L, ns.Art
-local Plan, Util, Schema = ns.Plan, ns.Util, ns.Schema
+local Plan, Schema = ns.Plan, ns.Schema
 local SP, SZ = S.SPACE, S.SIZE
 
 local PartyGroups = {}
@@ -108,11 +108,37 @@ function PartyGroups.Create(parent, o)
 		seat.slot = slot
 		seat:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 		seat:SetScript("OnClick", memberMenu)
+		seat:SetScript("OnEnter", function(self)
+			if self.seat then
+				ns.PartySeats.Tooltip(self, self.seat, self.inGroup)
+			end
+		end)
+		seat:SetScript("OnLeave", ns.PartySeats.HideTip)
 		card.seats[i] = seat
 	end
+	-- Members beyond the five seats (a raid on a dungeon plan): a note at the card's top right, named in its tooltip.
+	card.extra = CreateFrame("Button", nil, card)
+	card.extra:SetPoint("TOPRIGHT", -SP.md, -SP.md)
+	card.extra:SetSize(200, HEAD_H)
+	card.extra.text = W.Text(card.extra, "caption", "muted")
+	card.extra.text:SetPoint("RIGHT")
+	card.extra.text:SetJustifyH("RIGHT")
+	card.extra:SetScript("OnEnter", function(self)
+		local tt = W.Tip()
+		if tt then
+			W.TipBeside(tt, self)
+			tt:SetText(L["Also in your group:"], 1, 0.82, 0, 1, true)
+			for _, line in ipairs(self.lines or {}) do
+				tt:AddLine(line, 1, 1, 1, true)
+			end
+			W.TipShow(tt)
+		end
+	end)
+	card.extra:SetScript("OnLeave", ns.PartySeats.HideTip)
+	card.extra:Hide()
 	card.hint = W.Paragraph(card, "caption", "muted")
 	card.hint:SetJustifyH("CENTER")
-	card.hint:SetText(L["Fill from my party takes the roles your group chose; + adds a name by hand. Right-click a name to remove it."])
+	card.hint:SetText(L["Fill from my party stores the seats as shown, guesses included; + adds a name by hand. Right-click a name to remove it."])
 
 	-- The seats share the card's width; the hint under them while the plan can change.
 	function g:LayoutCard(width)
@@ -197,41 +223,46 @@ function PartyGroups.Create(parent, o)
 			return
 		end
 		if isParty() then
-			if not (IsInGroup and IsInGroup()) then
+			if not ns.PartyInfo.InGroup() then
 				ns:Print(L["You are not in a group."])
 				return
 			end
+			-- The seats as the strip fills them from the group (Model/Party.lua), stored by whole name so the plan
+			-- matches its members again later (Share/Roster.lua). In a raid: the player's own group.
+			local members = ns.PartyInfo.Members()
+			local mine = members[1] and members[1].player and members[1].subgroup
+			if mine then
+				local own = {}
+				for _, m in ipairs(members) do
+					if m.subgroup == mine then
+						own[#own + 1] = m
+					end
+				end
+				members = own
+			end
+			local fill = ns.Party.Fill({}, members)
 			for gi = 1, Schema.MAX.groups do
 				p.groups[gi] = {}
 			end
-			for _, unit in ipairs({ "player", "party1", "party2", "party3", "party4" }) do
-				if UnitExists and UnitExists(unit) then
-					local name = Util.ShortName(UnitName(unit))
-					local role = UnitGroupRolesAssigned and Util.Plain(UnitGroupRolesAssigned(unit)) or nil
-					local gi = role == "TANK" and 1 or role == "HEALER" and 2 or 3
-					if name and #p.groups[gi] >= (gi == 3 and 3 or 1) then
-						gi = #p.groups[3] < 3 and 3 or (#p.groups[1] < 1 and 1 or 2)
-					end
-					if name then
-						Plan.SetGroup(p, name, gi)
-					end
+			for i, seat in ipairs(fill.seats) do
+				if seat.member then
+					Plan.SetGroup(p, seat.member.id, ns.Party.SEATS[i].group)
 				end
 			end
 			o.changed()
 			return
 		end
-		if not (IsInRaid and IsInRaid() and GetRaidRosterInfo) then
+		if not ns.PartyInfo.RaidGroups() then
 			ns:Print(L["You are not in a raid."])
 			return
 		end
 		for gi = 1, Schema.MAX.groups do
 			p.groups[gi] = {}
 		end
-		for i = 1, GetNumGroupMembers() do
-			local name, _, subgroup = GetRaidRosterInfo(i)
-			name, subgroup = Util.ShortName(name), Util.Plain(subgroup)
-			if name and Util.IsInteger(subgroup) then
-				Plan.SetGroup(p, name, subgroup)
+		-- The raid's groups, by whole name.
+		for _, m in ipairs(ns.PartyInfo.Members()) do
+			if m.subgroup then
+				Plan.SetGroup(p, m.id, m.subgroup)
 			end
 		end
 		o.changed()
@@ -250,22 +281,33 @@ function PartyGroups.Create(parent, o)
 		raid:SetShown(not party)
 		card.hint:SetShown(not ro)
 		if party then
-			for _, seat in ipairs(card.seats) do
+			-- The stored seats, the group filled in where the plan stores nobody (UI/PartySeats.lua).
+			local fill = ns.PartySeats.Fill(p)
+			for i, seat in ipairs(card.seats) do
 				local name = (p.groups[seat.slot[2]] or {})[seat.slot[3]]
-				seat.name = name
-				W.FitText(seat.role, L[ROLE_TEXT[seat.slot[1]]])
-				W.FitText(seat.text, name or L["party:open"])
-				S.TextColor(seat.text, name and "ink" or "muted")
-				seat.ring:SetVertexColor(S.Color(name and "borderHover" or "border"))
+				local s = fill.seats[i]
+				seat.name, seat.seat, seat.inGroup = name, s, fill.inGroup
+				local level = s.member and s.member.level
+				W.FitText(seat.role, level and string.format(L["%s • level %d"], L[ROLE_TEXT[seat.slot[1]]], level)
+					or L[ROLE_TEXT[seat.slot[1]]])
+				local plate = ns.PartySeats.Paint(seat.text, s)
+				seat.disc:SetAlpha(plate)
+				seat.glyph:SetAlpha(plate)
+				seat.ring:SetVertexColor(S.Color((name or s.member) and "borderHover" or "border"))
 				seat.add:SetShown(not ro and name == nil and #(p.groups[seat.slot[2]] or {}) < seat.slot[3])
 			end
+			local extra = #fill.extra
+			card.extra:SetShown(extra > 0)
+			card.extra.lines = ns.PartySeats.ExtraLines(fill.extra)
+			card.extra.text:SetText(string.format(L["+%d more in your group"], extra))
 		else
 			for gi, box in ipairs(raid.boxes) do
 				local members = p.groups[gi] or {}
 				box.count:SetText(#members .. "/" .. Schema.MAX.groupSize)
 				for i, b in ipairs(box.names) do
 					b.name = members[i]
-					b.text:SetText(members[i] or "")
+					-- A whole name reads as the member's short name while they are in the group.
+				b.text:SetText(members[i] and ns.PartySeats.Short(members[i]) or "")
 					b:SetShown(members[i] ~= nil)
 				end
 				box.addButton:SetShown(not ro)
@@ -273,5 +315,12 @@ function PartyGroups.Create(parent, o)
 			end
 		end
 	end
+	-- The group changes while the party card is shown: repaint it (coalesced in Data/PartyInfo.lua).
+	local function cardShown()
+		return card:IsVisible()
+	end
+	ns.PartySeats.Watch(g, cardShown, function()
+		g:Refresh()
+	end)
 	return g
 end

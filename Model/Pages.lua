@@ -217,10 +217,17 @@ function Pages.Keyword(word, classes)
 	return nil
 end
 
--- The raid group (1..8) the plan puts `name` in, or nil.
-function Pages.GroupOf(groups, name)
+-- The raid group (1..8) the plan puts `name` in, or nil. isMe(stored): an own test for the stored names (the whole
+-- name, or a first name stored before plans kept surnames: Party.Match), instead of comparing them with `name`.
+function Pages.GroupOf(groups, name, isMe)
 	for g, members in ipairs(groups or EMPTY) do
-		if Util.IndexOf(members, name) then
+		if isMe then
+			for _, stored in ipairs(members) do
+				if isMe(stored) then
+					return g
+				end
+			end
+		elseif Util.IndexOf(members, name) then
 			return g
 		end
 	end
@@ -233,6 +240,7 @@ local NAME_CHARS = "[%a\128-\255]+"
 --   chat = true            for raid chat: {rtN} (the chat draws the icon), role and class words, plain names
 --   groups                 the plan's raid groups (for {group N})
 --   me                     the player's name: their lines are marked
+--   isMe(name)             is a name the plan stores the player's (whole or first name)? (else: equal to me)
 --   own                    the mark put before the player's lines (display only), e.g. a coloured ">"
 --   classes                [lower-case class token or name] = TOKEN (from the client)
 --   classOf(name)          a group member's class token, when known
@@ -242,7 +250,7 @@ local NAME_CHARS = "[%a\128-\255]+"
 -- Returns the expanded text and the number of lines marked as the player's.
 function Pages.Expand(text, env)
 	env = env or {}
-	local myGroup = env.me and Pages.GroupOf(env.groups, env.me)
+	local myGroup = env.me and Pages.GroupOf(env.groups, env.me, env.isMe)
 	local function plainName(name)
 		if env.chat or not env.classOf or not env.colorName then
 			return name

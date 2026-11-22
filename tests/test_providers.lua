@@ -629,7 +629,8 @@ T.case("Party strip: role glyphs on a bronze-ringed plate, and empty seats say s
 	ns.UI.SelectPlan("b:hall-of-thanes")
 	local side = _G.DungeonPlannerMainFrame.instancePage.side
 	side:RefreshParty(ns.DB.GetPlan("b:hall-of-thanes"))
-	local slot = side.party.slots[3]
+	-- Solo, the player takes the first damage seat (the mock's class lists no specializations); the next one is open.
+	local slot = side.party.slots[4]
 	T.ok(slot.role:IsShown() and slot.ring:IsShown() and slot.icon:IsShown(), "glyph on its plate")
 	T.eq(ns.Art.SPECS.party_DAMAGER.atlas, "groupfinder-icon-role-micro-dps", "the sword glyph, not the red disc")
 	T.eq(ns.Art.SPECS.partyDisc_DAMAGER.atlas, "UI-LFG-RoleIcon-DPS", "the disc only as a fallback")

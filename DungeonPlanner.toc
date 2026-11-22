@@ -52,6 +52,7 @@ Model\Progress.lua
 Model\RunLog.lua
 Model\RunCompare.lua
 Model\Prep.lua
+Model\Party.lua
 Model\TravelLive.lua
 
 Share\Checksum.lua
@@ -92,6 +93,7 @@ Data\Templates.lua
 Data\TravelData.lua
 Data\Travel.lua
 Data\PrepInfo.lua
+Data\PartyInfo.lua
 Data\Navigation.lua
 
 # BEGIN generated plans (tools/gen_plans.lua)
@@ -264,6 +266,7 @@ UI\Portraits.lua
 UI\Home.lua
 UI\PlanActions.lua
 UI\InstancePicker.lua
+UI\PartySeats.lua
 UI\SidePanel.lua
 UI\InstancePage.lua
 UI\GettingThere.lua

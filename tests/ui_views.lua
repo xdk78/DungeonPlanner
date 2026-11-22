@@ -1,6 +1,6 @@
 -- The views tests/ui_dump.lua dumps (wow-ui-harness, wowui.runner): the window's home (every tab), the instance
 -- picker and other dropdown lists, every section of a Forever dungeon on Santiago Reyes' bundled map (Share with Advanced open),
--- a raid's party, a classic dungeon and a raid on the game's old map tiles, an own plan with the drawing tools and
+-- a raid's party, a party filled from the group, a classic dungeon and a raid on the game's old map tiles, an own plan with the drawing tools and
 -- drawings (also at the window's minimum size, 880 x 560, and a large one), run mode at its first, a middle and its
 -- last step and with group sync (following, leading, a plan the member lacks), the /dp debug dialog and a
 -- confirmation. The client is set up the way WoW: Forever is: an empty Adventure Guide, the recommended plans, and
@@ -380,6 +380,102 @@ local function party(on)
 	end
 end
 
+-- A party of WoW: Forever characters (first name and surname, made up) filling a recommended plan's open seats
+-- (UI/PartySeats.lua): the healer and two damage dealers set their roles, a warrior without one is guessed into the
+-- tank seat, one member is offline, one has a long first name, and a sixth (a raid of six on a dungeon plan, raid1
+-- being the player) has no seat.
+local liveSaved
+local LIVE = {
+	raid1 = { name = "Tess", surname = "Tester", cls = "MAGE", role = "DAMAGER", level = 18 },
+	raid2 = { name = "Aldra", surname = "Vey", cls = "PRIEST", role = "HEALER", level = 19 },
+	raid3 = { name = "Bram", surname = "Holt", cls = "WARRIOR", level = 18 },
+	raid4 = { name = "Thorvaldurinn", surname = "Stone", cls = "ROGUE", role = "DAMAGER", level = 20 },
+	raid5 = { name = "Dessa", surname = "Moor", cls = "MAGE", role = "DAMAGER", level = 17, offline = true },
+	raid6 = { name = "Ivo", surname = "Lark", cls = "MAGE", role = "DAMAGER", level = 18 },
+}
+local LIVE_GROUP = { 1, 1, 1, 1, 1, 2 }
+local LIVE_SPECS = { WARRIOR = { "TANK", "DAMAGER" }, PRIEST = { "HEALER", "DAMAGER" }, ROGUE = { "DAMAGER" },
+	MAGE = { "DAMAGER" } }
+local LIVE_IDS = { WARRIOR = 1, PRIEST = 5, ROGUE = 4, MAGE = 8 }
+local LIVE_CLASSES = {}
+for token, id in pairs(LIVE_IDS) do
+	LIVE_CLASSES[id] = token
+end
+local LIVE_GLOBALS = { "UnitName", "UnitClass", "UnitGroupRolesAssigned", "UnitIsConnected", "UnitIsUnit", "IsInRaid",
+	"GetRaidRosterInfo", "GetNumGroupMembers", "GetNumSpecializationsForClassID", "GetSpecializationInfoForClassID",
+	"RAID_CLASS_COLORS" }
+local function liveParty(on)
+	if not on then
+		for n, v in pairs(liveSaved or {}) do
+			_G[n] = v or nil
+		end
+		mock.inGroup, mock.units = false, {}
+		mock.FireEvent("GROUP_ROSTER_UPDATE")
+		return
+	end
+	liveSaved = {}
+	for _, n in ipairs(LIVE_GLOBALS) do
+		liveSaved[n] = rawget(_G, n) or false
+	end
+	mock.inGroup = true
+	mock.units = { player = LIVE.raid1 }
+	for unit, u in pairs(LIVE) do
+		mock.units[unit] = u
+	end
+	_G.IsInRaid = function()
+		return true
+	end
+	_G.GetNumGroupMembers = function()
+		return #LIVE_GROUP
+	end
+	_G.GetRaidRosterInfo = function(i)
+		local u = LIVE["raid" .. i]
+		return u and u.name, 0, LIVE_GROUP[i]
+	end
+	_G.UnitIsUnit = function(a, b)
+		return a == b or (b == "player" and a == "raid1")
+	end
+	_G.UnitName = function(unit)
+		local u = mock.units[unit]
+		return u and u.name, u and u.surname
+	end
+	_G.UnitClass = function(unit)
+		local u = mock.units[unit]
+		return u and u.cls, u and u.cls, u and LIVE_IDS[u.cls]
+	end
+	_G.UnitGroupRolesAssigned = function(unit)
+		local u = mock.units[unit]
+		return u and u.role or "NONE"
+	end
+	_G.UnitIsConnected = function(unit)
+		local u = mock.units[unit]
+		return not (u and u.offline)
+	end
+	_G.GetNumSpecializationsForClassID = function(id)
+		return LIVE_CLASSES[id] and #LIVE_SPECS[LIVE_CLASSES[id]] or 0
+	end
+	_G.GetSpecializationInfoForClassID = function(id, i)
+		return id * 10 + i, "Spec", "", 0, LIVE_SPECS[LIVE_CLASSES[id]][i]
+	end
+	_G.RAID_CLASS_COLORS = { WARRIOR = { r = 0.78, g = 0.61, b = 0.43 }, PRIEST = { r = 1, g = 1, b = 1 },
+		ROGUE = { r = 1, g = 0.96, b = 0.41 }, MAGE = { r = 0.25, g = 0.78, b = 0.92 } }
+	mock.FireEvent("GROUP_ROSTER_UPDATE") -- the strip reads the new roster
+end
+
+local function liveView(name, section)
+	return {
+		name = name,
+		setup = function()
+			liveParty(true)
+			openPlan("hall-of-thanes", section)
+		end,
+		window = window,
+		teardown = function()
+			liveParty(false)
+		end,
+	}
+end
+
 local function pagesView(name, w, h)
 	return {
 		name = name,
@@ -636,6 +732,9 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- The group fills the recommended plan's open seats: the side panel's strip and the Party section's card.
+	liveView("party-live", "map"),
+	liveView("party-live-card", "assignments"),
 	-- An own dungeon plan's party: three seats taken, two assignments, the first selected (its editor under the list).
 	{
 		name = "party-own",

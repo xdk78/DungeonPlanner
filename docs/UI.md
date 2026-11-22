@@ -66,7 +66,24 @@ differently:
   (`groupfinder-icon-role-micro-tank`, `-heal`, `-dps`, else the classic `LFGRole` sheet, else the round
   `UI-LFG-RoleIcon-*` icons) and the player's name under it, or a muted "Open". The ring is bronze for every role:
   the round damage icon (a slanted sword on a red disc) and ability icons in a red ring both read as a "no entry"
-  sign.
+  sign. Where the plan names nobody, the seats show the group as it is (`Model/Party.lua`, `UI/PartySeats.lua`;
+  solo, the player alone): each member by the role set in the group finder; without one, a damage-only class in a
+  damage seat, and a class that can also tank or heal in the empty tank or healer seat it can fill (the least
+  flexible first), else a damage seat, as a guess. Whoever is left (a fourth mage, a class the client cannot tell)
+  takes a free seat, which the tooltip says plainly ("Role not set: placed in a free seat."). A member is the short
+  name (the first name) in class colour, cut by its letters with "..." when one word is too long, with the level
+  small on the plate's lower right; a guess, a free seat or a member in a seat that is not their role reads dimmer,
+  an offline or dead member dims the plate too. The tooltip: the whole name (with the surname), the role, level and
+  class, and how the seat was chosen ("Role not set: guessed from class."). A name the plan stores keeps its seat
+  and is matched to a member by the whole name, or, for a first name stored before plans kept surnames, by the one
+  member with that first name (`Party.Match`; two members with it match neither, and the tooltip says so instead of
+  "Not in your group."). Members past the five seats show as "+1" on the header, named in the strip's tooltip. A
+  raid plan that sets no groups shows the raid's groups as they stand (`GetRaidRosterInfo` only), the counts muted.
+  The Party section's card fills its seats the same way, with "Tank • level 18" under the plate and "+1 more in your
+  group" at its top right. Both redraw on the group's events while shown (Data/PartyInfo.lua, one redraw 0.3 s after
+  a burst); hidden, nothing. The roster is read once per group event, not on every resize or redraw.
+  One identity across the plan: Fill from my party (in a raid: the player's own group) and Fill from my raid, the
+  assignment targets and the Notes window store and match whole names and show the short name.
 - **Section area**: the map by default; Bosses, Pulls, Party (assignments), Gear, Runs (the run recorder), Share and
   Notes (details, notes and progress) in the same place, each in an inset.
 - **Gear**: the filters on one line (they shrink alike on a narrow window), and under them a line of its own with the
@@ -644,6 +661,10 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   the click pinning the entrance and opening the world map, right-click and Shift-click opening Getting there, the
   button off in combat and while dead and back after both, off for an instance without travel facts; with the gamepad
   interface style, the pin only; the header at the minimum width (880) in German.
+- The party strip filled from the group: what `UnitGroupRolesAssigned` answers on Forever outside the group finder,
+  class colours and the role guesses from the client's specializations, a member going offline; a member's death and
+  return dimming and restoring their seat (`UNIT_FLAGS`; the player's own through `PLAYER_DEAD` / `PLAYER_ALIVE` /
+  `PLAYER_UNGHOST`); a plan holding first names matched to "First Surname" members.
 
 Since 0.1.0:
 
