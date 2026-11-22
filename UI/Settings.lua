@@ -187,7 +187,7 @@ local function routesGroup()
 				order = 9,
 				width = "double",
 				name = L["Highlight the route under the pointer"],
-				desc = L["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."],
+				desc = L["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."],
 				get = routeGet("hover"),
 				set = routeSet("hover"),
 			},

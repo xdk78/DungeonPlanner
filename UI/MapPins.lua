@@ -417,8 +417,9 @@ function MapRoutes.Install(view)
 	end
 
 	-- Draw layers on the overlay (sublevels): outlines and joint outlines, lines and joints, then the highlighted leg's
-	-- outline and line above every other line, and the arrows on top. Pins and stops are frames above all of these.
-	local OUTLINE, LINE, TOP_OUTLINE, TOP_LINE, ARROW = 0, 1, 2, 3, 4
+	-- outline and line above every other line, and the arrows on top (4, set where they are made). Pins and stops are
+	-- frames above all of these.
+	local OUTLINE, LINE, TOP_OUTLINE, TOP_LINE = 0, 1, 2, 3
 
 	-- Draw every route path on `floor`. px, py: plan coordinates to canvas offsets (py negative downwards). o = { scale
 	-- (icon size), seg (the focused step's { route, from, to } or nil), highlight (a leg { route, from, to } drawn as the
