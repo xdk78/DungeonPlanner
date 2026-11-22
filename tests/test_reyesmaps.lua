@@ -71,7 +71,7 @@ T.case("Reyes maps: every Forever plan floor gets its map with no other addon in
 		local plan = ns.Bundled.Get("b:" .. slug)
 		for i, floor in ipairs(plan.floors) do
 			local art, source = ns.MinimapArt.Choose(plan, i, nil)
-			if (floor.name or "") == "" and floor.uiMapID then
+			if ns.Floors.IsOutside(floor) then
 				T.ok(source ~= "reyes", slug .. " " .. i .. ": the zone outside gets no dungeon map")
 			else
 				T.eq(source, "reyes", slug .. " floor " .. i)

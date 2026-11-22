@@ -13,8 +13,8 @@
 --
 -- Matching: by instance, not by plan, so a player's own plan or a copy of a recommended one gets the same spawns. The
 -- instance is found by name the way Data/GameFiles.lua finds the floor's map (GameFiles.Key, aliases included), and a
--- floor by its position, as the map tiles are: floor i of a plan is the instance's i-th dungeon map. An unnamed floor
--- with its own map ID (the zone outside) gets none.
+-- floor by its position, as the map tiles are: floor i of a plan is the instance's i-th dungeon map. The zone outside
+-- (Floors.IsOutside: an unnamed floor on an entrance zone's map) gets none.
 -- Pure Lua apart from GameFiles' name keys: no game API.
 
 local _, ns = ...

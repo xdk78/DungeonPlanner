@@ -11,7 +11,7 @@ local UI = ns.UI
 -- Plans ------------------------------------------------------------------------------------------------------------------
 
 local function createPlan(templateId, name, entry)
-	local info
+	local info, instanceID
 	if entry then
 		info = {
 			name = entry.name or "",
@@ -19,16 +19,18 @@ local function createPlan(templateId, name, entry)
 			ejInstanceID = entry.ejInstanceID,
 			uiMapID = entry.uiMapID,
 		}
+		instanceID = entry.instanceMapID
 	else
 		local cur = ns.Instances.Current()
 		info = { name = cur.name or "", kind = cur.kind, ejInstanceID = cur.ejInstanceID, uiMapID = cur.uiMapID }
+		instanceID = cur.inInstance and cur.instanceID or nil
 	end
 	local author = UnitName and ns.Util.Plain(UnitName("player")) or ""
 	local plan = ns.Plan.New({
 		name = name,
 		author = author,
 		instance = info,
-		floors = ns.Floors.Initial(info),
+		floors = ns.Floors.Initial(info, instanceID),
 	})
 	ns.Templates.Get(templateId).apply(plan)
 	if info.ejInstanceID then

@@ -266,6 +266,7 @@ ns.Locales.deDE = {
 	["First step"] = "Erster Schritt",
 	["Fit"] = "Alles",
 	["Floor %d"] = "Ebene %d",
+	["%s (%d)"] = "%s (%d)",
 	["%d marker on this floor|%d markers on this floor"] = "%d Markierung auf dieser Ebene|%d Markierungen auf dieser Ebene",
 	["Boss order"] = "Reihenfolge der Bosse",
 	["Click to go there."] = "Klicken, um dorthin zu wechseln.",

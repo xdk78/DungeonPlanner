@@ -266,6 +266,7 @@ ns.Locales.esES = {
 	["First step"] = "Primer paso",
 	["Fit"] = "Todo",
 	["Floor %d"] = "Planta %d",
+	["%s (%d)"] = "%s (%d)",
 	["%d marker on this floor|%d markers on this floor"] = "%d marcador en esta planta|%d marcadores en esta planta",
 	["Boss order"] = "Orden de los jefes",
 	["Click to go there."] = "Haz clic para ir allí.",

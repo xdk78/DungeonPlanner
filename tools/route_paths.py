@@ -293,6 +293,18 @@ def load_repo():
     return data["plans"], data["instances"]
 
 
+_ZONE_MAPS = None
+
+
+def is_outside(floor) -> bool:
+    """Floors.IsOutside: an unnamed floor whose map is an entrance zone (data-src/travel/places.json `zoneMap`)."""
+    global _ZONE_MAPS
+    if _ZONE_MAPS is None:
+        places = json.loads((REPO / "data-src" / "travel" / "places.json").read_text(encoding="utf-8"))["places"]
+        _ZONE_MAPS = {p["zoneMap"] for p in places.values() if isinstance(p.get("zoneMap"), int)}
+    return not floor.get("name") and floor.get("uiMapID") in _ZONE_MAPS
+
+
 def tile_bases(instances, plan):
     spec = instances.get(strip_article(plan["instance"]["name"]))
     if spec and spec.get("alias"):
@@ -479,7 +491,7 @@ def floor_picture(game, casc, instances, fdj, openmap, plan, floor_index):
     """(image, source, transform) for a plan floor; transform maps plan space to picture space (Providers.Align)."""
     floor = plan["floors"][floor_index - 1]
     bases = tile_bases(instances, plan)
-    if floor_index <= len(bases) and not (not floor.get("name") and floor.get("uiMapID")):
+    if floor_index <= len(bases) and not is_outside(floor):
         img = classic_floor(casc, bases[floor_index - 1])
         if img is not None:
             return img, "game map tiles " + bases[floor_index - 1], (1.0, 0.0, 1.0, 0.0, "none")

@@ -191,9 +191,28 @@ end
 
 -- Collecting rows --------------------------------------------------------------------------------------------------------
 
--- A floor that is a dungeon floor (not the zone outside: unnamed with its own map ID), as Data/Spawns.lua decides.
+-- The entrance zones' uiMapIDs (Data/TravelData.lua, `zm`), read once.
+local zoneMaps
+local function isZoneMap(uiMapID)
+	if not zoneMaps then
+		zoneMaps = {}
+		local ns = {}
+		local chunk = assert(loadfile("Data/TravelData.lua"))
+		setfenv(chunk, {})
+		chunk("DungeonPlanner", ns)
+		for _, rec in pairs(ns.TravelData.instances) do
+			if type(rec.zm) == "number" then
+				zoneMaps[rec.zm] = true
+			end
+		end
+	end
+	return zoneMaps[uiMapID] == true
+end
+
+-- A floor that is a dungeon floor, as Data/Spawns.lua decides (Floors.IsOutside: the zone outside is an unnamed floor
+-- whose map is an entrance zone).
 local function dungeonFloor(floor)
-	return type(floor) == "table" and not ((floor.name or "") == "" and floor.uiMapID)
+	return type(floor) == "table" and not ((floor.name or "") == "" and floor.uiMapID and isZoneMap(floor.uiMapID))
 end
 
 local function inRange(v)

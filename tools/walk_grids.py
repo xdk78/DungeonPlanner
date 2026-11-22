@@ -111,7 +111,7 @@ def load_tables():
 def reyes_pick(reyes, plan, index):
     """ReyesMaps.Pick: the bundled floor for plan floor `index` (1-based), or None."""
     floor = plan["floors"][index - 1]
-    if not floor.get("name") and floor.get("uiMapID"):
+    if rp.is_outside(floor):
         return None
     floors = reyes.get(rp.strip_article(plan["instance"]["name"]))
     if not floors:
@@ -135,9 +135,9 @@ def minimap_floor(minimap, key, index):
 def floor_key(instances, reyes, minimap, plan, index):
     """The grid key of a plan floor: "t:<tiles>", "r:<file>", "m:<instance>:<floor>" or None."""
     floor = plan["floors"][index - 1]
-    if not floor.get("name") and floor.get("uiMapID"):
+    if rp.is_outside(floor):
         return None
-    bases = rp.tile_bases(instances, plan)
+    bases =rp.tile_bases(instances, plan)
     if index <= len(bases):
         return "t:" + bases[index - 1]
     f = reyes_pick(reyes, plan, index)

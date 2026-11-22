@@ -266,6 +266,7 @@ ns.Locales.ruRU = {
 	["First step"] = "Первый шаг",
 	["Fit"] = "Всё",
 	["Floor %d"] = "Этаж %d",
+	["%s (%d)"] = "%s (%d)",
 	["%d marker on this floor|%d markers on this floor"] = "%d метка на этом этаже|%d метки на этом этаже|%d меток на этом этаже",
 	["Boss order"] = "Порядок боссов",
 	["Click to go there."] = "Нажмите, чтобы перейти туда.",
