@@ -1,6 +1,12 @@
--- Offline test runner. Plain Lua 5.1, no busted. From the repo root:  lua tests/run.lua [filter]
+-- Offline test runner. Plain Lua 5.1, no busted. From the repo root:
+--   lua tests/run.lua [filter] [--file <names>] [--reverse | --shuffle <seed>]
 -- Loads the whole addon (TOC order, embedded libraries included) against tests/wowmock.lua, then runs every
 -- tests/test_*.lua file. Exit code 1 when anything fails.
+--   filter            only the cases whose name contains this text
+--   --file <names>    only these files, in this order (comma-separated: test_native, test_native.lua or native),
+--                     on a freshly loaded addon; one name runs that file alone
+--   --reverse         the files in reverse order; --shuffle <seed> in a seeded random order. Both catch a case that
+--                     passes only because another file's cases ran first.
 
 package.path = "./tests/?.lua;" .. package.path
 math.randomseed(42)
@@ -14,7 +20,30 @@ mock.LoadAddon(".", "DungeonPlanner.toc", "DungeonPlanner", ns)
 mock.KnowArt(ns)
 
 local T = { passed = 0, failed = 0, failures = {}, mock = mock, ns = ns }
-local filter = arg[1]
+local filter, onlyFile, order, seed
+do
+	local i = 1
+	while i <= #arg do
+		local a = arg[i]
+		if a == "--file" then
+			onlyFile = {}
+			for name in assert(arg[i + 1], "--file needs a name"):gmatch("[^,]+") do
+				onlyFile[#onlyFile + 1] = "test_" .. name:gsub("%.lua$", ""):gsub("^test_", "") .. ".lua"
+			end
+			i = i + 1
+		elseif a == "--reverse" then
+			order = "reverse"
+		elseif a == "--shuffle" then
+			order, seed = "shuffle", assert(tonumber(arg[i + 1]), "--shuffle needs a numeric seed")
+			i = i + 1
+		elseif a:sub(1, 2) == "--" then
+			error("unknown option " .. a)
+		else
+			filter = a
+		end
+		i = i + 1
+	end
+end
 
 function T.eq(actual, expected, msg)
 	if actual ~= expected then
@@ -50,8 +79,11 @@ function T.case(name, fn)
 	end
 end
 
--- A fresh in-memory database for tests that need ns.db (the real one comes from AceDB in Boot).
+-- A fresh in-memory database for tests that need ns.db (the real one comes from AceDB in Boot). The one it replaces
+-- comes back after the file, so the files after it keep the booted addon's database.
+local replacedDB
 function T.freshDB()
+	replacedDB = replacedDB or { db = ns.db, char = ns.char, dbInfo = ns.dbInfo }
 	local adb = { profile = { settings = {}, ui = {}, minimap = {} }, global = { plans = {}, quarantine = {} }, char = {} }
 	ns.Defaults.Fill(adb.profile.settings, ns.Defaults.settings)
 	ns.Defaults.Fill(adb.profile.ui, ns.Defaults.ui)
@@ -82,9 +114,36 @@ local files = { "test_model.lua", "test_share.lua", "test_db.lua", "test_v2.lua"
 	"test_provider_pins.lua",
 	"test_routelegs.lua", "test_routelook.lua", "test_openmap_overlay.lua", "test_identity.lua", "test_zoom.lua",
 	"test_release_changelog.lua" }
+if onlyFile then
+	local listed = {}
+	for _, file in ipairs(files) do
+		listed[file] = true
+	end
+	for _, file in ipairs(onlyFile) do
+		assert(listed[file], "no test file " .. file .. " in the list")
+	end
+	files = onlyFile
+elseif order == "reverse" then
+	for i = 1, math.floor(#files / 2) do
+		files[i], files[#files + 1 - i] = files[#files + 1 - i], files[i]
+	end
+elseif order == "shuffle" then
+	-- An own generator (Park-Miller), so math.random keeps the sequence the cases see in a normal run.
+	local state = seed % 2147483646 + 1
+	for i = #files, 2, -1 do
+		state = state * 16807 % 2147483647
+		local j = state % i + 1
+		files[i], files[j] = files[j], files[i]
+	end
+	realPrint("file order (seed " .. seed .. "): " .. table.concat(files, " "))
+end
 for _, file in ipairs(files) do
 	local chunk = assert(loadfile("tests/" .. file))
 	chunk(T)
+	if replacedDB then
+		ns.db, ns.char, ns.dbInfo = replacedDB.db, replacedDB.char, replacedDB.dbInfo
+		replacedDB = nil
+	end
 end
 
 realPrint(string.format("\n%d passed, %d failed", T.passed, T.failed))

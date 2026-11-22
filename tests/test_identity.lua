@@ -16,12 +16,23 @@ local function boot()
 	if not ns.UI.IsShown() then
 		ns.UI.Toggle()
 	end
+	-- The bundled boss facts, as in game (files about the providers' answers switch them off).
+	if not ns.BossData.enabled then
+		ns.BossData.enabled = true
+		ns.Providers.ResetCaches()
+	end
 end
 
--- The old dungeon map tiles are in the client (Data/GameFiles.lua): the mock knows their first tiles from here on.
+-- The old dungeon map tiles are in the client (Data/GameFiles.lua): the mock knows their first tiles for this file's
+-- cases, and forgets them after the last one (other files' cases need a client without them).
+local addedTiles = {}
 for _, spec in pairs(ns.GameFiles.INSTANCES) do
 	for _, base in ipairs(spec.tiles or {}) do
-		mock.artFiles[("Interface\\WorldMap\\" .. base .. "1"):lower()] = true
+		local path = ("Interface\\WorldMap\\" .. base .. "1"):lower()
+		if not mock.artFiles[path] then
+			mock.artFiles[path] = true
+			addedTiles[#addedTiles + 1] = path
+		end
 	end
 end
 ns.GameFiles.Reset()
@@ -446,3 +457,9 @@ T.case("Identity: run mode's 'in the plan's instance' tells wings apart when bot
 		T.ok(not Instances.IsHere(library, { inInstance = false }), "outside")
 	end)
 end)
+
+-- After the last case: the client without the tiles this file added.
+for _, path in ipairs(addedTiles) do
+	mock.artFiles[path] = nil
+end
+ns.GameFiles.Reset()

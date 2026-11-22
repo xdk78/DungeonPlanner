@@ -121,7 +121,11 @@ T.case("What's new: saved only after Show succeeds; a first install keeps its we
 	for _, name in ipairs({ "DungeonPlannerMainFrame", "DungeonPlannerRunFrame", "DungeonPlannerNotesFrame", "DungeonPlannerReportFrame",
 		"DungeonPlannerNewsFrame", "DungeonPlannerDialog" }) do
 		local f = rawget(_G, name)
-		if f and f.IsShown and f:IsShown() then
+		-- Hiding the dialog shows the next one waiting in its queue (earlier files may leave some): until none is left.
+		for _ = 1, 20 do
+			if not (f and f.IsShown and f:IsShown()) then
+				break
+			end
 			f:Hide()
 		end
 	end
@@ -153,14 +157,15 @@ T.case("What's new: saved only after Show succeeds; a first install keeps its we
 	T.ok(ok, err)
 end)
 
-T.case("Report for Discord: 1500 characters of words are cut with an ellipsis so the total is at most 2000", function()
+T.case("Report for Discord: words that cannot fit are cut with an ellipsis so the total is at most 2000", function()
 	boot()
 	ns.Errors.Clear()
 	for i = 1, 10 do
 		ns.Errors.Record("error " .. i .. " " .. string.rep("x", 200))
 	end
 	local data = Report.Collect()
-	local words = string.rep("\196\133", 1500)
+	-- As long as the limit itself: too long whatever the core facts say (their length depends on the session's state).
+	local words = string.rep("\196\133", Report.DISCORD_LIMIT)
 	local text = Report.Text(data, words, { limit = Report.DISCORD_LIMIT })
 	T.ok(Report.CharCount(text) <= Report.DISCORD_LIMIT, Report.CharCount(text))
 	T.ok(text:find("\226\128\166", 1, true), "the words end with an ellipsis")

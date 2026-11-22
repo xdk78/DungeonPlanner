@@ -54,7 +54,7 @@ Rules:
 - `diagnostics` (top level, outside AceDB's sections) - written only by `/dp scan`: every journal instance with its IDs,
   pictures, map and floors, its bosses, how each recommended plan resolved, and a loot sample; `/dp scan clear` removes
   it. For reading the client's real data offline after a `/reload`. `diagnostics.fontTest` holds the font test
-  (`UI/Fonts.lua`): each Polish face probed at its first use this session, at the scan and 2 seconds later, with controls.
+  (`UI/FontTest.lua`): each Polish face probed at its first use this session, at the scan and 2 seconds later, with controls.
   (`fontsAtLogin`, one probe per face at the last full login, was dropped: a single early probe proved nothing.)
 - `profiles[name]` - `settings` (theme, font, language, sharing policy, tracker), `ui` (window, selected plan, tab),
   `minimap` (LibDBIcon position and visibility). Profiles via AceDBOptions.
@@ -348,7 +348,7 @@ Data/Navigation.lua   the game's pin, the navigation providers (Polestar, Shorte
                       nothing in combat or while dead; the world map only through C_Map.OpenWorldMap, never with the
                       gamepad style
 UI/GettingThere.lua   the card's lines (pure over the above) and buttons; its small window
-UI/Panels/PrepPanel.lua the section; RunMode.PrepText the run window's line
+UI/Panels/PrepPanel.lua the section; RunMode.PrepText (UI/RunLines.lua) the run window's line
 ```
 
 Prep notes are a plan field (`prep`, format 5, optional; `DB.SCHEMA` 6 only marks the data). Idle cost: event
@@ -509,6 +509,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Data/Providers.lua, Data/Providers/ | data-provider layer and adapters: Dungeon Journal, Forever Dungeon Routes, OpenMap, NeedRoll, Questie |
 | Data/BossInfo.lua, UI/BossSections.lua | what a boss page says beyond the plan: the provider facts (level, description, summon item, drops) per plan boss, cached per plan revision, and a marker's details without repeated names; the sections drawn the same on the map's details pane, the Bosses page and run mode |
 | UI/Style.lua, UI/Art.lua | colour tokens, fonts, backdrops; Blizzard art names with fallbacks |
+| UI/Fonts.lua, UI/FontTest.lua | our font objects, the face chain per alphabet and the face probe; the font test of /dp debug and /dp scan |
 | UI/Widgets.lua, UI/Fields.lua, UI/Tabs.lua, UI/Containers.lua, UI/Popup.lua, UI/Window.lua | widget kit: controls, insets, section headers; fields, dropdowns, menus; tabs; lists with scroll bars, portraits, steppers; the opaque popup list behind every dropdown (virtual rows, one keyboard-and-pointer cursor, closes on an outside click); the window, dialogs and Escape |
 | UI/MainFrame.lua, UI/StepText.lua, UI/Undo.lua, UI/Home.lua, UI/PlanActions.lua | window, header and bottom bar, steps context; how a step reads (title, caption, floor, where stairs lead); ctx:Changed, undo and redo; home table and preview; plan actions, instance list data, pictures and the drawn plate |
 | Data/Floors.lua, UI/Panels/FloorBar.lua | every floor an instance has map art for, merged with the plan's (no duplicates); the map's floor switcher |
@@ -517,7 +518,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | UI/Panels/MapToolbar.lua | the map's edit tools (a picture and a name each) and the toolbar line's layout: what gives way on a narrow table |
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line (picture buttons, their glyphs, the clear menu) and the drawings' menu |
 | UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapRoutes.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths and stops (cased lines in a colour ramp, dashed ways back, joints, arrows); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
-| UI/RunMode.lua | the run window (with the recorder line, the drift line and the prep line) |
+| UI/RunMode.lua, UI/RunLines.lua | the run window; the texts of its recorder line, drift line and prep line |
 | Model/Prep.lua, Data/PrepInfo.lua, Data/Travel.lua, Data/TravelData.lua, Data/Navigation.lua, Data/Providers/TomTom.lua, Polestar.lua, ShortestPathForever.lua | Prep: quests, keys, group, the way there, navigation hand-off (section above) |
 | UI/Panels/PrepPanel.lua, UI/GettingThere.lua | the Prep section; the Getting there card and its window |
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |

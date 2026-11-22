@@ -20,17 +20,30 @@ local function findCard(home, name)
 	return nil
 end
 
-local booted = false
+-- The addon initializes once per run (AceAddon), so a file that runs after another one's boot uses that boot.
 local function boot()
-	if booted then
+	if ns.loggedIn then
 		return
 	end
-	booted = true
 	_G.DungeonPlannerDB = nil
 	mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
 	mock.loggedIn = true
 	mock.FireEvent("PLAYER_LOGIN")
 	mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+end
+
+-- The window open on the "Smoke" plan, an own plan of the journal's Test Dungeon, which the cases below go on working
+-- on (the window case makes it, the map tools case adds to it). A case run alone makes its own.
+local function smoke()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	local plan = ns.UI.ctx:Plan()
+	if plan and plan.name == "Smoke" and not plan.bundled then
+		return plan
+	end
+	return ns.Home.CreatePlan("dungeon", "Smoke", ns.Instances.Get("ej:63"))
 end
 
 T.case("Addon boots: database, settings, slash, launcher", function()
@@ -85,6 +98,11 @@ end)
 
 T.case("Window opens on the home grid; tabs switch; an instance page builds every section", function()
 	boot()
+	-- Closed, with a fresh profile's view (an earlier file may have left the window open on a page).
+	if ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	ns.db.ui.view, ns.db.ui.homeTab, ns.db.ui.instance = "home", "dungeons", nil
 	ns.UI.Toggle()
 	T.ok(ns.UI.IsShown(), "shown")
 	local frame = _G.DungeonPlannerMainFrame
@@ -110,7 +128,12 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 	home:Refresh()
 	T.eq(#home.grid.items, 0, "search hides the card")
 	ns.UI.ctx.search = ""
+	-- No own plan for it yet (earlier files may have made some).
+	for _, p in ipairs(ns.DB.PlansFor(card.entry)) do
+		ns.DB.DeletePlan(p.id)
+	end
 	home:Refresh()
+	card = findCard(home, "Test Dungeon")
 
 	-- Open the instance: no plan yet, so the page offers to create one.
 	mock.FireScript(card, "OnDoubleClick", "LeftButton")
@@ -140,7 +163,7 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 end)
 
 T.case("Map tools add markers, positions, pulls and routes; layers and undo", function()
-	boot()
+	smoke()
 	local ctx = ns.UI.ctx
 	local plan = ctx:Plan()
 	ns.UI.SelectTab("map")
@@ -212,7 +235,7 @@ T.case("Map tools add markers, positions, pulls and routes; layers and undo", fu
 end)
 
 T.case("A recommended plan is read-only, shows as recommended, and copies into an editable plan", function()
-	boot()
+	smoke()
 	local smokeId = ns.db.ui.selectedPlan
 	local ok = ns.Bundled.Add({
 		id = "test-dungeon-standard",
@@ -270,7 +293,7 @@ T.case("A recommended plan is read-only, shows as recommended, and copies into a
 end)
 
 T.case("A recommended plan that places some bosses still gets the Adventure Guide's pins for the others", function()
-	boot()
+	smoke()
 	local smokeId = ns.db.ui.selectedPlan
 	-- The mock journal pins map 100 with "Boss 1" at (0.3, 0.4) and "Boss 2" at (0.6, 0.4).
 	local function add(id, bosses)
@@ -304,7 +327,7 @@ T.case("A recommended plan that places some bosses still gets the Adventure Guid
 end)
 
 T.case("Art report and debug list atlases, files and templates", function()
-	boot()
+	smoke()
 	local rows = ns.Art.Report()
 	T.ok(#rows > 20, "every art key reported")
 	local tex = _G.DungeonPlannerMainFrame:CreateTexture()
@@ -316,7 +339,10 @@ T.case("Art report and debug list atlases, files and templates", function()
 end)
 
 T.case("Actions, slash commands and the public API", function()
-	boot()
+	local plan = smoke()
+	if #plan.pulls == 0 then -- run alone: the map tools case adds the pulls
+		ns.Plan.AddPull(plan)
+	end
 	ns.Slash.Handle("next")
 	T.ok(ns.API.GetCurrentPull(), "current pull after next")
 	ns.Slash.Handle("prev")
@@ -342,23 +368,26 @@ T.case("Actions, slash commands and the public API", function()
 end)
 
 T.case("Boss kills from ENCOUNTER_END are tracked once", function()
-	boot()
+	smoke()
 	local plan = ns.UI.ctx:Plan()
 	local enc = plan.encounters[1]
 	local seen = { n = 0 }
 	ns.API.RegisterCallback(seen, "DUNGEONPLANNER_BOSS_KILLED", function()
 		seen.n = seen.n + 1
 	end)
+	-- Counted from what is there already (other files record kills of these encounters too).
+	local kills = ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID)
 	mock.FireEvent("ENCOUNTER_END", enc.dungeonEncounterID, "Boss 1", 1, 5, 1)
 	mock.FireEvent("BOSS_KILL", enc.dungeonEncounterID, "Boss 1")
-	T.eq(ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID), 1, "deduplicated")
+	T.eq(ns.Progress.KillsOf(ns.char.progress, enc.dungeonEncounterID), kills + 1, "deduplicated")
 	T.ok(ns.Progress.IsKilledInRun(ns.char.progress, enc.dungeonEncounterID))
+	local wiped = ns.Progress.KillsOf(ns.char.progress, 999)
 	mock.FireEvent("ENCOUNTER_END", 999, "Wipe", 1, 5, 0)
-	T.eq(ns.Progress.KillsOf(ns.char.progress, 999), 0, "a wipe is not a kill")
+	T.eq(ns.Progress.KillsOf(ns.char.progress, 999), wiped, "a wipe is not a kill")
 end)
 
 T.case("Sharing over AceComm: offer, accept, payload, import", function()
-	boot()
+	smoke()
 	local plan = ns.UI.ctx:Plan()
 	mock.inGroup = true
 	mock.sent = {}
@@ -917,4 +946,56 @@ T.case("Approximate spots: '(approx.)' becomes a small mark in step text and too
 	ns.MapCanvas.AddNote(tt, "Kill the Summoner first. (approx.)")
 	T.eq(lines[1], "Kill the Summoner first.")
 	T.ok(lines[2] and lines[2]:find(ns.Style.APPROX, 1, true), "the estimate line")
+end)
+
+-- An update that splits a file adds a file the running client has not read (docs/COMPATIBILITY.md section 7): until
+-- the game restarts, what moved there is missing, and the rest goes on without it.
+T.case("Split-off files missing until a restart: run mode without UI/RunLines.lua, /dp debug and scan without UI/FontTest.lua", function()
+	boot()
+	local RM, S = ns.RunMode, ns.Style
+	local moved = {
+		[RM] = { "RecorderText", "Drift", "DriftText", "PrepText", "GoToEstimate" },
+		[S] = { "FontTest", "FontTestAgain", "FontTestLines", "FontTestRecord", "FontTestPanel", "ShowFontTest", "MarkFontTest",
+			"RunFontTest", "DescribeProbe" },
+	}
+	local saved = {}
+	for owner, names in pairs(moved) do
+		saved[owner] = {}
+		for _, name in ipairs(names) do
+			saved[owner][name], owner[name] = owner[name], nil
+		end
+	end
+	local rows
+	local ok, err = pcall(function()
+		ns.UI.SelectPlan("b:hall-of-thanes")
+		RM.Show()
+		RM.Refresh()
+		local f = _G.DungeonPlannerRunFrame
+		T.ok(not f.drift:IsShown() and not f.prep:IsShown(), "no drift or prep line")
+		T.eq(f.rec.text:GetText(), "", "an empty recorder line")
+		RM.Hide()
+		closeAllDialogs()
+		ns.Slash.Handle("debug")
+		T.ok(_G.DungeonPlannerDialog:IsShown(), "the debug dialog without the font test")
+		closeAllDialogs()
+		ns.Slash.Handle("scan")
+		local d = _G.DungeonPlannerDB.diagnostics
+		T.ok(d and d.fonts and d.fontTest == nil, "the scan saves the fonts line, no font test")
+		rows = ns.Compat.Report()
+	end)
+	for owner, names in pairs(saved) do
+		for name, fn in pairs(names) do
+			owner[name] = fn
+		end
+	end
+	ns.Slash.Handle("scan clear")
+	T.ok(ok, tostring(err))
+	local missing = {}
+	for _, row in ipairs(rows) do
+		if row.path == "(file)" and not row.ok then
+			missing[#missing + 1] = row.name
+		end
+	end
+	table.sort(missing)
+	T.eq(table.concat(missing, ", "), "Addon file UI/FontTest.lua, Addon file UI/RunLines.lua", "both reported by /dp debug")
 end)

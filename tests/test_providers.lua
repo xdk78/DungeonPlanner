@@ -467,6 +467,9 @@ T.case("Map legend: its title folds it, the choice sticks; untouched, it folds w
 	canvas.FitIsWhole = function()
 		return true
 	end
+	-- The mock lays nothing out: the canvas keeps the size it was last given (other files give it theirs). These
+	-- expectations are for the mock's default frame size.
+	canvas:SetSize(400, 300)
 	map:RefreshNow()
 	T.eq(map.legend:IsFolded(), false, "open: the map keeps its place")
 	T.ok(map.legend.rows[1]:IsShown(), "with its rows")

@@ -5,8 +5,9 @@
 local _, ns = ...
 local Compat = ns:NewModule("Compat")
 
-local function has(path)
-	local value = _G
+-- A dotted path ("C_Map.GetMapInfo") is set under root (the global table unless given).
+local function has(path, root)
+	local value = root or _G
 	for part in path:gmatch("[^%.]+") do
 		if type(value) ~= "table" then
 			return false
@@ -181,17 +182,20 @@ function Compat.Report()
 	-- Files an update added: the client reads an addon's file list only when the game starts (docs/COMPATIBILITY.md
 	-- section 7), so after an update without a restart they are missing and their features stay off.
 	for _, file in ipairs(Compat.FILES) do
-		rows[#rows + 1] = { name = "Addon file " .. file[1], ok = ns[file[2]] ~= nil, path = "(file)",
+		rows[#rows + 1] = { name = "Addon file " .. file[1], ok = has(file[2], ns), path = "(file)",
 			degrades = file[3] .. " - restart the game after updating" }
 	end
 	return rows
 end
 
--- file, the module it defines, what is missing without it
+-- file, what it defines (a module, or a dotted path in ns for a file that adds functions to one), what is missing
+-- without it
 Compat.FILES = {
 	{ "Model/RouteLook.lua", "RouteLook", "route lines on the map" },
 	{ "UI/MapRoutes.lua", "MapRoutes", "route lines on the map" },
 	{ "UI/OpenMapOverlay.lua", "OpenMapOverlay", "the experimental plan on OpenMap's dungeon map" },
+	{ "UI/FontTest.lua", "Style.RunFontTest", "the font test in /dp debug and /dp scan" },
+	{ "UI/RunLines.lua", "RunMode.RecorderText", "run mode's recorder, drift and prep lines" },
 }
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a

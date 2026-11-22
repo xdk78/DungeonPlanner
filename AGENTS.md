@@ -23,6 +23,8 @@ Guide for contributors and coding agents. Dungeon Planner is a World of Warcraft
 ```sh
 lua tests/run.lua                          # all offline tests; must pass
 lua tests/run.lua Discord                  # only tests whose name contains "Discord"
+lua tests/run.lua --file native            # one test file alone (comma-separated: several, in that order)
+lua tests/run.lua --reverse                # files in reverse order (or --shuffle <seed>): finds order dependence
 lua tools/locale_keys.lua --all             # every UI string translated in every locale (names what is missing)
 lua tools/validate_plans.lua               # community plans
 lua tools/gen_plans.lua [--check|--report] # regenerate Data/Plans from data-src (docs/DATA-SOURCES.md)
@@ -60,8 +62,9 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   drift in its own pull request (`data-src/routes/README.md`, "When to run the `--check`s").
 - Keep files under ~800 lines; split by responsibility before a file passes that (UI panels are separate files).
   `wowui check` enforces 800 for addon code. Exceptions, in `.wowui-check.json`: `Locales/` (one string per line,
-  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked), and
-  `UI/Fonts.lua` and `UI/RunMode.lua`, capped at about their size until they are split (they may not grow).
+  1500), `tools/` (development scripts, 1200), tests (no limit), vendored and generated code (not checked).
+  A file split off an existing one is new to a running client: list it in `Compat.FILES` and let its callers do
+  without it until the game restarts (docs/COMPATIBILITY.md section 7).
 - New logic goes in pure modules with tests; UI files stay thin and call Model/Share functions.
 - New UI strings: write English in `L["..."]`, add the line to every file in `Locales/` (`lua tools/locale_keys.lua --missing-lines Locales/xxXX.lua`; the locale check fails
   otherwise). Format strings must keep the same `%s`/`%d` order (a test checks).
