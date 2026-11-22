@@ -258,7 +258,7 @@ T.case("Read-only pages show text, not inputs; gear lists the guide's drops; par
 	local gear = page.panels.gear.inner
 	T.ok(not gear.form:IsShown(), "no add form")
 	local headers, drops = 0, 0
-	for _, item in ipairs(gear.list.items) do
+	for _, item in ipairs(gear.entries) do
 		if item.header then
 			headers = headers + 1
 		elseif item.loot then

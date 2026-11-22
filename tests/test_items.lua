@@ -231,14 +231,20 @@ T.case("Item names: drops of every boss end up named on the open pages, however 
 	gear:Refresh()
 	run(60)
 	local seen = 0
-	for index, item in ipairs(gear.list.items) do
-		if item.loot then
+	-- Lines of the list: a heading, or items side by side (a cell each).
+	for index, line in ipairs(gear.list.items) do
+		if line.cells then
 			gear.list:ScrollTo(index)
 			for _, row in ipairs(gear.list.rows) do
-				if row.item == item then
-					seen = seen + 1
-					local id = item.loot.itemID
-					T.eq(row.title:GetText(), id == never and ("Item " .. id) or ("Real " .. id), "Gear page row")
+				if row.item == line then
+					for _, cell in ipairs(row.cells) do
+						local item = cell:IsShown() and cell.entry
+						if item and item.loot then
+							seen = seen + 1
+							local id = item.loot.itemID
+							T.eq(cell.title:GetText(), id == never and ("Item " .. id) or ("Real " .. id), "Gear page item")
+						end
+					end
 				end
 			end
 		end

@@ -173,14 +173,15 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	ns.UI.SelectTab("gear")
 	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.gear.inner
 	panel:Refresh()
-	local row
+	local row -- the item's cell in its line
 	for _, r in ipairs(panel.list.rows) do
-		if r:IsShown() and r.item and r.item.gear then
-			row = r
-			break
+		for _, cell in ipairs(r:IsShown() and r.cells or {}) do
+			if not row and cell:IsShown() and cell.entry and cell.entry.gear then
+				row = cell
+			end
 		end
 	end
-	T.ok(row, "a gear row")
+	T.ok(row, "a gear item")
 	panel.needRoll:Hide()
 	row:GetScript("OnEnter")(row)
 	local a = GameTooltip:FindPoint("TOPLEFT")
@@ -197,6 +198,52 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	T.eq(GameTooltip:FindPoint("TOPLEFT"), nil, "and only there")
 	row:GetScript("OnLeave")(row)
 	panel.needRoll:Hide()
+end)
+
+T.case("Gear: the items fill the page's width, side by side, the headings on lines of their own", function()
+	boot()
+	local saved = ns.BossData.enabled
+	ns.BossData.enabled = true -- the bundled drops, as in game (provider tests switch them off)
+	ns.Providers.ResetCaches()
+	ns.UI.SelectPlan("b:hall-of-thanes")
+	ns.UI.SelectTab("gear")
+	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.gear.inner
+	panel:Refresh()
+	local function check(width, cols)
+		panel.list:SetWidth(width)
+		panel.list:GetScript("OnSizeChanged")(panel.list, width, panel.list:GetHeight())
+		T.eq(panel.cols, cols, width .. " px wide")
+		local entries, placed = 0, 0
+		for _, e in ipairs(panel.entries) do
+			if not e.header then
+				entries = entries + 1
+			end
+		end
+		for _, line in ipairs(panel.list.items) do
+			if line.cells then
+				T.ok(#line.cells <= cols, "at most " .. cols .. " a line")
+				placed = placed + #line.cells
+			else
+				T.ok(line.header, "a heading alone")
+			end
+		end
+		T.ok(entries > 3, "Hall of Thanes' drops are listed")
+		T.eq(placed, entries, "every item placed once")
+		-- The cells of a full line share its width, in reading order.
+		for _, row in ipairs(panel.list.rows) do
+			if row:IsShown() and row.item and row.item.cells and #row.item.cells == cols and cols > 1 then
+				local a, b = row.cells[1]:FindPoint("TOPLEFT"), row.cells[2]:FindPoint("TOPLEFT")
+				T.ok(b[4] > a[4] + row.cells[1]:GetWidth() - 1, "side by side")
+				return
+			end
+		end
+		T.eq(cols, 1, "a full line is shown")
+	end
+	check(900, 3)
+	check(560, 2)
+	check(300, 1)
+	ns.BossData.enabled = saved
+	ns.Providers.ResetCaches()
 end)
 
 T.case("Native window: the game's framed window, insets, tabs under the window, panel buttons and scroll bars", function()

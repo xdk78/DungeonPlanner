@@ -5,6 +5,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [Unreleased]
+
 ### Added
 - **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" now follows your
   game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other languages stay
@@ -13,27 +15,14 @@ follow [Semantic Versioning](https://semver.org/).
   (`Locales/README.md`, a "Translation" issue, or a pull request).
 - Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
 - A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
-- **Group sync for run mode.** The group's leader (in a raid also an assistant) clicks "Lead this run" in run mode;
-  members who have the same plan see "Following <leader>", and their run mode shows the leader's step, next pull and
-  boss as the leader moves on. Prev or Next steps on your own ("Unfollow" does the same); "Rejoin" snaps back. A member
-  without the plan, or with another version of it, sees "Leader is on a plan you don't have: ask for it": one click
-  asks, and the leader's Dungeon Planner offers the plan the usual way. The leader sees who follows and who is out of
-  sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
-  fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
-  older step. Older Dungeon Planners ignore them.
-- **Report a problem**: `/dp report`, the `!` button in the window's title bar or Settings (Troubleshooting) opens a
-  text to paste into a GitHub issue: versions, language, the plan, other addons, the `/dp debug` summary, recent
-  Dungeon Planner errors and blocked actions. Add what happened in your own words; "Short for Discord" fits it in one
-  message. Character, realm, guild, group and plan names are replaced with `<name>`, and chat is never included.
-- **What's new**: a card with the highlights, shown once after an update at a quiet moment (out of combat and
-  instances). A first install shows a short welcome instead. `/dp new` shows it again.
-- **`/dp perf`**: an opt-in probe that times the addon's events and redraws and reports its memory. Nothing runs until
-  `/dp perf start`; `/dp perf stop` turns it off.
+## [Unreleased]
 
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
   Dungeon Planner opens it read-only instead of losing that on its next save.
-- The bug report form on GitHub is now an issue form.
+- **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
+  instead of one narrow column.
+
 
 ### Fixed
 - **Share, Advanced, recorded run**: before the first run of an instance it no longer asks you to turn on "Record my
