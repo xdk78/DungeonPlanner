@@ -171,7 +171,8 @@ function Panel.Create(parent, ctx)
 			row.text:SetText((run.done and "" or (L["Recording"] .. " · ")) .. when(run))
 			local best = RunLog.Best(store(), run.k, run)
 			local delta = best.total and run.done and (" " .. D(s.duration - best.total)) or ""
-			row.meta:SetText(string.format(L["%s · %d pulls · %d bosses"], T(s.duration), s.pulls, s.bosses) .. delta)
+			row.meta:SetText(T(s.duration) .. " · " .. ns.Plural(s.pulls, L["%d pull|%d pulls"]) .. " · "
+				.. ns.Plural(s.bosses, L["%d boss|%d bosses"]) .. delta)
 		end,
 		isSelected = function(run)
 			return run == selectedRun
@@ -297,11 +298,11 @@ function Panel.Create(parent, ctx)
 		doc:Add("title", T(s.duration))
 		-- What the client cannot tell says so instead of showing a zero.
 		local deaths = s.deaths and ns.Plural(s.deaths, L["%d death|%d deaths"]) or L["deaths not available"]
-		doc:Add("muted", string.format(L["%d pulls · %d bosses · %d wipes · %s · %s in combat"], s.pulls, s.bosses,
-			s.wipes, deaths, T(s.fighting)))
+		doc:Add("muted", table.concat({ ns.Plural(s.pulls, L["%d pull|%d pulls"]), ns.Plural(s.bosses, L["%d boss|%d bosses"]),
+			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }, " · "))
 		local splits, best, prev = RunCompare.Splits(store(), run)
 		if best.total then
-			doc:Add("muted", string.format(L["Best: %s over %d runs"], T(best.total), best.runs))
+			doc:Add("muted", string.format(L["Best: %s over %s"], T(best.total), ns.Plural(best.runs, L["%d run|%d runs"])))
 		end
 		if prev then
 			doc:Add("muted", string.format(L["Previous run: %s (%s)"], T(RunLog.Duration(prev)), D(s.duration - RunLog.Duration(prev))))

@@ -166,8 +166,18 @@ local function check(target)
 	local ns = { Locales = {} }
 	local chunk = assert(loadfile(target))
 	chunk("DungeonPlanner", ns)
-	local _, tbl = next(ns.Locales)
+	local code, tbl = next(ns.Locales)
 	local missing, unused, badFormat = {}, {}, {}
+	-- A plural key has exactly as many forms as the language's rule (ns.PLURAL_RULES in Locales/enUS.lua) can pick.
+	local rule = enNs.PLURAL_RULES[code]
+	local formCount = 1
+	if rule then
+		for n = 0, 1000 do
+			formCount = math.max(formCount, rule(n))
+		end
+	else
+		badFormat[#badFormat + 1] = "(no plural rule for " .. tostring(code) .. " in Locales/enUS.lua)"
+	end
 	for _, k in ipairs(keys) do
 		if tbl[k] == nil then
 			missing[#missing + 1] = k
@@ -181,11 +191,15 @@ local function check(target)
 			badFormat[#badFormat + 1] = k .. " (not a non-empty string)"
 		elseif k:find("|", 1, true) then
 			local want = specs(k:match("^[^|]*"))
+			local n, bad = 0, false
 			for form in v:gmatch("[^|]+") do
-				if specs(form) ~= want then
-					badFormat[#badFormat + 1] = k
-					break
-				end
+				n = n + 1
+				bad = bad or specs(form) ~= want
+			end
+			if bad then
+				badFormat[#badFormat + 1] = k
+			elseif rule and n ~= formCount then
+				badFormat[#badFormat + 1] = k .. " (" .. n .. " plural forms, " .. code .. " has " .. formCount .. ")"
 			end
 		elseif k:find("%", 1, true) and specs(v) ~= specs(k) then
 			badFormat[#badFormat + 1] = k
@@ -213,26 +227,20 @@ local function check(target)
 	return #missing == 0 and #unused == 0 and #badFormat == 0
 end
 
--- Every locale file in Locales/ except enUS, each of which must also be listed in the TOC.
+-- Every locale file the TOC loads (its Locales\xxXX.lua lines) except enUS. The list comes from the TOC, not from a
+-- directory listing: `find` on Windows can be System32's find.exe, which lists nothing.
 local function allLocaleFiles()
 	local files = {}
-	local p = io.popen('find Locales -name "*.lua"')
-	for path in p:lines() do
-		if not path:match("enUS%.lua$") then
-			files[#files + 1] = path
-		end
-	end
-	p:close()
-	table.sort(files)
 	local f = assert(io.open("DungeonPlanner.toc", "rb"))
-	local toc = f:read("*a")
-	f:close()
-	for _, path in ipairs(files) do
-		if not toc:find((path:gsub("/", "\\")), 1, true) then
-			print("  not in DungeonPlanner.toc: " .. path)
-			files.bad = true
+	for line in f:lines() do
+		local code = line:match("^Locales[\\/](%a+)%.lua%s*$")
+		if code and code ~= "enUS" then
+			files[#files + 1] = "Locales/" .. code .. ".lua"
 		end
 	end
+	f:close()
+	table.sort(files)
+	assert(#files > 0, "no Locales\\*.lua lines found in DungeonPlanner.toc")
 	return files
 end
 
@@ -259,10 +267,15 @@ if first == "--missing-lines" then
 			print("\t[" .. lq(k) .. "] = " .. lq(english[k] or k) .. ",")
 		end
 	end
-	for k, v in pairs(english) do
+	local bindings = {}
+	for k in pairs(english) do
 		if k:match("^BINDING_") and tbl[k] == nil then
-			print("\t" .. k .. " = " .. lq(v) .. ",")
+			bindings[#bindings + 1] = k
 		end
+	end
+	table.sort(bindings)
+	for _, k in ipairs(bindings) do
+		print("\t" .. k .. " = " .. lq(english[k]) .. ",")
 	end
 	return
 end

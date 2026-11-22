@@ -5,6 +5,11 @@ AlegreyaSans-Medium.ttf
   Alegreya Sans Medium 2.004 by Huerta Tipografica (Juan Pablo del Peral), unmodified, from
   https://github.com/google/fonts/tree/main/ofl/alegreyasans (upstream:
   https://github.com/huertatipografica/Alegreya-Sans). SIL Open Font License 1.1, see OFL.txt.
+  Coverage checked 2026-11-22 with fontTools (cmap subtables: Unicode BMP and Windows BMP, format 4; 2109 glyphs):
+  every code point of U+0410-U+044F and U+0401, U+0451 (all of Russian) is present, including U+0416 and U+044F;
+  178 of the 256 code points of U+0400-U+04FF are. Latin-1, Latin Extended-A (Polish), the guillemets, the middle
+  dot and the dashes are present too. tests/test_fonts.lua reads the cmap and fails if a shipped locale uses a
+  character the face lacks. DPSans.ttf below has no Cyrillic at all, so it is never a Russian fallback.
 
 DPSans.ttf ("DP Sans Medium")
   A Modified Version of AlegreyaSans-Medium.ttf above, in the sense of the SIL Open Font License 1.1 (OFL.txt), which

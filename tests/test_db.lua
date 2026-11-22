@@ -89,7 +89,13 @@ T.case("Polish locale covers every key and is chosen with WoW Po Polsku", functi
 	ns.SetLocale("enUS")
 	-- Every shipped language: string pairs, the same format specifiers in the same order (or string.format breaks),
 	-- and as many plural forms as the language has.
-	local FORMS = { plPL = 3, ruRU = 3, deDE = 2, esES = 2, frFR = 2 }
+	local function formCount(code)
+		local most = 1
+		for n = 0, 1000 do
+			most = math.max(most, ns.PLURAL_RULES[code](n))
+		end
+		return most
+	end
 	local function specs(s)
 		local out = {}
 		for spec in s:gmatch("%%[%d%.]*[sdf]") do
@@ -110,7 +116,7 @@ T.case("Polish locale covers every key and is chosen with WoW Po Polsku", functi
 						n = n + 1
 						T.eq(specs(form), want, code .. ": format specifiers of a form of " .. k)
 					end
-					T.eq(n, FORMS[code], code .. ": plural forms of " .. k)
+					T.eq(n, formCount(code), code .. ": plural forms of " .. k)
 				elseif k:find("%", 1, true) then
 					T.eq(specs(v), specs(k), code .. ": format specifiers of " .. k)
 				end

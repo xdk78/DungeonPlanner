@@ -529,6 +529,27 @@ T.case("A Russian UI gets a face with Cyrillic on a client that is not Russian; 
 	S.ForgetFontProbes()
 	S.SetupFonts()
 	T.eq(S.fontFile, "Fonts\\FRIZQT__.TTF", "the game face last")
+	T.eq(S.cyrillicFace, nil, "no Cyrillic face loads")
+	T.ok(S.PolishFontNote() ~= "", "the language dialog says Russian will show boxes")
+	mock.missingFonts = { [CYRILLIC] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.cyrillicFace, S.BUNDLED_FACE, "the face in use is recorded")
+	T.eq(S.PolishFontNote(), "", "no note while a face loads")
+	-- A font setting we cannot vouch for gets a note, not a silent box.
+	ns.db.settings.font = "clean"
+	T.ok(S.PolishFontNote():find("Arial Narrow", 1, true), "Arial Narrow with a Russian UI")
+	ns.db.settings.font = "auto"
+	-- The font test lists the game's Cyrillic cut.
+	mock.missingFonts = nil
+	S.ForgetFontProbes()
+	local test = S.FontTest()
+	T.ok(test.cyrillic and test.cyrillic.usable, "FRIZQT___CYR.TTF is probed")
+	local listed = false
+	for _, line in ipairs(S.FontTestLines(test)) do
+		listed = listed or line:find("FRIZQT___CYR.TTF", 1, true) ~= nil
+	end
+	T.ok(listed, "/dp debug lists it")
 	-- A Russian client keeps its own cut whatever the UI language.
 	mock.missingFonts = nil
 	mock.locale = "ruRU"

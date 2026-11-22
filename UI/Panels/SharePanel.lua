@@ -288,7 +288,8 @@ function Panel.Create(parent, ctx)
 			adv.partText:SetText(L["No text yet"])
 			adv.box:SetValue("")
 		else
-			adv.partText:SetText(string.format(L["Part %d of %d (%d characters)"], discordIndex, n, #discordParts[discordIndex]))
+			adv.partText:SetText(string.format(L["Part %d of %d (%s)"], discordIndex, n,
+				ns.Plural(#discordParts[discordIndex], L["%d character|%d characters"])))
 			adv.box:SetValue(discordParts[discordIndex])
 			adv.box.edit:SetFocus()
 		end
@@ -341,7 +342,8 @@ function Panel.Create(parent, ctx)
 		-- Who has this plan, while in a group.
 		local status = ns.Comm.GroupChannel() and ns.Comm.PlanStatus(plan()) or nil
 		if status and status.total > 0 then
-			local text = string.format(L["Has this plan: %d of %d group members, outdated: %d"], status.has, status.total,
+			local text = string.format(L["Has this plan: %d of %s, outdated: %d"], status.has,
+				ns.Plural(status.total, L["%d group member|%d group members"]),
 				status.outdated)
 			if status.unknown > 0 then
 				text = text .. ", " .. string.format(L["unknown: %d"], status.unknown)

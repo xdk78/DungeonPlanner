@@ -37,7 +37,7 @@ function Slash.Debug()
 			print("  " .. line(false, row.name .. " (" .. row.path .. ") - " .. L["affects:"] .. " " .. row.degrades))
 		end
 	end
-	print("  " .. string.format(L["%d API checks missing."], missing))
+	print("  " .. ns.Plural(missing, L["%d API check missing.|%d API checks missing."]))
 	for _, r in ipairs(ns.Compat.SelfTest()) do
 		print("  " .. line(r.ok, r.name .. (r.ok and "" or (": " .. r.detail))))
 	end

@@ -38,7 +38,7 @@ You can also open a "Translation" issue with the string and your proposed wordin
 - **Plurals.** A key with `|` lists the forms of the English ("%d plan|%d plans"); your value lists the forms of your
   language, separated by `|`: two for German, Spanish and French (French uses the first for 0 and 1), three for Polish
   and Russian (1 / 2-4 / the rest; Russian also counts 21, 31, ... as 1 and 11-14 as the rest). The rules are in
-  `Locales/enUS.lua` (`PLURAL_RULES`), tested in `tests/test_journal.lua`.
+  `Locales/enUS.lua` (`ns.PLURAL_RULES`, the one source: `tools/locale_keys.lua --all` and `tests/test_db.lua` read the form count from it), tested in `tests/test_journal.lua`. Keys with a bare number and a noun ("%d runs") are plural keys so Russian and Polish can decline them.
 - **Keep it short.** The window has fixed-width buttons, tabs and columns. A word or two stays a word or two. The CI
   runs a layout lint for every locale (`lua tests/ui_dump.lua --out <dir> --locale deDE --prefix deDE/`): it fails on
   text that is cut off or overlaps. Prefer a shorter natural word over a smaller font.
@@ -58,7 +58,7 @@ lua tools/locale_keys.lua --template itIT > Locales/itIT.lua   # every key, Engl
 
 Translate the values, then: list the file in `DungeonPlanner.toc` (after `Locales\ruRU.lua`, and add a
 `## Notes-itIT:` line), add `{ "itIT", "Italiano" }` to `ns.LOCALE_LIST` and a rule to `PLURAL_RULES` in
-`Locales/enUS.lua`, add the form count to `FORMS` in `tests/test_db.lua`, and run `lua tests/run.lua` and
+`Locales/enUS.lua`, and run `lua tests/run.lua` and
 `lua tools/locale_keys.lua --all`. Automatic language selection then picks the file for clients with that locale.
 
 ## When the English text changes
