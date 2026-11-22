@@ -17,6 +17,14 @@ jobs:
         with:
           args: .
 
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v10.4.0
+      - name: Static safety check (wowui check, .wowui-check.json)
+        run: uv run --script tests/vendor/wow-ui-harness/python/check.py
+
   test:
     runs-on: ubuntu-latest
     steps:

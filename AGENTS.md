@@ -36,6 +36,7 @@ uv run --script tools/reyes_maps.py --work <scratch> [--check] # Santiago Reyes'
 uv run --script tools/walk_grids.py --game <client folder> --work <scratch> --reyes <reyes_maps work> [--check] # Data/WalkData.lua
 lua tools/walk_timing.lua [repeats]        # Snap to corridors timings (Data/Corridors.lua, docs/DATA-SOURCES.md)
 luacheck .                                 # lint, must be clean (CI)
+uv run --script tests/vendor/wow-ui-harness/python/check.py # wowui check: the game API rules below (CI; .wowui-check.json)
 lua tests/ui_dump.lua --out <work dir>      # UI views as JSON + layout lint (CI; "Seeing the UI" below)
 lua tools/gen_textures.lua                 # regenerate Media/*.tga
 uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga from Media/Logo/*.svg
@@ -43,7 +44,8 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 
 ## Changes
 
-- Work on a branch and open a pull request; `main` is protected by CI (lint + tests + locale + plans).
+- Work on a branch and open a pull request; `main` is protected by CI (lint + safety check + tests + locale +
+  plans).
 - After a pull request is merged, delete its branch and remove any worktree and work folder used for it.
 - Every change that players can see gets a line under `## [Unreleased]` in `CHANGELOG.md`.
 - The checks that need a local game install do not run in CI: `tools/route_paths.py`, `tools/walk_grids.py`,
@@ -78,6 +80,10 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
 - Addon messages go through `Share/Comm.lua` only (AceComm + lockdown outbox).
 - Untrusted input (imports, received plans, community files) goes through `Codec.Decode` and `Validate.*`. Never
   `loadstring`.
+- `wowui check` enforces what it can see of these rules (forbidden calls and hooks, the combat log, new globals, file
+  length, slash commands and `UISpecialFrames` only behind `Compat.Gamepad`); its config is `.wowui-check.json`. Keep
+  that file's global allowlist in step with `docs/API.md` and `.luacheckrc`. Suppress one finding with
+  `-- wowui-check: ignore <rule> <reason>`, never without a reason.
 
 ## Data honesty
 

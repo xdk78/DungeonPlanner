@@ -1,3 +1,4 @@
+-- wowui-check: ignore file-length grew past 800 lines before the check ran in CI; to be split by responsibility
 -- Fonts: Dungeon Planner's own font objects (DungeonPlannerFont_*), the Polish face chain and the font test that
 -- /dp debug and /dp scan run. Loaded right after UI/Style.lua; the functions live on Style (Style.SetupFonts, ...).
 -- Dungeon Planner never changes the game's font objects: it only creates its own.

@@ -1,0 +1,66 @@
+{
+  "_about": "wowui check (wow-ui-harness, tests/vendor/wow-ui-harness/python/check.py): the static safety lint CI runs. The rules follow AGENTS.md, \"Game API rules\"; the allowed globals are those in docs/API.md and .luacheckrc. Suppress a single finding with `-- wowui-check: ignore <rule> <reason>`.",
+  "include": ["**/*.lua"],
+  "exclude": ["Libs/**", "tests/vendor/**", ".release/**", ".lua/**", ".luarocks/**"],
+  "_disable": "Tests and the mock define the fake client API as globals and register into UISpecialFrames on purpose; tools are development scripts that never load in game.",
+  "disable": {
+    "tests/**": ["new-global", "unguarded-registration", "file-length"],
+    "tools/**": ["unguarded-registration"]
+  },
+  "rules": {
+    "forbidden-call": {
+      "calls": {
+        "SetCVar": "Dungeon Planner never changes the game's settings (AGENTS.md)",
+        "C_CVar.SetCVar": "Dungeon Planner never changes the game's settings (AGENTS.md)",
+        "SetBinding": "key bindings are the player's: Bindings.xml only declares them",
+        "SetBindingClick": "key bindings are the player's: Bindings.xml only declares them",
+        "SetBindingSpell": "key bindings are the player's: Bindings.xml only declares them",
+        "SetBindingItem": "key bindings are the player's: Bindings.xml only declares them",
+        "SetBindingMacro": "key bindings are the player's: Bindings.xml only declares them",
+        "SetOverrideBinding": "key bindings are the player's: Bindings.xml only declares them",
+        "SetOverrideBindingClick": "key bindings are the player's: Bindings.xml only declares them",
+        "SaveBindings": "key bindings are the player's: Bindings.xml only declares them",
+        "hooksecurefunc": "Dungeon Planner never hooks Blizzard functions (AGENTS.md)",
+        "loadstring": "untrusted input goes through Codec.Decode and Validate, never through the compiler",
+        "load": "untrusted input goes through Codec.Decode and Validate, never through the compiler",
+        "RunScript": "untrusted input goes through Codec.Decode and Validate, never through the compiler",
+        "CombatLogGetCurrentEventInfo": "the combat log is closed on WoW: Forever (docs/COMPATIBILITY.md)",
+        "CastSpellByName": "protected function",
+        "CastSpellByID": "protected function",
+        "UseAction": "protected function",
+        "RunMacroText": "protected function",
+        "TargetUnit": "protected function",
+        "FocusUnit": "protected function",
+        "SetRaidTarget": "Dungeon Planner shows raid markers on its map and never sets them on units"
+      },
+      "hookTargets": [
+        "WorldMapFrame", "GameTooltip", "ItemRefTooltip", "GameMenuFrame", "UIParent", "PlayerFrame", "TargetFrame",
+        "FocusFrame", "Minimap", "MinimapCluster", "ChatFrame1", "EncounterJournal", "SettingsPanel", "PVEFrame",
+        "LFGListFrame", "AddonCompartmentFrame", "QuestFrame"
+      ]
+    },
+    "combat-log": { "events": ["COMBAT_LOG_EVENT", "COMBAT_LOG_EVENT_UNFILTERED"] },
+    "new-global": {
+      "_allow": "docs/API.md, \"Public API\" and \"Other globals\"; .luacheckrc keeps the same list for luacheck.",
+      "allow": [
+        "DungeonPlanner",
+        "DungeonPlannerDB",
+        "DungeonPlanner_Binding",
+        "DungeonPlanner_OnAddonCompartmentClick",
+        "BINDING_HEADER_DUNGEONPLANNER",
+        "BINDING_NAME_DUNGEONPLANNER_*"
+      ]
+    },
+    "file-length": {
+      "_overrides": "Addon code stays under 800 lines (AGENTS.md: split by responsibility first). Exceptions: translation tables keep one string per line; development tools never ship. Tests are off (disable above); the vendored harness and libraries are excluded.",
+      "maxLines": 800,
+      "overrides": { "Locales/**": 1500, "tools/**": 1200 }
+    },
+    "test-shell-find": { "tests": ["tests/**"] },
+    "unguarded-registration": {
+      "_guard": "With the gamepad interface style on, a slash command freezes the client and the gamepad menus close the frames in UISpecialFrames (docs/COMPATIBILITY.md); every registration asks Compat.Gamepad first.",
+      "guard": ["ns.Compat.Gamepad", "Compat.Gamepad", "Slash.Allowed"]
+    },
+    "suppression-reason": true
+  }
+}
