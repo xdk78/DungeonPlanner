@@ -132,6 +132,7 @@ T.case("Party.RaidCounts: the plan's groups when it sets any, else the raid's", 
 	T.eq(counts[2], 0)
 	counts, live = Party.RaidCounts({}, {}, 8)
 	T.ok(not live)
+	T.eq(counts[1], 0, "no raid, no groups: all empty")
 end)
 
 -- The UI against the mock: a party of WoW: Forever characters (first name and surname from UnitName).
