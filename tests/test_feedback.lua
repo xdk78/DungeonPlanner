@@ -245,7 +245,7 @@ T.case("What's new: a note can name its Settings group, and the card offers to o
 	windowsClosed()
 	ns.NewsFrame.Show("news", "0.2.0")
 	local f = ns.NewsFrame.Frame()
-	T.eq(f.settingsGroup, "advanced")
+	T.eq(f.settingsGroup, "routes")
 	T.ok(f.settings:IsShown())
 	local opened
 	local old = ns.UI.OpenSettings
@@ -254,7 +254,7 @@ T.case("What's new: a note can name its Settings group, and the card offers to o
 	end
 	f.settings:GetScript("OnClick")(f.settings)
 	ns.UI.OpenSettings = old
-	T.eq(opened, "advanced")
+	T.eq(opened, "routes")
 	ns.NewsFrame.Show("welcome")
 	T.ok(not f.settings:IsShown(), "the welcome has no settings note")
 	f:Hide()

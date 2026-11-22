@@ -1,8 +1,8 @@
 -- "What's new" and the first-run welcome: what to show and when. The window is UI/NewsFrame.lua.
 --
 -- The highlights are a small table (ENTRIES) kept in step with CHANGELOG.md: a test (tests/test_news.lua) fails when the
--- newest released version in the changelog has no entry, or when the changelog has an [Unreleased] section and no entry
--- is newer than the last release. Strings go through L, so each language has its own text (Locales/plPL.lua).
+-- newest released version in the changelog has no entry, or when the changelog's [Unreleased] section has entries and
+-- no entry is newer than the last release. Strings go through L, so each language has its own text (Locales/plPL.lua).
 --
 -- When it shows (Decide, pure): the saved version (global.news.seen) is compared with the running one.
 --   * nothing saved and this is a fresh install (no saved data existed before this session, or an earlier session of
@@ -23,18 +23,26 @@ function WhatsNew.Normalize(version)
 end
 
 -- Newest first by the entry's version; each entry is a function so the text follows the language chosen at runtime.
--- items = { { heading, text } }
+-- items = { { heading, text, settingsGroup? } } (the card's Open Settings button goes to the first group named)
 local ENTRIES = {
 	["0.2.0"] = function()
 		return {
 			title = L["What's new in 0.2.0"],
 			items = {
+				{ L["Six languages"],
+					L["German, Spanish, French and Russian join English and Polish. Automatic follows your game's language."] },
+				{ L["Group sync in run mode"],
+					L["The leader clicks Lead this run; members with the same plan follow along, and one without it asks for it in one click."] },
+				{ L["Prep and Getting there"],
+					L["Prep lists quests, keys and your group's levels. Getting there shows the way to the entrance with a live map outdoors; Navigate hands it to Polestar, Shortest Path Forever or TomTom."] },
+				{ L["Every floor on the map"],
+					L["A floor switcher in the map's corner; Shift + mouse wheel changes floor too."] },
+				{ L["Clearer routes"],
+					L["Snap to corridors, clearer arrows, the leg under the pointer highlighted, and a Routes group in Settings."], "routes" },
+				{ L["Your group in the plan"],
+					L["The party seats fill from your group, and the Gear class and slot filters now change the drop list."] },
 				{ L["Report a problem"],
-					L["/dp report gathers version, plan and error details into a text for a GitHub issue, without your character, realm, guild or group."], "advanced" },
-				{ L["What's new"],
-					L["This card appears once after an update, and /dp new shows it again."], "advanced" },
-				{ L["Performance probe"],
-					L["/dp perf start times the addon's handlers and redraws and shows its memory use; /dp perf stop removes it. It is off unless you start it."] },
+					L["/dp report gathers version, plan and error details into a text for a GitHub issue, without your character, realm, guild or group."] },
 			},
 		}
 	end,
