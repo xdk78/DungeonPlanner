@@ -121,7 +121,11 @@ T.case("What's new: saved only after Show succeeds; a first install keeps its we
 	for _, name in ipairs({ "DungeonPlannerMainFrame", "DungeonPlannerRunFrame", "DungeonPlannerNotesFrame", "DungeonPlannerReportFrame",
 		"DungeonPlannerNewsFrame", "DungeonPlannerDialog" }) do
 		local f = rawget(_G, name)
-		if f and f.IsShown and f:IsShown() then
+		-- Hiding the dialog shows the next one waiting in its queue (earlier files may leave some): until none is left.
+		for _ = 1, 20 do
+			if not (f and f.IsShown and f:IsShown()) then
+				break
+			end
 			f:Hide()
 		end
 	end

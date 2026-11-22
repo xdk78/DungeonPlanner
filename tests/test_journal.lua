@@ -298,6 +298,7 @@ end)
 
 T.case("/dp scan saves the journal for offline reading; /dp scan clear removes it", function()
 	boot()
+	hallPlan() -- the recommended plan the scan resolves
 	ns.Slash.Handle("scan")
 	local d = _G.DungeonPlannerDB.diagnostics
 	T.ok(d, "saved")

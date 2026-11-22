@@ -16,6 +16,11 @@ local function boot()
 	if not ns.UI.IsShown() then
 		ns.UI.Toggle()
 	end
+	-- The bundled boss facts, as in game (files about the providers' answers switch them off).
+	if not ns.BossData.enabled then
+		ns.BossData.enabled = true
+		ns.Providers.ResetCaches()
+	end
 end
 
 -- The old dungeon map tiles are in the client (Data/GameFiles.lua): the mock knows their first tiles for this file's

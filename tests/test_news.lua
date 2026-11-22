@@ -67,7 +67,11 @@ T.case("What's new: Check shows once, never on a first install, and remembers th
 	boot()
 	for _, name in ipairs({ "DungeonPlannerMainFrame", "DungeonPlannerRunFrame", "DungeonPlannerNotesFrame", "DungeonPlannerDialog" }) do
 		local f = rawget(_G, name)
-		if f and f:IsShown() then
+		-- Hiding the dialog shows the next one waiting in its queue (earlier files may leave some): until none is left.
+		for _ = 1, 20 do
+			if not (f and f:IsShown()) then
+				break
+			end
 			f:Hide()
 		end
 	end

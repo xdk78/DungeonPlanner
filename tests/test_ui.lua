@@ -32,6 +32,20 @@ local function boot()
 	mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
 end
 
+-- The window open on the "Smoke" plan, an own plan of the journal's Test Dungeon, which the cases below go on working
+-- on (the window case makes it, the map tools case adds to it). A case run alone makes its own.
+local function smoke()
+	boot()
+	if not ns.UI.IsShown() then
+		ns.UI.Toggle()
+	end
+	local plan = ns.UI.ctx:Plan()
+	if plan and plan.name == "Smoke" and not plan.bundled then
+		return plan
+	end
+	return ns.Home.CreatePlan("dungeon", "Smoke", ns.Instances.Get("ej:63"))
+end
+
 T.case("Addon boots: database, settings, slash, launcher", function()
 	boot()
 	T.ok(ns.loggedIn, "OnEnable ran")
@@ -149,7 +163,7 @@ T.case("Window opens on the home grid; tabs switch; an instance page builds ever
 end)
 
 T.case("Map tools add markers, positions, pulls and routes; layers and undo", function()
-	boot()
+	smoke()
 	local ctx = ns.UI.ctx
 	local plan = ctx:Plan()
 	ns.UI.SelectTab("map")
@@ -221,7 +235,7 @@ T.case("Map tools add markers, positions, pulls and routes; layers and undo", fu
 end)
 
 T.case("A recommended plan is read-only, shows as recommended, and copies into an editable plan", function()
-	boot()
+	smoke()
 	local smokeId = ns.db.ui.selectedPlan
 	local ok = ns.Bundled.Add({
 		id = "test-dungeon-standard",
@@ -279,7 +293,7 @@ T.case("A recommended plan is read-only, shows as recommended, and copies into a
 end)
 
 T.case("A recommended plan that places some bosses still gets the Adventure Guide's pins for the others", function()
-	boot()
+	smoke()
 	local smokeId = ns.db.ui.selectedPlan
 	-- The mock journal pins map 100 with "Boss 1" at (0.3, 0.4) and "Boss 2" at (0.6, 0.4).
 	local function add(id, bosses)
@@ -313,7 +327,7 @@ T.case("A recommended plan that places some bosses still gets the Adventure Guid
 end)
 
 T.case("Art report and debug list atlases, files and templates", function()
-	boot()
+	smoke()
 	local rows = ns.Art.Report()
 	T.ok(#rows > 20, "every art key reported")
 	local tex = _G.DungeonPlannerMainFrame:CreateTexture()
@@ -325,7 +339,10 @@ T.case("Art report and debug list atlases, files and templates", function()
 end)
 
 T.case("Actions, slash commands and the public API", function()
-	boot()
+	local plan = smoke()
+	if #plan.pulls == 0 then -- run alone: the map tools case adds the pulls
+		ns.Plan.AddPull(plan)
+	end
 	ns.Slash.Handle("next")
 	T.ok(ns.API.GetCurrentPull(), "current pull after next")
 	ns.Slash.Handle("prev")
@@ -351,7 +368,7 @@ T.case("Actions, slash commands and the public API", function()
 end)
 
 T.case("Boss kills from ENCOUNTER_END are tracked once", function()
-	boot()
+	smoke()
 	local plan = ns.UI.ctx:Plan()
 	local enc = plan.encounters[1]
 	local seen = { n = 0 }
@@ -370,7 +387,7 @@ T.case("Boss kills from ENCOUNTER_END are tracked once", function()
 end)
 
 T.case("Sharing over AceComm: offer, accept, payload, import", function()
-	boot()
+	smoke()
 	local plan = ns.UI.ctx:Plan()
 	mock.inGroup = true
 	mock.sent = {}

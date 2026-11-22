@@ -378,6 +378,7 @@ end
 
 T.case("Travel: the entrance on its bundled zone map, names in the client's language, the continent by parents", function()
 	boot()
+	ns.UI.Show() -- the home table's preview below
 	ns.Travel.Reset()
 	ns.Instances.ForgetMapNames()
 	local rec = ns.Travel.For(bundled("the-deadmines"))
@@ -572,6 +573,7 @@ end)
 
 T.case("Prep notes: an own plan's notes show read-only in read-only mode", function()
 	boot()
+	ns.UI.Show() -- the window's instance page holds the section built below
 	local plan = bundled("the-deadmines")
 	local ro = true
 	local ctx = { Plan = function() return plan end, ReadOnly = function() return ro end }
