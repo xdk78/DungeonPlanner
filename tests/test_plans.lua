@@ -326,7 +326,7 @@ T.case("Recommended plans say when their research is older than the game build",
 	local mock = T.mock
 	local thanes = B.Get(B.PREFIX .. "hall-of-thanes")
 	local realBuild, realInfo = rawget(_G, "GetBuildInfo"), mock.buildInfo
-	local okInfo, err = pcall(function()
+	local okInfo, errInfo = pcall(function()
 		for _, odd in ipairs({ "?", "", "2030-12-24", "Smarch 1 2030", "Dec 2030" }) do
 			mock.buildInfo = { realInfo[1], realInfo[2], odd, realInfo[4] }
 			T.eq(ns.UI.StaleLine(thanes), nil, "build date " .. odd .. ": no notice")
@@ -337,7 +337,7 @@ T.case("Recommended plans say when their research is older than the game build",
 		T.eq(ns.UI.StaleLine(thanes), nil, "no GetBuildInfo: no notice")
 	end)
 	_G.GetBuildInfo, mock.buildInfo = realBuild, realInfo
-	assert(okInfo, err)
+	assert(okInfo, errInfo)
 	local saved = mock.buildInfo
 	mock.buildInfo = { saved[1], saved[2], "Dec 24 2030", saved[4] }
 	local ok, err = pcall(function()
