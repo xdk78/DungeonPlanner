@@ -21,7 +21,7 @@ ns.BossData.Add({
 				14507, 18267, 12662, 14930, 14297,
 			},
 		},
-		{ name = "Zevrim Thornhoof", npc = 11490, disp = 11335, lv = { 57, 57 }, cls = "e",
+		{ name = "Zevrim Thornhoof", npc = 11490, disp = 11335, enc = 343, lv = { 57, 57 }, cls = "e",
 			ab = {
 				{ 22478, "dispel" },
 				{ 22651, "deadly", "Pulls a player to his altar and drains them; free them quickly." },
@@ -30,7 +30,7 @@ ns.BossData.Add({
 				18313, 18323, 18319, 18359, 18306,
 			},
 		},
-		{ name = "Hydrospawn", npc = 13280, disp = 5489, lv = { 57, 57 }, cls = "e",
+		{ name = "Hydrospawn", npc = 13280, disp = 5489, enc = 344, lv = { 57, 57 }, cls = "e",
 			ab = {
 				{ 22419, "aoe" },
 				{ 22420, "dispel" },
@@ -42,7 +42,7 @@ ns.BossData.Add({
 				18322, 18317, 18324, 19268, 18359,
 			},
 		},
-		{ name = "Lethtendris", npc = 14327, disp = 14378, lv = { 57, 57 }, cls = "e",
+		{ name = "Lethtendris", npc = 14327, disp = 14378, enc = 345, lv = { 57, 57 }, cls = "e",
 			ab = {
 				{ 22709, "interrupt" },
 				{ 14887, "interrupt,healer" },
@@ -55,7 +55,7 @@ ns.BossData.Add({
 				18325, 18311, 18302, 18301, 14930, 14297, 15985, 13518, 14287, 15657,
 			},
 		},
-		{ name = "Alzzin the Wildshaper", npc = 11492, disp = 14416, lv = { 58, 58 }, cls = "e",
+		{ name = "Alzzin the Wildshaper", npc = 11492, disp = 14416, enc = 346, lv = { 58, 58 }, cls = "e",
 			ab = {
 				{ 22661, "dispel" },
 				{ 22662, "dispel" },

@@ -1161,4 +1161,5 @@ ns.Locales.frFR = {
 	["wing unknown"] = "aile inconnue",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Enregistrée sans connaître l'aile\194\160: ce peut être une run d'une autre aile de cette instance.",
 	["Runs recorded without a known wing are kept."] = "Les runs enregistrées sans aile connue sont conservées.",
+	["Also clear runs without a known wing"] = "Effacer aussi les runs sans aile connue",
 }

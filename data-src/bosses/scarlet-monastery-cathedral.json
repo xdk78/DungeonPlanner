@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "High Inquisitor Fairbanks",
    "npcID": 4542,
+   "encounterID": 449,
    "displayID": 2605,
    "class": "elite",
    "level": [
@@ -126,6 +127,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -242,6 +244,7 @@
    "point": "p5",
    "name": "High Inquisitor Whitemane",
    "npcID": 3977,
+   "encounterID": 450,
    "displayID": 2043,
    "class": "elite",
    "level": [
@@ -314,6 +317,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

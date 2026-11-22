@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Guard Mol'dar", npc = 14326, disp = 11561, lv = { 59, 59 }, cls = "e",
+		{ name = "Guard Mol'dar", npc = 14326, disp = 11561, enc = 362, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 11972 },
 				{ 8269, false, "Hits harder and faster at low health; save cooldowns and burn it down." },
@@ -18,7 +18,7 @@ ns.BossData.Add({
 				18494, 18493, 18496, 18498, 18497, 18450, 18459, 18464, 18458, 18460, 18462, 18463, 18451,
 			},
 		},
-		{ name = "Stomper Kreeg", npc = 14322, disp = 11545, lv = { 59, 59 }, cls = "e",
+		{ name = "Stomper Kreeg", npc = 14322, disp = 11545, enc = 363, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 8269, false, "Hits harder and faster at low health; save cooldowns and burn it down." },
 				{ 15577 },
@@ -30,7 +30,7 @@ ns.BossData.Add({
 				18425,
 			},
 		},
-		{ name = "Guard Fengus", npc = 14321, disp = 11561, lv = { 58, 59 }, cls = "e",
+		{ name = "Guard Fengus", npc = 14321, disp = 11561, enc = 364, lv = { 58, 59 }, cls = "e",
 			ab = {
 				{ 22817 },
 			},
@@ -38,7 +38,7 @@ ns.BossData.Add({
 				18360, 18364, 18359, 18462, 18464, 18450, 18459,
 			},
 		},
-		{ name = "Guard Slip'kik", npc = 14323, disp = 11561, lv = { 59, 59 }, cls = "e",
+		{ name = "Guard Slip'kik", npc = 14323, disp = 11561, enc = 365, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 11972 },
 				{ 8269, false, "Hits harder and faster at low health; save cooldowns and burn it down." },
@@ -47,7 +47,7 @@ ns.BossData.Add({
 				18498, 18494, 18496, 18497, 18493, 18364,
 			},
 		},
-		{ name = "Captain Kromcrush", npc = 14325, disp = 11564, lv = { 61, 61 }, cls = "e",
+		{ name = "Captain Kromcrush", npc = 14325, disp = 11564, enc = 366, lv = { 61, 61 }, cls = "e",
 			ab = {
 				{ 8599, false, "Hits harder and faster for a while; heal through it." },
 				{ 22857 },
@@ -58,7 +58,7 @@ ns.BossData.Add({
 				18503, 18507, 18505, 18502, 18360, 14811,
 			},
 		},
-		{ name = "Cho'Rush the Observer", npc = 14324, disp = 11537, lv = { 60, 60 }, cls = "e",
+		{ name = "Cho'Rush the Observer", npc = 14324, disp = 11537, enc = 367, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 15531, "aoe", "Roots nearby players; dispel or kill it from range." },
 			},
@@ -69,7 +69,7 @@ ns.BossData.Add({
 				18538,
 			},
 		},
-		{ name = "King Gordok", npc = 11501, disp = 11583, lv = { 62, 62 }, cls = "e",
+		{ name = "King Gordok", npc = 11501, disp = 11583, enc = 368, lv = { 62, 62 }, cls = "e",
 			ab = {
 				{ 22886, false, "Charges a random player and throws them up; be ready to heal." },
 				{ 16856, "healer", "Cuts healing on the tank; plan extra healing or swap." },

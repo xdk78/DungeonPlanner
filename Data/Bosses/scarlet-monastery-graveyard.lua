@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Interrogator Vishas", npc = 3983, disp = 2044, lv = { 32, 32 }, cls = "e",
+		{ name = "Interrogator Vishas", npc = 3983, disp = 2044, enc = 444, lv = { 32, 32 }, cls = "e",
 			ab = {
 				{ 9034 },
 				{ 14032 },

@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Houndmaster Loksey", npc = 3974, disp = 2040, lv = { 34, 34 }, cls = "e",
+		{ name = "Houndmaster Loksey", npc = 3974, disp = 2040, enc = 446, lv = { 34, 34 }, cls = "e",
 			ab = {
 				{ 6742, false, "Speeds up an ally; dispel it or save cooldowns." },
 			},
@@ -17,7 +17,7 @@ ns.BossData.Add({
 				7710, 7728, 7761, 2262, 5756, 5819, 7727, 7729, 7752, 7757, 7787, 8225, 10332, 7756, 274292,
 			},
 		},
-		{ name = "Arcanist Doan", npc = 6487, disp = 5266, lv = { 37, 37 }, cls = "e",
+		{ name = "Arcanist Doan", npc = 6487, disp = 5266, enc = 447, lv = { 37, 37 }, cls = "e",
 			ab = {
 				{ 9438 },
 				{ 34517, "aoe" },

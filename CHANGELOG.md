@@ -25,11 +25,18 @@ follow [Semantic Versioning](https://semver.org/).
   them instead of holding every message indefinitely; if the game refuses them, sharing and group sync say so.
 - **Recorded runs of instances with wings** (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire): a wing's Runs
   section listed the runs of every wing, so the Library's plan showed Armory runs. A run is now recorded for its wing
-  when the wing is known: from the plan open in run mode, or from the game's map when it names the wing. When neither
-  says, the run stays with the whole instance. Runs recorded before this version, and runs whose wing was not known,
-  still show in every wing's Runs section, marked "wing unknown".
+  when the game tells which wing it is: its map names the wing, or you kill a boss only that wing has. Until then the
+  run stays with the whole instance; the plan you have open never decides it. Runs recorded before this version, and
+  runs whose wing was not known, still show in every wing's Runs section, marked "wing unknown".
+- **Best times per wing**: where the wing is known, a wing's best time, boss splits and "previous run" come from that
+  wing's runs (and those without a known wing), not from the other wings'.
+- **Clear history on a wing** removes only that wing's runs; runs without a known wing stay unless you tick "Also
+  clear runs without a known wing".
+- **Run history of many instances**: once 60 instances had runs, a run in a new one was not kept. Now the instance
+  played longest ago makes room.
 - **"Open in NeedRoll" for plans saved in another game language**: the button passed the instance's name in that
-  language. It now passes the English name first and falls back to the plan's own name.
+  language. It now passes the English name first and falls back to the plan's own name, without opening NeedRoll
+  twice.
 
 ## [0.2.0] - 2026-11-22
 

@@ -1161,4 +1161,5 @@ ns.Locales.deDE = {
 	["wing unknown"] = "Flügel unbekannt",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Aufgezeichnet, ohne den Flügel zu kennen: Es kann ein Run in einem anderen Flügel dieser Instanz sein.",
 	["Runs recorded without a known wing are kept."] = "Runs ohne bekannten Flügel bleiben erhalten.",
+	["Also clear runs without a known wing"] = "Auch Runs ohne bekannten Flügel löschen",
 }

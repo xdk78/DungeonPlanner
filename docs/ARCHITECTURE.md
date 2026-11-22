@@ -282,7 +282,7 @@ a run is a sequence of **pulls** = combat segments, plus boss kills and wipes:
 ```
 PLAYER_ENTERING_WORLD / ZONE_CHANGED_NEW_AREA -> RunLog.Enter (same instance, not another wing, within 30 min: the
   same run) / Leave
-PLAYER_REGEN_DISABLED (inside the run's instance) -> RunLog.PullStart; a 0.5 s C_Timer ticker starts
+PLAYER_REGEN_DISABLED (inside the run's instance ID) -> RunLog.PullStart; a 0.5 s C_Timer ticker starts
   ticker -> Recorder.ScanPlates (C_NamePlate: hostile, living, in-combat units; level, classification, plain names)
          -> RunLog.Observe (peak counts: the same mob cannot be told apart between looks)
 PLAYER_REGEN_ENABLED -> ticker stops; RunLog.PullEnd (group members dead, all dead = wipe); a pull with no enemy seen is dropped
@@ -298,16 +298,28 @@ found by its instance map ID (`Recorder.KeyForPlan`: the plan's stored `instance
 through `Instances.InstanceMapID`, else the Group Finder's for its name, else a run recorded under the same name).
 
 Wings (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) share `GetInstanceInfo`'s instance ID, and on
-Forever the client does not say which wing the player is in. So a run is keyed by the wing only when the wing is known
-(`Recorder.KeyHere`): the client's floor map names one wing (`Travel.Here`), else run mode is open on a plan whose wing
-the resolver knows (`Instances.Resolve`) and the player is in its instance (`Instances.IsHere`). Otherwise the run
-keeps the bare instance ID. A run that started without a wing takes one at its next zone event or pull once the wing
-is known (`RunLog.Adopt`); a run with a wing never changes wing, and another wing is another run. A wing's plan lists
-its wing's runs plus the bare-ID runs (`Recorder.KeysForPlan`; every run recorded before 0.2.1 is one), which the
-Runs section marks "wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of
-its instance. "Clear history" on a wing's plan removes only that wing's runs (the bare-ID runs stay: every wing lists
-them, and the dialog says they are kept); on a plan whose wing is unclear it removes every run the plan lists
-(`Recorder.ClearForPlan`). Run mode shows the live pull count.
+Forever the client does not say which wing the player is in. A run's wing comes only from what the game reports, never
+from a plan (the selected or run-mode plan changes when the player browses or group sync follows a leader, and says
+nothing about where the player is):
+
+- the client's floor map, when it names exactly one wing of the instance (`Recorder.KeyHere`, `Travel.Here`);
+- the first boss kill (`ENCOUNTER_END` success, `BOSS_KILL`) whose encounter ID belongs to exactly one wing
+  (`Recorder.WingForKill`, `BossData.InstancesForEncounter`: the `enc` IDs in `Data/Bosses`, from warcraft.wiki.gg's
+  classic list, data-src/bosses/README.md).
+
+Until then the run keeps the bare instance ID ("wing unknown"). A wing is only ever added to a run (`RunLog.Adopt`
+fills a missing wing, never replaces one): a pull is recorded whenever the instance ID matches, whatever the map says,
+and an encounter of another wing does not move a run. `RunLog.Enter` starts a new run for another wing only when the
+floor map names that other wing; a map of no wing, or none, continues the run. A wing's plan lists its wing's runs plus
+the bare-ID runs (`Recorder.KeysForPlan`; every run recorded before 0.2.1 is one), which the Runs section marks
+"wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of its instance.
+Best times, splits and the previous run compare over the same keys as the list (`RunLog.Best`, `RunCompare.Splits`
+take a key list), so a wing's best is its own runs' and the unknown-wing runs'. The Share section's run text prefers
+the newest run of the wing's own key and says "wing unknown" when it uses another. "Clear history" on a wing's plan
+removes only that wing's runs unless "Also clear runs without a known wing" is ticked (off by default; the dialog says
+the others are kept); on a plan whose wing is unclear it removes every run the plan lists (`Recorder.ClearForPlan`).
+At most 60 instance keys are kept: a new key makes room by dropping the key whose newest run is the oldest.
+Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
 
@@ -444,7 +456,8 @@ Providers.Loot(plan, enc)       -- items { itemID, name?, quality?, slot?, slotT
 Providers.Portrait(plan, enc)   -- { icon } or { displayInfo }, credit (Journal.BossArt falls back to it)
 Providers.BossInfo(plan, enc)   -- { level?, rare?, description?, summon = { itemID }?, drops? }, credit (Data/BossInfo.lua)
 Providers.LootLinks()           -- adapters with OpenLoot (NeedRoll's public API: the instance's English name by
-                                --   Instances.CanonicalName first, then the name the client shows, then the stored one)
+                                --   Instances.CanonicalName first, then the name the client shows, then the stored one;
+                                --   the next only after an error or a plain false, so nothing opens twice)
 Providers.Report()              -- /dp debug: id, title, active, internals, version, counts, failure
 ```
 

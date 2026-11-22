@@ -90,8 +90,9 @@ function Panel.Create(parent, ctx)
 	local function plan()
 		return ctx:Plan()
 	end
-	local function key()
-		return Recorder.KeyForPlan(plan())
+	-- The keys of the runs listed, which best times and splits compare against (Recorder.KeysForPlan).
+	local function keys()
+		return Recorder.KeysForPlan(plan())
 	end
 	local function store()
 		return Recorder.Store()
@@ -129,22 +130,43 @@ function Panel.Create(parent, ctx)
 	f.best:SetPoint("BOTTOMLEFT", f.runsTitle, "BOTTOMRIGHT", SP.md, 0)
 	f.best:SetJustifyH("RIGHT")
 
+	-- On a wing's plan the dialog offers to clear the runs without a known wing too (off by default: every wing lists
+	-- them). Made on first use, shown under the dialog's text.
+	local alsoUnknown, clearBody = false, nil
+	local function clearOptions()
+		if not clearBody then
+			clearBody = CreateFrame("Frame", nil, f)
+			clearBody:SetHeight(SZ.control)
+			clearBody.check = W.Check(clearBody, L["Also clear runs without a known wing"], function(on)
+				alsoUnknown = on and true or false
+			end)
+			clearBody.check:SetPoint("TOPLEFT")
+			clearBody:Hide()
+			f.clearOptions = clearBody
+		end
+		alsoUnknown = false
+		clearBody.check:SetChecked(false)
+		return clearBody
+	end
 	f.clear = W.Button(left, L["Clear history"], "outline", function()
 		local p = plan()
 		local text = L["Remove the recorded runs of this instance? This cannot be undone."]
 		local _, shared = Recorder.KeyForPlan(p)
+		local body
 		if shared then
-			-- A wing clears only its own runs (Recorder.ClearForPlan).
+			-- A wing clears only its own runs unless the box is ticked (Recorder.ClearForPlan).
 			text = text .. "\n" .. L["Runs recorded without a known wing are kept."]
+			body = clearOptions()
 		end
 		W.ShowDialog({
 			title = L["Clear history"],
 			text = text,
+			body = body,
 			buttons = {
 				{
 					L["Clear history"],
 					function()
-						Recorder.ClearForPlan(p)
+						Recorder.ClearForPlan(p, body ~= nil and alsoUnknown)
 						select(nil)
 						f:Refresh()
 					end,
@@ -176,7 +198,7 @@ function Panel.Create(parent, ctx)
 			local s = RunLog.Summary(run)
 			row.text:SetText((run.done and "" or (L["Recording"] .. " • ")) .. when(run)
 				.. (Recorder.WingUnknown(run, plan()) and (" • " .. L["wing unknown"]) or ""))
-			local best = RunLog.Best(store(), run.k, run)
+			local best = RunLog.Best(store(), keys(), run)
 			local delta = best.total and run.done and (" " .. D(s.duration - best.total)) or ""
 			row.meta:SetText(T(s.duration) .. " • " .. ns.Plural(s.pulls, L["%d pull|%d pulls"]) .. " • "
 				.. ns.Plural(s.bosses, L["%d boss|%d bosses"]) .. delta)
@@ -310,7 +332,7 @@ function Panel.Create(parent, ctx)
 		if Recorder.WingUnknown(run, plan()) then
 			doc:Add("muted", L["Recorded without knowing the wing: it may be a run of another wing of this instance."])
 		end
-		local splits, best, prev = RunCompare.Splits(store(), run)
+		local splits, best, prev = RunCompare.Splits(store(), run, keys())
 		if best.total then
 			doc:Add("muted", string.format(L["Best: %s over %s"], T(best.total), ns.Plural(best.runs, L["%d run|%d runs"])))
 		end
@@ -480,7 +502,6 @@ function Panel.Create(parent, ctx)
 		end
 		self.record:SetChecked(Recorder.Enabled())
 		local st = store()
-		local k = key()
 		local runs = Recorder.RunsForPlan(p)
 		local cur = st and st.current
 		runsShown = runs
@@ -496,7 +517,8 @@ function Panel.Create(parent, ctx)
 		else
 			self.state:SetText(Recorder.Enabled() and L["Recording starts when you enter a dungeon."] or L["Off"])
 		end
-		local best = st and k and RunLog.Best(st, k)
+		-- Over the runs listed: the wing's own and those without a known wing (the rows' differences use the same).
+		local best = st and RunLog.Best(st, keys())
 		self.best:SetText(best and best.total and string.format(L["Best %s"], T(best.total)) or "")
 		self.runs:SetItems(runs)
 		self.finish:SetShown(cur ~= nil)

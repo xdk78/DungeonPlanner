@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "Tendris Warpwood",
    "npcID": 11489,
+   "encounterID": 350,
    "displayID": 14383,
    "class": "elite",
    "level": [
@@ -86,6 +87,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -96,6 +98,7 @@
    "point": "p4",
    "name": "Illyanna Ravenoak",
    "npcID": 11488,
+   "encounterID": 347,
    "displayID": 11270,
    "class": "elite",
    "level": [
@@ -139,6 +142,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -149,6 +153,7 @@
    "point": "p5",
    "name": "Magister Kalendris",
    "npcID": 11487,
+   "encounterID": 348,
    "displayID": 14384,
    "class": "elite",
    "level": [
@@ -202,6 +207,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -212,6 +218,7 @@
    "point": "p6",
    "name": "Immol'thar",
    "npcID": 11496,
+   "encounterID": 349,
    "displayID": 14173,
    "class": "elite",
    "level": [
@@ -301,6 +308,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -311,6 +319,7 @@
    "point": "p7",
    "name": "Prince Tortheldrin",
    "npcID": 11486,
+   "encounterID": 361,
    "displayID": 11256,
    "class": "elite",
    "level": [
@@ -383,6 +392,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

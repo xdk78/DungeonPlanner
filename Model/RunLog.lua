@@ -296,12 +296,18 @@ function Recorder.Finish(store, now)
 	run.seen = nil
 	local list = store.runs[run.k]
 	if not list then
-		local n = 0
-		for _ in pairs(store.runs) do
+		-- A new key when MAX_INSTANCES keys are kept: the key whose newest run is the oldest makes room.
+		local n, stale, staleAt = 0, nil, nil
+		for k, runs in pairs(store.runs) do
 			n = n + 1
+			local last = runs[#runs]
+			local at = last and (last.e or last.t) or -math.huge
+			if not staleAt or at < staleAt or (at == staleAt and k < stale) then
+				stale, staleAt = k, at
+			end
 		end
-		if n >= Recorder.MAX_INSTANCES then
-			return nil
+		if n >= Recorder.MAX_INSTANCES and stale then
+			store.runs[stale] = nil
 		end
 		list = {}
 		store.runs[run.k] = list
@@ -377,10 +383,24 @@ local function bossKey(b)
 	return b.i and ("e" .. b.i) or ("n" .. (b.n or ""))
 end
 
--- Best times over the finished runs of an instance, split by boss: best[bossKey] = fastest time to that kill, and
--- total = the fastest run that killed at least as many bosses as the most complete run. Also the previous run.
-function Recorder.Best(store, key, except)
-	local list = store.runs[key] or {}
+-- The finished runs under a key, or under a list of keys (a wing's and its instance's), oldest first.
+local function oldestFirst(store, keys)
+	if type(keys) ~= "table" then
+		return store.runs[keys] or {}
+	end
+	local out = Recorder.RunsOf(store, keys)
+	for i = 1, math.floor(#out / 2) do
+		out[i], out[#out + 1 - i] = out[#out + 1 - i], out[i]
+	end
+	return out
+end
+Recorder.OldestFirst = oldestFirst
+
+-- Best times over the finished runs of an instance (a key, or a list of keys), split by boss: best[bossKey] = fastest
+-- time to that kill, and total = the fastest run that killed at least as many bosses as the most complete run. Also
+-- the previous run.
+function Recorder.Best(store, keys, except)
+	local list = oldestFirst(store, keys)
 	local splits, most = {}, 0
 	for _, run in ipairs(list) do
 		if run ~= except then
@@ -393,7 +413,7 @@ function Recorder.Best(store, key, except)
 			end
 		end
 	end
-	local total, previous
+	local total, previous, count = nil, nil, 0
 	for _, run in ipairs(list) do
 		if run ~= except then
 			if most > 0 and #run.b >= most then
@@ -403,14 +423,16 @@ function Recorder.Best(store, key, except)
 				end
 			end
 			previous = run
+			count = count + 1
 		end
 	end
-	return { splits = splits, total = total, previous = previous, runs = #list - (except and 1 or 0) }
+	return { splits = splits, total = total, previous = previous, runs = count }
 end
 
--- Per boss of a run: time, best split from the other runs, and the difference (negative = faster).
-function Recorder.Splits(store, run)
-	local best = Recorder.Best(store, run.k, run)
+-- Per boss of a run: time, best split from the other runs (under `keys`, else the run's own key), and the difference
+-- (negative = faster).
+function Recorder.Splits(store, run, keys)
+	local best = Recorder.Best(store, keys or run.k, run)
 	local out = {}
 	for _, b in ipairs(run.b) do
 		local bestA = best.splits[bossKey(b)]

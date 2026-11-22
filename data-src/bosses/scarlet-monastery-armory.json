@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "Herod",
    "npcID": 3975,
+   "encounterID": 448,
    "displayID": 2041,
    "class": "elite",
    "level": [
@@ -116,6 +117,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

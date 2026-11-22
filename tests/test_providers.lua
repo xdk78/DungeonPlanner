@@ -389,6 +389,27 @@ T.case("NeedRoll adapter: a plan saved on a German client opens by the English n
 	mock.needRollCalls, mock.needRollKnows = {}, {}
 	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), false)
 	T.eq(#mock.needRollCalls, 2, "no name twice")
+	-- An answer the documentation does not promise (nil) ends it: NeedRoll may have opened, so no second window.
+	local root = select(2, P.Get("needRoll"))
+	local showLoot, calls = root.showLoot, 0
+	root.showLoot = function()
+		calls = calls + 1
+		return nil
+	end
+	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), false)
+	T.eq(calls, 1, "one call after an unclear answer")
+	-- An error tries the next name.
+	calls = 0
+	root.showLoot = function(inst)
+		calls = calls + 1
+		if inst == "The Deadmines" then
+			error("no such instance")
+		end
+		return true
+	end
+	T.eq(P.Call("needRoll", "OpenLoot", plan, plan.encounters[1]), true, "the German name after an error")
+	T.eq(calls, 2)
+	root.showLoot = showLoot
 	mock.needRollKnows = nil
 	mock.RemoveProviders()
 	fresh()

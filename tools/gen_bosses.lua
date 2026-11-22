@@ -114,10 +114,13 @@ function M.Validate(doc, file, plan)
 			end
 			seen[b.point] = true
 		end
-		for _, key in ipairs({ "npcID", "displayID" }) do
+		for _, key in ipairs({ "npcID", "displayID", "encounterID" }) do
 			if b[key] ~= nil and not isInt(b[key]) then
 				err("%s: %s must be a positive integer", at, key)
 			end
+		end
+		if b.encounterID ~= nil and not (type(b.src) == "table" and b.src.encounterID ~= nil) then
+			err("%s: encounterID needs its source (src.encounterID)", at)
 		end
 		for _, m in ipairs(b.members or {}) do
 			if not isInt(m) then
@@ -279,6 +282,9 @@ local function renderBoss(b)
 	end
 	if b.displayID then
 		head[#head + 1] = "disp = " .. b.displayID
+	end
+	if b.encounterID then
+		head[#head + 1] = "enc = " .. b.encounterID
 	end
 	if b.level then
 		head[#head + 1] = "lv = " .. (b.level == "??" and '"??"' or string.format("{ %d, %d }", b.level[1], b.level[2]))

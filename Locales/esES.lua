@@ -1161,4 +1161,5 @@ ns.Locales.esES = {
 	["wing unknown"] = "ala desconocida",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Grabada sin saber el ala: puede ser una partida en otra ala de esta instancia.",
 	["Runs recorded without a known wing are kept."] = "Se conservan las partidas grabadas sin un ala conocida.",
+	["Also clear runs without a known wing"] = "Borrar también las partidas sin un ala conocida",
 }

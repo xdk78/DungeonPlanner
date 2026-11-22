@@ -3,7 +3,8 @@
 -- true when it opened). Its data tables (boss, rare and entrance spots, loot) live on its private namespace, which it
 -- does not publish, so they cannot be read: this adapter offers "open in NeedRoll" links and nothing else.
 -- The instance goes by its English name first (Instances.CanonicalName: the same for a plan saved in any client
--- language), then by the name the client shows, then by the stored one, until NeedRoll says it opened.
+-- language), then by the name the client shows, then by the stored one; the next only after an error or a plain
+-- `false` (open() below).
 
 local _, ns = ...
 local Providers = ns.Providers
@@ -39,11 +40,15 @@ local function names(plan, enc)
 	return list, boss
 end
 
+-- The next name is tried only when NeedRoll raised an error or answered exactly `false` (its documented "did not
+-- open"). Any other answer (true, or a value the documentation does not promise) ends it, so a window or a chat line
+-- never comes twice.
 local function open(fn, plan, enc)
 	local list, boss = names(plan, enc)
 	for _, inst in ipairs(list) do
-		if fn(inst, boss) == true then
-			return true
+		local ok, r = pcall(fn, inst, boss)
+		if ok and r ~= false then
+			return r == true
 		end
 	end
 	return false

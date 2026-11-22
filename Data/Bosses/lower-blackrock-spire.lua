@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "War Master Voone", npc = 9237, disp = 9733, lv = { 59, 59 }, cls = "e",
+		{ name = "War Master Voone", npc = 9237, disp = 9733, enc = 269, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 10966 },
 				{ 15618, "control" },
@@ -21,7 +21,7 @@ ns.BossData.Add({
 				13173, 13179, 16676, 13177, 12582, 22231, 12335, 21524, 13175,
 			},
 		},
-		{ name = "Shadow Hunter Vosh'gajin", npc = 9236, disp = 9732, lv = { 58, 58 }, cls = "e",
+		{ name = "Shadow Hunter Vosh'gajin", npc = 9236, disp = 9732, enc = 268, lv = { 58, 58 }, cls = "e",
 			ab = {
 				{ 16098, "dispel,interrupt", "Raises physical damage taken; dispel it." },
 				{ 16097, "dispel", "Turns players into frogs; dispel or wait." },
@@ -30,7 +30,7 @@ ns.BossData.Add({
 				13255, 12654, 12626, 16712, 13257, 12651, 12653, 12685,
 			},
 		},
-		{ name = "Mother Smolderweb", npc = 10596, disp = 9929, lv = { 59, 59 }, cls = "e",
+		{ name = "Mother Smolderweb", npc = 10596, disp = 9929, enc = 270, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 16104, "dispel" },
 				{ 16468, "dispel" },
@@ -40,7 +40,7 @@ ns.BossData.Add({
 				13244, 16715, 13213, 13183, 10374,
 			},
 		},
-		{ name = "Highlord Omokk", npc = 9196, disp = 11565, lv = { 59, 59 }, cls = "e",
+		{ name = "Highlord Omokk", npc = 9196, disp = 11565, enc = 267, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 10101, "tank", "Throws its target back; tank with a wall behind you." },
 				{ 156861 },
@@ -49,7 +49,7 @@ ns.BossData.Add({
 				13167, 13170, 13169, 13168, 13166, 16670, 12336, 10226,
 			},
 		},
-		{ name = "Urok Doomhowl", npc = 10584, disp = 11583, lv = { 60, 60 }, cls = "re",
+		{ name = "Urok Doomhowl", npc = 10584, disp = 11583, enc = 271, lv = { 60, 60 }, cls = "re",
 			ab = {
 				{ 16508, "control", "Mass fear; use tremor or fear ward and spread." },
 			},
@@ -57,7 +57,7 @@ ns.BossData.Add({
 				13258, 13259, 18784, 22232, 13178,
 			},
 		},
-		{ name = "Quartermaster Zigris", npc = 9736, disp = 9738, lv = { 59, 59 }, cls = "re",
+		{ name = "Quartermaster Zigris", npc = 9736, disp = 9738, enc = 272, lv = { 59, 59 }, cls = "re",
 			ab = {
 				{ 15504 },
 				{ 15609 },
@@ -67,12 +67,12 @@ ns.BossData.Add({
 				13252, 13253, 12835, 16713, 16735, 16703, 16673, 16696, 16680, 16683, 16716, 16717, 13247,
 			},
 		},
-		{ name = "Halycon", npc = 10220, disp = 9567, lv = { 59, 59 }, cls = "e",
+		{ name = "Halycon", npc = 10220, disp = 9567, enc = 274, lv = { 59, 59 }, cls = "e",
 			loot = {
 				13212, 13211, 13210, 22313,
 			},
 		},
-		{ name = "Gizrul the Slavener", npc = 10268, disp = 9564, lv = { 60, 60 }, cls = "e",
+		{ name = "Gizrul the Slavener", npc = 10268, disp = 9564, enc = 273, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 8269, "enrage", "Hits harder and faster at low health; save cooldowns and burn it down." },
 				{ 7938 },
@@ -82,7 +82,7 @@ ns.BossData.Add({
 				13206, 13205, 13208, 16718,
 			},
 		},
-		{ name = "Overlord Wyrmthalak", npc = 9568, disp = 8711, lv = { 60, 60 }, cls = "e",
+		{ name = "Overlord Wyrmthalak", npc = 9568, disp = 8711, enc = 275, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 15284 },
 				{ 16244 },

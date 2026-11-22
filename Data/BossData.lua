@@ -53,6 +53,29 @@ local function byInstance()
 	return index
 end
 
+-- The instance keys whose bosses include an encounter ID (`enc`, ENCOUNTER_END's ID; only wings that share an instance
+-- ID carry it). The run recorder learns a run's wing from it. A fact about the game, not a display: `enabled` does not
+-- switch it off.
+local byEncounter
+function BossData.InstancesForEncounter(encounterID)
+	if not byEncounter or byEncounter.n ~= #list then
+		byEncounter = { n = #list, map = {} }
+		for _, d in ipairs(list) do
+			local k = key(d.name)
+			for _, b in ipairs(k and d.bosses or {}) do
+				if type(b.enc) == "number" then
+					local keys = byEncounter.map[b.enc] or {}
+					byEncounter.map[b.enc] = keys
+					if not ns.Util.IndexOf(keys, k) then
+						keys[#keys + 1] = k
+					end
+				end
+			end
+		end
+	end
+	return byEncounter.map[encounterID] or {}
+end
+
 -- The data table of a plan's instance (matched by instance name, like the providers do), or nil.
 function BossData.Instance(plan)
 	if not BossData.enabled then

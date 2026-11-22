@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Hearthsinger Forresten", npc = 10558, disp = 10482, lv = { 57, 57 }, cls = "re",
+		{ name = "Hearthsinger Forresten", npc = 10558, disp = 10482, enc = 473, lv = { 57, 57 }, cls = "re",
 			ab = {
 				{ 14443 },
 				{ 16798, "control", "Sleeps a player; do not damage them, wake or dispel." },
@@ -18,7 +18,7 @@ ns.BossData.Add({
 				13378, 13379, 13384, 13383, 16682,
 			},
 		},
-		{ name = "The Unforgiven", npc = 10516, disp = 10771, lv = { 57, 57 }, cls = "e",
+		{ name = "The Unforgiven", npc = 10516, disp = 10771, enc = 472, lv = { 57, 57 }, cls = "e",
 			ab = {
 				{ 14907, "aoe", "Roots nearby players; dispel or kill it from range." },
 			},
@@ -26,7 +26,7 @@ ns.BossData.Add({
 				13405, 13404, 13408, 13409, 16717,
 			},
 		},
-		{ name = "Timmy the Cruel", npc = 10808, disp = 571, lv = { 58, 58 }, cls = "re",
+		{ name = "Timmy the Cruel", npc = 10808, disp = 571, enc = 474, lv = { 58, 58 }, cls = "re",
 			ab = {
 				{ 8599, false, "Hits harder and faster for a while; heal through it." },
 				{ 17470 },
@@ -65,7 +65,7 @@ ns.BossData.Add({
 				13386, 13387, 18716, 16692, 13385, 22897, 12811, 22206, 13518,
 			},
 		},
-		{ name = "Balnazzar", npc = 10813, disp = 10691, cls = "e",
+		{ name = "Balnazzar", npc = 10813, disp = 10691, enc = 478, cls = "e",
 			ab = {
 				{ 196977 },
 				{ 219616 },

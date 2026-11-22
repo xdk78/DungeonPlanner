@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Tendris Warpwood", npc = 11489, disp = 14383, lv = { 60, 60 }, cls = "e",
+		{ name = "Tendris Warpwood", npc = 11489, disp = 14383, enc = 350, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 5568, "aoe", "Hits everyone next to the boss; keep ranged and healers away." },
 				{ 22916 },
@@ -20,7 +20,7 @@ ns.BossData.Add({
 				18390, 18393, 18352, 18353, 15987,
 			},
 		},
-		{ name = "Illyanna Ravenoak", npc = 11488, disp = 11270, lv = { 60, 60 }, cls = "e",
+		{ name = "Illyanna Ravenoak", npc = 11488, disp = 11270, enc = 347, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 20735 },
 				{ 22914 },
@@ -30,7 +30,7 @@ ns.BossData.Add({
 				18383, 18386, 18347, 18349, 22206,
 			},
 		},
-		{ name = "Magister Kalendris", npc = 11487, disp = 14384, lv = { 60, 60 }, cls = "e",
+		{ name = "Magister Kalendris", npc = 11487, disp = 14384, enc = 348, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 7645, false, "Takes over a player for a few seconds; hold your damage on them." },
 				{ 17146 },
@@ -44,7 +44,7 @@ ns.BossData.Add({
 				18401,
 			},
 		},
-		{ name = "Immol'thar", npc = 11496, disp = 14173, lv = { 61, 61 }, cls = "e",
+		{ name = "Immol'thar", npc = 11496, disp = 14173, enc = 349, lv = { 61, 61 }, cls = "e",
 			ab = {
 				{ 22950, "tank" },
 				{ 16128, "healer,dispel" },
@@ -58,7 +58,7 @@ ns.BossData.Add({
 				18401,
 			},
 		},
-		{ name = "Prince Tortheldrin", npc = 11486, disp = 11256, lv = { 61, 61 }, cls = "e",
+		{ name = "Prince Tortheldrin", npc = 11486, disp = 11256, enc = 361, lv = { 61, 61 }, cls = "e",
 			ab = {
 				{ 15589, false, "Spins and hits everyone close; get out of melee range." },
 				{ 22920 },

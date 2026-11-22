@@ -26,6 +26,7 @@
    "point": "p2",
    "name": "Interrogator Vishas",
    "npcID": 3983,
+   "encounterID": 444,
    "displayID": 2044,
    "class": "elite",
    "level": [
@@ -98,6 +99,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

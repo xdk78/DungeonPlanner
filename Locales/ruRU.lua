@@ -1161,4 +1161,5 @@ ns.Locales.ruRU = {
 	["wing unknown"] = "крыло неизвестно",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Записан без сведений о крыле: возможно, это забег в другом крыле этого подземелья.",
 	["Runs recorded without a known wing are kept."] = "Забеги, записанные без известного крыла, сохраняются.",
+	["Also clear runs without a known wing"] = "Удалить и забеги без известного крыла",
 }
