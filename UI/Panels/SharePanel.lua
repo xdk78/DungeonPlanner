@@ -230,7 +230,7 @@ function Panel.Create(parent, ctx)
 		for _, m in ipairs(self.status.list) do
 			local state = STATE[m.state] or m.state
 			if sync[m.name] then
-				state = state .. "  ·  " .. sync[m.name]
+				state = state .. "  •  " .. sync[m.name]
 			end
 			tt:AddDoubleLine(m.name, state, 0.93, 0.91, 0.86, 0.71, 0.67, 0.59)
 		end

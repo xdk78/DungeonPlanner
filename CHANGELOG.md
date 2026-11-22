@@ -13,6 +13,14 @@ follow [Semantic Versioning](https://semver.org/).
   (`Locales/README.md`, a "Translation" issue, or a pull request).
 - Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
 - A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
+- **Group sync for run mode.** The group's leader (in a raid also an assistant) clicks "Lead this run" in run mode;
+  members who have the same plan see "Following <leader>", and their run mode shows the leader's step, next pull and
+  boss as the leader moves on. Prev or Next steps on your own ("Unfollow" does the same); "Rejoin" snaps back. A member
+  without the plan, or with another version of it, sees "Leader is on a plan you don't have: ask for it": one click
+  asks, and the leader's Dungeon Planner offers the plan the usual way. The leader sees who follows and who is out of
+  sync in run mode and in the Share section's "Has this plan" line. Small messages, sent only on a change; in a boss
+  fight they wait until addons may talk again, and a boss kill seen by your own tracker is not undone by the leader's
+  older step. Older Dungeon Planners ignore them.
 - **Every floor on the map**: the map shows all the floors an instance has a map for, not only the plan's: Atal'Byzal,
   the Maximum Security Unit and the Prismatic Talus are there now. A recommended plan shows such a floor as the map
   alone; in your own plan, putting something on it adds it to the plan. The home table's Floors count agrees.
@@ -29,14 +37,11 @@ follow [Semantic Versioning](https://semver.org/).
 - **Import conflict notice**: importing a plan named like one of yours that was last changed before yours warns, in
   orange, who it is from and both dates: replacing would undo your newer changes. Keep both stays the first choice.
 
-## [Unreleased]
-
 ### Changed
 - Saved data moves to schema 5 (it remembers which plan each received copy came from, for group sync). An older
   Dungeon Planner opens it read-only instead of losing that on its next save.
 - **Gear** uses the page's width: items stand side by side (up to three a line, as many as fit) under each boss,
   instead of one narrow column.
-
 - **Notes**: the objectives follow right under the bosses, each list as tall as its rows; they stand side by side
   only when that does not fit (a raid's bosses). **Pulls** of a recommended plan: the list's box is as tall as its
   pulls instead of an empty frame down to the bottom.
