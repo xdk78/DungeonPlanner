@@ -1160,4 +1160,5 @@ ns.Locales.deDE = {
 	["failed: the game refused the message"] = "fehlgeschlagen: Das Spiel hat die Nachricht abgelehnt",
 	["wing unknown"] = "Flügel unbekannt",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Aufgezeichnet, ohne den Flügel zu kennen: Es kann ein Run in einem anderen Flügel dieser Instanz sein.",
+	["Runs recorded without a known wing are kept."] = "Runs ohne bekannten Flügel bleiben erhalten.",
 }

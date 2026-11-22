@@ -1160,4 +1160,5 @@ ns.Locales.frFR = {
 	["failed: the game refused the message"] = "échec\194\160: le jeu a refusé le message",
 	["wing unknown"] = "aile inconnue",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Enregistrée sans connaître l'aile\194\160: ce peut être une run d'une autre aile de cette instance.",
+	["Runs recorded without a known wing are kept."] = "Les runs enregistrées sans aile connue sont conservées.",
 }

@@ -420,10 +420,25 @@ T.case("Recorder: wings sharing an instance ID record their runs apart; older ru
 		panel.detail.Add = add
 		T.ok(ns.Util.IndexOf(lines, L["Recorded without knowing the wing: it may be a run of another wing of this instance."]),
 			"the run's wing is not known")
-		-- Clearing the Library's history removes what it lists; the Armory keeps its own run.
-		R.ClearForPlan(library)
-		T.eq(#R.RunsForPlan(library), 0)
-		T.eq(#R.RunsForPlan(armory), 1)
+		-- "Clear history" on the Library: its own runs go; the runs whose wing was not known stay (every wing lists
+		-- them), and the dialog says so.
+		local W, dialog = ns.Widgets, nil
+		local show = W.ShowDialog
+		W.ShowDialog = function(spec)
+			dialog = spec
+		end
+		mock.Click(panel.clear)
+		W.ShowDialog = show
+		T.ok(dialog and dialog.text:find(L["Runs recorded without a known wing are kept."], 1, true), "the dialog says so")
+		dialog.buttons[1][2]()
+		local left = R.RunsForPlan(library)
+		T.eq(#left, 2, "the Library's own run is gone, the two whose wing was not known stay")
+		T.ok(not has(left, libRun) and has(left, legacy), "the older run is kept")
+		T.eq(#R.RunsForPlan(armory), 3, "the Armory lists its run and the older ones still")
+		-- A plan whose wing is unclear clears every run it lists, as before.
+		R.ClearForPlan(unclear)
+		T.eq(#R.RunsForPlan(armory), 0)
+		T.eq(next(store.runs), nil, "nothing left of this instance")
 	end)
 	_G.GetInstanceInfo, _G.C_Map.GetBestMapForUnit = saved.info, saved.best
 	local made = {}

@@ -131,9 +131,15 @@ function Panel.Create(parent, ctx)
 
 	f.clear = W.Button(left, L["Clear history"], "outline", function()
 		local p = plan()
+		local text = L["Remove the recorded runs of this instance? This cannot be undone."]
+		local _, shared = Recorder.KeyForPlan(p)
+		if shared then
+			-- A wing clears only its own runs (Recorder.ClearForPlan).
+			text = text .. "\n" .. L["Runs recorded without a known wing are kept."]
+		end
 		W.ShowDialog({
 			title = L["Clear history"],
-			text = L["Remove the recorded runs of this instance? This cannot be undone."],
+			text = text,
 			buttons = {
 				{
 					L["Clear history"],

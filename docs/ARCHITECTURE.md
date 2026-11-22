@@ -305,7 +305,9 @@ keeps the bare instance ID. A run that started without a wing takes one at its n
 is known (`RunLog.Adopt`); a run with a wing never changes wing, and another wing is another run. A wing's plan lists
 its wing's runs plus the bare-ID runs (`Recorder.KeysForPlan`; every run recorded before 0.2.1 is one), which the
 Runs section marks "wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of
-its instance. "Clear history" removes what the plan lists. Run mode shows the live pull count.
+its instance. "Clear history" on a wing's plan removes only that wing's runs (the bare-ID runs stay: every wing lists
+them, and the dialog says they are kept); on a plan whose wing is unclear it removes every run the plan lists
+(`Recorder.ClearForPlan`). Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
 

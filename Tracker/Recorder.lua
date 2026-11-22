@@ -346,14 +346,21 @@ function Recorder.RunsForPlan(plan)
 	return runs
 end
 
--- Remove the runs a plan lists (KeysForPlan).
+-- Remove a plan's runs: a wing's own runs (the runs whose wing was not known are kept: every wing lists them), else
+-- every run the plan lists (KeysForPlan).
 function Recorder.ClearForPlan(plan)
 	local store = Recorder.Store()
 	if not store then
 		return
 	end
-	for _, k in ipairs(Recorder.KeysForPlan(plan)) do
-		RunLog.Clear(store, k)
+	local key, shared = Recorder.KeyForPlan(plan)
+	if shared then
+		-- A wing: only its own runs. The runs whose wing was not known are every wing's; they stay.
+		RunLog.Clear(store, key)
+	else
+		for _, k in ipairs(Recorder.KeysForPlan(plan)) do
+			RunLog.Clear(store, k)
+		end
 	end
 	ns:Fire("RECORDER_CHANGED")
 end

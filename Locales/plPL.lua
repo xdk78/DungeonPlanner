@@ -1186,4 +1186,5 @@ ns.Locales.plPL = {
 	["failed: the game refused the message"] = "nie udało się: gra odrzuciła wiadomość",
 	["wing unknown"] = "skrzydło nieznane",
 	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Nagrane bez wiedzy, które to skrzydło: może to być przejście innego skrzydła tej instancji.",
+	["Runs recorded without a known wing are kept."] = "Przejścia nagrane bez znanego skrzydła zostają.",
 }
