@@ -420,7 +420,7 @@ local function cyrillicNote()
 	end
 	local mode = Style.FontMode()
 	if mode == "clean" or (type(mode) == "string" and mode:match("^lsm:")) then
-		return L["Your font setting (Arial Narrow or a SharedMedia font) may have no Cyrillic letters, so Russian text can show as boxes. Choose Automatic or Game font in Settings."]
+		return L["Your font (Arial Narrow or SharedMedia) may lack Cyrillic letters, so Russian text can show as boxes. Choose Automatic or Game font in Settings."]
 	end
 	if (ALPHABET[GetLocale and GetLocale() or "enUS"] or "roman") ~= "roman" then
 		return nil -- the client's own face
