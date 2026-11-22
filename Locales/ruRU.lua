@@ -1146,4 +1146,6 @@ ns.Locales.ruRU = {
 	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "Цвет линии меняется от начала пути к его концу, чтобы было видно, какая часть идёт раньше. Выкл.: один цвет.",
 	["From %s to %s"] = "Из %s в %s",
 	["To %s"] = "До %s",
+	["Show plan on OpenMap's dungeon map (experimental)"] = "Показывать план на карте подземелья OpenMap (экспериментально)",
+	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Рисует маршрут, остановки и метки вашего плана на карте подземелья OpenMap. Использует закрытые части OpenMap: обновление может это отключить.",
 }

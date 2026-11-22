@@ -703,6 +703,9 @@ function UI.ApplyColors()
 	if ns.RunMode then
 		ns.RunMode.Refresh()
 	end
+	if ns.OpenMapOverlay then
+		ns.OpenMapOverlay.Refresh()
+	end
 end
 
 function UI.ResetPosition()

@@ -59,3 +59,11 @@ Callbacks run inside Dungeon Planner's event handling; keep them short and do no
 | `DungeonPlannerFont_face1`, `_face2`, `_face3` | One font object per Polish face of the chain, for the font test and its probe (`UI/Fonts.lua`) |
 | `DungeonPlannerTooltip` | Our own tooltip (GameTooltipTemplate), so its lines use our fonts without changing the shared GameTooltip |
 | `DungeonPlannerDB` | SavedVariables (AceDB) |
+
+## Other addons' frames read
+
+Dungeon Planner defines no global for these; it only reads them, guarded (docs/COMPATIBILITY.md section 5).
+
+| Name | Addon | Why |
+|---|---|---|
+| `OpenMapDungeonView` | OpenMap (its private dungeon view, 0.8.12) | The experimental plan overlay (`UI/OpenMapOverlay.lua`, off by default): one frame of ours on its `page`, and `HookScript` on its own frames (`OnShow`, `OnHide`, the page's `OnSizeChanged`, the floor buttons' `OnClick`). Its fields `page`, `floor`, `floors`, `inst`, `source`, `prev`, `next`, `floorButton`, `list.rows`, `side.pool.thumb` and `bossPins` are read with shape checks and never written |
