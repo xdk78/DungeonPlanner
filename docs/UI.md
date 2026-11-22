@@ -388,7 +388,8 @@ centre: `LEFT` on one frame and `RIGHT` on another at a different height gives i
 The map section's toolbar holds the tools (own plans): Select, Marker, Position, Pull, Route, Draw, Erase, with the
 kind, role or pull picker of the active tool; on the right Legend, Fit, Focus and Floor (Focus gives way on a narrow window).
 Labels and the icon-size stepper sit in the map's bottom-left corner, inside the gold frame with a margin of their own
-(as the legend in the other corner). The **legend** floats over the top-right corner:
+(as the legend in the other corner); with the Route tool the "Snap to corridors" switch sits above them, faded on a
+floor without corridor data (`UI/Panels/MapControls.lua`). The **legend** floats over the top-right corner:
 layer switches with icons and counts, the tool's help while editing, the routes on this floor when there are any, and
 the marker editor (`UI/Panels/MapEditor.lua`) whenever a marker is selected. Alone it is compact (204 px wide, as
 tall as its content; a recommended plan's single route on a floor is not listed again under the Route row); the editor
@@ -444,6 +445,14 @@ one, none to segments too short for one, and one to a stretch between two stops 
 step is in focus its segment is brighter and thicker and the rest of the path dims. Numbered stops are dark discs with
 a ring in the route's colour, drawn above the path. Chevrons are turned in their texture coordinates
 (`MapPins.TurnedCoords`), not with `SetRotation`, which left every chevron pointing up in game.
+
+**Snap to corridors.** With the switch on, a click with the Route tool adds a numbered stop and its leg from the
+route's last point follows the corridors; Shift-click keeps the leg straight, and a stop dropped with the Route tool
+finds both its legs again (Shift on the drop: straight; with Select it moves alone). The bends appear with the stop, in the same frame as the click: the leg is found
+before the change is recorded, so the map never shows a half-made leg and one Undo takes back the stop with its bends.
+The floor's corridor data is prepared over a few frames as soon as the Route tool is chosen or the floor changes, so a
+click waits only for its own leg (docs/DATA-SOURCES.md has the times). Where no path is found, or the route has no room
+for the bends, the leg stays straight and a one-line notice under the map says why for 4 seconds.
 
 **One numbering.** A stop shows the number of the step it makes in the side panel and run mode
 (`Steps.StopNumbers`), not its own order in the route: the map and the list always agree. Steps that are not stops

@@ -36,6 +36,8 @@ local DYNAMIC = {
 	"Click to add route points, Shift-click for a numbered stop. Right-click to finish the route.",
 	"Click the map to place a party position for the chosen role. With a boss or pull in focus, it belongs to it.",
 	"Click a marker or route point to delete it.",
+	"Click to add numbered stops: the path between them follows the corridors. Shift-click for a straight leg. Right-click to finish the route.",
+	"Click to add route points, Shift-click for a numbered stop. With Snap to corridors on (where the floor has corridor data), a click adds a numbered stop whose path follows the corridors and Shift-click gives a straight leg. Right-click to finish the route.",
 	"Create a plan: mark bosses and pulls on the map, draw the route, write strategies, assign players and list gear. Share it with your group or as a string.",
 	"A recommended plan. Hover markers for notes; make an editable copy to change it.",
 	"Click a dungeon to open it  •  Right-click a plan for more  •  /dp help",

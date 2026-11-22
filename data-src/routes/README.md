@@ -64,6 +64,10 @@ next to it. Re-running is stable: the tool undoes its own earlier moves before i
 
 `tests/test_plans.lua` checks that every leg's bends are in its plan, in order, between its two stops, and on the map.
 
+`tools/walk_grids.py` (the route tool's "Snap to corridors", docs/DATA-SOURCES.md) builds its walkability grids with
+this tool's mask and applies these `overrides` to the picture they were made on: a fix here improves both (re-run
+both tools).
+
 ## Imported routes (`import`)
 
 `tools/import_routes.py` (same requirements as `route_paths.py`, plus a local clone of

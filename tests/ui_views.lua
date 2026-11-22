@@ -224,6 +224,38 @@ local function travelWindow()
 		end,
 	}
 end
+-- An editable copy of the Deadmines with one route clicked stop by stop with "Snap to corridors" (UI/RouteSnap.lua):
+-- the recommended route's first, middle and last stops on floor 1; the Route tool on.
+local snapCopy
+local function snapView()
+	closeAll()
+	ns.db.ui.snapRoutes = true
+	if not snapCopy then
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "the-deadmines")
+		local bundled = ns.UI.ctx:Plan()
+		snapCopy = ns.UI.CopyPlan(bundled)
+		snapCopy.routes = {}
+		ns.UI.ctx.tool, ns.UI.ctx.floor, ns.UI.ctx.activeRoute = "route", 1, nil
+		ns.UI.SelectTab("map")
+		ns.UI.RefreshPage()
+		local stops = {}
+		for _, r in ipairs(bundled.routes) do
+			for _, p in ipairs(r.floor == 1 and r.points or {}) do
+				if p.step then
+					stops[#stops + 1] = p
+				end
+			end
+		end
+		local cb = page().panels.map.canvas.cb
+		for _, p in ipairs({ stops[1], stops[math.ceil(#stops / 2)], stops[#stops] }) do
+			cb.onRoutePoint(p[1], p[2], false)
+		end
+	end
+	ns.UI.SelectPlan(snapCopy.id)
+	ns.UI.ctx.tool, ns.UI.ctx.floor, ns.UI.ctx.activeRoute = "route", 1, snapCopy.routes[1] and snapCopy.routes[1].id
+	ns.UI.SelectTab("map")
+	ns.UI.RefreshPage()
+end
 
 -- Run mode at step `which` ("first", "middle", "last") of Hall of Thanes.
 local function runMode(which)
@@ -797,6 +829,14 @@ V.views = {
 			openOwn("map", "draw")
 		end,
 		window = window,
+	},
+	{
+		name = "map-snap",
+		setup = snapView,
+		window = window,
+		teardown = function()
+			ns.UI.ctx.tool, ns.UI.ctx.activeRoute = "select", nil
+		end,
 	},
 	{
 		name = "map-min",
