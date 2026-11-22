@@ -10,6 +10,13 @@ _The text below is the project description as published on CurseForge. Paste eve
 
 ![](https://media.forgecdn.net/attachments/description/1808067/description_a7d9bc32-4429-4ff8-970f-f6b5ebe579e0.png)
 
+**See it** (clips made from the addon's own UI; these links work once `docs/media/` is on `main`):
+
+![Click a step in the list and the map follows](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/steps.gif)
+![Run mode: Next, Next](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/runmode.gif)
+![Draw a route](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/route.gif)
+![Find an instance](https://raw.githubusercontent.com/xdk78/DungeonPlanner/main/docs/media/picker.gif)
+
 Dungeon Planner turns every dungeon and raid into a war table: the instance map fills the window, the plan's steps and your party sit beside it. Click a step and the map jumps to it: the right floor, that stretch of the route, the pull or boss, and where each role should stand.
 
 **Works on its own:** maps, boss portraits, abilities, loot, levels and dungeon quests are built in. Other addons only add extras (see below).

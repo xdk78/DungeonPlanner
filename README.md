@@ -8,7 +8,17 @@ kills and objectives, and share plans in game, as text, or on Discord.
 > covered by offline tests; expect rough edges in the client and please report them; see [What is verified](#what-is-verified) and the
 > [release notes](docs/RELEASE-NOTES-0.1.0.md) (highlights, known limitations on Forever, the test checklist).
 
-Screenshots: in-game screenshots will be in [docs/screenshots/](docs/screenshots/) after the first in-game test.
+## See it
+
+Short clips of the main interactions (rendered offline from the addon's own UI code with the game's textures, so
+details differ a little from the client; in-game screenshots will be in [docs/screenshots/](docs/screenshots/) after
+the first in-game test).
+
+| Click a step, the map follows | Run mode: Next, Next |
+|---|---|
+| ![Clicking steps in the list moves the map to each step](docs/media/steps.gif) | ![Run mode follows the plan step by step](docs/media/runmode.gif) |
+| **Draw a route** on your own copy | **Find an instance** by name, level or "forever" |
+| ![Drawing a route with bends and numbered stops](docs/media/route.gif) | ![Searching the instance picker](docs/media/picker.gif) |
 
 ## Features
 
@@ -102,6 +112,9 @@ loot come from Dungeon Planner's bundled facts.
 | `/dp import` | the Share page of the selected plan |
 | `/dp settings`, `/dp minimap`, `/dp reset` | options; show/hide the minimap button; reset the window |
 | `/dp debug` | client and API report, self-tests, Polish letter test |
+| `/dp report` | report a problem: a text to paste into a GitHub issue (also the `!` button in the window's title bar); it holds no character, realm, guild or group details |
+| `/dp new` | what's new in this version (shown once after an update; a welcome on a first install) |
+| `/dp perf`, `/dp perf start`, `/dp perf stop` | opt-in timing of the addon's handlers and redraws, and its memory; off until started |
 | `/dp scan`, `/dp scan clear` | save diagnostics (journal, Group Finder, maps, game files) for bug reports, written on `/reload`; remove them |
 | `/dp mapid` | print the current map ID |
 | `/dp shots`, `/dp shots stop` | take a screenshot of every view of the window (Escape stops) |
@@ -163,6 +176,7 @@ lua tools/gen_plans.lua --check            # recommended plans are up to date wi
 lua tools/gen_spawns.lua --check           # enemy spawn points are up to date with the plans and data-src/spawns
 lua tools/gen_bosses.lua --check           # bundled boss facts are valid, cover every plan boss and are up to date
 lua tests/ui_dump.lua --out <work dir>     # UI views as JSON + layout lint (CI)
+uv run --script tools/make_gifs.py --png <renders> --out docs/media   # the README's clips (AGENTS.md, "Seeing the UI")
 luacheck .                                 # lint (CI)
 ```
 

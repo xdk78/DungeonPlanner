@@ -172,6 +172,28 @@ runs), `party-pages` and `party-pages-min` (raid pages), `notes-window`, `share-
 `confirm`; `--only a,b` draws some of them.
 Textures, atlases and fonts are the game's; the Settings panel and Blizzard templates are not drawn (use `/dp shots`).
 A grey placeholder is a game file this install has not downloaded; magenta, a file the client does not have.
+More views: `report` (the Report a problem window), `news-welcome` and `news-update` (the first-run welcome and the
+What's new card).
+
+**GIFs for the README and CurseForge, offline** (no game needed). `tests/ui_views.lua` has sequences: views named
+`seq-<name>-NN`, one per frame, each the state after the next step of one interaction (`steps`: clicking steps and the
+map following; `runmode`: Next, Next; `route`: drawing a route with a numbered stop; `picker`: searching the instance
+picker). Dump and render them like any view, then build the GIFs; keep `<work>` outside the repository:
+
+```sh
+# after the `lua tests/ui_dump.lua ... --files $W/files.txt` dump above:
+uv run --script $H/python/wowui.py render --game "$G" --dump $W/dump --out $W/png --addon DungeonPlanner=. --only seq-steps-01,seq-steps-02,...
+uv run --script tools/make_gifs.py --png $W/png --out docs/media     # --only steps,route; --width 720; --max-mb 3
+```
+
+`tools/make_gifs.py` (PEP 723, Pillow) crops, scales to about 720 px, captions (the bundled Alegreya Sans) and writes
+`docs/media/<name>.gif` under 3 MB (it shrinks the palette, then the width, until it fits). Crops, delays and captions
+are in `tools/gif_sequences.json`; a new sequence needs its frames in `tests/ui_views.lua` and an entry there. **Look
+at every frame before committing:** pick frames where the renderer's placeholders do not show (grey loading-screen
+boxes: the picker sequence stubs `GetFileIDFromPath` for them; missing scroll bars; unrotated chevrons), stub the
+texture in the view's setup or leave the view out. A frame that trips the layout lint is a real state to fix or avoid
+(the steps are chosen so none does). The GIFs are approximations of the client, as `docs/media/README.md` says; real
+in-game screenshots (`/dp shots`) still go in `docs/screenshots/`.
 
 ## What is verified where
 

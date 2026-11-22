@@ -725,6 +725,52 @@ V.views = {
 		teardown = closeAll,
 	},
 	{
+		name = "report",
+		setup = function()
+			openPlan("hall-of-thanes", "map")
+			ns.Errors.Clear()
+			ns.Errors.Record("Interface\\AddOns\\DungeonPlanner\\UI\\MapCanvas.lua:612: attempt to index field 'floor' (a nil value)")
+			ns.Errors.Record("Interface\\AddOns\\DungeonPlanner\\UI\\MapCanvas.lua:612: attempt to index field 'floor' (a nil value)")
+			ns.ReportFrame.Show()
+			local f = ns.ReportFrame.Frame()
+			f.what:SetValue("The map stays empty after I switch floors in Blackmaw Hold.")
+			ns.ReportFrame.Update()
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerReportFrame")
+		end,
+		teardown = function()
+			ns.Errors.Clear()
+			ns.ReportFrame.Frame():Hide()
+		end,
+	},
+	{
+		name = "news-welcome",
+		setup = function()
+			closeAll()
+			ns.NewsFrame.Show("welcome")
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerNewsFrame")
+		end,
+		teardown = function()
+			ns.NewsFrame.Frame():Hide()
+		end,
+	},
+	{
+		name = "news-update",
+		setup = function()
+			closeAll()
+			ns.NewsFrame.Show("news", "0.2.0")
+		end,
+		window = function()
+			return rawget(_G, "DungeonPlannerNewsFrame")
+		end,
+		teardown = function()
+			ns.NewsFrame.Frame():Hide()
+		end,
+	},
+	{
 		name = "confirm",
 		setup = function()
 			openOwn("map", "draw")
@@ -736,6 +782,145 @@ V.views = {
 		teardown = closeAll,
 	},
 }
+
+-- Sequences: one interaction as several frames (`seq-<name>-NN`), each frame the state after the next step, for
+-- tools/make_gifs.py (AGENTS.md, "Seeing the UI"). A step does what the click does (UI.FocusStep, RunMode.Step, the
+-- model's route functions followed by DB.Changed); only the last frame tears down. The frame texts are
+-- tools/gif_sequences.json's.
+local function sequence(name, steps, windowFn, finish)
+	local views = {}
+	for i, step in ipairs(steps) do
+		views[i] = {
+			name = string.format("seq-%s-%02d", name, i),
+			setup = step,
+			window = windowFn or window,
+			teardown = i == #steps and finish or nil,
+		}
+	end
+	return views
+end
+
+-- Clicking steps in the list: the map follows (floor, route segment, pull or boss, centred view).
+local function stepsSequence()
+	local steps = {}
+	for i, index in ipairs({ 1, 2, 3, 6, 8 }) do
+		steps[i] = function()
+			if i == 1 then
+				openPlan("hall-of-thanes", "map")
+			end
+			ns.UI.FocusStep(index)
+		end
+	end
+	return sequence("steps", steps, window, closeAll)
+end
+
+-- Run mode, Next, Next: the small window and the map behind it follow.
+local function runModeSequence()
+	local steps = {
+		function()
+			openPlan("hall-of-thanes", "map")
+			ns.UI.FocusStep(6, { stay = true })
+			ns.RunMode.Show()
+			ns.RunMode.Refresh()
+		end,
+	}
+	for i = 2, 3 do
+		steps[i] = function()
+			ns.RunMode.Step(1)
+		end
+	end
+	return sequence("runmode", steps, window, function()
+		closeAll()
+	end)
+end
+
+-- Drawing a route: an own copy of Hall of Thanes without its routes, the Route tool, a bend per click, the last click on
+-- a boss as a numbered stop (Shift-click), then right-click ends it.
+local routePlan
+local function routeSequence()
+	local spots = { { 0.51, 0.88 }, { 0.51, 0.74 }, { 0.51, 0.62 }, { 0.63, 0.55 }, { 0.72, 0.47 } }
+	local steps = {}
+	local function add(i)
+		local plan, route = routePlan, routePlan.routes[1]
+		ns.Plan.AddRoutePoint(plan, route.id, spots[i][1], spots[i][2])
+		if i == 1 or i == #spots then
+			ns.Plan.SetRouteStop(plan, route.id, #route.points, true)
+		end
+		ns.DB.Changed(plan, "routes")
+	end
+	for i = 0, #spots do
+		steps[i + 1] = function()
+			if i == 0 then
+				closeAll()
+				ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+				routePlan = ns.UI.CopyPlan(ns.UI.ctx:Plan())
+				routePlan.routes = {}
+				ns.Plan.AddRoute(routePlan, 1, "", 2)
+				ns.DB.Changed(routePlan, "routes")
+				ns.UI.SelectPlan(routePlan.id)
+				ns.UI.ctx.tool = "route"
+				ns.UI.SelectTab("map")
+				ns.UI.ctx.activeRoute = routePlan.routes[1].id
+			else
+				add(i)
+			end
+			if i == #spots then
+				ns.UI.ctx.activeRoute = nil -- right-click: the route is finished
+			end
+			ns.UI.RefreshPage()
+		end
+	end
+	return sequence("route", steps, window, function()
+		ns.UI.ctx.tool = "select"
+		if routePlan then
+			ns.DB.DeletePlan(routePlan.id)
+			routePlan = nil
+		end
+		closeAll()
+	end)
+end
+
+-- The instance picker's search: every row, then fewer as the words grow.
+local function pickerSequence()
+	local queries = { "forever", "bl", "blackmaw" }
+	local steps = {}
+	local realFileID
+	for i, query in ipairs(queries) do
+		steps[i] = function()
+			if i == 1 then
+				realFileID = _G.GetFileIDFromPath
+				-- The loading screens of the classic dungeons (the rows' pictures) are in the client but not on this
+				-- machine, so the renderer draws a grey placeholder: for these frames the client "lacks" them and the rows
+				-- show their parchment icons instead.
+				_G.GetFileIDFromPath = function(path)
+					if type(path) == "string" and path:find("LoadingScreens", 1, true) then
+						return nil
+					end
+					return realFileID(path)
+				end
+				ns.GameFiles.Reset()
+				openPlan("hall-of-thanes", "map")
+				ns.InstancePicker.Open(page().instancePick, ns.UI.ctx:Instance())
+			end
+			local edit = rawget(_G, "DungeonPlannerPopup").search.edit
+			edit:SetText(query)
+			edit:GetScript("OnTextChanged")(edit, true)
+		end
+	end
+	return sequence("picker", steps, function()
+		return rawget(_G, "DungeonPlannerPopup")
+	end, function()
+		_G.GetFileIDFromPath = realFileID
+		ns.GameFiles.Reset()
+		closeAll()
+	end)
+end
+
+for _, make in ipairs({ stepsSequence, runModeSequence, routeSequence, pickerSequence }) do
+	for _, view in ipairs(make()) do
+		V.views[#V.views + 1] = view
+	end
+end
 
 -- The client: the mock's API, set up like WoW: Forever.
 -- The made-up installed addons (tests/wowmock.lua), with the provider's real picture path (the made-up data's is not a
