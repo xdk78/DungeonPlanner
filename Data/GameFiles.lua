@@ -466,8 +466,8 @@ function GameFiles.FinderByMap(mapID)
 	local name
 	for _, e in ipairs(f.list) do
 		if e.mapID == mapID then
-			local spec = GameFiles.INSTANCES[e.key]
-			local k = spec and spec.alias or e.key -- "Sunken Temple" is The Temple of Atal'Hakkar
+			local known = GameFiles.INSTANCES[e.key]
+			local k = known and known.alias or e.key -- "Sunken Temple" is The Temple of Atal'Hakkar
 			if name and k ~= name then
 				return nil
 			end
