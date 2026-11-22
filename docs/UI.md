@@ -540,6 +540,27 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
+This round (0.2 polish):
+
+- Floors: the switcher in the map's bottom-right corner (tabs on the Deadmines and Shaper's Terrace, the name between
+  arrows on Lower Blackrock Spire and Blackmaw Hold), left of the marker editor while one is selected, the coordinates
+  over it; the Prismatic Talus, Atal'Byzal and the Maximum Security Unit on their own maps; Shift + wheel; "to
+  <floor>" on the Scholomance outside portal and its step; run mode's floor plate. Inside a dungeon: `/dp scan`, then
+  look at `position.bestMap` / `mapGroup` in the saved diagnostics (does the client give a map there?).
+- Gear: items three to a line at the default size, two at the minimum width (880); hover, Shift-click and right-click
+  on each cell; the item tooltip beside the name.
+- Bosses: an ability with a one-line note (no gap under it); Hall of Thanes' labels beside Reliquary of Kings, Dark
+  Iron Ingress and Anvilmar's Rest, the denser plates.
+- Notes: the objectives right under the bosses; a raid (Molten Core) side by side. Pulls of a recommended plan: the
+  list box as tall as the pulls. Home, My plans: the tip under a short list, the boss order and Open plan under the
+  preview's text.
+- The bullet separator (•) everywhere, in Russian especially (it was a box with the Cyrillic face).
+- With the gamepad interface style on: no `/dp`, the minimap button and key bindings open the window, the gamepad
+  menus leave it alone; the Settings panel's debug button reports "Gamepad interface style: on".
+- A recommended plan's orange "may be out of date" line on a client whose build is newer than the plan's data.
+
+Earlier:
+
 - The map centred in its frame on every classic and drawn map (equal bands left and right, the table's parchment in
   them); the legend's caret (right when folded, down when open), its folded box, and that it starts folded on Molten
   Core (its painted title shows), Hall of Thanes and the Deadmines. Opened, the Party positions row's gold hint and
