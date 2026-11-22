@@ -2,14 +2,16 @@
 -- y down) on whatever the canvas drew: the map calls it once per redraw, never per frame.
 --   MapLayout.Nudge(items)  pins never cover each other: a pull disc on a boss becomes a badge just right of it, a
 --                           numbered route stop on a marker one just left of it (the marker stays put), and other
---                           pins that still overlap are pushed apart (each half the way). Small route bends stay.
+--                           pins that still overlap are pushed apart (each half the way). Small route bends stay; one
+--                           whose centre lies inside another pin's click area is marked `covered` (left out).
 --   MapLayout.Labels(items, avoid, bounds) picks a side for each label (below, above, right, left), or hides it when
 --                           every side is taken; higher `prio` places first, and labels with prio >= KEEP always show.
 --                           avoid: optional rectangles { x1, y1, x2, y2 } no label may cover (the floating legend).
 --                           bounds: optional rectangle { x1, y1, x2, y2 } labels stay inside (the visible map): a
 --                           label below or above its pin slides sideways to fit, one beside it slides up or down
 --                           (it.dx, it.dy), and a side where it cannot fit is not used.
--- items: { x, y, r (pin radius), kind ("boss" | "disc" | "stop" | "pin"), w, h (label size; w = 0: no label), prio }.
+-- items: { x, y, r (pin radius), kind ("boss" | "disc" | "stop" | "pin"), w, h (label size; w = 0: no label), prio,
+-- hit (half the side of the pin's square click area; nil: r) }.
 -- Direction arrows along routes are placed by Model/RouteArrows.lua, clear of these pins and labels.
 
 local _, ns = ...
@@ -99,6 +101,22 @@ function MapLayout.Nudge(items)
 		end
 		if not any then
 			break
+		end
+	end
+	-- A route bend's small handle (shown while editing; it.bend) whose centre lies inside another pin's click area,
+	-- where the pin is or was moved to, is left out (it.covered): the pin takes the click there, and zooming in shows
+	-- the bend again. A bend that only touches a pin stays, as does one marked `keep` (being dragged).
+	for _, it in ipairs(items) do
+		if it.bend and not it.keep then
+			for _, other in ipairs(items) do
+				if not other.bend and other.r >= MIN_SPREAD_R then
+					local half = other.hit or other.r
+					if math.abs(it.x - other.x) < half and math.abs(it.y - other.y) < half then
+						it.covered = true
+						break
+					end
+				end
+			end
 		end
 	end
 	return items

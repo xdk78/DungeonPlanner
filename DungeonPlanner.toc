@@ -46,6 +46,7 @@ Model\Match.lua
 Model\MapLayout.lua
 Model\RouteArrows.lua
 Model\RouteLegs.lua
+Model\RouteLook.lua
 Model\Route.lua
 Model\Walk.lua
 Model\Steps.lua
@@ -256,6 +257,7 @@ UI\Window.lua
 UI\Popup.lua
 UI\MapSpawns.lua
 UI\MapPins.lua
+UI\MapRoutes.lua
 UI\MapDraw.lua
 UI\MapCanvas.lua
 UI\MapArt.lua

@@ -1133,6 +1133,8 @@ ns.Locales.esES = {
 	["The leg under the pointer, or of a step pointed at in the list, stands out with its arrows; the rest dims. So does run mode's current step."] = "El tramo bajo el puntero, o el de un paso señalado en la lista, destaca con sus flechas; el resto se atenúa. Igual el paso actual del modo de recorrido.",
 	["Step %d to step %d"] = "Del paso %d al paso %d",
 	["To step %d"] = "Hasta el paso %d",
+	["Colour along the route"] = "Color a lo largo de la ruta",
+	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "El color de la línea cambia del inicio de la ruta a su final, para ver qué parte va primero. Desactivado: un solo color.",
 	["From %s to %s"] = "De %s a %s",
 	["To %s"] = "Hasta %s",
 }

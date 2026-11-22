@@ -463,7 +463,12 @@ function Panel.Create(parent, ctx)
 			row.text:SetPoint("RIGHT", row.count, "LEFT", -SP.sm, 0)
 		end,
 		update = function(row, route)
-			row.swatch:SetVertexColor(S.PaletteColor(route.color))
+			-- The route's colour as the map draws it (the Routes setting's one colour, the start of its ramp).
+			if ns.MapRoutes then
+				row.swatch:SetVertexColor(ns.MapRoutes.Color(route, true))
+			else
+				row.swatch:SetVertexColor(S.PaletteColor(route.color))
+			end
 			local stops = 0
 			for _, pt in ipairs(route.points) do
 				if pt.step then

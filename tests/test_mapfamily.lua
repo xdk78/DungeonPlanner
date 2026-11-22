@@ -302,9 +302,10 @@ T.case("Steps list: a move wears its map stop (route ring, step number), a pull 
 				T.eq(b.num:GetText(), "", "not in the pull badge's number")
 				T.eq(numbers[step.route] and numbers[step.route][step.to], index, "the number its map stop shows")
 				local route = ns.Util.FindById(plan.routes, step.route)
-				local r, g, bl = ns.Style.PaletteColor(route.color)
+				-- The colour of the map's ring for that stop (the route's colour at that point along it).
+				local r, g, bl = ns.MapRoutes.StopColor(route, step.to)
 				local cr, cg, cb = b.stopRing:GetVertexColor()
-				T.ok(near(cr, r) and near(cg, g) and near(cb, bl), "ringed in the route's colour")
+				T.ok(near(cr, r) and near(cg, g) and near(cb, bl), "ringed in the route's colour at that stop")
 				T.ok(b.disc:GetWidth() < 24, "smaller than a pull's badge")
 			elseif step.kind == "pull" then
 				pulls = pulls + 1

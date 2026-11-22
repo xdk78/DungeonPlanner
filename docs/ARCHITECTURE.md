@@ -187,9 +187,9 @@ position) and the guide's boss pins. "Make an editable copy" stores the IDs foun
 that finds nothing (the journal not ready, the Blizzard guide open) is retried on a later call.
 
 Pins come from pools: boss portraits in the Adventure Guide's ring, round icons in the gold minimap ring, pull-coloured
-discs for packs, role icons for positions; routes are outlined lines with joints at bends, direction arrows spaced by
+discs for packs, role icons for positions; routes are thin lines over a dark casing with joints at bends, their colour running from the route's own at its start to a partner colour at its end (`Model/RouteLook.lua`), the way back through a corridor dashed, direction arrows spaced by
 screen distance and kept clear of pins, labels and crossings (`RouteArrows.Place` in `Model/RouteArrows.lua`, drawn by
-`MapRoutes` in `UI/MapPins.lua` after the pins are laid out) and numbered stops. Layers
+`UI/MapRoutes.lua` after the pins are laid out) and numbered stops. Layers
 (`Schema.LAYERS`) can be hidden from the legend; positions tied to a boss or pull show while it is in focus. Without
 boss markers, the Adventure Guide's own boss pins (`EJ_GetMapEncounter`) are shown. `UI/MapInput.lua` holds tooltips and
 input (state machine `view.drag`: idle / pan / marker / point / draw). Tools (own plans): Select (drag to move markers
@@ -504,7 +504,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Model/Picker.lua, UI/InstancePicker.lua | the instance picker: sections, level bands, search and cursor (pure); its rows and popup |
 | UI/Panels/MapToolbar.lua | the map's edit tools (a picture and a name each) and the toolbar line's layout: what gives way on a narrow table |
 | UI/MapDraw.lua, UI/Panels/DrawBar.lua | the drawings on a map view and the drawing tools' input; the Draw tool's toolbar line (picture buttons, their glyphs, the clear menu) and the drawings' menu |
-| UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths (outlines, joints, chevrons); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
+| UI/MapCanvas.lua, UI/MapArt.lua, UI/MapPins.lua, UI/MapRoutes.lua, UI/MapInput.lua, UI/MapSpawns.lua | map drawing (the view, its fit and pan, the plan on it; the map art, its colours and credit chip, the grid); pin pool, pin styles and label placement (labels on a dark plate), route paths and stops (cased lines in a colour ramp, dashed ways back, joints, arrows); map tooltips and input; the Enemies layer, floor loading, step centring and framing |
 | UI/RunMode.lua | the run window (with the recorder line, the drift line and the prep line) |
 | Model/Prep.lua, Data/PrepInfo.lua, Data/Travel.lua, Data/TravelData.lua, Data/Navigation.lua, Data/Providers/TomTom.lua, Polestar.lua, ShortestPathForever.lua | Prep: quests, keys, group, the way there, navigation hand-off (section above) |
 | UI/Panels/PrepPanel.lua, UI/GettingThere.lua | the Prep section; the Getting there card and its window |

@@ -1,6 +1,6 @@
 -- The instance picker and the popup list behind every dropdown: sections, level bands, search, the current instance,
 -- the keyboard, closing on an outside click (Model/Picker.lua, UI/Popup.lua, UI/InstancePicker.lua); and route paths
--- with many bends (UI/MapPins.lua).
+-- with many bends (UI/MapRoutes.lua).
 local T = ...
 local ns, mock = T.ns, T.mock
 local Picker = ns.Picker

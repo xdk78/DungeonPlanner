@@ -78,7 +78,7 @@ local files = { "test_model.lua", "test_share.lua", "test_db.lua", "test_v2.lua"
 	"test_scrub.lua",
 	"test_prep.lua", "test_travel_live.lua", "test_party.lua",
 	"test_walk.lua", "test_walk_ui.lua", "test_gearfilter.lua", "test_routes.lua",
-	"test_routelegs.lua" }
+	"test_routelegs.lua", "test_routelook.lua" }
 for _, file in ipairs(files) do
 	local chunk = assert(loadfile("tests/" .. file))
 	chunk(T)

@@ -1,5 +1,5 @@
 -- Route legs (Model/RouteLegs.lua): two lanes for corridors walked out and back, hit testing, the leg and steps a
--- segment belongs to; and the map's hover highlight (UI/MapInput.lua, UI/MapPins.lua SetRouteHover) from the pointer,
+-- segment belongs to; and the map's hover highlight (UI/MapInput.lua, UI/MapRoutes.lua SetRouteHover) from the pointer,
 -- from the steps list and in run mode.
 local T = ...
 local ns, mock = T.ns, T.mock
@@ -202,7 +202,7 @@ T.case("Route hover: the leg under the pointer is highlighted with its steps in 
 		local _, _, _, a = l:GetVertexColor()
 		if sub == 3 then
 			top = top + 1
-		elseif a < 0.5 then
+		elseif math.abs(a - ns.Style.ROUTE.dim) < 1e-6 then
 			dim = dim + 1
 		end
 	end

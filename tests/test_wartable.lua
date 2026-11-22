@@ -185,22 +185,35 @@ T.case("Route paths: outlined lines, joints at bends, arrows; the focused step's
 	local function py(y)
 		return -y * 600
 	end
+	-- One colour (no colour along the route): one line per segment.
+	ns.db.settings.routes.ramp = false
 	local n = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1 })
 	T.eq(n.lines, 4)
-	T.eq(n.outlines, 4, "a dark outline under every segment")
+	T.eq(n.outlines, 4, "a dark casing under every segment")
 	T.eq(n.joints, 2, "a joint at each of the two bends (stops have their own disc)")
 	T.ok(n.arrows >= 4, "arrows along the path: " .. n.arrows)
 	local pools = canvas.pools
 	T.eq(pools.arrows[1]:GetTexture(), ns.MapRoutes.ARROW_EDGE_FILE)
 	local or1, og1, ob1 = pools.outlines[1]:GetVertexColor()
-	T.ok(or1 < 0.1 and og1 < 0.1 and ob1 < 0.1, "the outline is dark")
-	-- Focus on the step reached by segments 2..4 (points 1 -> 4): brighter there, dimmed after.
-	n = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, seg = { route = "rx", from = 1, to = 4 } })
+	T.ok(or1 < 0.1 and og1 < 0.1 and ob1 < 0.1, "the casing is dark")
+	-- Focus on the step reached by segments 2..4 (points 1 -> 4): brighter there, dimmed after: less opaque and
+	-- greyer, not paler.
+	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, seg = { route = "rx", from = 1, to = 4 } })
 	local _, g1, b1, a1 = pools.lines[1]:GetVertexColor()
 	local r4, g4, b4, a4 = pools.lines[4]:GetVertexColor()
 	local base = { ns.Style.PaletteColor(1) }
 	T.ok(g1 > base[2] and b1 > base[3] and a1 == 1, "focused segment brighter")
-	T.ok(r4 == base[1] and g4 == base[2] and b4 == base[3] and a4 < 0.5, "the rest dimmed")
+	local function chroma(r, g, b)
+		return math.max(r, g, b) - math.min(r, g, b)
+	end
+	T.ok(math.abs(a4 - ns.Style.ROUTE.dim) < 1e-6, "the rest dimmed to ROUTE.dim: " .. a4)
+	T.ok(chroma(r4, g4, b4) < chroma(base[1], base[2], base[3]) - 0.1, "and greyer")
+	T.ok(ns.RouteLook.Oklab(r4, g4, b4) < ns.RouteLook.Oklab(base[1], base[2], base[3]) + 0.02, "not paler")
+	-- Colour along the route (the default): long stretches in pieces so the colour flows, bounded.
+	ns.db.settings.routes.ramp = true
+	n = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1 })
+	T.ok(n.lines > 4 and n.lines <= 4 + ns.Style.ROUTE.ramp.pieces, "pieces: " .. n.lines)
+	T.eq(n.outlines, n.lines, "each with its casing")
 	-- Pooled: a second draw creates nothing new, fewer routes hide the rest.
 	local made = #pools.lines
 	canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1 })

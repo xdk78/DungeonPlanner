@@ -31,20 +31,47 @@ Style.SIZE = {
 }
 -- Kept for code that still names a radius; the game's frames have their own corners.
 Style.RADIUS = { badge = 2, control = 4, container = 4, dialog = 6 }
--- Route lines and their direction arrows on the map (UI/MapPins.lua MapRoutes), at icon size 1, by the Routes settings
--- (settings.routes). width: the line; outline: the dark edge around it (both sides together); spacing: path length on
--- screen between arrows (false: no arrows); arrow: an arrow's size as a share of the outlined line's width; head: the
--- arrowhead before each stop, as a share of an arrow; tone: how far an arrow's fill is mixed towards white.
+-- Route lines and their direction arrows on the map (UI/MapRoutes.lua), at icon size 1, by the Routes settings
+-- (settings.routes). width: the line; outline: the dark casing around it (both sides together) in `casing`'s colour;
+-- spacing: path length on screen between arrows (false: no arrows); arrow: an arrow's size as a share of the outlined
+-- line's width; head: the arrowhead before each stop, as a share of an arrow; tone: how far an arrow's fill is mixed
+-- towards white.
 Style.ROUTE = {
-	width = { thin = 2.5, medium = 4, thick = 6 },
-	outline = 3,
+	width = { thin = 1.5, medium = 2.5, thick = 3.75 },
+	outline = 2.5,
+	casing = { 0.05, 0.03, 0.02, 0.85 },
 	spacing = { off = false, few = 190, normal = 120, many = 75 },
-	arrow = { small = 1.9, medium = 2.4, large = 3 },
+	arrow = { small = 2.3, medium = 2.9, large = 3.6 },
 	head = 1.35,
-	tone = 0.4,
+	tone = 0.25,
 	focusWidth = 2, -- the focused step's leg is this much wider
-	dim = 0.35, -- the rest of the routes while a leg is highlighted (hover, a hovered step, run mode's current step)
+	-- The rest of the routes while a leg is highlighted (hover, a hovered step, run mode's current step) or a step is in
+	-- focus: this much of their opacity, their colour moved this far towards grey (so it does not fade to pink on
+	-- parchment).
+	dim = 0.55,
+	dimGrey = 0.5,
 	lane = 0.6, -- a corridor walked out and back: each direction moves this share of the outlined width to its right
+	dash = { 2, 1.2 }, -- the way back through such a corridor: dash and gap, in outlined line widths
+	maxDashes = 600, -- per redraw, all routes together; longer dashes and gaps beyond it
+	-- Colour along the route (Model/RouteLook.lua): the line runs from the route's colour to a partner colour, its hue
+	-- turned by `turn` degrees (the way that reads best: red runs through magenta to blue), its lightness moved by
+	-- `lift` (within low..high; lighter when the start is darker than `mid`), its chroma at least `chroma`. A stretch
+	-- longer than 1/pieces of the route is drawn in pieces so its colour flows. paper and dark: the map art the ramp
+	-- is checked against (parchment, the game's dark minimap pictures).
+	ramp = {
+		turn = 120,
+		lift = 0.14,
+		low = 0.55,
+		high = 0.78,
+		mid = 0.66,
+		chroma = 0.11,
+		grey = 0.04, -- a start with less chroma (white) turns towards greyHue (blue)
+		greyHue = 255,
+		steps = 32,
+		pieces = 48,
+		paper = { 0.80, 0.68, 0.48 },
+		dark = { 0.12, 0.10, 0.08 },
+	},
 }
 
 local function rgb(r, g, b, a)

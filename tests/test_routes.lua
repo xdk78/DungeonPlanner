@@ -1,6 +1,6 @@
 -- Route direction arrows (Model/RouteArrows.lua): spacing by on-screen distance, no overlaps, clear of stops, bends,
 -- pins, labels and crossings, arrowheads before stops, bounded; and the Routes settings (UI/Settings.lua, drawn by
--- MapRoutes in UI/MapPins.lua): stored in the profile, applied to the map at once.
+-- UI/MapRoutes.lua): stored in the profile, applied to the map at once.
 local T = ...
 local ns, mock = T.ns, T.mock
 local RA = ns.RouteArrows
@@ -250,10 +250,11 @@ T.case("Routes settings: defaults are the readable look, stored in the profile, 
 	T.eq(s.opacity, 1)
 	T.eq(s.color, 0, "each route's own colour")
 	T.eq(s.focusArrows, false)
+	T.eq(s.ramp, true, "colour along the route")
 	T.ok(ns.adb.profile.settings.routes == s, "in the active profile (AceDB defaults)")
 	local args = routesOptions()
 	T.ok(args.width and args.arrows and args.arrowSize and args.opacity and args.outline and args.color and args.heads
-		and args.focusArrows, "every option in the Routes group")
+		and args.focusArrows and args.ramp, "every option in the Routes group")
 	local cases = {
 		{ "width", "thick", "width", "thick" },
 		{ "arrows", "few", "arrows", "few" },
@@ -261,6 +262,7 @@ T.case("Routes settings: defaults are the readable look, stored in the profile, 
 		{ "opacity", "60", "opacity", 0.6 },
 		{ "outline", false, "outline", false },
 		{ "color", "3", "color", 3 },
+		{ "ramp", false, "ramp", false },
 		{ "heads", false, "heads", false },
 		{ "focusArrows", true, "focusArrows", true },
 	}
@@ -332,9 +334,20 @@ T.case("Routes settings: a change redraws the map at once", function()
 	args.color.set({}, "2")
 	args.opacity.set({}, "50")
 	local r, g, b, a = pools.lines[1]:GetVertexColor()
-	local br, bg, bb = ns.Style.PaletteColor(2)
-	T.ok(r == br and g == bg and b == bb, "the chosen colour")
+	local chosen = { ns.Style.PaletteColor(2) }
+	local Distance = ns.RouteLook.Distance
+	-- Colour along the route: it starts in the chosen colour and moves away from it towards the end.
+	T.ok(Distance({ r, g, b }, chosen) < 0.03, "the route starts in the chosen colour")
+	local lr, lg, lb = pools.lines[canvas.counts.lines]:GetVertexColor()
+	T.ok(Distance({ lr, lg, lb }, chosen) > 0.2, "and ends far from it")
 	T.ok(math.abs(a - 0.5) < 1e-6, "half opacity: " .. a)
+	-- Colour along the route off: every line in the chosen colour.
+	args.ramp.set({}, false)
+	for i = 1, canvas.counts.lines do
+		r, g, b = pools.lines[i]:GetVertexColor()
+		T.ok(r == chosen[1] and g == chosen[2] and b == chosen[3], "the chosen colour")
+	end
+	args.ramp.set({}, true)
 	-- Only the focused step's leg carries arrows.
 	args.focusArrows.set({}, true)
 	ns.UI.FocusStep(3, { stay = true })
@@ -402,6 +415,31 @@ T.case("Routes: one colour for every plan route reaches stops; another addon's r
 	ns.UI.RefreshPage()
 	local canvas = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
 	local want = { ns.Style.PaletteColor(2) }
+	local plan0 = ns.UI.ctx:Plan()
+	-- Colour along the route: each ring in the route's colour at its stop, further from the chosen colour the later
+	-- the stop.
+	local byIndex = {}
+	for _, p in ipairs(canvas.pools.points) do
+		if p:IsShown() and p.ring:IsShown() then
+			local route = ns.Util.FindById(plan0.routes, p.routeId)
+			local r, g, b = p.ring:GetVertexColor()
+			local er, eg, eb = ns.MapRoutes.StopColor(route, p.pointIndex)
+			T.ok(r == er and g == eg and b == eb, "a stop ring in the colour at its place")
+			byIndex[#byIndex + 1] = { i = p.pointIndex, d = ns.RouteLook.Distance({ r, g, b }, want) }
+		end
+	end
+	T.ok(#byIndex > 3, "stops drawn: " .. #byIndex)
+	table.sort(byIndex, function(x, y)
+		return x.i < y.i
+	end)
+	T.ok(byIndex[1].d < 0.05, "the first stop near the chosen colour: " .. byIndex[1].d)
+	T.ok(byIndex[#byIndex].d > 0.15, "the last far from it: " .. byIndex[#byIndex].d)
+	for k = 2, #byIndex do
+		T.ok(byIndex[k].d >= byIndex[k - 1].d - 1e-6, "further along, further from the start colour")
+	end
+	-- Colour along the route off: every ring in the chosen colour.
+	ns.db.settings.routes.ramp = false
+	ns.UI.RefreshPage()
 	local rings = 0
 	for _, p in ipairs(canvas.pools.points) do
 		if p:IsShown() and p.ring:IsShown() then
@@ -426,6 +464,13 @@ T.case("Routes: one colour for every plan route reaches stops; another addon's r
 	local teal = { ns.Style.PaletteColor(6) }
 	T.ok(r1 == want[1] and g1 == want[2] and b1 == want[3], "the plan's route in the chosen colour")
 	T.ok(r2 == teal[1] and g2 == teal[2] and b2 == teal[3], "the provider's route keeps its colour")
+	-- With colour along the route the plan's route changes along its length; the provider's keeps its one colour.
+	ns.db.settings.routes.ramp = true
+	local n = canvas:DrawRoutePaths(plan, 1, px, py, { scale = 1, extra = extra, mx = px, my = py }).lines
+	r2, g2, b2 = canvas.pools.lines[n]:GetVertexColor()
+	T.ok(r2 == teal[1] and g2 == teal[2] and b2 == teal[3], "the provider's route still in its colour")
+	r1, g1, b1 = canvas.pools.lines[n - 1]:GetVertexColor()
+	T.ok(ns.RouteLook.Distance({ r1, g1, b1 }, want) > 0.2, "the plan's route ends in another colour")
 	ns.db.settings.routes.color = 0
 	ns.UI.RefreshPage()
 end)

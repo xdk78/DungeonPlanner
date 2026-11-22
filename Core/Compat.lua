@@ -175,8 +175,20 @@ function Compat.Report()
 	for _, m in ipairs(Compat.Methods()) do
 		rows[#rows + 1] = { name = m[1], ok = m[2], path = "(method)", degrades = m[3] }
 	end
+	-- Files an update added: the client reads an addon's file list only when the game starts (docs/COMPATIBILITY.md
+	-- section 7), so after an update without a restart they are missing and their features stay off.
+	for _, file in ipairs(Compat.FILES) do
+		rows[#rows + 1] = { name = "Addon file " .. file[1], ok = ns[file[2]] ~= nil, path = "(file)",
+			degrades = file[3] .. " - restart the game after updating" }
+	end
 	return rows
 end
+
+-- file, the module it defines, what is missing without it
+Compat.FILES = {
+	{ "Model/RouteLook.lua", "RouteLook", "route lines on the map" },
+	{ "UI/MapRoutes.lua", "MapRoutes", "route lines on the map" },
+}
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a
 -- client freeze (an empty slash command is enough), and the gamepad menus read and close the frames in UISpecialFrames
