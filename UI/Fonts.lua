@@ -76,6 +76,8 @@ Style.POLISH_FACE = POLISH_FACE
 Style.BUNDLED_FACE = MEDIA .. "Fonts\\AlegreyaSans-Medium.ttf"
 Style.CLEAN_FACE = MEDIA .. "Fonts\\DPSans.ttf"
 Style.POLISH_FACES = { POLISH_FACE, Style.BUNDLED_FACE, Style.CLEAN_FACE }
+-- A Russian UI's faces (Media/Fonts/FONTLOG.txt: Alegreya Sans has all of U+0410-044F; DPSans.ttf has none).
+Style.CYRILLIC_FACES = { GAME_FACE.russian, Style.BUNDLED_FACE }
 
 -- "wowpopolsku", "bundled" or "game".
 function Style.FaceKind(file)
@@ -252,6 +254,14 @@ function Style.WantsPolish()
 	return chosen == "plPL"
 end
 
+-- Russian text on screen: the active UI language, or the one just chosen (applied after /reload).
+function Style.WantsCyrillic()
+	if ns.activeLocale == "ruRU" then
+		return true
+	end
+	return (ns.db and ns.db.settings.locale) == "ruRU"
+end
+
 -- The chain's faces that may be tried now (WoW Po Polsku's only while that addon is enabled).
 local function candidates()
 	local list = {}
@@ -273,6 +283,21 @@ local function firstLoadable()
 	return nil
 end
 
+-- The face a Russian UI uses on a client that is not Russian: the game's Cyrillic cut, else the bundled Alegreya Sans.
+-- A face proven to load comes first; one the client cannot tell about yet (nil, no frames) is taken too, and
+-- Style.RecheckFonts looks again after the first loading screen, as it does for Polish.
+local function firstCyrillic()
+	for pass = 1, 2 do
+		for _, file in ipairs(Style.CYRILLIC_FACES) do
+			local can = Style.CanLoadFont(file)
+			if (pass == 1 and can == true) or (pass == 2 and can ~= false) then
+				return file
+			end
+		end
+	end
+	return nil
+end
+
 -- The face a Polish UI would use, whatever the language is now (the chain above): its file and its kind, "wowpopolsku",
 -- "bundled" or "game" (no Polish letters).
 function Style.PolishFace()
@@ -288,11 +313,21 @@ function Style.FontFile()
 	local mode = Style.FontMode()
 	local locale = GetLocale and GetLocale() or "enUS"
 	local alphabet = ALPHABET[locale] or "roman"
-	Style.polishFace = nil
+	Style.polishFace, Style.cyrillicFace = nil, nil
 	if Style.WantsPolish() and (mode == "game" or mode == "follow") and alphabet == "roman" then
 		local file = firstLoadable()
 		if file then
 			Style.polishFace = file
+			return file, 0
+		end
+	end
+	-- A Russian UI on a client that is not Russian: the game's Cyrillic cut if this client has it, else the bundled
+	-- Alegreya Sans (it has Cyrillic; DPSans.ttf has not). German, French and Spanish need no face of their own: the
+	-- client's Friz Quadrata covers Latin-1 (ä ö ü ß é è ê ç ñ ¿ ¡), as those clients use it themselves.
+	if Style.WantsCyrillic() and (mode == "game" or mode == "follow") and alphabet == "roman" then
+		local file = firstCyrillic()
+		if file then
+			Style.cyrillicFace = file
 			return file, 0
 		end
 	end
@@ -377,10 +412,36 @@ local function noFaceText()
 	return L["No font with Polish letters loads, so ą ć ę ń ś ź ż show as boxes. The UI stays Polish; /dp debug tests the fonts, English avoids the boxes."]
 end
 
--- The language dialog's note when Polish is chosen but no Polish face loads ("" otherwise).
+-- The same for Russian: nothing with Cyrillic loads, or the font setting is one we cannot vouch for (Arial Narrow, a
+-- SharedMedia face). Returns the note's text, or nil.
+local function cyrillicNote()
+	if not Style.WantsCyrillic() then
+		return nil
+	end
+	local mode = Style.FontMode()
+	if mode == "clean" or (type(mode) == "string" and mode:match("^lsm:")) then
+		return L["Your font (Arial Narrow or SharedMedia) may lack Cyrillic letters, so Russian text can show as boxes. Choose Automatic or Game font in Settings."]
+	end
+	if (ALPHABET[GetLocale and GetLocale() or "enUS"] or "roman") ~= "roman" then
+		return nil -- the client's own face
+	end
+	for _, file in ipairs(Style.CYRILLIC_FACES) do
+		if Style.CanLoadFont(file) ~= false then
+			return nil
+		end
+	end
+	return L["No font with Cyrillic letters loads, so Russian text shows as boxes. The UI stays Russian; /dp debug tests the fonts, English avoids the boxes."]
+end
+
+-- The language dialog's note when Polish or Russian is chosen but no face for its letters loads ("" otherwise).
+-- (The name is from when Polish was the only language with its own letters.)
 function Style.PolishFontNote()
 	if polishFaceMissing() then
 		return "\n\n" .. noFaceText()
+	end
+	local cyrillic = cyrillicNote()
+	if cyrillic then
+		return "\n\n" .. cyrillic
 	end
 	return ""
 end
@@ -392,19 +453,29 @@ function Style.RecheckFonts(delay)
 		return
 	end
 	rechecked = true
-	if not (Style.WantsPolish() and Style.polishFace == nil) then
+	-- Polish without a face yet, or Russian with no face or one the client could not vouch for yet (nil).
+	local polish = Style.WantsPolish() and Style.polishFace == nil
+	-- (A Russian client uses its own cut: nothing to look at again there.)
+	local cyrillic = Style.WantsCyrillic() and (ALPHABET[GetLocale and GetLocale() or "enUS"] or "roman") == "roman"
+		and (Style.cyrillicFace == nil or Style.CanLoadFont(Style.cyrillicFace) ~= true)
+	if not (polish or cyrillic) then
 		return
 	end
 	-- Warm-up: the faces through our Font objects, as the UI would use them.
-	for _, file in ipairs(candidates()) do
+	for _, file in ipairs(polish and candidates() or Style.CYRILLIC_FACES) do
 		Style.ProbeFace(file)
 	end
+	local before = Style.cyrillicFace
 	local function again()
 		Style.SetupFonts()
-		if Style.polishFace then
+		if polish and Style.polishFace then
 			ns:Print(string.format(L["Polish letters: %s is now used."], shortName(Style.polishFace)))
-		elseif polishFaceMissing() then
+		elseif polish and polishFaceMissing() then
 			ns:Print(noFaceText())
+		elseif cyrillic and Style.cyrillicFace and Style.cyrillicFace ~= before then
+			ns:Print(string.format(L["Cyrillic letters: %s is now used."], shortName(Style.cyrillicFace)))
+		elseif cyrillic and cyrillicNote() then
+			ns:Print(cyrillicNote())
 		end
 	end
 	if C_Timer and C_Timer.After then
@@ -491,6 +562,11 @@ function Style.FontTest()
 		test.faces[#test.faces + 1] = { file = file, kind = Style.FaceKind(file), first = first, now = now }
 	end
 	test.game = Style.ProbeFace(GAME_FACE.roman)
+	-- The game's Cyrillic cut (the bundled Alegreya Sans, the other Russian face, is in test.faces above).
+	test.cyrillic = Style.ProbeFace(GAME_FACE.russian)
+	if test.cyrillic.usable then
+		usable[GAME_FACE.russian] = true
+	end
 	for _, file in ipairs(controlFaces()) do
 		test.controls[#test.controls + 1] = Style.ProbeFace(file)
 	end
@@ -508,6 +584,12 @@ function Style.FontTestAgain(test)
 		f.later = Style.ProbeFace(f.file)
 		if f.later.usable then
 			usable[f.file] = true
+		end
+	end
+	if test.cyrillic and not test.cyrillic.usable then
+		test.cyrillic = Style.ProbeFace(GAME_FACE.russian)
+		if test.cyrillic.usable then
+			usable[GAME_FACE.russian] = true
 		end
 	end
 	for i, r in ipairs(test.controls) do
@@ -544,6 +626,10 @@ function Style.FontTestLines(test)
 			end
 		end
 	end
+	if test.cyrillic then
+		lines[#lines + 1] = string.format(L["%s (Russian): %s (SetFont %s)"], shortName(GAME_FACE.russian),
+			test.cyrillic.usable and L["loads"] or L["does not load"], yesNo(test.cyrillic.set))
+	end
 	local controlsOk = 0
 	for _, r in ipairs(test.controls) do
 		if r.usable then
@@ -568,7 +654,8 @@ end
 
 -- The compact record /dp scan saves (DungeonPlannerDB.diagnostics.fontTest).
 function Style.FontTestRecord(test)
-	local rec = { polishAddon = test.polishAddon, texture = test.texture, game = describe(test.game), faces = {}, controls = {} }
+	local rec = { polishAddon = test.polishAddon, texture = test.texture, game = describe(test.game),
+		cyrillic = describe(test.cyrillic), faces = {}, controls = {} }
 	for _, f in ipairs(test.faces) do
 		rec.faces[shortName(f.file)] = { first = describe(f.first), now = describe(f.now), later = describe(f.later),
 			firstAt = f.first and round(f.first.t) or nil, works = faceWorks(f) }
@@ -692,7 +779,7 @@ function Style.RunFontTest(opts)
 		Style.FontTestAgain(test)
 		Style.MarkFontTest(test)
 		local before = Style.fontFile
-		if Style.WantsPolish() then
+		if Style.WantsPolish() or Style.WantsCyrillic() then
 			Style.SetupFonts()
 		end
 		if opts.print then
@@ -702,6 +789,8 @@ function Style.RunFontTest(opts)
 			end
 			if Style.fontFile ~= before and Style.polishFace then
 				print("    " .. string.format(L["Polish letters: %s is now used."], shortName(Style.polishFace)))
+			elseif Style.fontFile ~= before and Style.cyrillicFace then
+				print("    " .. string.format(L["Cyrillic letters: %s is now used."], shortName(Style.cyrillicFace)))
 			end
 		end
 		if opts.done then

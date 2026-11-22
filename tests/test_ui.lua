@@ -506,6 +506,133 @@ T.case("A Polish UI puts our font objects on every text, with a Polish-capable f
 	S.SetupFonts()
 end)
 
+T.case("A Russian UI gets a face with Cyrillic on a client that is not Russian; German, French and Spanish keep the game face", function()
+	boot()
+	local S = ns.Style
+	local wasLocale = ns.activeLocale
+	local CYRILLIC = "Fonts\\FRIZQT___CYR.TTF"
+	for _, code in ipairs({ "deDE", "frFR", "esES" }) do
+		ns.SetLocale(code)
+		S.ForgetFontProbes()
+		S.SetupFonts()
+		T.eq(S.fontFile, "Fonts\\FRIZQT__.TTF", code .. ": Latin-1 letters are in the game's face")
+	end
+	ns.SetLocale("ruRU")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, CYRILLIC, "the game's Cyrillic cut when this client has it")
+	mock.missingFonts = { [CYRILLIC] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, S.BUNDLED_FACE, "the bundled Alegreya Sans (it has Cyrillic) when the client has no Cyrillic cut")
+	mock.missingFonts = { [CYRILLIC] = true, [S.BUNDLED_FACE] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, "Fonts\\FRIZQT__.TTF", "the game face last")
+	T.eq(S.cyrillicFace, nil, "no Cyrillic face loads")
+	T.ok(S.PolishFontNote() ~= "", "the language dialog says Russian will show boxes")
+	mock.missingFonts = { [CYRILLIC] = true }
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.cyrillicFace, S.BUNDLED_FACE, "the face in use is recorded")
+	T.eq(S.PolishFontNote(), "", "no note while a face loads")
+	-- A font setting we cannot vouch for gets a note, not a silent box.
+	ns.db.settings.font = "clean"
+	T.ok(S.PolishFontNote():find("Arial Narrow", 1, true), "Arial Narrow with a Russian UI")
+	ns.db.settings.font = "auto"
+	-- The font test lists the game's Cyrillic cut.
+	mock.missingFonts = nil
+	S.ForgetFontProbes()
+	local test = S.FontTest()
+	T.ok(test.cyrillic and test.cyrillic.usable, "FRIZQT___CYR.TTF is probed")
+	local listed = false
+	for _, line in ipairs(S.FontTestLines(test)) do
+		listed = listed or line:find("FRIZQT___CYR.TTF", 1, true) ~= nil
+	end
+	T.ok(listed, "/dp debug lists it")
+	-- A Russian client keeps its own cut whatever the UI language.
+	mock.missingFonts = nil
+	mock.locale = "ruRU"
+	ns.SetLocale("enUS")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+	T.eq(S.fontFile, CYRILLIC, "Russian client, English UI")
+	mock.locale = "enUS"
+	ns.SetLocale(wasLocale or "enUS")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+end)
+
+T.case("A Russian UI looks at its face again after the loading screen: confirmed, switched, or not needed", function()
+	boot()
+	local S = ns.Style
+	local wasLocale, wasFont, wasTimer, wasPrint, wasCan = ns.activeLocale, ns.db.settings.font, _G.C_Timer, ns.Print, S.CanLoadFont
+	local CYRILLIC = "Fonts\\FRIZQT___CYR.TTF"
+	local pending, printed
+	_G.C_Timer = { After = function(_, fn)
+		pending = fn
+	end }
+	ns.Print = function(_, ...)
+		printed = table.concat({ ... }, " ")
+	end
+	local function fresh(answers)
+		pending, printed = nil, nil
+		S.CanLoadFont = wasCan
+		S.ForgetFontProbes() -- also allows RecheckFonts to run again
+		S.CanLoadFont = function(file)
+			return answers[file]
+		end
+		S.SetupFonts()
+	end
+	ns.db.settings.font = "auto"
+	ns.SetLocale("ruRU")
+	mock.locale = "enUS"
+
+	-- The client cannot tell yet (nil): the game's cut is taken, looked at again, and confirmed: no message.
+	local answers = {}
+	fresh(answers)
+	T.eq(S.cyrillicFace, CYRILLIC, "an unproven face is taken")
+	S.RecheckFonts()
+	T.ok(pending, "a second look is scheduled")
+	answers[CYRILLIC] = true
+	pending()
+	T.eq(S.cyrillicFace, CYRILLIC, "confirmed: kept")
+	T.eq(printed, nil, "and nothing said")
+
+	-- Unproven, then refused: the bundled Alegreya Sans takes over, and the chat says so.
+	answers = {}
+	fresh(answers)
+	S.RecheckFonts()
+	T.ok(pending, "a second look is scheduled")
+	answers[CYRILLIC] = false
+	answers[S.BUNDLED_FACE] = true
+	pending()
+	T.eq(S.cyrillicFace, S.BUNDLED_FACE, "switched to the bundled face")
+	T.eq(S.fontFile, S.BUNDLED_FACE)
+	T.ok(printed and printed:find("AlegreyaSans-Medium.ttf", 1, true), "the chat names the face")
+
+	-- A face already proven needs no second look.
+	answers = { [CYRILLIC] = true }
+	fresh(answers)
+	S.RecheckFonts()
+	T.eq(pending, nil, "proven: no timer")
+
+	-- A Russian client uses its own cut, so there is nothing to look at again.
+	mock.locale = "ruRU"
+	fresh({})
+	S.RecheckFonts()
+	T.eq(pending, nil, "Russian client: no timer")
+
+	mock.locale = "enUS"
+	S.CanLoadFont = wasCan
+	ns.Print = wasPrint
+	_G.C_Timer = wasTimer
+	ns.db.settings.font = wasFont
+	ns.SetLocale(wasLocale or "enUS")
+	S.ForgetFontProbes()
+	S.SetupFonts()
+end)
+
 T.case("Route names generated in English show the UI's word", function()
 	boot()
 	T.eq(ns.Names.Route({ name = "Route" }), ns.L["Route"])

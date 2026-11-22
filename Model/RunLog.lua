@@ -394,10 +394,10 @@ function Recorder.PullText(pull, L, plural)
 	local parts = { plural(pull.c or 0, L["%d enemy|%d enemies"]) }
 	local kinds = {}
 	if (pull.el or 0) > 0 then
-		kinds[#kinds + 1] = string.format(L["%d elite"], pull.el)
+		kinds[#kinds + 1] = plural(pull.el, L["%d elite|%d elites"])
 	end
 	if (pull.r or 0) > 0 then
-		kinds[#kinds + 1] = string.format(L["%d rare"], pull.r)
+		kinds[#kinds + 1] = plural(pull.r, L["%d rare|%d rares"])
 	end
 	if (pull.b or 0) > 0 then
 		kinds[#kinds + 1] = L["with a boss"]
@@ -459,7 +459,8 @@ function Recorder.PlanFromRun(run, instance, text)
 			dungeonEncounterID = b.i }
 	end
 	local s = Recorder.Summary(run)
-	plan.notes = string.format(L["Drafted from a recorded run: %s, %d pulls, %d bosses, %d wipes. Place the pulls and bosses on the map with the editor."],
-		Recorder.FormatTime(s.duration), s.pulls, s.bosses, s.wipes)
+	plan.notes = string.format(L["Drafted from a recorded run: %s, %s, %s, %s. Place the pulls and bosses on the map with the editor."],
+		Recorder.FormatTime(s.duration), plural(s.pulls, L["%d pull|%d pulls"]), plural(s.bosses, L["%d boss|%d bosses"]),
+		plural(s.wipes, L["%d wipe|%d wipes"]))
 	return plan
 end

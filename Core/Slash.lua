@@ -37,7 +37,7 @@ function Slash.Debug()
 			print("  " .. line(false, row.name .. " (" .. row.path .. ") - " .. L["affects:"] .. " " .. row.degrades))
 		end
 	end
-	print("  " .. string.format(L["%d API checks missing."], missing))
+	print("  " .. ns.Plural(missing, L["%d API check missing.|%d API checks missing."]))
 	for _, r in ipairs(ns.Compat.SelfTest()) do
 		print("  " .. line(r.ok, r.name .. (r.ok and "" or (": " .. r.detail))))
 	end
@@ -66,8 +66,8 @@ function Slash.Debug()
 	for _, list in pairs(store and store.runs or {}) do
 		runs = runs + #list
 	end
-	print("  " .. string.format(L["Run recorder: %s, %d runs saved, nameplates %s, unit names %s."],
-		rec.Enabled() and L["on"] or L["off"], runs, tostring(rec.api.namePlates == nil and "?" or rec.api.namePlates),
+	print("  " .. string.format(L["Run recorder: %s, %s, nameplates %s, unit names %s."],
+		rec.Enabled() and L["on"] or L["off"], ns.Plural(runs, L["%d run saved|%d runs saved"]), tostring(rec.api.namePlates == nil and "?" or rec.api.namePlates),
 		tostring(rec.api.names or "?")))
 	-- Blizzard art the window draws (UI/Art.lua): atlases and files this client lacks, and frame templates that failed.
 	local missingArt = {}

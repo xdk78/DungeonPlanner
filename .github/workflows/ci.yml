@@ -29,8 +29,8 @@ jobs:
           find . -type f -name '*.lua' -not -path './.git/*' -not -path './.lua/*' -not -path './.luarocks/*' -print0 | xargs -0 -n1 luac -p
       - name: Offline tests
         run: lua tests/run.lua
-      - name: Polish locale covers every key
-        run: lua tools/locale_keys.lua Locales/plPL.lua
+      - name: Every locale covers every key (0 missing, 0 unused; the log names the keys a new string still needs)
+        run: lua tools/locale_keys.lua --all
       - name: Community plans validate
         run: lua tools/validate_plans.lua
       - name: Recommended plans match the research data
@@ -41,5 +41,11 @@ jobs:
         run: lua tools/gen_bosses.lua --check
       - name: UI layout lint, English (tests/ui_dump.lua; new findings fail, tests/ui_lint_baseline.txt)
         run: lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui"
-      - name: UI layout lint, Polish
-        run: lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui" --locale plPL --prefix plPL/
+      - name: UI layout lint, every other locale in Locales/
+        run: |
+          for f in Locales/*.lua; do
+            code=$(basename "$f" .lua)
+            [ "$code" = enUS ] && continue
+            echo "== $code"
+            lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui" --locale "$code" --prefix "$code/"
+          done

@@ -3,8 +3,10 @@
 Thanks for helping. Three kinds of contributions are welcome:
 
 1. **Community plans** - see [docs/COMMUNITY-PLANS.md](docs/COMMUNITY-PLANS.md). No coding needed.
-2. **Translations** - copy `Locales/plPL.lua` to your language, translate the values, add it to the TOC, and check it
-   with `lua tools/locale_keys.lua Locales/xxXX.lua`.
+2. **Translations** - German, Spanish, French and Russian are a machine-assisted first pass and want native speakers'
+   corrections; Polish is hand-written; more languages are welcome. Edit `Locales/<code>.lua` and send a pull request,
+   or open a "Translation" issue. [Locales/README.md](Locales/README.md) has the rules (official WoW terms, plural
+   forms, keeping texts short) and the one command that checks a file. No game and no coding needed.
 3. **Code** - bug fixes and features. Read [AGENTS.md](AGENTS.md) first (layout, rules for the Forever client, tests).
 
 ## Workflow
@@ -14,7 +16,7 @@ Thanks for helping. Three kinds of contributions are welcome:
 3. Before pushing:
    ```sh
    lua tests/run.lua
-   lua tools/locale_keys.lua Locales/plPL.lua
+   lua tools/locale_keys.lua --all   # every locale has every key (new strings: --missing-lines Locales/xxXX.lua)
    luacheck .
    ```
 4. Add a line to `CHANGELOG.md` under the newest, unreleased version.

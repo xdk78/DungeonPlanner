@@ -14,6 +14,7 @@ ignore:
   - tests
   - tools
   - data-src
+  - Locales/README.md
   - docs/API.md
   - docs/ARCHITECTURE.md
   - docs/COMMUNITY-PLANS.md

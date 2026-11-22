@@ -84,6 +84,41 @@ T.case("Plurals: English 1 / other, Polish 1 / 2-4 / 5+ (12-14 too)", function()
 	T.eq(ns.Plural(2, ns.L["%d marker: %s|%d markers: %s"], "a, b"), "2 markers: a, b", "extra arguments")
 end)
 
+T.case("Plurals: German and Spanish 1 / other, French 0 and 1 / other, Russian 1 / 2-4 / 5+ (11-14, 21, 22 right)", function()
+	local two = "%d Plan|%d Pläne"
+	for _, code in ipairs({ "deDE", "esES", "esMX" }) do
+		ns.SetLocale(code)
+		T.eq(ns.Plural(1, two), "1 Plan", code)
+		T.eq(ns.Plural(0, two), "0 Pläne", code .. ": 0 is plural")
+		T.eq(ns.Plural(2, two), "2 Pläne", code)
+		T.eq(ns.Plural(21, two), "21 Pläne", code)
+	end
+	ns.SetLocale("frFR")
+	T.eq(ns.Plural(0, "%d plan|%d plans"), "0 plan", "French: 0 is singular")
+	T.eq(ns.Plural(1, "%d plan|%d plans"), "1 plan")
+	T.eq(ns.Plural(2, "%d plan|%d plans"), "2 plans")
+	T.eq(ns.Plural(100, "%d plan|%d plans"), "100 plans")
+	T.eq(ns.Plural(0, ns.L["%d plan|%d plans"]), "0 plan", "French table")
+	T.eq(ns.Plural(2, ns.L["%d plan|%d plans"]), "2 plans", "French table")
+	ns.SetLocale("ruRU")
+	local forms = "%d план|%d плана|%d планов"
+	local want = {
+		[0] = 3, [1] = 1, [2] = 2, [3] = 2, [4] = 2, [5] = 3, [9] = 3, [10] = 3, [11] = 3, [12] = 3, [13] = 3, [14] = 3,
+		[15] = 3, [19] = 3, [20] = 3, [21] = 1, [22] = 2, [24] = 2, [25] = 3, [31] = 1, [101] = 1, [111] = 3,
+		[112] = 3, [121] = 1, [122] = 2, [1000] = 3,
+	}
+	for n, form in pairs(want) do
+		T.eq(ns.PluralForm(n), form, "Russian form of " .. n)
+	end
+	T.eq(ns.Plural(21, forms), "21 план")
+	T.eq(ns.Plural(23, forms), "23 плана")
+	T.eq(ns.Plural(11, forms), "11 планов")
+	T.eq(ns.Plural(5, ns.L["%d plan|%d plans"]), "5 планов", "Russian table")
+	T.eq(ns.PluralForm(21, "plPL"), 3, "Polish keeps 21 in the last form")
+	T.eq(ns.PluralForm(2, "esMX"), 2, "an alias uses its language's rule")
+	ns.SetLocale("enUS")
+end)
+
 T.case("Map layout: a pull disc on a boss moves beside it; labels avoid each other; bosses keep theirs", function()
 	local L = ns.MapLayout
 	local items = {

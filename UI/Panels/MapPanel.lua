@@ -503,7 +503,7 @@ function Panel.Create(parent, ctx)
 			local tt = W.Tip()
 			if tt then
 				tt:SetOwner(row, "ANCHOR_RIGHT")
-				tt:SetText(string.format(L["%s (%d stops)"], ns.Names.Route(route), row.stops or 0), 1, 0.82, 0, 1, true)
+				tt:SetText(ns.Names.Route(route) .. " (" .. ns.Plural(row.stops or 0, L["%d stop|%d stops"]) .. ")", 1, 0.82, 0, 1, true)
 				W.TipShow(tt)
 			end
 		end,

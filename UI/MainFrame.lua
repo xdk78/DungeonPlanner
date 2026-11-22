@@ -603,7 +603,11 @@ local function settingsMenu(owner)
 	}
 	items[#items + 1] = "-"
 	items[#items + 1] = { title = L["Language"] }
-	for _, opt in ipairs({ { L["Automatic"], "auto" }, { "English", "enUS" }, { "Polski", "plPL" } }) do
+	local choices = { { L["Automatic"], "auto" } }
+	for _, entry in ipairs(ns.LOCALE_LIST) do
+		choices[#choices + 1] = { entry[2], entry[1] }
+	end
+	for _, opt in ipairs(choices) do
 		local mark = ns.db.settings.locale == opt[2] and "> " or "   "
 		items[#items + 1] = {
 			mark .. opt[1],

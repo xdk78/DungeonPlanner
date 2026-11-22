@@ -3,6 +3,17 @@
 All notable changes to Dungeon Planner. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- **The interface in German, Spanish, French and Russian**, besides English and Polish. "Automatic" now follows your
+  game's language when Dungeon Planner has it (Spanish serves both Spain and Latin America; other languages stay
+  English), and the language menu and Settings list all six. German, Spanish, French and Russian are a
+  machine-assisted first pass using the official WoW terms; native speakers are invited to correct them
+  (`Locales/README.md`, a "Translation" issue, or a pull request).
+- Plural rules for German, Spanish, French (0 counts as singular) and Russian (one, few, many).
+- A Russian UI uses the game's Cyrillic face, or the bundled Alegreya Sans when the client has none.
+
 ## [0.1.0] - 2026-11-16
 
 The first public version, for WoW: Forever. Highlights, known limitations and the test checklist:

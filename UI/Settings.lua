@@ -40,6 +40,15 @@ local function fontValues()
 	return values
 end
 
+local function languageValues()
+	local values, order = { auto = L["Automatic"] }, { "auto" }
+	for _, entry in ipairs(ns.LOCALE_LIST) do
+		values[entry[1]] = entry[2]
+		order[#order + 1] = entry[1]
+	end
+	return values, order
+end
+
 local scaleValues, scaleSorting = {}, {}
 for pct = 70, 140, 5 do
 	scaleValues[tostring(pct)] = pct .. "%"
@@ -68,7 +77,8 @@ local function options()
 						order = 1,
 						name = L["Language"],
 						desc = L["Automatic uses Polish when WoW Po Polsku is loaded, otherwise the game's language. Takes effect after /reload."],
-						values = { auto = L["Automatic"], enUS = "English", plPL = "Polski" },
+						values = languageValues(),
+						sorting = select(2, languageValues()),
 						get = function()
 							return ns.db.settings.locale
 						end,

@@ -48,7 +48,7 @@ addons add extras when installed (see "Recommended companion addons").
 - **Sharing**: send to your group, guild or a player (accept/decline prompt, size and checksum checks); export and
   import strings; instance packs; **Discord** text split into 2000-character messages; a community plan repository;
   who in your group has the plan you sent, and whether their copy is outdated.
-- **Polish** interface (automatic with WoW Po Polsku), minimap button, key bindings, Addon Compartment, options in the
+- **Interface in six languages**: English, German, Spanish, French, Polish and Russian (automatic: your game's language, or Polish with WoW Po Polsku; German, Spanish, French and Russian are a first pass that native speakers are invited to improve, see `Locales/README.md`), minimap button, key bindings, Addon Compartment, options in the
   game's Settings panel, a public API for other addons and WeakAuras.
 - **Data from other addons** you have installed, read in your game only (nothing is copied) and switchable under
   Settings > Data from other addons; each source is named where its data shows:
@@ -156,7 +156,7 @@ Requirements: Lua 5.1 (`lua`, `luac`); optional `luacheck` (CI runs it).
 
 ```sh
 lua tests/run.lua                          # offline tests (whole addon against a mock client)
-lua tools/locale_keys.lua Locales/plPL.lua # translation coverage
+lua tools/locale_keys.lua --all             # translation coverage, every locale
 lua tools/validate_plans.lua               # community plans
 lua tools/gen_plans.lua --check            # recommended plans are up to date with data-src/
 lua tools/gen_spawns.lua --check           # enemy spawn points are up to date with the plans and data-src/spawns

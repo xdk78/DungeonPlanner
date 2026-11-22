@@ -87,24 +87,72 @@ T.case("Polish locale covers every key and is chosen with WoW Po Polsku", functi
 	T.eq(ns.SetLocale("plPL"), "plPL", "forced Polish")
 	T.eq(ns.L["missing key stays"], "missing key stays")
 	ns.SetLocale("enUS")
-	for k, v in pairs(ns.Locales.plPL) do
-		T.ok(type(k) == "string" and type(v) == "string", "string pairs")
-		-- Format specifiers must match, or string.format breaks in Polish.
-		local function specs(s)
-			local out = {}
-			for spec in s:gmatch("%%[%d%.]*[sdf]") do
-				out[#out + 1] = spec
-			end
-			return table.concat(out, ",")
+	-- Every shipped language: string pairs, the same format specifiers in the same order (or string.format breaks),
+	-- and as many plural forms as the language has.
+	local function formCount(code)
+		local most = 1
+		for n = 0, 1000 do
+			most = math.max(most, ns.PLURAL_RULES[code](n))
 		end
-		if k:find("|", 1, true) then
-			-- A plural (ns.Plural): every Polish form has the specifiers of the English ones.
-			local want = specs(k:match("^[^|]*"))
-			for form in v:gmatch("[^|]+") do
-				T.eq(specs(form), want, "format specifiers of a form of " .. k)
+		return most
+	end
+	local function specs(s)
+		local out = {}
+		for spec in s:gmatch("%%[%d%.]*[sdf]") do
+			out[#out + 1] = spec
+		end
+		return table.concat(out, ",")
+	end
+	for _, entry in ipairs(ns.LOCALE_LIST) do
+		local code = entry[1]
+		if code ~= "enUS" then
+			T.ok(ns.Locales[code], code .. " is loaded")
+			for k, v in pairs(ns.Locales[code]) do
+				T.ok(type(k) == "string" and type(v) == "string" and v ~= "", code .. ": string pairs")
+				if k:find("|", 1, true) then
+					local want = specs(k:match("^[^|]*"))
+					local n = 0
+					for form in v:gmatch("[^|]+") do
+						n = n + 1
+						T.eq(specs(form), want, code .. ": format specifiers of a form of " .. k)
+					end
+					T.eq(n, formCount(code), code .. ": plural forms of " .. k)
+				elseif k:find("%", 1, true) then
+					T.eq(specs(v), specs(k), code .. ": format specifiers of " .. k)
+				end
 			end
-		elseif k:find("%", 1, true) then
-			T.eq(specs(v), specs(k), "format specifiers of " .. k)
 		end
 	end
+end)
+
+T.case("Automatic language follows the client's locale when we have it", function()
+	local mock = T.mock
+	local was = mock.locale
+	local CASES = {
+		{ "enUS", "enUS" }, { "enGB", "enUS" }, { "deDE", "deDE" }, { "frFR", "frFR" }, { "esES", "esES" },
+		{ "esMX", "esES", "the Spanish translation serves Latin America" }, { "ruRU", "ruRU" },
+		{ "koKR", "enUS", "no Korean translation: English" }, { "itIT", "enUS", "no Italian translation: English" },
+	}
+	for _, c in ipairs(CASES) do
+		mock.locale = c[1]
+		T.eq(ns.SetLocale("auto"), c[2], c[3] or ("client " .. c[1]))
+	end
+	-- A chosen language wins over the client's, and aliases resolve.
+	mock.locale = "deDE"
+	T.eq(ns.SetLocale("frFR"), "frFR")
+	T.eq(ns.SetLocale("esMX"), "esES")
+	T.eq(ns.SetLocale("nonsense"), "enUS", "an unknown code is English")
+	-- The language list offers every shipped locale once.
+	local seen = {}
+	for _, entry in ipairs(ns.LOCALE_LIST) do
+		T.ok(not seen[entry[1]], "listed once: " .. entry[1])
+		seen[entry[1]] = true
+		T.ok(ns.Locales[entry[1]], "has a table: " .. entry[1])
+	end
+	-- A translated string comes out in each language, an untranslated one in English.
+	ns.SetLocale("deDE")
+	T.eq(ns.L["Close"], "Schließen")
+	T.eq(ns.L["not a key"], "not a key")
+	mock.locale = was
+	ns.SetLocale("enUS")
 end)

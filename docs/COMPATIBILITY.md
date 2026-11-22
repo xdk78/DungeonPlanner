@@ -278,6 +278,39 @@ What Dungeon Planner does:
 Needs in-game testing: glyphs in DP's window with WoW Po Polsku active; that it leaves DP's frames alone; that its
 language selection wizard (`/wtr`) switching languages is picked up after `/reload`.
 
+### Client languages and the UI languages (checked 2026-11-22)
+
+Blizzard publishes no list of WoW: Forever's client languages. Evidence that the standard set exists:
+
+| Evidence | Finding |
+|---|---|
+| warcraft.wiki.gg `API_GetLocale` | `GetLocale()` returns enUS (also for enGB), deDE, frFR, esES, esMX, ruRU, ptBR, itIT, koKR, zhCN, zhTW; the page lists WoW Forever (1.60.1) among the game types, without a difference |
+| The installed Forever client | `Wow.exe` carries the locale table (enUS, deDE, frFR, esES, esMX, ruRU, itIT, ptBR, koKR, zhCN, zhTW), as do the same-named locale files of the installed ForeverDungeonJournal (frFR, esES, ruRU, itIT, ptBR, koKR, zhCN, zhTW) and DBM-Core (`localization.de/es/fr/ru/...`) |
+| Community reports | A French site reports a French Forever client and French servers; RestedXP ships Forever guides in German, French, Spanish, Portuguese and Chinese |
+| Not confirmed | No Blizzard page says that Forever's launcher offers every one of these; the Russian client in particular is region-restricted on EU servers in retail, and nothing says whether Forever lifts that. |
+
+DP ships enUS, deDE, esES (also for esMX), frFR, plPL (chosen, or with WoW Po Polsku) and ruRU. A locale is picked
+automatically only when `GetLocale()` returns it (`ns.SetLocale`); a player can pick any shipped language by hand on
+any client, so the translations are useful even where a client language turns out not to exist. Fonts: the client's
+`FRIZQT__.TTF` covers Latin-1 (German, French, Spanish accents, `ß`, `ñ`, `¿`, `¡`); `œ` is avoided in French. A
+Russian UI uses `FRIZQT___CYR.TTF` (the file ForeverDungeonJournal's `Core/Fonts.lua` names for Russian) when this client
+has it, else the bundled Alegreya Sans (`UI/Fonts.lua`, `tests/test_ui.lua`). Alegreya Sans Medium has every Russian
+letter, checked with fontTools on 2026-11-22 (`Media/Fonts/FONTLOG.txt`); `tests/test_fonts.lua` reads its cmap
+(`tools/ttf_cmap.lua`) and fails if a shipped locale uses a character it lacks. A face the client cannot vouch for yet
+is taken and looked at again after the first loading screen (`Style.RecheckFonts`, as for Polish); `/dp debug` lists
+`FRIZQT___CYR.TTF`, and the language dialog and one chat line say when no Cyrillic face loads, or when the font setting
+is Arial Narrow or a SharedMedia face.
+
+Needs in-game testing:
+- that `FRIZQT___CYR.TTF` opens on a non-Russian client;
+- that the layout (checked offline with a widened Alegreya Sans, `tests/ui_dump.lua --locale`) holds with the game's
+  real fonts;
+- the parts the game draws with its own fonts, which an addon cannot change and which may show boxes for Russian on a
+  client without Cyrillic: the key binding labels (Options > Key Bindings, the `BINDING_*` strings), the TOC `Notes`
+  line in the AddOns list, the Settings panel entry for DP (its category name and our option labels are drawn by
+  Blizzard's controls), the game's own menus and tooltips on Blizzard frames, and the Addon Compartment entry;
+- that German, French and Spanish show no boxes in the same places (Latin-1 is in the game's face, so none should).
+
 ## 9. The Adventure Guide is empty on WoW: Forever
 
 The first in-game `/dp scan` (build 70938, enUS) found no journal instance at all: 0 instances, and every recommended
