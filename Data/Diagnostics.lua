@@ -263,7 +263,7 @@ local function position(out)
 	-- with each member's relativeHeightIndex: what an automatic floor switch would need (Data/Floors.lua PlayerFloor,
 	-- unverified until a scan inside a dungeon shows a map).
 	p.instanceMapID = state(okN, instanceID)
-	p.indoors = state(call(IsIndoors))
+	p.indoors = state(call(rawget(_G, "IsIndoors")))
 	if okB and type(Util.Plain(best)) == "number" then
 		local okG, group = call(mapAPI.GetMapGroupID, best)
 		p.mapGroup = state(okG, group)
