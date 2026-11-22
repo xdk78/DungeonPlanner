@@ -1146,4 +1146,6 @@ ns.Locales.frFR = {
 	["The line's colour shifts from the start of a route to its end, so you can tell which part comes first. Off: one colour."] = "La couleur de la ligne change du début du trajet à sa fin, pour voir quelle partie vient d'abord. Désactivé\194\160: une seule couleur.",
 	["From %s to %s"] = "De %s à %s",
 	["To %s"] = "Jusqu'à %s",
+	["Show plan on OpenMap's dungeon map (experimental)"] = "Afficher le plan sur la carte de donjon d'OpenMap (expérimental)",
+	["Draws your plan's route, stops and markers on OpenMap's dungeon map. It uses parts of OpenMap that are not public: an update may stop it."] = "Dessine l'itinéraire, les arrêts et les marqueurs de votre plan sur la carte de donjon d'OpenMap. Cela utilise des parties non publiques d'OpenMap : une mise à jour peut l'arrêter.",
 }

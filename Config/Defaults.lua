@@ -28,6 +28,7 @@ Defaults.settings = {
 	},
 	providers = {}, -- [adapter id] = false when switched off (Data/Providers.lua); every adapter is on by default
 	preferProviderMaps = true, -- drawn maps (Data/ReyesMaps.lua, other addons') before the game's minimap pictures
+	openmapOverlay = false, -- experimental: the plan drawn on OpenMap's own dungeon map (UI/OpenMapOverlay.lua)
 	mapColors = "parchment", -- minimap floors: "parchment" (tinted like the old map tiles) | "game" (UI/MapCanvas.lua)
 	-- How routes look on the map (UI/MapRoutes.lua; sizes in UI/Style.lua ROUTE).
 	routes = {

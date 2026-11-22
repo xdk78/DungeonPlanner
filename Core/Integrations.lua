@@ -3,7 +3,8 @@
 -- of what is integrated, what was decided against, and what is verified.
 --
 --   Dungeon Journal (ForeverDungeonJournal): the global ForeverDungeonJournal_Toggle() (its binding/compartment entry).
---   OpenMap: OpenMapAPI major 1: RegisterDungeonSection (our plans on its dungeon card) and RegisterMenuToggle.
+--   OpenMap: OpenMapAPI major 1: RegisterDungeonSection (our plans on its dungeon card) and RegisterMenuToggle; the
+--     experimental plan overlay on its own dungeon view reads that private frame (UI/OpenMapOverlay.lua).
 --   WoW Po Polsku Forever: detected to choose Polish (Locales) and to follow its fonts (UI/Style.lua).
 --   LibDataBroker-1.1 + LibDBIcon-1.0: the launcher and the minimap button (collectors such as MinimapButtonButton
 --     pick LibDBIcon buttons up by themselves).
@@ -181,6 +182,10 @@ local function registerOpenMap()
 	end
 	if type(api.RegisterDungeonSection) == "function" then
 		pcall(api.RegisterDungeonSection, ns.name, function(info)
+			-- OpenMap's dungeon card is up: its own dungeon view may open next (UI/OpenMapOverlay.lua).
+			if ns.OpenMapOverlay then
+				ns.OpenMapOverlay.CardShown()
+			end
 			local plans = Integrations.PlansForOpenMap(info)
 			if #plans == 0 then
 				return nil
@@ -213,6 +218,23 @@ local function registerOpenMap()
 				end
 			end,
 		})
+		-- Experimental: the plan on OpenMap's own dungeon map (UI/OpenMapOverlay.lua; off by default).
+		local overlay = ns.OpenMapOverlay
+		if overlay then
+			pcall(api.RegisterMenuToggle, ns.name, {
+				id = "openmapOverlay",
+				label = ns.L["Show plan on OpenMap's dungeon map (experimental)"],
+				icon = Integrations.LauncherIcon(),
+				section = ns.title,
+				get = function()
+					overlay.Look()
+					return overlay.IsEnabled()
+				end,
+				set = function(on)
+					overlay.SetEnabled(on)
+				end,
+			})
+		end
 	end
 	return true
 end
@@ -329,6 +351,9 @@ Integrations.status = {}
 function Integrations.Init()
 	Integrations.status.launcher = registerLauncher()
 	Integrations.status.openMap = registerOpenMap()
+	if ns.OpenMapOverlay then
+		ns.OpenMapOverlay.Init()
+	end
 	Integrations.status.dungeonJournal = Integrations.HasDungeonJournal()
 	Integrations.status.polish = Integrations.PolishTranslationLoaded()
 	ns:On("PROFILE_CHANGED", Integrations, function()

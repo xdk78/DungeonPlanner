@@ -412,7 +412,6 @@ function MapRoutes.Install(view)
 	function view:DrawRouteStops(plan, floor, px, py, c)
 		local count = 0
 		local scale, seg = c.scale, c.seg
-		local u = math.max(0.75, scale)
 		local drag = self.drag and self.drag.mode == "point" and self.drag or nil
 		local look = MapRoutes.Look(1) -- once per redraw: the colours below need only its colour and ramp
 		for _, route in ipairs(plan.routes) do
@@ -430,16 +429,14 @@ function MapRoutes.Install(view)
 						local p = c.getPoint(count)
 						p.routeId, p.pointIndex = route.id, i
 						p:EnableMouse(not c.drawTool)
-						local size = (pt.step and 20 or 9) * u
+						local size = MapPins.StopSize(scale, pt.step)
 						MapPins.Reset(p, size)
 						p:ClearAllPoints()
 						p:SetPoint("CENTER", self.canvas, "TOPLEFT", px(pt[1], pt[2]), py(pt[2], pt[1]))
 						if pt.step then
-							-- A dark disc with a ring in the route's colour: the number reads on any art and over the line.
 							-- The number is the step's in the side panel (Steps.StopNumbers), not the stop's own order.
 							local number = c.stopNumber and c.stopNumber(route.id, i) or pt.step
-							MapPins.StyleDisc(p, size, 0.1, 0.07, 0.04, tostring(number))
-							p.ring:SetVertexColor(r, g, b, 1)
+							MapPins.StyleStop(p, size, r, g, b, tostring(number))
 							if seg and seg.route == route.id and seg.to == i then
 								p.select:ClearAllPoints()
 								p.select:SetPoint("CENTER")
