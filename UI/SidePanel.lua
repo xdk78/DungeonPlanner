@@ -209,7 +209,21 @@ function SidePanel.Create(parent, ctx)
 	party:SetScript("OnClick", function()
 		UI.SelectTab("assignments")
 	end)
-	W.SetTooltip(party, L["Party"], L["Who plays which role. Click to edit the party and the assignments."])
+	-- The strip's tooltip (its text set by RefreshParty: the extras, or where raid counts come from), shown beside the
+	-- strip or beside an open seat.
+	party.tipTitle = L["Party"]
+	party.tipText = L["Who plays which role. Click to edit the party and the assignments."]
+	local function stripTip(owner)
+		local tt = W.Tip()
+		if tt then
+			W.TipBeside(tt, owner)
+			tt:SetText(party.tipTitle, 1, 0.82, 0, 1, true)
+			tt:AddLine(party.tipText, 1, 1, 1, true)
+			W.TipShow(tt)
+		end
+	end
+	party:SetScript("OnEnter", stripTip)
+	party:SetScript("OnLeave", ns.PartySeats.HideTip)
 	f.party = party
 	party.heading = W.SectionHeader(party, L["Party"])
 	party.heading:SetPoint("TOPLEFT")
@@ -226,16 +240,10 @@ function SidePanel.Create(parent, ctx)
 		slot:SetScript("OnClick", openParty)
 		slot:SetScript("OnEnter", function(self)
 			if not (self.seat and ns.PartySeats.Tooltip(self, self.seat, self.inGroup)) then
-				local onEnter = party:GetScript("OnEnter")
-				if onEnter then
-					onEnter(party)
-				end
+				stripTip(self)
 			end
 		end)
-		slot:SetScript("OnLeave", function(self)
-			ns.PartySeats.HideTip(self)
-			ns.PartySeats.HideTip(party)
-		end)
+		slot:SetScript("OnLeave", ns.PartySeats.HideTip)
 		-- A slate plate in a bronze ring with the role's glyph (or, for a raid, the group number) on it. The ring stays
 		-- bronze for every role: a red ring around a slanted sword reads as a "no entry" sign.
 		slot.icon = slot:CreateTexture(nil, "ARTWORK", nil, 0)
@@ -288,7 +296,7 @@ function SidePanel.Create(parent, ctx)
 		elseif live then
 			tip = tip .. "\n\n" .. L["Groups as your raid stands now: the plan sets none."]
 		end
-		W.SetTooltip(party, raid and L["Raid groups"] or L["Party"], tip)
+		party.tipTitle, party.tipText = raid and L["Raid groups"] or L["Party"], tip
 		for i, slot in ipairs(party.slots) do
 			slot:ClearAllPoints()
 			slot.seat, slot.inGroup = nil, nil

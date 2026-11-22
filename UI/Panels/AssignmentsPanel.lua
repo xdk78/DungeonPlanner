@@ -18,29 +18,21 @@ local EDITOR_H = SZ.control * 2 + SP.md -- the selected assignment's editor, und
 local Panel = {}
 ns.Panels.assignments = Panel
 
--- The current group's member names (never secret values).
+-- The current group's members as assignment targets: { value = the whole name (what is stored), text = the short name,
+-- or the whole one where two members share it }, by text (Data/PartyInfo.lua; never secret values).
 local function roster()
-	local names = {}
-	local function add(name)
-		name = Util.ShortName(name)
-		if name and not Util.IndexOf(names, name) then
-			names[#names + 1] = name
-		end
+	local members, seen = ns.PartyInfo.Members(), {}
+	for _, m in ipairs(members) do
+		seen[m.name] = (seen[m.name] or 0) + 1
 	end
-	if IsInRaid and IsInRaid() and GetRaidRosterInfo then
-		for i = 1, (GetNumGroupMembers and GetNumGroupMembers() or 0) do
-			add((GetRaidRosterInfo(i)))
-		end
-	else
-		add(UnitName and UnitName("player"))
-		for i = 1, 4 do
-			if UnitExists and UnitExists("party" .. i) then
-				add(UnitName("party" .. i))
-			end
-		end
+	local out = {}
+	for _, m in ipairs(members) do
+		out[#out + 1] = { value = m.id, text = seen[m.name] > 1 and m.id or m.name }
 	end
-	table.sort(names)
-	return names
+	table.sort(out, function(a, b)
+		return a.text < b.text
+	end)
+	return out
 end
 
 local function targetText(target)
@@ -55,7 +47,7 @@ local function targetText(target)
 	if target == "all" then
 		return L["Everyone"]
 	end
-	return target
+	return ns.PartySeats.Short(target) -- a whole name reads as the member's short name while they are in the group
 end
 
 function Panel.Create(parent, ctx)
@@ -216,11 +208,15 @@ function Panel.Create(parent, ctx)
 			end
 			local a = selected()
 			local names = roster()
-			if a and not a.target:find(":") and a.target ~= "all" and not Util.IndexOf(names, a.target) then
-				table.insert(names, 1, a.target)
+			local listed = false
+			for _, n in ipairs(names) do
+				listed = listed or (a ~= nil and n.value == a.target)
 			end
-			for _, name in ipairs(names) do
-				out[#out + 1] = { text = name, value = name }
+			if a and not a.target:find(":") and a.target ~= "all" and not listed then
+				table.insert(names, 1, { value = a.target, text = targetText(a.target) })
+			end
+			for _, n in ipairs(names) do
+				out[#out + 1] = n
 			end
 			out[#out + 1] = { text = L["Other player..."], value = "?" }
 			return out

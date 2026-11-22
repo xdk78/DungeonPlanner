@@ -107,39 +107,33 @@ end
 
 local ROLE_TEXT = { TANK = "Tank", HEALER = "Healer", DAMAGER = "Damage" }
 
--- Class tokens of the group's members by name (plain values only).
-local function rosterClasses()
-	local out = {}
-	for _, unit in ipairs(ns.Comm.GroupUnits()) do
-		local okName, name = pcall(UnitName, unit)
-		name = okName and Util.ShortName(Util.Plain(name)) or nil
-		if name then
-			local ok, _, token = pcall(rawget(_G, "UnitClass") or error, unit)
-			token = ok and Util.Plain(token) or nil
-			if type(token) == "string" then
-				out[name] = token
-			end
-		end
-	end
-	return out
-end
-
 -- The expansion's environment (Pages.Expand) for the player's client. groups = the plan's raid groups, or nil.
 function NotesFrame.Env(groups)
-	local byName = rosterClasses()
-	local me = UnitName and Util.ShortName(Util.Plain((UnitName("player"))))
+	-- The group by whole name (Data/PartyInfo.lua); a name in a page or the plan is one of them by Party.Match: the
+	-- whole name, or a first name only one member has.
+	local members = ns.PartyInfo.Members()
+	local function memberOf(name)
+		return (ns.Party.Match(name, members, ns.Roster.Id))
+	end
+	local player = members[1] and members[1].player and members[1]
 	local own = "|cffffd100> |r" -- the game's gold
 	return {
 		groups = groups,
-		me = me,
+		me = player and player.name or nil,
+		isMe = function(name)
+			return player ~= nil and memberOf(name) == player
+		end,
 		own = own,
 		classes = classTable(),
 		classOf = function(name)
-			return byName[name]
+			local m = memberOf(name)
+			return m and m.class
 		end,
 		colorName = function(name, token)
 			local hex = classHex(token)
-			return hex and ("|c" .. hex .. name .. "|r") or name
+			local m = memberOf(name)
+			local shown = m and m.name or name -- a whole name reads as the member's short name
+			return hex and ("|c" .. hex .. shown .. "|r") or shown
 		end,
 		raidIcon = function(n)
 			return "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_" .. n .. ":0|t"

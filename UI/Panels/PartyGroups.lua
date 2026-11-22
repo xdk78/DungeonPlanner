@@ -6,7 +6,7 @@
 
 local _, ns = ...
 local S, W, L, Art = ns.Style, ns.Widgets, ns.L, ns.Art
-local Plan, Util, Schema = ns.Plan, ns.Util, ns.Schema
+local Plan, Schema = ns.Plan, ns.Schema
 local SP, SZ = S.SPACE, S.SIZE
 
 local PartyGroups = {}
@@ -138,7 +138,7 @@ function PartyGroups.Create(parent, o)
 	card.extra:Hide()
 	card.hint = W.Paragraph(card, "caption", "muted")
 	card.hint:SetJustifyH("CENTER")
-	card.hint:SetText(L["Fill from my party takes the roles your group chose; + adds a name by hand. Right-click a name to remove it."])
+	card.hint:SetText(L["Fill from my party stores the seats as shown, guesses included; + adds a name by hand. Right-click a name to remove it."])
 
 	-- The seats share the card's width; the hint under them while the plan can change.
 	function g:LayoutCard(width)
@@ -228,8 +228,19 @@ function PartyGroups.Create(parent, o)
 				return
 			end
 			-- The seats as the strip fills them from the group (Model/Party.lua), stored by whole name so the plan
-			-- matches its members again later (Share/Roster.lua).
-			local fill = ns.Party.Fill({}, ns.PartyInfo.Members())
+			-- matches its members again later (Share/Roster.lua). In a raid: the player's own group.
+			local members = ns.PartyInfo.Members()
+			local mine = members[1] and members[1].player and members[1].subgroup
+			if mine then
+				local own = {}
+				for _, m in ipairs(members) do
+					if m.subgroup == mine then
+						own[#own + 1] = m
+					end
+				end
+				members = own
+			end
+			local fill = ns.Party.Fill({}, members)
 			for gi = 1, Schema.MAX.groups do
 				p.groups[gi] = {}
 			end
@@ -241,18 +252,17 @@ function PartyGroups.Create(parent, o)
 			o.changed()
 			return
 		end
-		if not (IsInRaid and IsInRaid() and GetRaidRosterInfo) then
+		if not ns.PartyInfo.RaidGroups() then
 			ns:Print(L["You are not in a raid."])
 			return
 		end
 		for gi = 1, Schema.MAX.groups do
 			p.groups[gi] = {}
 		end
-		for i = 1, GetNumGroupMembers() do
-			local name, _, subgroup = GetRaidRosterInfo(i)
-			name, subgroup = Util.ShortName(name), Util.Plain(subgroup)
-			if name and Util.IsInteger(subgroup) then
-				Plan.SetGroup(p, name, subgroup)
+		-- The raid's groups, by whole name.
+		for _, m in ipairs(ns.PartyInfo.Members()) do
+			if m.subgroup then
+				Plan.SetGroup(p, m.id, m.subgroup)
 			end
 		end
 		o.changed()
@@ -296,7 +306,8 @@ function PartyGroups.Create(parent, o)
 				box.count:SetText(#members .. "/" .. Schema.MAX.groupSize)
 				for i, b in ipairs(box.names) do
 					b.name = members[i]
-					b.text:SetText(members[i] or "")
+					-- A whole name reads as the member's short name while they are in the group.
+				b.text:SetText(members[i] and ns.PartySeats.Short(members[i]) or "")
 					b:SetShown(members[i] ~= nil)
 				end
 				box.addButton:SetShown(not ro)

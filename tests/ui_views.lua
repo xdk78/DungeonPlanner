@@ -382,15 +382,18 @@ end
 
 -- A party of WoW: Forever characters (first name and surname, made up) filling a recommended plan's open seats
 -- (UI/PartySeats.lua): the healer and two damage dealers set their roles, a warrior without one is guessed into the
--- tank seat, one member is offline, one has a long first name, and a sixth (a raid on a dungeon plan) has no seat.
-local liveSaved, liveUnits
+-- tank seat, one member is offline, one has a long first name, and a sixth (a raid of six on a dungeon plan, raid1
+-- being the player) has no seat.
+local liveSaved
 local LIVE = {
-	party1 = { name = "Aldra", surname = "Vey", cls = "PRIEST", role = "HEALER", level = 19 },
-	party2 = { name = "Bram", surname = "Holt", cls = "WARRIOR", level = 18 },
-	party3 = { name = "Thorvaldurinn", surname = "Stone", cls = "ROGUE", role = "DAMAGER", level = 20 },
-	party4 = { name = "Dessa", surname = "Moor", cls = "MAGE", role = "DAMAGER", level = 17, offline = true },
+	raid1 = { name = "Tess", surname = "Tester", cls = "MAGE", role = "DAMAGER", level = 18 },
+	raid2 = { name = "Aldra", surname = "Vey", cls = "PRIEST", role = "HEALER", level = 19 },
+	raid3 = { name = "Bram", surname = "Holt", cls = "WARRIOR", level = 18 },
+	raid4 = { name = "Thorvaldurinn", surname = "Stone", cls = "ROGUE", role = "DAMAGER", level = 20 },
+	raid5 = { name = "Dessa", surname = "Moor", cls = "MAGE", role = "DAMAGER", level = 17, offline = true },
 	raid6 = { name = "Ivo", surname = "Lark", cls = "MAGE", role = "DAMAGER", level = 18 },
 }
+local LIVE_GROUP = { 1, 1, 1, 1, 1, 2 }
 local LIVE_SPECS = { WARRIOR = { "TANK", "DAMAGER" }, PRIEST = { "HEALER", "DAMAGER" }, ROGUE = { "DAMAGER" },
 	MAGE = { "DAMAGER" } }
 local LIVE_IDS = { WARRIOR = 1, PRIEST = 5, ROGUE = 4, MAGE = 8 }
@@ -398,33 +401,41 @@ local LIVE_CLASSES = {}
 for token, id in pairs(LIVE_IDS) do
 	LIVE_CLASSES[id] = token
 end
-local LIVE_GLOBALS = { "UnitName", "UnitClass", "UnitGroupRolesAssigned", "UnitIsConnected",
-	"GetNumSpecializationsForClassID", "GetSpecializationInfoForClassID", "RAID_CLASS_COLORS" }
+local LIVE_GLOBALS = { "UnitName", "UnitClass", "UnitGroupRolesAssigned", "UnitIsConnected", "UnitIsUnit", "IsInRaid",
+	"GetRaidRosterInfo", "GetNumGroupMembers", "GetNumSpecializationsForClassID", "GetSpecializationInfoForClassID",
+	"RAID_CLASS_COLORS" }
 local function liveParty(on)
 	if not on then
 		for n, v in pairs(liveSaved or {}) do
 			_G[n] = v or nil
 		end
-		ns.Roster.Units = liveUnits or ns.Roster.Units
 		mock.inGroup, mock.units = false, {}
+		mock.FireEvent("GROUP_ROSTER_UPDATE")
 		return
 	end
-	liveSaved, liveUnits = {}, ns.Roster.Units
+	liveSaved = {}
 	for _, n in ipairs(LIVE_GLOBALS) do
 		liveSaved[n] = rawget(_G, n) or false
 	end
 	mock.inGroup = true
-	mock.units = { player = { cls = "MAGE", role = "DAMAGER", level = 18 } }
+	mock.units = { player = LIVE.raid1 }
 	for unit, u in pairs(LIVE) do
 		mock.units[unit] = u
 	end
-	ns.Roster.Units = function()
-		return { "player", "party1", "party2", "party3", "party4", "raid6" }
+	_G.IsInRaid = function()
+		return true
+	end
+	_G.GetNumGroupMembers = function()
+		return #LIVE_GROUP
+	end
+	_G.GetRaidRosterInfo = function(i)
+		local u = LIVE["raid" .. i]
+		return u and u.name, 0, LIVE_GROUP[i]
+	end
+	_G.UnitIsUnit = function(a, b)
+		return a == b or (b == "player" and a == "raid1")
 	end
 	_G.UnitName = function(unit)
-		if unit == "player" then
-			return "Tess", "Tester"
-		end
 		local u = mock.units[unit]
 		return u and u.name, u and u.surname
 	end
@@ -448,6 +459,7 @@ local function liveParty(on)
 	end
 	_G.RAID_CLASS_COLORS = { WARRIOR = { r = 0.78, g = 0.61, b = 0.43 }, PRIEST = { r = 1, g = 1, b = 1 },
 		ROGUE = { r = 1, g = 0.96, b = 0.41 }, MAGE = { r = 0.25, g = 0.78, b = 0.92 } }
+	mock.FireEvent("GROUP_ROSTER_UPDATE") -- the strip reads the new roster
 end
 
 local function liveView(name, section)

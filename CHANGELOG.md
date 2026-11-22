@@ -82,11 +82,16 @@ follow [Semantic Versioning](https://semver.org/).
   people you are grouped with wherever the plan names nobody (you alone when solo): each by the role chosen in the
   group finder, a damage-only class without a role in a damage seat, and a class that can also tank or heal in the
   empty tank or healer seat it can fill, marked as a guess (a dimmer name; the tooltip says it was guessed from the
-  class). Names are in class colour with the level on the plate; offline and dead members are dimmed; the tooltip
-  has the whole name (with the surname), the class and how the seat was chosen. Names a plan stores keep their seats
-  and are matched to members by the whole name. Members past the five seats show as "+1" with their names in the
-  tooltip. A raid plan that sets no groups shows the raid's groups as they stand. Nothing is saved: "Fill from my
-  party" still stores the group into an own plan, now by the whole name.
+  class). Anyone left over takes a free seat, and the tooltip says only that. Names are in class colour with the
+  level on the plate; offline and dead members are dimmed; the tooltip has the whole name (with the surname), the
+  class and how the seat was chosen. Names a plan stores keep their seats and are matched to members by the whole
+  name, or by a first name only one member has (plans filled before surnames were kept). Members past the five seats
+  show as "+1" with their names in the tooltip. A raid plan that sets no groups shows the raid's groups as they
+  stand. Nothing is saved: "Fill from my party" still stores the group into an own plan (in a raid, your own
+  group).
+- **Whole names across a plan.** "Fill from my party", "Fill from my raid" and the assignment targets store a
+  player's whole name (first name and surname on WoW: Forever), and the Party section, the assignments and the Notes
+  window show the short name. Names stored before still match a member when only one has that first name.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the

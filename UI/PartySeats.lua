@@ -12,10 +12,10 @@ PartySeats.ROLE_TEXT = ROLE_TEXT
 PartySeats.DIM = 0.45 -- offline or dead
 PartySeats.GUESS = 0.65 -- placed from the class, not a role the player set
 
--- The seats of a dungeon plan with the group as it is now: { seats, extra, inGroup }.
+-- The seats of a dungeon plan with the group as it is now: { seats, extra, inGroup }. The roster is read once per
+-- group event (PartyInfo.Cached), not on every redraw.
 function PartySeats.Fill(plan)
-	local members = ns.PartyInfo.Members()
-	local fill = ns.Party.Fill(plan and plan.groups, members, ns.Roster.Id)
+	local fill = ns.Party.Fill(plan and plan.groups, ns.PartyInfo.Cached(), ns.Roster.Id)
 	fill.inGroup = ns.PartyInfo.InGroup()
 	if not fill.inGroup then
 		fill.extra = {} -- solo: a plan that seats others has no one extra to name
@@ -23,16 +23,16 @@ function PartySeats.Fill(plan)
 	return fill
 end
 
--- The raid strip's counts: the plan's groups, else the raid's.
+-- The raid strip's counts: the plan's groups, else the raid's (GetRaidRosterInfo only).
 function PartySeats.RaidCounts(plan, n)
-	local members = ns.PartyInfo.InGroup() and ns.PartyInfo.Members() or {}
-	local raid = {}
-	for _, m in ipairs(members) do
-		if m.subgroup then
-			raid[#raid + 1] = m
-		end
-	end
-	return ns.Party.RaidCounts(plan and plan.groups, raid, n)
+	return ns.Party.RaidCounts(plan and plan.groups, ns.PartyInfo.RaidGroups(), n)
+end
+
+-- How a name the plan stores reads: the member's short name when it stands for one in the group (Party.Match),
+-- else the name as stored.
+function PartySeats.Short(name, members)
+	local m = ns.Party.Match(name, members or ns.PartyInfo.Cached(), ns.Roster.Id)
+	return m and m.name or name
 end
 
 -- A name on one line: cut after a whole word (W.FitText), and a single long word by its letters, with "..." and the
@@ -80,7 +80,7 @@ function PartySeats.Paint(fs, seat)
 		fs:SetTextColor(r, g, b)
 	end
 	local away = m and (m.offline or m.dead)
-	local guessed = seat.how == "guess" or seat.how == "offrole"
+	local guessed = seat.how == "guess" or seat.how == "offrole" or seat.how == "free"
 	fs:SetAlpha(away and PartySeats.DIM or guessed and PartySeats.GUESS or 1)
 	return away and PartySeats.DIM or 1
 end
@@ -129,7 +129,12 @@ function PartySeats.Tooltip(owner, seat, inGroup)
 	local how = seat.how
 	if how == "stored" then
 		tt:AddLine(L["Seat set in the plan."], 0.71, 0.67, 0.59, true)
-		if not m and inGroup then
+		-- Only a name nobody in the group answers to is "not in your group".
+		if seat.present == "twice" then
+			tt:AddLine(L["The plan names this player in another seat too."], 0.71, 0.67, 0.59, true)
+		elseif seat.present == "ambiguous" then
+			tt:AddLine(L["More than one member of your group has this first name."], 0.71, 0.67, 0.59, true)
+		elseif not m and inGroup then
 			tt:AddLine(L["Not in your group."], 0.71, 0.67, 0.59, true)
 		end
 	elseif how == "role" then
@@ -137,8 +142,9 @@ function PartySeats.Tooltip(owner, seat, inGroup)
 	elseif how == "class" then
 		tt:AddLine(L["Role not set: this class only deals damage."], 0.71, 0.67, 0.59, true)
 	elseif how == "guess" then
-		tt:AddLine(m.roles and L["Role not set: guessed from class."] or L["Role not set: placed in a free seat."],
-			1, 0.6, 0.2, true)
+		tt:AddLine(L["Role not set: guessed from class."], 1, 0.6, 0.2, true)
+	elseif how == "free" then
+		tt:AddLine(L["Role not set: placed in a free seat."], 1, 0.6, 0.2, true)
 	elseif how == "offrole" then
 		tt:AddLine(string.format(L["Chose %s, but that seat is taken."], L[ROLE_TEXT[m.role]] or m.role), 1, 0.6, 0.2, true)
 	end

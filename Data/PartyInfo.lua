@@ -2,8 +2,9 @@
 -- raid group) and what each class can do. Each call is guarded and every value passes Util.Plain; Model/Party.lua
 -- places the members in seats. Read on demand, when the strip or the Party section draws.
 --
---   PartyInfo.Members() -> { { id, name, role?, class?, className?, roles?, level?, offline?, dead?, player?,
---                             subgroup? }, ... } (the player first)
+--   PartyInfo.Members() -> { { id, first?, name, role?, class?, className?, roles?, level?, offline?, dead?, player?,
+--                             subgroup? }, ... } (the player first; Cached() keeps it until the next group event)
+--   PartyInfo.RaidGroups() -> { [group] = count } | nil
 --   PartyInfo.InGroup() -> bool                PartyInfo.ClassColor(token) -> r, g, b | nil
 --   PartyInfo.Watch(owner, shows)              PARTY_CHANGED goes out a moment after a burst of group events
 
@@ -91,11 +92,15 @@ local function member(unit, isPlayer, subgroup)
 		return nil
 	end
 	local first = call(UnitName, unit)
+	first = type(first) == "string" and first ~= "" and first or nil
 	local className, token, classID = call(g("UnitClass"), unit)
 	local role = call(g("UnitGroupRolesAssigned"), unit)
 	local level = call(g("UnitLevel"), unit)
+	-- The first name alone, where names carry surnames: a plan may hold it from before plans kept surnames.
+	local surnamed = first and id ~= first and id:sub(1, #first) == first and ns.Roster.Surnames()
 	return {
 		id = id,
+		first = surnamed and first or nil,
 		name = Util.ShortName(first) or id,
 		role = ROLES[role] and role or nil,
 		class = type(token) == "string" and token or nil,
@@ -109,18 +114,28 @@ local function member(unit, isPlayer, subgroup)
 	}
 end
 
+local function inRaid()
+	return call(g("IsInRaid")) == true
+end
+
+-- The raid's group of each raid index (GetRaidRosterInfo), or nil outside a raid.
+local function subgroupOf(i)
+	local _, _, subgroup = call(g("GetRaidRosterInfo"), i)
+	return Util.IsInteger(subgroup) and subgroup or nil
+end
+
+-- The group as it is now, read fresh (the Party section's actions, the Notes window, the assignment picker).
 function PartyInfo.Members()
 	local out = {}
 	if not PartyInfo.InGroup() then
 		out[1] = member("player", true)
 		return out
 	end
-	local inRaid = call(g("IsInRaid")) == true
+	local raid = inRaid()
 	for i, unit in ipairs(ns.Roster.Units()) do
 		if unit == "player" or call(g("UnitExists"), unit) then
 			local isPlayer = unit == "player" or call(g("UnitIsUnit"), unit, "player") == true
-			local subgroup = inRaid and select(3, call(g("GetRaidRosterInfo"), i)) or nil
-			local m = member(unit, isPlayer, Util.IsInteger(subgroup) and subgroup or nil)
+			local m = member(unit, isPlayer, raid and subgroupOf(i) or nil)
 			if m then
 				-- The player first: the seats fill in this order.
 				table.insert(out, isPlayer and 1 or #out + 1, m)
@@ -130,10 +145,35 @@ function PartyInfo.Members()
 	return out
 end
 
+-- The same, kept until the next group event (PartyInfo.Changed): the strip redraws on resizes and shows without
+-- reading the roster again.
+local cached
+function PartyInfo.Cached()
+	cached = cached or PartyInfo.Members()
+	return cached
+end
+
+-- How many raid members each group has ({ [1..8] = n }), from GetRaidRosterInfo alone; nil outside a raid.
+function PartyInfo.RaidGroups()
+	if not inRaid() then
+		return nil
+	end
+	local counts = {}
+	local n = call(g("GetNumGroupMembers"))
+	for i = 1, math.min(40, Util.IsInteger(n) and n or 0) do
+		local gi = subgroupOf(i)
+		if gi then
+			counts[gi] = (counts[gi] or 0) + 1
+		end
+	end
+	return counts
+end
+
 -- The strip and the Party section redraw on PARTY_CHANGED, sent once a moment after the first of a burst of these, and
--- only while one of them is shown (PartyInfo.Watch). UNIT_* events count only for the group's own units.
+-- only while one of them is shown (PartyInfo.Watch). UNIT_* events count only for the group's own units. A member's
+-- death or return shows through UNIT_FLAGS; the player's own through PLAYER_DEAD, PLAYER_ALIVE and PLAYER_UNGHOST.
 PartyInfo.EVENTS = { "GROUP_ROSTER_UPDATE", "PLAYER_ROLES_ASSIGNED", "UNIT_NAME_UPDATE", "UNIT_LEVEL", "PLAYER_LEVEL_UP",
-	"UNIT_CONNECTION", "UNIT_FLAGS" }
+	"UNIT_CONNECTION", "UNIT_FLAGS", "PLAYER_DEAD", "PLAYER_ALIVE", "PLAYER_UNGHOST", "PLAYER_ENTERING_WORLD" }
 PartyInfo.DELAY = 0.3
 PartyInfo.watchers = {} -- [owner] = function() -> true while it shows the party
 
@@ -146,6 +186,7 @@ function PartyInfo.Changed(event, unit)
 	if type(event) == "string" and event:sub(1, 5) == "UNIT_" and not groupUnit(unit) then
 		return
 	end
+	cached = nil -- read again on the next draw, shown or not
 	local wanted = false
 	for _, shows in pairs(PartyInfo.watchers) do
 		wanted = wanted or shows() == true
