@@ -106,6 +106,9 @@ function WhatsNew.Decide(seen, current, fresh, hasEntry)
 	if seen == current then
 		return nil
 	end
+	if seen and WhatsNew.Compare(seen, current) > 0 then
+		return nil -- a downgrade: the card for a newer version was shown already
+	end
 	if seen == nil and fresh then
 		return "welcome"
 	end
@@ -167,12 +170,18 @@ function WhatsNew.TryShow()
 		return false
 	end
 	local kind, version = pending, pendingVersion
+	-- Saved only once the card really showed; if it could not be shown it stays pending for the next quiet moment.
+	if not ns.NewsFrame.Show(kind) then
+		return false
+	end
 	pending = nil
 	local saved = store()
-	if saved and version then
-		saved.seen = version
+	if saved then
+		saved.firstRun = nil
+		if version then
+			saved.seen = version
+		end
 	end
-	ns.NewsFrame.Show(kind)
 	return true
 end
 
@@ -185,10 +194,16 @@ function WhatsNew.Check()
 	end
 	local current = WhatsNew.Normalize(ns.version)
 	local seen = WhatsNew.Normalize(saved.seen)
-	local kind = WhatsNew.Decide(seen, current, ns.freshInstall, current and WhatsNew.Entry(current) ~= nil)
+	-- A first install stays a first install until its welcome was shown, even across sessions (a first session spent in an
+	-- instance, or ended before the card showed).
+	if seen == nil and ns.freshInstall then
+		saved.firstRun = true
+	end
+	local fresh = ns.freshInstall or saved.firstRun == true
+	local kind = WhatsNew.Decide(seen, current, fresh, current and WhatsNew.Entry(current) ~= nil)
 	if not kind then
-		if current then
-			saved.seen = current -- nothing to show for this version: remembered all the same
+		if current and (seen == nil or WhatsNew.Compare(seen, current) < 0) then
+			saved.seen = current -- nothing to show for this version: remembered all the same (never lowered on a downgrade)
 		end
 		return nil
 	end

@@ -921,7 +921,7 @@ ns.Locales.plPL = {
 	-- Report a problem, What's new, /dp perf
 	["Report a problem"] = "Zgłoś problem",
 	["Builds a text with your version, plan and the latest errors, to paste into a GitHub issue. No character, realm, guild or group details."] = "Tworzy tekst z wersją, planem i ostatnimi błędami, do wklejenia w zgłoszeniu na GitHubie. Bez postaci, realmu, gildii i członków grupy.",
-	["Gathers versions, language, your plan's id and size, other addons and the latest errors. No character name, realm, guild, group members or chat."] = "Zbiera wersje, język, identyfikator i rozmiar twojego planu, inne dodatki i ostatnie błędy. Bez nazwy postaci, realmu, gildii, członków grupy i czatu.",
+	["Gathers versions, plan id and size, addons and errors. Your character, realm, guild, group and plan names become <name>, also in your words. No chat."] = "Zbiera wersje, id i rozmiar planu, dodatki i błędy. Nazwy twojej postaci, realmu, gildii, grupy i planów zamieniane są na <name>, także w twoich słowach. Bez czatu.",
 	["What happened?"] = "Co się stało?",
 	["Report"] = "Raport",
 	["Click the box, then Ctrl+C to copy"] = "Kliknij pole, potem Ctrl+C, by skopiować",

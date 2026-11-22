@@ -76,6 +76,7 @@ T.case("What's new: Check shows once, never on a first install, and remembers th
 	local oldShow = ns.NewsFrame.Show
 	ns.NewsFrame.Show = function(kind)
 		shown[#shown + 1] = kind
+		return true
 	end
 	local ok, err = pcall(function()
 		ns.version = "0.2.0"

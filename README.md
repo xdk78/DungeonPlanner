@@ -12,7 +12,8 @@ kills and objectives, and share plans in game, as text, or on Discord.
 
 Short clips of the main interactions (rendered offline from the addon's own UI code with the game's textures, so
 details differ a little from the client; in-game screenshots will be in [docs/screenshots/](docs/screenshots/) after
-the first in-game test).
+the first in-game test). The images contain Blizzard Entertainment game art, are not under the MIT licence and are
+shown for documentation only ([docs/media/README.md](docs/media/README.md)).
 
 | Click a step, the map follows | Run mode: Next, Next |
 |---|---|

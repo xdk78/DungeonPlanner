@@ -43,7 +43,7 @@ body:
     id: language
     attributes:
       label: Dungeon Planner language
-      description: enUS or plPL, from the report ("Language:").
+      description: enUS, plPL, deDE, esES, frFR or ruRU, from the report ("Language:").
   - type: textarea
     id: report
     attributes:

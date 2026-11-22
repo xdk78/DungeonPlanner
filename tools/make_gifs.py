@@ -14,7 +14,9 @@ wow-ui-harness `render` command (AGENTS.md, "Seeing the UI"). For each sequence 
 along the bottom (the bundled Alegreya Sans, OFL), one shared palette for all frames. When a GIF is over --max-mb the
 palette shrinks, then the width, until it fits.
 
-Everything here is part of Dungeon Planner under its MIT licence.
+This script is part of Dungeon Planner under its MIT licence. The images it makes are not: they are screenshots or renders
+of the addon that include Blizzard Entertainment game art (the game's textures and map tiles, (c) Blizzard Entertainment),
+and are shown for documentation only. Use the game's own map tiles; do not include Santiago Reyes' maps.
 """
 
 import argparse
@@ -90,14 +92,17 @@ def make(name: str, paths: list[Path], spec: dict, width: int, max_bytes: int) -
     delay = int(spec.get("delay", 1400))
     delays = [delay] * len(paths)
     delays[-1] = int(spec.get("last_delay", delay * 2)) # the end rests a little longer before it loops
+    floor = min(480, width)  # never narrower than 480 px, or than the width asked for when that is smaller
     for colors in (256, 128, 64):
         w = width
-        while w >= 480:
+        while True:
             data = encode(prepare(paths, spec, w), delays, colors)
             if len(data) <= max_bytes:
                 return data, w, colors
-            w = round(w * 0.9)
-    raise SystemExit(f"{name}: no size under {max_bytes} bytes down to 480 px and 64 colours")
+            if w <= floor:
+                break
+            w = max(floor, round(w * 0.9))
+    raise SystemExit(f"{name}: no size under {max_bytes} bytes down to {floor} px and 64 colours")
 
 
 def main() -> None:

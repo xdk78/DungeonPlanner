@@ -50,7 +50,7 @@ local function build()
 	f.intro:SetPoint("TOPLEFT")
 	f.intro:SetPoint("RIGHT")
 	f.intro:SetText(
-		L["Gathers versions, language, your plan's id and size, other addons and the latest errors. No character name, realm, guild, group members or chat."]
+		L["Gathers versions, plan id and size, addons and errors. Your character, realm, guild, group and plan names become <name>, also in your words. No chat."]
 	)
 
 	f.whatLabel = W.Text(inner, "caption", "gold")

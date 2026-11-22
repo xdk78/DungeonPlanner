@@ -50,14 +50,21 @@ end
 
 -- Timing ------------------------------------------------------------------------------------------------------------------
 
+-- A call that began under one run of the probe and ends after it was stopped (or restarted) must not touch the books: a
+-- slash command goes through the timed SafeCall, and `/dp perf stop` is such a call. Each entry carries the run's number.
+local gen = 0
+
 local function enter(name)
 	depth = depth + 1
-	local e = { name = name, t0 = Perf.clock(), child = 0 }
+	local e = { name = name, t0 = Perf.clock(), child = 0, gen = gen }
 	stack[depth] = e
 	return e
 end
 
 local function leave(e, ...)
+	if e.gen ~= gen or not running then
+		return ...
+	end
 	local raw = Perf.clock() - e.t0
 	stack[depth] = nil
 	depth = depth - 1
@@ -174,6 +181,8 @@ function Perf.Start()
 		return false
 	end
 	running = true
+	gen = gen + 1
+	stack, depth = {}, 0
 	startedAt = Perf.clock()
 	overhead = 0
 	overhead = measureOverhead()
@@ -238,6 +247,7 @@ function Perf.Stop()
 	end
 	ticker = nil
 	stack, depth = {}, 0
+	gen = gen + 1 -- calls still on the stack (this one, when a command ran it) end without a record
 	running = false
 	ns.Log("perf probe stopped")
 	return true
@@ -361,6 +371,10 @@ function Perf.Summary(top)
 end
 
 -- For tests and the report: how many spikes the ring holds.
+function Perf.Depth()
+	return depth
+end
+
 function Perf.SpikeCount()
 	return #spikes
 end

@@ -104,6 +104,8 @@ uv run --script tools/render_logo.py       # logo PNGs and Media/LogoIcon.tga fr
   (`docs/licenses/SantiagoReyes-maps.md`). Make them only with `tools/reyes_maps.py` from his published files; never
   edit, recolour or crop them or remove his signature, and keep "Map by Santiago Reyes" on the map and his credits in
   the docs.
+- Screenshots and GIFs in `docs/media/` and on the addon's pages use the game's own map art, not Santiago Reyes' maps.
+  They contain Blizzard Entertainment art and are not under the MIT licence (`docs/media/README.md`).
 
 ## UI
 

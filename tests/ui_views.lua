@@ -800,13 +800,17 @@ local function sequence(name, steps, windowFn, finish)
 	return views
 end
 
+-- The plan the sequences show: a classic dungeon on the game's old map tiles, with few enough steps that the list needs no
+-- scroll bar (the renderer does not draw one). Not one of Santiago Reyes' maps (docs/media/README.md).
+local SEQ_PLAN = "scarlet-monastery-library"
+
 -- Clicking steps in the list: the map follows (floor, route segment, pull or boss, centred view).
 local function stepsSequence()
 	local steps = {}
-	for i, index in ipairs({ 1, 2, 3, 6, 8 }) do
+	for i, index in ipairs({ 1, 2, 3, 4, 5 }) do
 		steps[i] = function()
 			if i == 1 then
-				openPlan("hall-of-thanes", "map")
+				openPlan(SEQ_PLAN, "map")
 			end
 			ns.UI.FocusStep(index)
 		end
@@ -816,10 +820,17 @@ end
 
 -- Run mode, Next, Next: the small window and the map behind it follow.
 local function runModeSequence()
+	local realAbilities
 	local steps = {
 		function()
-			openPlan("hall-of-thanes", "map")
-			ns.UI.FocusStep(6, { stay = true })
+			-- The next boss's ability icons are spell pictures this machine has not downloaded: the renderer would draw red
+			-- question marks. For these frames the boss has no listed abilities (the text under the title stays).
+			realAbilities = ns.BossInfo.KeyAbilities
+			ns.BossInfo.KeyAbilities = function()
+				return {}
+			end
+			openPlan(SEQ_PLAN, "map")
+			ns.UI.FocusStep(2, { stay = true })
 			ns.RunMode.Show()
 			ns.RunMode.Refresh()
 		end,
@@ -830,15 +841,16 @@ local function runModeSequence()
 		end
 	end
 	return sequence("runmode", steps, window, function()
+		ns.BossInfo.KeyAbilities = realAbilities
 		closeAll()
 	end)
 end
 
--- Drawing a route: an own copy of Hall of Thanes without its routes, the Route tool, a bend per click, the last click on
+-- Drawing a route: an own copy of the sequences' plan without its routes, the Route tool, a bend per click, the last click on
 -- a boss as a numbered stop (Shift-click), then right-click ends it.
 local routePlan
 local function routeSequence()
-	local spots = { { 0.51, 0.88 }, { 0.51, 0.74 }, { 0.51, 0.62 }, { 0.63, 0.55 }, { 0.72, 0.47 } }
+	local spots = { { 0.13, 0.25 }, { 0.20, 0.27 }, { 0.20, 0.65 }, { 0.29, 0.67 }, { 0.29, 0.80 } }
 	local steps = {}
 	local function add(i)
 		local plan, route = routePlan, routePlan.routes[1]
@@ -852,7 +864,7 @@ local function routeSequence()
 		steps[i + 1] = function()
 			if i == 0 then
 				closeAll()
-				ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+				ns.UI.SelectPlan(ns.Bundled.PREFIX .. SEQ_PLAN)
 				routePlan = ns.UI.CopyPlan(ns.UI.ctx:Plan())
 				routePlan.routes = {}
 				ns.Plan.AddRoute(routePlan, 1, "", 2)
@@ -899,7 +911,7 @@ local function pickerSequence()
 					return realFileID(path)
 				end
 				ns.GameFiles.Reset()
-				openPlan("hall-of-thanes", "map")
+				openPlan(SEQ_PLAN, "map")
 				ns.InstancePicker.Open(page().instancePick, ns.UI.ctx:Instance())
 			end
 			local edit = rawget(_G, "DungeonPlannerPopup").search.edit

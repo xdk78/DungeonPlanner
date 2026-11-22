@@ -4,9 +4,9 @@
     "delay": 1500,
     "captions": [
       "Click a step in the list: the entrance",
-      "A quest giver: the map shows where",
       "A boss: the view centres on it",
-      "The next boss up the route",
+      "A move step: that stretch of the route",
+      "The next stretch, one click away",
       "The last boss: one click per step"
     ]
   },
@@ -15,7 +15,7 @@
     "delay": 1700,
     "captions": [
       "Run mode follows your plan step by step",
-      "Next: the pull, with notes and the next boss",
+      "Next: the next stretch of the route",
       "Next again: the map behind it moves on"
     ]
   },

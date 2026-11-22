@@ -41,6 +41,21 @@ local function cut(text, max)
 	return text:sub(1, stop)
 end
 
+-- The first `n` characters (not bytes) of a UTF-8 text.
+local function charSub(text, n)
+	local count = 0
+	for i = 1, #text do
+		local b = text:byte(i)
+		if b < 0x80 or b >= 0xC0 then
+			if count == n then
+				return text:sub(1, i - 1)
+			end
+			count = count + 1
+		end
+	end
+	return text
+end
+
 -- The new-issue link. GitHub fills an issue form's fields from query parameters named after the field ids in
 -- .github/ISSUE_TEMPLATE/bug_report.yml (version, client, language, what); the long report is pasted by hand.
 function Report.IssueURL(data, what)
@@ -51,7 +66,7 @@ function Report.IssueURL(data, what)
 			tostring(data.client.build)) or ""),
 		"language=" .. Report.UrlEncode(data.language and data.language.active or ""),
 	}
-	what = ns.Util.Trim(tostring(what or "")):gsub("%s+", " ")
+	what = ns.Errors.Scrub(ns.Util.Trim(tostring(what or ""))):gsub("%s+", " ")
 	local base = "https://github.com/" .. Report.REPO .. "/issues/new?" .. table.concat(parts, "&")
 	-- Fixed length cap: the free text goes in as much as fits, cut on a whole character.
 	local keep = math.min(#what, Report.MAX_WHAT)
@@ -70,8 +85,11 @@ end
 -- code in the stack, else the first Lua line (and the C function that was called).
 local function stackSpot()
 	local stack = rawget(_G, "debugstack")
-	local text = type(stack) == "function" and select(2, pcall(stack, 3, 12, 0)) or nil
-	if type(text) ~= "string" then
+	local ok, text
+	if type(stack) == "function" then
+		ok, text = pcall(stack, 3, 12, 0)
+	end
+	if not ok or type(text) ~= "string" then
 		return "location unknown"
 	end
 	local first
@@ -460,8 +478,13 @@ function Report.Text(data, what, opts)
 			end
 		end)
 	end
-	local words = ns.Util.Trim(tostring(what or ""))
-	local tail = "What happened:\n" .. (words ~= "" and words or "(not filled in)")
+	-- The player's words are theirs, but a name in them (their own, a friend's) is scrubbed like one anywhere else.
+	local words = ns.Errors.Scrub(ns.Util.Trim(tostring(what or "")))
+	local tail
+	local function setTail()
+		tail = "What happened:\n" .. (words ~= "" and words or "(not filled in)")
+	end
+	setTail()
 	local function compose(dropped)
 		local parts = {}
 		for _, b in ipairs(blocks) do
@@ -489,6 +512,15 @@ function Report.Text(data, what, opts)
 		end
 		dropped[name] = true
 		text = compose(dropped)
+	end
+	-- Still too long with every detail gone: the player's words are cut (with an ellipsis) so the total fits.
+	if limit and Report.CharCount(text) > limit then
+		local keep = math.max(0, Report.CharCount(words) - (Report.CharCount(text) - limit) - 1)
+		if keep < Report.CharCount(words) then
+			words = charSub(words, keep) .. "\226\128\166"
+			setTail()
+			text = compose(dropped)
+		end
 	end
 	return text
 end

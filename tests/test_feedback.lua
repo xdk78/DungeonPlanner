@@ -182,6 +182,7 @@ T.case("What's new: waits for a quiet moment (combat, instance, cinematic, our w
 	local oldShow = ns.NewsFrame.Show
 	ns.NewsFrame.Show = function()
 		shown = shown + 1
+		return true
 	end
 	local ok, err = pcall(function()
 		ns.version = "0.2.0"

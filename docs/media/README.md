@@ -8,7 +8,16 @@ AGENTS.md, "Seeing the UI"; the captions and crops are in `tools/gif_sequences.j
 
 | File | Shows |
 |---|---|
-| `steps.gif` | clicking steps in the list: the map follows |
+| `steps.gif` | clicking steps in the list: the map follows (Scarlet Monastery: Library, on the game's old map tiles) |
 | `runmode.gif` | run mode, Next, Next |
 | `route.gif` | drawing a route on your own copy |
 | `picker.gif` | searching the instance picker |
+
+## Licence
+
+The images in this folder are not covered by the repository's MIT licence. They are screenshots or renders of the
+addon that include Blizzard Entertainment game art (the game's textures, map tiles and interface pieces, (c) Blizzard
+Entertainment), and they are shown for documentation only. The tooling that makes them (`tools/make_gifs.py`,
+`tests/ui_views.lua`) is MIT.
+
+They use a classic dungeon on the game's own map tiles, not Santiago Reyes' maps.

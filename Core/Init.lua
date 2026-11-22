@@ -60,14 +60,107 @@ end
 local Errors = { MAX = 10, list = {} }
 ns.Errors = Errors
 
--- Shortens the add-on path and removes the player's name and realm, so a message can be pasted in public.
-function Errors.Clean(text)
-	text = tostring(text or ""):gsub("Interface[/\\]AddOns[/\\]", "")
-	for _, secret in ipairs({ UnitName and UnitName("player") or false, GetRealmName and GetRealmName() or false }) do
-		if type(secret) == "string" and #secret > 2 then
-			text = text:gsub(secret:gsub("%p", "%%%0"), "<name>")
+-- Names that must not leave the machine in a pasted message: the character, the realm (as shown, "Area 52", and
+-- normalized, "Area52"), the guild, everyone in the group, and the player's own plans. A short list, read when needed.
+local function privateNames()
+	local names, seen = {}, {}
+	local plain = ns.Util and ns.Util.Plain or function(v)
+		return v
+	end
+	local function add(name)
+		name = plain(name)
+		if type(name) ~= "string" or name == "" then
+			return
+		end
+		for _, variant in ipairs({ name, (name:gsub("[%s%-]", "")) }) do
+			local key = variant:lower()
+			if variant ~= "" and not seen[key] then
+				seen[key] = true
+				names[#names + 1] = variant
+			end
 		end
 	end
+	local function call(fn, ...)
+		if type(fn) == "function" then
+			local ok, a, b = pcall(fn, ...)
+			if ok then
+				add(a)
+				add(b)
+			end
+		end
+	end
+	call(UnitName, "player")
+	call(GetRealmName)
+	call(rawget(_G, "GetNormalizedRealmName"))
+	call(rawget(_G, "GetGuildInfo"), "player")
+	local unitName = UnitName
+	if type(unitName) == "function" then
+		for i = 1, 4 do
+			call(unitName, "party" .. i)
+		end
+		for i = 1, 40 do
+			call(unitName, "raid" .. i)
+		end
+	end
+	local plans = ns.db and ns.db.plans
+	if type(plans) == "table" then
+		local prefix = ns.Bundled and ns.Bundled.PREFIX
+		for id, plan in pairs(plans) do
+			if type(plan) == "table" and not (prefix and type(id) == "string" and id:sub(1, #prefix) == prefix) then
+				add(plan.name)
+			end
+		end
+	end
+	return names
+end
+
+-- A letter, digit or non-ASCII byte: part of a word.
+local function wordByte(c)
+	return c ~= nil and c ~= "" and (c:find("%w") ~= nil or c:byte() >= 128)
+end
+
+-- `name` replaced by <name> wherever it stands as a whole word, ignoring case.
+local function scrubName(text, name)
+	local low, wanted = text:lower(), name:lower()
+	local out, pos = {}, 1
+	while true do
+		local s, e = low:find(wanted, pos, true)
+		if not s then
+			break
+		end
+		if not wordByte(text:sub(s - 1, s - 1)) and not wordByte(text:sub(e + 1, e + 1)) then
+			out[#out + 1] = text:sub(pos, s - 1)
+			out[#out + 1] = "<name>"
+			pos = e + 1
+		else
+			out[#out + 1] = text:sub(pos, s)
+			pos = s + 1
+		end
+	end
+	out[#out + 1] = text:sub(pos)
+	return table.concat(out)
+end
+
+-- The text with those names replaced, of any length, whole words only (so a two-letter name does not eat other words).
+function Errors.Scrub(text)
+	text = tostring(text or "")
+	local ok, names = pcall(privateNames)
+	if ok then
+		-- Longest first: "Area 52" before "Area".
+		table.sort(names, function(a, b)
+			return #a > #b
+		end)
+		for _, name in ipairs(names) do
+			text = scrubName(text, name)
+		end
+	end
+	return text
+end
+
+-- Shortens the add-on path, scrubs the names (above) and cuts the message, so it can be pasted in public.
+function Errors.Clean(text)
+	text = tostring(text or ""):gsub("Interface[/\\]AddOns[/\\]", "")
+	text = Errors.Scrub(text)
 	if #text > 400 then
 		text = text:sub(1, 400) .. "..."
 	end
@@ -122,7 +215,7 @@ local RAISE_EVERY = 30
 local raised = {}
 local raisedCount = 0
 
-local function shouldRaise(err)
+local function throttle(err)
 	local key = Errors.Clean(err)
 	local now = ns.Clock()
 	local last = raised[key]
@@ -139,16 +232,24 @@ local function shouldRaise(err)
 	return true
 end
 
+-- Raise when in doubt: if the bookkeeping itself fails, the error still goes through.
+local function shouldRaise(err)
+	local ok, raise = pcall(throttle, err)
+	return not ok or raise
+end
+
 function ns.SafeCall(fn, ...)
 	local ok, err = pcall(fn, ...)
 	if not ok then
 		pcall(Errors.Record, err)
-		local raise = shouldRaise(err)
-		local handler = geterrorhandler and geterrorhandler()
-		if raise and handler then
-			handler(err)
-		elseif raise then
-			print("DungeonPlanner error: " .. tostring(err))
+		if shouldRaise(err) then
+			-- A broken error handler (a failing BugSack) must not escape the isolation either.
+			local handler = geterrorhandler and geterrorhandler()
+			if handler then
+				pcall(handler, err)
+			else
+				print("DungeonPlanner error: " .. tostring(err))
+			end
 		end
 	end
 	return ok, err
