@@ -63,7 +63,7 @@ T.case("TravelLive.Step: ticks only while shown and outdoors; arriving from outs
 	s, fx = Live.Step(s, { kind = "world", outdoors = false, instances = DM })
 	T.ok(not has(fx, "arrived"), "still inside")
 	s = Live.Step(s, { kind = "world", outdoors = true })
-	s, fx = Live.Step(s, { kind = "world", outdoors = false, instances = DM })
+	_, fx = Live.Step(s, { kind = "world", outdoors = false, instances = DM })
 	T.ok(has(fx, "arrived"), "out and back in")
 	s, fx = Live.Step({ mode = "live", target = "dm" }, { kind = "hide" })
 	T.eq(s.mode, "hidden")
@@ -260,7 +260,19 @@ T.case("Live map: the arrow off the entrance's map, no redraw without a change, 
 	T.eq(nearest, 0, "no flight masters looked up on resize")
 	T.ok(w.map.entrance:IsShown())
 	w:Hide()
+	-- Leaving from that other map next to the entrance: the spot is learned on the entrance's map.
+	mock.playerPos = { map = ent.uiMapID + 2, x = ent.x, y = 0.5 }
+	ns.TravelMap.OnLeavingWorld()
 	mock.playerPos = nil
+	local restore = inside("The Deadmines", 36)
+	ns.TravelMap.OnWorld()
+	restore()
+	local key = ns.Travel.For(plan).key
+	local learned = ns.db.entrances[key]
+	T.ok(learned and learned.map == ent.uiMapID, "projected onto the entrance's map")
+	ns.db.entrances[key] = nil
+	ns.Travel.Reset()
+	ns.RunMode.Hide()
 end)
 
 T.case("Learned entrances in the saved data: junk dropped on load, none while the data is read-only", function()

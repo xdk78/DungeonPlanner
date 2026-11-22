@@ -308,7 +308,10 @@ local function onEntranceMap(rec, last)
 	if last.uiMapID == map then
 		return { map = map, x = last.x, y = last.y }
 	end
-	local m, x, y = last.wx and ns.Travel.ToMap(last.continent, last.wx, last.wy, map)
+	if not last.wx then
+		return nil
+	end
+	local m, x, y = ns.Travel.ToMap(last.continent, last.wx, last.wy, map)
 	if m == map and x >= 0 and x <= 1 and y >= 0 and y <= 1 then
 		return { map = map, x = x, y = y }
 	end
