@@ -81,12 +81,9 @@ function GT.Lines(target)
 	end
 	-- Where.
 	-- The zone in the player's language: the map the entrance is placed on, else the bundled zone map's name (the
-	-- English name only when the client has neither). The area inside it is the research's.
+	-- English name only when the client has neither), then the research's area inside it.
 	local map = (ent and ent.uiMapID) or rec.zm
-	local where = (ent and ent.uiMapID and ns.Instances.MapName(ent.uiMapID)) or ns.Travel.ZoneName(rec)
-	if rec.sub and rec.sub ~= rec.zone then
-		where = where .. "  •  " .. rec.sub
-	end
+	local where = ns.Travel.Where(rec, ent and ent.uiMapID)
 	local continent = map and ns.Travel.ContinentName(map)
 	add("text", continent and (where .. "  •  " .. continent) or where)
 	if rec.fac then

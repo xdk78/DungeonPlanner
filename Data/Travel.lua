@@ -4,6 +4,7 @@
 --   Travel.For(planOrEntry)    -> the instance's record { e, zone, zm, sub, fac, how, stone, hint } or nil
 --   Travel.Entrance(rec)       -> { uiMapID?, x?, y? (0..1 on the zone's map), continent?, wx?, wy? (world yards) }
 --   Travel.ZoneName(rec), Travel.StoneZone(stone) -> the zone's name in the player's language (its map's name)
+--   Travel.Where(rec, uiMapID?) -> that zone (or the given map's name) and the area, unless the area reads the same
 --   Travel.ContinentName(uiMapID) -> the continent above a map (its parents), in the player's language
 --   Travel.Player()            -> { uiMapID, x, y, continent?, wx?, wy? } outdoors; nil inside instances (the client
 --                                 gives no position there: docs/COMPATIBILITY.md section 10)
@@ -112,21 +113,26 @@ function Travel.ToWorld(uiMapID, x, y)
 	return nil
 end
 
--- The zone's map: the bundled uiMapID; the English name is only a fallback (it matches on English clients alone).
-local function zoneMap(rec)
-	if Util.IsInteger(rec.zm) then
-		return rec.zm
-	end
-	return rec.zone and ns.Instances.ZoneMapByName and ns.Instances.ZoneMapByName(rec.zone) or nil
-end
-
--- The zone's name in the player's language (its map's name), else the bundled English one.
+-- The zone's name in the player's language (its map's name: rec.zm, which the generator requires), else the bundled
+-- English one.
 function Travel.ZoneName(rec)
 	if type(rec) ~= "table" then
 		return nil
 	end
-	local map = zoneMap(rec)
-	return (map and ns.Instances.MapName(map)) or rec.zone
+	return ns.Instances.MapName(rec.zm) or rec.zone
+end
+
+-- The zone shown (the given map's name, else the zone's) with the area the entrance lies in, unless that area reads
+-- the same as the zone shown: "Burning Steppes  •  Blackrock Mountain".
+function Travel.Where(rec, uiMapID)
+	if type(rec) ~= "table" then
+		return nil
+	end
+	local zone = (uiMapID and ns.Instances.MapName(uiMapID)) or Travel.ZoneName(rec)
+	if rec.sub and (not zone or rec.sub:lower() ~= zone:lower()) then
+		return zone and (zone .. "  •  " .. rec.sub) or rec.sub
+	end
+	return zone
 end
 
 -- A summoning stone's zone in the player's language, else the bundled English name.
@@ -154,7 +160,7 @@ function Travel.Entrance(rec)
 	else
 		out.continent, out.wx, out.wy = e.c, e.x, e.y
 		-- The researched zone's map first (the client's "best" map may be a city or a continent), else the best map.
-		local zone = zoneMap(rec)
+		local zone = rec.zm
 		local map, x, y
 		if zone then
 			map, x, y = Travel.ToMap(e.c, e.x, e.y, zone)

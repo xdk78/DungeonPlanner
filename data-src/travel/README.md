@@ -22,11 +22,15 @@ tool reads them as data (an empty environment; they only assign tables) and keep
 The plan slugs are matched to OpenMap's instance names (the Group Finder's) by the table `OPENMAP_SLUGS` in the tool.
 
 A transport leg's faction is derived when `Data/TravelData.lua` is written: a dock serves the factions of the flight
-masters within `DOCK_RADIUS` (1000) yards of it, and a leg is Alliance or Horde only when both its docks serve only
-that faction (Grom'gol, Orgrimmar and Undercity: Horde; Menethil, Theramore, Auberdine, Rut'theran, Feathermoon,
+masters within `DOCK_RADIUS` (1000) yards of it, and a leg is Alliance or Horde when that is the only faction both
+its docks serve (Grom'gol, Orgrimmar and Undercity: Horde; Menethil, Theramore, Auberdine, Rut'theran, Feathermoon,
 Southshore, Stormwind: Alliance). Booty Bay and Ratchet serve both; a dock with no flight master that near (Forever's
 goblin ports, Zephras Isle's airships) leaves the leg open to both. Getting there offers a player only the legs of
 their faction or open to both.
+
+A leg's label is written the same way: the names of the two docks' nearest flight masters within `DOCK_RADIUS`
+(the town before the comma, "Grom'gol - Undercity"), in the direction of travel. A leg whose dock has no flight master
+that near, or whose docks share one, keeps OpenMap's route name.
 
 ## `places.json` (researched)
 
@@ -41,8 +45,10 @@ their faction or open to both.
 - Every plan with an entrance in `openmap.json` needs a place (the generator checks).
 - `zone`: the outside zone in English (shown only when the client has no name for `zoneMap`). `zoneMap`: that zone's
   uiMapID (OpenMap's map tables, source 4): the entrance is placed on this map and the card shows the map's name in
-  the client's language. Blackrock Mountain lies between Searing Gorge and Burning Steppes; its entrances use Burning
-  Steppes' map. `subzone`: the named area the entrance lies in or is reached through.
+  the client's language. Blackrock Mountain lies between Searing Gorge and Burning Steppes; its places name Burning
+  Steppes (the map they are placed on) as the zone and Blackrock Mountain as the area, and their `zoneFaction` is
+  Blackrock Mountain's. `subzone`: the named area the entrance lies in or is reached through (Molten Core: Blackrock
+  Depths; Blackwing Lair: Upper Blackrock Spire). The card leaves it out when it reads the same as the zone shown.
 - `zoneFaction`: the zone's control as the wiki's zone page states it: `alliance`, `horde`, `contested`, `neutral`.
   Left out where the page has no faction field (Ashenvale, Alterac Mountains, Badlands, Swamp of Sorrows, Stranglethorn
   Vale, both Plaguelands, Un'Goro Crater).

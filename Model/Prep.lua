@@ -111,11 +111,16 @@ function Prep.Keys(keys, env)
 				required = k.required and true or false, note = k.note, forever = k.forever, have = have }
 		end
 	end
+	-- table.sort is not stable: ties keep their original order through the index.
+	local at = {}
+	for i, row in ipairs(rows) do
+		at[row] = i
+	end
 	table.sort(rows, function(a, b)
 		if a.required ~= b.required then
 			return a.required
 		end
-		return false
+		return at[a] < at[b]
 	end)
 	return rows
 end

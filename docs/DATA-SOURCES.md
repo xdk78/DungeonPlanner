@@ -107,8 +107,8 @@ are shown as classic facts. Details and what was left out: `data-src/bosses/READ
 
 The nearest flight master, the direction and the distance from it are computed by the addon (`Model/Prep.lua`) from
 these positions, so the "fly to X, then go south-west" lines are ours. A boat or zeppelin leg is marked as one
-faction's by the generator when the flight masters within 1000 yards of both its docks serve only that faction
-(OpenMap's flight data). Only the sources above are used.
+faction's by the generator when that is the only faction the flight masters within 1000 yards of both its docks
+serve (OpenMap's flight data), and named after those flight masters' towns. Only the sources above are used.
 
 ## Other addons' data at runtime (not shipped)
 

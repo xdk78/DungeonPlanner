@@ -1085,7 +1085,7 @@
    "item": 13873,
    "name": "Viewing Room Key",
    "kind": "key",
-   "required": true,
+   "required": false,
    "note": "Viewing room door to the later bosses; Rattlegore drops it.",
    "forever": false,
    "src": 2

@@ -68,7 +68,7 @@
    ]
   },
   "blackrock-depths": {
-   "zone": "Blackrock Mountain",
+   "zone": "Burning Steppes",
    "zoneMap": 1428,
    "subzone": "Blackrock Mountain",
    "zoneFaction": "neutral",
@@ -81,7 +81,7 @@
    ]
   },
   "blackwing-lair": {
-   "zone": "Blackrock Mountain",
+   "zone": "Burning Steppes",
    "zoneMap": 1428,
    "subzone": "Upper Blackrock Spire",
    "zoneFaction": "neutral",
@@ -210,9 +210,9 @@
    ]
   },
   "lower-blackrock-spire": {
-   "zone": "Blackrock Mountain",
+   "zone": "Burning Steppes",
    "zoneMap": 1428,
-   "subzone": "Blackrock Spire",
+   "subzone": "Blackrock Mountain",
    "zoneFaction": "neutral",
    "approach": "mountain",
    "hint": "South side of the Hall of Blackhand, opposite the Upper Spire",
@@ -236,7 +236,7 @@
    ]
   },
   "molten-core": {
-   "zone": "Blackrock Mountain",
+   "zone": "Burning Steppes",
    "zoneMap": 1428,
    "subzone": "Blackrock Depths",
    "zoneFaction": "neutral",
@@ -504,9 +504,9 @@
    ]
   },
   "upper-blackrock-spire": {
-   "zone": "Blackrock Mountain",
+   "zone": "Burning Steppes",
    "zoneMap": 1428,
-   "subzone": "Blackrock Spire",
+   "subzone": "Blackrock Mountain",
    "zoneFaction": "neutral",
    "approach": "mountain",
    "hint": "Same portal as the Lower Spire; keep to the left wall",

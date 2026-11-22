@@ -21,8 +21,9 @@ M.FACTIONS = { alliance = true, horde = true, contested = true, neutral = true }
 M.APPROACH = { cave = true, building = true, mountain = true, open = true, underwater = true, ship = true, tower = true }
 M.MAX_HINT = 80
 -- A dock belongs to the factions of the flight masters within this many yards of it; a boat or zeppelin leg is one
--- faction's when both its docks are that faction's only (Grom'gol, Orgrimmar and Undercity: Horde; Menethil,
+-- faction's when that is the only faction both its docks serve (Grom'gol, Orgrimmar and Undercity: Horde; Menethil,
 -- Theramore, Auberdine: Alliance). A dock without a flight master that near says nothing, and the leg stays open to both.
+-- The same flight masters name the leg ("Grom'gol - Undercity").
 M.DOCK_RADIUS = 1000
 
 -- OpenMap's instance names (the Group Finder's) for each plan slug.
@@ -195,7 +196,30 @@ local function dockFactions(nodes, continent, x, y)
 	return out
 end
 
--- A transport leg's faction ("alliance" | "horde") from both docks' flight masters, or nil (both, or unknown).
+-- A transport leg's label: its docks' nearest flight masters' towns ("Booty Bay, Stranglethorn" -> "Booty Bay"), from
+-- one to the other; OpenMap's route name when a dock has none within DOCK_RADIUS or both docks share one.
+local function dockTown(nodes, continent, x, y)
+	local best, bestD
+	for _, nd in ipairs(nodes or {}) do
+		local d = nd.continent == continent and math.sqrt((nd.x - x) ^ 2 + (nd.y - y) ^ 2)
+		if d and d <= M.DOCK_RADIUS and (not bestD or d < bestD) then
+			best, bestD = nd, d
+		end
+	end
+	return best and (best.name:match("^([^,]+)") or best.name)
+end
+
+function M.TransportLabel(t, nodes)
+	local from = dockTown(nodes, t.continent, t.x, t.y)
+	local to = t.toX and dockTown(nodes, t.toContinent, t.toX, t.toY)
+	if from and to and from ~= to then
+		return from .. " - " .. to
+	end
+	return t.route
+end
+
+-- A transport leg's faction ("alliance" | "horde"): the only faction both docks' flight masters serve, or nil (both,
+-- or unknown).
 function M.TransportFaction(t, nodes)
 	local from = dockFactions(nodes, t.continent, t.x, t.y)
 	local to = t.toX and dockFactions(nodes, t.toContinent, t.toX, t.toY)
@@ -378,12 +402,13 @@ function M.Render(openmap, placesDoc, names)
 			nd.factions)
 	end
 	out[#out + 1] = "\t},"
-	out[#out + 1] = "\t-- boats, zeppelins, airships: { kind, route, continent, x, y, toContinent, faction? } (faction: both docks'"
-	out[#out + 1] = "\t-- flight masters serve only it; none: open to both or not known)"
+	out[#out + 1] = "\t-- boats, zeppelins, airships: { kind, route (from dock - to dock), continent, x, y, toContinent, faction? }"
+	out[#out + 1] = "\t-- (faction: the only one both docks' flight masters serve; none: open to both or not known)"
 	out[#out + 1] = "\ttransports = {"
 	for _, t in ipairs(openmap.transports) do
 		local faction = t.faction and t.faction:lower() or M.TransportFaction(t, openmap.nodes)
-		out[#out + 1] = string.format("\t\t{ %s, %s, %d, %s, %s, %d%s },", q(t.kind), q(t.route), t.continent, n(t.x),
+		out[#out + 1] = string.format("\t\t{ %s, %s, %d, %s, %s, %d%s },", q(t.kind),
+			q(M.TransportLabel(t, openmap.nodes)), t.continent, n(t.x),
 			n(t.y), t.toContinent, faction and (", " .. q(faction)) or "")
 	end
 	out[#out + 1] = "\t},"

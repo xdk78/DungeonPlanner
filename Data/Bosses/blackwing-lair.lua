@@ -147,7 +147,7 @@ ns.BossData.Add({
 	keys = {
 		{ item = 18987, name = "Blackhand's Command", kind = "attunement",
 			note = "Starts the brand quest (Upper Blackrock Spire)." },
-		{ quest = 7761, name = "Blackhand's Command", kind = "attunement",
+		{ quest = 7761, name = "Blackhand's Command", kind = "attunement", req = true,
 			note = "The brand lets the orb take you into the raid." },
 	},
 })

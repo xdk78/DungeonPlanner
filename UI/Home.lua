@@ -333,7 +333,7 @@ local function buildPreview(f)
 		self.name:SetText(plan and plan.name or entry.name or "")
 		local sub = plan and (entry.name or "") or (entry.kind == "raid" and L["Raid"] or L["Dungeon"])
 		if travel then
-			sub = sub .. "  •  " .. ns.Travel.ZoneName(travel)
+			sub = sub .. "  •  " .. ns.Travel.Where(travel)
 		end
 		self.sub:SetText(sub)
 		if not entry.plans then

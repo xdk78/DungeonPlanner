@@ -400,6 +400,22 @@ T.case("Travel: the entrance on its bundled zone map, names in the client's lang
 	T.ok(cardText(bundled("city-of-dalaran")):find("Alteracgebirge", 1, true))
 	mock.mapBoxes, mock.mapInfo = {}, {}
 	ns.Travel.Reset()
+	-- Blackrock Depths: the zone is the map the entrance is placed on (Burning Steppes), the area Blackrock Mountain.
+	local brdRec = ns.Travel.For(bundled("blackrock-depths"))
+	mock.mapBoxes[1428] = { 0, brdRec.e.x + 500, brdRec.e.y + 5000 }
+	mock.mapInfo[1428] = { name = "Burning Steppes", mapType = 3, parentMapID = 1415 }
+	local brd = cardText(bundled("blackrock-depths"))
+	T.ok(brd:find("Burning Steppes  •  Blackrock Mountain", 1, true), brd)
+	-- The nearest flight master lies across the mountain in Searing Gorge; its line names that zone.
+	T.ok(brd:find("Thorium Point, Searing Gorge", 1, true), brd)
+	T.eq(ns.Travel.Where({ zone = "Westfall", zm = 1428, sub = "burning steppes" }), "Burning Steppes",
+		"an area that reads the same as the zone shown is left out")
+	ns.UI.GoHome("dungeons")
+	local preview = _G.DungeonPlannerMainFrame.home.preview
+	preview:ShowEntry({ key = "brd", name = "Blackrock Depths", kind = "dungeon" }, nil)
+	T.ok(preview.sub:GetText():find("Blackrock Mountain", 1, true), preview.sub:GetText())
+	mock.mapBoxes, mock.mapInfo = {}, {}
+	ns.Travel.Reset()
 	-- The generator: an entrance needs its place, a place its zone map, a stone its map.
 	local gen = dofile("tools/gen_travel.lua")
 	local errs = gen.Validate({ schema = 1, entrances = { ["the-deadmines"] = { continent = 0, x = 1, y = 2 },
@@ -445,7 +461,32 @@ T.case("Keys with the bundled data: one per key group, any of a quest's IDs coun
 	T.eq(keysMissing("upper-blackrock-spire"), 1)
 	mock.itemCounts = { [12344] = 1 }
 	T.eq(keysMissing("upper-blackrock-spire"), 0)
+	-- Scholomance: both keys are optional (Rattlegore drops the Viewing Room Key inside).
+	mock.itemCounts = {}
+	T.eq(keysMissing("scholomance"), 0)
+	-- Blackwing Lair: the brand quest is the attunement.
+	T.eq(keysMissing("blackwing-lair"), 1)
+	mock.questsDone = { [7761] = true }
+	T.eq(keysMissing("blackwing-lair"), 0)
 	mock.questsDone, mock.itemCounts = {}, {}
+	-- Rows of the same weight keep the data's order (table.sort alone is not stable): Blackrock Depths' optional keys.
+	local want = {}
+	for _, k in ipairs(ns.BossData.Keys(bundled("blackrock-depths")) or {}) do
+		want[#want + 1] = k.name
+	end
+	T.ok(#want >= 4, "Blackrock Depths has its optional keys")
+	local got = {}
+	for _, row in ipairs(ns.Prep.Keys(ns.BossData.Keys(bundled("blackrock-depths")))) do
+		got[#got + 1] = row.name
+	end
+	T.eq(table.concat(got, "|"), table.concat(want, "|"))
+	local mixed = ns.Prep.Keys({ { name = "a" }, { name = "b", required = true }, { name = "c" }, { name = "d" },
+		{ name = "e", required = true }, { name = "f" }, { name = "g" }, { name = "h" } })
+	local order = {}
+	for _, row in ipairs(mixed) do
+		order[#order + 1] = row.name
+	end
+	T.eq(table.concat(order), "beacdfgh", "required first, each part in its order")
 	-- The generator checks the new fields.
 	local gen = dofile("tools/gen_bosses.lua")
 	local doc = { keys = { { quest = 1, alt = { 1 }, name = "Q", kind = "attunement", required = true, forever = false,
@@ -464,13 +505,23 @@ T.case("Boats and zeppelins: a leg is one faction's when both docks' flight mast
 		return out
 	end
 	local ally, horde = routes("alliance"), routes("horde")
-	T.ok(not ally["Grom'gol - Orgrimmar"] and not ally["Orgrimmar Zepplins"], "no Horde zeppelin for the Alliance")
-	T.ok(ally["Menethil Ships"] and ally["Booty Bay - Ratchet"])
-	T.ok(horde["Grom'gol - Orgrimmar"] and horde["Booty Bay - Ratchet"])
-	T.ok(not horde["Menethil Ships"], "no Alliance boat for the Horde")
+	T.ok(not ally["Grom'gol - Orgrimmar"] and not ally["Undercity - Orgrimmar"], "no Horde zeppelin for the Alliance")
+	T.ok(ally["Menethil Harbor - Theramore"] and ally["Booty Bay - Ratchet"])
+	T.ok(horde["Grom'gol - Orgrimmar"] and horde["Undercity - Orgrimmar"] and horde["Booty Bay - Ratchet"])
+	T.ok(not horde["Menethil Harbor - Theramore"], "no Alliance boat for the Horde")
+	-- Labels name the docks in the direction of travel; OpenMap's route name stays where no flight master names a dock.
+	T.ok(routes(nil)["Steamwheedle Port - Powderfuse Port"])
+	for _, t in ipairs(ns.Travel.Transports()) do
+		T.ok(not t[2]:find("Zepplin", 1, true), t[2])
+	end
 	local gen = dofile("tools/gen_travel.lua")
 	local nodes = { { id = 1, continent = 0, x = 0, y = 0, factions = 2 }, { id = 2, continent = 1, x = 0, y = 0, factions = 3 },
 		{ id = 3, continent = 1, x = 5000, y = 0, factions = 2 } }
+	nodes[1].name, nodes[2].name, nodes[3].name = "Grom'gol, Stranglethorn", "Ratchet, The Barrens", "Orgrimmar, Durotar"
+	T.eq(gen.TransportLabel({ route = "R", continent = 0, x = 10, y = 0, toContinent = 1, toX = 5000, toY = 10 }, nodes),
+		"Grom'gol - Orgrimmar")
+	T.eq(gen.TransportLabel({ route = "R", continent = 0, x = 3000, y = 0, toContinent = 1, toX = 0, toY = 0 }, nodes),
+		"R", "no flight master near one dock: OpenMap's name")
 	T.eq(gen.TransportFaction({ continent = 0, x = 10, y = 0, toContinent = 1, toX = 5000, toY = 10 }, nodes), "horde")
 	T.eq(gen.TransportFaction({ continent = 0, x = 10, y = 0, toContinent = 1, toX = 0, toY = 10 }, nodes), "horde",
 		"a both-faction dock does not open a Horde-only one")

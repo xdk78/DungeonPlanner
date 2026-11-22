@@ -179,7 +179,7 @@ ns.BossData.Add({
 	keys = {
 		{ item = 13704, name = "Skeleton Key", kind = "key", quests = { 5803, 5804 },
 			note = "Opens the front door (lockpicking or charges also work)." },
-		{ item = 13873, name = "Viewing Room Key", kind = "key", req = true,
+		{ item = 13873, name = "Viewing Room Key", kind = "key",
 			note = "Viewing room door to the later bosses; Rattlegore drops it." },
 	},
 })

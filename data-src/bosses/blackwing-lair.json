@@ -1004,7 +1004,7 @@
    "quest": 7761,
    "name": "Blackhand's Command",
    "kind": "attunement",
-   "required": false,
+   "required": true,
    "note": "The brand lets the orb take you into the raid.",
    "forever": false,
    "src": 2

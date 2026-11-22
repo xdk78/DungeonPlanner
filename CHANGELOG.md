@@ -54,7 +54,8 @@ follow [Semantic Versioning](https://semver.org/).
   faction and the way from it, your faction's boats and zeppelins when you are on another continent, Forever's
   summoning stones, and
   outdoors your distance and direction to the entrance. "Show on world map" sets the game's map pin; "Navigate" hands
-  the entrance to Polestar, Shortest Path Forever or TomTom when installed (each can be switched off in Settings),
+  the entrance to Polestar or TomTom when installed, or to Shortest Path Forever when its API is present (each can be
+  switched off in Settings),
   else to the game's own pin. "Pop out" keeps it in a small window.
 - Run mode shows "Prep: 3 quests to pick up" before the first step and updates it as you pick up quests or keys; a
   click opens Prep.
