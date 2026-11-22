@@ -12,7 +12,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: lunarmodules/luacheck@v1
         with:
           args: .
@@ -20,7 +20,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.4.0
       - name: Static safety check (wowui check, .wowui-check.json)
         run: uv run --script tests/vendor/wow-ui-harness/python/check.py
@@ -28,8 +28,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: leafo/gh-actions-lua@v10
+      - uses: actions/checkout@v7
+      - uses: leafo/gh-actions-lua@v13
         with:
           luaVersion: "5.1.5"
       - name: Syntax check (luac -p)
