@@ -22,6 +22,14 @@ function Slash.MapSources()
 		L["Floor maps: %d game map, %d old map tiles, %d Santiago Reyes maps, %d other addons, %d minimap pictures, %d grid."],
 		counts.map, counts.tiles, counts.reyes, counts.provider, counts.minimap, counts.grid)
 		.. (#grid > 0 and (" " .. L["Grid:"] .. " " .. table.concat(grid, ", ")) or ""))
+	-- Snap to corridors: which floors have a walkability grid (Data/Corridors.lua).
+	local okC, c = pcall(ns.Corridors.Summary)
+	if not okC then
+		print("    " .. line(false, "corridors: " .. tostring(c)))
+		return
+	end
+	print("  " .. string.format(L["Corridor data (Snap to corridors): %d of the recommended plans' floors, %d grids."],
+		c.floors, c.grids) .. (#c.without > 0 and (" " .. L["No corridor data:"] .. " " .. table.concat(c.without, ", ")) or ""))
 end
 
 function Slash.Debug()

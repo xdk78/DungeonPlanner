@@ -547,10 +547,11 @@ def _paths(mask, paths, value):
     mask[np.asarray(canvas) > 0] = value
 
 
-def walkable(img: Image.Image, seeds, opts, background=None):
+def walkable(img: Image.Image, seeds, opts, background=None, keep_all=False):
     """Boolean mask of walkable floor, and the threshold used. seeds: picture pixels (x, y) of the route stops; only
-    the parts of the mask they touch (or lie next to) are kept. background: the blank parchment all the game's old
-    dungeon maps are painted on (their per-pixel median); where given, only what is drawn on it can be floor."""
+    the parts of the mask they touch (or lie next to) are kept, unless keep_all (tools/walk_grids.py keeps every part).
+    background: the blank parchment all the game's old dungeon maps are painted on (their per-pixel median); where
+    given, only what is drawn on it can be floor."""
     o = dict(DEFAULTS, **{k: v for k, v in opts.items() if k in DEFAULTS})
     a = np.asarray(img.convert("RGB")).astype(np.float32)
     light = ndimage.gaussian_filter(a.mean(2), o["smooth"])
@@ -583,6 +584,8 @@ def walkable(img: Image.Image, seeds, opts, background=None):
     _rects(mask, opts.get("open_rects", []), True)
     _polys(mask, opts.get("open_polys", []), True)
     _paths(mask, opts.get("open_paths", []), True)
+    if keep_all:
+        return mask, t, region
     # Keep the parts a stop touches or lies next to; specks (a portal swirl, an icon) do not count as parts.
     lab, n = ndimage.label(mask)
     sizes = np.concatenate([[0], ndimage.sum(mask, lab, range(1, n + 1))]) if n else np.zeros(1)

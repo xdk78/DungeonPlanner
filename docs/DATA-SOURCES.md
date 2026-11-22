@@ -25,8 +25,8 @@ Treat everything as a starting point: check it in game and adjust it in an edita
 | [Wowhead Classic](https://www.wowhead.com/classic) NPC and item pages | web | NPC and item IDs: each ID was opened and its page title matched the name (they have no coordinates for instance NPCs) |
 | [Warcraft Wiki](https://warcraft.wiki.gg/wiki/UiMapID) `UiMapID` table | web | Map IDs of Classic dungeon floors |
 | [Warcraft Wiki: World of Warcraft: Forever](https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever) | web | Which instances are new in WoW: Forever (`origin`, shown as the "Forever" tag): the page marks the nine new dungeons (The Hall of Thanes, Ruins of Lordaeron, Excavation Site: Wetlands, City of Dalaran, The Drowned City, Krol'dok Stronghold, Alcaz Prison, Blackmaw Hold, Shaper's Terrace) and the raids Hyjal Summit and Barrow Deeps as new, the others as old, and describes no reworked classic dungeon. Checked against [Warcraft Tavern's announcement of the nine dungeons](https://www.warcrafttavern.com/news/nine-new-dungeons-coming-to-world-of-warcraft-forever/) and the game's own data: those nine have instance map IDs 2959-3065 in the client's encounter table (as Forever Dungeon Routes exports it) and the Group Finder (`/dp scan`), where every classic instance is 533 or below. Barrow Deeps has no plan here |
-| Dungeon map pictures (the game's map art; community-made art for the Forever-only dungeons) | not copied | Viewed to read where rooms and portals are; every position read this way is an estimate marked "(approx.)". No picture or data file of them is shipped (Santiago Reyes' maps ship separately, by his permission: section "Bundled maps" below) |
-| The same pictures, analysed by `tools/route_paths.py` on a local install (the game's dungeon map tiles; the Dungeon Journal and OpenMap addons' maps of the Forever-only dungeons) | not copied | Route bends that keep each route on the floor, and estimated spots moved off walls (`data-src/routes/`). Only coordinates ship; no picture, mask or grid derived from them |
+| Dungeon map pictures (the game's map art; community-made art for the Forever-only dungeons) | not copied | Viewed to read where rooms and portals are; every position read this way is an estimate marked "(approx.)". No picture or data file of them is shipped, except the walkability grids (section "Walkability grids" below); Santiago Reyes' maps ship separately, by his permission (section "Bundled maps" below) |
+| The same pictures, analysed by `tools/route_paths.py` on a local install (the game's dungeon map tiles; the Dungeon Journal and OpenMap addons' maps of the Forever-only dungeons) | not copied | Route bends that keep each route on the floor, and estimated spots moved off walls (`data-src/routes/`). Only coordinates ship; no picture, mask or grid derived from them, except the walkability grids of the game's own map tiles (section "Walkability grids" below) |
 | [Forever Dungeon Routes](https://github.com/Checkov23/ForeverDungeonRoutes), an addon by Checkov23 | MIT ([copy](licenses/ForeverDungeonRoutes-LICENSE.txt)) | The routes of 41 plans: the classic dungeons, the 7 raids and the 9 new Forever dungeons. Main paths (route bends), side paths (optional routes), its stops as positions for our unplaced or estimated bosses and as added stops (`tools/import_routes.py`, section below). It states that its classic dungeon routes were traced from the aetherflask.com walkthrough maps; the project includes them. Its pictures are not used |
 
 ### Game files used at runtime (not shipped)
@@ -240,6 +240,60 @@ stops and markers that sat in a wall. `tools/route_paths.py` computes them from 
 a cheapest path down the middle of the corridors), except the legs an imported route covers (above);
 `tools/gen_plans.lua` puts them into the plans. How, the file
 format, per-floor fixes and the known gaps: `data-src/routes/README.md`.
+
+## Walkability grids
+
+The route tool's "Snap to corridors" finds the way between two stops a player clicks through a coarse grid of each
+floor picture: `Data/WalkData.lua`, 120 x 80 cells on a 3:2 map, each cell floor, rough (drawn but not floor: a wall,
+a door, a room's outline; crossed only where the floor alone does not connect two stops) or nothing (the blank
+parchment). One run-length string per picture (81 pictures, 78.6 KiB in all); no picture or mask ships.
+`tools/walk_grids.py` writes it with `tools/route_paths.py`'s walkable mask, from the game's files on a local install
+(read-only) and from Santiago Reyes' published files (`--reyes`: the folder `tools/reyes_maps.py --work` keeps them
+in):
+
+| Picture | Source and terms | Grids |
+|---|---|---|
+| The old dungeon map tiles of the classic dungeons and raids | The game's files, read from its local storage; Blizzard's, not copied | 64 (every classic floor) |
+| Santiago Reyes' maps of Forever's new dungeons | His published files, the same ones `tools/reyes_maps.py` bundles; (c) Santiago Reyes. He gave permission to use his World of Warcraft maps in Dungeon Planner ("Bundled maps" above); the `r:` grids, which only record where each map shows floor, are made from his maps under that permission and, like the maps, are not under the MIT licence ([licenses/SantiagoReyes-maps.md](licenses/SantiagoReyes-maps.md)) | 13 of 18: the caves and buildings. His five open outdoor maps (Krol'dok, Blackmaw Grove, Excavation Site, the City of Dalaran, Shaper's Terrace) get none: their light mountains and the ground could not be told apart (`data-src/walkgrids.json`) |
+| The game's minimap pictures, composed as `Data/MinimapArtData.lua` places them | The game's files; not copied | 4: the old Scholomance's floors, which have neither |
+
+The Dungeon Journal and Forever Dungeon Routes addons draw Santiago Reyes' pictures; their floors use his grid, and
+nothing is derived from those addons' files. A floor with none keeps straight legs. The mask's per-floor fixes are the
+routes files' `overrides` (on the picture they were made on) and `data-src/walkgrids.json`.
+
+The grid size was chosen by measuring the recommended plans' legs (their consecutive stops, 236 legs on the floors with
+a grid) through grids of several widths with the addon's own pathfinder (`--measure`), against the
+full-size mask ("on the floor": the share of the drawn leg on the mask grown by 2 px; the rest crosses doors and
+outlines the mask does not count as floor, or a stop's own piece):
+
+| Width (cells) | Size | Legs found | >= 97% on the floor | Mean on the floor | Bends per leg | Most cells searched |
+|---|---|---|---|---|---|---|
+| 80 | 47.8 KiB | 232 | 111 | 0.914 | 3.0 | 1,305 |
+| 100 | 63.4 KiB | 229 | 129 | 0.935 | 3.6 | 2,012 |
+| **120** | **78.6 KiB** | **228** | **142** | **0.950** | **4.2** | **3,465** |
+| 140 | 94.0 KiB | 226 | 148 | 0.955 | 4.6 | 4,315 |
+
+120 x 80 keeps a corridor a cell wide on most maps and keeps the file small; the legs not found are
+stops on parts of the map the floor and its walls do not connect (6) or far from any floor (2): they stay straight.
+At runtime a leg is found in the same call as the click or the drop (Data/Corridors.lua). Measured with reference Lua
+5.1, which the client's is close to, over the recommended plans' 236 legs on their 76 floors with a grid (`lua tools/walk_timing.lua`; each
+figure is the median of five runs, on a machine busy with other work, so an idle one is faster):
+
+| What | Median | At most |
+|---|---|---|
+| One leg on a prepared grid (consecutive stops of a recommended route) | 1.9 ms | 14 ms |
+| The leg between a floor's two stops that lie farthest apart (58 floors with two or more stops) | 5.5 ms | 18 ms |
+| Preparing a floor (decoding its grid, then the wall distances and prices), done over four frames when the route tool is chosen or the floor changes | 4.7 ms | 8.3 ms (3.9 ms a frame) |
+| A first click that has to finish preparing as well (preparing plus the slowest of the floor's legs above) | 9.4 ms | 26 ms |
+
+A search takes at most `Walk.MAX_NODES` (12,000) cells, more than a grid has; the longest recommended leg searches
+about 3,400.
+
+```sh
+uv run --script tools/walk_grids.py --game "<World of Warcraft>/_forever_" --work <scratch> --reyes <reyes_maps work>
+uv run --script tools/walk_grids.py ... --check            # exit 1 when Data/WalkData.lua would change
+uv run --script tools/walk_grids.py ... --measure 80,100,120,140
+```
 
 ## Regenerating
 

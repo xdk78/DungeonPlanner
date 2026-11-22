@@ -184,6 +184,9 @@ function MapCanvas.InstallInput(view)
 					local route = Util.FindById(plan.routes, d.routeId)
 					local pt = route and route.points[d.index]
 					if pt then
+						if not d.fromX then
+							d.fromX, d.fromY = pt[1], pt[2] -- where it was (a snapped stop's legs, UI/RouteSnap.lua)
+						end
 						pt[1], pt[2] = Util.Round(x, 4), Util.Round(y, 4)
 					end
 				end
@@ -209,6 +212,10 @@ function MapCanvas.InstallInput(view)
 				local pt = route and route.points[d.index]
 				if pt then
 					Plan.MoveRoutePoint(plan, d.routeId, d.index, pt[1], pt[2])
+					if self.cb.onPointMoved then -- a stop's legs found again when snapping (UI/RouteSnap.lua)
+						local shift = IsShiftKeyDown and IsShiftKeyDown() or false
+						self.cb.onPointMoved(d.routeId, d.index, d.fromX, d.fromY, shift)
+					end
 					self.cb.onChanged("routes")
 				end
 			end

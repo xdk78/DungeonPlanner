@@ -44,6 +44,7 @@ Model\Bundled.lua
 Model\Match.lua
 Model\MapLayout.lua
 Model\Route.lua
+Model\Walk.lua
 Model\Steps.lua
 Model\Picker.lua
 Model\Progress.lua
@@ -82,6 +83,8 @@ Data\Providers\Polestar.lua
 Data\Providers\ShortestPathForever.lua
 Data\ReyesMaps.lua
 Data\Floors.lua
+Data\WalkData.lua
+Data\Corridors.lua
 Data\BossData.lua
 Data\BossInfo.lua
 Data\Templates.lua
@@ -252,8 +255,10 @@ UI\MapDraw.lua
 UI\MapCanvas.lua
 UI\MapArt.lua
 UI\MapInput.lua
+UI\RouteSnap.lua
 UI\MainFrame.lua
 UI\StepText.lua
+UI\Undo.lua
 UI\Portraits.lua
 UI\Home.lua
 UI\PlanActions.lua
@@ -265,6 +270,7 @@ UI\TravelMap.lua
 UI\Panels\MapEditor.lua
 UI\Panels\DrawBar.lua
 UI\Panels\FloorBar.lua
+UI\Panels\MapControls.lua
 UI\Panels\MapLegend.lua
 UI\Panels\MapPanel.lua
 UI\Panels\MapMenus.lua

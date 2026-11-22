@@ -1,4 +1,4 @@
--- Undo and redo for plan edits: a bounded history of snapshots of one plan. Pure (no game API); the UI (UI/MainFrame.lua,
+-- Undo and redo for plan edits: a bounded history of snapshots of one plan. Pure (no game API); the UI (UI/Undo.lua,
 -- ctx:Changed / ctx:Undo / ctx:Redo) takes a deep copy of the plan after every change and hands it here. Everything that
 -- changes a plan goes through ctx:Changed, so markers, routes, pulls, steps, notes, bosses, party, gear and drawings all
 -- share one history: one Undo takes back the last change, whatever it was.

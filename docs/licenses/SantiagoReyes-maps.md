@@ -2,10 +2,12 @@
 
 The map pictures in `Media/Maps/Reyes/` are **(c) Santiago Reyes**, all rights reserved, and are used in Dungeon
 Planner **with his permission**. They are **not covered by the MIT licence** of this project: that licence covers the
-code only. Do not reuse these pictures outside Dungeon Planner without his permission.
+code only. Do not reuse these pictures outside Dungeon Planner without his permission. The same applies to the
+walkability grids made from them (see "Walkability grids made from the maps" below).
 
 - Artist: Santiago Reyes (WoWMaps), <https://sreyesmaps.com>, on X as SR433_20 (<https://x.com/SR433_20>).
-- Work: his "Atlas de Azeroth: Forever", maps of the new dungeons of World of Warcraft: Forever.
+- Work: his World of Warcraft maps. The ones used are from his "Atlas de Azeroth: Forever", maps of the new dungeons
+  of World of Warcraft: Forever.
 - Credit in the addon: "Map by Santiago Reyes" on the map itself (with his site and donation page in its tooltip), the
   map settings, the README and the addon's page.
 
@@ -35,6 +37,14 @@ Only a change of format, so the game client can draw them (`tools/reyes_maps.py`
    repeating its last row; the padding is never drawn).
 
 Nothing was recoloured, cropped away or painted over; his titles, watermarks and signature are kept.
+
+## Walkability grids made from the maps
+
+The walkability grids under the `r:` keys of `Data/WalkData.lua` (the route tool's "Snap to corridors") are made from
+his maps by `tools/walk_grids.py`, from the same published files at the size the addon draws them. They only record
+where each map shows floor (and where it shows a wall or nothing); the file holds no picture. He gave permission to use
+his World of Warcraft maps in Dungeon Planner (see Permission). The `r:` grids are made from his maps under that
+permission and, like the maps, are not under the MIT licence.
 
 ## Files
 

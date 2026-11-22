@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "about": "Per-picture settings for tools/walk_grids.py (Data/WalkData.lua, the route tool's Snap to corridors). Keys as in Data/WalkData.lua. Settings are route_paths.py's mask settings and fixes (data-src/routes/README.md, overrides), applied over the overrides of the routes file made on the same picture. skip: no grid for this picture (the reason); its floors keep straight route legs. Santiago Reyes' maps are all painted on one parchment, like the old dungeon maps: the per-pixel median of all of them is that parchment, and only what is drawn on it can be floor. On his cave and building maps the floor is the light ground inside a dark outline (the default score); on his open outdoor maps, mountains and floor are both drawn in light, textured paint and no setting tells them apart on the tool's previews.",
+  "pictures": {
+    "r:BlackmawGrove": { "skip": "an open outdoor map: the light mountains and the ground cannot be told apart" },
+    "r:DalaranCity": { "skip": "an open outdoor map: the light mountains and the city cannot be told apart" },
+    "r:ExcavationSite": { "skip": "an open outdoor map: the light mountains and the ground cannot be told apart" },
+    "r:Kroldok": { "skip": "an open outdoor map: the light mountains and the ground cannot be told apart" },
+    "r:ShapersTerrace": { "skip": "an open outdoor map: the light mountains and the ground cannot be told apart" },
+    "r:DrownedCity": { "light": -1, "saturation": 0, "drawn": 25 }
+  }
+}

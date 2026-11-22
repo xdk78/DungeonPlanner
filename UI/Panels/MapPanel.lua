@@ -31,9 +31,16 @@ local TOOL_HELP = {
 	position = "Click the map to place a party position for the chosen role. With a boss or pull in focus, it belongs to it.",
 	pull = "Click markers to add them to the current pull, or to take them out.",
 	route = "Click to add route points, Shift-click for a numbered stop. Right-click to finish the route.",
+	routeSnap = "Click to add numbered stops: the path between them follows the corridors. Shift-click for a straight leg. Right-click to finish the route.",
 	erase = "Click a marker or route point to delete it.",
 	draw = "Pick a tool, colour and width above. Drawings made while a boss or pull is in focus belong to it. Right-click one for more.",
 	readOnly = "A recommended plan. Hover markers for notes; make an editable copy to change it.",
+}
+-- A tool button's tooltip where it differs from the tool's help (the Route tool's covers both modes).
+local TOOL_TIP = {
+	route = "Click to add route points, Shift-click for a numbered stop. With Snap to corridors on (where the floor has "
+		.. "corridor data), a click adds a numbered stop whose path follows the corridors and Shift-click gives a straight "
+		.. "leg. Right-click to finish the route.",
 }
 
 local Panel = {}
@@ -76,7 +83,7 @@ function Panel.Create(parent, ctx)
 			f:Refresh()
 		end)
 		b:SetPoint("LEFT", x, 0)
-		W.SetTooltip(b, L[TOOL_TEXT[tool]], L[TOOL_HELP[tool]])
+		W.SetTooltip(b, L[TOOL_TEXT[tool]], L[TOOL_TIP[tool] or TOOL_HELP[tool]])
 		x = x + b:GetWidth() + SP.xs
 		f.toolButtons[tool] = b
 	end
@@ -337,12 +344,15 @@ function Panel.Create(parent, ctx)
 		onChanged = function(what)
 			changed(what)
 		end,
-		onRoutePoint = function(px, py, isStop)
+		-- shift: Shift held. Snapping (UI/RouteSnap.lua): a stop, its leg snapped (Shift: straight); otherwise a bend
+		-- (Shift: a stop).
+		onRoutePoint = function(px, py, shift)
 			local p = plan()
 			if not p then
 				return
 			end
 			local route = ctx.activeRoute and Util.FindById(p.routes, ctx.activeRoute)
+			local created = false
 			if not route then
 				route = ctx:AddOnFloor(function(floor)
 					return Plan.AddRoute(p, floor, string.format(L["Route %d"], #p.routes + 1), (#p.routes % Schema.COLOR_COUNT) + 1)
@@ -351,11 +361,16 @@ function Panel.Create(parent, ctx)
 					ns:Print(L["Cannot add more routes."])
 					return
 				end
-				ctx.activeRoute = route.id
+				ctx.activeRoute, created = route.id, true
 			end
 			if not Plan.AddRoutePoint(p, route.id, px, py) then
 				ns:Print(L["This route has the maximum number of points."])
-			elseif isStop then
+				if not created then
+					return -- nothing changed: no undo step
+				end
+			elseif ns.RouteSnap.Active(p, route.floor) then
+				ns.RouteSnap.Stop(p, route.id, shift, f.canvas)
+			elseif shift then
 				Plan.SetRouteStop(p, route.id, #route.points, true)
 			end
 			changed("routes")
@@ -363,6 +378,14 @@ function Panel.Create(parent, ctx)
 		onRouteFinished = function()
 			ctx.activeRoute = nil
 			f:Refresh()
+		end,
+		-- A dragged route point dropped, before the change is recorded: with the Route tool, a stop's legs found again
+		-- when snapping (with Select a stop moves alone, as without snapping).
+		onPointMoved = function(routeId, index, fromX, fromY, shift)
+			local p = plan()
+			if p and ctx.tool == "route" then
+				ns.RouteSnap.Moved(p, routeId, index, fromX, fromY, shift, f.canvas)
+			end
 		end,
 	})
 	canvas:SetPoint("TOPLEFT", bar, "BOTTOMLEFT", 0, -SP.sm)
@@ -372,36 +395,8 @@ function Panel.Create(parent, ctx)
 	-- The drawing tools' line under the toolbar, and the canvas's drawing callbacks (UI/Panels/DrawBar.lua).
 	ns.DrawBar.Build(f, ctx, bar, canvas)
 
-	-- Map controls in the bottom-left corner: labels and icon size, inside the gold frame with a margin of their own.
-	local controls = CreateFrame("Frame", nil, canvas.edge)
-	controls:SetPoint("BOTTOMLEFT", ns.MapCanvas.FRAME_INSET + SP.sm, ns.MapCanvas.FRAME_INSET + SP.sm)
-	controls:SetSize(120, 80)
-	f.labels = W.Check(controls, L["Labels"], function(on)
-		ctx.showLabels = on
-		canvas:DrawContent()
-	end)
-	local labelsBox = W.Panel(controls, "surface", "border")
-	labelsBox:SetPoint("TOPLEFT")
-	labelsBox:SetSize(112, SZ.control + 4)
-	f.labels:SetParent(labelsBox)
-	f.labels:SetPoint("LEFT", SP.sm, 0)
-	f.iconSize = W.Stepper(controls, L["Icon size"], {
-		min = 0.5,
-		max = 1.5,
-		step = 0.1,
-		get = function()
-			return ns.db.ui.iconScale or 1
-		end,
-		set = function(v)
-			ns.db.ui.iconScale = v
-			canvas:DrawContent()
-		end,
-		format = function(v)
-			return string.format("%d%%", math.floor(v * 100 + 0.5))
-		end,
-	})
-	f.iconSize:SetPoint("TOPLEFT", labelsBox, "BOTTOMLEFT", 0, -SP.xs)
-	f.controls = controls
+	-- Map controls in the bottom-left corner: labels, icon size, the route tool's snap switch (UI/Panels/MapControls.lua).
+	ns.MapControls.Build(f, ctx, canvas)
 	-- The floor switcher in the top-left corner (UI/Panels/FloorBar.lua).
 	ns.FloorBar.Build(f, ctx, canvas)
 
@@ -424,8 +419,8 @@ function Panel.Create(parent, ctx)
 	canvas.fitAvoid = function()
 		local vh = canvas:GetHeight() or 0
 		local inset = ns.MapCanvas.FRAME_INSET + SP.sm
-		local cw, ch = controls:GetWidth() or 0, controls:GetHeight() or 0
-		local rects = { { inset, vh - inset - ch, inset + cw, vh - inset } }
+		local rects = {}
+		ns.MapControls.Rects(f, rects, vh, inset)
 		if f.floorBar:IsShown() then
 			rects[#rects + 1] = f.floorBar:Rect()
 		end
@@ -647,6 +642,7 @@ function Panel.Create(parent, ctx)
 		self.kind:SetShown(not ro and ctx.tool == "marker")
 		self.role:SetShown(not ro and ctx.tool == "position")
 		self.pull:SetShown(not ro and ctx.tool == "pull")
+		local snapping = ns.MapControls.Refresh(self, p, ctx.floor, not ro and ctx.tool == "route")
 		self.kind:Refresh()
 		self.role:Refresh()
 		self.pull:Refresh()
@@ -676,7 +672,18 @@ function Panel.Create(parent, ctx)
 		self.fit:ClearAllPoints()
 		self.fit:SetPoint("RIGHT", roomy and self.focus or (many and self.floor or bar), roomy and "LEFT" or
 			(many and "LEFT" or "RIGHT"), roomy and -SP.sm or (many and -SP.sm or 0), 0)
-		self.help:SetText(L[ro and TOOL_HELP.readOnly or TOOL_HELP[ctx.tool]])
+		-- Still too narrow (long tool names, a floor picker): Fit gives way too, the Legend button takes its place.
+		local fitRoom = roomy or toolsW + optW + rightW - 178 - SP.sm <= bar:GetWidth()
+		self.fit:SetShown(fitRoom)
+		self.legendButton:ClearAllPoints()
+		if fitRoom then
+			self.legendButton:SetPoint("RIGHT", self.fit, "LEFT", -SP.sm, 0)
+		else
+			self.legendButton:SetPoint("RIGHT", many and self.floor or bar, many and "LEFT" or "RIGHT",
+				many and -SP.sm or 0, 0)
+		end
+		self.help:SetText(L[ro and TOOL_HELP.readOnly or (ctx.tool == "route" and snapping and TOOL_HELP.routeSnap)
+			or TOOL_HELP[ctx.tool]])
 		self.labels:SetChecked(ctx.showLabels)
 		self.iconSize:Refresh()
 

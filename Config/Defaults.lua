@@ -49,6 +49,7 @@ Defaults.ui = {
 	onlyWithPlans = false, -- home grid filter
 	mapLayers = {}, -- [layer id] = false when hidden on the map (Schema.LAYERS)
 	iconScale = 1.0, -- map icon size, 0.5 .. 1.5
+	snapRoutes = true, -- the route tool's "Snap to corridors" (UI/RouteSnap.lua)
 	showLegend = nil, -- nil: shown the first time the map opens, then hidden until the Legend button shows it
 	legendSeen = false,
 	homeSelected = nil, -- the instance selected in the home table (its key)

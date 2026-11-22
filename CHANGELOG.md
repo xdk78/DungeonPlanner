@@ -70,6 +70,11 @@ follow [Semantic Versioning](https://semver.org/).
   portal or hearthstone from farther away teaches nothing; one taken near the entrance can be learned. A later spot
   replaces a learned one only when it lies within 100 yards of it. `/dp entrances reset`, or "Forget learned
   entrances" under Troubleshooting in the Settings panel, forgets them.
+- **Snap to corridors** in the route tool: with it on, a click adds a numbered stop and the line from the stop before
+  follows the dungeon's corridors instead of cutting through walls. Shift-click (or hold Shift while dropping a stop
+  dragged with the route tool) for a straight line. On by default; works on
+  every classic floor and Forever's caves and buildings. Open outdoor maps keep straight lines. Snapped routes are
+  ordinary route points, so shared plans work with older versions.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the

@@ -302,6 +302,27 @@ function Plan.AddRoutePoint(plan, routeId, x, y)
 	return route
 end
 
+-- Replace the points between points i and j (i < j) of a route with `bends` ({ { x, y }, ... }, plain bends of the
+-- path: "Snap to corridors", Data/Corridors.lua). Returns point j's new index, or nil and "limit" when the route would
+-- pass Schema.MAX.routePoints (the route is left as it was).
+function Plan.SetLegBends(plan, routeId, i, j, bends)
+	local route = Util.FindById(plan.routes, routeId)
+	if not route or not route.points[i] or not route.points[j] or i >= j then
+		return nil, "missing"
+	end
+	if #route.points - (j - i - 1) + #bends > MAX.routePoints then
+		return nil, "limit"
+	end
+	for _ = i + 1, j - 1 do
+		table.remove(route.points, i + 1)
+	end
+	for k, b in ipairs(bends) do
+		table.insert(route.points, i + k, { Util.Round(Util.Clamp(b[1], 0, 1), 4), Util.Round(Util.Clamp(b[2], 0, 1), 4) })
+	end
+	touch(plan)
+	return i + #bends + 1
+end
+
 function Plan.RemoveLastRoutePoint(plan, routeId)
 	local route = Util.FindById(plan.routes, routeId)
 	if not route or #route.points == 0 then
