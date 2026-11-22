@@ -39,6 +39,7 @@ Defaults.settings = {
 		outline = true, -- a dark edge around lines and arrows
 		color = 0, -- 0: each route's own colour; 1 .. 8: every plan route in that palette colour
 		focusArrows = false, -- while a step is in focus, arrows only on the leg that leads to it
+		hover = true, -- highlight the leg under the pointer (and a hovered step's) with a tooltip
 	},
 	share = {
 		acceptFrom = "groupGuild", -- "nobody" | "group" | "groupGuild" | "anyone"

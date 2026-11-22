@@ -1155,4 +1155,10 @@ ns.Locales.plPL = {
 	["A larger arrowhead just before each numbered stop and at the route's end."] = "Większy grot tuż przed każdym numerowanym przystankiem i na końcu trasy.",
 	["Arrows only on the focused step's leg"] = "Strzałki tylko na odcinku wybranego kroku",
 	["While a step is in focus, direction arrows show only on the part of the route that leads to it."] = "Gdy krok jest wybrany, strzałki kierunku widać tylko na części trasy, która do niego prowadzi.",
+	["Highlight the route under the pointer"] = "Wyróżniaj trasę pod wskaźnikiem",
+	["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."] = "Część trasy pod wskaźnikiem albo kroku wskazanego na liście wyróżnia się razem ze strzałkami i krokami, które łączy; reszta przygasa. Tryb przejścia tak samo pokazuje część bieżącego kroku.",
+	["Step %d to step %d"] = "Krok %d do kroku %d",
+	["To step %d"] = "Do kroku %d",
+	["From %s to %s"] = "Od: %s, do: %s",
+	["To %s"] = "Do: %s",
 }

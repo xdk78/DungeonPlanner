@@ -865,6 +865,26 @@ V.views = {
 		end,
 		window = window,
 	},
+	-- The same with the pointer over a leg of the route (the longest, Kresh to Verdan the Everliving, walked out and
+	-- back): that leg drawn above the rest, brighter and wider, with its arrows; the rest dimmed (UI/MapPins.lua
+	-- SetRouteHover).
+	{
+		name = "map-wailing-hover",
+		setup = function()
+			openPlan("wailing-caverns", "map")
+			local best
+			for _, s in ipairs(ns.UI.ctx:Steps()) do
+				if s.stop and s.route and (not best or s.to - s.from > best.to - best.from) then
+					best = s
+				end
+			end
+			page().panels.map.canvas:SetRouteHover({ route = best.route, from = best.from, to = best.to }, "map")
+		end,
+		window = window,
+		teardown = function()
+			page().panels.map.canvas:SetRouteHover(nil)
+		end,
+	},
 	{
 		name = "map-wailing-min",
 		setup = function()

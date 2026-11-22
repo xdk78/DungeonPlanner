@@ -494,7 +494,24 @@ with `SetRotation`, which left every arrow pointing up in game.
 **Route settings.** The Routes group in the Settings panel changes the look at once, on the map and in run mode: line
 width (thin, medium, thick), line opacity, route colour (each route's own, or one palette colour for every route of a
 plan; another addon's routes keep theirs), the dark outline, direction arrows (off, few, normal, many), arrow size,
-arrowheads at stops, and arrows only on the focused step's leg. They are stored in the profile (`settings.routes`).
+arrowheads at stops, arrows only on the focused step's leg, and the hover highlight. They are stored in the profile
+(`settings.routes`); the arrows' own options are greyed out while arrows are off.
+
+**Two lanes.** A corridor walked out and back (two parts of a route running close together in opposite directions)
+draws as two lanes: each direction moves a little to its own right (`RouteLegs.Lanes`, a share of the outlined line's
+width), and its arrows follow its lane, so the way in and the way back read apart instead of as one doubled line.
+
+**Hover highlight.** With the pointer over a route line (hit test against the drawn segments, a few pixels of
+tolerance), the leg under it, the stretch between the two numbered stops it joins, is drawn above the other lines,
+a little brighter and wider, with its arrows at the normal density even where the settings show fewer (but not when
+arrows are off), and the rest of the routes dim to 35 %. A tooltip names the two steps as the steps list does
+("Step 3 to step 4", "From Lady Anacondra to Lord Cobrahn"). Pointing at a step in the steps list highlights the leg
+that leads to it the same way, and run mode draws its current step's leg so. One highlight at a time, shared by the
+pointer and the list. It follows the coordinate readout's hover check (at most 20 times a second, only while the
+pointer is over the map) and changes only when the leg changes: the lines are restyled and the placed arrows reused.
+None while dragging or with a drawing tool, and none over a pin.
+
+Labels at the map's edge keep clear of the coordinate readout in its bottom-right corner.
 
 **Snap to corridors.** With the switch on, a click with the Route tool adds a numbered stop and its leg from the
 route's last point follows the corridors; Shift-click keeps the leg straight, and a stop dropped with the Route tool

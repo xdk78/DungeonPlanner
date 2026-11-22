@@ -43,6 +43,8 @@ Style.ROUTE = {
 	head = 1.35,
 	tone = 0.4,
 	focusWidth = 2, -- the focused step's leg is this much wider
+	dim = 0.35, -- the rest of the routes while a leg is highlighted (hover, a hovered step, run mode's current step)
+	lane = 0.6, -- a corridor walked out and back: each direction moves this share of the outlined width to its right
 }
 
 local function rgb(r, g, b, a)

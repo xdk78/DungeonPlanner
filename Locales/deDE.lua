@@ -1129,4 +1129,10 @@ ns.Locales.deDE = {
 	["A larger arrowhead just before each numbered stop and at the route's end."] = "Eine größere Pfeilspitze kurz vor jedem nummerierten Stopp und am Ende der Route.",
 	["Arrows only on the focused step's leg"] = "Pfeile nur auf dem Abschnitt des gewählten Schritts",
 	["While a step is in focus, direction arrows show only on the part of the route that leads to it."] = "Solange ein Schritt gewählt ist, zeigen sich Richtungspfeile nur auf dem Teil der Route, der zu ihm führt.",
+	["Highlight the route under the pointer"] = "Route unter dem Mauszeiger hervorheben",
+	["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."] = "Der Teil einer Route unter dem Mauszeiger oder eines Schritts, auf den du in der Liste zeigst, hebt sich mit seinen Pfeilen und den verbundenen Schritten ab; der Rest wird blasser. Der Durchlaufmodus zeigt den Teil des aktuellen Schritts genauso.",
+	["Step %d to step %d"] = "Schritt %d bis Schritt %d",
+	["To step %d"] = "Bis Schritt %d",
+	["From %s to %s"] = "Von %s bis %s",
+	["To %s"] = "Bis %s",
 }

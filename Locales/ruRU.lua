@@ -1129,4 +1129,10 @@ ns.Locales.ruRU = {
 	["A larger arrowhead just before each numbered stop and at the route's end."] = "Более крупный наконечник стрелки прямо перед каждой пронумерованной остановкой и в конце пути.",
 	["Arrows only on the focused step's leg"] = "Стрелки только на отрезке выбранного шага",
 	["While a step is in focus, direction arrows show only on the part of the route that leads to it."] = "Пока шаг выбран, стрелки направления видны только на той части пути, что ведёт к нему.",
+	["Highlight the route under the pointer"] = "Подсвечивать путь под указателем",
+	["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."] = "Часть пути под указателем или часть шага, на который вы наводите в списке, выделяется вместе со стрелками и шагами, которые она соединяет; остальное тускнеет. Режим прохождения так же показывает часть текущего шага.",
+	["Step %d to step %d"] = "Шаг %d — шаг %d",
+	["To step %d"] = "До шага %d",
+	["From %s to %s"] = "Из %s в %s",
+	["To %s"] = "До %s",
 }

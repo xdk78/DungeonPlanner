@@ -182,6 +182,15 @@ local function routesGroup()
 				set = routeSet("focusArrows"),
 				disabled = arrowsOff,
 			},
+			hover = {
+				type = "toggle",
+				order = 9,
+				width = "double",
+				name = L["Highlight the route under the pointer"],
+				desc = L["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."],
+				get = routeGet("hover"),
+				set = routeSet("hover"),
+			},
 		},
 	}
 end

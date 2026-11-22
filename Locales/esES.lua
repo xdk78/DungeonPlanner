@@ -1129,4 +1129,10 @@ ns.Locales.esES = {
 	["A larger arrowhead just before each numbered stop and at the route's end."] = "Una punta de flecha mayor justo antes de cada parada numerada y al final de la ruta.",
 	["Arrows only on the focused step's leg"] = "Flechas solo en el tramo del paso elegido",
 	["While a step is in focus, direction arrows show only on the part of the route that leads to it."] = "Mientras un paso está elegido, las flechas de dirección solo se ven en la parte de la ruta que lleva a él.",
+	["Highlight the route under the pointer"] = "Resaltar la ruta bajo el puntero",
+	["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."] = "La parte de una ruta bajo el puntero, o la de un paso que señales en la lista, destaca con sus flechas y los pasos que une; el resto se atenúa. El modo de recorrido muestra igual la parte del paso actual.",
+	["Step %d to step %d"] = "Del paso %d al paso %d",
+	["To step %d"] = "Hasta el paso %d",
+	["From %s to %s"] = "De %s a %s",
+	["To %s"] = "Hasta %s",
 }

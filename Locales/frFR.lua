@@ -1129,4 +1129,10 @@ ns.Locales.frFR = {
 	["A larger arrowhead just before each numbered stop and at the route's end."] = "Une pointe de flèche plus grande juste avant chaque arrêt numéroté et à la fin du trajet.",
 	["Arrows only on the focused step's leg"] = "Flèches seulement sur le tronçon de l'étape choisie",
 	["While a step is in focus, direction arrows show only on the part of the route that leads to it."] = "Quand une étape est choisie, les flèches de direction n'apparaissent que sur la partie du trajet qui y mène.",
+	["Highlight the route under the pointer"] = "Mettre en valeur le trajet sous le pointeur",
+	["The part of a route under the pointer, or of a step you point at in the list, stands out with its arrows and the steps it joins; the rest dims. Run mode shows the current step's part the same way."] = "La partie d'un trajet sous le pointeur, ou celle d'une étape pointée dans la liste, ressort avec ses flèches et les étapes qu'elle relie ; le reste s'estompe. Le mode parcours montre de même la partie de l'étape en cours.",
+	["Step %d to step %d"] = "De l'étape %d à l'étape %d",
+	["To step %d"] = "Jusqu'à l'étape %d",
+	["From %s to %s"] = "De %s à %s",
+	["To %s"] = "Jusqu'à %s",
 }

@@ -24,12 +24,26 @@ local STEP_ART = { entrance = "kind_entrance", objective = "check" }
 -- (a route stop with nothing on it) is drawn as its stop on the map: a smaller dark disc ringed in the route's colour,
 -- with the step's number, which the stop shows too (Steps.StopNumbers). So a step number never wears a pull's badge.
 local STOP = 18 -- a move step's stop disc
+
+-- The instance page's map (UI/MapCanvas.lua), while it is shown.
+local function mapCanvas()
+	local f = UI.Frame()
+	local page = f and f.instancePage
+	local map = page and page.panels and page.panels.map
+	local canvas = map and map.canvas
+	return canvas and canvas:IsVisible() and canvas or nil
+end
+
 local function stopBadge(b, plan, step, index)
 	local route = step.route and ns.Util.FindById(plan.routes, step.route)
 	b.disc:SetSize(STOP, STOP)
 	b.disc:SetVertexColor(0.1, 0.07, 0.04, 1)
 	b.ring:Hide()
-	b.stopRing:SetVertexColor(S.PaletteColor(route and route.color or 1))
+	if route then
+		b.stopRing:SetVertexColor(ns.MapRoutes.Color(route, true))
+	else
+		b.stopRing:SetVertexColor(S.PaletteColor(1))
+	end
 	b.stopRing:Show()
 	b.num:SetText("")
 	b.stopNum:SetText(tostring(index))
@@ -181,6 +195,12 @@ function SidePanel.Create(parent, ctx)
 		end,
 		onEnter = function(step, row)
 			local plan = ctx:Plan()
+			-- The leg of the route that leads to this step stands out on the map, as one under the pointer does.
+			local canvas = mapCanvas()
+			local focus = ns.Steps.Focus(step)
+			if canvas and focus.route and focus.from and ns.db.settings.routes.hover ~= false then
+				canvas:SetRouteHover({ route = focus.route, from = focus.from, to = focus.to }, "list")
+			end
 			local title, caption, _, note = UI.StepText(plan, step)
 			local tt = W.Tip()
 			if not (tt and plan) then
@@ -197,6 +217,12 @@ function SidePanel.Create(parent, ctx)
 				tt:AddLine(note, 1, 1, 1, true)
 			end
 			W.TipShow(tt)
+		end,
+		onLeave = function()
+			local canvas = mapCanvas()
+			if canvas then
+				canvas:ClearRouteHover("list")
+			end
 		end,
 	})
 

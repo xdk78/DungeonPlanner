@@ -117,6 +117,9 @@ local function segDist(px, py, s)
 	return sqrt(dx * dx + dy * dy)
 end
 
+-- Shared with Model/RouteLegs.lua. A segment for SegDist is { ax, ay, bx, by } of non-zero length.
+RouteArrows.NewGrid, RouteArrows.GridAdd, RouteArrows.GridAny, RouteArrows.SegDist = newGrid, gridAdd, gridAny, segDist
+
 local function boxDist(px, py, b)
 	local dx = max(b[1] - px, 0, px - b[3])
 	local dy = max(b[2] - py, 0, py - b[4])

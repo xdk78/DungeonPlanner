@@ -484,6 +484,21 @@ function MapCanvas.Install(view)
 		if bounds[3] - bounds[1] < 40 or bounds[4] - bounds[2] < 40 then
 			bounds = nil -- not laid out yet
 		end
+		-- And the coordinate readout in the bottom-right corner (shown while the pointer is over the map): the room its
+		-- widest text takes, measured once per font.
+		if bounds and view.cb.showCoordinates and view.cb.showCoordinates() then
+			local c = view.coords
+			local font = c:GetFont()
+			if view.coordsFont ~= font then
+				local text = c:GetText()
+				c:SetText("100.0, 100.0")
+				view.coordsFont, view.coordsW, view.coordsH = font, c:GetStringWidth() or 0, c:GetStringHeight() or 0
+				c:SetText(text or "")
+			end
+			local right, bottom = bounds[3] - SP.sm, bounds[4] - SP.sm
+			avoid = avoid or {}
+			avoid[#avoid + 1] = { right - view.coordsW - SP.xs, bottom - view.coordsH - SP.xs, right, bottom }
+		end
 		MapPins.ApplyLayout(list, canvas, avoid, bounds)
 		return bounds
 	end
@@ -563,7 +578,9 @@ function MapCanvas.Install(view)
 			if layerShown("route") or extra then
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
-					extra = extra, mx = mx, my = my, deferArrows = true })
+					extra = extra, mx = mx, my = my, deferArrows = true,
+					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapPins.lua SetRouteHover).
+					highlight = self.cb.highlightFocus and self.cb.highlightFocus() and seg or nil })
 				nLines, pathsDrawn = drawn.lines, true
 				self.routeCounts = drawn
 				for _, route in ipairs(own and plan.routes or {}) do

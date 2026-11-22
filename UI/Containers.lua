@@ -320,7 +320,8 @@ end
 
 -- List -----------------------------------------------------------------------------------------------------------------------
 -- A virtual list: only visible rows exist. opts: rowHeight, gap, create(row), update(row, item, index),
--- onClick(item, index, mouseButton, row), onDoubleClick(item, index, row), isSelected(item), empty, boxed.
+-- onClick(item, index, mouseButton, row), onDoubleClick(item, index, row), onEnter(item, row), onLeave(item, row),
+-- isSelected(item), empty, boxed.
 -- One highlight per list: the selected row wears the game's list selection (Options_List_Active, the settings list's)
 -- over an amber fill with a gold edge for boxed rows; where the atlas is missing, an amber fill, gold edge and a gold
 -- bar on its left. The pointer adds the game's list hover (Options_List_Hover, else the quest-title glow).
@@ -400,6 +401,9 @@ function W.List(parent, opts)
 				if tt and tt:IsOwned(self) then
 					tt:Hide()
 				end
+			end
+			if opts.onLeave and self.item then
+				ns.SafeCall(opts.onLeave, self.item, self)
 			end
 		end)
 		row:SetScript("OnClick", function(self, mouse)

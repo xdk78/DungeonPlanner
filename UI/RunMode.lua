@@ -290,6 +290,10 @@ local function build()
 		getFocusSegment = function()
 			return ctx().focusSegment
 		end,
+		-- The current step's leg stands out as a hovered one does on the big map (the rest of the routes dim).
+		highlightFocus = function()
+			return ns.db.settings.routes.hover ~= false
+		end,
 		getActiveRoute = function()
 			return nil
 		end,

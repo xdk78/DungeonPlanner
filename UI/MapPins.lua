@@ -373,8 +373,7 @@ function MapRoutes.Install(view)
 	local pools = view.pools
 	pools.outlines, pools.joints, pools.jointOutlines = pools.outlines or {}, pools.joints or {}, pools.jointOutlines or {}
 
-	-- Draw layers on the overlay: outlines (0) under lines and joints (1) under arrows (3); stops and pins are frames
-	-- above the overlay's textures.
+	-- Pooled pieces on the overlay; their draw layers are below (OUTLINE .. ARROW).
 	local function line(list, i, sublevel)
 		local l = list[i]
 		if not l and overlay.CreateLine then
@@ -396,7 +395,7 @@ function MapRoutes.Install(view)
 	local function arrow(i, file)
 		local a = pools.arrows[i]
 		if not a then
-			a = overlay:CreateTexture(nil, "ARTWORK", nil, 3)
+			a = overlay:CreateTexture(nil, "ARTWORK", nil, 4) -- above every line, the highlighted one too
 			pools.arrows[i] = a
 		end
 		if a.dpFile ~= file then
@@ -417,18 +416,29 @@ function MapRoutes.Install(view)
 		l:SetEndPoint("TOPLEFT", canvas, x1, y1)
 	end
 
+	-- Draw layers on the overlay (sublevels): outlines and joint outlines, lines and joints, then the highlighted leg's
+	-- outline and line above every other line, and the arrows on top. Pins and stops are frames above all of these.
+	local OUTLINE, LINE, TOP_OUTLINE, TOP_LINE, ARROW = 0, 1, 2, 3, 4
+
 	-- Draw every route path on `floor`. px, py: plan coordinates to canvas offsets (py negative downwards). o = { scale
-	-- (icon size), seg (the focused step's { route, from, to } or nil), activeRoute, extra (more routes in the map's own
-	-- coordinates: another addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows
-	-- (the caller places the arrows with DrawRouteArrows once its pins are laid out) }. Returns the counts drawn.
+	-- (icon size), seg (the focused step's { route, from, to } or nil), highlight (a leg { route, from, to } drawn as the
+	-- hover highlight: run mode's current step), activeRoute, extra (more routes in the map's own coordinates: another
+	-- addon's, Data/Providers.lua Routes), mx, my (map coordinates to canvas offsets), deferArrows (the caller places the
+	-- arrows with PlaceRouteArrows once its pins are laid out), restyle (a hover change: same paths, new looks) }.
+	-- view.routeHover, the leg under the pointer or a hovered step (SetRouteHover), wins over o.highlight. Returns the
+	-- counts drawn.
 	function view:DrawRoutePaths(plan, floor, px, py, o)
 		o = o or {}
+		if o.deferArrows and not o.restyle then
+			self.routeArgs = { plan, floor, px, py, o }
+		end
 		local canvas = self.canvas
 		local n = { lines = 0, outlines = 0, joints = 0, arrows = 0 }
 		local u = math.max(0.75, o.scale or 1)
 		local look = MapRoutes.Look(u)
 		local seg = o.seg
-		local jobs = { paths = {}, styles = {}, look = look, u = u, counts = n }
+		local hl = self.routeHover or o.highlight
+		local jobs = { paths = {}, styles = {}, routes = {}, raw = {}, ranges = {}, look = look, u = u, counts = n, hl = hl }
 		self.routeJobs = jobs
 		local all = {}
 		for _, route in ipairs(plan and plan.routes or {}) do
@@ -447,35 +457,51 @@ function MapRoutes.Install(view)
 				if route.mapSpace then
 					fx, fy = o.mx or px, o.my or py
 				end
-				local pts = {}
+				local raw = {}
 				for i, pt in ipairs(route.points) do
-					pts[i] = { fx(pt[1], pt[2]), fy(pt[2], pt[1]), stop = pt.step ~= nil }
+					raw[i] = { fx(pt[1], pt[2]), fy(pt[2], pt[1]), stop = pt.step ~= nil }
 				end
+				-- A corridor walked out and back draws as two lanes, each direction on its own right
+				-- (Model/RouteLegs.lua); lanes[k].seg is the route's own segment for drawn segment k.
+				local wide = thickness + look.outline
+				local lanes = ns.RouteLegs.Lanes(raw, { shift = wide * S.ROUTE.lane, near = wide * 1.2, yUp = true })
 				local focusHere = seg and seg.route == route.id
-				-- Segment i joins points i - 1 and i: its colour, alpha and width.
+				-- The route's own segment i (joining points i - 1 and i): its colour, alpha, width, whether it is
+				-- brighter, and whether it draws above the other lines.
 				local function segLook(i)
-					if focusHere and i > seg.from and i <= seg.to then
+					if hl then
+						if hl.route == route.id and i > hl.from and i <= hl.to then
+							local lr, lg, lb = lighten(r, g, b, 0.12)
+							return lr, lg, lb, alpha, thickness + S.ROUTE.focusWidth * u, true, true
+						end
+						return r, g, b, alpha * S.ROUTE.dim, thickness, false, false
+					elseif focusHere and i > seg.from and i <= seg.to then
 						local lr, lg, lb = lighten(r, g, b, 0.25)
-						return lr, lg, lb, alpha, thickness + S.ROUTE.focusWidth * u, true
+						return lr, lg, lb, alpha, thickness + S.ROUTE.focusWidth * u, true, false
 					elseif seg then
-						return r, g, b, alpha * 0.45, thickness, false
+						return r, g, b, alpha * 0.45, thickness, false, false
 					end
-					return r, g, b, alpha, thickness, false
+					return r, g, b, alpha, thickness, false, false
 				end
-				for i = 2, #pts do
-					local a, c = pts[i - 1], pts[i]
-					local cr, cg, cb, ca, th = segLook(i)
-					local l = line(pools.lines, n.lines + 1, 1)
+				local function laneLook(k)
+					return segLook(lanes[k].seg or k)
+				end
+				for k = 2, #lanes do
+					local a, c = lanes[k - 1], lanes[k]
+					local cr, cg, cb, ca, th, _, top = laneLook(k)
+					local l = line(pools.lines, n.lines + 1, LINE)
 					if l then
 						n.lines = n.lines + 1
 						place(l, a[1], a[2], c[1], c[2], canvas)
+						l:SetDrawLayer("ARTWORK", top and TOP_LINE or LINE)
 						l:SetThickness(th)
 						l:SetVertexColor(cr, cg, cb, ca)
 						l:Show()
-						local ol = look.outline > 0 and line(pools.outlines, n.outlines + 1, 0)
+						local ol = look.outline > 0 and line(pools.outlines, n.outlines + 1, OUTLINE)
 						if ol then
 							n.outlines = n.outlines + 1
 							place(ol, a[1], a[2], c[1], c[2], canvas)
+							ol:SetDrawLayer("ARTWORK", top and TOP_OUTLINE or OUTLINE)
 							ol:SetThickness(th + look.outline)
 							ol:SetVertexColor(0.05, 0.03, 0.02, ca * 0.8)
 							ol:Show()
@@ -483,11 +509,12 @@ function MapRoutes.Install(view)
 					end
 				end
 				-- A joint takes the look of the segment that arrives at the bend.
-				for _, i in ipairs(ns.RouteArrows.Joints(pts)) do
-					local cr, cg, cb, ca, th = segLook(i)
-					local p = pts[i]
+				for _, k in ipairs(ns.RouteArrows.Joints(lanes)) do
+					local cr, cg, cb, ca, th, _, top = laneLook(k)
+					local p = lanes[k]
 					n.joints = n.joints + 1
-					local outer, inner = disc(pools.jointOutlines, n.joints, 0), disc(pools.joints, n.joints, 1)
+					local outer, inner = disc(pools.jointOutlines, n.joints, OUTLINE), disc(pools.joints, n.joints, LINE)
+					outer:SetDrawLayer("ARTWORK", top and TOP_OUTLINE or OUTLINE)
 					outer:ClearAllPoints()
 					outer:SetPoint("CENTER", canvas, "TOPLEFT", p[1], p[2])
 					outer:SetSize(th + look.outline, th + look.outline)
@@ -497,23 +524,39 @@ function MapRoutes.Install(view)
 					else
 						outer:Hide()
 					end
+					inner:SetDrawLayer("ARTWORK", top and TOP_LINE or LINE)
 					inner:ClearAllPoints()
 					inner:SetPoint("CENTER", canvas, "TOPLEFT", p[1], p[2])
 					inner:SetSize(th, th)
 					inner:SetVertexColor(cr, cg, cb, ca)
 					inner:Show()
 				end
+				-- The drawn points from..to of the route's own points: from its last copy of `from` (a doubled turning
+				-- point) to its first copy of `to`.
+				local function laneRange(from, to)
+					local lf, lt
+					for k, p in ipairs(lanes) do
+						if p.i == from then
+							lf = k
+						end
+						if p.i == to and not lt then
+							lt = k
+						end
+					end
+					return { from = lf or 1, to = lt or #lanes }
+				end
 				-- Arrows keep clear of the whole outlined line, of this route and the others.
-				local path = { pts = pts, half = (thickness + look.outline) / 2 }
+				local path = { pts = lanes, half = wide / 2, hit = entry.own and not route.mapSpace or false }
 				if look.focusOnly and seg then
 					if focusHere then
-						path.range = { from = seg.from, to = seg.to }
+						path.range = laneRange(seg.from, seg.to)
 					else
 						path.arrows = false
 					end
 				end
-				jobs.paths[#jobs.paths + 1] = path
-				jobs.styles[#jobs.paths] = segLook
+				local index = #jobs.paths + 1
+				jobs.paths[index], jobs.styles[index], jobs.ranges[index] = path, laneLook, laneRange
+				jobs.routes[index], jobs.raw[index] = route.id, raw
 			end
 		end
 		for key, list in pairs({ lines = pools.lines, outlines = pools.outlines }) do
@@ -531,30 +574,72 @@ function MapRoutes.Install(view)
 		return n
 	end
 
-	-- Place and draw the direction arrows of the paths DrawRoutePaths drew last, clear of `obstacles` (pins and labels
-	-- in the paths' canvas offsets: RouteArrows.Obstacles). Returns how many it drew.
-	function view:DrawRouteArrows(obstacles)
-		local jobs = self.routeJobs
+	local function placeOptions(jobs, obstacles, spacing, heads)
+		local u, R, look = jobs.u, S.ROUTE, jobs.look
+		local size = (look.width + R.outline * u) * look.arrow
+		return {
+			spacing = spacing,
+			size = size,
+			headSize = heads and size * R.head or nil,
+			stopGap = 12 * u, -- a numbered stop's disc is 20 across at icon scale 1
+			bendGap = 2 * u,
+			gap = 2 * u,
+			pins = obstacles and obstacles.pins,
+			boxes = obstacles and obstacles.boxes,
+			bounds = obstacles and obstacles.bounds,
+			total = MapRoutes.MAX_ARROWS,
+		}
+	end
+
+	-- The highlighted leg's own arrows at the normal density, when the settings show fewer (or only another leg's):
+	-- placed once per highlighted leg, on that leg alone. Arrows turned off stay off.
+	local function legMarks(v, jobs)
+		local hl, look = jobs.hl, jobs.look
+		local normal = S.ROUTE.spacing.normal * jobs.u
+		if not hl or not look.spacing or (look.spacing <= normal and look.heads and not look.focusOnly) then
+			return nil
+		end
+		local key = hl.route .. ":" .. hl.from .. ":" .. hl.to
+		if v.legMarksKey == key and v.legMarksJobs == jobs then
+			return v.legMarks
+		end
+		local paths, index = {}, nil
+		for i, path in ipairs(jobs.paths) do
+			local copy = { pts = path.pts, half = path.half, arrows = false }
+			if jobs.routes[i] == hl.route then
+				copy.arrows, copy.range, index = true, jobs.ranges[i](hl.from, hl.to), i
+			end
+			paths[i] = copy
+		end
+		local marks = index and ns.RouteArrows.Place(paths, placeOptions(jobs, v.arrowObstacles, normal, true)) or {}
+		v.legMarksKey, v.legMarksJobs, v.legMarks = key, jobs, marks
+		return marks
+	end
+
+	-- Draw arrows (RouteArrows.Place marks on the drawn lanes) in the look their segment has now. Returns how many.
+	local function drawMarks(v, marks)
+		local jobs = v.routeJobs
 		local count = 0
-		local look = jobs and jobs.look
-		if look and look.spacing and #jobs.paths > 0 then
-			local u, R = jobs.u, S.ROUTE
-			local size = (look.width + R.outline * u) * look.arrow
-			local marks = ns.RouteArrows.Place(jobs.paths, {
-				spacing = look.spacing,
-				size = size,
-				headSize = look.heads and size * R.head or nil,
-				stopGap = 12 * u, -- a numbered stop's disc is 20 across at icon scale 1
-				bendGap = 2 * u,
-				gap = 2 * u,
-				pins = obstacles and obstacles.pins,
-				boxes = obstacles and obstacles.boxes,
-				bounds = obstacles and obstacles.bounds,
-				total = MapRoutes.MAX_ARROWS,
-			})
-			local file = look.outline > 0 and ARROW_EDGE_FILE or ARROW_FILE
-			local canvas = self.canvas
-			for _, m in ipairs(marks) do
+		if jobs then
+			local extra = legMarks(v, jobs)
+			local hl = jobs.hl
+			local list = marks or {}
+			if extra then
+				-- The leg's own arrows replace whatever the settings left on it.
+				list = {}
+				for _, m in ipairs(marks or {}) do
+					local _, _, _, _, _, _, top = jobs.styles[m.path](m.seg)
+					if not (top and jobs.routes[m.path] == hl.route) then
+						list[#list + 1] = m
+					end
+				end
+				for _, m in ipairs(extra) do
+					list[#list + 1] = m
+				end
+			end
+			local file = jobs.look.outline > 0 and ARROW_EDGE_FILE or ARROW_FILE
+			local canvas = v.canvas
+			for _, m in ipairs(list) do
 				local cr, cg, cb, ca, _, bright = jobs.styles[m.path](m.seg)
 				count = count + 1
 				local a = arrow(count, file)
@@ -562,9 +647,9 @@ function MapRoutes.Install(view)
 				a:SetSize(sz, sz)
 				a:ClearAllPoints()
 				a:SetPoint("CENTER", canvas, "TOPLEFT", m.x, m.y)
-				local ar, ag, ab = lighten(cr, cg, cb, R.tone)
+				local ar, ag, ab = lighten(cr, cg, cb, S.ROUTE.tone)
 				a:SetVertexColor(ar, ag, ab, ca)
-				-- m.angle: the segment's direction in canvas offsets (y up); the arrow points up unturned.
+				-- m.angle: the path's direction in canvas offsets (y up); the arrow points up unturned.
 				local tc = MapPins.TurnedCoords(m.angle - math.pi / 2)
 				a:SetTexCoord(tc[1], tc[2], tc[3], tc[4], tc[5], tc[6], tc[7], tc[8])
 				a:Show()
@@ -575,6 +660,19 @@ function MapRoutes.Install(view)
 			pools.arrows[i]:Hide()
 		end
 		return count
+	end
+
+	-- Place and draw the direction arrows of the paths DrawRoutePaths drew last, clear of `obstacles` (pins and labels
+	-- in the paths' canvas offsets: RouteArrows.Obstacles, and the visible bounds). Returns how many it drew.
+	function view:DrawRouteArrows(obstacles)
+		local jobs = self.routeJobs
+		local marks
+		self.arrowObstacles = obstacles
+		if jobs and jobs.look.spacing and #jobs.paths > 0 then
+			marks = ns.RouteArrows.Place(jobs.paths, placeOptions(jobs, obstacles, jobs.look.spacing, jobs.look.heads))
+		end
+		self.routeMarks = marks
+		return drawMarks(self, marks)
 	end
 
 	-- While a marker or route point is dragged, or a window is being resized, the map redraws on every pointer move:
@@ -617,5 +715,35 @@ function MapRoutes.Install(view)
 			C_Timer.After(0.1, settle)
 		end
 		return 0
+	end
+
+	-- The highlighted leg: { route, from, to } (the route's own point indices) or nil, from the pointer over a line
+	-- (source "map", UI/MapInput.lua) or a hovered step in the list (source "list", UI/SidePanel.lua); one at a time.
+	-- A change restyles the lines and reuses the placed arrows: nothing is placed again, except the leg's own arrows
+	-- when the settings show fewer (once per leg).
+	function view:SetRouteHover(leg, source)
+		local cur = self.routeHover
+		if leg and cur and leg.route == cur.route and leg.from == cur.from and leg.to == cur.to then
+			self.routeHoverSource = source
+			return false
+		end
+		if not leg and not cur then
+			return false
+		end
+		self.routeHover, self.routeHoverSource = leg, leg and source or nil
+		local args = self.routeArgs
+		if args and self:IsVisible() then
+			local o = {}
+			for k, v in pairs(args[5]) do
+				o[k] = v
+			end
+			o.restyle = true
+			self:DrawRoutePaths(args[1], args[2], args[3], args[4], o)
+			local n = drawMarks(self, self.routeMarks)
+			if self.counts then
+				self.counts.arrows = n
+			end
+		end
+		return true
 	end
 end
