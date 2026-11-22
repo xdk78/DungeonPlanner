@@ -26,7 +26,14 @@
 --                              the addon asked about to <out>/files-asked.txt, the input of `wowui.py files`.
 --   --atlases <file>           the atlases the client has, one "name<TAB>width<TAB>height" per line (`wowui.py atlases`);
 --                              C_Texture.GetAtlasInfo then answers like that client
+--   --sizes <file>             recorded game facts (`wowui.py files --sizes`, JSON): the file IDs and pixel sizes of the
+--                              files and the sizes of the atlases an earlier run asked for. Without --files / --atlases
+--                              GetFileIDFromPath and C_Texture.GetAtlasInfo answer from it; texture sizes always apply.
+--                              Default: the config's `sizes`. Every run writes the atlas names asked to
+--                              <out>/atlases-asked.txt.
 -- ctx (passed to prepare and setup): { mock, args, out }.
+-- A view may also carry `meta` (fields copied into its dump's meta) and `needs` (another view that is set up first when
+-- it has not run yet). `wowui.views` builds both for interaction sequences (`seq-<name>-NN`).
 
 local JSON = require("wowui.json")
 local Dump = require("wowui.dump")
@@ -76,6 +83,8 @@ function Runner.ParseArgs(argv)
 			args.files = val()
 		elseif a == "--atlases" then
 			args.atlases = val()
+		elseif a == "--sizes" then
+			args.sizes = val()
 		elseif a == "--update-baseline" then
 			args.update = true
 		elseif a == "--width" then
@@ -88,6 +97,59 @@ function Runner.ParseArgs(argv)
 		i = i + 1
 	end
 	return args
+end
+
+-- Recorded game facts (`wowui.py files --sizes`): { schema = "wowui-sizes/1", files = { [path] = { id, size } },
+-- atlases = { [name] = { width, height } } }. Texture sizes always go into M.textureSizes; with `use.files` the file
+-- IDs answer GetFileIDFromPath, with `use.atlases` the atlases answer C_Texture.GetAtlasInfo (case-insensitively).
+-- Returns true, or nil and an error.
+function Runner.LoadSizes(M, path, use)
+	use = use or { files = true, atlases = true }
+	local fh = io.open(path, "rb")
+	if not fh then
+		return nil, "cannot open " .. path
+	end
+	local text = fh:read("*a")
+	fh:close()
+	local ok, doc = pcall(JSON.Decode, text)
+	if not ok or type(doc) ~= "table" or doc.schema ~= "wowui-sizes/1" then
+		return nil, path .. " is not a wowui-sizes/1 file"
+	end
+	local names = {}
+	for file in pairs(doc.files or {}) do
+		names[#names + 1] = file
+	end
+	table.sort(names) -- spellings that differ only in case: the same answer on every run
+	for _, file in ipairs(names) do
+		local info = doc.files[file]
+		if type(info) == "table" then
+			if type(info.size) == "table" then
+				M.SetTextureSize(file, info.size[1], info.size[2])
+				if info.id then
+					M.SetTextureSize(info.id, info.size[1], info.size[2])
+				end
+			end
+			if use.files and info.id then
+				M.files[file:gsub("/", "\\"):lower()] = info.id
+			end
+		end
+	end
+	if use.atlases and doc.atlases then
+		-- Atlases the addon's test setup registered stay (the recorded ones win on a clash).
+		local known = {}
+		for name, v in pairs(M.atlases or {}) do
+			known[tostring(name):lower()] = v
+		end
+		for name, size in pairs(doc.atlases) do
+			known[name:lower()] = { width = size[1], height = size[2] }
+		end
+		M.atlases = setmetatable({}, { __index = function(_, k)
+			return type(k) == "string" and known[k:lower()] or nil
+		end, __newindex = function(_, k, v)
+			known[tostring(k):lower()] = v
+		end })
+	end
+	return true
 end
 
 local function fileName(view)
@@ -139,6 +201,15 @@ function Runner.Main(M, cfg, argv)
 		M.fileResolver = M.SyntheticFileID
 	end
 	M.fileQueries = {}
+	M.atlasQueries = {}
+	local sizes = args.sizes or cfg.sizes
+	if sizes then
+		local ok, err = Runner.LoadSizes(M, sizes, { files = not args.files, atlases = not args.atlases })
+		if not ok then
+			io.stderr:write("--sizes: " .. tostring(err) .. "\n")
+			return 2
+		end
+	end
 	if args.files then
 		local fh = io.open(args.files, "rb")
 		if fh then
@@ -176,38 +247,83 @@ function Runner.Main(M, cfg, argv)
 	end
 	local all, written = {}, {}
 	local prefix = args.prefix or ""
+	-- A view's setup runs once. A view with `needs` (a step of wowui.views' Sequence) has the view it builds on set up
+	-- first when that one was not selected, so `--only` of a later step shows the same state as a full run. A step that
+	-- fails (its own or one it needs) stops the run with exit code 3 at once: no further views are dumped and no pending
+	-- teardown or sequence `finish` runs (the same as before sequences existed).
+	local ran = {}
+	local function setUp(view)
+		if ran[view] then
+			return true
+		end
+		if view.needs and not setUp(view.needs) then
+			return false
+		end
+		ran[view] = true
+		local ok, err = pcall(view.setup, ctx)
+		if not ok then
+			io.stderr:write(string.format("view %s: setup failed: %s\n", view.name, tostring(err)))
+			return false
+		end
+		-- Sizes settle the way the client's do between frames: OnSizeChanged for every frame whose size changed.
+		Layout.SettleSizes(M)
+		return true
+	end
+	local selected = {}
 	for _, view in ipairs(cfg.views or {}) do
 		if not args.only or args.only[view.name] then
-			local ok, err = pcall(view.setup, ctx)
-			if not ok then
-				io.stderr:write(string.format("view %s: setup failed: %s\n", view.name, tostring(err)))
-				return 3
+			selected[#selected + 1] = view
+		end
+	end
+	for index, view in ipairs(selected) do
+		if not setUp(view) then
+			return 3
+		end
+		local window = view.window
+		if type(window) == "function" then
+			window = window(ctx)
+		end
+		local name = prefix .. view.name
+		local meta = cfg.meta and cfg.meta(ctx, view) or nil
+		if view.meta then
+			meta = meta or {}
+			for k, v in pairs(view.meta) do
+				meta[k] = v
 			end
-			-- Sizes settle the way the client's do between frames: OnSizeChanged for every frame whose size changed.
-			Layout.SettleSizes(M)
-			local window = view.window
-			if type(window) == "function" then
-				window = window(ctx)
-			end
-			local name = prefix .. view.name
-			local doc = Dump.Capture(M, { view = name, window = window, meta = cfg.meta and cfg.meta(ctx, view) or nil })
-			local path = args.out .. "/" .. fileName(name) .. ".json"
-			Dump.Write(doc, path)
-			written[#written + 1] = path
-			for _, f in ipairs(Lint.Run(doc)) do
-				local ignored = false
-				for _, pattern in ipairs(cfg.lintIgnore or {}) do
-					if f.key:find(pattern) then
-						ignored = true
-						break
-					end
+		end
+		local doc = Dump.Capture(M, { view = name, window = window, meta = meta })
+		local path = args.out .. "/" .. fileName(name) .. ".json"
+		Dump.Write(doc, path)
+		written[#written + 1] = path
+		for _, f in ipairs(Lint.Run(doc)) do
+			local ignored = false
+			for _, pattern in ipairs(cfg.lintIgnore or {}) do
+				if f.key:find(pattern) then
+					ignored = true
+					break
 				end
-				if not ignored then
-					all[#all + 1] = f
+			end
+			if not ignored then
+				all[#all + 1] = f
+			end
+		end
+		if view.teardown then
+			view.teardown(ctx)
+		end
+		-- A sequence whose last step was not selected finishes after its last selected step, before the next selected
+		-- view, so that view sees the same state as in a full run.
+		local seq = view.sequence
+		if seq and not seq.done and seq.finish then
+			local later = false
+			for j = index + 1, #selected do
+				if selected[j].sequence == seq then
+					later = true
+					break
 				end
 			end
-			if view.teardown then
-				view.teardown(ctx)
+			if not later then
+				seq.done = true
+				seq.finish(ctx)
 			end
 		end
 	end
@@ -220,6 +336,16 @@ function Runner.Main(M, cfg, argv)
 	if fq then
 		fq:write(table.concat(asked, "\n"), "\n")
 		fq:close()
+	end
+	local atlasesAsked = {}
+	for name in pairs(M.atlasQueries or {}) do
+		atlasesAsked[#atlasesAsked + 1] = name
+	end
+	table.sort(atlasesAsked)
+	local aq = io.open(args.out .. "/" .. fileName(prefix .. "atlases-asked") .. ".txt", "wb")
+	if aq then
+		aq:write(table.concat(atlasesAsked, "\n"), "\n")
+		aq:close()
 	end
 	-- lint.json: every finding.
 	local fh = assert(io.open(args.out .. "/" .. fileName(prefix .. "lint") .. ".json", "wb"))

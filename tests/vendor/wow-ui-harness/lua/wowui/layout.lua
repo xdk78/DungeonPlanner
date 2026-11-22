@@ -12,7 +12,8 @@
 --
 -- After Enable, region getters answer from the resolved layout: GetLeft/Right/Top/Bottom/Center/Rect, GetWidth/Height/
 -- Size, GetEffectiveScale, IsVisible, GetStringWidth/Height, GetUnboundedStringWidth, IsTruncated, GetFrameStrata
--- (inherited), GetFrameLevel (parent + 1 unless set), IsMouseEnabled (as set). Rectangles are in UIParent units with the
+-- (inherited), GetFrameLevel (parent + 1 unless set), IsMouseEnabled (as set), a line's GetThickness (the client's
+-- default 4 unless set). Rectangles are in UIParent units with the
 -- origin at the bottom left, like the client's; a region without anchors (or anchored to one without) has no rect.
 --
 -- How it resolves, as the client does: every anchor fixes one horizontal value (LEFT, RIGHT or centre) and one vertical
@@ -280,6 +281,21 @@ local function compute(r)
 	elseif r._h then
 		h = r._h * s
 	end
+	-- A texture given no size (or 0) whose file's size is known (mock.textureSizes, the runner's --sizes) takes the
+	-- file's pixel size, as the client does.
+	if r._type == "Texture" and r._texture ~= nil and not (L and R and T and B) then
+		local M = state.mock
+		local key = M.TextureKey and M.TextureKey(M.SyntheticPath and M.SyntheticPath(r._texture) or r._texture)
+		local size = key ~= nil and M.textureSizes and M.textureSizes[key]
+		if size then
+			if not (L and R) and (r._w or 0) == 0 then
+				w = size[1] * s
+			end
+			if not (T and B) and (r._h or 0) == 0 then
+				h = size[2] * s
+			end
+		end
+	end
 	if r._type == "FontString" and (w == nil or h == nil) then
 		local lay = Layout.TextLayout(r, w and (w / s) or nil, h and (h / s) or nil)
 		w = w or lay.width * s
@@ -357,22 +373,28 @@ end
 -- Enable --------------------------------------------------------------------------------------------------------------
 
 -- The client fires OnSizeChanged when a frame's resolved size changes (also when anchors, not SetSize, change it, and
--- the first time it gets a size). The mock resolves sizes lazily, so this does the same on demand: every shown frame
--- with an OnSizeChanged script whose size differs from the last one it was told gets the call, repeated until nothing
--- changes (handlers that resize their children cascade), at most `passes` times. Returns the number of calls made.
+-- the first time it gets a size). The mock fires it at once for SetSize / SetWidth / SetHeight; sizes that change
+-- through anchors are resolved lazily, so this does the rest on demand: every shown frame with an OnSizeChanged script
+-- whose size differs from the last one it was told gets the call (handler and hooks), repeated until nothing changes
+-- (handlers that resize their children cascade), at most `passes` times. Returns the number of calls made.
 function Layout.SettleSizes(M, passes)
 	local calls = 0
 	for _ = 1, passes or 8 do
 		local changed = false
 		for _, f in ipairs(M.frames or {}) do
-			local fn = f._scripts and f._scripts.OnSizeChanged
-			if fn and Layout.Visible(f) then
+			local has = (f._scripts and f._scripts.OnSizeChanged) or (f._hooks and f._hooks.OnSizeChanged)
+			if has and Layout.Visible(f) then
 				local w, h = f:GetWidth() or 0, f:GetHeight() or 0
 				local last = f._settledSize
 				if not last or math.abs(last[1] - w) > 0.01 or math.abs(last[2] - h) > 0.01 then
 					f._settledSize = { w, h }
 					if w > 0 or h > 0 or last then
-						fn(f, w, h)
+						f._inSizeChanged = true
+						local ok, err = pcall(M.FireScript, f, "OnSizeChanged", w, h)
+						f._inSizeChanged = nil
+						if not ok then
+							error(err, 0)
+						end
 						calls = calls + 1
 						changed = true
 						M.gen = (M.gen or 0) + 1
@@ -478,6 +500,9 @@ function Layout.Enable(M, opts)
 	end
 	D.IsMouseEnabled = function(r)
 		return r._mouse or false
+	end
+	D.GetThickness = function(r)
+		return r._thickness or M.LINE_THICKNESS
 	end
 	D.GetJustifyH = function(r)
 		return Layout.FontInfo(r).justifyH

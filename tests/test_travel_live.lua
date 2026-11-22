@@ -328,8 +328,15 @@ T.case("Live map: the arrow off the entrance's map, no redraw without a change, 
 		nearest = nearest + 1
 		return realNearest(...)
 	end
+	-- SetSize runs the window's OnSizeChanged at once, as the client does; SettleSizes then passes the change on to
+	-- children whose anchors resized them.
+	local sized = 0
+	w:HookScript("OnSizeChanged", function()
+		sized = sized + 1
+	end)
 	w:SetSize(ns.GettingThere.MIN_W + 40, 600)
-	T.ok(Layout.SettleSizes(mock) > 0, "the size scripts ran")
+	T.eq(sized, 1, "the size scripts ran")
+	Layout.SettleSizes(mock)
 	ns.Travel.Nearest = realNearest
 	T.eq(nearest, 0, "no flight masters looked up on resize")
 	T.eq(w.map:GetWidth(), ns.GettingThere.MIN_W + 40 - ins.left - ins.right - 2 * SP.md, "the map follows the window")
