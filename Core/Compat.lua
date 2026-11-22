@@ -122,6 +122,10 @@ Compat.CHECKS = {
 	{ "Faction", "UnitFactionGroup", "hiding the other faction's quests" },
 	{ "Group size", "GetNumGroupMembers", "Prep's raid members" },
 	{ "Unit exists", "UnitExists", "Prep's party members" },
+	-- The party strip (Data/PartyInfo.lua): who sits in which seat.
+	{ "Unit online", "UnitIsConnected", "offline members are not dimmed in the party strip" },
+	{ "Specialization count", "C_SpecializationInfo.GetNumSpecializationsForClassID",
+		"role guesses from class in the party strip (GetNumSpecializationsForClassID is tried instead)" },
 	{ "Area names", "C_Map.GetAreaInfo", "zone names of Questie's quest givers" },
 	-- Getting there (Data/Travel.lua, Data/Navigation.lua): outdoors only.
 	{ "World to map", "C_Map.GetMapPosFromWorldPos", "the entrance's coordinates on its zone map" },

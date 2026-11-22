@@ -66,7 +66,18 @@ differently:
   (`groupfinder-icon-role-micro-tank`, `-heal`, `-dps`, else the classic `LFGRole` sheet, else the round
   `UI-LFG-RoleIcon-*` icons) and the player's name under it, or a muted "Open". The ring is bronze for every role:
   the round damage icon (a slanted sword on a red disc) and ability icons in a red ring both read as a "no entry"
-  sign.
+  sign. Where the plan names nobody, the seats show the group as it is (`Model/Party.lua`, `UI/PartySeats.lua`;
+  solo, the player alone): each member by the role set in the group finder; without one, a damage-only class in a
+  damage seat, and a class that can also tank or heal in the empty tank or healer seat it can fill (the least
+  flexible first), else a damage seat, as a guess. A member is the short name (the first name) in class colour, cut
+  by its letters with "..." when one word is too long, with the level small on the plate's lower right; a guess or
+  a member in a seat that is not their role reads dimmer, an offline or dead member dims the plate too. The tooltip:
+  the whole name (with the surname), the role, level and class, and how the seat was chosen ("Role not set: guessed
+  from class."). A name the plan stores keeps its seat and is matched to a member by the whole name, never a first
+  name (`Share/Roster.lua`). Members past the five seats show as "+1" on the header, named in the strip's tooltip. A
+  raid plan that sets no groups shows the raid's groups as they stand, the counts muted. The Party section's card
+  fills its seats the same way, with "Tank • level 18" under the plate and "+1 more in your group" at its top right.
+  Both redraw on the group's events while shown (Data/PartyInfo.lua, one redraw 0.3 s after a burst); hidden, nothing.
 - **Section area**: the map by default; Bosses, Pulls, Party (assignments), Gear, Runs (the run recorder), Share and
   Notes (details, notes and progress) in the same place, each in an inset.
 - **Gear**: the filters on one line (they shrink alike on a narrow window), and under them a line of its own with the

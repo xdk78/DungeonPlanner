@@ -78,6 +78,15 @@ follow [Semantic Versioning](https://semver.org/).
 - **Show location** in the window's header, right after the instance's name: a click shows the entrance on the world
   map (the game's pin, as in Getting there), a right-click or Shift-click opens the Getting there window. Its tooltip
   names the zone and what a click does; it is greyed out in combat, while dead and for instances without travel facts.
+- **The party strip fills from your group.** The side panel's Party seats and the Party section's card show the
+  people you are grouped with wherever the plan names nobody (you alone when solo): each by the role chosen in the
+  group finder, a damage-only class without a role in a damage seat, and a class that can also tank or heal in the
+  empty tank or healer seat it can fill, marked as a guess (a dimmer name; the tooltip says it was guessed from the
+  class). Names are in class colour with the level on the plate; offline and dead members are dimmed; the tooltip
+  has the whole name (with the surname), the class and how the seat was chosen. Names a plan stores keep their seats
+  and are matched to members by the whole name. Members past the five seats show as "+1" with their names in the
+  tooltip. A raid plan that sets no groups shows the raid's groups as they stand. Nothing is saved: "Fill from my
+  party" still stores the group into an own plan, now by the whole name.
 
 ### Changed
 - Saved data moves to schema 6 (it remembers which plan each received copy came from, for group sync, and keeps the
