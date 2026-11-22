@@ -281,6 +281,8 @@ T.case("Perf: a route point drag redraws Wailing Caverns' routes in their plain 
 	-- Counted alone (lua tests/run.lua "Perf: a route point"), whole map / zoom 4: a redraw while dragging 3660k / 2760k
 	-- (before the plain look 3706k / 2820k), its route paths 543k / 806k (554k / 830k). Most of a path's cost is the
 	-- lane split (RouteLegs.Lanes, about 60%), which the plain look keeps; the rest of the redraw is pins and labels.
+	-- Since lanes cost the same at any zoom and label placement passes over boxes that lie apart: a redraw while
+	-- dragging 1785k / 1072k; its route paths drawn again with the same points 228k / 290k (the lanes reused).
 	for _, m in ipairs({ whole, close }) do
 		T.ok(m.draggedPaths < m.stillPaths and m.drag.lines < m.full.lines, string.format(
 			"paths while dragging: %dk in %d pieces against %dk in %d", m.draggedPaths, m.drag.lines, m.stillPaths,

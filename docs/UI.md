@@ -446,6 +446,21 @@ Santiago Reyes", or "Map: Dungeon Journal" where another addon provides the map,
 dark plate in the map's own top-left corner, on the picture (in the frame's corner while that corner is scrolled
 away), and the provider's boss pins say where they come from.
 
+**Zoom and pan.** The mouse wheel zooms by a quarter per tick (from the whole map to eight times it) about the point
+under the pointer, which stays exactly where it is (except where the map would leave the view: at least a quarter of
+it stays inside, and the whole map returns to its fit). A drag pans: only the canvas moves while the pointer moves, and
+the map is laid out once on release. Wheel zoom is a mode of the map's state machine (`view.drag` "zoom",
+`MapCanvas.ZoomStep` in `UI/MapInput.lua`): each tick lays the map out once (pins, labels and route lines at the new
+size) with the routes in their plain look (no dashes, no arrows, the arrows placed before hidden); when no tick has come
+for 0.15 s a timer event ends the zoom and the full look (colour pieces, the dashed way back, the arrows) is drawn once,
+on the pins and labels that last tick laid out. One timer runs per zoom; a timer of an earlier zoom changes nothing, a
+timer that comes before the zoom's end waits for the rest. A press on the map, or hiding it, ends a zoom at once. The
+leg under the pointer stays highlighted while zooming and is looked at again when the zoom has settled; a pointer that
+leaves the map (or moves onto a pin) during a zoom takes the highlight, its tooltip and the coordinates with it. A
+tick during a pan zooms and the pan goes on from there. Measured with
+the instruction count (`tests/test_zoom.lua`, Wailing Caverns): a tick costs about a third of a full redraw and a fifth
+of what a tick cost when each one was a full redraw.
+
 Map labels sit on a dark plate (a few pixels of margin), so they stay readable over a map's own painted names; label
 placement (`MapLayout.Labels`) counts the plate, so labels still avoid each other, the pins and the floating legend,
 and stay inside the visible map (within the gold frame): a label below or above its pin slides sideways, one beside
@@ -510,10 +525,16 @@ map redraw, after the pins and labels are laid out, only on the visible part of 
 on every side (at most 200 per route and 400 in all), never per frame. A pan moves the canvas without a redraw, so the
 margin's arrows show on the map it reveals; past that margin they come with the redraw on release. The margin costs
 up to a fifth more per redraw than the visible part alone (measured with the instruction count of `tests/test_perf.lua`
-on Wailing Caverns zoomed in). While a marker or route point is dragged or a window is resized the arrows hide and the
-lines are drawn plain (one piece per segment, the way back solid), and the full look and the arrows come once when that
-ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its release, when the window
-hides, or when the timer finds no mouse button held). Every
+on Wailing Caverns zoomed in). While a marker or route point is dragged, the wheel zooms or a window is resized the
+arrows hide and the lines are drawn plain (one piece per segment, the way back solid), and the full look and the
+arrows come once when that ends (a short timer looks; `ns.sizingWindow` is set by the size grip and cleared on its
+release, when the window hides, or when the timer finds no mouse button held; a zoom ends on its own timer, below).
+A route's two lanes (`RouteLegs.Lanes`) are worked out again only when its drawn points or the line's width change:
+a hover change, a marker drag and the end of a drag or zoom reuse them, and while the wheel zooms or a window is
+resized the last lanes are scaled with the map (their spacing grows or shrinks with it for that moment) and worked out
+exactly when the full look comes. Only the routes of the last draw are kept (none once the map hides). The lanes'
+lookup grid has cells as large as an average segment, so their cost does not grow with the zoom; of two opposite
+segments that run alongside a segment equally far, the earlier is its partner. Every
 part of a route takes its colour from `MapRoutes.ColorAt`: lines, arrows, stop rings and bend discs. While a step
 is in focus its leg is brighter and wider and the rest of the path dims (as with the hover highlight, below). Numbered
 stops are dark discs with a ring in the route's colour at that stop, drawn above the path. While a route is edited,
@@ -712,7 +733,8 @@ Pins, route lines and their outlines, joints, chevrons, route points, journal pi
 joints and labels come from pools;
 nothing is created per redraw. The map
 redraws on a plan change, a zoom, the end of a pan, a step focus, a setting change or a resize, never per frame; while
-a pan lasts only the canvas moves (pins, routes and drawings are anchored to it). One change refreshes the map section
+a pan lasts only the canvas moves (pins, routes and drawings are anchored to it), and while the wheel zooms each tick
+draws the routes plain and the full look comes once it settles (The map, "Zoom and pan"). One change refreshes the map section
 once (`UI.Batch`), and the Enemies layer and boss portraits are computed once per plan revision (`DB.Revision`). OnUpdate runs
 only while dragging, while a drawing press lasts (only the stroke's preview or the moved drawing is redrawn), or while
 the pointer is over the map (coordinates, 20 Hz). The steps are rebuilt only after the
@@ -854,6 +876,8 @@ From 0.1.0:
   bends, the focused segment brighter than the rest, stop numbers readable over the line, and every option of the
   Routes settings. `Media/RouteArrow.tga` and `Media/RouteArrowEdge.tga` are new files: until the game is restarted
   the older chevron or arrow shape stands in (where the client reports that a texture failed).
+- Wheel zoom on Wailing Caverns and Molten Core: smooth while the wheel turns (plain lines, no arrows), the dashes and
+  arrows back about 0.15 s after the last tick, the point under the pointer still, a click right after a tick.
 - Everything from the previous list still applies: map tiles lining up with markers, boss portraits, Polish letters.
 - The experimental plan on OpenMap's dungeon map (`UI/OpenMapOverlay.lua`, OpenMap 0.8.12 and 0.8.13): the route, stops and
   markers follow OpenMap's zoom (wheel) and panning (drag) and stay inside its clipped picture; their frame level

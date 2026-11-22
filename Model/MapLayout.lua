@@ -205,17 +205,26 @@ function MapLayout.Labels(items, avoid, bounds)
 		return a < b
 	end)
 	local placed = {}
+	local pins = {}
+	for j, other in ipairs(items) do
+		pins[j] = pinBox(other)
+	end
 	-- What a label box covers: other pins, labels already placed, the legend (counted the most) and the outside of the
-	-- visible map (a label there would be cut). 0: free.
+	-- visible map (a label there would be cut). 0: free. (Boxes apart are passed over without working out an area.)
 	local function cost(i, box)
 		local c = 8 * outside(box, bounds)
-		for j, other in ipairs(items) do
-			if j ~= i then
-				c = c + area(box, pinBox(other))
+		local x1, y1, x2, y2 = box[1], box[2], box[3], box[4]
+		for j = 1, #pins do
+			local p = pins[j]
+			if j ~= i and p[1] < x2 and p[3] > x1 and p[2] < y2 and p[4] > y1 then
+				c = c + area(box, p)
 			end
 		end
-		for _, p in ipairs(placed) do
-			c = c + area(box, p)
+		for j = 1, #placed do
+			local p = placed[j]
+			if p[1] < x2 and p[3] > x1 and p[2] < y2 and p[4] > y1 then
+				c = c + area(box, p)
+			end
 		end
 		for _, r in ipairs(avoid or {}) do
 			c = c + 4 * area(box, r)

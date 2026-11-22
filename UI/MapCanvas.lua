@@ -9,7 +9,8 @@
 -- Layers (Schema.LAYERS) can be hidden; position markers tied to a boss or a pull show only while that boss or pull is
 -- in focus. Every drawn object comes from a pool and is redrawn only when the plan, the view or a setting changes.
 --
--- Interaction is an explicit state machine (view.drag): idle | pan | marker | point. OnUpdate runs only while dragging
+-- Interaction is an explicit state machine (view.drag): idle | pan | marker | point | draw | zoom (UI/MapInput.lua;
+-- while the wheel zooms the routes are drawn plain until it settles). OnUpdate runs only while dragging
 -- or while the pointer is over the map (coordinates, 20 Hz), so an idle map costs nothing per frame.
 
 local _, ns = ...
@@ -615,7 +616,7 @@ function MapCanvas.Install(view)
 			if layerShown("route") or extra then
 				local own = layerShown("route") and plan or nil
 				local drawn = self:DrawRoutePaths(own, floor, px, py, { scale = scale, seg = seg, activeRoute = activeRoute,
-					extra = extra, mx = mx, my = my, deferArrows = true, bounds = routeBounds(visibleBox()),
+					extra = extra, mx = mx, my = my, mapScale = s, deferArrows = true, bounds = routeBounds(visibleBox()),
 					-- Run mode: the current step's leg highlighted as a hovered one is (UI/MapRoutes.lua SetRouteHover).
 					highlight = self.cb.highlightFocus and self.cb.highlightFocus() and seg or nil })
 				nLines, pathsDrawn = drawn.lines, true
