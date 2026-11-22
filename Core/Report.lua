@@ -14,6 +14,8 @@ local Report = ns:NewModule("Report")
 
 Report.REPO = "xdk78/DungeonPlanner"
 Report.MAX_ERRORS = 10
+Report.DISCORD_LIMIT = 2000 -- characters
+Report.MAX_URL = 420 -- the issue link never gets longer than this
 Report.MAX_WHAT = 120 -- bytes of "What happened?" put into the issue link (the link stays short; the report has all of it)
 
 -- Percent-encoding of a URL query value (UTF-8 bytes kept as %XX).
@@ -50,10 +52,48 @@ function Report.IssueURL(data, what)
 		"language=" .. Report.UrlEncode(data.language and data.language.active or ""),
 	}
 	what = ns.Util.Trim(tostring(what or "")):gsub("%s+", " ")
-	if what ~= "" then
-		parts[#parts + 1] = "what=" .. Report.UrlEncode(cut(what, Report.MAX_WHAT))
+	local base = "https://github.com/" .. Report.REPO .. "/issues/new?" .. table.concat(parts, "&")
+	-- Fixed length cap: the free text goes in as much as fits, cut on a whole character.
+	local keep = math.min(#what, Report.MAX_WHAT)
+	while keep > 0 do
+		local url = base .. "&what=" .. Report.UrlEncode(cut(what, keep))
+		if #url <= Report.MAX_URL then
+			return url
+		end
+		keep = keep - 8
 	end
-	return "https://github.com/" .. Report.REPO .. "/issues/new?" .. table.concat(parts, "&")
+	return base
+end
+
+-- Taint is not a Lua error: when the game blocks one of our actions (ADDON_ACTION_BLOCKED / ADDON_ACTION_FORBIDDEN) it
+-- raises these events, and the report would say "no errors". Record each with where it happened: the first line of our own
+-- code in the stack, else the first Lua line (and the C function that was called).
+local function stackSpot()
+	local stack = rawget(_G, "debugstack")
+	local text = type(stack) == "function" and select(2, pcall(stack, 3, 12, 0)) or nil
+	if type(text) ~= "string" then
+		return "location unknown"
+	end
+	local first
+	for line in text:gmatch("[^\n]+") do
+		line = ns.Errors.Clean(line)
+		if line:find("DungeonPlanner", 1, true) then
+			return line:match("^%s*(.-)%s*$")
+		end
+		first = first or line:match("^%s*(.-)%s*$")
+	end
+	return "via " .. (first or "?")
+end
+
+function Report.Init()
+	for _, event in ipairs({ "ADDON_ACTION_BLOCKED", "ADDON_ACTION_FORBIDDEN" }) do
+		ns:RegisterEvent(event, function(_, addon, func)
+			if addon == ns.name then
+				ns.Errors.Record(string.format("%s %s at %s", event == "ADDON_ACTION_BLOCKED" and "blocked:" or "forbidden:",
+					tostring(func), stackSpot()))
+			end
+		end)
+	end
 end
 
 -- Collection ------------------------------------------------------------------------------------------------------------
@@ -238,9 +278,60 @@ function Report.Errors()
 	return out
 end
 
+-- "gamepad" or "keyboard and mouse": the interface style the client is in (the gamepad style changes how the game reads
+-- slash commands and the Escape list, which matters for bug reports on Forever).
+function Report.InputStyle()
+	local style, gamepad
+	local api, enum = rawget(_G, "C_InputInterfaceStyle"), rawget(_G, "Enum")
+	if type(api) == "table" and type(api.GetCurrentStyle) == "function" and type(enum) == "table" and type(enum.InputInterfaceStyle) == "table" then
+		local ok, v = pcall(api.GetCurrentStyle)
+		style = ok and v or nil
+		gamepad = style ~= nil and style == enum.InputInterfaceStyle.Gamepad
+	elseif type(rawget(_G, "GetCVar")) == "function" then
+		local ok, v = pcall(rawget(_G, "GetCVar"), "InputDeviceInterfaceStyle")
+		style = ok and v or nil
+		gamepad = style ~= nil and tostring(style):lower():find("gamepad", 1, true) ~= nil
+	end
+	if style == nil then
+		return "unknown"
+	end
+	return gamepad and "gamepad" or "keyboard and mouse"
+end
+
+-- Settings that differ from the defaults, "path=value" sorted, and the profile name ("custom" unless it is the stock
+-- "Default": a profile is often named after a character or realm).
+local function settingsDiff()
+	local out = {}
+	local function walk(current, defaults, path)
+		for _, key in ipairs(ns.Util.SortedKeys(current)) do
+			local value, default = current[key], defaults and defaults[key]
+			local name = path .. key
+			if type(value) == "table" then
+				walk(value, type(default) == "table" and default or nil, name .. ".")
+			elseif type(value) ~= "function" and value ~= default and (type(value) ~= "string" or #value <= 40) then
+				out[#out + 1] = name .. "=" .. tostring(value)
+			end
+		end
+	end
+	walk(ns.db.settings, ns.Defaults.settings, "")
+	local profile = ns.adb and ns.adb.GetCurrentProfile and ns.adb:GetCurrentProfile() or "Default"
+	return { profile = profile == "Default" and "Default" or "custom", diff = out }
+end
+
+local function logLines()
+	local out = {}
+	for _, entry in ipairs(ns.LogLines(5)) do
+		out[#out + 1] = entry.text
+	end
+	return out
+end
+
 -- Everything the report says, as plain data (nothing the player wrote).
 function Report.Collect()
 	local data = {
+		input = guarded("input", Report.InputStyle),
+		settings = guarded("settings", settingsDiff),
+		log = guarded("log", logLines),
 		addon = guarded("addon", addonInfo),
 		client = guarded("client", ns.Compat.ClientInfo),
 		language = guarded("language", languageInfo),
@@ -259,8 +350,23 @@ end
 
 -- Text ------------------------------------------------------------------------------------------------------------------
 
-function Report.Text(data, what)
-	local out = {}
+-- Characters, not bytes (Discord counts characters): UTF-8 continuation bytes do not count.
+function Report.CharCount(text)
+	return #text - select(2, text:gsub("[\128-\191]", ""))
+end
+
+-- What goes first when a text must fit a limit (Discord's 2000 characters); the core facts and the player's own words
+-- always stay, whole.
+Report.DROP_ORDER = { "perf", "log", "settings", "integrations", "debug", "errors" }
+
+-- opts.limit: at most that many characters; sections are dropped in DROP_ORDER until it fits (errors last, and a short
+-- note says what was left out). Without it, the whole report.
+function Report.Text(data, what, opts)
+	local blocks, out = {}, {}
+	local function block(name)
+		out = {}
+		blocks[#blocks + 1] = { name = name, lines = out }
+	end
 	-- A section that failed to collect becomes one line; the rest of the report stays.
 	local function put(section, fn)
 		if type(section) == "table" and section.failed then
@@ -272,6 +378,7 @@ function Report.Text(data, what)
 	local function line(text)
 		out[#out + 1] = text
 	end
+	block("core")
 	line("Dungeon Planner problem report")
 	put(data.addon, function(a)
 		line(string.format("Addon: %s | data schema %s | share protocol %s%s", tostring(a.version), tostring(a.schema),
@@ -304,6 +411,10 @@ function Report.Text(data, what)
 		line(string.format("Window: %s | view %s | section %s | run mode %s | scale %s", w.shown and "open" or "closed",
 			tostring(w.view), tostring(w.section), w.runMode and "open" or "closed", tostring(w.scale)))
 	end)
+	put(data.input, function(i)
+		line("Input: " .. tostring(i))
+	end)
+	block("integrations")
 	put(data.integrations, function(list)
 		local bits = {}
 		for _, row in ipairs(list) do
@@ -311,13 +422,19 @@ function Report.Text(data, what)
 		end
 		line("Other addons: " .. table.concat(bits, ", "))
 	end)
+	block("settings")
+	put(data.settings, function(s)
+		line("Settings (profile " .. s.profile .. ", differing from the defaults): " .. (#s.diff > 0 and table.concat(s.diff, ", ") or "none"))
+	end)
+	block("debug")
 	line("Debug summary:")
 	put(data.debug, function(lines)
 		for _, text in ipairs(lines) do
 			line("  " .. text)
 		end
 	end)
-	line("Lua errors (newest last, up to " .. Report.MAX_ERRORS .. "):")
+	block("errors")
+	line("Lua errors and blocked actions (newest last, up to " .. Report.MAX_ERRORS .. "):")
 	put(data.errors, function(list)
 		if #list == 0 then
 			line("  none")
@@ -326,6 +443,16 @@ function Report.Text(data, what)
 			line(string.format("  %s%s [%s]", e.count > 1 and (e.count .. "x ") or "", e.message, e.source))
 		end
 	end)
+	block("log")
+	put(data.log, function(lines)
+		if #lines > 0 then
+			line("Log (last " .. #lines .. "):")
+			for _, text in ipairs(lines) do
+				line("  " .. text)
+			end
+		end
+	end)
+	block("perf")
 	if data.perf then
 		put(data.perf, function(lines)
 			for _, text in ipairs(lines) do
@@ -333,10 +460,37 @@ function Report.Text(data, what)
 			end
 		end)
 	end
-	what = ns.Util.Trim(tostring(what or ""))
-	line("What happened:")
-	line(what ~= "" and what or "(not filled in)")
-	return table.concat(out, "\n")
+	local words = ns.Util.Trim(tostring(what or ""))
+	local tail = "What happened:\n" .. (words ~= "" and words or "(not filled in)")
+	local function compose(dropped)
+		local parts = {}
+		for _, b in ipairs(blocks) do
+			if not dropped[b.name] and #b.lines > 0 then
+				parts[#parts + 1] = table.concat(b.lines, "\n")
+			end
+		end
+		local left = {}
+		for name in pairs(dropped) do
+			left[#left + 1] = name
+		end
+		table.sort(left)
+		if #left > 0 then
+			parts[#parts + 1] = "(left out to fit: " .. table.concat(left, ", ") .. ")"
+		end
+		parts[#parts + 1] = tail
+		return table.concat(parts, "\n")
+	end
+	local dropped, text = {}, nil
+	text = compose(dropped)
+	local limit = opts and opts.limit
+	for _, name in ipairs(Report.DROP_ORDER) do
+		if not limit or Report.CharCount(text) <= limit then
+			break
+		end
+		dropped[name] = true
+		text = compose(dropped)
+	end
+	return text
 end
 
 -- /dp report [text]

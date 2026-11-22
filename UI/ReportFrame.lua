@@ -24,7 +24,7 @@ function ReportFrame.Update()
 		return
 	end
 	local what = frame.what:GetValue()
-	frame.report:SetValue(Report.Text(data, what))
+	frame.report:SetValue(Report.Text(data, what, frame.short:GetChecked() and { limit = Report.DISCORD_LIMIT } or nil))
 	frame.link:SetValue(Report.IssueURL(data, what))
 end
 
@@ -72,6 +72,10 @@ local function build()
 	f.hint = W.Text(inner, "caption", "muted")
 	f.hint:SetPoint("LEFT", f.reportLabel, "RIGHT", SP.md, 0)
 	f.hint:SetText(L["Click the box, then Ctrl+C to copy"])
+	f.short = W.Check(inner, L["Short for Discord (2000 characters)"], function()
+		ReportFrame.Update()
+	end)
+	f.short:SetPoint("TOPRIGHT", f.what, "BOTTOMRIGHT", 0, -SP.md)
 
 	-- Bottom up: buttons, the link, then the report fills what is left.
 	f.select = W.Button(inner, L["Select the report"], "red", function()

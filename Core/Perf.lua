@@ -1,24 +1,36 @@
--- /dp perf: an opt-in probe. Off by default and free when off: nothing here runs, and no handler is wrapped, until
--- `/dp perf start`. Start swaps each of our event handlers, bus listeners and main redraw functions for a thin wrapper
--- that times the call (debugprofilestop, in milliseconds), counts it and records the ones over SPIKE_MS; `/dp perf stop`
--- puts the originals back. The numbers stay for `/dp perf` and the report window (UI/ReportFrame.lua) until
--- `/dp perf reset`. Memory comes from C_AddOnProfiler and the addon memory call, each guarded.
+-- /dp perf: an opt-in probe, free when off. Everything the addon runs for the game goes through three funnels in
+-- Core/Init.lua: the event dispatcher (one AceEvent callback for every event we listen to), `ns:Fire` (the internal bus)
+-- and `ns.SafeCall` (button clicks, timers, anything that must not break its caller). `/dp perf start` swaps those three
+-- for timed versions and watches the frame rate; `/dp perf stop` puts the originals back. While it is off nothing is
+-- wrapped and nothing runs: no OnUpdate, no ticker.
 --
--- Limits: a function another module copied into a local before the probe started is not seen (it keeps calling the
--- original); handlers registered while the probe runs are not wrapped; timings include the cost of what the handler
--- calls (a redraw inside an event is counted twice, once under each name).
+-- What it keeps (all bounded): per name the calls, total and own time (own = total minus the calls inside it, tracked
+-- with a depth stack, so a redraw inside an event is not counted twice), the worst calls over SPIKE_MS in a ring of
+-- SPIKE_MAX with what called them, per frame the time we used and its 3 slowest calls (frames that cost over SPIKE_MS), the
+-- number of hitches (frames over HITCH_MS) and how many were ours. The probe's own per-call cost is measured at the start
+-- and subtracted. Every 5 s it samples the game's addon profiler (C_AddOnProfiler), each call guarded; when the game's own
+-- number is far above what we measured, the summary says some time is not seen here (an OnUpdate or a timer callback
+-- that bypasses SafeCall).
 
 local _, ns = ...
 local Perf = ns:NewModule("Perf")
 
 Perf.SPIKE_MS = 5
-Perf.MAX_SPIKES = 10 -- spikes kept, newest last (bounded)
+Perf.HITCH_MS = 50
+Perf.SPIKE_MAX = 200
+Perf.FRAME_MAX = 20
+Perf.SAMPLE_EVERY = 5
 
 local running = false
 local startedAt
-local stats = {} -- [name] = { calls, total, max, spikes }
-local spikes = {}
-local undo = {} -- { restore function }
+local stats, spikes, slowFrames = {}, {}, {}
+local frames, hitches, hitchesOurs = 0, 0, 0
+local frameSum, frameTop = 0, {} -- this frame: our time, and its 3 slowest top-level calls
+local overhead = 0
+local stack, depth = {}, 0
+local profiler = {} -- the last sample of the game's profiler
+local original = {} -- what the funnels were before the probe
+local ticker, frame
 
 -- Milliseconds. Tests replace Perf.clock.
 function Perf.clock()
@@ -33,67 +45,129 @@ function Perf.IsRunning()
 end
 
 function Perf.HasData()
-	return next(stats) ~= nil
+	return next(stats) ~= nil or frames > 0
 end
 
-local function record(name, t0, ...)
-	local ms = Perf.clock() - t0
-	local s = stats[name]
+-- Timing ------------------------------------------------------------------------------------------------------------------
+
+local function enter(name)
+	depth = depth + 1
+	local e = { name = name, t0 = Perf.clock(), child = 0 }
+	stack[depth] = e
+	return e
+end
+
+local function leave(e, ...)
+	local raw = Perf.clock() - e.t0
+	stack[depth] = nil
+	depth = depth - 1
+	local total = math.max(0, raw - overhead)
+	local own = math.max(0, raw - e.child - overhead)
+	local parent = stack[depth]
+	if parent then
+		parent.child = parent.child + raw
+	else
+		frameSum = frameSum + total
+		frameTop[#frameTop + 1] = { name = e.name, ms = total }
+		table.sort(frameTop, function(a, b)
+			return a.ms > b.ms
+		end)
+		frameTop[4] = nil
+	end
+	local s = stats[e.name]
 	if not s then
-		s = { calls = 0, total = 0, max = 0, spikes = 0 }
-		stats[name] = s
+		s = { calls = 0, total = 0, own = 0, max = 0, spikes = 0 }
+		stats[e.name] = s
 	end
-	s.calls = s.calls + 1
-	s.total = s.total + ms
-	if ms > s.max then
-		s.max = ms
+	s.calls, s.total, s.own = s.calls + 1, s.total + total, s.own + own
+	if total > s.max then
+		s.max = total
 	end
-	if ms > Perf.SPIKE_MS then
+	if total > Perf.SPIKE_MS then
 		s.spikes = s.spikes + 1
-		spikes[#spikes + 1] = { name = name, ms = ms, at = (Perf.clock() - startedAt) / 1000 }
-		if #spikes > Perf.MAX_SPIKES then
+		spikes[#spikes + 1] = { name = e.name, ms = total, own = own, from = parent and parent.name or nil,
+			at = (Perf.clock() - startedAt) / 1000 }
+		if #spikes > Perf.SPIKE_MAX then
 			table.remove(spikes, 1)
 		end
 	end
 	return ...
 end
 
-local function timed(name, fn)
-	return function(...)
-		return record(name, Perf.clock(), fn(...))
-	end
-end
-
--- Replace owner[key] (a function) with a timed wrapper; remember how to put it back.
-local function wrapField(name, owner, key)
-	local original = type(owner) == "table" and owner[key]
-	if type(original) ~= "function" then
-		return
-	end
-	local wrapper = timed(name, original)
-	owner[key] = wrapper
-	undo[#undo + 1] = function()
-		if owner[key] == wrapper then
-			owner[key] = original
+-- One frame ended (the probe's OnUpdate): elapsed seconds since the last one.
+function Perf.OnFrame(elapsed)
+	frames = frames + 1
+	local frameMs = (elapsed or 0) * 1000
+	if frameMs > Perf.HITCH_MS then
+		hitches = hitches + 1
+		-- Ours when we used a quarter of that frame or the spike limit, whichever is less.
+		if frameSum >= math.min(frameMs * 0.25, Perf.SPIKE_MS) then
+			hitchesOurs = hitchesOurs + 1
 		end
 	end
+	if frameSum > Perf.SPIKE_MS then
+		slowFrames[#slowFrames + 1] = { ms = frameSum, frame = frameMs, top = frameTop }
+		if #slowFrames > Perf.FRAME_MAX then
+			table.remove(slowFrames, 1)
+		end
+	end
+	frameSum, frameTop = 0, {}
 end
 
--- The main redraws, by name: the window's page, the page's pieces, the map, run mode and the Notes window.
-local function redraws()
-	local UI = ns.UI
-	local frame = UI and UI.Frame and UI.Frame()
-	return {
-		{ "redraw: page", UI, "RefreshPage" },
-		{ "redraw: footer", UI, "RefreshFooter" },
-		{ "redraw: instance page", frame and frame.instancePage, "Refresh" },
-		{ "redraw: steps list", frame and frame.instancePage, "RefreshSteps" },
-		{ "redraw: home", frame and frame.home, "Refresh" },
-		{ "redraw: map", UI and UI.mapCanvas, "DrawContent" },
-		{ "redraw: run mode", ns.RunMode, "Refresh" },
-		{ "redraw: notes", ns.NotesFrame, "Refresh" },
-	}
+-- The game's profiler, every few seconds while running: each call guarded.
+local function metricsOf()
+	local api, enum = rawget(_G, "C_AddOnProfiler"), rawget(_G, "Enum")
+	local metrics = type(enum) == "table" and enum.AddOnProfilerMetric
+	if type(api) ~= "table" or type(api.GetAddOnMetric) ~= "function" or type(metrics) ~= "table" then
+		return nil
+	end
+	return api, metrics
 end
+
+local function sample()
+	local api, metrics = metricsOf()
+	if not api then
+		return
+	end
+	local function metric(key)
+		local ok, v = pcall(api.GetAddOnMetric, ns.name, metrics[key])
+		v = ok and ns.Util.Plain(v) or nil
+		return type(v) == "number" and v or nil
+	end
+	profiler.last, profiler.recent, profiler.peak = metric("LastTime"), metric("RecentAverageTime"), metric("PeakTime")
+	profiler.over = {}
+	for _, ms in ipairs({ 5, 10, 50, 100 }) do
+		profiler.over[ms] = metric("CountTimeOver" .. ms .. "Ms")
+	end
+	if type(api.IsEnabled) == "function" then
+		local ok, v = pcall(api.IsEnabled)
+		profiler.enabled = ok and v or nil
+	end
+	if type(api.GetOverallMetric) == "function" and type(metrics.RecentAverageTime) ~= "nil" then
+		local ok, v = pcall(api.GetOverallMetric, metrics.RecentAverageTime)
+		v = ok and ns.Util.Plain(v) or nil
+		profiler.overall = type(v) == "number" and v or nil
+	end
+end
+Perf.Sample = sample
+
+-- Per call overhead of the probe itself, ms.
+local function measureOverhead()
+	if Perf.fixedOverhead then
+		return Perf.fixedOverhead
+	end
+	local n = 200
+	local t0 = Perf.clock()
+	for _ = 1, n do
+		local e = enter("calibrate")
+		leave(e)
+	end
+	local per = (Perf.clock() - t0) / n
+	stats.calibrate, spikes, frameSum, frameTop = nil, {}, 0, {}
+	return per
+end
+
+-- Start and stop ---------------------------------------------------------------------------------------------------------
 
 function Perf.Start()
 	if running then
@@ -101,19 +175,48 @@ function Perf.Start()
 	end
 	running = true
 	startedAt = Perf.clock()
-	for event, handlers in pairs(ns.EventTable()) do
-		for i = 1, #handlers do
-			wrapField("event: " .. event, handlers, i)
+	overhead = 0
+	overhead = measureOverhead()
+	-- 1. Events: the one dispatcher AceEvent calls, registered again with a timed version.
+	original.dispatch = ns.EventDispatcher()
+	original.events = {}
+	local function timedDispatch(event, ...)
+		local e = enter("event: " .. tostring(event))
+		return leave(e, original.dispatch(event, ...))
+	end
+	for event in pairs(ns.EventTable()) do
+		if ns.addon and pcall(ns.addon.RegisterEvent, ns.addon, event, timedDispatch) then
+			original.events[#original.events + 1] = event
 		end
 	end
-	for message, list in pairs(ns.ListenerTable()) do
-		for i = 1, #list do
-			wrapField("message: " .. message, list[i], "fn")
+	-- 2. The bus.
+	original.fire = ns.Fire
+	ns.Fire = function(self, message, ...)
+		local e = enter("message: " .. tostring(message))
+		return leave(e, original.fire(self, message, ...))
+	end
+	-- 3. SafeCall: top-level calls only (those inside an event or a message are inside it already).
+	original.safeCall = ns.SafeCall
+	ns.SafeCall = function(fn, ...)
+		if depth > 0 then
+			return original.safeCall(fn, ...)
 		end
+		local e = enter("callback (SafeCall)")
+		return leave(e, original.safeCall(fn, ...))
 	end
-	for _, r in ipairs(redraws()) do
-		wrapField(r[1], r[2], r[3])
+	-- Frames: an OnUpdate for as long as the probe runs.
+	if CreateFrame then
+		frame = frame or CreateFrame("Frame")
+		frame:SetScript("OnUpdate", function(_, elapsed)
+			Perf.OnFrame(elapsed)
+		end)
+		frame:Show()
 	end
+	if C_Timer and C_Timer.NewTicker then
+		ticker = C_Timer.NewTicker(Perf.SAMPLE_EVERY, sample)
+	end
+	sample()
+	ns.Log("perf probe started")
 	return true
 end
 
@@ -121,23 +224,37 @@ function Perf.Stop()
 	if not running then
 		return false
 	end
-	for i = #undo, 1, -1 do
-		undo[i]()
+	for _, event in ipairs(original.events or {}) do
+		pcall(ns.addon.RegisterEvent, ns.addon, event, original.dispatch)
 	end
-	undo = {}
+	ns.Fire, ns.SafeCall = original.fire, original.safeCall
+	original = {}
+	if frame then
+		frame:SetScript("OnUpdate", nil)
+		frame:Hide()
+	end
+	if ticker and ticker.Cancel then
+		ticker:Cancel()
+	end
+	ticker = nil
+	stack, depth = {}, 0
 	running = false
-	startedAt = nil
+	ns.Log("perf probe stopped")
 	return true
 end
 
 function Perf.Reset()
-	stats, spikes = {}, {}
+	stats, spikes, slowFrames = {}, {}, {}
+	frames, hitches, hitchesOurs, frameSum, frameTop = 0, 0, 0, 0, {}
+	profiler = {}
 	if running then
 		startedAt = Perf.clock()
 	end
 end
 
--- Memory and the game's own profiler, guarded: { memoryKB?, recent?, peak?, over5ms? }.
+-- Report -----------------------------------------------------------------------------------------------------------------
+
+-- Memory from the addon memory call, guarded: { memoryKB? }.
 function Perf.Memory()
 	local out = {}
 	local addons = rawget(_G, "C_AddOns")
@@ -153,16 +270,6 @@ function Perf.Memory()
 			out.memoryKB = kb
 		end
 	end
-	local profiler, enum = rawget(_G, "C_AddOnProfiler"), rawget(_G, "Enum")
-	local metrics = type(enum) == "table" and enum.AddOnProfilerMetric
-	if type(profiler) == "table" and type(profiler.GetAddOnMetric) == "function" and type(metrics) == "table" then
-		local function metric(key)
-			local ok, v = pcall(profiler.GetAddOnMetric, ns.name, metrics[key])
-			v = ok and ns.Util.Plain(v) or nil
-			return type(v) == "number" and v or nil
-		end
-		out.recent, out.peak, out.over5ms = metric("RecentAverageTime"), metric("PeakTime"), metric("CountTimeOver5Ms")
-	end
 	return out
 end
 
@@ -172,47 +279,90 @@ end
 
 -- A short plain-text summary, for chat and the report window: lines.
 function Perf.Summary(top)
+	top = top or 12
 	local lines = {}
 	local state = running and string.format("running for %d s", math.floor((Perf.clock() - startedAt) / 1000))
 		or (Perf.HasData() and "stopped" or "off")
-	lines[#lines + 1] = "Perf probe: " .. state .. " (spikes are calls over " .. Perf.SPIKE_MS .. " ms)"
-	local mem = Perf.Memory()
+	lines[#lines + 1] = "Perf probe: " .. state .. " (spike: a call over " .. Perf.SPIKE_MS .. " ms; hitch: a frame over "
+		.. Perf.HITCH_MS .. " ms)"
 	local bits = {}
+	local mem = Perf.Memory()
 	if mem.memoryKB then
 		bits[#bits + 1] = string.format("memory %.1f MB", mem.memoryKB / 1024)
 	end
-	if mem.recent then
-		bits[#bits + 1] = "profiler recent avg " .. ms(mem.recent) .. " ms"
+	if profiler.recent then
+		bits[#bits + 1] = "profiler recent avg " .. ms(profiler.recent) .. " ms"
 	end
-	if mem.peak then
-		bits[#bits + 1] = "peak " .. ms(mem.peak) .. " ms"
+	if profiler.last then
+		bits[#bits + 1] = "last " .. ms(profiler.last)
 	end
-	if mem.over5ms then
-		bits[#bits + 1] = "frames over 5 ms: " .. mem.over5ms
+	if profiler.peak then
+		bits[#bits + 1] = "peak " .. ms(profiler.peak)
+	end
+	if profiler.over then
+		local over = {}
+		for _, limit in ipairs({ 5, 10, 50, 100 }) do
+			if profiler.over[limit] then
+				over[#over + 1] = ">" .. limit .. " ms: " .. profiler.over[limit]
+			end
+		end
+		if #over > 0 then
+			bits[#bits + 1] = "frames " .. table.concat(over, ", ")
+		end
+	end
+	if profiler.enabled == false then
+		bits[#bits + 1] = "the game's profiler is switched off"
 	end
 	lines[#lines + 1] = #bits > 0 and table.concat(bits, ", ") or "memory and profiler: not available on this client"
+	if frames > 0 then
+		local ours = 0
+		for _, s in pairs(stats) do
+			ours = ours + s.own
+		end
+		lines[#lines + 1] = string.format("%d frames watched, %d hitches (%d ours), our time per frame %s ms", frames, hitches,
+			hitchesOurs, ms(ours / frames))
+		if profiler.recent and profiler.recent > (ours / frames) * 2 + 1 then
+			lines[#lines + 1] = "note: the game's profiler sees more time than was measured here: an OnUpdate or a timer callback outside SafeCall"
+		end
+	end
 	local names = {}
 	for name in pairs(stats) do
 		names[#names + 1] = name
 	end
 	table.sort(names, function(a, b)
-		if stats[a].total ~= stats[b].total then
-			return stats[a].total > stats[b].total
+		if stats[a].own ~= stats[b].own then
+			return stats[a].own > stats[b].own
 		end
 		return a < b
 	end)
-	for i = 1, math.min(#names, top or 12) do
+	for i = 1, math.min(#names, top) do
 		local s = stats[names[i]]
-		lines[#lines + 1] = string.format("  %s: %d calls, total %s ms, avg %s, max %s, spikes %d", names[i], s.calls,
-			ms(s.total), ms(s.total / s.calls), ms(s.max), s.spikes)
+		lines[#lines + 1] = string.format("  %s: %d calls, own %s ms, total %s ms, avg %s, max %s, spikes %d", names[i], s.calls,
+			ms(s.own), ms(s.total), ms(s.total / s.calls), ms(s.max), s.spikes)
 	end
-	if #names > (top or 12) then
-		lines[#lines + 1] = string.format("  (+%d more)", #names - (top or 12))
+	if #names > top then
+		lines[#lines + 1] = string.format("  (+%d more)", #names - top)
 	end
-	for _, sp in ipairs(spikes) do
-		lines[#lines + 1] = string.format("  spike: %s %s ms at +%d s", sp.name, ms(sp.ms), math.floor(sp.at))
+	for i = math.max(1, #spikes - 4), #spikes do -- the last few; the ring keeps more
+		local sp = spikes[i]
+		lines[#lines + 1] = string.format("  spike: %s %s ms (own %s)%s at +%d s", sp.name, ms(sp.ms), ms(sp.own),
+			sp.from and (" inside " .. sp.from) or "", math.floor(sp.at))
+	end
+	local worst = slowFrames[#slowFrames]
+	if worst then
+		local calls = {}
+		for _, c in ipairs(worst.top) do
+			calls[#calls + 1] = c.name .. " " .. ms(c.ms)
+		end
+		lines[#lines + 1] = string.format("  slowest recent frame: ours %s ms of %s ms: %s", ms(worst.ms), ms(worst.frame),
+			table.concat(calls, "; "))
 	end
 	return lines
+end
+
+-- For tests and the report: how many spikes the ring holds.
+function Perf.SpikeCount()
+	return #spikes
 end
 
 -- /dp perf [start|stop|reset]

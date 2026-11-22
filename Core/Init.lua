@@ -74,8 +74,29 @@ function Errors.Clean(text)
 	return text
 end
 
-function Errors.Record(err)
-	local message = Errors.Clean(err)
+-- A short log of what the addon did (about LOG_MAX lines; the report window shows the last few). Only our own system
+-- facts go in, never chat or names: errors, the probe starting, a plan opened by id. Bounded.
+local LOG_MAX = 200
+local log = {}
+
+function ns.Log(text)
+	log[#log + 1] = { at = ns.Now and ns.Now() or 0, text = Errors.Clean(text) }
+	if #log > LOG_MAX then
+		table.remove(log, 1)
+	end
+end
+
+function ns.LogLines(count)
+	local out = {}
+	for i = math.max(1, #log - count + 1), #log do
+		out[#out + 1] = log[i]
+	end
+	return out
+end
+
+function Errors.Record(err, kind)
+	local message = (kind and (kind .. " ") or "") .. Errors.Clean(err)
+	ns.Log(message)
 	local list = Errors.list
 	for i = #list, 1, -1 do
 		if list[i].message == message then
@@ -95,14 +116,38 @@ function Errors.Clear()
 	Errors.list = {}
 end
 
+-- The same message goes to the game's error handler (BugSack and the error frame, untouched: nothing replaces it) at most
+-- once every RAISE_EVERY seconds; a handler that fails every frame would otherwise flood them.
+local RAISE_EVERY = 30
+local raised = {}
+local raisedCount = 0
+
+local function shouldRaise(err)
+	local key = Errors.Clean(err)
+	local now = ns.Clock()
+	local last = raised[key]
+	if last and now - last < RAISE_EVERY then
+		return false
+	end
+	if raisedCount >= 50 then
+		raised, raisedCount = {}, 0
+	end
+	if not last then
+		raisedCount = raisedCount + 1
+	end
+	raised[key] = now
+	return true
+end
+
 function ns.SafeCall(fn, ...)
 	local ok, err = pcall(fn, ...)
 	if not ok then
 		pcall(Errors.Record, err)
+		local raise = shouldRaise(err)
 		local handler = geterrorhandler and geterrorhandler()
-		if handler then
+		if raise and handler then
 			handler(err)
-		else
+		elseif raise then
 			print("DungeonPlanner error: " .. tostring(err))
 		end
 	end
@@ -114,11 +159,6 @@ end
 -- others. Public events for other addons go through ns.API's CallbackHandler (Core/API.lua).
 
 local listeners = {}
-
--- For /dp perf (Core/Perf.lua), which wraps handlers only while a probe runs.
-function ns.ListenerTable()
-	return listeners
-end
 
 function ns:On(message, owner, fn)
 	local list = listeners[message]
@@ -184,6 +224,7 @@ end
 
 local eventHandlers = {}
 
+-- The events we listen to (for /dp perf, which swaps the dispatcher only while a probe runs).
 function ns.EventTable()
 	return eventHandlers
 end
@@ -196,6 +237,11 @@ local function dispatch(event, ...)
 	for i = 1, #handlers do
 		ns.SafeCall(handlers[i], event, ...)
 	end
+end
+
+-- The one callback AceEvent calls for every event we listen to (/dp perf registers a timed one in its place).
+function ns.EventDispatcher()
+	return dispatch
 end
 
 function ns:RegisterEvent(event, handler)

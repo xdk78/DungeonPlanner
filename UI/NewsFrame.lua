@@ -33,6 +33,10 @@ local function build()
 		ns.UI.Show()
 	end)
 	f.open:SetPoint("LEFT", f.ok, "RIGHT", SP.sm, 0)
+	f.settings = W.Button(inner, L["Open Settings"], "outline", function()
+		ns.UI.OpenSettings(f.settingsGroup)
+	end)
+	f.settings:SetPoint("LEFT", f.ok, "RIGHT", SP.sm, 0)
 	f.doc = W.Document(inner)
 	f.doc:SetPoint("TOPLEFT")
 	f.doc:SetPoint("BOTTOMRIGHT", inner, "BOTTOMRIGHT", 0, SZ.control + SP.md)
@@ -61,12 +65,15 @@ function NewsFrame.Show(kind, version)
 	if content.intro then
 		doc:Add("text", content.intro)
 	end
+	frame.settingsGroup = nil
 	for _, item in ipairs(content.items) do
 		doc:Add("label", item[1])
 		doc:Add("text", item[2])
+		frame.settingsGroup = frame.settingsGroup or item[3] -- a note can name the Settings group it is about
 	end
 	doc:Finish()
 	frame.open:SetShown(kind == "welcome")
+	frame.settings:SetShown(frame.settingsGroup ~= nil)
 	frame:Show()
 	return true
 end

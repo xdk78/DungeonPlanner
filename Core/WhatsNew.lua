@@ -29,9 +29,9 @@ local ENTRIES = {
 			title = L["What's new in 0.2.0"],
 			items = {
 				{ L["Report a problem"],
-					L["/dp report gathers version, plan and error details into a text for a GitHub issue, without your character, realm, guild or group."] },
+					L["/dp report gathers version, plan and error details into a text for a GitHub issue, without your character, realm, guild or group."], "advanced" },
 				{ L["What's new"],
-					L["This card appears once after an update, and /dp new shows it again."] },
+					L["This card appears once after an update, and /dp new shows it again."], "advanced" },
 				{ L["Performance probe"],
 					L["/dp perf start times the addon's handlers and redraws and shows its memory use; /dp perf stop removes it. It is off unless you start it."] },
 			},
@@ -124,7 +124,60 @@ local function store()
 	return nil
 end
 
--- At login, a few seconds after the first frame: decide, remember, and show. Returns what it showed.
+-- Our own windows: the card never opens over one of them.
+local WINDOWS = { "DungeonPlannerMainFrame", "DungeonPlannerRunFrame", "DungeonPlannerNotesFrame", "DungeonPlannerReportFrame",
+	"DungeonPlannerDialog" }
+
+local function called(name)
+	local fn = rawget(_G, name)
+	if type(fn) ~= "function" then
+		return false
+	end
+	local ok, value = pcall(fn)
+	return ok and value and true or false
+end
+
+-- A quiet moment: true, or false and why. Not in combat, not in a cinematic, not inside an instance (a run is no time
+-- for a card), not over another of our windows.
+function WhatsNew.Quiet()
+	if InCombatLockdown and InCombatLockdown() then
+		return false, "combat"
+	end
+	if called("IsInInstance") or called("InCinematic") or called("IsInCinematicScene") then
+		return false, "instance or cinematic"
+	end
+	for _, name in ipairs(WINDOWS) do
+		local f = rawget(_G, name)
+		if type(f) == "table" and f.IsShown and f:IsShown() then
+			return false, name
+		end
+	end
+	return true
+end
+
+local pending, pendingVersion -- decided, waiting for a quiet moment
+
+-- Show the pending card if the moment is quiet; the version is saved only then, so a reload before it shows leaves it
+-- pending. Returns true when shown.
+function WhatsNew.TryShow()
+	if not pending or not ns.NewsFrame then
+		return false
+	end
+	if not WhatsNew.Quiet() then
+		return false
+	end
+	local kind, version = pending, pendingVersion
+	pending = nil
+	local saved = store()
+	if saved and version then
+		saved.seen = version
+	end
+	ns.NewsFrame.Show(kind)
+	return true
+end
+
+-- At login, a few seconds after the first frame: decide; show now if quiet, else when the matching events say it is.
+-- Returns what was decided.
 function WhatsNew.Check()
 	local saved = store()
 	if not saved then
@@ -133,15 +186,19 @@ function WhatsNew.Check()
 	local current = WhatsNew.Normalize(ns.version)
 	local seen = WhatsNew.Normalize(saved.seen)
 	local kind = WhatsNew.Decide(seen, current, ns.freshInstall, current and WhatsNew.Entry(current) ~= nil)
-	if current then
-		saved.seen = current
+	if not kind then
+		if current then
+			saved.seen = current -- nothing to show for this version: remembered all the same
+		end
+		return nil
 	end
-	if kind and ns.NewsFrame then
-		ns:RunOutOfCombat(function()
-			ns.NewsFrame.Show(kind)
-		end)
-	end
+	pending, pendingVersion = kind, current
+	WhatsNew.TryShow()
 	return kind
+end
+
+function WhatsNew.IsPending()
+	return pending
 end
 
 -- /dp new: the highlights of this version (the newest entry on a development checkout).
@@ -150,7 +207,20 @@ function WhatsNew.Open()
 	ns.NewsFrame.Show("news", current)
 end
 
+-- A few seconds after login; then, while a card waits, whenever combat, a cinematic or a loading screen ends.
 function WhatsNew.Init()
+	for _, event in ipairs({ "PLAYER_REGEN_ENABLED", "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA", "CINEMATIC_STOP" }) do
+		ns:RegisterEvent(event, function()
+			if pending then
+				-- After the event's own work is done (the instance flag, the windows, are right a moment later).
+				if C_Timer and C_Timer.After then
+					C_Timer.After(3, WhatsNew.TryShow)
+				else
+					WhatsNew.TryShow()
+				end
+			end
+		end)
+	end
 	if C_Timer and C_Timer.After then
 		C_Timer.After(5, function()
 			ns.SafeCall(WhatsNew.Check)

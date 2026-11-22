@@ -500,16 +500,24 @@ function UI.InitSettings()
 end
 
 -- Opening the game's Settings panel is not allowed in combat on recent clients: wait for combat to end.
-function UI.OpenSettings()
+-- group: an options group's key ("advanced" is Troubleshooting) to select once the page is open.
+function UI.OpenSettings(group)
 	ns:RunOutOfCombat(function()
+		local AceConfigDialog = LibStub("AceConfigDialog-3.0", true)
+		local function openGroup()
+			if group and AceConfigDialog and AceConfigDialog.SelectGroup then
+				pcall(AceConfigDialog.SelectGroup, AceConfigDialog, APP, group)
+			end
+		end
 		if categoryID and Settings and Settings.OpenToCategory then
 			if pcall(Settings.OpenToCategory, categoryID) then
+				openGroup()
 				return
 			end
 		end
-		local AceConfigDialog = LibStub("AceConfigDialog-3.0", true)
 		if AceConfigDialog then
 			AceConfigDialog:Open(APP)
+			openGroup()
 		end
 	end)
 end

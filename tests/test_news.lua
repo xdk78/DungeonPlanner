@@ -63,6 +63,14 @@ end)
 
 T.case("What's new: Check shows once, never on a first install, and remembers the version", function()
 	boot()
+	for _, name in ipairs({ "DungeonPlannerMainFrame", "DungeonPlannerRunFrame", "DungeonPlannerNotesFrame", "DungeonPlannerDialog" }) do
+		local f = rawget(_G, name)
+		if f and f:IsShown() then
+			f:Hide()
+		end
+	end
+	local oldInstance = _G.IsInInstance
+	_G.IsInInstance = function() return false, "none" end
 	local oldVersion, oldAdb, oldFresh = ns.version, ns.adb, ns.freshInstall
 	local shown = {}
 	local oldShow = ns.NewsFrame.Show
@@ -96,6 +104,7 @@ T.case("What's new: Check shows once, never on a first install, and remembers th
 		T.eq(ns.adb.global.news, nil)
 	end)
 	ns.dbInfo.readOnly = false
+	_G.IsInInstance = oldInstance
 	ns.NewsFrame.Show = oldShow
 	ns.version, ns.adb, ns.freshInstall = oldVersion, oldAdb, oldFresh
 	T.ok(ok, err)

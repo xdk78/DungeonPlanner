@@ -1,8 +1,8 @@
--- The problem report (Core/Report.lua, UI/ReportFrame.lua), the error ring (Core/Init.lua) and the perf probe
--- (Core/Perf.lua) against the mock client.
+-- The problem report (Core/Report.lua, UI/ReportFrame.lua) and the error ring and log (Core/Init.lua) against the mock
+-- client. The perf probe is tests/test_probe.lua.
 local T = ...
 local ns, mock = T.ns, T.mock
-local Report, Perf = ns.Report, ns.Perf
+local Report = ns.Report
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -221,95 +221,3 @@ T.case("Report window: opens from /dp report and the title-bar button, shows the
 	f:Hide()
 end)
 
-T.case("Perf: off by default, nothing wrapped; start wraps, stop restores", function()
-	boot()
-	T.ok(not Perf.IsRunning() and not Perf.HasData())
-	local listeners = ns.ListenerTable()
-	local owner = {}
-	local function original() end
-	ns:On("PERF_TEST", owner, original)
-	local refresh = ns.UI.RefreshPage
-	T.eq(listeners.PERF_TEST[1].fn, original, "untouched while off")
-	local event = next(ns.EventTable())
-	local handler = ns.EventTable()[event][1]
-	T.ok(Perf.Start())
-	T.ok(not Perf.Start(), "already running")
-	T.ok(listeners.PERF_TEST[1].fn ~= original, "wrapped while running")
-	T.ok(ns.UI.RefreshPage ~= refresh)
-	T.ok(ns.EventTable()[event][1] ~= handler)
-	T.ok(Perf.Stop())
-	T.eq(listeners.PERF_TEST[1].fn, original, "restored")
-	T.eq(ns.UI.RefreshPage, refresh)
-	T.eq(ns.EventTable()[event][1], handler)
-	ns:Off("PERF_TEST", owner)
-	Perf.Reset()
-end)
-
-T.case("Perf: counts calls, records spikes over 5 ms, summarises, and reports memory only when the client has it", function()
-	boot()
-	local fake = 0
-	local realClock = Perf.clock
-	Perf.clock = function()
-		return fake
-	end
-	local owner = {}
-	ns:On("PERF_TEST", owner, function(slow)
-		fake = fake + (slow and 7 or 1)
-	end)
-	_G.GetAddOnMemoryUsage = function()
-		return 2048
-	end
-	Perf.Start()
-	ns:Fire("PERF_TEST", false)
-	ns:Fire("PERF_TEST", true)
-	ns:Fire("PERF_TEST", false)
-	local lines = Perf.Summary()
-	Perf.Stop()
-	Perf.clock = realClock
-	_G.GetAddOnMemoryUsage = nil
-	ns:Off("PERF_TEST", owner)
-	local text = table.concat(lines, "\n")
-	T.ok(text:find("message: PERF_TEST: 3 calls, total 9.00 ms", 1, true), text)
-	T.ok(text:find("spikes 1", 1, true), text)
-	T.ok(text:find("spike: message: PERF_TEST 7.00 ms", 1, true), text)
-	T.ok(text:find("memory 2.0 MB", 1, true), text)
-	T.ok(Perf.HasData())
-	-- The report carries the numbers.
-	T.ok(Report.Text(Report.Collect(), ""):find("Perf probe: stopped", 1, true))
-	Perf.Reset()
-	T.ok(not Perf.HasData())
-	T.ok(table.concat(Perf.Summary(), "\n"):find("not available on this client", 1, true), "no profiler, no memory call: said so")
-end)
-
-T.case("Perf: /dp perf start, stop and reset; spikes stay bounded", function()
-	boot()
-	ns.Slash.Handle("perf start")
-	T.ok(Perf.IsRunning())
-	ns.Slash.Handle("perf")
-	ns.Slash.Handle("perf stop")
-	T.ok(not Perf.IsRunning())
-	ns.Slash.Handle("perf reset")
-	local fake = 0
-	local realClock = Perf.clock
-	Perf.clock = function()
-		fake = fake + 10
-		return fake
-	end
-	local owner = {}
-	ns:On("PERF_TEST", owner, function() end)
-	Perf.Start()
-	for _ = 1, 50 do
-		ns:Fire("PERF_TEST")
-	end
-	local spikes = 0
-	for _, line in ipairs(Perf.Summary()) do
-		if line:find("^  spike:") then
-			spikes = spikes + 1
-		end
-	end
-	Perf.Stop()
-	Perf.clock = realClock
-	ns:Off("PERF_TEST", owner)
-	T.eq(spikes, Perf.MAX_SPIKES)
-	Perf.Reset()
-end)
