@@ -2,6 +2,9 @@
 -- (NeedRoll_ShowLoot(instance, boss), NeedRoll_ShowMap(instance, boss); names in English or the client's language,
 -- true when it opened). Its data tables (boss, rare and entrance spots, loot) live on its private namespace, which it
 -- does not publish, so they cannot be read: this adapter offers "open in NeedRoll" links and nothing else.
+-- The instance goes by its English name first (Instances.CanonicalName: the same for a plan saved in any client
+-- language), then by the name the client shows, then by the stored one; the next only after an error or a plain
+-- `false` (open() below).
 
 local _, ns = ...
 local Providers = ns.Providers
@@ -22,27 +25,45 @@ function A.Detect()
 	return { showLoot = loot, showMap = rawget(_G, "NeedRoll_ShowMap") }
 end
 
+-- The instance's names to try, each once, in order; and the boss's name.
 local function names(plan, enc)
-	local inst = ns.Names.Instance(plan.instance)
-	if inst == "" then
-		inst = plan.instance.name
+	local list = {}
+	local function add(name)
+		if type(name) == "string" and name ~= "" and not ns.Util.IndexOf(list, name) then
+			list[#list + 1] = name
+		end
 	end
+	add(ns.Instances.CanonicalName(plan))
+	add(ns.Names.Instance(plan.instance))
+	add(plan.instance.name)
 	local boss = enc and (enc.name ~= "" and enc.name or ns.Names.Encounter(enc)) or nil
-	return inst, boss
+	return list, boss
+end
+
+-- The next name is tried only when NeedRoll raised an error or answered exactly `false` (its documented "did not
+-- open"). Any other answer (true, or a value the documentation does not promise) ends it, so a window or a chat line
+-- never comes twice.
+local function open(fn, plan, enc)
+	local list, boss = names(plan, enc)
+	for _, inst in ipairs(list) do
+		local ok, r = pcall(fn, inst, boss)
+		if ok and r ~= false then
+			return r == true
+		end
+	end
+	return false
 end
 
 -- Open NeedRoll's loot page for a boss (or the instance). Returns true when it opened.
 function A.OpenLoot(root, plan, enc)
-	local inst, boss = names(plan, enc)
-	return root.showLoot(inst, boss) == true
+	return open(root.showLoot, plan, enc)
 end
 
 function A.OpenMap(root, plan, enc)
 	if type(root.showMap) ~= "function" then
 		return false
 	end
-	local inst, boss = names(plan, enc)
-	return root.showMap(inst, boss) == true
+	return open(root.showMap, plan, enc)
 end
 
 function A.Counts()

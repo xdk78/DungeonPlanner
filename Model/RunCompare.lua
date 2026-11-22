@@ -315,10 +315,11 @@ end
 
 -- Runs of the same instance --------------------------------------------------------------------------------------------
 
--- The run before `run` (by start time) among the store's runs of its instance, or nil.
-function RunCompare.Previous(store, run)
+-- The run before `run` (by start time) among the store's runs under `keys` (a list: a wing's and its instance's), else
+-- under the run's own key, or nil.
+function RunCompare.Previous(store, run, keys)
 	local best
-	for _, r in ipairs(store.runs[run.k] or NONE) do
+	for _, r in ipairs(RunLog.OldestFirst(store, keys or run.k)) do
 		if r ~= run and r.t < run.t and (not best or r.t > best.t) then
 			best = r
 		end
@@ -331,10 +332,11 @@ local function bossKey(b)
 end
 RunCompare.BossKey = bossKey
 
--- Per boss of `run`: time, best split of the other runs, the previous run's time, and both differences.
-function RunCompare.Splits(store, run)
-	local splits, best = RunLog.Splits(store, run)
-	local prev = RunCompare.Previous(store, run)
+-- Per boss of `run`: time, best split of the other runs (under `keys`, as Previous), the previous run's time, and both
+-- differences.
+function RunCompare.Splits(store, run, keys)
+	local splits, best = RunLog.Splits(store, run, keys)
+	local prev = RunCompare.Previous(store, run, keys)
 	local prevAt = {}
 	for _, b in ipairs(prev and prev.b or NONE) do
 		prevAt[bossKey(b)] = prevAt[bossKey(b)] or b.a

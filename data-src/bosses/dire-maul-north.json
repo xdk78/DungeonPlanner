@@ -18,7 +18,7 @@
    "name": "warcraft.wiki.gg",
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
-   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs); the DungeonEncounterID list (classic encounter IDs of the wing bosses)"
   }
  ],
  "bosses": [
@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "Guard Mol'dar",
    "npcID": 14326,
+   "encounterID": 362,
    "displayID": 11561,
    "class": "elite",
    "level": [
@@ -98,6 +99,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -108,6 +110,7 @@
    "point": "p4",
    "name": "Stomper Kreeg",
    "npcID": 14322,
+   "encounterID": 363,
    "displayID": 11545,
    "class": "elite",
    "level": [
@@ -148,6 +151,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -158,6 +162,7 @@
    "point": "p5",
    "name": "Guard Fengus",
    "npcID": 14321,
+   "encounterID": 364,
    "displayID": 11561,
    "class": "elite",
    "level": [
@@ -201,6 +206,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -211,6 +217,7 @@
    "point": "p6",
    "name": "Guard Slip'kik",
    "npcID": 14323,
+   "encounterID": 365,
    "displayID": 11561,
    "class": "elite",
    "level": [
@@ -255,6 +262,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -265,6 +273,7 @@
    "point": "p7",
    "name": "Captain Kromcrush",
    "npcID": 14325,
+   "encounterID": 366,
    "displayID": 11564,
    "class": "elite",
    "level": [
@@ -317,6 +326,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -327,6 +337,7 @@
    "point": "p8",
    "name": "Cho'Rush the Observer",
    "npcID": 14324,
+   "encounterID": 367,
    "displayID": 11537,
    "class": "elite",
    "level": [
@@ -404,6 +415,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -414,6 +426,7 @@
    "point": "p9",
    "name": "King Gordok",
    "npcID": 11501,
+   "encounterID": 368,
    "displayID": 11583,
    "class": "elite",
    "level": [
@@ -493,6 +506,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

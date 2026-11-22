@@ -59,9 +59,11 @@ Rules:
 - `profiles[name]` - `settings` (theme, font, language, sharing policy, tracker), `ui` (window, selected plan, tab),
   `minimap` (LibDBIcon position and visibility). Profiles via AceDBOptions.
 - `char[key].progress` - boss kills per encounter and difficulty, the current run, run history, objective checkmarks.
-- `char[key].recorder` - the run recorder's runs (`Model/RunLog.lua`): the run being recorded and, per instance ID,
-  the last 20 finished runs. Additive (older versions ignore it), so `DB.SCHEMA` is unchanged; `RunLog.Normalize`
-  repairs it on load.
+- `char[key].recorder` - the run recorder's runs (`Model/RunLog.lua`): the run being recorded and, per instance key,
+  the last 20 finished runs. An instance key is the instance ID ("189"), or for one wing of an instance whose wings
+  share the ID, the ID and the wing's bundled key ("189:scarletmonasterylibrary", since 0.2.1). Additive (older
+  versions ignore it; a version before 0.2.1 does not list runs under a wing key), so `DB.SCHEMA` is unchanged and
+  runs saved under the bare ID are not converted; `RunLog.Normalize` repairs the store on load.
 - `char[key].notes` - raid pages received from the group's leader (`received`, the last 10; `Pages.NormalizeReceived`
   repairs it on load). Additive, like the recorder.
 - `char[key].shareAcks` - who has which version of the plans this character sent in game (`Share/Acks.lua`,
@@ -278,8 +280,9 @@ it). Inside an instance the client gives no position and no creature identity (d
 a run is a sequence of **pulls** = combat segments, plus boss kills and wipes:
 
 ```
-PLAYER_ENTERING_WORLD / ZONE_CHANGED_NEW_AREA -> RunLog.Enter (same instance within 30 min: the same run) / Leave
-PLAYER_REGEN_DISABLED (inside the run's instance) -> RunLog.PullStart; a 0.5 s C_Timer ticker starts
+PLAYER_ENTERING_WORLD / ZONE_CHANGED_NEW_AREA -> RunLog.Enter (same instance, not another wing, within 30 min: the
+  same run) / Leave
+PLAYER_REGEN_DISABLED (inside the run's instance ID) -> RunLog.PullStart; a 0.5 s C_Timer ticker starts
   ticker -> Recorder.ScanPlates (C_NamePlate: hostile, living, in-combat units; level, classification, plain names)
          -> RunLog.Observe (peak counts: the same mob cannot be told apart between looks)
 PLAYER_REGEN_ENABLED -> ticker stops; RunLog.PullEnd (group members dead, all dead = wipe); a pull with no enemy seen is dropped
@@ -292,9 +295,35 @@ summaries, best splits per boss (`RunLog.Best`, `Splits`), and `RunLog.PlanFromR
 their make-up in the note, bosses in kill order with their encounter IDs, no markers) that goes through
 `Validate.Plan` and `DB.AddPlan`. The Runs section (`UI/Panels/RunsPanel.lua`) shows the runs of the plan's instance,
 found by its instance map ID (`Recorder.KeyForPlan`: the plan's stored `instanceMapID`, else its bundled instance's
-through `Instances.InstanceMapID`, else the Group Finder's for its name, else a run recorded under the same name). Runs
-are stored under `GetInstanceInfo`'s instance ID, which the wings of one instance share, so a wing's plan lists every
-wing's runs (the client does not say which wing a run was in). Run mode shows the live pull count.
+through `Instances.InstanceMapID`, else the Group Finder's for its name, else a run recorded under the same name).
+
+Wings (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire) share `GetInstanceInfo`'s instance ID, and on
+Forever the client does not say which wing the player is in. A run's wing comes only from what the game reports, never
+from a plan (the selected or run-mode plan changes when the player browses or group sync follows a leader, and says
+nothing about where the player is):
+
+- the client's floor map, when it names exactly one wing of the instance (`Recorder.KeyHere`, `Travel.Here`);
+- the first boss kill (`ENCOUNTER_END` success, `BOSS_KILL`) whose encounter ID belongs to exactly one wing
+  (`Recorder.WingForKill`, `BossData.InstancesForEncounter`: the `enc` IDs in `Data/Bosses`, from warcraft.wiki.gg's
+  classic list, data-src/bosses/README.md).
+
+Until then the run keeps the bare instance ID ("wing unknown"). A wing is never changed to another wing
+(`RunLog.Adopt` fills a missing wing, never replaces one): a pull is recorded whenever the instance ID matches,
+whatever the map says. A kill of another wing's boss means the run spans two wings (Dire Maul's wings have no floor
+maps and Stratholme's share theirs, so walking on within the resume window keeps the run): `RunLog.Unwing` puts it back
+to the bare instance ID and marks it (`wx`), so it stays "wing unknown" and no later map or kill gives it a wing. Kills
+count only inside the run's instance (by its ID, like pulls). `RunLog.Enter` starts a new run for another wing only
+when the floor map names that other wing; a map of no wing, or none, continues the run. A wing's plan lists its wing's runs plus
+the bare-ID runs (`Recorder.KeysForPlan`; every run recorded before 0.2.1 is one), which the Runs section marks
+"wing unknown" (`Recorder.WingUnknown`); a plan whose wing is unclear lists the runs of every wing of its instance,
+each row with a wing key naming it ("Library", `Recorder.WingName`).
+Best times, splits and the previous run compare over the same keys as the list (`RunLog.Best`, `RunCompare.Splits`
+take a key list), so a wing's best is its own runs' and the unknown-wing runs'. The Share section's run text prefers
+the newest run of the wing's own key and says "wing unknown" when it uses another. "Clear history" on a wing's plan
+removes only that wing's runs unless "Also clear runs without a known wing" is ticked (off by default; the dialog says
+the others are kept); on a plan whose wing is unclear it removes every run the plan lists (`Recorder.ClearForPlan`).
+At most 60 instance keys are kept: a new key makes room by dropping the key whose newest run is the oldest.
+Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
 
@@ -430,7 +459,9 @@ Providers.PickFloor(plan, floor, list, describe) -- a provider's floor for a pla
 Providers.Loot(plan, enc)       -- items { itemID, name?, quality?, slot?, slotText? }, credit
 Providers.Portrait(plan, enc)   -- { icon } or { displayInfo }, credit (Journal.BossArt falls back to it)
 Providers.BossInfo(plan, enc)   -- { level?, rare?, description?, summon = { itemID }?, drops? }, credit (Data/BossInfo.lua)
-Providers.LootLinks()           -- adapters with OpenLoot (NeedRoll's public API)
+Providers.LootLinks()           -- adapters with OpenLoot (NeedRoll's public API: the instance's English name by
+                                --   Instances.CanonicalName first, then the name the client shows, then the stored one;
+                                --   the next only after an error or a plain false, so nothing opens twice)
 Providers.Report()              -- /dp debug: id, title, active, internals, version, counts, failure
 ```
 

@@ -642,10 +642,11 @@ function M.InstallProviders()
 		},
 		Rooms = { deadmines = { { name = "A" }, { name = "B" } } },
 	}
-	M.needRollCalls = {}
+	-- NeedRoll opens for every name, or only for the names in M.needRollKnows when a test sets it.
+	M.needRollCalls, M.needRollKnows = {}, nil
 	_G.NeedRoll_ShowLoot = function(instance, boss)
 		M.needRollCalls[#M.needRollCalls + 1] = { instance, boss }
-		return true
+		return M.needRollKnows == nil or M.needRollKnows[instance] == true
 	end
 	local quests = { [101] = { 16919, "Ancient Grudge", 16, { { 5001 } } }, [102] = { 1581, "Elsewhere", 18 },
 		[103] = { 16919, "Treaty", 15 } }

@@ -60,6 +60,13 @@ Rules (docs/DATA-SOURCES.md has the credits):
 - `npcID`, `displayID`: positive integers (`displayID` feeds `SetPortraitTextureFromCreatureDisplayID`). `level`:
   `[min, max]` or `"??"` (a skull level). `class`: `normal`, `elite`, `rareelite`, `worldboss`, `rare` (the game's
   `UnitClassification` names).
+- `encounterID` (optional, with `src.encounterID`): the encounter ID `ENCOUNTER_END` and `BOSS_KILL` report. Only the
+  wings that share one instance ID carry it (Scarlet Monastery, Dire Maul, Stratholme, Lower Blackrock Spire): the run
+  recorder learns a run's wing from the first kill whose ID belongs to one wing (docs/ARCHITECTURE.md, Run recorder).
+  Taken from warcraft.wiki.gg's DungeonEncounterID list (classic IDs, not checked on Forever); a boss the list does not
+  name exactly (Bloodmage Thalnos, Scarlet Commander Mograine, Pusillin, Stratholme's Malor the Zealous, Cannon Master
+  Willey, Archivist Galford, Baron Rivendare, Postmaster Malown) or names only with a later expansion's ID (Upper
+  Blackrock Spire) is left out.
 - `abilities`: at most 8, in the order a source lists them. `spell` is a spell ID. `tags` (any of `interrupt`, `dispel`,
   `tank`, `healer`, `enrage`, `deadly`, `bleed`, `control`, `aoe`, `adds`) say what a player should do or watch for;
   the UI shows them localised. `note` (at most 160 characters, plain text) is ours. Tags a source states (the wiki marks

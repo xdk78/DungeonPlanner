@@ -18,7 +18,7 @@
    "name": "warcraft.wiki.gg",
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
-   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs); the DungeonEncounterID list (classic encounter IDs of the wing bosses)"
   }
  ],
  "bosses": [
@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "High Inquisitor Fairbanks",
    "npcID": 4542,
+   "encounterID": 449,
    "displayID": 2605,
    "class": "elite",
    "level": [
@@ -126,6 +127,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -242,6 +244,7 @@
    "point": "p5",
    "name": "High Inquisitor Whitemane",
    "npcID": 3977,
+   "encounterID": 450,
    "displayID": 2043,
    "class": "elite",
    "level": [
@@ -314,6 +317,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

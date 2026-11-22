@@ -18,7 +18,7 @@
    "name": "warcraft.wiki.gg",
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
-   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs); the DungeonEncounterID list (classic encounter IDs of the wing bosses)"
   }
  ],
  "bosses": [
@@ -91,6 +91,7 @@
    "point": "p4",
    "name": "Zevrim Thornhoof",
    "npcID": 11490,
+   "encounterID": 343,
    "displayID": 11335,
    "class": "elite",
    "level": [
@@ -137,6 +138,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -147,6 +149,7 @@
    "point": "p5",
    "name": "Hydrospawn",
    "npcID": 13280,
+   "encounterID": 344,
    "displayID": 5489,
    "class": "elite",
    "level": [
@@ -214,6 +217,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -224,6 +228,7 @@
    "point": "p6",
    "name": "Lethtendris",
    "npcID": 14327,
+   "encounterID": 345,
    "displayID": 14378,
    "class": "elite",
    "level": [
@@ -323,6 +328,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -333,6 +339,7 @@
    "point": "p7",
    "name": "Alzzin the Wildshaper",
    "npcID": 11492,
+   "encounterID": 346,
    "displayID": 14416,
    "class": "elite",
    "level": [
@@ -427,6 +434,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

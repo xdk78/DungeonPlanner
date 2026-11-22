@@ -132,6 +132,54 @@ local function deaths()
 	return dead, present > 0 and dead == present
 end
 
+-- Where a run's wing comes from: only what the game reports, never a plan (the plan shown changes when the player
+-- browses or follows a leader, and says nothing about where they are).
+--   * the client's floor map, when it names exactly one wing of the instance (Travel.Here);
+--   * the first boss kill whose encounter ID belongs to exactly one wing (Data/Bosses' `enc`, BossData).
+-- Until then the run keeps the bare instance ID ("wing unknown"). A wing is added to a run (RunLog.Adopt) and never
+-- changed to another wing: a kill of another wing's boss puts the run back to "wing unknown" for good (RunLog.Unwing;
+-- Dire Maul's and Stratholme's floor maps cannot tell their wings apart). A new run for another wing starts only when
+-- the floor map names that other wing (RunLog.Enter).
+
+-- The key a run here is recorded under (RunLog's instance keys): the instance ID, with the wing when the instance's
+-- wings share it and the client's floor map names exactly one of them. Otherwise the ID alone.
+function Recorder.KeyHere(cur)
+	local key = tostring(cur.instanceID)
+	if not Util.IsInteger(cur.instanceID) or #ns.Travel.Here(cur.instanceID) < 2 then
+		return key
+	end
+	local wings = ns.Travel.Here(cur.instanceID, cur.uiMapID)
+	if #wings == 1 then
+		return RunLog.WingKey(key, wings[1].key)
+	end
+	return key
+end
+
+-- The wing key a boss kill names for a run of a shared instance ID: the one wing of that instance whose bosses have
+-- the encounter ID, else nil.
+function Recorder.WingForKill(instanceKey, encounterID)
+	local iid = tonumber(instanceKey)
+	if not (Util.IsInteger(iid) and Util.IsInteger(encounterID)) then
+		return nil
+	end
+	local wings = ns.Travel.Here(iid)
+	if #wings < 2 then
+		return nil
+	end
+	local hit
+	for _, k in ipairs(ns.BossData.InstancesForEncounter(encounterID)) do
+		for _, w in ipairs(wings) do
+			if w.key == k then
+				if hit and hit ~= k then
+					return nil
+				end
+				hit = k
+			end
+		end
+	end
+	return hit and RunLog.WingKey(instanceKey, hit) or nil
+end
+
 function Recorder.OnZone()
 	local store = Recorder.Store()
 	if not store or not Recorder.Enabled() then
@@ -140,8 +188,9 @@ function Recorder.OnZone()
 	local cur = ns.Instances.Current()
 	local now = ns.Now()
 	if cur.inInstance and cur.instanceID then
-		local _, isNew = RunLog.Enter(store, tostring(cur.instanceID), cur.name, cur.difficultyID, now)
-		if isNew then
+		local before = store.current and store.current.k
+		local run, isNew = RunLog.Enter(store, Recorder.KeyHere(cur), cur.name, cur.difficultyID, now)
+		if isNew or run.k ~= before then
 			ns:Fire("RECORDER_CHANGED")
 		end
 	else
@@ -157,9 +206,12 @@ function Recorder.OnCombat(started)
 	end
 	local cur = ns.Instances.Current()
 	if started then
-		if not (cur.inInstance and tostring(cur.instanceID) == run.k) then
+		-- The same instance, by its ID alone: a pull is never dropped over a wing. A run whose wing was not known takes
+		-- the one the floor map names now (RunLog.Adopt; never another wing).
+		if not (cur.inInstance and RunLog.SplitKey(run.k) == tostring(cur.instanceID)) then
 			return
 		end
+		RunLog.Adopt(run, Recorder.KeyHere(cur))
 		local zone = call(GetSubZoneText)
 		if type(zone) ~= "string" or zone == "" then
 			zone = call(GetMinimapZoneText)
@@ -184,7 +236,27 @@ end
 function Recorder.OnKill(encounterID, name)
 	local run = Recorder.Current()
 	encounterID, name = Util.Plain(encounterID), Util.Plain(name)
-	if run and Recorder.Enabled() and RunLog.BossKill(run, encounterID, name, ns.Now()) then
+	if not (run and Recorder.Enabled()) then
+		return
+	end
+	-- Only a kill inside the run's instance (by its ID, like a pull): not one outdoors after leaving.
+	local cur = ns.Instances.Current()
+	local iid, wing = RunLog.SplitKey(run.k)
+	if not (cur.inInstance and iid == tostring(cur.instanceID)) then
+		return
+	end
+	local before = run.k
+	local changed = RunLog.BossKill(run, encounterID, name, ns.Now())
+	-- A run whose wing is not known learns it from the first kill of a boss only one wing has; a kill of another
+	-- wing's boss puts it back to "wing unknown" (it spans two wings), never into the other wing.
+	local wingKey = Recorder.WingForKill(iid, encounterID)
+	if wingKey and not wing then
+		RunLog.Adopt(run, wingKey)
+	elseif wingKey and wing and wingKey ~= run.k then
+		RunLog.Unwing(run)
+	end
+	changed = changed or run.k ~= before
+	if changed then
 		ns:Fire("RECORDER_CHANGED")
 	end
 end
@@ -216,10 +288,10 @@ function Recorder.ClearHistory(key)
 	end
 end
 
--- The instance key of a plan for the recorder (the key the recorder stores runs under is GetInstanceInfo's instance
--- ID): the plan's instance map ID (stored, else its bundled instance's: Instances.InstanceMapID), else the Group
--- Finder's for its name, else nil.
-function Recorder.KeyForPlan(plan)
+-- The instance part of a plan's key (GetInstanceInfo's instance ID): the plan's instance map ID (stored, else its
+-- bundled instance's: Instances.InstanceMapID), else the Group Finder's for its name, else a run recorded under the
+-- same instance name, else nil.
+local function instanceKey(plan)
 	local name = type(plan) == "table" and plan.instance and plan.instance.name
 	local iid = name and ns.Instances.InstanceMapID(plan)
 	if iid then
@@ -229,20 +301,123 @@ function Recorder.KeyForPlan(plan)
 	if hit and hit.mapID then
 		return tostring(hit.mapID)
 	end
-	-- A run recorded under the same instance name.
 	local store = Recorder.Store()
 	local key = name and ns.Match.StripArticle(name)
 	for k, list in pairs(store and store.runs or {}) do
 		local last = list[#list]
 		if last and key and ns.Match.StripArticle(last.n or "") == key then
-			return k
+			return (RunLog.SplitKey(k))
 		end
 	end
 	local cur = store and store.current
 	if cur and key and ns.Match.StripArticle(cur.n or "") == key then
-		return cur.k
+		return (RunLog.SplitKey(cur.k))
 	end
 	return nil
+end
+
+-- The key a plan's runs are recorded under (RunLog's instance keys): its instance's, and for one wing of an instance
+-- whose wings share the instance ID, that wing's key when the resolver knows the plan's wing. The second value, for
+-- such a wing: its instance's key, under which runs whose wing was not known are stored (every run recorded before
+-- 0.2.1, and runs where neither the floor map nor a boss kill named the wing).
+function Recorder.KeyForPlan(plan)
+	local key = instanceKey(plan)
+	if not key then
+		return nil
+	end
+	local iid, shared = ns.Instances.InstanceMapID(plan)
+	local rec = shared and tostring(iid) == key and ns.Instances.Resolve(plan)
+	if rec and rec.iid == iid then
+		return RunLog.WingKey(key, rec.key), key
+	end
+	return key
+end
+
+-- The keys whose runs a plan lists: its own; for a wing, also its instance's (runs whose wing was not known); for a
+-- plan whose wing is unclear, its instance's and every wing's of it (any of them may be its runs).
+function Recorder.KeysForPlan(plan)
+	local key, shared = Recorder.KeyForPlan(plan)
+	if not key then
+		return {}
+	end
+	if shared then
+		return { key, shared }
+	end
+	local wings = {}
+	local store = Recorder.Store()
+	local function add(k)
+		local iid, wing = RunLog.SplitKey(k)
+		if wing and iid == key and not Util.IndexOf(wings, k) then
+			wings[#wings + 1] = k
+		end
+	end
+	for k in pairs(store and store.runs or {}) do
+		add(k)
+	end
+	if store and store.current then
+		add(store.current.k)
+	end
+	table.sort(wings)
+	table.insert(wings, 1, key)
+	return wings
+end
+
+-- Is a run one of the plan's (KeysForPlan)?
+function Recorder.RunMatchesPlan(run, plan)
+	return run ~= nil and Util.IndexOf(Recorder.KeysForPlan(plan), run.k) ~= nil
+end
+
+-- Is a run listed for a wing's plan one whose wing was not known (stored under the shared instance key)?
+function Recorder.WingUnknown(run, plan)
+	local _, shared = Recorder.KeyForPlan(plan)
+	return shared ~= nil and run ~= nil and run.k == shared
+end
+
+-- The short name of a run's wing, from its recommended plan's English instance name ("Scarlet Monastery: Library" ->
+-- "Library", "Lower Blackrock Spire" as it is), or nil for a run without a wing.
+function Recorder.WingName(run)
+	local _, wing = RunLog.SplitKey(run and run.k)
+	local rec = wing and ns.Instances.RecommendedFor(wing)
+	local name = rec and rec.instance and rec.instance.name
+	if type(name) ~= "string" then
+		return nil
+	end
+	return name:match(":%s*(.+)$") or name
+end
+
+-- A plan's runs, newest first; the run being recorded first when it is one of them.
+function Recorder.RunsForPlan(plan)
+	local store = Recorder.Store()
+	if not store then
+		return {}
+	end
+	local keys = Recorder.KeysForPlan(plan)
+	local runs = RunLog.RunsOf(store, keys)
+	if store.current and Util.IndexOf(keys, store.current.k) then
+		table.insert(runs, 1, store.current)
+	end
+	return runs
+end
+
+-- Remove a plan's runs: a wing's own runs (the runs whose wing was not known are kept, since every wing lists them,
+-- unless `alsoUnknown`), else every run the plan lists (KeysForPlan).
+function Recorder.ClearForPlan(plan, alsoUnknown)
+	local store = Recorder.Store()
+	if not store then
+		return
+	end
+	local key, shared = Recorder.KeyForPlan(plan)
+	if shared then
+		RunLog.Clear(store, key)
+		if alsoUnknown then
+			RunLog.Clear(store, shared)
+		end
+	else
+		for _, k in ipairs(Recorder.KeysForPlan(plan)) do
+			RunLog.Clear(store, k)
+		end
+	end
+	ns:Fire("RECORDER_CHANGED")
 end
 
 -- A draft plan from a recorded run, saved as a new editable plan. Returns the plan.
@@ -251,7 +426,7 @@ function Recorder.CreatePlan(run, basePlan)
 	local instance = basePlan and ns.Util.DeepCopy(basePlan.instance) or { name = run.n, kind = "dungeon" }
 	instance.ejInstanceID = nil
 	-- The run's key is the instance's map ID (GetInstanceInfo's eighth return): the same in every client language.
-	instance.instanceMapID = instance.instanceMapID or tonumber(run.k)
+	instance.instanceMapID = instance.instanceMapID or tonumber((RunLog.SplitKey(run.k)))
 	local raw = RunLog.PlanFromRun(run, instance, {
 		L = L,
 		plural = ns.Plural,

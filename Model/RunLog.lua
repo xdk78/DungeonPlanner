@@ -7,6 +7,9 @@
 -- The store (DungeonPlannerDB.char[key].recorder), compact field names because it is saved:
 --   current   the run being recorded or nil
 --   runs      [instance key] = { run, ... } finished runs, oldest first, at most MAX_RUNS per instance
+-- An instance key is GetInstanceInfo's instance ID as a string ("189"), or, for one wing of an instance whose wings
+-- share that ID (Scarlet Monastery, Dire Maul, Stratholme, Blackrock Spire), the ID and the wing's bundled key
+-- ("189:scarletmonasterylibrary"). A run whose wing was not known keeps the plain ID (runs saved before 0.2.1 all do).
 -- A run:
 --   k key, n instance name, d difficultyID, t start (wall time), e end (wall time), done = finished
 --   p pulls: { s = start (seconds after t), u = duration, c = enemies seen at once (peak), el = elites, r = rares,
@@ -14,6 +17,7 @@
 --              dd = deaths, w = wipe, k = encounter killed during the pull }
 --   b boss kills: { i = encounterID, n = name, a = seconds after t, p = pull index }
 --   w wipes (count), dd deaths (count), dk = deaths could be read (else the deaths count is not available)
+--   wx = seen in two wings (kills of two wings' bosses): its wing stays unknown (Unwing)
 
 local _, ns = ...
 local Recorder = ns:NewModule("RunLog")
@@ -85,17 +89,63 @@ function Recorder.Normalize(store)
 	return store
 end
 
+-- Instance keys ----------------------------------------------------------------------------------------------------------
+
+-- The key of one wing of an instance: "189:scarletmonasterylibrary".
+function Recorder.WingKey(instanceKey, wing)
+	return tostring(instanceKey) .. ":" .. wing
+end
+
+-- A key's instance part ("189") and its wing (nil for a key without one).
+function Recorder.SplitKey(key)
+	if type(key) ~= "string" then
+		return nil
+	end
+	local iid, wing = key:match("^([^:]+):(.+)$")
+	if iid then
+		return iid, wing
+	end
+	return key, nil
+end
+
+-- Can a run recorded under `run.k` go on under `key`? The same instance and not two different wings. A run whose wing
+-- was not known takes the wing `key` names, unless it was seen in two wings (`wx`, Unwing): that run stays unknown.
+function Recorder.Adopt(run, key)
+	local iid, wing = Recorder.SplitKey(key)
+	local runIid, runWing = Recorder.SplitKey(run.k)
+	if not iid or iid ~= runIid or (wing and runWing and wing ~= runWing) then
+		return false
+	end
+	if wing and not runWing and not run.wx then
+		run.k = key
+	end
+	return true
+end
+
+-- A run that turned out to span two wings (a kill of another wing's boss, where the floor map cannot tell the wings
+-- apart: Dire Maul, Stratholme): back to the bare instance ID, "wing unknown" for good (`wx`), never another wing's.
+-- Returns true when the key changed.
+function Recorder.Unwing(run)
+	local iid, wing = Recorder.SplitKey(run.k)
+	run.wx = true
+	if wing then
+		run.k = iid
+		return true
+	end
+	return false
+end
+
 local function newRun(key, name, difficultyID, now)
 	return { k = key, n = Util.CleanText(name or "", 64) or "", d = Util.IsInteger(difficultyID) and difficultyID or nil,
 		t = now, seen = now, p = {}, b = {}, w = 0, dd = 0 }
 end
 
--- Entering an instance: continue the current run when it is the same instance and recent, otherwise finish it and
--- start a new one. Returns the run and whether it is new.
+-- Entering an instance: continue the current run when it is the same instance (and not another wing of it) and recent,
+-- otherwise finish it and start a new one. Returns the run and whether it is new.
 function Recorder.Enter(store, key, name, difficultyID, now)
 	local run = store.current
-	if run and run.k == key and run.d == (Util.IsInteger(difficultyID) and difficultyID or nil)
-		and now - (run.seen or run.t) <= Recorder.RESUME then
+	if run and run.d == (Util.IsInteger(difficultyID) and difficultyID or nil)
+		and now - (run.seen or run.t) <= Recorder.RESUME and Recorder.Adopt(run, key) then
 		run.seen = now
 		return run, false
 	end
@@ -260,12 +310,18 @@ function Recorder.Finish(store, now)
 	run.seen = nil
 	local list = store.runs[run.k]
 	if not list then
-		local n = 0
-		for _ in pairs(store.runs) do
+		-- A new key when MAX_INSTANCES keys are kept: the key whose newest run is the oldest makes room.
+		local n, stale, staleAt = 0, nil, nil
+		for k, runs in pairs(store.runs) do
 			n = n + 1
+			local last = runs[#runs]
+			local at = last and (last.e or last.t) or -math.huge
+			if not staleAt or at < staleAt or (at == staleAt and k < stale) then
+				stale, staleAt = k, at
+			end
 		end
-		if n >= Recorder.MAX_INSTANCES then
-			return nil
+		if n >= Recorder.MAX_INSTANCES and stale then
+			store.runs[stale] = nil
 		end
 		list = {}
 		store.runs[run.k] = list
@@ -293,6 +349,20 @@ function Recorder.Runs(store, key)
 	for i = #list, 1, -1 do
 		out[#out + 1] = list[i]
 	end
+	return out
+end
+
+-- Runs under any of several keys (a wing's and its instance's), newest first.
+function Recorder.RunsOf(store, keys)
+	local out = {}
+	for _, key in ipairs(keys) do
+		for _, run in ipairs(store.runs[key] or {}) do
+			out[#out + 1] = run
+		end
+	end
+	table.sort(out, function(a, b)
+		return a.t > b.t
+	end)
 	return out
 end
 
@@ -327,10 +397,24 @@ local function bossKey(b)
 	return b.i and ("e" .. b.i) or ("n" .. (b.n or ""))
 end
 
--- Best times over the finished runs of an instance, split by boss: best[bossKey] = fastest time to that kill, and
--- total = the fastest run that killed at least as many bosses as the most complete run. Also the previous run.
-function Recorder.Best(store, key, except)
-	local list = store.runs[key] or {}
+-- The finished runs under a key, or under a list of keys (a wing's and its instance's), oldest first.
+local function oldestFirst(store, keys)
+	if type(keys) ~= "table" then
+		return store.runs[keys] or {}
+	end
+	local out = Recorder.RunsOf(store, keys)
+	for i = 1, math.floor(#out / 2) do
+		out[i], out[#out + 1 - i] = out[#out + 1 - i], out[i]
+	end
+	return out
+end
+Recorder.OldestFirst = oldestFirst
+
+-- Best times over the finished runs of an instance (a key, or a list of keys), split by boss: best[bossKey] = fastest
+-- time to that kill, and total = the fastest run that killed at least as many bosses as the most complete run. Also
+-- the previous run.
+function Recorder.Best(store, keys, except)
+	local list = oldestFirst(store, keys)
 	local splits, most = {}, 0
 	for _, run in ipairs(list) do
 		if run ~= except then
@@ -343,7 +427,7 @@ function Recorder.Best(store, key, except)
 			end
 		end
 	end
-	local total, previous
+	local total, previous, count = nil, nil, 0
 	for _, run in ipairs(list) do
 		if run ~= except then
 			if most > 0 and #run.b >= most then
@@ -353,14 +437,16 @@ function Recorder.Best(store, key, except)
 				end
 			end
 			previous = run
+			count = count + 1
 		end
 	end
-	return { splits = splits, total = total, previous = previous, runs = #list - (except and 1 or 0) }
+	return { splits = splits, total = total, previous = previous, runs = count }
 end
 
--- Per boss of a run: time, best split from the other runs, and the difference (negative = faster).
-function Recorder.Splits(store, run)
-	local best = Recorder.Best(store, run.k, run)
+-- Per boss of a run: time, best split from the other runs (under `keys`, else the run's own key), and the difference
+-- (negative = faster).
+function Recorder.Splits(store, run, keys)
+	local best = Recorder.Best(store, keys or run.k, run)
 	local out = {}
 	for _, b in ipairs(run.b) do
 		local bestA = best.splits[bossKey(b)]

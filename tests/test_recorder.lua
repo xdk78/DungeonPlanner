@@ -279,3 +279,364 @@ T.case("Runs section lists recorded runs and drafts a plan", function()
 	R.SetEnabled(false)
 	R.ClearHistory()
 end)
+
+-- One pull, so a run is kept when it finishes.
+local function pull(run, now)
+	RunLog.PullStart(run, now)
+	RunLog.Observe(run, { { level = 30, class = "elite" } })
+	RunLog.PullEnd(run, now + 20, 0, false)
+end
+
+T.case("RunLog: instance keys with a wing; a run of the shared key takes the wing, another wing is another run", function()
+	T.eq(RunLog.WingKey("189", "scarletmonasterylibrary"), "189:scarletmonasterylibrary")
+	local iid, wing = RunLog.SplitKey("189:scarletmonasterylibrary")
+	T.eq(iid, "189")
+	T.eq(wing, "scarletmonasterylibrary")
+	iid, wing = RunLog.SplitKey("189")
+	T.eq(iid, "189")
+	T.eq(wing, nil, "a key saved before 0.2.1 has no wing")
+	local store = RunLog.NewStore()
+	local run = RunLog.Enter(store, "189", "Scarlet Monastery", 1, 1000)
+	pull(run, 1010)
+	local again, new = RunLog.Enter(store, "189:a", "Scarlet Monastery", 1, 1100)
+	T.ok(again == run and not new, "the wing becomes known: the same run")
+	T.eq(run.k, "189:a", "and it takes the wing")
+	again, new = RunLog.Enter(store, "189", "Scarlet Monastery", 1, 1200)
+	T.ok(again == run and not new and run.k == "189:a", "the wing unclear again: the run keeps its wing")
+	local other, isNew = RunLog.Enter(store, "189:b", "Scarlet Monastery", 1, 1300)
+	T.ok(isNew and other ~= run, "another wing: another run")
+	T.eq(#store.runs["189:a"], 1, "the first run is kept under its wing")
+	T.eq(store.runs["189"], nil, "nothing under the shared key")
+	pull(other, 1310)
+	local third = RunLog.Enter(store, "36", "The Deadmines", 1, 1400)
+	T.ok(third ~= other and not RunLog.Adopt(third, "189"), "another instance")
+	RunLog.Finish(store, 1500)
+	store.runs["189"] = { { k = "189", t = 900, p = {}, b = {}, done = true } }
+	local merged = RunLog.RunsOf(store, { "189:b", "189" })
+	T.eq(#merged, 2)
+	T.ok(merged[1] == other and merged[2].k == "189", "newest first across both keys")
+end)
+
+T.case("Recorder: wings sharing an instance ID record their runs apart; older runs show under every wing", function()
+	boot()
+	local R, L = ns.Recorder, ns.L
+	R.SetEnabled(false)
+	R.ClearHistory()
+	local iid = ns.TravelData.instances["Scarlet Monastery: Library"].iid
+	local shared = tostring(iid)
+	local libKey, armKey = RunLog.WingKey(shared, "scarletmonasterylibrary"), RunLog.WingKey(shared, "scarletmonasteryarmory")
+	local library = ns.Bundled.Get("b:scarlet-monastery-library")
+	local armory = ns.Bundled.Get("b:scarlet-monastery-armory")
+	T.ok(library and armory, "the recommended plans of two wings")
+	local key, sharedKey = R.KeyForPlan(library)
+	T.eq(key, libKey, "the Library's runs are its own")
+	T.eq(sharedKey, shared, "runs whose wing was not known are under the instance ID")
+	T.eq(R.KeyForPlan(armory), armKey)
+	T.eq(R.KeyForPlan(ns.Bundled.Get("b:hall-of-thanes")), "3065", "an instance without wings: its ID alone")
+	-- A run saved by 0.2.0: under the shared ID.
+	local store = R.Store()
+	local legacy = RunLog.Enter(store, shared, "Scharlachrotes Kloster", 1, ns.Now() - 5000)
+	pull(legacy, ns.Now() - 4990)
+	RunLog.Finish(store, ns.Now() - 4000)
+	-- Standing in Scarlet Monastery: the client names the instance, its map no wing.
+	local saved = { info = _G.GetInstanceInfo, best = _G.C_Map.GetBestMapForUnit }
+	local map
+	_G.GetInstanceInfo = function()
+		return "Scharlachrotes Kloster", "party", 1, "Normal", 5, 0, false, iid
+	end
+	_G.C_Map.GetBestMapForUnit = function()
+		return map
+	end
+	local ok, err = pcall(function()
+		-- 1. Nothing says which wing: the shared key.
+		R.SetEnabled(true)
+		T.eq(R.Current().k, shared, "wing unclear: the shared instance ID")
+		pull(R.Current(), ns.Now())
+		R.FinishRun()
+		T.eq(#store.runs[shared], 2, "kept under the shared key, with the older run")
+		mock.Advance(60)
+		-- 2. Run mode on the Library's plan names no wing; the Library's floor map does, and the run takes it.
+		ns.UI.SelectPlan(library.id)
+		ns.RunMode.Show()
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
+		T.eq(R.Current().k, shared, "a plan never names the wing")
+		local started = R.Current()
+		map = 303
+		mock.FireEvent("ZONE_CHANGED_NEW_AREA")
+		T.ok(R.Current() == started and started.k == libKey, "the floor map names it: the same run takes the wing")
+		pull(R.Current(), ns.Now())
+		local libRun = R.FinishRun()
+		ns.RunMode.Hide()
+		map = nil
+		mock.Advance(60)
+		-- 3. The client's map names the Armory.
+		map = 437
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
+		T.eq(R.Current().k, armKey, "the client's map names the wing")
+		pull(R.Current(), ns.Now())
+		local armRun = R.FinishRun()
+		map = nil
+		mock.Advance(60)
+		-- What each plan lists.
+		local function has(list, run)
+			return ns.Util.IndexOf(list, run) ~= nil
+		end
+		local libRuns, armRuns = R.RunsForPlan(library), R.RunsForPlan(armory)
+		T.eq(#libRuns, 3, "the Library: its run and the two whose wing was not known")
+		T.ok(has(libRuns, libRun) and has(libRuns, legacy) and not has(libRuns, armRun), "not the Armory's run")
+		T.eq(#armRuns, 3)
+		T.ok(has(armRuns, armRun) and has(armRuns, legacy) and not has(armRuns, libRun), "not the Library's run")
+		T.ok(R.WingUnknown(legacy, library) and not R.WingUnknown(libRun, library), "older runs are marked")
+		T.ok(not R.WingUnknown(armRun, armory))
+		local unclear = ns.Validate.Plan({ name = "Mein Plan", instance = { name = "Scharlachrotes Kloster",
+			kind = "dungeon", instanceMapID = iid }, floors = { { name = "" } } })
+		T.eq(R.KeyForPlan(unclear), shared, "a plan whose wing is unclear: the shared key")
+		T.eq(#R.RunsForPlan(unclear), 4, "and every wing's runs")
+		T.ok(not R.WingUnknown(legacy, unclear))
+		T.eq(R.CreatePlan(libRun, nil).instance.instanceMapID, iid, "a plan from a wing's run knows the instance")
+		-- The Runs section: the older run, newest here, says its wing is not known.
+		legacy.t = ns.Now() + 10
+		if not ns.UI.IsShown() then
+			ns.UI.Toggle()
+		end
+		ns.UI.SelectPlan(library.id)
+		ns.UI.SelectTab("runs")
+		local panel = _G.DungeonPlannerMainFrame.instancePage.panels.runs.inner
+		local lines = {}
+		local add = panel.detail.Add
+		panel.detail.Add = function(doc, style, text)
+			lines[#lines + 1] = text
+			return add(doc, style, text)
+		end
+		panel:Refresh()
+		panel.detail.Add = add
+		T.ok(ns.Util.IndexOf(lines, L["Recorded without knowing the wing: it may be a run of another wing of this instance."]),
+			"the run's wing is not known")
+		-- "Clear history" on the Library: its own runs go; the runs whose wing was not known stay (every wing lists
+		-- them), and the dialog says so.
+		local W, dialog = ns.Widgets, nil
+		local show = W.ShowDialog
+		W.ShowDialog = function(spec)
+			dialog = spec
+		end
+		mock.Click(panel.clear)
+		W.ShowDialog = show
+		T.ok(dialog and dialog.text:find(L["Runs recorded without a known wing are kept unless you tick the box below."], 1,
+			true), "the dialog says so")
+		T.ok(dialog.body and dialog.body.check:GetChecked() == false, "'Also clear runs without a known wing' is off")
+		-- The Share section's run text: the newest run of the Library itself, before a newer one without a known wing.
+		ns.UI.SelectTab("share")
+		local share = _G.DungeonPlannerMainFrame.instancePage.panels.share.inner
+		ns.UI.ctx.selectedRun = nil
+		local text = table.concat(share:RunParts(library, {}), "\n")
+		T.ok(not text:find(L["wing unknown"], 1, true), "the Library's own run\n" .. text)
+		dialog.buttons[1][2]()
+		local left = R.RunsForPlan(library)
+		T.eq(#left, 2, "the Library's own run is gone, the two whose wing was not known stay")
+		T.ok(not has(left, libRun) and has(left, legacy), "the older run is kept")
+		T.eq(#R.RunsForPlan(armory), 3, "the Armory lists its run and the older ones still")
+		ns.UI.ctx.selectedRun = nil
+		text = table.concat(share:RunParts(library, {}), "\n")
+		T.ok(text:find(L["wing unknown"], 1, true), "only a run without a known wing left: the text says so\n" .. text)
+		-- Ticked, the Armory's clear takes the runs without a known wing too.
+		W.ShowDialog = function(spec)
+			dialog = spec
+		end
+		dialog = nil
+		ns.UI.SelectPlan(armory.id)
+		ns.UI.SelectTab("runs")
+		T.eq(ns.UI.ctx:Plan(), armory, "the Armory's plan")
+		mock.Click(panel.clear)
+		T.ok(dialog, "the Armory's dialog")
+		W.ShowDialog = show
+		-- The dialog itself is not drawn here (ShowDialog was replaced), so its box is ticked by its own click handler.
+		dialog.body.check:GetScript("OnClick")(dialog.body.check)
+		T.ok(dialog.body.check:GetChecked(), "ticked")
+		dialog.buttons[1][2]()
+		T.eq(#R.RunsForPlan(armory), 0, "the Armory's run and the older ones are gone")
+		T.eq(#R.RunsForPlan(library), 0)
+		-- A plan whose wing is unclear clears every run it lists, as before.
+		store.runs[libKey] = { libRun }
+		R.ClearForPlan(unclear)
+		T.eq(next(store.runs), nil, "nothing left of this instance")
+	end)
+	_G.GetInstanceInfo, _G.C_Map.GetBestMapForUnit = saved.info, saved.best
+	local made = {}
+	for id, p in pairs(ns.db.plans) do
+		if p.instance.instanceMapID == iid then
+			made[#made + 1] = id
+		end
+	end
+	for _, id in ipairs(made) do
+		ns.DB.DeletePlan(id)
+	end
+	R.SetEnabled(false)
+	R.ClearHistory()
+	ns.RunMode.Hide()
+	assert(ok, err)
+end)
+
+T.case("Recorder: a run's wing comes only from the game (floor map, a boss kill), never another wing's, drops no pull", function()
+	boot()
+	local R = ns.Recorder
+	R.SetEnabled(false)
+	R.ClearHistory()
+	local iid = ns.TravelData.instances["Scarlet Monastery: Library"].iid
+	local shared = tostring(iid)
+	local libKey, armKey = RunLog.WingKey(shared, "scarletmonasterylibrary"), RunLog.WingKey(shared, "scarletmonasteryarmory")
+	local library = ns.Bundled.Get("b:scarlet-monastery-library")
+	local armory = ns.Bundled.Get("b:scarlet-monastery-armory")
+	local HEROD = 448 -- the Armory's boss (Data/Bosses, warcraft.wiki.gg)
+	T.eq(R.WingForKill(shared, HEROD), armKey, "Herod's encounter ID names the Armory")
+	T.eq(R.WingForKill(shared, 999999), nil, "an ID no wing has names none")
+	T.eq(R.WingForKill("3065", HEROD), nil, "an instance without wings")
+	local saved = { info = _G.GetInstanceInfo, best = _G.C_Map.GetBestMapForUnit }
+	local map
+	_G.GetInstanceInfo = function()
+		return "Scharlachrotes Kloster", "party", 1, "Normal", 5, 0, false, iid
+	end
+	_G.C_Map.GetBestMapForUnit = function()
+		return map
+	end
+	local function enter()
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
+		return R.Current()
+	end
+	local function fight()
+		mock.units = { nameplate1 = { level = 38, class = "elite", hostile = true, combat = true } }
+		mock.plates = { "nameplate1" }
+		mock.inCombat = true
+		mock.FireEvent("PLAYER_REGEN_DISABLED")
+		mock.Advance(1)
+		mock.inCombat = false
+		mock.FireEvent("PLAYER_REGEN_ENABLED")
+		mock.units, mock.plates = {}, {}
+	end
+	local ok, err = pcall(function()
+		R.SetEnabled(true)
+		-- (a) A Library run, then the Armory's plan in run mode (browsing, or following a leader): the pull is kept, the
+		-- run stays the Library's, and coming back into the instance continues it.
+		map = 303
+		local run = enter()
+		T.eq(run.k, libKey, "the floor map names the Library")
+		map = nil
+		ns.UI.SelectPlan(armory.id)
+		ns.RunMode.Show()
+		fight()
+		T.eq(#run.p, 1, "the pull is recorded")
+		T.eq(run.k, libKey, "the run is still the Library's")
+		T.ok(enter() == run and run.k == libKey, "entering again continues the Library's run")
+		-- An Armory boss's kill never moves the run to the Armory: it now spans two wings, so its wing is unknown.
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(run.k, shared, "never another wing: wing unknown")
+		T.eq(#run.p, 1, "no pull dropped")
+		ns.RunMode.Hide()
+		R.FinishRun()
+		mock.Advance(60)
+		-- (b) The Library's plan in run mode, no floor map, an Armory boss killed: the Armory, from the kill.
+		ns.UI.SelectPlan(library.id)
+		ns.RunMode.Show()
+		run = enter()
+		T.eq(run.k, shared, "no floor map, the plan says nothing: wing unknown")
+		fight()
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(run.k, armKey, "the kill names the Armory")
+		ns.RunMode.Hide()
+		R.FinishRun()
+		T.eq(#R.Store().runs[armKey], 1, "filed under the Armory")
+		mock.Advance(60)
+		-- (c) No kill and no floor map: wing unknown.
+		run = enter()
+		fight()
+		R.FinishRun()
+		T.eq(run.k, shared)
+		T.eq(#R.Store().runs[shared], 2, "filed under the instance ID, with (a)'s run of two wings")
+		mock.Advance(60)
+		-- (d) The floor map flickers (another map, none): the run goes on; only the other wing's map splits it.
+		map = 303
+		run = enter()
+		fight()
+		map = 100
+		T.ok(enter() == run, "a map of no wing: the same run")
+		map = nil
+		T.ok(enter() == run and run.k == libKey, "no map: the same run, still the Library's")
+		map = 437
+		local other = enter()
+		T.ok(other ~= run and other.k == armKey, "the Armory's map: a new run")
+		local libRuns = R.Store().runs[libKey]
+		T.eq(libRuns[#libRuns], run, "the Library's run is filed under the Library")
+		R.FinishRun()
+		map = nil
+		mock.Advance(60)
+		-- (e) A kill names the Armory, then a kill of the Library's Arcanist Doan: the run spans two wings (where the
+		-- floor map cannot tell, as in Dire Maul): back to "wing unknown" for good, never the Library's.
+		run = enter()
+		fight()
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(run.k, armKey)
+		mock.Advance(30)
+		mock.FireEvent("ENCOUNTER_END", 447, "Arcanist Doan", 1, 5, 1)
+		T.eq(run.k, shared, "another wing's boss: wing unknown")
+		T.eq(#run.b, 2, "both kills recorded")
+		mock.Advance(30)
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		map = 303
+		fight()
+		T.eq(run.k, shared, "no later kill or floor map gives it a wing again")
+		T.eq(#run.p, 2, "the pull is still recorded")
+		map = nil
+		local function listed(plan)
+			return ns.Util.IndexOf(R.RunsForPlan(plan), run) ~= nil and R.WingUnknown(run, plan)
+		end
+		T.ok(listed(library) and listed(armory), "listed in both wings, marked 'wing unknown'")
+		R.FinishRun()
+		mock.Advance(60)
+		-- (f) A run without a wing takes the floor map's wing at the next pull.
+		run = enter()
+		T.eq(run.k, shared)
+		map = 303
+		fight()
+		T.eq(run.k, libKey, "the pull's floor map names the Library")
+		T.eq(R.WingName(run), "Library", "its wing's short name")
+		T.eq(R.WingName({ k = shared }), nil)
+		map = nil
+		-- (g) Left the instance: a boss killed outdoors is not this run's.
+		local kills = #run.b
+		_G.GetInstanceInfo = function()
+			return "Tirisfal Glades", "none", 0, "", 0, 0, false, 0
+		end
+		mock.FireEvent("ENCOUNTER_END", HEROD, "Herod", 1, 5, 1)
+		T.eq(#run.b, kills, "an outdoor kill is not recorded")
+		R.FinishRun()
+	end)
+	_G.GetInstanceInfo, _G.C_Map.GetBestMapForUnit = saved.info, saved.best
+	mock.units, mock.plates, mock.inCombat = {}, {}, false
+	ns.RunMode.Hide()
+	R.SetEnabled(false)
+	R.ClearHistory()
+	assert(ok, err)
+end)
+
+T.case("RunLog: a new instance key beyond MAX_INSTANCES makes room by dropping the key whose newest run is oldest", function()
+	local store = RunLog.NewStore()
+	for i = 1, RunLog.MAX_INSTANCES do
+		local run = RunLog.Enter(store, "k" .. i, "Instance " .. i, 1, 1000 * i)
+		pull(run, 1000 * i + 1)
+		RunLog.Finish(store, 1000 * i + 100)
+	end
+	-- k1's run is the oldest; give k2 a newer run so only k1 is the stalest.
+	local again = RunLog.Enter(store, "k1", "Instance 1", 1, 1000 * (RunLog.MAX_INSTANCES + 1))
+	pull(again, 1000 * (RunLog.MAX_INSTANCES + 1) + 1)
+	RunLog.Finish(store, 1000 * (RunLog.MAX_INSTANCES + 1) + 100)
+	local fresh = RunLog.Enter(store, "new", "New", 1, 1000 * (RunLog.MAX_INSTANCES + 2))
+	pull(fresh, 1000 * (RunLog.MAX_INSTANCES + 2) + 1)
+	T.ok(RunLog.Finish(store, 1000 * (RunLog.MAX_INSTANCES + 2) + 100) == fresh, "the new run is kept")
+	local n = 0
+	for _ in pairs(store.runs) do
+		n = n + 1
+	end
+	T.eq(n, RunLog.MAX_INSTANCES, "still at most MAX_INSTANCES keys")
+	T.eq(store.runs.new[1], fresh)
+	T.eq(store.runs.k2, nil, "k2, whose newest run is now the oldest, made room")
+	T.eq(#store.runs.k1, 2, "k1 had a newer run: kept")
+end)

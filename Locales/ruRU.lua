@@ -1158,4 +1158,8 @@ ns.Locales.ruRU = {
 	["Addon messages are blocked by the game right now: they wait and go out when it allows them."] = "Игра сейчас блокирует сообщения аддонов: они ждут и уйдут, когда игра разрешит.",
 	["The game refused the last addon messages: other players may not receive them."] = "Игра отклонила последние сообщения аддонов: другие игроки могут их не получить.",
 	["failed: the game refused the message"] = "ошибка: игра отклонила сообщение",
+	["wing unknown"] = "крыло неизвестно",
+	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Записан без сведений о крыле: возможно, это забег в другом крыле этого подземелья.",
+	["Runs recorded without a known wing are kept unless you tick the box below."] = "Забеги, записанные без известного крыла, сохраняются, если не отметить пункт ниже.",
+	["Also clear runs without a known wing"] = "Удалить и забеги без известного крыла",
 }

@@ -18,7 +18,7 @@
    "name": "warcraft.wiki.gg",
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
-   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs); the DungeonEncounterID list (classic encounter IDs of the wing bosses)"
   }
  ],
  "bosses": [
@@ -26,6 +26,7 @@
    "point": "p4",
    "name": "Nerub'enkan",
    "npcID": 10437,
+   "encounterID": 480,
    "displayID": 9793,
    "class": "elite",
    "level": [
@@ -101,6 +102,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -111,6 +113,7 @@
    "point": "p5",
    "name": "Baroness Anastari",
    "npcID": 10436,
+   "encounterID": 479,
    "displayID": 10698,
    "class": "elite",
    "level": [
@@ -166,6 +169,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -176,6 +180,7 @@
    "point": "p6",
    "name": "Maleki the Pallid",
    "npcID": 10438,
+   "encounterID": 481,
    "displayID": 10546,
    "class": "elite",
    "level": [
@@ -255,6 +260,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -265,6 +271,7 @@
    "point": "p7",
    "name": "Magistrate Barthilas",
    "npcID": 10435,
+   "encounterID": 482,
    "displayID": 10433,
    "class": "elite",
    "level": [
@@ -323,6 +330,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -333,6 +341,7 @@
    "point": "p8",
    "name": "Ramstein the Gorger",
    "npcID": 10439,
+   "encounterID": 483,
    "displayID": 12818,
    "class": "elite",
    "level": [
@@ -414,6 +423,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

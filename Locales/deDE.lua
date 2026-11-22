@@ -1158,4 +1158,8 @@ ns.Locales.deDE = {
 	["Addon messages are blocked by the game right now: they wait and go out when it allows them."] = "Addon-Nachrichten werden gerade vom Spiel blockiert: Sie warten und gehen raus, sobald es sie wieder zulässt.",
 	["The game refused the last addon messages: other players may not receive them."] = "Das Spiel hat die letzten Addon-Nachrichten abgelehnt: Andere Spieler erhalten sie möglicherweise nicht.",
 	["failed: the game refused the message"] = "fehlgeschlagen: Das Spiel hat die Nachricht abgelehnt",
+	["wing unknown"] = "Flügel unbekannt",
+	["Recorded without knowing the wing: it may be a run of another wing of this instance."] = "Aufgezeichnet, ohne den Flügel zu kennen: Es kann ein Run in einem anderen Flügel dieser Instanz sein.",
+	["Runs recorded without a known wing are kept unless you tick the box below."] = "Runs ohne bekannten Flügel bleiben erhalten, außer du setzt unten den Haken.",
+	["Also clear runs without a known wing"] = "Auch Runs ohne bekannten Flügel löschen",
 }

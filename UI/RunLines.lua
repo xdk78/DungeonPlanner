@@ -42,7 +42,7 @@ function RunMode.Drift(plan)
 		return nil
 	end
 	local run = R.Current()
-	if not run or run.k ~= R.KeyForPlan(plan) or (#run.p == 0 and #run.b == 0) then
+	if not R.RunMatchesPlan(run, plan) or (#run.p == 0 and #run.b == 0) then
 		return nil
 	end
 	return ns.RunCompare.Drift(plan, run, ctx():Steps(), ns.Panels.runs.CompareOptions(plan))

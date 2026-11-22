@@ -18,7 +18,7 @@
    "name": "warcraft.wiki.gg",
    "url": "https://warcraft.wiki.gg",
    "licence": "CC BY-SA 4.0, facts and IDs only; no text copied",
-   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs)"
+   "what": "Boss pages (NPC IDs, ability IDs and type tags, Forever loot), instance pages (loot tables, quests), item and quest pages (IDs); the DungeonEncounterID list (classic encounter IDs of the wing bosses)"
   }
  ],
  "bosses": [
@@ -26,6 +26,7 @@
    "point": "p3",
    "name": "War Master Voone",
    "npcID": 9237,
+   "encounterID": 269,
    "displayID": 9733,
    "class": "elite",
    "level": [
@@ -98,6 +99,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -108,6 +110,7 @@
    "point": "p5",
    "name": "Shadow Hunter Vosh'gajin",
    "npcID": 9236,
+   "encounterID": 268,
    "displayID": 9732,
    "class": "elite",
    "level": [
@@ -168,6 +171,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -178,6 +182,7 @@
    "point": "p6",
    "name": "Mother Smolderweb",
    "npcID": 10596,
+   "encounterID": 270,
    "displayID": 9929,
    "class": "elite",
    "level": [
@@ -227,6 +232,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -237,6 +243,7 @@
    "point": "p8",
    "name": "Highlord Omokk",
    "npcID": 9196,
+   "encounterID": 267,
    "displayID": 11565,
    "class": "elite",
    "level": [
@@ -292,6 +299,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -302,6 +310,7 @@
    "point": "p12",
    "name": "Urok Doomhowl",
    "npcID": 10584,
+   "encounterID": 271,
    "displayID": 11583,
    "class": "rareelite",
    "level": [
@@ -342,6 +351,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -352,6 +362,7 @@
    "point": "p13",
    "name": "Quartermaster Zigris",
    "npcID": 9736,
+   "encounterID": 272,
    "displayID": 9738,
    "class": "rareelite",
    "level": [
@@ -432,6 +443,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -442,6 +454,7 @@
    "point": "p14",
    "name": "Halycon",
    "npcID": 10220,
+   "encounterID": 274,
    "displayID": 9567,
    "class": "elite",
    "level": [
@@ -467,6 +480,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -477,6 +491,7 @@
    "point": "p15",
    "name": "Gizrul the Slavener",
    "npcID": 10268,
+   "encounterID": 273,
    "displayID": 9564,
    "class": "elite",
    "level": [
@@ -524,6 +539,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,
@@ -534,6 +550,7 @@
    "point": "p17",
    "name": "Overlord Wyrmthalak",
    "npcID": 9568,
+   "encounterID": 275,
    "displayID": 8711,
    "class": "elite",
    "level": [
@@ -602,6 +619,7 @@
     }
    ],
    "src": {
+    "encounterID": 2,
     "npcID": 1,
     "displayID": 1,
     "class": 1,

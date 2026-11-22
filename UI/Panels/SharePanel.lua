@@ -269,13 +269,21 @@ function Panel.Create(parent, ctx)
 		area:SetContentHeight(baseHeight + (open and advHeight or 0) + SP.md + restHeight + SP.lg)
 	end
 
-	-- A recorded run against the plan: the run chosen in the Runs section, else this instance's latest.
+	-- A recorded run against the plan: the run chosen in the Runs section, else this instance's latest, a run of the
+	-- plan's own wing before one whose wing is not known. A run whose wing is not known says so in the text.
 	function f:RunParts(p, opts)
 		local R = ns.Recorder
-		local key, st = R.KeyForPlan(p), R.Store()
+		local st = R.Store()
 		local run = ctx.selectedRun
-		if not (run and key and run.k == key) then
-			run = st and key and ((st.current and st.current.k == key and st.current) or ns.RunLog.Runs(st, key)[1])
+		if not R.RunMatchesPlan(run, p) then
+			local runs = R.RunsForPlan(p)
+			run = runs[1]
+			for _, r in ipairs(runs) do
+				if not R.WingUnknown(r, p) then
+					run = r
+					break
+				end
+			end
 		end
 		if not run then
 			-- Like the Runs section's empty pane: the turn-on hint only while recording is off.
@@ -285,11 +293,15 @@ function Panel.Create(parent, ctx)
 			return { L["No recorded run of this instance yet. Turn on \"Record my runs\" in the Runs section."] }
 		end
 		local Runs = ns.Panels.runs
-		local splits = ns.RunCompare.Splits(st, run)
+		local splits = ns.RunCompare.Splits(st, run, R.KeysForPlan(p))
+		local when = date and date("%Y-%m-%d %H:%M", run.t) or nil
+		if R.WingUnknown(run, p) then
+			when = (when and (when .. " ") or "") .. "(" .. L["wing unknown"] .. ")"
+		end
 		return ns.Discord.RenderRun(p, run, {
 			overlay = Runs.Overlay(p, run),
 			splits = splits,
-			date = date and date("%Y-%m-%d %H:%M", run.t) or nil,
+			date = when,
 			bossName = function(encId)
 				local enc = ns.Util.FindById(p.encounters, encId)
 				return enc and ns.Names.Encounter(enc) or "?"

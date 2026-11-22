@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Herod", npc = 3975, disp = 2041, lv = { 40, 40 }, cls = "e",
+		{ name = "Herod", npc = 3975, disp = 2041, enc = 448, lv = { 40, 40 }, cls = "e",
 			ab = {
 				{ 15496 },
 				{ 8269, false, "Hits harder and faster at low health; save cooldowns and burn it down." },

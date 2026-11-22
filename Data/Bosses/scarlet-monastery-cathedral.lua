@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "High Inquisitor Fairbanks", npc = 4542, disp = 2605, lv = { 40, 40 }, cls = "e",
+		{ name = "High Inquisitor Fairbanks", npc = 4542, disp = 2605, enc = 449, lv = { 40, 40 }, cls = "e",
 			ab = {
 				{ 8282, false, "Raises physical damage taken; dispel it." },
 				{ 15090 },
@@ -41,7 +41,7 @@ ns.BossData.Add({
 				2825,
 			},
 		},
-		{ name = "High Inquisitor Whitemane", npc = 3977, disp = 2043, lv = { 42, 42 }, cls = "e",
+		{ name = "High Inquisitor Whitemane", npc = 3977, disp = 2043, enc = 450, lv = { 42, 42 }, cls = "e",
 			ab = {
 				{ 225692 },
 				{ 9232 },

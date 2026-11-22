@@ -9,7 +9,7 @@ ns.BossData.Add({
 	kind = "dungeon",
 	updated = "2026-11-16",
 	bosses = {
-		{ name = "Nerub'enkan", npc = 10437, disp = 9793, lv = { 60, 60 }, cls = "e",
+		{ name = "Nerub'enkan", npc = 10437, disp = 9793, enc = 480, lv = { 60, 60 }, cls = "e",
 			ab = {
 				{ 17235 },
 				{ 31602 },
@@ -20,7 +20,7 @@ ns.BossData.Add({
 				13529, 18740, 18738, 16675, 18739, 18736, 13530, 13531, 13532, 13533, 13508, 10256,
 			},
 		},
-		{ name = "Baroness Anastari", npc = 10436, disp = 10698, lv = { 59, 59 }, cls = "e",
+		{ name = "Baroness Anastari", npc = 10436, disp = 10698, enc = 479, lv = { 59, 59 }, cls = "e",
 			ab = {
 				{ 16867 },
 			},
@@ -28,7 +28,7 @@ ns.BossData.Add({
 				18730, 18728, 13534, 16704, 18729, 13535, 13539, 13537, 13538, 13514,
 			},
 		},
-		{ name = "Maleki the Pallid", npc = 10438, disp = 10546, lv = { 61, 61 }, cls = "e",
+		{ name = "Maleki the Pallid", npc = 10438, disp = 10546, enc = 481, lv = { 61, 61 }, cls = "e",
 			ab = {
 				{ 16869, "control" },
 				{ 17238 },
@@ -39,7 +39,7 @@ ns.BossData.Add({
 				18737, 18734, 16691, 13524, 18735, 12833, 18741, 13526, 13525, 13527, 13528, 13509,
 			},
 		},
-		{ name = "Magistrate Barthilas", npc = 10435, disp = 10433, lv = { 58, 58 }, cls = "e",
+		{ name = "Magistrate Barthilas", npc = 10435, disp = 10433, enc = 482, lv = { 58, 58 }, cls = "e",
 			ab = {
 				{ 10887, "aoe" },
 				{ 16791, "enrage" },
@@ -49,7 +49,7 @@ ns.BossData.Add({
 				18727, 18725, 18722, 13376, 18726, 23198, 12382,
 			},
 		},
-		{ name = "Ramstein the Gorger", npc = 10439, disp = 12818, lv = { 61, 61 }, cls = "e",
+		{ name = "Ramstein the Gorger", npc = 10439, disp = 12818, enc = 483, lv = { 61, 61 }, cls = "e",
 			ab = {
 				{ 5568, "aoe", "Hits everyone next to the boss; keep ranged and healers away." },
 				{ 17307, "control" },
