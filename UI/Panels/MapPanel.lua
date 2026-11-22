@@ -2,9 +2,9 @@
 -- its bottom-left corner and a floating legend in its top-right corner (the "Legend" button shows or hides it): the
 -- layer switch (each layer with its icon, count and a check box, plus "Enemies" where spawn data exists), the routes
 -- on this floor, and the editor of the selected marker, which opens there whenever a marker is selected.
--- Your own plans get the edit tools above the map (UI/Panels/MapToolbar.lua): Select (drag to move), Marker, Position (party role), Pull (click
--- markers into the current pull), Route (click adds a bend, Shift-click a numbered stop, right-click ends), Draw (the
--- drawing tools' own line, UI/Panels/DrawBar.lua) and Erase.
+-- Your own plans get the edit tools above the map (UI/Panels/MapToolbar.lua): Select (drag to move), Marker,
+-- Position (party role), Pull (click markers into the current pull), Route (click adds a bend, Shift-click a numbered
+-- stop, right-click ends), Draw (the drawing tools' own line, UI/Panels/DrawBar.lua) and Erase.
 -- A recommended plan is read-only: no tools, and the rail shows the marker's details instead of an editor.
 
 local _, ns = ...

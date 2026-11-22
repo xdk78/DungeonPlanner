@@ -184,6 +184,21 @@ function Art.HasAtlas(name)
 	return atlasCache[name]
 end
 
+-- Width / height of the atlas art `key` draws with (an Art key), or nil: no atlas, the client lacks it, or its info
+-- has no size. Pictures in a square slot keep this shape (W.Button SetIcon).
+function Art.AtlasAspect(key)
+	local spec = Art.SPECS[key]
+	if not (spec and spec.atlas and Art.HasAtlas(spec.atlas)) then
+		return nil
+	end
+	local ok, info = pcall(C_Texture.GetAtlasInfo, spec.atlas)
+	local w = ok and type(info) == "table" and tonumber(info.width)
+	local h = ok and type(info) == "table" and tonumber(info.height)
+	if w and h and w > 0 and h > 0 then
+		return w / h
+	end
+end
+
 -- Is a texture file known to the client? true / false, or nil when the client cannot tell us.
 function Art.FileExists(path)
 	if type(path) == "number" then

@@ -241,7 +241,11 @@ function DrawBar.Build(f, ctx, bar, canvas)
 	end
 	db.clear = add(W.ToolButton(db, "draw_clear", GLYPHS.clear, L["Clear drawings"],
 		L["Clear this floor's drawings or every drawing of the plan. Each asks first; Undo brings them back."], function(b)
-			W.Menu(b, db:ClearItems())
+			-- The game's context menu, else our own popup list (a client without MenuUtil).
+			local items = db:ClearItems()
+			if not W.Menu(b, items) then
+				W.ActionList(b, items)
+			end
 		end), true)
 	db.clear.dpGround = "surface"
 

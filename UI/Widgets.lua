@@ -489,21 +489,25 @@ function W.Button(parent, text, variant, onClick, width)
 		end
 		self.label:SetShown(not (pic and self.dpCompact))
 	end
-	local function fit(self)
+	-- The width the button takes compact or not, without changing it (toolbars measure both before choosing).
+	function b:WidthFor(compact)
 		if self.dpFixedWidth then
-			return
+			return self:GetWidth()
 		end
 		local pic = picture(self)
-		local w
-		if pic and self.dpCompact then
-			w = SZ.control
-		else
-			w = math.ceil(self.label:GetStringWidth()) + 2 * SP.md
-			if pic then
-				w = w + pic:GetWidth() + SP.xs
-			end
+		if pic and compact then
+			return SZ.control
 		end
-		self:SetWidth(math.max(SZ.control, w))
+		local w = math.ceil(self.label:GetStringWidth()) + 2 * SP.md
+		if pic then
+			w = w + pic:GetWidth() + SP.xs
+		end
+		return math.max(SZ.control, w)
+	end
+	local function fit(self)
+		if not self.dpFixedWidth then
+			self:SetWidth(self:WidthFor(self.dpCompact))
+		end
 	end
 	function b:SetLabel(t)
 		self.label:SetText(t or "")
@@ -525,8 +529,16 @@ function W.Button(parent, text, variant, onClick, width)
 			self.icon = round and Art.RoundTexture(self, "ARTWORK", 2) or self:CreateTexture(nil, "ARTWORK", nil, 2)
 		end
 		size = size or (SZ.control - 6)
-		self.icon:SetSize(size, size)
 		local ok = Art.Set(self.icon, key)
+		-- An atlas that is not square keeps its shape inside the size x size slot.
+		local aspect = ok and Art.AtlasAspect(key)
+		if aspect and aspect > 1 then
+			self.icon:SetSize(size, size / aspect)
+		elseif aspect and aspect < 1 then
+			self.icon:SetSize(size * aspect, size)
+		else
+			self.icon:SetSize(size, size)
+		end
 		self.icon:SetShown(ok)
 		if self.glyph then
 			self.glyph:SetShown(not ok)
@@ -551,7 +563,11 @@ function W.Button(parent, text, variant, onClick, width)
 	-- Compact: the picture alone on a square button, the label left to the tooltip (narrow toolbars). A button without
 	-- a picture keeps its label.
 	function b:SetCompact(compact)
-		self.dpCompact = compact and true or nil
+		compact = compact and true or nil
+		if compact == self.dpCompact then
+			return
+		end
+		self.dpCompact = compact
 		place(self)
 		fit(self)
 	end

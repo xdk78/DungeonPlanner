@@ -38,13 +38,14 @@ local TOOL_TIP = {
 		.. "corridor data), a click adds a numbered stop whose path follows the corridors and Shift-click gives a straight "
 		.. "leg. Right-click to finish the route.",
 }
--- What gives way on a narrow table, tried in order until the line fits.
-local LEVELS = {
-	{ names = true, focus = true, fit = true },
-	{ names = true, focus = false, fit = true },
-	{ names = false, focus = true, fit = true },
-	{ names = false, focus = false, fit = true },
-	{ names = false, focus = false, fit = false },
+-- What gives way on a narrow table, tried in order until the line fits: each level hides one more thing than the one
+-- before (Focus, then the names, then Fit), so nothing comes back as the table narrows, and all of it returns, in the
+-- reverse order, as it widens.
+MapToolbar.LEVELS = {
+	{ index = 1, names = true, focus = true, fit = true },
+	{ index = 2, names = true, focus = false, fit = true },
+	{ index = 3, names = false, focus = false, fit = true },
+	{ index = 4, names = false, focus = false, fit = false },
 }
 
 -- The tool buttons in `bar`, as f.toolButtons; a click chooses the tool (`ctx.tool`) and refreshes the section.
@@ -72,51 +73,47 @@ function MapToolbar.Build(f, ctx, bar)
 		f.toolButtons[tool] = b
 		prev = b
 	end
+	-- A resized table lays the line out again (Layout is a few sums; the section's refresh sets `many`).
+	bar:HookScript("OnSizeChanged", function()
+		if f.toolbarMany ~= nil then
+			MapToolbar.Layout(f, bar, f.toolbarMany)
+		end
+	end)
 	return prev -- the last tool: the chosen tool's picker sits after it
 end
 
 -- Lay the line out for the bar's width: which of the tools' names, Focus and Fit show, and where the right-hand
--- buttons sit. `many`: the floor list shows (an instance with many floors).
+-- buttons sit. `many`: the floor list shows (an instance with many floors). Returns the chosen level (LEVELS).
 function MapToolbar.Layout(f, bar, many)
+	f.toolbarMany = many and true or false
 	local width = bar:GetWidth() or 0
 	local picker = f.kind:IsShown() and f.kind or f.role:IsShown() and f.role or f.pull:IsShown() and f.pull or nil
-	local function need(level)
-		local w = 0
-		for _, tool in ipairs(MapToolbar.TOOLS) do
-			local b = f.toolButtons[tool]
-			if b:IsShown() then
-				b:SetCompact(not level.names)
-				w = w + b:GetWidth() + SP.xs
-			end
+	-- Each width measured once, without changing a button: the tools named and compact, the rest as they are.
+	local named, compact = 0, 0
+	for _, tool in ipairs(MapToolbar.TOOLS) do
+		local b = f.toolButtons[tool]
+		if b:IsShown() then
+			named = named + b:WidthFor(false) + SP.xs
+			compact = compact + b:WidthFor(true) + SP.xs
 		end
-		if picker then
-			w = w + SP.sm + picker:GetWidth()
-		end
-		local right = { f.legendButton }
-		if level.fit then
-			right[#right + 1] = f.fit
-		end
-		if level.focus then
-			right[#right + 1] = f.focus
-		end
-		if many then
-			right[#right + 1] = f.floor
-		end
-		for _, item in ipairs(right) do
-			w = w + SP.sm + item:GetWidth()
-		end
-		return w
 	end
-	local chosen = LEVELS[1]
+	local fixed = SP.sm + f.legendButton:GetWidth() + (picker and SP.sm + picker:GetWidth() or 0)
+		+ (many and SP.sm + f.floor:GetWidth() or 0)
+	local fitW, focusW = SP.sm + f.fit:GetWidth(), SP.sm + f.focus:GetWidth()
+	local chosen = MapToolbar.LEVELS[1]
 	if width > 0 then
-		for _, level in ipairs(LEVELS) do
+		for _, level in ipairs(MapToolbar.LEVELS) do
 			chosen = level
-			if need(level) <= width then
+			local need = (level.names and named or compact) + fixed + (level.fit and fitW or 0)
+				+ (level.focus and focusW or 0)
+			if need <= width then
 				break
 			end
 		end
 	end
-	need(chosen) -- the tools sized for the chosen level
+	for _, tool in ipairs(MapToolbar.TOOLS) do
+		f.toolButtons[tool]:SetCompact(not chosen.names)
+	end
 	f.focus:SetShown(chosen.focus)
 	f.fit:SetShown(chosen.fit)
 	-- Right to left: the floor list at the edge, then Focus, Fit and Legend, each a small gap from the last.
