@@ -104,25 +104,41 @@ T.case("Settings: only what differs from the defaults; a profile named after a c
 	T.ok(Report.Text(Report.Collect(), ""):find("profile Default", 1, true) or not oldAdb.GetCurrentProfile)
 end)
 
-T.case("Input style: gamepad or keyboard, from the client's interface style or the CVar", function()
+T.case("Input style: what the addon detected (Compat.Gamepad) and how: the setting, the API, the CVar or nothing", function()
 	boot()
 	_G.Enum = _G.Enum or {}
-	local oldEnum = _G.Enum.InputInterfaceStyle
-	_G.Enum.InputInterfaceStyle = { Gamepad = 2, Mouse = 1 }
-	_G.C_InputInterfaceStyle = { GetCurrentStyle = function() return 2 end }
-	T.eq(Report.InputStyle(), "gamepad")
-	_G.C_InputInterfaceStyle = { GetCurrentStyle = function() return 1 end }
-	T.eq(Report.InputStyle(), "keyboard and mouse")
-	_G.C_InputInterfaceStyle = nil
-	_G.Enum.InputInterfaceStyle = oldEnum
-	_G.GetCVar = function() return "Gamepad" end
-	T.eq(Report.InputStyle(), "gamepad")
-	_G.GetCVar = nil
-	T.eq(Report.InputStyle(), "unknown")
-	_G.C_InputInterfaceStyle = { GetCurrentStyle = function() return 2 end }
-	_G.Enum.InputInterfaceStyle = { Gamepad = 2 }
-	T.ok(Report.Text(Report.Collect(), ""):find("Input: gamepad", 1, true))
-	_G.C_InputInterfaceStyle, _G.Enum.InputInterfaceStyle = nil, oldEnum
+	local oldEnum, oldApi, oldGet, oldCVar = _G.Enum.InputInterfaceStyle, rawget(_G, "C_InputInterfaceStyle"),
+		rawget(_G, "GetCVar"), rawget(_G, "C_CVar")
+	local oldSetting = ns.db.settings.gamepad
+	local function style()
+		ns.Compat.ResetGamepad()
+		return Report.InputStyle()
+	end
+	local ok, err = pcall(function()
+		ns.db.settings.gamepad = "auto"
+		_G.C_CVar = nil
+		_G.Enum.InputInterfaceStyle = { Gamepad = 2, Mouse = 1 }
+		_G.C_InputInterfaceStyle = { GetCurrentStyle = function() return 2 end }
+		T.eq(style(), "gamepad (api)")
+		_G.C_InputInterfaceStyle = { GetCurrentStyle = function() return 1 end }
+		T.eq(style(), "keyboard and mouse (api)")
+		_G.C_InputInterfaceStyle = nil
+		_G.GetCVar = function() return "2" end
+		T.eq(style(), "gamepad (cvar)")
+		_G.Enum.InputInterfaceStyle = nil
+		T.eq(style(), "unknown (none)", "no enum value: the CVar is not guessed")
+		_G.GetCVar = nil
+		T.eq(style(), "unknown (none)")
+		ns.db.settings.gamepad = "off"
+		T.eq(style(), "keyboard and mouse (setting)")
+		ns.db.settings.gamepad = "on"
+		style()
+		T.ok(Report.Text(Report.Collect(), ""):find("Input: gamepad (setting)", 1, true))
+	end)
+	ns.db.settings.gamepad = oldSetting
+	_G.C_InputInterfaceStyle, _G.Enum.InputInterfaceStyle, _G.GetCVar, _G.C_CVar = oldApi, oldEnum, oldGet, oldCVar
+	ns.Compat.ResetGamepad()
+	assert(ok, err)
 end)
 
 T.case("Report for Discord: characters not bytes, the free text whole, details dropped in a fixed order", function()

@@ -282,8 +282,6 @@ function MapCanvas.Install(view)
 		self:PlaceCredit()
 	end
 
-	-- The credit chip sits in the map's own top-left corner (inside the picture, not on the frame's empty band above
-	-- it), or in the frame's corner when that corner of the map is scrolled out of view.
 	-- Put something on the current floor: `add(floor)` returns it or nil and an error. The map section makes a floor
 	-- only the map had part of the plan first, and takes it back when the add fails.
 	function view:AddOnFloor(add)
@@ -293,6 +291,8 @@ function MapCanvas.Install(view)
 		return add(self.cb.getFloor())
 	end
 
+	-- The credit chip sits in the map's own top-left corner (inside the picture, not on the frame's empty band above
+	-- it), or in the frame's corner when that corner of the map is scrolled out of view.
 	function view:PlaceCredit()
 		local x = math.max(FRAME_INSET, self.ox or 0) + SP.sm
 		local y = math.max(FRAME_INSET, self.oy or 0) + SP.sm

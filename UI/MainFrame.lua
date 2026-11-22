@@ -263,10 +263,8 @@ end
 -- A recommended plan researched well before the game build the player runs (Bundled.Stale): one line that says so,
 -- with the build's date; nil otherwise, or when the client's build date cannot be read.
 function UI.StaleLine(plan)
-	local ok, stale, build = pcall(function()
-		return ns.Bundled.Stale(plan and plan.updated, ns.Compat.ClientInfo().date)
-	end)
-	if not (ok and stale) then
+	local stale, build = ns.Bundled.Stale(plan and plan.updated, ns.Compat.ClientInfo().date)
+	if not stale then
 		return nil
 	end
 	return string.format(L["Researched before this game build (%s): the route and pulls may have changed. Check them in game."], build)
@@ -425,7 +423,7 @@ function UI.SelectPlan(id, stayOnPage)
 		ns.Widgets.CommitFocus() -- text still being typed belongs to the plan being left
 		ns.db.ui.selectedPlan = id
 		ctx.floor, ctx.selectedMarker, ctx.focusPull, ctx.currentPull, ctx.activeRoute = 1, nil, nil, nil, nil
-		ctx.focusEncounter, ctx.focusSegment = nil, nil
+		ctx.focusEncounter, ctx.focusSegment, ctx.selectedShape = nil, nil, nil
 		stepsCache.list = nil
 		resetUndo(ns.DB.GetPlan(id))
 		ns:FirePublic("DUNGEONPLANNER_ACTIVE_PLAN", id)

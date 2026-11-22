@@ -766,7 +766,7 @@ function RunMode.Init()
 	end)
 	-- The mini map's floor line says where the player is (Floors.PlayerFloor), while the window is open: refreshed only
 	-- when that floor changed, and never for an instance of one floor.
-	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS" }) do
+	for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "PLAYER_ENTERING_WORLD" }) do
 		ns:RegisterEvent(event, function()
 			ns.SafeCall(RunMode.OnZoneChanged)
 		end)

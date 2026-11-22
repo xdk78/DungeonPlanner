@@ -322,16 +322,22 @@ T.case("Recommended plans say when their research is older than the game build",
 	T.eq(B.Stale(nov16, "1.0.0"), nil, "no date: unknown")
 	T.eq(B.Stale(nov16, "Nov 99 2026"), nil, "not a day")
 	T.eq(B.Stale(nil, "Nov 20 2026"), nil)
-	-- A client whose build date cannot be read: no notice, no error.
-	local realInfo = ns.Compat.ClientInfo
-	ns.Compat.ClientInfo = function()
-		error("no build info")
-	end
-	local okInfo, line = pcall(ns.UI.StaleLine, B.Get(B.PREFIX .. "hall-of-thanes"))
-	ns.Compat.ClientInfo = realInfo
-	T.ok(okInfo, "StaleLine never raises")
-	T.eq(line, nil, "and hides the notice")
+	-- A client without a build date, or with one that is not a date: no notice, no error.
 	local mock = T.mock
+	local thanes = B.Get(B.PREFIX .. "hall-of-thanes")
+	local realBuild, realInfo = rawget(_G, "GetBuildInfo"), mock.buildInfo
+	local okInfo, err = pcall(function()
+		for _, odd in ipairs({ "?", "", "2030-12-24", "Smarch 1 2030", "Dec 2030" }) do
+			mock.buildInfo = { realInfo[1], realInfo[2], odd, realInfo[4] }
+			T.eq(ns.UI.StaleLine(thanes), nil, "build date " .. odd .. ": no notice")
+		end
+		mock.buildInfo = { realInfo[1], realInfo[2], nil, realInfo[4] }
+		T.eq(ns.UI.StaleLine(thanes), nil, "no build date: no notice")
+		_G.GetBuildInfo = nil
+		T.eq(ns.UI.StaleLine(thanes), nil, "no GetBuildInfo: no notice")
+	end)
+	_G.GetBuildInfo, mock.buildInfo = realBuild, realInfo
+	assert(okInfo, err)
 	local saved = mock.buildInfo
 	mock.buildInfo = { saved[1], saved[2], "Dec 24 2030", saved[4] }
 	local ok, err = pcall(function()

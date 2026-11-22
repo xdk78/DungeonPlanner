@@ -340,6 +340,23 @@ T.case("Floors: the map follows the player's floor inside an instance when the c
 		map:GoToFloor(1)
 		map.FollowPlayerFloor()
 		T.eq(ns.UI.ctx.floor, 2, "a plan picked again: followed again")
+		-- A route being drawn (the Route tool with a route in hand) holds the map; a route left picked does not.
+		local ctx, savedTool = ns.UI.ctx, ns.UI.ctx.tool
+		map:GoToFloor(1)
+		map.floorBar.playerFloor = nil
+		ctx.activeRoute, ctx.tool = "r1", "route"
+		map.FollowPlayerFloor()
+		T.eq(ctx.floor, 1, "drawing a route: the map stays")
+		ctx.tool = "select"
+		map.FollowPlayerFloor()
+		T.eq(ctx.floor, 2, "a route left picked under another tool: the map follows")
+		ctx.activeRoute, ctx.tool = nil, savedTool
+		-- Another plan drops a selected drawing too.
+		ctx.selectedShape = "s1"
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "blackfathom-deeps")
+		T.eq(ctx.selectedShape, nil, "another plan: no drawing selected")
+		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "the-deadmines")
+		ns.UI.SelectTab("map")
 		map:GoToFloor(1)
 		inside, best = false, 501
 		map.floorBar.playerFloor = nil
@@ -385,6 +402,11 @@ T.case("Run mode: zone events redraw only when the player's floor changed, and n
 		T.ok(f.mapFloor:GetText():find(ns.Names.Floor(plan.floors[2], 2), 1, true), f.mapFloor:GetText())
 		mock.FireEvent("ZONE_CHANGED")
 		T.eq(count, 1, "the same floor: nothing")
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
+		T.eq(count, 1, "entering the world on the same floor: nothing")
+		best = nil
+		mock.FireEvent("ZONE_CHANGED_NEW_AREA")
+		T.eq(count, 2, "a new area without a floor: redrawn")
 		ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
 		realRefresh()
 		count = 0
