@@ -47,7 +47,8 @@ T.case("Item names: a miss asks the client once, the arrival fires one batched m
 	T.eq(fired, 1, "one message for both items")
 	T.eq(ns.Names.ItemInfo({ itemID = 910001, label = "" }), "Real Helm")
 
-	-- A failed load fires nothing; it is asked again a few seconds later, three times in all, then left alone.
+	-- A failed load fires nothing; it is asked again a few seconds later, three times in all, then left alone, with one
+	-- message when it is given up (pages stop saying they are loading it).
 	T.eq(ns.Names.Item(910003), nil)
 	mock.FireEvent("GET_ITEM_INFO_RECEIVED", 910003, false)
 	settle()
@@ -59,7 +60,9 @@ T.case("Item names: a miss asks the client once, the arrival fires one batched m
 		end
 	end
 	T.eq(asked, 3, "asked three times, no more")
-	T.eq(fired, 1)
+	T.eq(fired, 2, "one message when it was given up")
+	settle()
+	T.eq(fired, 2, "and no more")
 
 	ns:Off("ITEMS_READY", owner)
 	items.GetItemNameByID, items.RequestLoadItemDataByID = savedName, savedRequest

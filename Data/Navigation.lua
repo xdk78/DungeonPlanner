@@ -28,8 +28,18 @@ local function plainCall(fn, ...)
 end
 
 -- Not now: in combat or dead (another addon's route or the map would be driven from a restricted state).
+-- Navigation.BlockReason() -> "combat", "dead" or nil.
+function Navigation.BlockReason()
+	if plainCall(rawget(_G, "InCombatLockdown")) == true then
+		return "combat"
+	elseif plainCall(rawget(_G, "UnitIsDeadOrGhost"), "player") == true then
+		return "dead"
+	end
+	return nil
+end
+
 function Navigation.Blocked()
-	return plainCall(rawget(_G, "InCombatLockdown")) == true or plainCall(rawget(_G, "UnitIsDeadOrGhost"), "player") == true
+	return Navigation.BlockReason() ~= nil
 end
 
 -- No world map opening under the gamepad interface style (Compat.Gamepad).

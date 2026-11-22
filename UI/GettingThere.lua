@@ -216,9 +216,10 @@ function GT.ShowEntrance(facts)
 	return true
 end
 
--- The header's Show location button for a plan or a home entry: { state, facts, zone, mapped }. state: "ready",
--- "blocked" (combat or dead: Navigation.Blocked), "unknown" (no travel record for the instance) or "none" (no target).
--- mapped: the entrance lies on a map, so a click can show it there.
+-- The header's Show location button for a plan or a home entry: { state, facts, zone, canPin, canOpen, gamepad }.
+-- state: "ready", "combat" or "dead" (Navigation.BlockReason), "unknown" (no travel record for the instance) or "none"
+-- (no target). canPin: the game can pin the entrance; canOpen: the world map can open on it (not with the gamepad
+-- interface style); with neither, a click opens the Getting there window instead.
 function GT.Location(target)
 	if type(target) ~= "table" then
 		return { state = "none" }
@@ -227,19 +228,23 @@ function GT.Location(target)
 	if not facts.rec then
 		return { state = "unknown", facts = facts }
 	end
-	local ent = facts.ent
-	return { state = ns.Navigation.Blocked() and "blocked" or "ready", facts = facts, mapped = points(facts) ~= nil,
-		zone = ns.Travel.Where(facts.rec, ent and ent.uiMapID) }
+	local ent, p = facts.ent, points(facts)
+	local m = rawget(_G, "C_Map")
+	local gamepad = ns.Compat.Gamepad()
+	return { state = ns.Navigation.BlockReason() or "ready", facts = facts, gamepad = gamepad,
+		zone = ns.Travel.Where(facts.rec, ent and ent.uiMapID),
+		canPin = p ~= nil and ns.Navigation.CanPin(p[#p][1]),
+		canOpen = p ~= nil and m ~= nil and type(m.OpenWorldMap) == "function" and not gamepad }
 end
 
 -- A click on that button: the world map (left), or the Getting there window (right-click, Shift-click, or an
--- instance whose entrance lies on no map). Nothing while blocked.
+-- entrance the game can neither pin nor show). Nothing while blocked.
 function GT.Locate(target, window)
 	local loc = GT.Location(target)
 	if loc.state ~= "ready" then
 		return false
 	end
-	if window or not loc.mapped then
+	if window or not (loc.canPin or loc.canOpen) then
 		GT.Open(target)
 		return "window"
 	end

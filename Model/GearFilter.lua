@@ -2,17 +2,20 @@
 -- client's item class enums, read from the item with GetItemInfoInstant: Data/Loot.lua's Loot.ItemType), and whether
 -- an item matches a filter { class = class file ("WARRIOR"), slot = Schema slot }.
 --
--- "Can equip" is the rule: armor up to the class's heaviest type (cloth for everyone, leather, mail, plate), shields,
--- relics and the weapon types the class can learn. Cloaks, rings, necklaces, trinkets and held-in-off-hand items
--- (the armor subclasses "miscellaneous" and the cloak's cloth) suit every class. Items that are not armor or weapons
--- (quest items, recipes, reagents) are not class gear and pass the class filter. A class this table does not know
--- (a client with another class list) is not filtered at all. The level at which a class may start wearing mail or plate
--- is not modelled: the filter answers what the class can equip at all.
+-- The rule is what the class can wear and wield at full level, by the current client's class rules: armor up to the
+-- class's heaviest type (cloth for everyone, leather, mail, plate), shields, relics and the weapon types the class can
+-- use. Cloaks, rings, necklaces, trinkets and held-in-off-hand items (the armor subclasses "miscellaneous" and the
+-- cloak's cloth) suit every class. Items that are not armor or weapons (quest items, recipes, reagents) are not class
+-- gear and pass the class filter. A class this table does not know (a client with another class list) is not filtered.
+-- Not modelled: the level at which a class may start wearing mail or plate, and whether WoW: Forever follows the
+-- classic rules here (mail and plate from level 40, no one-handed axes for rogues, no polearms for druids); that is
+-- listed in docs/UI.md, "Needs a look in game", so the table can be adjusted once checked.
 --
 --   GearFilter.CanEquip(classFile, itemType) -> true | false | nil (nil: the item's type is not known yet)
 --   GearFilter.Match(filter, itemType)       -> true | false | nil (nil: cannot tell until the item loads)
 --
--- itemType = { classID, subclassID, slot } (Loot.ItemType), or nil while the client has no data for the item.
+-- itemType = { classID, subclassID, slot, alsoSlot? } (Loot.ItemType: a one-hand weapon also fits the off hand), or
+-- nil while the client has no data for the item.
 
 local _, ns = ...
 local GearFilter = ns:NewModule("GearFilter")
@@ -145,7 +148,7 @@ function GearFilter.Match(filter, itemType)
 	if type(itemType) ~= "table" then
 		return nil
 	end
-	if filter.slot and itemType.slot ~= filter.slot then
+	if filter.slot and itemType.slot ~= filter.slot and itemType.alsoSlot ~= filter.slot then
 		return false
 	end
 	if filter.class then

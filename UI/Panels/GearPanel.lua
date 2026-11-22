@@ -114,7 +114,7 @@ function Panel.Create(parent, ctx)
 	end, "slot")
 	f.slot:SetPoint("LEFT", f.encounter, "RIGHT", SP.sm, 0)
 	W.SetTooltip(f.class, L["Class"],
-		L["Shows the items this class can equip: armor up to its heaviest type, and the weapons and shields it can use. Items that are not equipment stay listed."])
+		L["Items this class can wear and wield at full level: armor up to its heaviest type, the weapons and shields it can use. Other items stay listed."])
 	W.SetTooltip(f.encounter, L["Boss"], L["Shows the drops of one boss, or of the whole instance."])
 	W.SetTooltip(f.slot, L["Slot"], L["Shows the items for one equipment slot."])
 	-- The filters share the line, each as wide as its longest option (in either language); when the line is too narrow

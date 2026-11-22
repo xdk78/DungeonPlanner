@@ -49,6 +49,13 @@ local EQUIP_SLOT = {
 	INVTYPE_RELIC = "RANGED",
 }
 Loot.EQUIP_SLOT = EQUIP_SLOT
+-- Equip locations that fit a second slot: a one-hand weapon goes in either hand.
+local ALSO_SLOT = { INVTYPE_WEAPON = "OFFHAND" }
+
+-- Whether an item of this type (Loot.ItemType, or a loot row with slot and alsoSlot) goes in `slot`.
+function Loot.FitsSlot(t, slot)
+	return t ~= nil and slot ~= nil and (t.slot == slot or t.alsoSlot == slot)
+end
 
 -- Loot needs the API and a journal with instances in it (on WoW: Forever the functions exist but the journal is empty).
 function Loot.APIAvailable()
@@ -94,7 +101,8 @@ function Loot.ItemType(itemID)
 	end
 	equipLoc, classID, subclassID = Util.Plain(equipLoc), Util.Plain(classID), Util.Plain(subclassID)
 	return { classID = Util.IsInteger(classID) and classID or nil, subclassID = Util.IsInteger(subclassID) and subclassID
-		or nil, equipLoc = type(equipLoc) == "string" and equipLoc or nil, slot = EQUIP_SLOT[equipLoc] }
+		or nil, equipLoc = type(equipLoc) == "string" and equipLoc or nil, slot = EQUIP_SLOT[equipLoc],
+		alsoSlot = ALSO_SLOT[equipLoc] }
 end
 
 function Loot.SlotOf(itemID)
@@ -180,7 +188,8 @@ local function read(ejInstanceID, ejEncounterID, classID, specID)
 			if not item.name then
 				complete = false
 			end
-			item.slot = Loot.SlotOf(item.itemID)
+			local t = Loot.ItemType(item.itemID)
+			item.slot, item.alsoSlot = t and t.slot, t and t.alsoSlot
 			item.ejEncounterID = item.encounterID or ejEncounterID
 			list[#list + 1] = item
 		end
@@ -253,7 +262,7 @@ function Loot.For(ejInstanceID, ejEncounterID, filter)
 	if filter.slot then
 		local out = {}
 		for _, item in ipairs(list) do
-			if item.slot == filter.slot then
+			if Loot.FitsSlot(item, filter.slot) then
 				out[#out + 1] = item
 			end
 		end

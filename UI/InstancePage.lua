@@ -53,8 +53,13 @@ local function buildChrome(f, ctx, window)
 
 	-- Show location: the entrance on the world map, the same action as the Getting there card's (GettingThere.Locate);
 	-- right-click or Shift-click opens the Getting there window. Off without a travel record, and in combat.
+	-- The plan on the table when it belongs to the open instance (as f:Refresh checks), else the instance itself.
 	local function locationTarget()
-		return ctx:Plan() or ctx:Instance()
+		local entry, plan = ctx:Instance(), ctx:Plan()
+		if plan and entry and ns.Bundled.SameInstance(plan.instance, entry) then
+			return plan
+		end
+		return entry
 	end
 	f.location = W.IconButton(chrome, "showLocation", nil, function(_, mouse)
 		local shift = IsShiftKeyDown and IsShiftKeyDown()
@@ -65,37 +70,49 @@ local function buildChrome(f, ctx, window)
 	-- The pin's picture has a wide clear margin: it fills the button to stay as legible as the back arrow beside it.
 	f.location.art:ClearAllPoints()
 	f.location.art:SetAllPoints()
+	-- What a left-click does, from what the game allows (GettingThere.Location).
+	local function locationHint(loc)
+		if loc.canPin and loc.canOpen then
+			return L["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."]
+		elseif loc.canOpen then
+			return L["Click: open the world map on the entrance's zone. Right-click or Shift-click: Getting there."]
+		elseif loc.canPin and loc.gamepad then
+			return L["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."]
+		elseif loc.canPin then
+			return L["Click: set the map pin on the entrance. Right-click or Shift-click: Getting there."]
+		end
+		return L["Click: open Getting there (the game can neither pin nor show this entrance)."]
+	end
 	-- combat: true from PLAYER_REGEN_DISABLED, which fires before InCombatLockdown says so.
 	function f.location:Update(combat)
 		local loc = ns.GettingThere.Location(locationTarget())
-		local state = (combat and loc.state == "ready") and "blocked" or loc.state
+		local state = (combat and loc.state == "ready") and "combat" or loc.state
 		self.dpState = state
 		self:SetDisabled(state ~= "ready")
 		local text
 		if state == "ready" then
-			local hint = loc.mapped and L["Click: show the entrance on the world map. Right-click or Shift-click: Getting there."]
-				or L["Click: open Getting there (the entrance lies on no map)."]
-			if loc.mapped and not ns.Navigation.CanOpenMap() then
-				hint = L["Click: set the map pin (the world map does not open with the gamepad interface style). Right-click or Shift-click: Getting there."]
-			end
-			text = (loc.zone and (loc.zone .. "\n") or "") .. hint
-		elseif state == "blocked" then
+			text = (loc.zone and (loc.zone .. "\n") or "") .. locationHint(loc)
+		elseif state == "combat" then
 			text = L["Not available in combat."]
+		elseif state == "dead" then
+			text = L["Not available while dead."]
 		else
 			text = L["Dungeon Planner has no travel facts for this instance."]
 		end
 		W.SetTooltip(self, L["Show location"], text, "below")
 	end
-	ns:RegisterEvent("PLAYER_REGEN_DISABLED", function()
-		if f.location:IsVisible() then
-			f.location:Update(true)
+	-- Combat and death switch it off and on again; only while it is on screen (the next Refresh catches up otherwise).
+	local function onState(combat)
+		return function()
+			if f.location:IsVisible() then
+				f.location:Update(combat)
+			end
 		end
-	end)
-	ns:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-		if f.location:IsVisible() then
-			f.location:Update(false)
-		end
-	end)
+	end
+	ns:RegisterEvent("PLAYER_REGEN_DISABLED", onState(true))
+	for _, event in ipairs({ "PLAYER_REGEN_ENABLED", "PLAYER_DEAD", "PLAYER_ALIVE", "PLAYER_UNGHOST" }) do
+		ns:RegisterEvent(event, onState(false))
+	end
 
 	f.planPick = W.Dropdown(chrome, {
 		width = 250,

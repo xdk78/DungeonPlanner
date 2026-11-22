@@ -199,7 +199,7 @@ end
 
 function Popup:Render()
 	local spec = self.spec
-	local pool = self.pools[spec.style]
+	local pool = self.pools[self.poolKey]
 	local viewH = self.view:GetHeight()
 	local maxScroll = self:MaxScroll()
 	self.scroll = clamp(self.scroll or 0, 0, maxScroll)
@@ -232,9 +232,9 @@ function Popup:Render()
 			end
 		end
 	end
-	for style, p in pairs(self.pools) do
+	for key, p in pairs(self.pools) do
 		for kind, list in pairs(p) do
-			local keep = style == spec.style and used[kind] or 0
+			local keep = key == self.poolKey and used[kind] or 0
 			for j = keep + 1, #list do
 				list[j]:Hide()
 				list[j].index, list[j].row = nil, nil
@@ -256,7 +256,7 @@ function Popup:SetCursor(i, reveal)
 		self:Render()
 		return
 	end
-	for _, f in ipairs(self.pools[self.spec.style].item) do
+	for _, f in ipairs(self.pools[self.poolKey].item) do
 		if f:IsShown() and f.index then
 			paintItem(f, f.index == i, f.current)
 		end
@@ -402,7 +402,7 @@ local function build()
 	S.Register(p, function(f)
 		S.PaintBackdrop(f)
 	end)
-	p.pools, p.tabBars = {}, {}
+	p.pools, p.poolBuilders, p.tabBars = {}, {}, {}
 	p.query, p.scroll, p.total, p.rows, p.tops = "", 0, 0, {}, {}
 
 	p.search = W.Input(p, {
@@ -557,7 +557,16 @@ function W.OpenPopup(owner, spec)
 	end
 	p.owner, p.spec, p.dpOpen = owner, spec, true
 	p.query, p.scroll, p.tab = "", 0, spec.tab
-	p.pools[spec.style] = p.pools[spec.style] or { item = {}, header = {} }
+	-- Rows are pooled per style and per row builder: two lists of one style whose rows are built differently (a row
+	-- without the label another one fills) never share rows. The style's first builder keeps the plain style key.
+	local key = spec.style
+	local built = p.poolBuilders[key]
+	if built and (built[1] ~= spec.createItem or built[2] ~= spec.createHeader) then
+		key = spec.style .. ":" .. tostring(spec.createItem) .. ":" .. tostring(spec.createHeader)
+	end
+	p.poolKey = key
+	p.poolBuilders[key] = p.poolBuilders[key] or { spec.createItem, spec.createHeader }
+	p.pools[key] = p.pools[key] or { item = {}, header = {} }
 	hideTips(owner)
 	owner.dpPopupOpen = true
 	if owner.SetActive then

@@ -116,8 +116,7 @@ T.case("Plan list: sized to its rows, no scroll bar while they all fit; scrolls 
 			rows[i] = { kind = "item", text = "Plan " .. i, value = i }
 		end
 		return W.OpenPopup(owner, {
-			-- Its own row style: rows are pooled per style, and these rows have no label for W.Dropdown to fill.
-			style = "test-scroll",
+			style = "menu",
 			rowHeight = ns.Style.SIZE.control,
 			maxHeight = 12 * ns.Style.SIZE.control + 2 * ns.Style.SPACE.sm,
 			rows = function()
