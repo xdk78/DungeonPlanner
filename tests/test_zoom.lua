@@ -4,6 +4,7 @@
 -- Cost is counted in Lua VM instructions (as in tests/test_perf.lua).
 local T = ...
 local ns, mock = T.ns, T.mock
+local Perf = require("wowui.perf")
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -15,15 +16,9 @@ local function boot()
 	ns.UI.Show()
 end
 
+-- Thousands of Lua VM instructions that fn runs (wowui.perf).
 local function cost(fn)
-	local k = 0
-	debug.sethook(function()
-		k = k + 1
-	end, "", 1000)
-	local ok, err = pcall(fn)
-	debug.sethook()
-	assert(ok, err)
-	return k
+	return math.floor(Perf.count(fn) / 1000)
 end
 
 -- The map section on a plan, at a usual size, with the pointer near its middle. The mock lays out no anchors, so the

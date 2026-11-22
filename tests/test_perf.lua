@@ -1,13 +1,14 @@
 -- Cost checks that fail on regressions: the steps of a plan at the schema's limits, a pan that moves the canvas without
 -- redrawing, one refresh of the map per edit, and the per-revision caches of the Enemies layer and the boss portraits.
 --
--- Cost is counted in Lua VM instructions (a debug.sethook count hook), not timed. These checks used to compare
+-- Cost is counted in Lua VM instructions (wowui.perf.count), not timed. These checks used to compare
 -- os.clock readings and failed now and then: on Windows os.clock is wall time, so any other load on the machine lands
 -- in the reading, and a garbage collection step paid for earlier tests' garbage can fall inside one measured call
 -- (Steps.Build allocates a lot). An instruction count is the same on every run and every machine.
 local T = ...
 local ns, mock = T.ns, T.mock
 local MAX = ns.Schema.MAX
+local Perf = require("wowui.perf")
 
 local function boot()
 	if not _G.DungeonPlannerDB then
@@ -75,16 +76,9 @@ local function limitPlan(scatter)
 	return p
 end
 
--- Thousands of Lua VM instructions that fn runs (a C function counts as the instruction that calls it).
+-- Thousands of Lua VM instructions that fn runs (wowui.perf; a C function counts as the instruction that calls it).
 local function cost(fn)
-	local k = 0
-	debug.sethook(function()
-		k = k + 1
-	end, "", 1000)
-	local ok, err = pcall(fn)
-	debug.sethook()
-	assert(ok, err)
-	return k
+	return math.floor(Perf.count(fn) / 1000)
 end
 
 T.case("Perf: Steps.Build at the schema's limits", function()
