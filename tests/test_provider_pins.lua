@@ -53,6 +53,10 @@ T.case("Map: on a provider map whose pins do not line up (\"pins\"), the plan's 
 	if not ns.UI.IsShown() then
 		ns.UI.Toggle()
 	end
+	-- The plan freshly selected, with no step: an earlier file may have left this plan selected on a boss step, whose
+	-- boss-tied positions would show and push the boss markers aside (selecting the same plan keeps its focus).
+	ns.UI.SelectPlan("b:the-deadmines", true)
+	ns.db.ui.step = nil
 	ns.UI.SelectPlan("b:hall-of-thanes")
 	ns.UI.SelectTab("map")
 	local map = _G.DungeonPlannerMainFrame.instancePage.panels.map

@@ -204,6 +204,7 @@ end)
 
 T.case("Pages over AceComm: only a leader sends; the receiver checks the sender; lockdown waits; Notes opens", function()
 	boot()
+	T.quietComm()
 	local plan = raidPlan()
 	local page = Pages.Add(plan, "Lucifron", "e1")
 	Pages.Update(plan, page.id, { text = "{group 2} heal" })

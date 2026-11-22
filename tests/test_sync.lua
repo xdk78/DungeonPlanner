@@ -377,6 +377,7 @@ local function boot()
 end
 
 local function withGroup(leaderUnit, fn)
+	T.quietComm() -- what goes out is counted: nothing an earlier file sent or scheduled
 	local leaderFn, assistFn = _G.UnitIsGroupLeader, _G.UnitIsGroupAssistant
 	_G.UnitIsGroupLeader = function(unit)
 		return unit == leaderUnit
