@@ -455,7 +455,8 @@ function Style.RecheckFonts(delay)
 	rechecked = true
 	-- Polish without a face yet, or Russian with no face or one the client could not vouch for yet (nil).
 	local polish = Style.WantsPolish() and Style.polishFace == nil
-	local cyrillic = Style.WantsCyrillic()
+	-- (A Russian client uses its own cut: nothing to look at again there.)
+	local cyrillic = Style.WantsCyrillic() and (ALPHABET[GetLocale and GetLocale() or "enUS"] or "roman") == "roman"
 		and (Style.cyrillicFace == nil or Style.CanLoadFont(Style.cyrillicFace) ~= true)
 	if not (polish or cyrillic) then
 		return

@@ -227,21 +227,55 @@ local function check(target)
 	return #missing == 0 and #unused == 0 and #badFormat == 0
 end
 
--- Every locale file the TOC loads (its Locales\xxXX.lua lines) except enUS. The list comes from the TOC, not from a
--- directory listing: `find` on Windows can be System32's find.exe, which lists nothing.
+-- The .lua files in Locales/. `dir /b` on Windows (cmd.exe, never System32's find.exe), `ls` elsewhere.
+local function localeFolder()
+	local windows = package.config:sub(1, 1) == "\\"
+	local p = assert(io.popen(windows and "dir /b Locales\\*.lua" or "ls Locales"))
+	local names = {}
+	for name in p:lines() do
+		name = name:gsub("%s+$", "")
+		if name:match("^%a+%.lua$") then
+			names[#names + 1] = name
+		end
+	end
+	p:close()
+	assert(#names > 0, "could not list the Locales folder")
+	return names
+end
+
+-- Every locale file the TOC loads (its Locales\xxXX.lua lines) except enUS, and whether the TOC and the folder agree:
+-- a file in Locales/ that the TOC does not load (or the reverse) is reported and makes the check fail.
 local function allLocaleFiles()
-	local files = {}
+	local files, listed = {}, {}
 	local f = assert(io.open("DungeonPlanner.toc", "rb"))
 	for line in f:lines() do
-		local code = line:match("^Locales[\\/](%a+)%.lua%s*$")
-		if code and code ~= "enUS" then
-			files[#files + 1] = "Locales/" .. code .. ".lua"
+		local name = line:match("^Locales[\\/](%a+%.lua)%s*$")
+		if name then
+			listed[name] = true
+			if name ~= "enUS.lua" then
+				files[#files + 1] = "Locales/" .. name
+			end
 		end
 	end
 	f:close()
 	table.sort(files)
 	assert(#files > 0, "no Locales\\*.lua lines found in DungeonPlanner.toc")
-	return files
+	local agree = true
+	local inFolder = {}
+	for _, name in ipairs(localeFolder()) do
+		inFolder[name] = true
+		if not listed[name] then
+			print("  not in DungeonPlanner.toc: Locales/" .. name)
+			agree = false
+		end
+	end
+	for name in pairs(listed) do
+		if not inFolder[name] then
+			print("  in DungeonPlanner.toc but not in the folder: Locales/" .. name)
+			agree = false
+		end
+	end
+	return files, agree
 end
 
 local first = arg[1]
@@ -280,11 +314,10 @@ if first == "--missing-lines" then
 	return
 end
 
-local targets = arg
+local targets, ok = arg, true
 if first == "--all" then
-	targets = allLocaleFiles()
+	targets, ok = allLocaleFiles()
 end
-local ok = not targets.bad
 for _, target in ipairs(targets) do
 	ok = check(target) and ok
 end
