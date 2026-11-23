@@ -255,11 +255,9 @@ function W.MultiLine(parent, opts)
 		end)
 	end
 
-	-- owner: what the text belongs to (a plan, its boss or pull), as a list's scroll owner. Another owner always gets
-	-- its own text, from the top. For the same owner a refresh of the page (a boss kill, a plan arriving) never throws
-	-- away what is being typed in a field that saves on leaving it (onCommit: leaving it saves the typed text over the
-	-- new one, Escape goes back to the new one), and the same text again keeps the cursor and the scroll offset. A field
-	-- without onCommit (an import or export box) takes the text its own action sets.
+	-- owner: as a list's scroll owner; another owner gets its text from the top. For the same owner a refresh never
+	-- overwrites what is being typed in a field that saves on leaving it (onCommit), and the same text keeps the cursor
+	-- and offset. Import and export boxes (no onCommit) take whatever their own action sets.
 	local guarded = opts.onCommit and not opts.readOnly
 	function holder:SetValue(text, owner)
 		text = text or ""
