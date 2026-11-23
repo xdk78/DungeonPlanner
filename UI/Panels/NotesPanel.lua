@@ -86,7 +86,7 @@ function Panel.Create(parent, ctx)
 
 	local function showDocument(p)
 		local doc = f.doc
-		doc:Begin()
+		doc:Begin(p.id)
 		doc:Add("title", p.name)
 		local meta = {}
 		if p.author ~= "" then
@@ -139,8 +139,8 @@ function Panel.Create(parent, ctx)
 		end
 		self.difficulty:SetValue(p.difficulty)
 		self.author:SetValue(p.author)
-		self.description:SetValue(p.description)
-		self.notes:SetValue(p.notes)
+		self.description:SetValue(p.description, p.id)
+		self.notes:SetValue(p.notes, p.id)
 		if p.source and p.source.from then
 			self.source:SetText(string.format(L["Received from %s"], p.source.from))
 		elseif p.source and p.source.kind then

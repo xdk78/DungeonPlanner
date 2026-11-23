@@ -523,12 +523,15 @@ function Panel.Create(parent, ctx)
 		-- Over the runs listed: the wing's own and those without a known wing (the rows' differences use the same).
 		local best = st and RunLog.Best(st, keys())
 		self.best:SetText(best and best.total and string.format(L["Best %s"], T(best.total)) or "")
-		self.runs:SetItems(runs)
+		self.runs:SetItems(runs, p.id .. "|" .. table.concat(keys(), ",")) -- the instance or wing keys listed
 		self.finish:SetShown(cur ~= nil)
 		self.create:SetShown(selectedRun ~= nil and #selectedRun.p + #selectedRun.b > 0 and not ns.DB.IsReadOnly())
 		self.show:SetShown(selectedRun ~= nil)
 		self.show:Refresh()
 		local comparing = selectedRun ~= nil and view == "compare" and compareRun ~= nil
+		-- The detail belongs to the run shown (by its start time) and how; a run being recorded keeps its offset as pulls
+		-- arrive.
+		local shown = p.id .. "|" .. view .. "|" .. tostring(selectedRun and selectedRun.t)
 		self.compare:SetShown(comparing)
 		self.detail:SetShown(not comparing)
 		if comparing then
@@ -537,11 +540,11 @@ function Panel.Create(parent, ctx)
 			self.compare.head.a:SetText("A")
 			self.compare.head.b:SetText("B")
 			self.compare.head.delta:SetText("A - B")
-			self.compare.list:SetItems(compareItems(selectedRun, compareRun))
+			self.compare.list:SetItems(compareItems(selectedRun, compareRun), shown .. "|" .. tostring(compareRun.t))
 			return
 		end
 		local doc = self.detail
-		doc:Begin()
+		doc:Begin(shown)
 		if selectedRun and view == "plan" then
 			showOverlay(doc, selectedRun)
 		elseif selectedRun then

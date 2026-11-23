@@ -144,7 +144,7 @@ local files = { "test_model.lua", "test_share.lua", "test_db.lua", "test_v2.lua"
 	"test_scrub.lua",
 	"test_prep.lua", "test_travel_live.lua", "test_party.lua",
 	"test_walk.lua", "test_walk_ui.lua", "test_gearfilter.lua", "test_routes.lua",
-	"test_provider_pins.lua",
+	"test_provider_pins.lua", "test_scroll.lua",
 	"test_routelegs.lua", "test_routelook.lua", "test_openmap_overlay.lua", "test_identity.lua", "test_zoom.lua",
 	"test_release_changelog.lua" }
 if onlyFile then
@@ -170,8 +170,18 @@ elseif order == "shuffle" then
 	end
 	realPrint("file order (seed " .. seed .. "): " .. table.concat(files, " "))
 end
+-- Between files every list, document, scroll area and multi-line field forgets what it was showing (its scroll owner,
+-- UI/Containers.lua): the next file's first refresh starts it at the top, as another plan would, so no file finds the
+-- offset or cursor an earlier one left on the same plan's list.
+local function forgetScrollOwners()
+	for _, f in ipairs(mock.frames) do
+		f.scrollOwner, f.valueOwner = nil, nil
+	end
+end
+
 for _, file in ipairs(files) do
 	local chunk = assert(loadfile("tests/" .. file))
+	forgetScrollOwners()
 	chunk(T)
 	if replacedDB then
 		ns.db, ns.char, ns.dbInfo = replacedDB.db, replacedDB.char, replacedDB.dbInfo

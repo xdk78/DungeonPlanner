@@ -271,7 +271,7 @@ function MapEditor.Build(f, ctx, rail, h)
 		local d = ns.BossInfo.MarkerDetail(p, m)
 		local doc = self.details
 		self:SetTitle(d.heading)
-		doc:Begin()
+		doc:Begin(p.id .. "|" .. tostring(m.id))
 		if d.boss then
 			local boss = d.boss
 			head.portrait:SetBoss(boss.enc and ns.Journal.BossArt(p, boss.enc) or nil)
@@ -322,7 +322,7 @@ function MapEditor.Build(f, ctx, rail, h)
 			self.pull:Refresh()
 			self.encounter:Refresh()
 			self.toFloor:Refresh()
-			self.note:SetValue(m.note)
+			self.note:SetValue(m.note, p.id .. "|" .. tostring(m.id))
 		end
 	end
 	return ed

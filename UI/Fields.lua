@@ -255,10 +255,21 @@ function W.MultiLine(parent, opts)
 		end)
 	end
 
-	-- As W.Input's: a refresh of the page (a boss kill, a plan arriving) must not throw away what is being typed.
-	function holder:SetValue(text)
+	-- owner: as a list's scroll owner; another owner gets its text from the top. For the same owner a refresh never
+	-- overwrites what is being typed in a field that saves on leaving it (onCommit), and the same text keeps the cursor
+	-- and offset. Import and export boxes (no onCommit) take whatever their own action sets.
+	local guarded = opts.onCommit and not opts.readOnly
+	function holder:SetValue(text, owner)
 		text = text or ""
-		if self.edit:HasFocus() and text == self.dpCommitted then
+		local same = owner == self.valueOwner
+		self.valueOwner = owner
+		if same and guarded and self.edit:HasFocus() then
+			self.dpCommitted = text
+			paintField(self)
+			return
+		end
+		if same and text == self.dpCommitted and self.edit:GetText() == text then
+			paintField(self)
 			return
 		end
 		self.dpCommitted = text

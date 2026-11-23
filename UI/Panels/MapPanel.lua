@@ -711,7 +711,7 @@ function Panel.Create(parent, ctx)
 			self.rail:SetWidth(folded and (self.legend.heading:GetWidth() + 2 * SP.md) or LEGEND_W)
 			local h = railHeight()
 			self.rail:SetHeight(maxH > 80 and math.min(h, maxH) or h)
-			self.routes.list:SetItems(list)
+			self.routes.list:SetItems(list, p.id .. "|" .. tostring(ctx.floor)) -- the routes of this floor
 		end
 	end
 

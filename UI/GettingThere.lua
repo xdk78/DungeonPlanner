@@ -383,7 +383,7 @@ function GT.Refresh()
 		return
 	end
 	local doc = window.doc
-	doc:Begin()
+	doc:Begin(window.target) -- live updates (PREP_CHANGED) keep the offset; another place starts at the top
 	doc:Add("title", GT.Facts(window.target).name)
 	GT.Fill(doc, window.target, window.bar, false, true)
 	doc:Finish()

@@ -497,7 +497,7 @@ function Panel.Create(parent, ctx)
 	f.entries = {}
 	local function setLines()
 		f.cols = columns()
-		f.list:SetItems(lines(f.entries, f.cols))
+		f.list:SetItems(lines(f.entries, f.cols), f.listOwner)
 	end
 	f.list:HookScript("OnSizeChanged", function()
 		if columns() ~= f.cols then
@@ -710,6 +710,9 @@ function Panel.Create(parent, ctx)
 			end
 		end
 		self.entries = items
+		-- Another plan or another filter starts at the top; items arriving for the same keep the offset.
+		self.listOwner = table.concat({ p.id, tostring(filter.class), tostring(filter.role), tostring(filter.encounter),
+			tostring(filter.slot) }, "|")
 		setLines()
 	end
 

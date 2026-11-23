@@ -317,7 +317,7 @@ function Panel.Create(parent, ctx)
 	head.meta:SetPoint("RIGHT", doc.content, "RIGHT", -SP.sm, 0)
 
 	local function showDocument(p, enc, index)
-		doc:Begin()
+		doc:Begin(p.id .. "|" .. enc.id)
 		head.portrait:SetBoss(ns.Journal.BossArt(p, enc))
 		head.portrait:SetBadge(index and tostring(index) or nil)
 		head.name:SetText(ns.Names.Encounter(enc))
@@ -389,7 +389,7 @@ function Panel.Create(parent, ctx)
 		if not selectedId and p.encounters[1] then
 			selectedId = p.encounters[1].id
 		end
-		self.list:SetItems(p.encounters)
+		self.list:SetItems(p.encounters, p.id)
 		local ro = ctx:ReadOnly()
 		-- Read-only plans have nothing to add: their toolbar keeps only the Dungeon Journal link.
 		self.add:SetShown(not ro)
@@ -421,6 +421,7 @@ function Panel.Create(parent, ctx)
 			showDocument(p, enc, select(2, Util.FindById(p.encounters, enc.id)))
 			return
 		end
+		area:SetOwner(p.id .. "|" .. enc.id)
 		c.portrait:SetBoss(ns.Journal.BossArt(p, enc))
 		local index = select(2, Util.FindById(p.encounters, enc.id))
 		c.portrait:SetBadge(index and tostring(index) or nil)
@@ -435,7 +436,7 @@ function Panel.Create(parent, ctx)
 		else
 			c.ids:SetText(L["Not linked to the journal: kills of this boss are not tracked automatically."])
 		end
-		c.strategy:SetValue(enc.strategy)
+		c.strategy:SetValue(enc.strategy, p.id .. "|" .. enc.id)
 
 		for _, b in ipairs(c.phaseButtons) do
 			b:Hide()
@@ -474,7 +475,7 @@ function Panel.Create(parent, ctx)
 		if phase then
 			c.phaseName:SetValue(phase.name)
 			c.trigger:SetValue(phase.trigger)
-			c.phaseNotes:SetValue(phase.notes)
+			c.phaseNotes:SetValue(phase.notes, p.id .. "|" .. enc.id .. "|" .. phaseIndex)
 		end
 		c.addPhase:SetDisabled(ro or #enc.phases >= Schema.MAX.phases)
 		c.removePhase:SetDisabled(ro)

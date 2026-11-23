@@ -431,6 +431,8 @@ function Panel.Create(parent, ctx)
 	end)
 
 	function f:Refresh()
+		local p = plan()
+		area:SetOwner(p and p.id)
 		local available = ns.Comm.IsAvailable()
 		c.sendGroup:SetDisabled(not available or ns.Comm.GroupChannel() == nil)
 		c.sendGuild:SetDisabled(not available or not (IsInGuild and IsInGuild()))

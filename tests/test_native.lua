@@ -175,17 +175,27 @@ T.case("Gear: an item's tooltip opens beside its name, and off 'Open in NeedRoll
 	ns.UI.SelectTab("gear")
 	local panel = _G.DungeonPlannerMainFrame.instancePage.panels.gear.inner
 	panel:Refresh()
-	-- From the top: the list keeps its scroll offset across plans, and an earlier file may have scrolled it down.
-	panel.list:ScrollTo(1)
+	-- The entry added here: the plan may be another file's own plan with entries of its own (label-only ones have no
+	-- item tooltip), so find this one's line and bring it into view.
+	local function ours(entry)
+		return entry and entry.gear and entry.gear.itemID == 19019
+	end
+	for index, line in ipairs(panel.list.items) do
+		for _, e in ipairs(line.cells or {}) do
+			if ours(e) then
+				panel.list:ScrollTo(index)
+			end
+		end
+	end
 	local row -- the item's cell in its line
 	for _, r in ipairs(panel.list.rows) do
 		for _, cell in ipairs(r:IsShown() and r.cells or {}) do
-			if not row and cell:IsShown() and cell.entry and cell.entry.gear then
+			if not row and cell:IsShown() and ours(cell.entry) then
 				row = cell
 			end
 		end
 	end
-	T.ok(row, "a gear item")
+	T.ok(row, "the gear item")
 	panel.needRoll:Hide()
 	mock.Hover(row)
 	local a = GameTooltip:FindPoint("TOPLEFT")

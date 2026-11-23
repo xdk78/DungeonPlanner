@@ -217,7 +217,7 @@ function Panel.Create(parent, ctx)
 		self.showAll:SetChecked(ns.db.ui.prepShowAll)
 		local rows, counts = ns.PrepInfo.Quests(p, ns.db.ui.prepShowAll)
 		local doc = self.doc
-		doc:Begin()
+		doc:Begin(tostring(p.id) .. "|" .. tostring(ns.db.ui.prepShowAll)) -- "Show all" makes another list: from the top
 		local questie = ns.Providers.Get("questie") ~= nil
 		for _, l in ipairs(Panel.QuestLines(rows, counts, questie)) do
 			doc:Add(l[1], l[2])
@@ -232,7 +232,7 @@ function Panel.Create(parent, ctx)
 		doc:Finish()
 
 		local travel = self.travel
-		travel:Begin()
+		travel:Begin(p.id)
 		GT.Fill(travel, p, self.bar, false)
 		travel:Finish()
 
@@ -241,7 +241,7 @@ function Panel.Create(parent, ctx)
 		self.notesText:SetShown(ro)
 		if ro then
 			-- The plan's own notes, read-only (a received copy, data from a newer version); the hint when it has none.
-			self.notesText:Begin()
+			self.notesText:Begin(p.id)
 			if p.prep and p.prep ~= "" then
 				self.notesText:Add("text", p.prep)
 			else
@@ -249,7 +249,7 @@ function Panel.Create(parent, ctx)
 			end
 			self.notesText:Finish()
 		else
-			self.notes:SetValue(p.prep or "")
+			self.notes:SetValue(p.prep or "", p.id)
 		end
 	end
 
