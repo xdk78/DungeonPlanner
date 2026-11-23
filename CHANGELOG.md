@@ -5,9 +5,16 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-23
+
+No new files: a `/reload` after updating is enough.
+
 ### Fixed
 - **Lists open at the top for another plan**: the steps, Gear and other lists and texts no longer keep the previous
-  plan's scroll position (nor boss, floor or filter); a refresh keeps your place, and the steps show the current step.
+  plan's scroll position (nor boss, floor or filter); a refresh keeps your place, and the steps list scrolls to the
+  current step only when the plan or the step changes.
+- **Text you are typing is kept**: a note, boss or page field you are editing is no longer overwritten when the window
+  refreshes (a group event, a kill); leaving the field saves what you typed, and Escape goes back to the saved text.
 
 ## [0.2.1] - 2026-11-23
 
