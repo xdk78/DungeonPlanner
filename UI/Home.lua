@@ -646,6 +646,8 @@ function Home.Create(parent, ctx, actionBar)
 		self.tabs:Select(tab)
 		local query = Home.Norm(ctx.search):gsub("^%s+", ""):gsub("%s+$", "")
 		local isInstances = tab == "dungeons" or tab == "raids"
+		-- The lists start at the top for another tab, search or filter; a refresh of the same keeps their offset.
+		local owner = tab .. "|" .. query .. "|" .. tostring(ns.db.ui.onlyWithPlans)
 		self.list:SetShown(isInstances)
 		self.heads:SetShown(isInstances)
 		self.plans:SetShown(tab == "plans")
@@ -697,7 +699,7 @@ function Home.Create(parent, ctx, actionBar)
 			end
 			selected = selected or shown[1]
 			ns.db.ui.homeSelected = selected and selected.key or nil
-			self.list:SetItems(shown)
+			self.list:SetItems(shown, owner)
 			self.preview:ShowEntry(selected, nil)
 			local text = ns.Plural(#shown, L["%d instance|%d instances"])
 			if not complete then
@@ -720,7 +722,7 @@ function Home.Create(parent, ctx, actionBar)
 			end
 			selected = selected or list[1]
 			ns.db.ui.homeSelectedPlan = selected and selected.id or nil
-			self.plans:SetItems(list)
+			self.plans:SetItems(list, owner)
 			self.plans:PlaceTip(#list)
 			self.preview:ShowEntry(selected and UI.EntryForPlan(selected) or nil, selected)
 			self.count:SetText(ns.Plural(#list, L["%d plan|%d plans"]))
@@ -737,7 +739,7 @@ function Home.Create(parent, ctx, actionBar)
 			table.sort(received, function(a, b)
 				return (a.source.at or 0) > (b.source.at or 0)
 			end)
-			self.shared.list:SetItems(received)
+			self.shared.list:SetItems(received, owner)
 			local all = 0
 			for _, plan in ipairs(ns.DB.Plans()) do
 				if plan.source then

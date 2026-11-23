@@ -315,7 +315,7 @@ function NotesFrame.Refresh()
 	index = found or math.max(1, math.min(index, #entries))
 	current = entries[index]
 	local doc = frame.doc
-	doc:Begin()
+	doc:Begin(current and current.page or false) -- the page shown: a refresh keeps the offset, another page starts at the top
 	if not current then
 		W.FitText(frame.pageTitle, L["No pages"])
 		frame.source:SetText("")

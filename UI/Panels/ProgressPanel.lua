@@ -219,8 +219,8 @@ function Panel.Create(parent, ctx)
 		else
 			self.run:SetText(L["No run in progress. A run starts when you enter an instance."])
 		end
-		self.bosses:SetItems(p.encounters)
-		self.objectives:SetItems(p.objectives)
+		self.bosses:SetItems(p.encounters, p.id)
+		self.objectives:SetItems(p.objectives, p.id)
 		local ro = ctx:ReadOnly()
 		self.newObjective:SetShown(not ro)
 		self.addObjective:SetShown(not ro)

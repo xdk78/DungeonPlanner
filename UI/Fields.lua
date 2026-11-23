@@ -261,6 +261,10 @@ function W.MultiLine(parent, opts)
 		if self.edit:HasFocus() and text == self.dpCommitted then
 			return
 		end
+		if text == self.dpCommitted and self.edit:GetText() == text then
+			paintField(self) -- the same text again (a refresh): the cursor and the scroll offset stay
+			return
+		end
 		self.dpCommitted = text
 		self.edit:SetText(text)
 		self.edit:SetCursorPosition(0)

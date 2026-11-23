@@ -5,6 +5,10 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- **Lists open at the top for another plan**: the steps, Gear and other lists and texts no longer keep the previous
+  plan's scroll position (nor boss, floor or filter); a refresh keeps your place, and the steps show the current step.
+
 ## [0.2.1] - 2026-11-23
 
 Upgrade notes, known limitations and the in-game test checklist: `docs/RELEASE-NOTES-0.2.1.md`.

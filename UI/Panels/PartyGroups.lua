@@ -273,6 +273,7 @@ function PartyGroups.Create(parent, o)
 		if not p then
 			return
 		end
+		grid:SetOwner(p.id)
 		local ro = o.readOnly()
 		local party = isParty()
 		self.fill:SetLabel(party and L["Fill from my party"] or L["Fill from my raid"])

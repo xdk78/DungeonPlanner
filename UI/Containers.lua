@@ -162,6 +162,12 @@ end
 W.AttachThumb = attachThumb
 
 -- ScrollArea: a scrolling container for forms. Put children on area.content and call area:SetContentHeight(h).
+--
+-- Scroll owners (areas, documents and lists alike): the owner is what the content belongs to, a key such as the plan's
+-- ID (with its boss, floor or filter where the content is per boss, floor or filter). While the owner stays the same
+-- the scroll offset is kept, so a refresh (new data, a setting, the language) never moves what is being read; when it
+-- changes, the content starts at the top: another plan never opens part-way down. area:SetOwner(owner),
+-- doc:Begin(owner), list:SetItems(items, owner).
 
 function W.ScrollArea(parent)
 	local area = CreateFrame("ScrollFrame", nil, parent)
@@ -215,13 +221,21 @@ function W.ScrollArea(parent)
 		end
 		self.thumb:Sync()
 	end
+	function area:SetOwner(owner)
+		if owner ~= self.scrollOwner then
+			self.scrollOwner = owner
+			self:SetVerticalScroll(0)
+			self.thumb:Sync()
+		end
+	end
 	return area
 end
 
 -- Document: read-only formatted text in a scroll area, as Dungeon Journal's detail pane (recommended plans show their
 -- text this way instead of in input boxes). Build it with doc:Begin(), then doc:Add(style, text), doc:Space(px) and
 -- doc:Place(frame, height or function(width)[, stretch]) in reading order, then doc:Finish(). Font strings are pooled; the layout reruns when the
--- area changes size. Styles: title, heading, label, text, muted.
+-- area changes size. Styles: title, heading, label, text, muted. doc:Begin(owner) keeps the offset for the same owner
+-- (above); doc:Begin() with none starts at the top every time.
 
 local DOC_STYLES = {
 	title = { "huge", "gold", 0 },
@@ -285,14 +299,19 @@ function W.Document(parent)
 		area:SetContentHeight(y + SP.md)
 	end
 
-	function area:Begin()
+	function area:Begin(owner)
 		for _, b in ipairs(blocks) do
 			if b.frame then
 				b.frame:Hide()
 			end
 		end
 		blocks = {}
-		self:SetVerticalScroll(0)
+		if owner == nil then
+			self.scrollOwner = nil
+			self:SetVerticalScroll(0)
+		else
+			self:SetOwner(owner) -- Finish's layout clamps a kept offset to the new length
+		end
 	end
 	function area:Add(style, text)
 		if text and text ~= "" then
@@ -470,8 +489,13 @@ function W.List(parent, opts)
 		self.thumb:Sync()
 	end
 
-	function list:SetItems(items)
+	-- owner: what the items belong to (see "Scroll owners" above); without one the offset is always kept.
+	function list:SetItems(items, owner)
 		self.items = items or {}
+		if owner ~= self.scrollOwner then
+			self.scrollOwner = owner
+			self.offset = 0
+		end
 		self:Refresh()
 	end
 

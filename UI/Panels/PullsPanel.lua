@@ -359,7 +359,7 @@ function Panel.Create(parent, ctx)
 	end
 
 	local function showDocument(p, pull, index)
-		doc:Begin()
+		doc:Begin(p.id .. "|" .. pull.id)
 		doc:Add("title", index .. ". " .. pull.name)
 		local marks = ns.UI.PullMarks(pull, { long = true })
 		if marks ~= "" then
@@ -405,7 +405,7 @@ function Panel.Create(parent, ctx)
 			selectedId = p.pulls[1].id
 		end
 		self:SizeList()
-		self.list:SetItems(p.pulls)
+		self.list:SetItems(p.pulls, p.id)
 		local ro = ctx:ReadOnly()
 		-- Read-only plans have nothing to add or reorder: the toolbar goes and the list moves up.
 		self.add:SetShown(not ro)

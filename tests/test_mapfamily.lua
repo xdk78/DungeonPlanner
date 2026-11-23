@@ -63,8 +63,6 @@ T.case("Rings: step badges, map pins, list icons and portraits all centre their 
 	ns.UI.RefreshPage()
 	local side = _G.DungeonPlannerMainFrame.instancePage.side
 	T.ok(side, "the side panel")
-	-- From the top: the step list keeps its scroll offset across plans, and an earlier file may have scrolled it down.
-	side.list:ScrollTo(1)
 	local kinds = {}
 	for _, row in ipairs(side.list.rows) do
 		if row:IsShown() and row.badge then

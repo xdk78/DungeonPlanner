@@ -403,7 +403,7 @@ function Panel.Create(parent, ctx)
 		end
 		local ro = ctx:ReadOnly()
 		self.filter:Refresh()
-		self.list:SetItems(items)
+		self.list:SetItems(items, p.id .. "|" .. filter)
 		-- A recommended plan has none: say how to get some.
 		self.list.emptyText:SetText(ro and L["No assignments in a recommended plan. Make an editable copy to say who does what, per boss."]
 			or L["No assignments yet."])
