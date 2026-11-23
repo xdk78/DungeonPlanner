@@ -436,7 +436,7 @@ function Panel.Create(parent, ctx)
 		else
 			c.ids:SetText(L["Not linked to the journal: kills of this boss are not tracked automatically."])
 		end
-		c.strategy:SetValue(enc.strategy)
+		c.strategy:SetValue(enc.strategy, p.id .. "|" .. enc.id)
 
 		for _, b in ipairs(c.phaseButtons) do
 			b:Hide()
@@ -475,7 +475,7 @@ function Panel.Create(parent, ctx)
 		if phase then
 			c.phaseName:SetValue(phase.name)
 			c.trigger:SetValue(phase.trigger)
-			c.phaseNotes:SetValue(phase.notes)
+			c.phaseNotes:SetValue(phase.notes, p.id .. "|" .. enc.id .. "|" .. phaseIndex)
 		end
 		c.addPhase:SetDisabled(ro or #enc.phases >= Schema.MAX.phases)
 		c.removePhase:SetDisabled(ro)

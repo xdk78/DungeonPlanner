@@ -170,8 +170,18 @@ elseif order == "shuffle" then
 	end
 	realPrint("file order (seed " .. seed .. "): " .. table.concat(files, " "))
 end
+-- Between files every list, document, scroll area and multi-line field forgets what it was showing (its scroll owner,
+-- UI/Containers.lua): the next file's first refresh starts it at the top, as another plan would, so no file finds the
+-- offset or cursor an earlier one left on the same plan's list.
+local function forgetScrollOwners()
+	for _, f in ipairs(mock.frames) do
+		f.scrollOwner, f.valueOwner = nil, nil
+	end
+end
+
 for _, file in ipairs(files) do
 	local chunk = assert(loadfile("tests/" .. file))
+	forgetScrollOwners()
 	chunk(T)
 	if replacedDB then
 		ns.db, ns.char, ns.dbInfo = replacedDB.db, replacedDB.char, replacedDB.dbInfo

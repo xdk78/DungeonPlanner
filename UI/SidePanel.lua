@@ -402,12 +402,14 @@ function SidePanel.Create(parent, ctx)
 		self.list:SetPoint("BOTTOMRIGHT", party, "TOPRIGHT", SP.md - SP.xs, SP.sm)
 		local steps = plan and ctx:Steps() or {}
 		self.heading:SetCount(#steps > 0 and #steps or nil)
-		-- Another plan's steps start at the top, or with its current step in view: never part-way down.
-		self.list:SetItems(steps, plan and plan.id)
+		-- Another plan's steps start at the top, or with its current step in view: never part-way down. The list
+		-- follows the current step when it changes; a refresh of the same keeps where the player scrolled to.
+		local reset = self.list:SetItems(steps, plan and plan.id)
 		local current = ctx:StepIndex()
-		if current then
+		if current and (reset or current ~= self.followed) then
 			self.list:ScrollTo(current)
 		end
+		self.followed = current
 		self.party:SetShown(plan ~= nil)
 		self:RefreshParty(plan)
 	end

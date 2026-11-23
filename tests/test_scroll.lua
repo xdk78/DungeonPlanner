@@ -127,6 +127,185 @@ T.case("Scroll: after a plan switch the current step is scrolled into view and i
 		for _, r in ipairs(steps.rows) do
 			T.eq(r.dpSelected == true, r == row, "one highlight: the current step's row")
 		end
+
+		-- The player scrolls away from the current step: a refresh leaves the list there.
+		steps:ScrollTo(1)
+		T.eq(steps.offset, 0, "scrolled back to the top")
+		ns.UI.RefreshPage()
+		page.side:Refresh()
+		T.eq(steps.offset, 0, "a refresh does not snap back to the current step")
+		-- Another current step (run mode's Next, a click): the list follows it.
+		ns.UI.FocusStep(last - 1, { stay = true })
+		T.ok(shownRow(steps, last - 1) and steps.offset > 0, "a new current step is scrolled into view")
+	end)
+end)
+
+T.case("Scroll: the same owner with fewer items clamps the offset instead of resetting it", function()
+	boot()
+	local list = W.List(UIParent, { rowHeight = 20, create = function() end, update = function() end })
+	list:SetSize(200, 100) -- five rows in view
+	local function items(n)
+		local out = {}
+		for i = 1, n do
+			out[i] = { i }
+		end
+		return out
+	end
+	list:SetItems(items(30), "plan-a")
+	list:ScrollTo(30)
+	T.eq(list.offset, 25, "at the end")
+	T.eq(list:SetItems(items(10), "plan-a"), false, "the same owner")
+	T.eq(list.offset, 5, "ten items: clamped to the last five, not back to the top")
+	list:SetItems(items(3), "plan-a")
+	T.eq(list.offset, 0, "three fit")
+	T.eq(list:SetItems(items(30), "plan-b"), true, "another owner")
+	list:Hide()
+end)
+
+T.case("Scroll: Home's lists start at the top for another tab or search and keep their place on a refresh", function()
+	boot()
+	ns.UI.GoHome("dungeons")
+	local home = _G.DungeonPlannerMainFrame.home
+	local list = home.list
+	T.ok(#list.items > #list.rows, "the dungeons are longer than the list")
+	list:ScrollTo(#list.items)
+	local at = list.offset
+	T.ok(at > 0, "scrolled down")
+	home:Refresh()
+	T.eq(list.offset, at, "a refresh keeps the offset")
+	ns.UI.GoHome("raids")
+	ns.UI.GoHome("dungeons")
+	T.eq(list.offset, 0, "back from another tab: the top")
+	list:ScrollTo(#list.items)
+	local search = ns.UI.ctx.search
+	ns.UI.ctx.search = "e"
+	home:Refresh()
+	T.ok(#list.items > #list.rows, "the search still lists many")
+	T.eq(list.offset, 0, "another search: the top")
+	ns.UI.ctx.search = search
+	home:Refresh()
+end)
+
+T.case("Scroll: the Runs list starts at the top when the plan lists another wing's runs", function()
+	boot()
+	local R, RunLog = ns.Recorder, ns.RunLog
+	R.SetEnabled(false)
+	R.ClearHistory()
+	local iid = ns.TravelData.instances["Scarlet Monastery: Library"].iid
+	local shared = tostring(iid)
+	-- A plan whose wing is unclear lists its instance's runs and every wing's.
+	local plan = ns.DB.AddPlan(ns.Validate.Plan({ name = "Some wing",
+		instance = { name = "Scroll Monastery", kind = "dungeon", instanceMapID = iid } }))
+	local store = R.Store()
+	local libKey, armKey = RunLog.WingKey(shared, "scarletmonasterylibrary"), RunLog.WingKey(shared, "scarletmonasteryarmory")
+	local function record(key, at)
+		local run = RunLog.Enter(store, key, "Scarlet Monastery", 1, at)
+		RunLog.PullStart(run, at + 1)
+		RunLog.Observe(run, { { level = 30, class = "elite" } })
+		RunLog.PullEnd(run, at + 20, 0, false)
+		RunLog.Finish(store, at + 60)
+	end
+	local ok, err = pcall(function()
+		for i = 1, 18 do
+			record(libKey, ns.Now() - 100000 + i * 1000)
+		end
+		ns.UI.SelectPlan(plan.id)
+		ns.UI.SelectTab("runs")
+		local runs = _G.DungeonPlannerMainFrame.instancePage.panels.runs.inner.runs
+		T.ok(#runs.items > #runs.rows, "more runs than rows")
+		runs:ScrollTo(#runs.items)
+		local at = runs.offset
+		T.ok(at > 0, "scrolled down")
+		ns:Fire("RECORDER_CHANGED")
+		T.eq(runs.offset, at, "a refresh with the same wings keeps the offset")
+		record(armKey, ns.Now() - 1000)
+		ns:Fire("RECORDER_CHANGED")
+		T.ok(#runs.items > #runs.rows, "still a long list")
+		T.eq(runs.offset, 0, "another wing's runs listed: the top")
+	end)
+	R.ClearHistory()
+	ns.DB.DeletePlan(plan.id)
+	assert(ok, err)
+end)
+
+-- The mock's edit boxes never hold the focus; give one the game's behaviour (ClearFocus reports the focus loss).
+local function focus(edit)
+	local focused = true
+	edit.HasFocus = function()
+		return focused
+	end
+	edit.ClearFocus = function(self)
+		if focused then
+			focused = false
+			mock.FireScript(self, "OnEditFocusLost")
+		end
+	end
+	mock.FireScript(edit, "OnEditFocusGained")
+end
+
+T.case("Scroll: a multi-line field keeps its place for the same owner, never loses typing, and resets for another", function()
+	boot()
+	local committed
+	local field = W.MultiLine(UIParent, { onCommit = function(text)
+		committed = text
+	end })
+	field:SetSize(200, 60)
+	local long = string.rep("A line of notes\n", 30)
+	field:SetValue(long, "plan-a")
+	field.scroll:SetVerticalScroll(80)
+	field:SetValue(long, "plan-a")
+	T.eq(field.scroll:GetVerticalScroll(), 80, "the same text again: the offset stays")
+	field:SetValue(long, "plan-b")
+	T.eq(field.scroll:GetVerticalScroll(), 0, "the same text of another plan: from the top")
+	-- Typing, then a refresh of the same plan brings other text (a plan arriving): what is typed stays and is saved.
+	focus(field.edit)
+	field.edit:SetText("typed")
+	field:SetValue("from elsewhere", "plan-b")
+	T.eq(field.edit:GetText(), "typed", "the text being typed stays")
+	field.edit:ClearFocus()
+	T.eq(committed, "typed", "leaving the field saves it")
+	-- Another plan replaces even a focused field's text.
+	focus(field.edit)
+	field.edit:SetText("half typed")
+	field:SetValue("plan c's text", "plan-c")
+	T.eq(field.edit:GetText(), "plan c's text", "another owner gets its own text")
+	field.edit:ClearFocus()
+	-- A box that saves nothing (import) takes the text its own action sets, focused or not.
+	local box = W.MultiLine(UIParent, {})
+	focus(box.edit)
+	box.edit:SetText("!DP1!pasted")
+	box:SetValue("")
+	T.eq(box.edit:GetText(), "", "an import box is cleared after its import")
+	field:Hide()
+	box:Hide()
+end)
+
+T.case("Scroll: the Bosses edit form starts at the top for another boss or plan and keeps its place on a refresh", function()
+	withPlans(function(a, b)
+		for _, p in ipairs({ a, b }) do
+			for i = 1, 3 do
+				local enc = ns.Plan.AddEncounter(p, { name = "Boss " .. i })
+				for j = 1, 6 do
+					ns.Plan.AddPhase(p, enc.id, "Phase " .. j)
+				end
+			end
+		end
+		ns.UI.SelectPlan(a.id)
+		ns.UI.SelectTab("encounters")
+		local panel = _G.DungeonPlannerMainFrame.instancePage.panels.encounters.inner
+		local area = panel.area
+		panel:Refresh()
+		area:SetVerticalScroll(40)
+		T.eq(area:GetVerticalScroll(), 40, "scrolled down")
+		panel:Refresh()
+		T.eq(area:GetVerticalScroll(), 40, "a refresh keeps the offset")
+		local second = shownRow(panel.list, 2)
+		T.ok(second, "the second boss's row")
+		mock.Click(second)
+		T.eq(area:GetVerticalScroll(), 0, "another boss: the top")
+		area:SetVerticalScroll(40)
+		ns.UI.SelectPlan(b.id)
+		T.eq(area:GetVerticalScroll(), 0, "another plan: the top")
 	end)
 end)
 

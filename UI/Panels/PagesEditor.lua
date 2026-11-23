@@ -226,9 +226,7 @@ function Editor.Create(parent, ctx)
 		if editing then
 			self.title:SetValue(page.title)
 			self.boss:Refresh()
-			if not self.text.edit:HasFocus() then
-				self.text:SetValue(page.text)
-			end
+			self.text:SetValue(page.text, p.id .. "|" .. page.id) -- keeps text being typed (W.MultiLine)
 		end
 	end
 	return f

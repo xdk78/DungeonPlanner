@@ -489,14 +489,17 @@ function W.List(parent, opts)
 		self.thumb:Sync()
 	end
 
-	-- owner: what the items belong to (see "Scroll owners" above); without one the offset is always kept.
+	-- owner: what the items belong to (see "Scroll owners" above); without one the offset is always kept. Returns true
+	-- when the owner changed (the list went back to the top).
 	function list:SetItems(items, owner)
 		self.items = items or {}
-		if owner ~= self.scrollOwner then
+		local changed = owner ~= self.scrollOwner
+		if changed then
 			self.scrollOwner = owner
 			self.offset = 0
 		end
 		self:Refresh()
+		return changed
 	end
 
 	function list:ScrollTo(index)

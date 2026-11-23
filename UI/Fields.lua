@@ -255,14 +255,23 @@ function W.MultiLine(parent, opts)
 		end)
 	end
 
-	-- As W.Input's: a refresh of the page (a boss kill, a plan arriving) must not throw away what is being typed.
-	function holder:SetValue(text)
+	-- owner: what the text belongs to (a plan, its boss or pull), as a list's scroll owner. Another owner always gets
+	-- its own text, from the top. For the same owner a refresh of the page (a boss kill, a plan arriving) never throws
+	-- away what is being typed in a field that saves on leaving it (onCommit: leaving it saves the typed text over the
+	-- new one, Escape goes back to the new one), and the same text again keeps the cursor and the scroll offset. A field
+	-- without onCommit (an import or export box) takes the text its own action sets.
+	local guarded = opts.onCommit and not opts.readOnly
+	function holder:SetValue(text, owner)
 		text = text or ""
-		if self.edit:HasFocus() and text == self.dpCommitted then
+		local same = owner == self.valueOwner
+		self.valueOwner = owner
+		if same and guarded and self.edit:HasFocus() then
+			self.dpCommitted = text
+			paintField(self)
 			return
 		end
-		if text == self.dpCommitted and self.edit:GetText() == text then
-			paintField(self) -- the same text again (a refresh): the cursor and the scroll offset stay
+		if same and text == self.dpCommitted and self.edit:GetText() == text then
+			paintField(self)
 			return
 		end
 		self.dpCommitted = text

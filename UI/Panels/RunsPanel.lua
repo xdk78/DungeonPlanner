@@ -523,7 +523,7 @@ function Panel.Create(parent, ctx)
 		-- Over the runs listed: the wing's own and those without a known wing (the rows' differences use the same).
 		local best = st and RunLog.Best(st, keys())
 		self.best:SetText(best and best.total and string.format(L["Best %s"], T(best.total)) or "")
-		self.runs:SetItems(runs, p.id)
+		self.runs:SetItems(runs, p.id .. "|" .. table.concat(keys(), ",")) -- the instance or wing keys listed
 		self.finish:SetShown(cur ~= nil)
 		self.create:SetShown(selectedRun ~= nil and #selectedRun.p + #selectedRun.b > 0 and not ns.DB.IsReadOnly())
 		self.show:SetShown(selectedRun ~= nil)

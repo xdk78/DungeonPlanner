@@ -322,7 +322,7 @@ function MapEditor.Build(f, ctx, rail, h)
 			self.pull:Refresh()
 			self.encounter:Refresh()
 			self.toFloor:Refresh()
-			self.note:SetValue(m.note)
+			self.note:SetValue(m.note, p.id .. "|" .. tostring(m.id))
 		end
 	end
 	return ed
