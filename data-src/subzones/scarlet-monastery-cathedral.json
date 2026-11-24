@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Chapel Gardens",
+   "key": "w143789",
    "wmo": 143789,
-   "names": {
-    "deDE": [
-     "Der Kapellengarten"
-    ],
-    "esES": [
-     "Jardines de la Capilla"
-    ],
-    "esMX": [
-     "Jardines de la Capilla"
-    ],
-    "frFR": [
-     "Jardins de la chapelle"
-    ],
-    "itIT": [
-     "Chapel Gardens"
-    ],
-    "koKR": [
-     "예배당 정원"
-    ],
-    "ptBR": [
-     "Jardins da Capela"
-    ],
-    "ruRU": [
-     "Церковные сады"
-    ],
-    "zhCN": [
-     "教堂花园"
-    ],
-    "zhTW": [
-     "教堂花園"
-    ]
-   },
+   "hashes": [
+    4035186196,
+    3223057913,
+    3515517005,
+    3515517005,
+    29014492,
+    4035186196,
+    1134776777,
+    687357615,
+    777464491,
+    1282396180,
+    2574523106
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Crusader's Chapel",
+   "key": "w143775",
    "wmo": 143775,
-   "names": {
-    "deDE": [
-     "Die Kapelle des Kreuzfahrers"
-    ],
-    "esES": [
-     "Capilla de los Cruzados"
-    ],
-    "esMX": [
-     "Capilla de los Cruzados"
-    ],
-    "frFR": [
-     "Chapelle des Croisés"
-    ],
-    "itIT": [
-     "Crusader's Chapel"
-    ],
-    "koKR": [
-     "십자군 예배당"
-    ],
-    "ptBR": [
-     "Capela do Cruzado"
-    ],
-    "ruRU": [
-     "Часовня Ордена"
-    ],
-    "zhCN": [
-     "十字军礼拜堂"
-    ],
-    "zhTW": [
-     "十字軍禮拜堂"
-    ]
-   },
+   "hashes": [
+    715886879,
+    3562624893,
+    1551754011,
+    1551754011,
+    17105180,
+    715886879,
+    1747434364,
+    3286683990,
+    2518060908,
+    749065706,
+    693663478
+   ],
    "at": [
     {
      "floor": 1,

@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Gallery of Treasures",
+   "key": "w47606",
    "wmo": 47606,
-   "names": {
-    "deDE": [
-     "Galerie der Schätze"
-    ],
-    "esES": [
-     "Galería de los Tesoros"
-    ],
-    "esMX": [
-     "Galería de los Tesoros"
-    ],
-    "frFR": [
-     "Galerie des trésors"
-    ],
-    "itIT": [
-     "Gallery of Treasures"
-    ],
-    "koKR": [
-     "보물 전시실"
-    ],
-    "ptBR": [
-     "Galeria dos Tesouros"
-    ],
-    "ruRU": [
-     "Сокровищница"
-    ],
-    "zhCN": [
-     "珍宝陈列室"
-    ],
-    "zhTW": [
-     "珍寶陳列室"
-    ]
-   },
+   "hashes": [
+    2381511664,
+    1439207865,
+    4199434111,
+    4199434111,
+    3642672065,
+    2381511664,
+    2466742012,
+    3378348500,
+    3133910033,
+    1551417217,
+    3453042116
+   ],
    "at": [
     {
      "floor": 5,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Kel'Thuzad's Chamber",
+   "key": "w37540",
    "wmo": 37540,
-   "names": {
-    "deDE": [
-     "Kel'Thuzads Gemach"
-    ],
-    "esES": [
-     "Cámara de Kel'Thuzad"
-    ],
-    "esMX": [
-     "Cámara de Kel'Thuzad"
-    ],
-    "frFR": [
-     "Appartements de Kel'Thuzad"
-    ],
-    "itIT": [
-     "Kel'Thuzad's Chamber"
-    ],
-    "koKR": [
-     "켈투자드의 방"
-    ],
-    "ptBR": [
-     "Câmara de Kel'Thuzad"
-    ],
-    "ruRU": [
-     "Зал Кел'Тузада"
-    ],
-    "zhCN": [
-     "克尔苏加德的大厅"
-    ],
-    "zhTW": [
-     "科爾蘇加德之間"
-    ]
-   },
+   "hashes": [
+    2468185374,
+    1371958064,
+    1415279707,
+    1415279707,
+    806789231,
+    2468185374,
+    2687468125,
+    2846125726,
+    4172955527,
+    3536185511,
+    3475832825
+   ],
    "at": [
     {
      "floor": 6,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Maexxna's Nest",
+   "key": "w36828",
    "wmo": 36828,
-   "names": {
-    "deDE": [
-     "Maexxnas Nest"
-    ],
-    "esES": [
-     "Nido de Maexxna"
-    ],
-    "esMX": [
-     "Nido de Maexxna"
-    ],
-    "frFR": [
-     "Nid de Maexxna"
-    ],
-    "itIT": [
-     "Maexxna's Nest"
-    ],
-    "koKR": [
-     "맥스나의 둥지"
-    ],
-    "ptBR": [
-     "Ninho de Maexxna"
-    ],
-    "ruRU": [
-     "Гнездо Мексны"
-    ],
-    "zhCN": [
-     "迈克斯纳之巢"
-    ],
-    "zhTW": [
-     "梅克絲娜之巢"
-    ]
-   },
+   "hashes": [
+    1321239689,
+    105329014,
+    2459606152,
+    2459606152,
+    907922215,
+    1321239689,
+    527588110,
+    2721793578,
+    849136909,
+    2714578720,
+    1684212356
+   ],
    "at": [
     {
      "floor": 2,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "Sapphiron's Lair",
+   "key": "w37054",
    "wmo": 37054,
-   "names": {
-    "deDE": [
-     "Saphirons Hort"
-    ],
-    "esES": [
-     "Sala Vermis Gélida"
-    ],
-    "esMX": [
-     "Guarida de Sapphiron"
-    ],
-    "frFR": [
-     "Repaire de Saphiron"
-    ],
-    "itIT": [
-     "Sapphiron's Lair"
-    ],
-    "koKR": [
-     "서리고룡의 방"
-    ],
-    "ptBR": [
-     "Covil do Sapphiron"
-    ],
-    "ruRU": [
-     "Логово Сафирона"
-    ],
-    "zhCN": [
-     "冰霜巨龙的大厅"
-    ],
-    "zhTW": [
-     "冰霜龍人之室"
-    ]
-   },
+   "hashes": [
+    3256362429,
+    2291435775,
+    2541085499,
+    2729324371,
+    440517696,
+    3256362429,
+    1515703387,
+    540262757,
+    1248034581,
+    3430993866,
+    3737838446
+   ],
    "at": [
     {
      "floor": 6,
@@ -202,40 +126,21 @@
    ]
   },
   {
-   "name": "The Arachnid Quarter",
+   "key": "w36774",
    "wmo": 36774,
-   "names": {
-    "deDE": [
-     "Das Arachnidenviertel"
-    ],
-    "esES": [
-     "El Arrabal Arácnido"
-    ],
-    "esMX": [
-     "El Arrabal Arácnido"
-    ],
-    "frFR": [
-     "Le quartier des Arachnides"
-    ],
-    "itIT": [
-     "The Arachnid Quarter"
-    ],
-    "koKR": [
-     "거미 지구"
-    ],
-    "ptBR": [
-     "O Distrito dos Aracnídeos"
-    ],
-    "ruRU": [
-     "Паучий квартал"
-    ],
-    "zhCN": [
-     "蜘蛛区"
-    ],
-    "zhTW": [
-     "蜘蛛區"
-    ]
-   },
+   "hashes": [
+    1485581004,
+    2161257285,
+    2222432933,
+    2222432933,
+    4003309197,
+    1485581004,
+    2058766496,
+    2630028510,
+    2030903034,
+    3508717100,
+    4045644835
+   ],
    "at": [
     {
      "floor": 2,
@@ -247,40 +152,21 @@
    ]
   },
   {
-   "name": "The Construct Quarter",
+   "key": "w36802",
    "wmo": 36802,
-   "names": {
-    "deDE": [
-     "Das Konstruktviertel"
-    ],
-    "esES": [
-     "El Arrabal de los Ensamblajes"
-    ],
-    "esMX": [
-     "El Arrabal de los Ensamblajes"
-    ],
-    "frFR": [
-     "Le quartier des Assemblages"
-    ],
-    "itIT": [
-     "The Construct Quarter"
-    ],
-    "koKR": [
-     "피조물 지구"
-    ],
-    "ptBR": [
-     "O Distrito dos Constructos"
-    ],
-    "ruRU": [
-     "Квартал Мерзости"
-    ],
-    "zhCN": [
-     "构造区"
-    ],
-    "zhTW": [
-     "傀儡區"
-    ]
-   },
+   "hashes": [
+    3517216257,
+    3848873857,
+    2283761325,
+    2283761325,
+    1755251062,
+    3517216257,
+    1052786376,
+    3396457583,
+    2882210178,
+    668598295,
+    368303444
+   ],
    "at": [
     {
      "floor": 1,
@@ -292,40 +178,21 @@
    ]
   },
   {
-   "name": "The Halls of Reanimation",
+   "key": "w37068",
    "wmo": 37068,
-   "names": {
-    "deDE": [
-     "Die Hallen der Wiederbelebung"
-    ],
-    "esES": [
-     "Las Salas de la Reanimación"
-    ],
-    "esMX": [
-     "Las Salas de la Reanimación"
-    ],
-    "frFR": [
-     "Les salles de réanimation"
-    ],
-    "itIT": [
-     "The Halls of Reanimation"
-    ],
-    "koKR": [
-     "부활의 전당"
-    ],
-    "ptBR": [
-     "Os Salões da Reanimação"
-    ],
-    "ruRU": [
-     "Залы воскрешения"
-    ],
-    "zhCN": [
-     "复活大厅"
-    ],
-    "zhTW": [
-     "再活化大廳"
-    ]
-   },
+   "hashes": [
+    1877370124,
+    3644180514,
+    2587898586,
+    2587898586,
+    312972728,
+    1877370124,
+    1936929512,
+    3684531978,
+    716287636,
+    4257198218,
+    3539880694
+   ],
    "at": [
     {
      "floor": 1,
@@ -337,40 +204,21 @@
    ]
   },
   {
-   "name": "The Horsemen's Assembly",
+   "key": "w37066",
    "wmo": 37066,
-   "names": {
-    "deDE": [
-     "Das Reiterkonzil"
-    ],
-    "esES": [
-     "La Asamblea de los Jinetes"
-    ],
-    "esMX": [
-     "La Asamblea de los Jinetes"
-    ],
-    "frFR": [
-     "L'assemblée des Cavaliers"
-    ],
-    "itIT": [
-     "The Horsemen's Assembly"
-    ],
-    "koKR": [
-     "기사단 회합실"
-    ],
-    "ptBR": [
-     "A Assembleia dos Cavaleiros"
-    ],
-    "ruRU": [
-     "Ассамблея всадников"
-    ],
-    "zhCN": [
-     "骑士议会厅"
-    ],
-    "zhTW": [
-     "騎士聚所"
-    ]
-   },
+   "hashes": [
+    2252594247,
+    2726132477,
+    1930972909,
+    1930972909,
+    2250138610,
+    2252594247,
+    3029713184,
+    2334856151,
+    4133017749,
+    2294543818,
+    76519333
+   ],
    "at": [
     {
      "floor": 3,
@@ -382,40 +230,21 @@
    ]
   },
   {
-   "name": "The Military Quarter",
+   "key": "w36833",
    "wmo": 36833,
-   "names": {
-    "deDE": [
-     "Das Militärviertel"
-    ],
-    "esES": [
-     "El Arrabal Militar"
-    ],
-    "esMX": [
-     "El Arrabal Militar"
-    ],
-    "frFR": [
-     "Le quartier Militaire"
-    ],
-    "itIT": [
-     "The Military Quarter"
-    ],
-    "koKR": [
-     "군사 지구"
-    ],
-    "ptBR": [
-     "O Distrito Militar"
-    ],
-    "ruRU": [
-     "Военный квартал"
-    ],
-    "zhCN": [
-     "军事区"
-    ],
-    "zhTW": [
-     "軍事區"
-    ]
-   },
+   "hashes": [
+    2001873375,
+    4046143110,
+    1132997381,
+    1132997381,
+    4014391951,
+    2001873375,
+    3986719744,
+    3296757622,
+    1513845960,
+    3000363515,
+    4219722640
+   ],
    "at": [
     {
      "floor": 3,
@@ -427,40 +256,21 @@
    ]
   },
   {
-   "name": "The Necrotic Vault",
+   "key": "w36824",
    "wmo": 36824,
-   "names": {
-    "deDE": [
-     "Die Nekrotische Kammer"
-    ],
-    "esES": [
-     "La Cripta Necrótica"
-    ],
-    "esMX": [
-     "La Cripta Necrótica"
-    ],
-    "frFR": [
-     "Le caveau nécrotique"
-    ],
-    "itIT": [
-     "The Necrotic Vault"
-    ],
-    "koKR": [
-     "죽음의 감옥"
-    ],
-    "ptBR": [
-     "A Câmara Necrótica"
-    ],
-    "ruRU": [
-     "Мертвые Своды"
-    ],
-    "zhCN": [
-     "死灵穹顶"
-    ],
-    "zhTW": [
-     "死靈穹殿"
-    ]
-   },
+   "hashes": [
+    1720891555,
+    1587558571,
+    3374251042,
+    3374251042,
+    2555069141,
+    1720891555,
+    2118732454,
+    1143618096,
+    4279870212,
+    1926165173,
+    2994544721
+   ],
    "at": [
     {
      "floor": 4,
@@ -472,40 +282,21 @@
    ]
   },
   {
-   "name": "The Outer Ring",
+   "key": "w36775",
    "wmo": 36775,
-   "names": {
-    "deDE": [
-     "Der Äußere Ring"
-    ],
-    "esES": [
-     "El Anillo Exterior"
-    ],
-    "esMX": [
-     "El Anillo Exterior"
-    ],
-    "frFR": [
-     "Le cercle extérieur"
-    ],
-    "itIT": [
-     "The Outer Ring"
-    ],
-    "koKR": [
-     "외곽 지구"
-    ],
-    "ptBR": [
-     "O Círculo Externo"
-    ],
-    "ruRU": [
-     "Внешнее кольцо"
-    ],
-    "zhCN": [
-     "外环"
-    ],
-    "zhTW": [
-     "外環區"
-    ]
-   },
+   "hashes": [
+    2411051875,
+    877867736,
+    52084127,
+    52084127,
+    3640482628,
+    2411051875,
+    2959269598,
+    3666896009,
+    4170000106,
+    3951134512,
+    1340629689
+   ],
    "at": [
     {
      "floor": 1,
@@ -524,40 +315,21 @@
    ]
   },
   {
-   "name": "The Plague Quarter",
+   "key": "w36818",
    "wmo": 36818,
-   "names": {
-    "deDE": [
-     "Das Seuchenviertel"
-    ],
-    "esES": [
-     "El Arrabal de la Peste"
-    ],
-    "esMX": [
-     "El Arrabal de la Peste"
-    ],
-    "frFR": [
-     "Le quartier de la Peste"
-    ],
-    "itIT": [
-     "The Plague Quarter"
-    ],
-    "koKR": [
-     "역병 지구"
-    ],
-    "ptBR": [
-     "O Distrito da Peste"
-    ],
-    "ruRU": [
-     "Чумной квартал"
-    ],
-    "zhCN": [
-     "瘟疫区"
-    ],
-    "zhTW": [
-     "瘟疫區"
-    ]
-   },
+   "hashes": [
+    4244442942,
+    425452703,
+    2934991736,
+    2934991736,
+    713360154,
+    4244442942,
+    3214060994,
+    4137406254,
+    1402315705,
+    1634961216,
+    3245759735
+   ],
    "at": [
     {
      "floor": 4,

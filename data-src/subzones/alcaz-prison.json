@@ -21,40 +21,21 @@
  "position": "game",
  "areas": [
   {
-   "name": "Maximum Security",
+   "key": "w137676",
    "wmo": 137676,
-   "names": {
-    "deDE": [
-     "Der Hochsicherheitstrakt"
-    ],
-    "esES": [
-     "Máxima seguridad"
-    ],
-    "esMX": [
-     "Máxima Seguridad"
-    ],
-    "frFR": [
-     "Haute sécurité"
-    ],
-    "itIT": [
-     "Maximum Security"
-    ],
-    "koKR": [
-     "최고 보안 시설"
-    ],
-    "ptBR": [
-     "Segurança Máxima"
-    ],
-    "ruRU": [
-     "Камера строгого режима"
-    ],
-    "zhCN": [
-     "最高戒备区"
-    ],
-    "zhTW": [
-     "最高警戒室"
-    ]
-   },
+   "hashes": [
+    541198293,
+    4261935353,
+    899843431,
+    141446087,
+    1356613442,
+    541198293,
+    788245975,
+    3173167033,
+    3586626787,
+    4068750874,
+    3874732455
+   ],
    "at": [
     {
      "floor": 1,
@@ -69,8 +50,8 @@
  "overrides": [],
  "exclude": [
   {
-   "name": "Maximum Security",
-   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua). The Maximum Security Unit is a floor of its own, which this plan does not have."
+   "key": "w137676",
+   "why": "On a floor of its own (Santiago Reyes' second Alcaz Prison map), which this plan does not have."
   }
  ]
 }

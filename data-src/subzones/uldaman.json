@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Dig One",
+   "key": "w13030",
    "wmo": 13030,
-   "names": {
-    "deDE": [
-     "Grabung eins"
-    ],
-    "esES": [
-     "Excavación 1"
-    ],
-    "esMX": [
-     "Excavación 1"
-    ],
-    "frFR": [
-     "Fouille n°1"
-    ],
-    "itIT": [
-     "Dig One"
-    ],
-    "koKR": [
-     "제 1 발굴지"
-    ],
-    "ptBR": [
-     "Sítio Um"
-    ],
-    "ruRU": [
-     "Первый раскоп"
-    ],
-    "zhCN": [
-     "一号挖掘场"
-    ],
-    "zhTW": [
-     "一號挖掘場"
-    ]
-   },
+   "hashes": [
+    989648507,
+    3654502006,
+    2634455340,
+    2634455340,
+    2565485458,
+    989648507,
+    1832046515,
+    813935948,
+    1874124171,
+    148797865,
+    2863468136
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Dig Three",
+   "key": "w13024",
    "wmo": 13024,
-   "names": {
-    "deDE": [
-     "Grabung drei"
-    ],
-    "esES": [
-     "Excavación 3"
-    ],
-    "esMX": [
-     "Excavación 3"
-    ],
-    "frFR": [
-     "Fouille n°3"
-    ],
-    "itIT": [
-     "Dig Three"
-    ],
-    "koKR": [
-     "제 3 발굴지"
-    ],
-    "ptBR": [
-     "Sítio Três"
-    ],
-    "ruRU": [
-     "Третий раскоп"
-    ],
-    "zhCN": [
-     "三号挖掘场"
-    ],
-    "zhTW": [
-     "三號挖掘場"
-    ]
-   },
+   "hashes": [
+    3558073119,
+    2144844263,
+    2668010578,
+    2668010578,
+    2531930220,
+    3558073119,
+    2570949605,
+    1825236914,
+    3859918077,
+    755215262,
+    3221921959
+   ],
    "at": [
     {
      "floor": 1,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Dig Two",
+   "key": "w12989",
    "wmo": 12989,
-   "names": {
-    "deDE": [
-     "Grabung zwei"
-    ],
-    "esES": [
-     "Excavación 2"
-    ],
-    "esMX": [
-     "Excavación 2"
-    ],
-    "frFR": [
-     "Fouille n°2"
-    ],
-    "itIT": [
-     "Dig Two"
-    ],
-    "koKR": [
-     "제 2 발굴지"
-    ],
-    "ptBR": [
-     "Sítio Dois"
-    ],
-    "ruRU": [
-     "Второй раскоп"
-    ],
-    "zhCN": [
-     "二号挖掘场"
-    ],
-    "zhTW": [
-     "二號挖掘場"
-    ]
-   },
+   "hashes": [
+    2443956885,
+    63851322,
+    2684788197,
+    2684788197,
+    2548707839,
+    2443956885,
+    2900019718,
+    4174082255,
+    1155013472,
+    2583135543,
+    2334220518
+   ],
    "at": [
     {
      "floor": 1,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "Echomok Cavern",
+   "key": "w13025",
    "wmo": 13025,
-   "names": {
-    "deDE": [
-     "Echomokhöhle"
-    ],
-    "esES": [
-     "Cueva Echomok"
-    ],
-    "esMX": [
-     "Cueva Echomok"
-    ],
-    "frFR": [
-     "Caverne d’Echomok"
-    ],
-    "itIT": [
-     "Echomok Cavern"
-    ],
-    "koKR": [
-     "메아리 동굴"
-    ],
-    "ptBR": [
-     "Caverna Ecomok"
-    ],
-    "ruRU": [
-     "Пещера Эхомок"
-    ],
-    "zhCN": [
-     "艾卡默克洞穴"
-    ],
-    "zhTW": [
-     "艾卡莫克洞穴"
-    ]
-   },
+   "hashes": [
+    2736078178,
+    2327972701,
+    326978359,
+    326978359,
+    3060579030,
+    2736078178,
+    505681605,
+    352724235,
+    135532086,
+    1672883954,
+    2115273259
+   ],
    "at": [
     {
      "floor": 1,
@@ -202,40 +126,21 @@
    ]
   },
   {
-   "name": "Hall of the Crafters",
+   "key": "w12990",
    "wmo": 12990,
-   "names": {
-    "deDE": [
-     "Halle der Handwerker"
-    ],
-    "esES": [
-     "Sala de los Artesanos"
-    ],
-    "esMX": [
-     "Sala de los Artesanos"
-    ],
-    "frFR": [
-     "Hall des Artisans"
-    ],
-    "itIT": [
-     "Hall of the Crafters"
-    ],
-    "koKR": [
-     "장인의 전당"
-    ],
-    "ptBR": [
-     "Salão dos Artesãos"
-    ],
-    "ruRU": [
-     "Зал Ремесленников"
-    ],
-    "zhCN": [
-     "工匠大厅"
-    ],
-    "zhTW": [
-     "工匠大廳"
-    ]
-   },
+   "hashes": [
+    3999994766,
+    856387351,
+    1101100455,
+    1101100455,
+    280786809,
+    3999994766,
+    836282621,
+    2220030253,
+    1249408785,
+    3852560487,
+    3961950748
+   ],
    "at": [
     {
      "floor": 1,
@@ -254,40 +159,21 @@
    ]
   },
   {
-   "name": "Hall of the Keepers",
+   "key": "w12988",
    "wmo": 12988,
-   "names": {
-    "deDE": [
-     "Halle der Bewahrer"
-    ],
-    "esES": [
-     "Sala de los Guardianes"
-    ],
-    "esMX": [
-     "Sala de los Guardianes"
-    ],
-    "frFR": [
-     "Hall des Gardiens"
-    ],
-    "itIT": [
-     "Hall of the Keepers"
-    ],
-    "koKR": [
-     "수호자의 전당"
-    ],
-    "ptBR": [
-     "Salão dos Guardiões"
-    ],
-    "ruRU": [
-     "Зал Хранителей"
-    ],
-    "zhCN": [
-     "守护者大厅"
-    ],
-    "zhTW": [
-     "守護者大廳"
-    ]
-   },
+   "hashes": [
+    1247292239,
+    3177546798,
+    2515668806,
+    2515668806,
+    1547889529,
+    1247292239,
+    3851649454,
+    3419581032,
+    2312144399,
+    280061309,
+    4152350606
+   ],
    "at": [
     {
      "floor": 1,
@@ -299,40 +185,21 @@
    ]
   },
   {
-   "name": "Khaz'goroth's Seat",
+   "key": "w12996",
    "wmo": 12996,
-   "names": {
-    "deDE": [
-     "Khaz'goroths Sitz"
-    ],
-    "esES": [
-     "Trono de Khaz'goroth"
-    ],
-    "esMX": [
-     "Trono de Khaz'goroth"
-    ],
-    "frFR": [
-     "Siège de Khaz'goroth"
-    ],
-    "itIT": [
-     "Khaz'goroth's Seat"
-    ],
-    "koKR": [
-     "카즈고로스의 왕좌"
-    ],
-    "ptBR": [
-     "Trono de Khaz'Goroth"
-    ],
-    "ruRU": [
-     "Трон Каз'горота"
-    ],
-    "zhCN": [
-     "卡兹格罗斯的王座"
-    ],
-    "zhTW": [
-     "卡茲格羅斯的王座"
-    ]
-   },
+   "hashes": [
+    1834801766,
+    1480716058,
+    2042785462,
+    2042785462,
+    3729997365,
+    1834801766,
+    3854639500,
+    2794009558,
+    610042040,
+    3597217146,
+    1570153872
+   ],
    "at": [
     {
      "floor": 2,
@@ -344,40 +211,21 @@
    ]
   },
   {
-   "name": "Map Chamber",
+   "key": "w13029",
    "wmo": 13029,
-   "names": {
-    "deDE": [
-     "Kartenkammer"
-    ],
-    "esES": [
-     "Cámara del Mapa"
-    ],
-    "esMX": [
-     "Cámara del Mapa"
-    ],
-    "frFR": [
-     "Chambre des cartes"
-    ],
-    "itIT": [
-     "Map Chamber"
-    ],
-    "koKR": [
-     "발굴 지도실"
-    ],
-    "ptBR": [
-     "Câmara do Mapa"
-    ],
-    "ruRU": [
-     "Зал Карт"
-    ],
-    "zhCN": [
-     "地图厅"
-    ],
-    "zhTW": [
-     "地圖室"
-    ]
-   },
+   "hashes": [
+    1920981303,
+    1631734241,
+    3451592021,
+    3451592021,
+    1422309191,
+    1920981303,
+    830498191,
+    205601942,
+    48277483,
+    843886500,
+    473162622
+   ],
    "at": [
     {
      "floor": 1,
@@ -389,40 +237,21 @@
    ]
   },
   {
-   "name": "Temple Hall",
+   "key": "w12995",
    "wmo": 12995,
-   "names": {
-    "deDE": [
-     "Tempelhalle"
-    ],
-    "esES": [
-     "Cámara del Templo"
-    ],
-    "esMX": [
-     "Sala del Templo"
-    ],
-    "frFR": [
-     "Hall du Temple"
-    ],
-    "itIT": [
-     "Temple Hall"
-    ],
-    "koKR": [
-     "신전 전당"
-    ],
-    "ptBR": [
-     "Salão do Templo"
-    ],
-    "ruRU": [
-     "Храмовый зал"
-    ],
-    "zhCN": [
-     "神殿大厅"
-    ],
-    "zhTW": [
-     "神殿大廳"
-    ]
-   },
+   "hashes": [
+    3068036783,
+    209177844,
+    3126700435,
+    3893767610,
+    1431243122,
+    3068036783,
+    2829040725,
+    4009819330,
+    2263124924,
+    4055661338,
+    860675445
+   ],
    "at": [
     {
      "floor": 1,
@@ -434,40 +263,21 @@
    ]
   },
   {
-   "name": "The Stone Vault",
+   "key": "w13015",
    "wmo": 13015,
-   "names": {
-    "deDE": [
-     "Das Steingewölbe"
-    ],
-    "esES": [
-     "Cámara de Piedra"
-    ],
-    "esMX": [
-     "El Arca Pétrea"
-    ],
-    "frFR": [
-     "Caveau de pierre"
-    ],
-    "itIT": [
-     "The Stone Vault"
-    ],
-    "koKR": [
-     "지하 석실"
-    ],
-    "ptBR": [
-     "Galeria de Pedra"
-    ],
-    "ruRU": [
-     "Каменный свод"
-    ],
-    "zhCN": [
-     "石窖"
-    ],
-    "zhTW": [
-     "石窖"
-    ]
-   },
+   "hashes": [
+    3541971253,
+    1938786979,
+    3293746767,
+    890386815,
+    1624091086,
+    3541971253,
+    2396688852,
+    2498519465,
+    610687447,
+    1541126153,
+    1541126153
+   ],
    "at": [
     {
      "floor": 1,
@@ -482,7 +292,7 @@
  "overrides": [],
  "exclude": [
   {
-   "name": "Dig One",
+   "key": "w13030",
    "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
   }
  ]

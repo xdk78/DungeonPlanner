@@ -22,7 +22,7 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "General's Terrace",
+   "key": "a3449",
    "area": 3449,
    "at": [
     {
@@ -35,7 +35,7 @@
    ]
   },
   {
-   "name": "Scarab Terrace",
+   "key": "a3448",
    "area": 3448,
    "at": [
     {
@@ -48,7 +48,7 @@
    ]
   },
   {
-   "name": "The Comb",
+   "key": "a3452",
    "area": 3452,
    "at": [
     {
@@ -61,7 +61,7 @@
    ]
   },
   {
-   "name": "The Hatchery",
+   "key": "a3451",
    "area": 3451,
    "at": [
     {
@@ -74,7 +74,7 @@
    ]
   },
   {
-   "name": "The Reservoir",
+   "key": "a3450",
    "area": 3450,
    "at": [
     {
@@ -87,7 +87,7 @@
    ]
   },
   {
-   "name": "Watchers' Terrace",
+   "key": "a3453",
    "area": 3453,
    "at": [
     {

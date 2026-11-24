@@ -766,7 +766,7 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   Deadmines), the marker on the map and run mode's mini map in the area the game names (walk from room to room: it
   moves at once, and hides between named areas and on another floor); the sub-zone text the client gives there is plain
   (not secret) and matches in a German or French client (an area named by the area table and a WMO room such as
-  Anvilmar's Rest; `bit.bxor` present, so the room hashes match); its look on the parchment and on the minimap
+  one of Hall of Thanes' rooms; `bit.bxor` present, so the room hashes match); its look on the parchment and on the minimap
   pictures; its tooltip with the pointer in the ring, and enemy dot tooltips, route-leg hover and the coordinates still
   working inside it; clicks, drags and the drawing tools going through it to the map and the pins; the setting turning it off; `/dp debug` listing "Area names", "Zone
   text" and the three new files after an update without a restart.

@@ -366,7 +366,7 @@ def anchors(per_floor, tables: Tables, map_id: int, known):
         if areas:
             entry["area"] = areas[0][1]
         if wmos:
-            # Rows of one English name may differ in another language ("Das Kriegsviertel", "Kriegsviertel"): the client
+            # Rows of one English name may be spelled differently in another language (with an article or without): the client
             # shows whichever row the player stands in, so every spelling counts.
             entry["wmo"] = wmos[0]
             entry["names"] = {}
@@ -414,18 +414,60 @@ def preview(game, casc, fdj, instances, plan, per_floor, areas, tables, work: Pa
         img.save(work / f"subzones-{plan['id']}-{floor}.png")
 
 
+VECTORS = REPO / "tests" / "fnv1a_vectors.json"
+
+
+def fnv1a(text: str) -> int:
+    """32-bit FNV-1a over the UTF-8 bytes: the hash Data/Subzones.lua (Subzones.Hash) computes in game."""
+    h = 0x811C9DC5
+    for b in text.encode("utf-8"):
+        h = ((h ^ b) * 0x01000193) & 0xFFFFFFFF
+    return h
+
+
+def check_vectors():
+    """The test vectors tests/test_subzones.lua checks the Lua hash with: this hash must give the same."""
+    for v in json.loads(VECTORS.read_text(encoding="utf-8")):
+        if fnv1a(v["text"]) != v["hash"]:
+            raise SystemExit(f"fnv1a({v['text']!r}) = {fnv1a(v['text'])}, {VECTORS.name} says {v['hash']}")
+
+
+def public(entry):
+    """An area as it goes into the repository: IDs, the hashes of a WMO area's names in LOCALES order (one, several,
+    or false where the client has no name in that language), anchors. No name."""
+    out = {"key": f"a{entry['area']}" if "area" in entry else f"w{entry['wmo']}"}
+    for field in ("area", "wmo"):
+        if field in entry:
+            out[field] = entry[field]
+    if "wmo" in entry:
+        out["hashes"] = []
+        for loc in LOCALES:
+            spellings = [entry["name"]] if loc == "enUS" else entry["names"].get(loc, [])
+            hashes = sorted({fnv1a(s) for s in spellings})
+            out["hashes"].append(hashes[0] if len(hashes) == 1 else hashes or False)
+    out["at"] = entry["at"]
+    return out
+
+
 def render(doc):
     return json.dumps(doc, indent=1, ensure_ascii=False) + "\n"
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--game", required=True, type=Path, help="the game folder that holds Interface/AddOns (e.g. _forever_)")
-    ap.add_argument("--work", required=True, type=Path, help="scratch folder (the downloaded tables, the log)")
+    ap.add_argument("--game", type=Path, help="the game folder that holds Interface/AddOns (e.g. _forever_)")
+    ap.add_argument("--work", type=Path, help="scratch folder (the downloaded tables, the names, previews, the log)")
     ap.add_argument("--fdr", type=Path, help="folder holding ForeverDungeonRoutes (default: the game's Interface/AddOns)")
     ap.add_argument("--only", default="", help="comma-separated plan slugs")
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 when a JSON file would change")
+    ap.add_argument("--self-test", action="store_true", help="only check the hash against tests/fnv1a_vectors.json")
     args = ap.parse_args(argv)
+    check_vectors()
+    if args.self_test:
+        print(f"fnv1a matches {VECTORS.name}")
+        return
+    if not (args.game and args.work):
+        ap.error("--game and --work are required")
     work = args.work.resolve()
     if work == REPO or REPO in work.parents:
         raise SystemExit("keep --work outside the repository")
@@ -484,18 +526,24 @@ def main(argv=None):
             drop(path, "no named area on the plan's floors")
             continue
         preview(args.game, casc, fdj, instances, plan, per_floor, areas, tables, work)
+        rows = [public(a) for a in areas]
+        # The names stay in the work folder, for checking the previews and the hand fixes by eye.
+        (work / "names").mkdir(parents=True, exist_ok=True)
+        (work / "names" / f"{slug}.txt").write_text(
+            "".join(f"{r['key']}\t{a['name']}\t{json.dumps(a.get('names', {}), ensure_ascii=False)}\n"
+                    for r, a in zip(rows, areas)), encoding="utf-8")
         old = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         # Hand fixes stay while their area does.
-        names = {a["name"] for a in areas}
+        keys = {r["key"] for r in rows}
         fixes = {}
         for field in ("overrides", "exclude"):
-            fixes[field] = [f for f in old.get(field, []) if f.get("name") in names]
+            fixes[field] = [f for f in old.get(field, []) if f.get("key") in keys]
             for f in old.get(field, []):
-                if f.get("name") not in names:
-                    log(f"{slug}: {field} entry for {f.get('name')!r} dropped: no such area any more")
+                if f.get("key") not in keys:
+                    log(f"{slug}: {field} entry for {f.get('key')} dropped: no such area any more")
         doc = {"schema": 1, "slug": slug, "instanceMapID": map_id, "build": BUILD,
                "sources": [s for s in SOURCES if s["id"] in ("wago", src)],
-               "position": src, "areas": areas, **fixes}
+               "position": src, "areas": rows, **fixes}
         text = render(doc)
         log(f"{slug}: {len(areas)} areas ({src})")
         if (path.read_text(encoding="utf-8") if path.exists() else "") != text:

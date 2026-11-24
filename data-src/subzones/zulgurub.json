@@ -22,7 +22,7 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Altar of Hir'eek",
+   "key": "a3378",
    "area": 3378,
    "at": [
     {
@@ -35,41 +35,22 @@
    ]
   },
   {
-   "name": "Altar of the Blood God",
+   "key": "a3384",
    "area": 3384,
    "wmo": 35768,
-   "names": {
-    "deDE": [
-     "Altar des Blutgottes"
-    ],
-    "esES": [
-     "Altar del Dios de la Sangre"
-    ],
-    "esMX": [
-     "Altar del Dios de la Sangre"
-    ],
-    "frFR": [
-     "Autel du Dieu sanglant"
-    ],
-    "itIT": [
-     "Altar of the Blood God"
-    ],
-    "koKR": [
-     "혈신의 제단"
-    ],
-    "ptBR": [
-     "Altar do Deus Sanguinário"
-    ],
-    "ruRU": [
-     "Алтарь Кровавого бога"
-    ],
-    "zhCN": [
-     "血神祭坛"
-    ],
-    "zhTW": [
-     "血神祭壇"
-    ]
-   },
+   "hashes": [
+    2247275977,
+    3334319648,
+    1845941277,
+    1845941277,
+    2781762710,
+    2247275977,
+    3908625222,
+    1598186264,
+    3272939055,
+    295902282,
+    1160746756
+   ],
    "at": [
     {
      "floor": 1,
@@ -81,7 +62,7 @@
    ]
   },
   {
-   "name": "Edge of Madness",
+   "key": "a3398",
    "area": 3398,
    "at": [
     {
@@ -94,7 +75,7 @@
    ]
   },
   {
-   "name": "Hakkari Grounds",
+   "key": "a3380",
    "area": 3380,
    "at": [
     {
@@ -107,7 +88,7 @@
    ]
   },
   {
-   "name": "Naze of Shirvallah",
+   "key": "a3381",
    "area": 3381,
    "at": [
     {
@@ -120,7 +101,7 @@
    ]
   },
   {
-   "name": "Pagle's Pointe",
+   "key": "a3419",
    "area": 3419,
    "at": [
     {
@@ -133,7 +114,7 @@
    ]
   },
   {
-   "name": "Shadra'zaar",
+   "key": "a3379",
    "area": 3379,
    "at": [
     {
@@ -146,41 +127,22 @@
    ]
   },
   {
-   "name": "Temple of Bethekk",
+   "key": "a3382",
    "area": 3382,
    "wmo": 19710,
-   "names": {
-    "deDE": [
-     "Tempel von Bethekk"
-    ],
-    "esES": [
-     "Templo de Bethekk"
-    ],
-    "esMX": [
-     "Templo de Bethekk"
-    ],
-    "frFR": [
-     "Temple de Bethekk"
-    ],
-    "itIT": [
-     "Temple of Bethekk"
-    ],
-    "koKR": [
-     "베데크 신전"
-    ],
-    "ptBR": [
-     "Templo de Bethekk"
-    ],
-    "ruRU": [
-     "Храм Бетекк"
-    ],
-    "zhCN": [
-     "贝瑟克神殿"
-    ],
-    "zhTW": [
-     "比塞克神廟"
-    ]
-   },
+   "hashes": [
+    461556123,
+    4019034515,
+    1617335775,
+    1617335775,
+    674863641,
+    461556123,
+    1713523035,
+    1617335775,
+    606358921,
+    3203707767,
+    942810402
+   ],
    "at": [
     {
      "floor": 1,
@@ -192,7 +154,7 @@
    ]
   },
   {
-   "name": "The Bloodfire Pit",
+   "key": "a3383",
    "area": 3383,
    "at": [
     {
@@ -205,7 +167,7 @@
    ]
   },
   {
-   "name": "The Coil",
+   "key": "a3377",
    "area": 3377,
    "at": [
     {
@@ -218,7 +180,7 @@
    ]
   },
   {
-   "name": "Zanza's Rise",
+   "key": "a3397",
    "area": 3397,
    "at": [
     {

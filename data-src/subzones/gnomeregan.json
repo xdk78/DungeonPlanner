@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Engineering Labs",
+   "key": "w12867",
    "wmo": 12867,
-   "names": {
-    "deDE": [
-     "Ingenieurlabore"
-    ],
-    "esES": [
-     "Laboratorios de Ingeniería"
-    ],
-    "esMX": [
-     "Laboratorios de Ingeniería"
-    ],
-    "frFR": [
-     "Labos d'ingénierie"
-    ],
-    "itIT": [
-     "Engineering Labs"
-    ],
-    "koKR": [
-     "기계공학 연구소"
-    ],
-    "ptBR": [
-     "Laboratório de Engenharia"
-    ],
-    "ruRU": [
-     "Инженерные лаборатории"
-    ],
-    "zhCN": [
-     "工程实验室"
-    ],
-    "zhTW": [
-     "工程實驗室"
-    ]
-   },
+   "hashes": [
+    2197008652,
+    965560608,
+    248858513,
+    248858513,
+    3984079573,
+    2197008652,
+    1069432869,
+    1649882005,
+    4198728567,
+    3789245165,
+    451970694
+   ],
    "at": [
     {
      "floor": 3,
@@ -74,40 +55,21 @@
    ]
   },
   {
-   "name": "Launch Bay",
+   "key": "w12888",
    "wmo": 12888,
-   "names": {
-    "deDE": [
-     "Startrampe"
-    ],
-    "esES": [
-     "Aeropuerto"
-    ],
-    "esMX": [
-     "Aeropuerto"
-    ],
-    "frFR": [
-     "Baie de lancement"
-    ],
-    "itIT": [
-     "Launch Bay"
-    ],
-    "koKR": [
-     "출격실"
-    ],
-    "ptBR": [
-     "Baia de Lançamento"
-    ],
-    "ruRU": [
-     "Пусковая установка"
-    ],
-    "zhCN": [
-     "发射台"
-    ],
-    "zhTW": [
-     "發射台"
-    ]
-   },
+   "hashes": [
+    2413691022,
+    2265903286,
+    3971510889,
+    3971510889,
+    1006663114,
+    2413691022,
+    984499787,
+    3702933224,
+    1439745260,
+    2277532033,
+    1015556822
+   ],
    "at": [
     {
      "floor": 2,
@@ -126,40 +88,21 @@
    ]
   },
   {
-   "name": "The Clean Zone",
+   "key": "w12848",
    "wmo": 12848,
-   "names": {
-    "deDE": [
-     "Die saubere Zone"
-    ],
-    "esES": [
-     "Punto de Limpieza"
-    ],
-    "esMX": [
-     "Punto de Limpieza"
-    ],
-    "frFR": [
-     "La zone propre"
-    ],
-    "itIT": [
-     "The Clean Zone"
-    ],
-    "koKR": [
-     "정화 지역"
-    ],
-    "ptBR": [
-     "A Zona Limpa"
-    ],
-    "ruRU": [
-     "Безопасная зона"
-    ],
-    "zhCN": [
-     "清洁区"
-    ],
-    "zhTW": [
-     "清潔區"
-    ]
-   },
+   "hashes": [
+    421833253,
+    3049170652,
+    2821701673,
+    2821701673,
+    1305307296,
+    421833253,
+    3794051187,
+    716241279,
+    3833867682,
+    1078947288,
+    4261015173
+   ],
    "at": [
     {
      "floor": 1,
@@ -178,40 +121,21 @@
    ]
   },
   {
-   "name": "The Clockwerk Run",
+   "key": "w12898",
    "wmo": 12898,
-   "names": {
-    "deDE": [
-     "Die Uhrwerkgasse"
-    ],
-    "esES": [
-     "La rampa del engranaje"
-    ],
-    "esMX": [
-     "La Rampa del Engranaje"
-    ],
-    "frFR": [
-     "La Fuite du temps"
-    ],
-    "itIT": [
-     "The Clockwerk Run"
-    ],
-    "koKR": [
-     "태엽장치 통로"
-    ],
-    "ptBR": [
-     "Corredor dos Mecanismos"
-    ],
-    "ruRU": [
-     "Часовой ход"
-    ],
-    "zhCN": [
-     "发条小径"
-    ],
-    "zhTW": [
-     "發條小徑"
-    ]
-   },
+   "hashes": [
+    3447786704,
+    1694736912,
+    1348340541,
+    3244687869,
+    1351462511,
+    3447786704,
+    1977235007,
+    3543526946,
+    4222797941,
+    463428899,
+    2428777762
+   ],
    "at": [
     {
      "floor": 1,
@@ -223,40 +147,21 @@
    ]
   },
   {
-   "name": "The Dormitory",
+   "key": "w12843",
    "wmo": 12843,
-   "names": {
-    "deDE": [
-     "Der Schlafsaal"
-    ],
-    "esES": [
-     "Los Dormitorios"
-    ],
-    "esMX": [
-     "Los Dormitorios"
-    ],
-    "frFR": [
-     "Le dortoir"
-    ],
-    "itIT": [
-     "The Dormitory"
-    ],
-    "koKR": [
-     "거주 지구"
-    ],
-    "ptBR": [
-     "Alojamentos"
-    ],
-    "ruRU": [
-     "Спальни"
-    ],
-    "zhCN": [
-     "宿舍"
-    ],
-    "zhTW": [
-     "宿舍"
-    ]
-   },
+   "hashes": [
+    4209826719,
+    1417790124,
+    4044830836,
+    4044830836,
+    3101366853,
+    4209826719,
+    447991667,
+    1477639850,
+    351495252,
+    3919331534,
+    3919331534
+   ],
    "at": [
     {
      "floor": 1,
@@ -275,40 +180,21 @@
    ]
   },
   {
-   "name": "The Hall of Gears",
+   "key": "w12842",
    "wmo": 12842,
-   "names": {
-    "deDE": [
-     "Die Halle der Zahnräder"
-    ],
-    "esES": [
-     "La Sala de Máquinas"
-    ],
-    "esMX": [
-     "La Sala de Máquinas"
-    ],
-    "frFR": [
-     "Le Hall des engrenages"
-    ],
-    "itIT": [
-     "The Hall of Gears"
-    ],
-    "koKR": [
-     "톱니바퀴의 전당"
-    ],
-    "ptBR": [
-     "Salão das Engrenagens"
-    ],
-    "ruRU": [
-     "Машинный зал"
-    ],
-    "zhCN": [
-     "齿轮大厅"
-    ],
-    "zhTW": [
-     "齒輪大廳"
-    ]
-   },
+   "hashes": [
+    277504368,
+    3143115135,
+    2867430942,
+    2867430942,
+    3984732222,
+    277504368,
+    1757526271,
+    4080714213,
+    2340627053,
+    1908290979,
+    4222131792
+   ],
    "at": [
     {
      "floor": 1,
@@ -327,40 +213,21 @@
    ]
   },
   {
-   "name": "Tinkers' Court",
+   "key": "w12830",
    "wmo": 12830,
-   "names": {
-    "deDE": [
-     "Tüftlerhof"
-    ],
-    "esES": [
-     "Cámara Manitas"
-    ],
-    "esMX": [
-     "Cámara Manitas"
-    ],
-    "frFR": [
-     "Cour du Bricoleur"
-    ],
-    "itIT": [
-     "Tinkers' Court"
-    ],
-    "koKR": [
-     "땜장이 왕실"
-    ],
-    "ptBR": [
-     "Paço dos Faz-tudo"
-    ],
-    "ruRU": [
-     "Двор Механиков"
-    ],
-    "zhCN": [
-     "工匠议会"
-    ],
-    "zhTW": [
-     "工匠議會"
-    ]
-   },
+   "hashes": [
+    253426079,
+    1259404694,
+    1638279716,
+    1638279716,
+    437752474,
+    253426079,
+    3744856906,
+    613654291,
+    2790359516,
+    4155192009,
+    132180903
+   ],
    "at": [
     {
      "floor": 4,

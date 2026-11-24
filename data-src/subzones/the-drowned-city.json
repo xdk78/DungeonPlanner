@@ -21,7 +21,7 @@
  "position": "game",
  "areas": [
   {
-   "name": "Abyssal Dais",
+   "key": "a17042",
    "area": 17042,
    "at": [
     {
@@ -34,7 +34,7 @@
    ]
   },
   {
-   "name": "Altar of the Serpent",
+   "key": "a17040",
    "area": 17040,
    "at": [
     {
@@ -47,7 +47,7 @@
    ]
   },
   {
-   "name": "Ataal'Byzal",
+   "key": "a17046",
    "area": 17046,
    "at": [
     {
@@ -60,7 +60,7 @@
    ]
   },
   {
-   "name": "Deep Archives",
+   "key": "a17039",
    "area": 17039,
    "at": [
     {
@@ -73,7 +73,7 @@
    ]
   },
   {
-   "name": "Eternal Amphitheater",
+   "key": "a17041",
    "area": 17041,
    "at": [
     {
@@ -86,7 +86,7 @@
    ]
   },
   {
-   "name": "Flooded Shrine",
+   "key": "a17038",
    "area": 17038,
    "at": [
     {
@@ -99,41 +99,22 @@
    ]
   },
   {
-   "name": "Sunken Hollow",
+   "key": "a17037",
    "area": 17037,
    "wmo": 141466,
-   "names": {
-    "deDE": [
-     "Die Versunkene Höhle"
-    ],
-    "esES": [
-     "Hoya Hundida"
-    ],
-    "esMX": [
-     "Hondonada Hundida"
-    ],
-    "frFR": [
-     "Vallon Englouti"
-    ],
-    "itIT": [
-     "Sunken Hollow"
-    ],
-    "koKR": [
-     "가라앉은 공동"
-    ],
-    "ptBR": [
-     "Baixada Vazia"
-    ],
-    "ruRU": [
-     "Затонувшая лощина"
-    ],
-    "zhCN": [
-     "沉没坳谷"
-    ],
-    "zhTW": [
-     "沉沒谷地"
-    ]
-   },
+   "hashes": [
+    2143821524,
+    2564809273,
+    3965438645,
+    4147491978,
+    3360588736,
+    2143821524,
+    3454084747,
+    2360712832,
+    4056243665,
+    870453175,
+    1576889774
+   ],
    "at": [
     {
      "floor": 1,
@@ -148,8 +129,8 @@
  "overrides": [],
  "exclude": [
   {
-   "name": "Ataal'Byzal",
-   "why": "Atal'Byzal is a floor of its own (Santiago Reyes' Atal'Byzal map), which this plan does not have."
+   "key": "a17046",
+   "why": "A floor of its own (Santiago Reyes' Atal'Byzal map), which this plan does not have."
   }
  ]
 }

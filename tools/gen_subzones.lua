@@ -3,8 +3,8 @@
 --   lua tools/gen_subzones.lua            writes Data/SubzoneData.lua
 --   lua tools/gen_subzones.lua --check    writes nothing; exits 1 when the JSON is invalid or the file differs
 --   lua tools/gen_subzones.lua --report   also prints the coverage
--- Plain Lua 5.1, run from the repository root; deterministic output. Only IDs, positions and hashes of the names of
--- WMO areas (which no game function returns by ID) ship, never a name.
+-- Plain Lua 5.1, run from the repository root; deterministic output. The JSON and the output hold IDs, positions and
+-- hashes of the names of WMO areas (tools/subzone_anchors.py computes them), never a name.
 
 local IN_DIR = "data-src/subzones"
 local PLANS_DIR = "data-src/dungeons"
@@ -15,29 +15,12 @@ local spawns = dofile("tools/gen_spawns.lua")
 local decode = spawns.DecodeJSON
 local listFiles = dofile("tools/gen_bosses.lua").ListFiles
 
--- The addon's own hash (Data/Subzones.lua), so the shipped hashes are what the game's text hashes to in game.
-local Subzones
-do
-	local ns = { Util = {} }
-	function ns:NewModule(name)
-		self[name] = {}
-		return self[name]
-	end
-	assert(loadfile("Data/Subzones.lua"))("DungeonPlanner", ns)
-	Subzones = ns.Subzones
-end
-
 local M = {}
 -- The client languages (GetLocale; enGB reports enUS): Blizzard lists none for WoW: Forever, and the client carries
--- all of these (docs/COMPATIBILITY.md section 8).
+-- all of these (docs/COMPATIBILITY.md section 8). A WMO area's hashes are in this order.
 M.LOCALE_ORDER = { "enUS", "deDE", "esES", "esMX", "frFR", "itIT", "koKR", "ptBR", "ruRU", "zhCN", "zhTW" }
-M.LOCALES = {}
-for _, loc in ipairs(M.LOCALE_ORDER) do
-	M.LOCALES[loc] = true
-end
 M.POSITIONS = { game = true, fdr = true }
-M.MAX_NAME, M.MAX_WHY, M.MAX_SPELLINGS, M.MAX_AREAS = 128, 160, 4, 64 -- name: bytes (UTF-8)
-M.Hash = Subzones.Hash
+M.MAX_WHY, M.MAX_SPELLINGS, M.MAX_AREAS = 160, 4, 64
 
 local function readFile(path)
 	local f = io.open(path, "rb")
@@ -53,12 +36,39 @@ local function isInt(v)
 	return type(v) == "number" and v == math.floor(v) and v > 0 and v < 2 ^ 31
 end
 
+local function isHash(v)
+	return type(v) == "number" and v == math.floor(v) and v >= 0 and v < 2 ^ 32
+end
+
 local function inRange(v)
 	return type(v) == "number" and v >= 0 and v <= 1
 end
 
 local function shortText(v, max)
 	return type(v) == "string" and v ~= "" and #v <= max and not v:find("[%c|]")
+end
+
+-- An area's hashes: one per language of M.LOCALE_ORDER, each a hash, a list of 2 to M.MAX_SPELLINGS hashes, or false.
+local function validHashes(h)
+	if type(h) ~= "table" or #h ~= #M.LOCALE_ORDER then
+		return false
+	end
+	for i = 1, #M.LOCALE_ORDER do
+		local v = h[i]
+		if type(v) == "table" then
+			if #v < 2 or #v > M.MAX_SPELLINGS then
+				return false
+			end
+			for _, x in ipairs(v) do
+				if not isHash(x) then
+					return false
+				end
+			end
+		elseif v ~= false and not isHash(v) then
+			return false
+		end
+	end
+	return true
 end
 
 -- The number of floors of each recommended plan, by slug (the generated plans, as the addon loads them).
@@ -112,37 +122,26 @@ function M.Validate(doc, file, research, floors)
 	if not (M.POSITIONS[doc.position] and sources[doc.position]) then
 		err("position must name a listed source (game or fdr)")
 	end
-	local names = {}
+	local keys = {}
 	if type(doc.areas) ~= "table" or #doc.areas == 0 or #doc.areas > M.MAX_AREAS then
 		err("areas: 1 to %d", M.MAX_AREAS)
 	end
 	for i, a in ipairs(type(doc.areas) == "table" and doc.areas or {}) do
-		local at = string.format("area %d (%s)", i, tostring(a.name))
-		if not shortText(a.name, M.MAX_NAME) then
-			err("%s: bad name", at)
-		elseif names[a.name] then
-			err("%s: name twice", at)
-		end
-		names[a.name or i] = true
-		if a.area == nil and a.wmo == nil then
+		local at = string.format("area %d (%s)", i, tostring(a.key))
+		if (a.area ~= nil and not isInt(a.area)) or (a.wmo ~= nil and not isInt(a.wmo)) or (a.area == nil and a.wmo == nil) then
 			err("%s: needs an area or wmo ID", at)
+		elseif a.key ~= (a.area and "a" .. a.area or "w" .. a.wmo) then
+			err("%s: the key is \"a\" and its AreaTable ID, else \"w\" and its WMO area ID", at)
+		elseif keys[a.key] then
+			err("%s: twice", at)
 		end
-		if (a.area ~= nil and not isInt(a.area)) or (a.wmo ~= nil and not isInt(a.wmo)) then
-			err("%s: bad ID", at)
+		keys[a.key or i] = true
+		if a.name ~= nil or a.names ~= nil then
+			err("%s: no names here, only their hashes", at)
 		end
-		if a.wmo ~= nil and type(a.names) ~= "table" then
-			err("%s: a WMO area needs its names in the client's languages", at)
-		end
-		for loc, list in pairs(type(a.names) == "table" and a.names or {}) do
-			if not M.LOCALES[loc] or loc == "enUS" or type(list) ~= "table" or #list == 0 or #list > M.MAX_SPELLINGS then
-				err("%s: bad names for %s", at, tostring(loc))
-			else
-				for _, n in ipairs(list) do
-					if not shortText(n, M.MAX_NAME) then
-						err("%s: bad name in %s", at, loc)
-					end
-				end
-			end
+		if (a.wmo ~= nil) ~= (a.hashes ~= nil) or (a.hashes ~= nil and not validHashes(a.hashes)) then
+			err("%s: a WMO area needs its hashes (%d values: a hash, a list of hashes, or false), others none", at,
+				#M.LOCALE_ORDER)
 		end
 		if type(a.at) ~= "table" or #a.at == 0 then
 			err("%s: no anchor", at)
@@ -154,62 +153,38 @@ function M.Validate(doc, file, research, floors)
 		end
 	end
 	for i, e in ipairs(type(doc.exclude) == "table" and doc.exclude or {}) do
-		if not (type(e) == "table" and names[e.name] and shortText(e.why, M.MAX_WHY)) then
-			err("exclude %d: needs the name of an area and why", i)
+		if not (type(e) == "table" and keys[e.key] and shortText(e.why, M.MAX_WHY)) then
+			err("exclude %d: needs the key of an area and why", i)
 		end
 	end
 	for i, o in ipairs(type(doc.overrides) == "table" and doc.overrides or {}) do
-		local ok = type(o) == "table" and names[o.name] and isInt(o.floor) and o.floor <= floors and shortText(o.why, M.MAX_WHY)
+		local ok = type(o) == "table" and keys[o.key] and isInt(o.floor) and o.floor <= floors and shortText(o.why, M.MAX_WHY)
 		if ok and not o.drop then
 			ok = inRange(o.x) and inRange(o.y) and (sources[o.src] or o.src == "own")
 		end
 		if not ok then
-			err("override %d: needs an area's name, a floor, why, and drop or x, y and src", i)
+			err("override %d: needs an area's key, a floor, why, and drop or x, y and src", i)
 		end
 	end
 	return errs
 end
 
--- The hashes of an area's names, one per client language in M.LOCALE_ORDER: a number, a list of numbers (spellings
--- that differ between rows of the area), or false (no name in that language). Hashed with the addon's own function.
-local function hashes(a)
-	local out = {}
-	for i, loc in ipairs(M.LOCALE_ORDER) do
-		local list = loc == "enUS" and { a.name } or (a.names or {})[loc] or {}
-		local seen, h = {}, {}
-		for _, name in ipairs(list) do
-			local v = Subzones.Hash(name)
-			if not seen[v] then
-				seen[v] = true
-				h[#h + 1] = v
-			end
-		end
-		table.sort(h)
-		if #h == 0 then
-			out[i] = false
-		else
-			out[i] = #h == 1 and h[1] or h
-		end
-	end
-	return out
-end
-
 -- The anchors that ship for one file: the areas, less the excluded ones, with the overrides applied. Each
--- { name, area, wmo, hashes (WMO areas), at = { { floor, x, y } } }, sorted by name.
+-- { key, area, wmo, hashes, at = { { floor, x, y } } }, sorted by key.
 function M.Anchors(doc)
 	local excluded = {}
 	for _, e in ipairs(doc.exclude or {}) do
-		excluded[e.name] = true
+		excluded[e.key] = true
 	end
 	local out = {}
 	for _, a in ipairs(doc.areas) do
-		if not excluded[a.name] then
+		if not excluded[a.key] then
 			local byFloor = {}
 			for _, p in ipairs(a.at) do
 				byFloor[p.floor] = { p.floor, p.x, p.y }
 			end
 			for _, o in ipairs(doc.overrides or {}) do
-				if o.name == a.name then
+				if o.key == a.key then
 					byFloor[o.floor] = not o.drop and { o.floor, o.x, o.y } or nil
 				end
 			end
@@ -221,12 +196,12 @@ function M.Anchors(doc)
 				return p[1] < q[1]
 			end)
 			if #at > 0 then
-				out[#out + 1] = { name = a.name, area = a.area, wmo = a.wmo, hashes = a.wmo and hashes(a) or nil, at = at }
+				out[#out + 1] = { key = a.key, area = a.area, wmo = a.wmo, hashes = a.hashes, at = at }
 			end
 		end
 	end
 	table.sort(out, function(p, q)
-		return p.name < q.name
+		return p.key < q.key
 	end)
 	return out
 end
@@ -250,7 +225,7 @@ function M.Collisions(anchors, file)
 			for _, v in ipairs(type(h) == "table" and h or { h or nil }) do
 				local other = owner[v]
 				if other and other ~= a and anchorsKey(other) ~= anchorsKey(a) then
-					errs[#errs + 1] = string.format("%s: %s and %s share a name hash in %s", file, other.name, a.name, loc)
+					errs[#errs + 1] = string.format("%s: %s and %s share a name hash in %s", file, other.key, a.key, loc)
 				end
 				owner[v] = owner[v] or a
 			end

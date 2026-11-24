@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Chamber of Atonement",
+   "key": "w143830",
    "wmo": 143830,
-   "names": {
-    "deDE": [
-     "Die Kammer der Buße"
-    ],
-    "esES": [
-     "Cámara Expiatoria"
-    ],
-    "esMX": [
-     "Cámara Expiatoria"
-    ],
-    "frFR": [
-     "Chambre de l’expiation"
-    ],
-    "itIT": [
-     "Chamber of Atonement"
-    ],
-    "koKR": [
-     "속죄의 방"
-    ],
-    "ptBR": [
-     "Câmara da Redenção"
-    ],
-    "ruRU": [
-     "Чертог Искупления"
-    ],
-    "zhCN": [
-     "忏悔室"
-    ],
-    "zhTW": [
-     "懺悔室"
-    ]
-   },
+   "hashes": [
+    3787248605,
+    2706862103,
+    2586446423,
+    2586446423,
+    2020906138,
+    3787248605,
+    1695722676,
+    638801488,
+    2404941374,
+    2679921203,
+    2096664801
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Forlorn Cloister",
+   "key": "w143843",
    "wmo": 143843,
-   "names": {
-    "deDE": [
-     "Der Unglückselige Kreuzgang"
-    ],
-    "esES": [
-     "Claustro Abandonado"
-    ],
-    "esMX": [
-     "Claustro Abandonado"
-    ],
-    "frFR": [
-     "Cloître solitaire"
-    ],
-    "itIT": [
-     "Forlorn Cloister"
-    ],
-    "koKR": [
-     "쓸쓸한 회랑"
-    ],
-    "ptBR": [
-     "Claustro Esquecido"
-    ],
-    "ruRU": [
-     "Покинутый двор"
-    ],
-    "zhCN": [
-     "遗忘回廊"
-    ],
-    "zhTW": [
-     "孤寂迴廊"
-    ]
-   },
+   "hashes": [
+    3414818704,
+    351064638,
+    4153310017,
+    4153310017,
+    1294980283,
+    3414818704,
+    2863372166,
+    3295851936,
+    4231735360,
+    232763780,
+    4001072258
+   ],
    "at": [
     {
      "floor": 1,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Honor's Tomb",
+   "key": "w143836",
    "wmo": 143836,
-   "names": {
-    "deDE": [
-     "Das Ehrengrabmal"
-    ],
-    "esES": [
-     "Tumba del Honor"
-    ],
-    "esMX": [
-     "Tumba del Honor"
-    ],
-    "frFR": [
-     "Tombe de l’Honneur"
-    ],
-    "itIT": [
-     "Honor's Tomb"
-    ],
-    "koKR": [
-     "명예의 무덤"
-    ],
-    "ptBR": [
-     "Tumba de Honra"
-    ],
-    "ruRU": [
-     "Гробница Доблести"
-    ],
-    "zhCN": [
-     "荣耀之墓"
-    ],
-    "zhTW": [
-     "榮耀之墓"
-    ]
-   },
+   "hashes": [
+    3592498241,
+    2205930859,
+    3777256033,
+    3777256033,
+    1651659093,
+    3592498241,
+    860528245,
+    2451447155,
+    323245010,
+    415402965,
+    1083368095
+   ],
    "at": [
     {
      "floor": 1,
@@ -160,7 +103,7 @@
  "overrides": [],
  "exclude": [
   {
-   "name": "Forlorn Cloister",
+   "key": "w143843",
    "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
   }
  ]

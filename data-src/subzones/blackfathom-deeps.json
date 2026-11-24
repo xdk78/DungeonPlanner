@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Aku'mai's Lair",
+   "key": "w11927",
    "wmo": 11927,
-   "names": {
-    "deDE": [
-     "Aku'mais Unterschlupf"
-    ],
-    "esES": [
-     "Guarida de Akumais"
-    ],
-    "esMX": [
-     "Guarida de Aku'mai"
-    ],
-    "frFR": [
-     "Repaire d'Aku'mai"
-    ],
-    "itIT": [
-     "Aku'mai's Lair"
-    ],
-    "koKR": [
-     "아쿠마이의 둥지"
-    ],
-    "ptBR": [
-     "Covil de Aku'mai"
-    ],
-    "ruRU": [
-     "Логово Аку'май"
-    ],
-    "zhCN": [
-     "阿库麦尔的巢穴"
-    ],
-    "zhTW": [
-     "阿庫麥爾的巢穴"
-    ]
-   },
+   "hashes": [
+    2015990064,
+    4080014492,
+    1734964604,
+    2795377620,
+    1366739889,
+    2015990064,
+    821398487,
+    1737394276,
+    2346289113,
+    4264606086,
+    163666563
+   ],
    "at": [
     {
      "floor": 2,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Moonshrine Ruins",
+   "key": "w11923",
    "wmo": 11923,
-   "names": {
-    "deDE": [
-     "Mondschreinruine"
-    ],
-    "esES": [
-     "Ruinas del Santuario Lunar"
-    ],
-    "esMX": [
-     "Ruinas del Santuario Lunar"
-    ],
-    "frFR": [
-     "Ruines d'Ecrin-de-Lune"
-    ],
-    "itIT": [
-     "Moonshrine Ruins"
-    ],
-    "koKR": [
-     "달의 제단 폐허"
-    ],
-    "ptBR": [
-     "Ruínas do Sacrário Lunar"
-    ],
-    "ruRU": [
-     "Руины святилища Луны"
-    ],
-    "zhCN": [
-     "月神圣地废墟"
-    ],
-    "zhTW": [
-     "月光神殿廢墟"
-    ]
-   },
+   "hashes": [
+    353847324,
+    1598262586,
+    707860016,
+    707860016,
+    3365223832,
+    353847324,
+    3250147612,
+    965128390,
+    2671443796,
+    4177335460,
+    1340966939
+   ],
    "at": [
     {
      "floor": 2,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Moonshrine Sanctum",
+   "key": "w11925",
    "wmo": 11925,
-   "names": {
-    "deDE": [
-     "Mondschreinsanktum"
-    ],
-    "esES": [
-     "Sagrario Lunar"
-    ],
-    "esMX": [
-     "Sagrario Lunar"
-    ],
-    "frFR": [
-     "Sanctuaire d'Ecrin-de-Lune"
-    ],
-    "itIT": [
-     "Moonshrine Sanctum"
-    ],
-    "koKR": [
-     "달의 제단 성소"
-    ],
-    "ptBR": [
-     "Sacrário Lunar"
-    ],
-    "ruRU": [
-     "Алтарь святилища Луны"
-    ],
-    "zhCN": [
-     "月神圣地密室"
-    ],
-    "zhTW": [
-     "月光神殿密室"
-    ]
-   },
+   "hashes": [
+    1424513472,
+    57924900,
+    4131118427,
+    4131118427,
+    1274400241,
+    1424513472,
+    610216171,
+    745749282,
+    3662054025,
+    565293403,
+    4150056706
+   ],
    "at": [
     {
      "floor": 2,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "The Drowned Sacellum",
+   "key": "w11911",
    "wmo": 11911,
-   "names": {
-    "deDE": [
-     "Die versunkene Weihekammer"
-    ],
-    "esES": [
-     "El Templete Sumergido"
-    ],
-    "esMX": [
-     "El Templete Sumergido"
-    ],
-    "frFR": [
-     "Le sacellum englouti"
-    ],
-    "itIT": [
-     "The Drowned Sacellum"
-    ],
-    "koKR": [
-     "가라앉은 제단"
-    ],
-    "ptBR": [
-     "O Sacelo Inundado"
-    ],
-    "ruRU": [
-     "Затопленная часовня"
-    ],
-    "zhCN": [
-     "水下庙宇"
-    ],
-    "zhTW": [
-     "水下廟宇"
-    ]
-   },
+   "hashes": [
+    3809022619,
+    4203821798,
+    3343603687,
+    3343603687,
+    209993727,
+    3809022619,
+    1642866234,
+    1818074407,
+    855236351,
+    2548510604,
+    3914889473
+   ],
    "at": [
     {
      "floor": 1,
@@ -202,40 +126,21 @@
    ]
   },
   {
-   "name": "The Forgotten Pool",
+   "key": "w11926",
    "wmo": 11926,
-   "names": {
-    "deDE": [
-     "Der vergessene Teich"
-    ],
-    "esES": [
-     "Las Charcas del Olvido"
-    ],
-    "esMX": [
-     "Las Charcas del Olvido"
-    ],
-    "frFR": [
-     "Les Bassins oubliés"
-    ],
-    "itIT": [
-     "The Forgotten Pool"
-    ],
-    "koKR": [
-     "잊혀진 웅덩이"
-    ],
-    "ptBR": [
-     "Charcos Esquecidos"
-    ],
-    "ruRU": [
-     "Забытый пруд"
-    ],
-    "zhCN": [
-     "遗忘之池"
-    ],
-    "zhTW": [
-     "遺忘之池"
-    ]
-   },
+   "hashes": [
+    3325540880,
+    2669136570,
+    847234362,
+    847234362,
+    3210660456,
+    3325540880,
+    1386395349,
+    3959452753,
+    3498653969,
+    1321937015,
+    1996165670
+   ],
    "at": [
     {
      "floor": 3,
@@ -247,40 +152,21 @@
    ]
   },
   {
-   "name": "The Pool of Ask'ar",
+   "key": "w11910",
    "wmo": 11910,
-   "names": {
-    "deDE": [
-     "Der Teich von Ask'ar"
-    ],
-    "esES": [
-     "La Alberca de Ask'ar"
-    ],
-    "esMX": [
-     "La Alberca de Ask'ar"
-    ],
-    "frFR": [
-     "Le Bassin d'Ask'ar"
-    ],
-    "itIT": [
-     "The Pool of Ask'ar"
-    ],
-    "koKR": [
-     "아스카르 연못"
-    ],
-    "ptBR": [
-     "O Poço de Ask'Ar"
-    ],
-    "ruRU": [
-     "Пруд Аск'ара"
-    ],
-    "zhCN": [
-     "阿斯卡之池"
-    ],
-    "zhTW": [
-     "阿斯卡之池"
-    ]
-   },
+   "hashes": [
+    492943424,
+    3364016779,
+    1442099360,
+    1442099360,
+    1060960210,
+    492943424,
+    901514718,
+    144079618,
+    2466223645,
+    2977428888,
+    2977428888
+   ],
    "at": [
     {
      "floor": 1,

@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Alonsus Chapel",
+   "key": "w143684",
    "wmo": 143684,
-   "names": {
-    "deDE": [
-     "Die Alonsuskapelle"
-    ],
-    "esES": [
-     "Capilla de Alonsus"
-    ],
-    "esMX": [
-     "Capilla de Alonsus"
-    ],
-    "frFR": [
-     "Chapelle d’Alonsus"
-    ],
-    "itIT": [
-     "Alonsus Chapel"
-    ],
-    "koKR": [
-     "알론수스 교회"
-    ],
-    "ptBR": [
-     "Capela Alonsus"
-    ],
-    "ruRU": [
-     "Часовня Алонсия"
-    ],
-    "zhCN": [
-     "阿隆索斯礼拜堂"
-    ],
-    "zhTW": [
-     "阿隆索斯教堂"
-    ]
-   },
+   "hashes": [
+    838394553,
+    710464198,
+    3131825145,
+    3131825145,
+    1786814963,
+    838394553,
+    698599504,
+    3955673104,
+    2779054317,
+    2055202767,
+    2222586213
+   ],
    "at": [
     {
      "floor": 2,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Crusaders' Square",
+   "key": "w143682",
    "wmo": 143682,
-   "names": {
-    "deDE": [
-     "Der Kreuzzüglerplatz"
-    ],
-    "esES": [
-     "Plaza de los Cruzados"
-    ],
-    "esMX": [
-     "Plaza de los Cruzados"
-    ],
-    "frFR": [
-     "Place des croisés"
-    ],
-    "itIT": [
-     "Crusaders' Square"
-    ],
-    "koKR": [
-     "십자군 광장"
-    ],
-    "ptBR": [
-     "Praça dos Cruzados"
-    ],
-    "ruRU": [
-     "Площадь рыцарей"
-    ],
-    "zhCN": [
-     "十字军广场"
-    ],
-    "zhTW": [
-     "十字軍廣場"
-    ]
-   },
+   "hashes": [
+    1353751419,
+    3869634493,
+    1379957323,
+    1379957323,
+    3051603503,
+    1353751419,
+    3229513348,
+    1476871162,
+    2461640839,
+    1093718763,
+    2895679395
+   ],
    "at": [
     {
      "floor": 1,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Elders' Square",
+   "key": "w143691",
    "wmo": 143691,
-   "names": {
-    "deDE": [
-     "Der Ältestenplatz"
-    ],
-    "esES": [
-     "Plaza de los Ancestros"
-    ],
-    "esMX": [
-     "Plaza de los Ancestros"
-    ],
-    "frFR": [
-     "Place des Anciens"
-    ],
-    "itIT": [
-     "Elders' Square"
-    ],
-    "koKR": [
-     "장로의 광장"
-    ],
-    "ptBR": [
-     "Praça dos Anciãos"
-    ],
-    "ruRU": [
-     "Площадь Старейшин"
-    ],
-    "zhCN": [
-     "长者广场"
-    ],
-    "zhTW": [
-     "長者廣場"
-    ]
-   },
+   "hashes": [
+    925611116,
+    3567287031,
+    1958292374,
+    1958292374,
+    1086260037,
+    925611116,
+    3444328071,
+    3285456484,
+    2576329143,
+    867319075,
+    72067107
+   ],
    "at": [
     {
      "floor": 2,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "Festival Lane",
+   "key": "w143644",
    "wmo": 143644,
-   "names": {
-    "deDE": [
-     "Die Feststraße"
-    ],
-    "esES": [
-     "Calle del Festival"
-    ],
-    "esMX": [
-     "Calle del Festival"
-    ],
-    "frFR": [
-     "Allée du festival"
-    ],
-    "itIT": [
-     "Festival Lane"
-    ],
-    "koKR": [
-     "축제의 거리"
-    ],
-    "ptBR": [
-     "Alameda do Festival"
-    ],
-    "ruRU": [
-     "Праздничная улица"
-    ],
-    "zhCN": [
-     "节日小道"
-    ],
-    "zhTW": [
-     "節日小道"
-    ]
-   },
+   "hashes": [
+    3232839157,
+    3581137868,
+    3055292751,
+    3055292751,
+    3873889166,
+    3232839157,
+    3485493967,
+    1112896397,
+    3651297942,
+    2212730386,
+    2509267824
+   ],
    "at": [
     {
      "floor": 1,
@@ -202,40 +126,21 @@
    ]
   },
   {
-   "name": "King's Square",
+   "key": "w143648",
    "wmo": 143648,
-   "names": {
-    "deDE": [
-     "Der Königsplatz"
-    ],
-    "esES": [
-     "Plaza del Rey"
-    ],
-    "esMX": [
-     "Plaza del Rey"
-    ],
-    "frFR": [
-     "Place du Roi"
-    ],
-    "itIT": [
-     "King's Square"
-    ],
-    "koKR": [
-     "왕의 광장"
-    ],
-    "ptBR": [
-     "Praça Real"
-    ],
-    "ruRU": [
-     "Королевская площадь"
-    ],
-    "zhCN": [
-     "国王广场"
-    ],
-    "zhTW": [
-     "國王廣場"
-    ]
-   },
+   "hashes": [
+    2025346671,
+    3762791992,
+    813094272,
+    813094272,
+    1615154397,
+    2025346671,
+    601518348,
+    744752013,
+    903923119,
+    4032776054,
+    3345147281
+   ],
    "at": [
     {
      "floor": 1,
@@ -247,40 +152,21 @@
    ]
   },
   {
-   "name": "Market Row",
+   "key": "w143640",
    "wmo": 143640,
-   "names": {
-    "deDE": [
-     "Die Marktgasse"
-    ],
-    "esES": [
-     "Fila del Mercado"
-    ],
-    "esMX": [
-     "Fila del Mercado"
-    ],
-    "frFR": [
-     "Allée du marché"
-    ],
-    "itIT": [
-     "Market Row"
-    ],
-    "koKR": [
-     "상가"
-    ],
-    "ptBR": [
-     "Travessa do Comércio"
-    ],
-    "ruRU": [
-     "Торговый ряд"
-    ],
-    "zhCN": [
-     "市场"
-    ],
-    "zhTW": [
-     "市場區"
-    ]
-   },
+   "hashes": [
+    552156521,
+    3534406419,
+    869035635,
+    869035635,
+    1689264637,
+    552156521,
+    228720715,
+    1059698491,
+    3887751363,
+    3782556647,
+    1317034485
+   ],
    "at": [
     {
      "floor": 1,
@@ -292,40 +178,21 @@
    ]
   },
   {
-   "name": "Slaughter Square",
+   "key": "w143664",
    "wmo": 143664,
-   "names": {
-    "deDE": [
-     "Der Schlächterplatz"
-    ],
-    "esES": [
-     "Plaza Degolladero"
-    ],
-    "esMX": [
-     "Plaza Degolladero"
-    ],
-    "frFR": [
-     "Place du Massacre"
-    ],
-    "itIT": [
-     "Slaughter Square"
-    ],
-    "koKR": [
-     "학살의 광장"
-    ],
-    "ptBR": [
-     "Praça do Massacre"
-    ],
-    "ruRU": [
-     "Площадь Живодерни"
-    ],
-    "zhCN": [
-     "屠杀广场"
-    ],
-    "zhTW": [
-     "屠殺廣場"
-    ]
-   },
+   "hashes": [
+    2078438361,
+    4024963886,
+    2188366113,
+    2188366113,
+    31721636,
+    2078438361,
+    2698858537,
+    167003765,
+    14628007,
+    2736240636,
+    621051801
+   ],
    "at": [
     {
      "floor": 2,
@@ -337,40 +204,21 @@
    ]
   },
   {
-   "name": "The Crimson Throne",
+   "key": "w143721",
    "wmo": 143721,
-   "names": {
-    "deDE": [
-     "Der Purpurthron"
-    ],
-    "esES": [
-     "El Trono Carmesí"
-    ],
-    "esMX": [
-     "El Trono Carmesí"
-    ],
-    "frFR": [
-     "Le Trône cramoisi"
-    ],
-    "itIT": [
-     "The Crimson Throne"
-    ],
-    "koKR": [
-     "진홍십자군 사령실"
-    ],
-    "ptBR": [
-     "O Trono Carmesim"
-    ],
-    "ruRU": [
-     "Кровавый трон"
-    ],
-    "zhCN": [
-     "赤红王座"
-    ],
-    "zhTW": [
-     "赤色王座"
-    ]
-   },
+   "hashes": [
+    2166014461,
+    2702276273,
+    3340246133,
+    3340246133,
+    1979908437,
+    2166014461,
+    1840236145,
+    2797743533,
+    393906254,
+    2373137105,
+    3924452579
+   ],
    "at": [
     {
      "floor": 1,
@@ -382,40 +230,21 @@
    ]
   },
   {
-   "name": "The Gauntlet",
+   "key": "w143666",
    "wmo": 143666,
-   "names": {
-    "deDE": [
-     "Der Spießrutenlauf"
-    ],
-    "esES": [
-     "El Guantelete"
-    ],
-    "esMX": [
-     "El Guantelete"
-    ],
-    "frFR": [
-     "Le Défi"
-    ],
-    "itIT": [
-     "The Gauntlet"
-    ],
-    "koKR": [
-     "투쟁의 거리"
-    ],
-    "ptBR": [
-     "Forquilha"
-    ],
-    "ruRU": [
-     "Улица Испытаний"
-    ],
-    "zhCN": [
-     "街巷"
-    ],
-    "zhTW": [
-     "街巷"
-    ]
-   },
+   "hashes": [
+    2617013042,
+    3089260889,
+    3046333016,
+    3046333016,
+    2669831463,
+    2617013042,
+    2463334141,
+    1369101508,
+    120296614,
+    2379955956,
+    2379955956
+   ],
    "at": [
     {
      "floor": 2,
@@ -427,40 +256,21 @@
    ]
   },
   {
-   "name": "The Hall of Lights",
+   "key": "w143706",
    "wmo": 143706,
-   "names": {
-    "deDE": [
-     "Die Halle der Lichter"
-    ],
-    "esES": [
-     "La Sala de las Luces"
-    ],
-    "esMX": [
-     "La Sala de las Luces"
-    ],
-    "frFR": [
-     "Hall des lumières"
-    ],
-    "itIT": [
-     "The Hall of Lights"
-    ],
-    "koKR": [
-     "보물 전시실"
-    ],
-    "ptBR": [
-     "O Salão das Luzes"
-    ],
-    "ruRU": [
-     "Зал Света"
-    ],
-    "zhCN": [
-     "圣光大厅"
-    ],
-    "zhTW": [
-     "聖光大廳"
-    ]
-   },
+   "hashes": [
+    2188851413,
+    1850017295,
+    2753884796,
+    2753884796,
+    2183854646,
+    2188851413,
+    2466742012,
+    1934068178,
+    2307176826,
+    40740526,
+    1759020054
+   ],
    "at": [
     {
      "floor": 1,
@@ -472,40 +282,21 @@
    ]
   },
   {
-   "name": "The Hoard",
+   "key": "w143711",
    "wmo": 143711,
-   "names": {
-    "deDE": [
-     "Der Hort"
-    ],
-    "esES": [
-     "El Tesoro Oculto"
-    ],
-    "esMX": [
-     "El Tesoro Oculto"
-    ],
-    "frFR": [
-     "Le Trésor"
-    ],
-    "itIT": [
-     "The Hoard"
-    ],
-    "koKR": [
-     "보병 무기고"
-    ],
-    "ptBR": [
-     "O Cofre"
-    ],
-    "ruRU": [
-     "Арсенал"
-    ],
-    "zhCN": [
-     "步兵武器库"
-    ],
-    "zhTW": [
-     "物資庫"
-    ]
-   },
+   "hashes": [
+    2689865942,
+    4268630547,
+    778357880,
+    778357880,
+    2268307796,
+    2689865942,
+    804306256,
+    3909161571,
+    1909300839,
+    3568944719,
+    3820052238
+   ],
    "at": [
     {
      "floor": 1,
@@ -517,40 +308,21 @@
    ]
   },
   {
-   "name": "The Scarlet Bastion",
+   "key": "w143701",
    "wmo": 143701,
-   "names": {
-    "deDE": [
-     "Die Scharlachrote Bastion"
-    ],
-    "esES": [
-     "El Bastión Escarlata"
-    ],
-    "esMX": [
-     "El Bastión Escarlata"
-    ],
-    "frFR": [
-     "Le Bastion écarlate"
-    ],
-    "itIT": [
-     "The Scarlet Bastion"
-    ],
-    "koKR": [
-     "붉은십자군 성채"
-    ],
-    "ptBR": [
-     "O Bastião Escarlate"
-    ],
-    "ruRU": [
-     "Бастион Алого ордена"
-    ],
-    "zhCN": [
-     "血色十字军堡垒"
-    ],
-    "zhTW": [
-     "血色十字軍堡壘"
-    ]
-   },
+   "hashes": [
+    1991381018,
+    2516575708,
+    931816701,
+    931816701,
+    2428068028,
+    1991381018,
+    879706347,
+    1226666752,
+    2770326601,
+    209409100,
+    1966324215
+   ],
    "at": [
     {
      "floor": 1,
@@ -562,40 +334,21 @@
    ]
   },
   {
-   "name": "The Slaughter House",
+   "key": "w143696",
    "wmo": 143696,
-   "names": {
-    "deDE": [
-     "Das Schlachthaus"
-    ],
-    "esES": [
-     "El Degolladero"
-    ],
-    "esMX": [
-     "El Degolladero"
-    ],
-    "frFR": [
-     "L’Abattoir"
-    ],
-    "itIT": [
-     "The Slaughter House"
-    ],
-    "koKR": [
-     "도살장"
-    ],
-    "ptBR": [
-     "O Matadouro"
-    ],
-    "ruRU": [
-     "Живодерня"
-    ],
-    "zhCN": [
-     "屠宰房"
-    ],
-    "zhTW": [
-     "屠宰房"
-    ]
-   },
+   "hashes": [
+    2796821301,
+    3573266336,
+    2614711960,
+    2614711960,
+    4170021908,
+    2796821301,
+    3386356170,
+    1420276650,
+    65962478,
+    118928433,
+    118928433
+   ],
    "at": [
     {
      "floor": 2,

@@ -21,41 +21,22 @@
  "position": "game",
  "areas": [
   {
-   "name": "Dun Algaz",
+   "key": "a836",
    "area": 836,
    "wmo": 20192,
-   "names": {
-    "deDE": [
-     "Dun Algaz"
-    ],
-    "esES": [
-     "Dun Algaz"
-    ],
-    "esMX": [
-     "Dun Algaz"
-    ],
-    "frFR": [
-     "Dun Algaz"
-    ],
-    "itIT": [
-     "Dun Algaz"
-    ],
-    "koKR": [
-     "던 알가즈"
-    ],
-    "ptBR": [
-     "Dun Algaz"
-    ],
-    "ruRU": [
-     "Дун Альгаз"
-    ],
-    "zhCN": [
-     "丹奥加兹"
-    ],
-    "zhTW": [
-     "丹奧加茲"
-    ]
-   },
+   "hashes": [
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1790456994,
+    1529537977,
+    759908578,
+    4027344799,
+    1862642786
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,7 +48,7 @@
    ]
   },
   {
-   "name": "Lost Dig Site",
+   "key": "a16880",
    "area": 16880,
    "at": [
     {
@@ -80,7 +61,7 @@
    ]
   },
   {
-   "name": "Lost Marsh",
+   "key": "a16877",
    "area": 16877,
    "at": [
     {
@@ -93,7 +74,7 @@
    ]
   },
   {
-   "name": "Site of the Guardian",
+   "key": "a16879",
    "area": 16879,
    "at": [
     {
@@ -106,7 +87,7 @@
    ]
   },
   {
-   "name": "Stalker's Thicket",
+   "key": "a16878",
    "area": 16878,
    "at": [
     {
@@ -119,7 +100,7 @@
    ]
   },
   {
-   "name": "Thelgen Rock",
+   "key": "a1021",
    "area": 1021,
    "at": [
     {
@@ -132,7 +113,7 @@
    ]
   },
   {
-   "name": "Whelgar's Excavation Site",
+   "key": "a118",
    "area": 118,
    "at": [
     {

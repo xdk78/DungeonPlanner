@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Chamber of Enchantment",
+   "key": "w147915",
    "wmo": 147915,
-   "names": {
-    "deDE": [
-     "Die Kammer der Verzauberung"
-    ],
-    "esES": [
-     "Cámara del Encantamiento"
-    ],
-    "esMX": [
-     "Cámara del Encantamiento"
-    ],
-    "frFR": [
-     "Chambre des Enchantements"
-    ],
-    "itIT": [
-     "Chamber of Enchantment"
-    ],
-    "koKR": [
-     "마법의 방"
-    ],
-    "ptBR": [
-     "Câmara do Encantamento"
-    ],
-    "ruRU": [
-     "Колдовской чертог"
-    ],
-    "zhCN": [
-     "魔法之厅"
-    ],
-    "zhTW": [
-     "魔法之廳"
-    ]
-   },
+   "hashes": [
+    1122076207,
+    2370115355,
+    914558720,
+    914558720,
+    1427698138,
+    1122076207,
+    505673226,
+    450938982,
+    2764091845,
+    1921821203,
+    2958929272
+   ],
    "at": [
     {
      "floor": 2,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Dark Iron Highway",
+   "key": "w147901",
    "wmo": 147901,
-   "names": {
-    "deDE": [
-     "Die Dunkeleisenstraße"
-    ],
-    "esES": [
-     "Ruta Hierro Negro"
-    ],
-    "esMX": [
-     "Ruta Hierro Negro"
-    ],
-    "frFR": [
-     "Grand-route des Sombrefer"
-    ],
-    "itIT": [
-     "Dark Iron Highway"
-    ],
-    "koKR": [
-     "검은무쇠 대로"
-    ],
-    "ptBR": [
-     "Estrada do Ferro Negro"
-    ],
-    "ruRU": [
-     "Тракт Черного Железа"
-    ],
-    "zhCN": [
-     "黑铁大道"
-    ],
-    "zhTW": [
-     "黑鐵大道"
-    ]
-   },
+   "hashes": [
+    3852481310,
+    2808444985,
+    930140239,
+    930140239,
+    4265993896,
+    3852481310,
+    700281315,
+    3616642645,
+    431452406,
+    2492463050,
+    386654249
+   ],
    "at": [
     {
      "floor": 1,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Detention Block",
+   "key": "w147888",
    "wmo": 147888,
-   "names": {
-    "deDE": [
-     "Der Gefängnisblock"
-    ],
-    "esES": [
-     "Bloque de Detención"
-    ],
-    "esMX": [
-     "Bloque de Detención"
-    ],
-    "frFR": [
-     "Le mitard"
-    ],
-    "itIT": [
-     "Detention Block"
-    ],
-    "koKR": [
-     "감금 구역"
-    ],
-    "ptBR": [
-     "Bloco de Detenção"
-    ],
-    "ruRU": [
-     "Тюремный блок"
-    ],
-    "zhCN": [
-     "禁闭室"
-    ],
-    "zhTW": [
-     "禁閉室"
-    ]
-   },
+   "hashes": [
+    1450858998,
+    470878517,
+    2130841902,
+    2130841902,
+    592136497,
+    1450858998,
+    419212514,
+    1131369516,
+    4042105696,
+    3468278223,
+    4128851904
+   ],
    "at": [
     {
      "floor": 1,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "East Garrison",
+   "key": "w147894",
    "wmo": 147894,
-   "names": {
-    "deDE": [
-     "Die Ostgarnison"
-    ],
-    "esES": [
-     "Cuartel del Este"
-    ],
-    "esMX": [
-     "Cuartel del Este"
-    ],
-    "frFR": [
-     "Garnison de l’Est"
-    ],
-    "itIT": [
-     "East Garrison"
-    ],
-    "koKR": [
-     "동쪽 주둔지"
-    ],
-    "ptBR": [
-     "Guarnição Leste"
-    ],
-    "ruRU": [
-     "Восточный гарнизон"
-    ],
-    "zhCN": [
-     "东区兵营"
-    ],
-    "zhTW": [
-     "東部兵營"
-    ]
-   },
+   "hashes": [
+    1485792597,
+    2840701986,
+    2070556957,
+    2070556957,
+    1809430336,
+    1485792597,
+    2868420547,
+    3415086135,
+    1782242781,
+    2400796120,
+    1123088437
+   ],
    "at": [
     {
      "floor": 1,
@@ -209,40 +133,21 @@
    ]
   },
   {
-   "name": "Hall of Crafting",
+   "key": "w147913",
    "wmo": 147913,
-   "names": {
-    "deDE": [
-     "Die Halle des Handwerks"
-    ],
-    "esES": [
-     "Sala de los Oficios"
-    ],
-    "esMX": [
-     "Sala de los Oficios"
-    ],
-    "frFR": [
-     "Chambre de l’Artisanat"
-    ],
-    "itIT": [
-     "Hall of Crafting"
-    ],
-    "koKR": [
-     "장인의 전당"
-    ],
-    "ptBR": [
-     "Salão da Criação"
-    ],
-    "ruRU": [
-     "Зал Ремесла"
-    ],
-    "zhCN": [
-     "工艺之厅"
-    ],
-    "zhTW": [
-     "工匠大廳"
-    ]
-   },
+   "hashes": [
+    4074741919,
+    321551720,
+    1995598197,
+    1995598197,
+    1162289066,
+    4074741919,
+    836282621,
+    3379408081,
+    2113374584,
+    3531829565,
+    3961950748
+   ],
    "at": [
     {
      "floor": 1,
@@ -261,40 +166,21 @@
    ]
   },
   {
-   "name": "Halls of the Law",
+   "key": "w147890",
    "wmo": 147890,
-   "names": {
-    "deDE": [
-     "Die Halle des Gesetzes"
-    ],
-    "esES": [
-     "Salas de la Ley"
-    ],
-    "esMX": [
-     "Salas de la Ley"
-    ],
-    "frFR": [
-     "Chambres de la Loi"
-    ],
-    "itIT": [
-     "Halls of the Law"
-    ],
-    "koKR": [
-     "법의 전당"
-    ],
-    "ptBR": [
-     "Salões da Lei"
-    ],
-    "ruRU": [
-     "Галереи Правосудия"
-    ],
-    "zhCN": [
-     "秩序大厅"
-    ],
-    "zhTW": [
-     "秩序大廳"
-    ]
-   },
+   "hashes": [
+    1009413003,
+    1686117235,
+    1813370043,
+    1813370043,
+    1921823382,
+    1009413003,
+    1534739897,
+    4267581144,
+    4031107574,
+    1786140870,
+    3834628433
+   ],
    "at": [
     {
      "floor": 1,
@@ -306,40 +192,21 @@
    ]
   },
   {
-   "name": "Mold Foundry",
+   "key": "w147918",
    "wmo": 147918,
-   "names": {
-    "deDE": [
-     "Die Formgießerei"
-    ],
-    "esES": [
-     "Fundición del Molde"
-    ],
-    "esMX": [
-     "Fundición del Molde"
-    ],
-    "frFR": [
-     "La fonderie"
-    ],
-    "itIT": [
-     "Mold Foundry"
-    ],
-    "koKR": [
-     "거푸집 주조소"
-    ],
-    "ptBR": [
-     "Fundição dos Moldes"
-    ],
-    "ruRU": [
-     "Литейная"
-    ],
-    "zhCN": [
-     "浇铸间"
-    ],
-    "zhTW": [
-     "澆鑄間"
-    ]
-   },
+   "hashes": [
+    4085009576,
+    2164689087,
+    28567177,
+    28567177,
+    463724018,
+    4085009576,
+    3166094052,
+    2370267120,
+    317827920,
+    3730188381,
+    4235530159
+   ],
    "at": [
     {
      "floor": 2,
@@ -351,40 +218,21 @@
    ]
   },
   {
-   "name": "Ring of the Law",
+   "key": "w147896",
    "wmo": 147896,
-   "names": {
-    "deDE": [
-     "Der Ring des Gesetzes"
-    ],
-    "esES": [
-     "Círculo de la Ley"
-    ],
-    "esMX": [
-     "Círculo de la Ley"
-    ],
-    "frFR": [
-     "Cercle de la loi"
-    ],
-    "itIT": [
-     "Ring of the Law"
-    ],
-    "koKR": [
-     "법의 심판장"
-    ],
-    "ptBR": [
-     "Círculo da Lei"
-    ],
-    "ruRU": [
-     "Зал Правосудия"
-    ],
-    "zhCN": [
-     "秩序竞技场"
-    ],
-    "zhTW": [
-     "秩序競技場"
-    ]
-   },
+   "hashes": [
+    3205779843,
+    4166633840,
+    1091188101,
+    1091188101,
+    3632597467,
+    3205779843,
+    3793022043,
+    2695007510,
+    1367897713,
+    3853114547,
+    3139835369
+   ],
    "at": [
     {
      "floor": 1,
@@ -403,40 +251,21 @@
    ]
   },
   {
-   "name": "Shadowforge City",
+   "key": "w147902",
    "wmo": 147902,
-   "names": {
-    "deDE": [
-     "Die Schattenschmiede"
-    ],
-    "esES": [
-     "Ciudad Forjatiniebla"
-    ],
-    "esMX": [
-     "Ciudad Forjatiniebla"
-    ],
-    "frFR": [
-     "Ville des Ombreforge"
-    ],
-    "itIT": [
-     "Shadowforge City"
-    ],
-    "koKR": [
-     "어둠괴철로 도시"
-    ],
-    "ptBR": [
-     "Cidade de Umbraforja"
-    ],
-    "ruRU": [
-     "Тенегорн"
-    ],
-    "zhCN": [
-     "暗炉城"
-    ],
-    "zhTW": [
-     "影爐城"
-    ]
-   },
+   "hashes": [
+    2651070883,
+    2267584361,
+    3261904565,
+    3261904565,
+    667914143,
+    2651070883,
+    2957710614,
+    2747066285,
+    1990930789,
+    261678480,
+    2589160983
+   ],
    "at": [
     {
      "floor": 1,
@@ -455,40 +284,21 @@
    ]
   },
   {
-   "name": "Shrine of Thaurissan",
+   "key": "w147899",
    "wmo": 147899,
-   "names": {
-    "deDE": [
-     "Der Schrein von Thaurissan"
-    ],
-    "esES": [
-     "Santuario de Thaurissan"
-    ],
-    "esMX": [
-     "Santuario de Thaurissan"
-    ],
-    "frFR": [
-     "Sanctuaire de Thaurissan"
-    ],
-    "itIT": [
-     "Shrine of Thaurissan"
-    ],
-    "koKR": [
-     "타우릿산의 제단"
-    ],
-    "ptBR": [
-     "Santuário de Thaurissan"
-    ],
-    "ruRU": [
-     "Святилище Тауриссана"
-    ],
-    "zhCN": [
-     "索瑞森神殿"
-    ],
-    "zhTW": [
-     "索瑞森神殿"
-    ]
-   },
+   "hashes": [
+    2720172199,
+    3175439775,
+    2830632194,
+    2830632194,
+    3947681161,
+    2720172199,
+    567436030,
+    1924982723,
+    15240745,
+    332938410,
+    332938410
+   ],
    "at": [
     {
      "floor": 2,
@@ -500,40 +310,21 @@
    ]
   },
   {
-   "name": "Summoners' Tomb",
+   "key": "w147929",
    "wmo": 147929,
-   "names": {
-    "deDE": [
-     "Die Gruft der Beschwörer"
-    ],
-    "esES": [
-     "Tumba del Invocador"
-    ],
-    "esMX": [
-     "Tumba del Invocador"
-    ],
-    "frFR": [
-     "Tombe des invocateurs"
-    ],
-    "itIT": [
-     "Summoners' Tomb"
-    ],
-    "koKR": [
-     "소환사의 무덤"
-    ],
-    "ptBR": [
-     "Tumba dos Evocadores"
-    ],
-    "ruRU": [
-     "Гробница Заклинателей"
-    ],
-    "zhCN": [
-     "召唤者之墓"
-    ],
-    "zhTW": [
-     "召喚師之墓"
-    ]
-   },
+   "hashes": [
+    3230680331,
+    3272635656,
+    1665609056,
+    1665609056,
+    3135198411,
+    3230680331,
+    1614271521,
+    1532862287,
+    3886483788,
+    1579843117,
+    3917159948
+   ],
    "at": [
     {
      "floor": 2,
@@ -545,41 +336,24 @@
    ]
   },
   {
-   "name": "The Black Vault",
+   "key": "w147912",
    "wmo": 147912,
-   "names": {
-    "deDE": [
-     "Das schwarze Gewölbe"
+   "hashes": [
+    1746304175,
+    1087601621,
+    1217774130,
+    [
+     1217774130,
+     2309980207
     ],
-    "esES": [
-     "Cámara Negra"
-    ],
-    "esMX": [
-     "Cámara Negra",
-     "La Cámara Negra"
-    ],
-    "frFR": [
-     "La Voûte noire"
-    ],
-    "itIT": [
-     "The Black Vault"
-    ],
-    "koKR": [
-     "검은 금고"
-    ],
-    "ptBR": [
-     "O Cofre Negro"
-    ],
-    "ruRU": [
-     "Черное Хранилище"
-    ],
-    "zhCN": [
-     "黑色宝库"
-    ],
-    "zhTW": [
-     "黑鐵寶庫"
-    ]
-   },
+    760744715,
+    1746304175,
+    1032275579,
+    616972414,
+    3752332373,
+    3592609461,
+    1610749410
+   ],
    "at": [
     {
      "floor": 2,
@@ -591,40 +365,21 @@
    ]
   },
   {
-   "name": "The Domicile",
+   "key": "w147909",
    "wmo": 147909,
-   "names": {
-    "deDE": [
-     "Das Domizil"
-    ],
-    "esES": [
-     "Domicilio"
-    ],
-    "esMX": [
-     "El Domicilio"
-    ],
-    "frFR": [
-     "Le Domicile"
-    ],
-    "itIT": [
-     "The Domicile"
-    ],
-    "koKR": [
-     "거주지"
-    ],
-    "ptBR": [
-     "O Domicílio"
-    ],
-    "ruRU": [
-     "Жилой квартал"
-    ],
-    "zhCN": [
-     "住宅区"
-    ],
-    "zhTW": [
-     "住宅區"
-    ]
-   },
+   "hashes": [
+    330983848,
+    442701305,
+    2779381842,
+    4174078593,
+    2551365370,
+    330983848,
+    219316334,
+    2264554018,
+    485906258,
+    204331956,
+    4230901275
+   ],
    "at": [
     {
      "floor": 2,
@@ -636,40 +391,21 @@
    ]
   },
   {
-   "name": "The Grim Guzzler",
+   "key": "w147905",
    "wmo": 147905,
-   "names": {
-    "deDE": [
-     "Zum Grimmigen Säufer"
-    ],
-    "esES": [
-     "Tragapenas"
-    ],
-    "esMX": [
-     "Tragapenas"
-    ],
-    "frFR": [
-     "Le Sinistre écluseur"
-    ],
-    "itIT": [
-     "The Grim Guzzler"
-    ],
-    "koKR": [
-     "험상궂은 주정뱅이 선술집"
-    ],
-    "ptBR": [
-     "O Glutão Implacável"
-    ],
-    "ruRU": [
-     "Трактир \"Угрюмый обжора\""
-    ],
-    "zhCN": [
-     "黑铁酒吧"
-    ],
-    "zhTW": [
-     "黑鐵酒吧"
-    ]
-   },
+   "hashes": [
+    968498412,
+    2402553664,
+    4104242921,
+    4104242921,
+    500234644,
+    968498412,
+    1265669164,
+    953591762,
+    1489194315,
+    3802913053,
+    1163745894
+   ],
    "at": [
     {
      "floor": 2,
@@ -681,40 +417,21 @@
    ]
   },
   {
-   "name": "The Imperial Seat",
+   "key": "w147923",
    "wmo": 147923,
-   "names": {
-    "deDE": [
-     "Der Kaiserliche Sitz"
-    ],
-    "esES": [
-     "El Trono Imperial"
-    ],
-    "esMX": [
-     "El Trono Imperial"
-    ],
-    "frFR": [
-     "Le Siège impérial"
-    ],
-    "itIT": [
-     "The Imperial Seat"
-    ],
-    "koKR": [
-     "옥좌"
-    ],
-    "ptBR": [
-     "O Trono Imperial"
-    ],
-    "ruRU": [
-     "Императорский Трон"
-    ],
-    "zhCN": [
-     "帝王之座"
-    ],
-    "zhTW": [
-     "帝王之座"
-    ]
-   },
+   "hashes": [
+    3753849146,
+    1655206952,
+    1347582733,
+    1347582733,
+    1172234287,
+    3753849146,
+    1479558694,
+    1691645919,
+    1484331837,
+    3300489099,
+    3300489099
+   ],
    "at": [
     {
      "floor": 2,
@@ -726,40 +443,21 @@
    ]
   },
   {
-   "name": "The Iron Hall",
+   "key": "w147922",
    "wmo": 147922,
-   "names": {
-    "deDE": [
-     "Die Eisenhalle"
-    ],
-    "esES": [
-     "Cámara de Hierro"
-    ],
-    "esMX": [
-     "Cámara de Hierro"
-    ],
-    "frFR": [
-     "Le Hall de fer"
-    ],
-    "itIT": [
-     "The Iron Hall"
-    ],
-    "koKR": [
-     "철의 전당"
-    ],
-    "ptBR": [
-     "O Salão de Ferro"
-    ],
-    "ruRU": [
-     "Железный зал"
-    ],
-    "zhCN": [
-     "钢铁大厅"
-    ],
-    "zhTW": [
-     "鐵之大廳"
-    ]
-   },
+   "hashes": [
+    2821635801,
+    1278456949,
+    4139211343,
+    4139211343,
+    2670312189,
+    2821635801,
+    4173334403,
+    792756110,
+    539852917,
+    2593501495,
+    1688442338
+   ],
    "at": [
     {
      "floor": 2,
@@ -771,40 +469,21 @@
    ]
   },
   {
-   "name": "The Lyceum",
+   "key": "w147920",
    "wmo": 147920,
-   "names": {
-    "deDE": [
-     "Das Lyzeum"
-    ],
-    "esES": [
-     "Lyceum"
-    ],
-    "esMX": [
-     "El Lyceum"
-    ],
-    "frFR": [
-     "Le Lyceum"
-    ],
-    "itIT": [
-     "The Lyceum"
-    ],
-    "koKR": [
-     "훈련강당"
-    ],
-    "ptBR": [
-     "O Liceu"
-    ],
-    "ruRU": [
-     "Лекторий"
-    ],
-    "zhCN": [
-     "讲学厅"
-    ],
-    "zhTW": [
-     "講學廳"
-    ]
-   },
+   "hashes": [
+    3871609129,
+    2927898325,
+    1500547572,
+    1185812625,
+    1959226847,
+    3871609129,
+    739426502,
+    1688109108,
+    3808378434,
+    1617409777,
+    355068273
+   ],
    "at": [
     {
      "floor": 2,
@@ -816,40 +495,21 @@
    ]
   },
   {
-   "name": "The Manufactory",
+   "key": "w147926",
    "wmo": 147926,
-   "names": {
-    "deDE": [
-     "Die Manufaktur"
-    ],
-    "esES": [
-     "La Fábrica"
-    ],
-    "esMX": [
-     "El Taller"
-    ],
-    "frFR": [
-     "La Manufacture"
-    ],
-    "itIT": [
-     "The Manufactory"
-    ],
-    "koKR": [
-     "제조 공장"
-    ],
-    "ptBR": [
-     "A Fábrica"
-    ],
-    "ruRU": [
-     "Фабрика"
-    ],
-    "zhCN": [
-     "制造厂"
-    ],
-    "zhTW": [
-     "製造廠"
-    ]
-   },
+   "hashes": [
+    2101938587,
+    3196563977,
+    711554003,
+    906766088,
+    3879220399,
+    2101938587,
+    3372891183,
+    2621909289,
+    3540043301,
+    1988585324,
+    1156123626
+   ],
    "at": [
     {
      "floor": 2,
@@ -861,40 +521,21 @@
    ]
   },
   {
-   "name": "The Molten Bridge",
+   "key": "w147919",
    "wmo": 147919,
-   "names": {
-    "deDE": [
-     "Die Geschmolzene Brücke"
-    ],
-    "esES": [
-     "Puente de Magma"
-    ],
-    "esMX": [
-     "Puente de Magma"
-    ],
-    "frFR": [
-     "Le pont de magma"
-    ],
-    "itIT": [
-     "The Molten Bridge"
-    ],
-    "koKR": [
-     "작열하는 다리"
-    ],
-    "ptBR": [
-     "A Ponte Derretida"
-    ],
-    "ruRU": [
-     "Огненный мост"
-    ],
-    "zhCN": [
-     "熔火之桥"
-    ],
-    "zhTW": [
-     "熔火之橋"
-    ]
-   },
+   "hashes": [
+    2930765416,
+    308692613,
+    3565633540,
+    3565633540,
+    1794929833,
+    2930765416,
+    855268653,
+    2979303524,
+    777935152,
+    558666309,
+    1667165923
+   ],
    "at": [
     {
      "floor": 2,
@@ -906,40 +547,21 @@
    ]
   },
   {
-   "name": "West Garrison",
+   "key": "w147903",
    "wmo": 147903,
-   "names": {
-    "deDE": [
-     "Die Westgarnison"
-    ],
-    "esES": [
-     "Cuartel del Oeste"
-    ],
-    "esMX": [
-     "Cuartel del Oeste"
-    ],
-    "frFR": [
-     "Garnison de l’Ouest"
-    ],
-    "itIT": [
-     "West Garrison"
-    ],
-    "koKR": [
-     "서쪽 주둔지"
-    ],
-    "ptBR": [
-     "Guarnição Oeste"
-    ],
-    "ruRU": [
-     "Западный гарнизон"
-    ],
-    "zhCN": [
-     "西区兵营"
-    ],
-    "zhTW": [
-     "西部兵營"
-    ]
-   },
+   "hashes": [
+    158479043,
+    4056304529,
+    2418761972,
+    2418761972,
+    1993987048,
+    158479043,
+    1336431092,
+    3589343514,
+    2734969644,
+    334075412,
+    1143781569
+   ],
    "at": [
     {
      "floor": 1,

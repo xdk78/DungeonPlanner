@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Dragonmaw Garrison",
+   "key": "w29470",
    "wmo": 29470,
-   "names": {
-    "deDE": [
-     "Dragonmaw-Garnison"
-    ],
-    "esES": [
-     "Cuartel Faucedraco"
-    ],
-    "esMX": [
-     "Cuartel Faucedraco"
-    ],
-    "frFR": [
-     "Garnison des Dragonmaw"
-    ],
-    "itIT": [
-     "Dragonmaw Garrison"
-    ],
-    "koKR": [
-     "용아귀 주둔지"
-    ],
-    "ptBR": [
-     "Guarnição Presa do Dragão"
-    ],
-    "ruRU": [
-     "Гарнизон Драконьей Пасти"
-    ],
-    "zhCN": [
-     "龙喉兵营"
-    ],
-    "zhTW": [
-     "龍喉兵營"
-    ]
-   },
+   "hashes": [
+    2367125218,
+    3789116589,
+    1144837034,
+    1144837034,
+    2355131566,
+    2367125218,
+    2007681580,
+    145075143,
+    1735873899,
+    627257429,
+    3825201113
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Halls of Strife",
+   "key": "w29474",
    "wmo": 29474,
-   "names": {
-    "deDE": [
-     "Hallen des Zwists"
-    ],
-    "esES": [
-     "Salas de los Confictos"
-    ],
-    "esMX": [
-     "Salas de los Conflictos"
-    ],
-    "frFR": [
-     "Halls des conflits"
-    ],
-    "itIT": [
-     "Halls of Strife"
-    ],
-    "koKR": [
-     "투쟁의 전당"
-    ],
-    "ptBR": [
-     "Salões da Contenda"
-    ],
-    "ruRU": [
-     "Зал Раздора"
-    ],
-    "zhCN": [
-     "征战大厅"
-    ],
-    "zhTW": [
-     "征戰大廳"
-    ]
-   },
+   "hashes": [
+    657055671,
+    2945078713,
+    2358084632,
+    2852382128,
+    2687950621,
+    657055671,
+    284157854,
+    1698880674,
+    3886871637,
+    73649937,
+    135692610
+   ],
    "at": [
     {
      "floor": 2,
@@ -119,40 +81,21 @@
    ]
   },
   {
-   "name": "Nefarian's Lair",
+   "key": "w29462",
    "wmo": 29462,
-   "names": {
-    "deDE": [
-     "Nefarians Unterschlupf"
-    ],
-    "esES": [
-     "Guarida de Nefarian"
-    ],
-    "esMX": [
-     "Guarida de Nefarian"
-    ],
-    "frFR": [
-     "Antre de Nefarian"
-    ],
-    "itIT": [
-     "Nefarian's Lair"
-    ],
-    "koKR": [
-     "네파리안의 둥지"
-    ],
-    "ptBR": [
-     "Covil de Nefarian"
-    ],
-    "ruRU": [
-     "Логово Нефариана"
-    ],
-    "zhCN": [
-     "奈法利安的巢穴"
-    ],
-    "zhTW": [
-     "奈法利安的巢穴"
-    ]
-   },
+   "hashes": [
+    3828552883,
+    98973649,
+    3277164773,
+    3277164773,
+    53793328,
+    3828552883,
+    4255874100,
+    1282939861,
+    1201935536,
+    2805283244,
+    2805283244
+   ],
    "at": [
     {
      "floor": 4,
@@ -164,40 +107,21 @@
    ]
   },
   {
-   "name": "Shadow Wing Lair",
+   "key": "w29471",
    "wmo": 29471,
-   "names": {
-    "deDE": [
-     "Schattenschwingenunterschlupf"
-    ],
-    "esES": [
-     "Guardia Alasombra"
-    ],
-    "esMX": [
-     "Guarida de Alasombra"
-    ],
-    "frFR": [
-     "Repaire de l'Aile de l'ombre"
-    ],
-    "itIT": [
-     "Shadow Wing Lair"
-    ],
-    "koKR": [
-     "어둠날개 둥지"
-    ],
-    "ptBR": [
-     "Covil do Asa Sombria"
-    ],
-    "ruRU": [
-     "Логово Крыльев Тени"
-    ],
-    "zhCN": [
-     "影翼巢穴"
-    ],
-    "zhTW": [
-     "影翼巢穴"
-    ]
-   },
+   "hashes": [
+    364165996,
+    2256633914,
+    2951958796,
+    3130674381,
+    1241493581,
+    364165996,
+    321349782,
+    349743771,
+    4027252065,
+    996270682,
+    996270682
+   ],
    "at": [
     {
      "floor": 1,

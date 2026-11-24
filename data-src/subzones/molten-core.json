@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Magmadar Cavern",
+   "key": "w28651",
    "wmo": 28651,
-   "names": {
-    "deDE": [
-     "Magmadarhöhle"
-    ],
-    "esES": [
-     "Cueva Magmadar"
-    ],
-    "esMX": [
-     "Cueva Magmadar"
-    ],
-    "frFR": [
-     "Caverne de Magmadar"
-    ],
-    "itIT": [
-     "Magmadar Cavern"
-    ],
-    "koKR": [
-     "마그마다르 용암굴"
-    ],
-    "ptBR": [
-     "Caverna de Magmadar"
-    ],
-    "ruRU": [
-     "Пещера Магмадара"
-    ],
-    "zhCN": [
-     "玛格曼达洞穴"
-    ],
-    "zhTW": [
-     "瑪格曼達洞穴"
-    ]
-   },
+   "hashes": [
+    3759715306,
+    3458446837,
+    2264281211,
+    2264281211,
+    4250568474,
+    3759715306,
+    2985282671,
+    4196430126,
+    2611404061,
+    2973820378,
+    515655436
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Ragnaros' Lair",
+   "key": "w28645",
    "wmo": 28645,
-   "names": {
-    "deDE": [
-     "Ragnaros' Unterschlupf"
-    ],
-    "esES": [
-     "Guarida de Ragnaros"
-    ],
-    "esMX": [
-     "Guarida de Ragnaros"
-    ],
-    "frFR": [
-     "Antre de Ragnaros"
-    ],
-    "itIT": [
-     "Ragnaros' Lair"
-    ],
-    "koKR": [
-     "라그나로스의 둥지"
-    ],
-    "ptBR": [
-     "Covil de Ragnaros"
-    ],
-    "ruRU": [
-     "Логово Рагнароса"
-    ],
-    "zhCN": [
-     "拉格纳罗斯之巢"
-    ],
-    "zhTW": [
-     "拉格納羅斯的巢穴"
-    ]
-   },
+   "hashes": [
+    1745677695,
+    2295264046,
+    2487518158,
+    2487518158,
+    2306208223,
+    1745677695,
+    667877244,
+    2877679038,
+    503402828,
+    679538245,
+    1833707041
+   ],
    "at": [
     {
      "floor": 1,

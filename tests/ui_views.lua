@@ -897,8 +897,8 @@ V.views = {
 			ns.ReyesMaps.Reset()
 		end,
 	},
-	-- The same map with the player inside Hall of Thanes, in Anvilmar's Rest: the "You are here (approx.)" marker
-	-- (UI/MapHere.lua) at the middle of that area.
+	-- Ruins of Lordaeron on Santiago Reyes' map with the player in one of its areas (the mock names an area "Area <ID>"):
+	-- the "You are here (approx.)" marker (UI/MapHere.lua) at the middle of that area.
 	{
 		name = "map-subzone",
 		setup = function()
@@ -906,17 +906,18 @@ V.views = {
 			ns.Providers.Reset()
 			ns.Providers.ResetCaches()
 			ns.ReyesMaps.Reset()
+			local data = ns.SubzoneData.ruinsoflordaeron
 			V.savedHere = { info = _G.GetInstanceInfo, zone = rawget(_G, "GetZoneText"), sub = mock.subzone }
 			_G.GetInstanceInfo = function()
-				return "The Hall of Thanes", "party", 1, "Normal", 5, 0, false, ns.SubzoneData.hallofthanes.iid
+				return "Ruins of Lordaeron", "party", 1, "Normal", 5, 0, false, data.iid
 			end
 			_G.GetZoneText = function()
-				return "The Hall of Thanes"
+				return "Ruins of Lordaeron"
 			end
-			mock.subzone = "Anvilmar's Rest"
+			mock.subzone = "Area " .. data[1].a
 			ns.Subzones.Reset()
 			mock.FireEvent("ZONE_CHANGED")
-			openPlan("hall-of-thanes", "map")
+			openPlan("ruins-of-lordaeron", "map")
 		end,
 		window = window,
 		teardown = function()

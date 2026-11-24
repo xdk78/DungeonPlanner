@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Dragonspire Hall",
+   "key": "w143322",
    "wmo": 143322,
-   "names": {
-    "deDE": [
-     "Die Dragonspirehalle"
-    ],
-    "esES": [
-     "Sala Dracopico"
-    ],
-    "esMX": [
-     "Sala Dracopico"
-    ],
-    "frFR": [
-     "Hall de la Flèche des dragons"
-    ],
-    "itIT": [
-     "Dragonspire Hall"
-    ],
-    "koKR": [
-     "용첨탑 전당"
-    ],
-    "ptBR": [
-     "Salão do Pináculo do Dragão"
-    ],
-    "ruRU": [
-     "Зал Драконов"
-    ],
-    "zhCN": [
-     "龙塔大厅"
-    ],
-    "zhTW": [
-     "龍塔大廳"
-    ]
-   },
+   "hashes": [
+    1750830740,
+    3956553275,
+    2554422824,
+    2554422824,
+    2426935773,
+    1750830740,
+    1302312600,
+    4259832935,
+    820438157,
+    51891705,
+    638105086
+   ],
    "at": [
     {
      "floor": 5,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Hall of Binding",
+   "key": "w143328",
    "wmo": 143328,
-   "names": {
-    "deDE": [
-     "Die Halle der Bindung"
-    ],
-    "esES": [
-     "Sala de Vínculos"
-    ],
-    "esMX": [
-     "Sala de Vínculos"
-    ],
-    "frFR": [
-     "Hall des liens"
-    ],
-    "itIT": [
-     "Hall of Binding"
-    ],
-    "koKR": [
-     "속박의 전당"
-    ],
-    "ptBR": [
-     "Salão da Vinculação"
-    ],
-    "ruRU": [
-     "Зал Оков"
-    ],
-    "zhCN": [
-     "禁锢之厅"
-    ],
-    "zhTW": [
-     "禁錮大廳"
-    ]
-   },
+   "hashes": [
+    775636450,
+    1205470765,
+    3205389423,
+    3205389423,
+    316576015,
+    775636450,
+    816346362,
+    4259102600,
+    965187891,
+    1637502114,
+    3967335843
+   ],
    "at": [
     {
      "floor": 6,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "The Rookery",
+   "key": "w143332",
    "wmo": 143332,
-   "names": {
-    "deDE": [
-     "Der Krähenhorst"
-    ],
-    "esES": [
-     "El Grajero"
-    ],
-    "esMX": [
-     "El Grajero"
-    ],
-    "frFR": [
-     "La colonie"
-    ],
-    "itIT": [
-     "The Rookery"
-    ],
-    "koKR": [
-     "부화장"
-    ],
-    "ptBR": [
-     "O Viveiro"
-    ],
-    "ruRU": [
-     "Гнездовье"
-    ],
-    "zhCN": [
-     "孵化间"
-    ],
-    "zhTW": [
-     "孵化間"
-    ]
-   },
+   "hashes": [
+    2017773665,
+    357806669,
+    2360603962,
+    2360603962,
+    953067919,
+    2017773665,
+    2271885015,
+    3010660034,
+    742641643,
+    806343525,
+    151972457
+   ],
    "at": [
     {
      "floor": 6,

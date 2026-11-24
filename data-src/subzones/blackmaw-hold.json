@@ -21,7 +21,7 @@
  "position": "game",
  "areas": [
   {
-   "name": "Blackmaw Grove",
+   "key": "a17311",
    "area": 17311,
    "at": [
     {
@@ -34,7 +34,7 @@
    ]
   },
   {
-   "name": "Blackmaw Stillwater",
+   "key": "a17312",
    "area": 17312,
    "at": [
     {
@@ -47,7 +47,7 @@
    ]
   },
   {
-   "name": "Bonesnout's Thicket",
+   "key": "a17313",
    "area": 17313,
    "at": [
     {
@@ -60,7 +60,7 @@
    ]
   },
   {
-   "name": "Defiled Peak",
+   "key": "a17309",
    "area": 17309,
    "at": [
     {
@@ -73,7 +73,7 @@
    ]
   },
   {
-   "name": "Festering Grotto",
+   "key": "a17310",
    "area": 17310,
    "at": [
     {
@@ -95,10 +95,10 @@
  ],
  "overrides": [
   {
-   "name": "Festering Grotto",
+   "key": "a17310",
    "floor": 1,
    "drop": true,
-   "why": "Its ground on this floor is the mountains around the map; the grotto itself is floor 2."
+   "why": "Its ground on this floor is the mountains around the map; the area itself is floor 2."
   }
  ],
  "exclude": []

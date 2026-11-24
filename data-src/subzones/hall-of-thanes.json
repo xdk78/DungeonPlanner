@@ -21,40 +21,21 @@
  "position": "game",
  "areas": [
   {
-   "name": "Anvilmar's Rest",
+   "key": "w140756",
    "wmo": 140756,
-   "names": {
-    "deDE": [
-     "Anvilmars Rast"
-    ],
-    "esES": [
-     "Reposo de Yunquemar"
-    ],
-    "esMX": [
-     "El Reposo de Yunquemar"
-    ],
-    "frFR": [
-     "Repos de Courbenclume"
-    ],
-    "itIT": [
-     "Anvilmar's Rest"
-    ],
-    "koKR": [
-     "앤빌마의 휴식처"
-    ],
-    "ptBR": [
-     "Repouso de Sidermar"
-    ],
-    "ruRU": [
-     "Обитель Старой Наковальни"
-    ],
-    "zhCN": [
-     "安威玛尔之眠"
-    ],
-    "zhTW": [
-     "安威瑪之眠"
-    ]
-   },
+   "hashes": [
+    3324822481,
+    1378206234,
+    1063778753,
+    1163681874,
+    4214041993,
+    3324822481,
+    3398749880,
+    1154526286,
+    571776646,
+    2494294803,
+    972261250
+   ],
    "at": [
     {
      "floor": 1,
@@ -66,40 +47,21 @@
    ]
   },
   {
-   "name": "Dark Iron Ingress",
+   "key": "w141320",
    "wmo": 141320,
-   "names": {
-    "deDE": [
-     "Der Dunkeleisenvorstoß"
-    ],
-    "esES": [
-     "Acceso Hierro Negro"
-    ],
-    "esMX": [
-     "Acceso a los Hierro Negro"
-    ],
-    "frFR": [
-     "Antre Sombrefer"
-    ],
-    "itIT": [
-     "Dark Iron Ingress"
-    ],
-    "koKR": [
-     "검은무쇠 침투지"
-    ],
-    "ptBR": [
-     "Passagem Ferro Negro"
-    ],
-    "ruRU": [
-     "Врата черного железа"
-    ],
-    "zhCN": [
-     "黑铁要道"
-    ],
-    "zhTW": [
-     "黑鐵入口"
-    ]
-   },
+   "hashes": [
+    1813960886,
+    2765299684,
+    2433958935,
+    1462990056,
+    2132172574,
+    1813960886,
+    4125825963,
+    3912866249,
+    3057758639,
+    1763060471,
+    1439574142
+   ],
    "at": [
     {
      "floor": 1,
@@ -111,40 +73,21 @@
    ]
   },
   {
-   "name": "Reliquary of Kings",
+   "key": "w140768",
    "wmo": 140768,
-   "names": {
-    "deDE": [
-     "Das Reliquiar der Könige"
-    ],
-    "esES": [
-     "Relicario de los Reyes"
-    ],
-    "esMX": [
-     "El Relicario de Reyes"
-    ],
-    "frFR": [
-     "Reliquaire des rois"
-    ],
-    "itIT": [
-     "Reliquary of Kings"
-    ],
-    "koKR": [
-     "왕가의 성물 보관소"
-    ],
-    "ptBR": [
-     "Relicário dos Reis"
-    ],
-    "ruRU": [
-     "Реликварий королей"
-    ],
-    "zhCN": [
-     "帝王圣物区"
-    ],
-    "zhTW": [
-     "諸王聖物間"
-    ]
-   },
+   "hashes": [
+    3990300882,
+    1967397685,
+    768297396,
+    2571290611,
+    424249321,
+    3990300882,
+    939308824,
+    575657929,
+    300357901,
+    1898010099,
+    3507490332
+   ],
    "at": [
     {
      "floor": 1,

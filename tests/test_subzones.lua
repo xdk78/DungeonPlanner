@@ -57,7 +57,7 @@ T.case("Subzones: every anchor lies on its recommended plan's drawn map", functi
 end)
 
 -- The client inside instance `iid` (or outside with nil), in zone `zone` and sub-zone `sub`, in client language `loc`;
--- `areas` answers C_Map.GetAreaInfo. Returns a function that puts the client back.
+-- `areas` answers C_Map.GetAreaInfo (else the mock's "Area <id>"). Returns a function that puts the client back.
 local function client(o)
 	local saved = { GetInstanceInfo = _G.GetInstanceInfo, GetZoneText = rawget(_G, "GetZoneText"),
 		GetAreaInfo = _G.C_Map.GetAreaInfo, subzone = mock.subzone, locale = mock.locale }
@@ -90,44 +90,65 @@ local function area(key, id)
 	error(key .. ": no area " .. id)
 end
 
-T.case("Subzones: an AreaTable area matches its name in the client's language, by ID (German client)", function()
+-- A made-up instance (test data, not the bundled anchors): WMO rooms with the hashes of names in two languages.
+local function testInstance(rooms)
+	local data = { iid = 9001 }
+	for i, r in ipairs(rooms) do
+		local h = {}
+		for loc, name in pairs(r.names) do
+			for n, l in ipairs(ns.SubzoneLocales) do
+				if l == loc then
+					h[n] = Subzones.Hash(name)
+				end
+			end
+		end
+		for n = 1, #ns.SubzoneLocales do
+			h[n] = h[n] or false
+		end
+		data[i] = { w = i, h = h, at = r.at }
+	end
+	ns.SubzoneData.testinstance = data
+	return { instance = { name = "Test Instance" }, floors = { { name = "One" }, { name = "Two" } } }
+end
+
+T.case("Subzones: an AreaTable area matches its name in the client's language, by ID", function()
 	local ruins = bundled("ruins-of-lordaeron")
-	local kings = area("ruinsoflordaeron", 16612)
-	local back = client({ iid = 2999, zone = "Ruinen von Lordaeron", sub = "Königsgasse", loc = "deDE",
-		areas = { [16612] = "Königsgasse" } })
+	local id = ruins and ns.SubzoneData.ruinsoflordaeron[1].a
+	local first = area("ruinsoflordaeron", id)
+	local back = client({ iid = 2999, zone = "Zone (de)", sub = "Area name (de)", loc = "deDE",
+		areas = { [id] = "Area name (de)" } })
 	local ok, err = pcall(function()
-		local here = Subzones.Here(ruins, kings.at[1][1])
+		local here = Subzones.Here(ruins, first.at[1][1])
 		T.ok(here, "found")
-		T.eq(here.name, "Königsgasse")
-		T.eq(here.x, kings.at[1][2])
-		T.eq(here.y, kings.at[1][3])
+		T.eq(here.name, "Area name (de)")
+		T.eq(here.x, first.at[1][2])
+		T.eq(here.y, first.at[1][3])
 		-- A plan of the same instance that is not the recommended one (a copy, a plan made inside) gets it too.
-		T.ok(Subzones.Here({ instance = { name = ruins.instance.name }, floors = ruins.floors }, kings.at[1][1]), "own plan")
-		mock.subzone = "King's Alley"
-		T.eq(Subzones.Here(ruins, kings.at[1][1]), nil, "the English name is not this client's")
+		T.ok(Subzones.Here({ instance = { name = ruins.instance.name }, floors = ruins.floors }, first.at[1][1]), "own plan")
+		mock.subzone = "Area name (en)"
+		T.eq(Subzones.Here(ruins, first.at[1][1]), nil, "another language's name")
 	end)
 	back()
 	T.ok(ok, tostring(err))
 end)
 
-T.case("Subzones: a WMO area matches the names the data carries for the client's language", function()
-	local hall = bundled("hall-of-thanes")
-	local rest = area("hallofthanes", 140756)
-	T.eq(rest.a, nil, "a WMO area with no AreaTable row")
-	local back = client({ iid = 3065, zone = "Die Halle der Thanen", sub = "Anvilmars Rast", loc = "deDE" })
+T.case("Subzones: a WMO area matches the hashes of the client's language", function()
+	local plan = testInstance({ { names = { enUS = "Room", deDE = "Raum" }, at = { { 1, 0.4, 0.6 } } } })
+	local back = client({ iid = 9001, zone = "Zone", sub = "Raum", loc = "deDE" })
 	local ok, err = pcall(function()
-		T.eq(Subzones.Here(hall, 1).x, rest.at[1][2], "German")
-		mock.subzone = "  Anvilmars Rast "
-		T.ok(Subzones.Here(hall, 1), "trimmed, as the generator trims")
-		mock.subzone = "Anvilmar's Rest"
-		T.eq(Subzones.Here(hall, 1), nil, "English text on a German client")
+		T.eq(Subzones.Here(plan, 1).x, 0.4, "German")
+		mock.subzone = "  Raum "
+		T.ok(Subzones.Here(plan, 1), "trimmed, as the tool trims")
+		mock.subzone = "Room"
+		T.eq(Subzones.Here(plan, 1), nil, "English text on a German client")
 		mock.locale = "enGB"
 		Subzones.Reset()
-		T.ok(Subzones.Here(hall, 1), "a British client reads the English names")
+		T.ok(Subzones.Here(plan, 1), "a British client reads the English names")
 		mock.locale = "xxXX"
 		Subzones.Reset()
-		T.eq(Subzones.Here(hall, 1), nil, "a language the data has no names for")
+		T.eq(Subzones.Here(plan, 1), nil, "a language the data has no names for")
 	end)
+	ns.SubzoneData.testinstance = nil
 	back()
 	T.ok(ok, tostring(err))
 end)
@@ -146,7 +167,9 @@ local function xor32(a, b)
 end
 
 T.case("Subzones: the name hash is 32-bit FNV-1a, with the game's bit library and without", function()
-	local vectors = { [""] = 0x811c9dc5, a = 0xe40c292c, foobar = 0xbf9cf968 }
+	-- The same vectors tools/subzone_anchors.py checks its own hash with, so the two agree.
+	local vectors = dofile("tools/gen_spawns.lua").DecodeJSON(assert(io.open("tests/fnv1a_vectors.json", "rb")):read("*a"))
+	T.ok(#vectors >= 8, "vectors")
 	local saved = rawget(_G, "bit")
 	local ok, err = pcall(function()
 		for _, withBit in ipairs({ false, true }) do
@@ -155,69 +178,45 @@ T.case("Subzones: the name hash is 32-bit FNV-1a, with the game's bit library an
 				local v = xor32(a % 4294967296, b % 4294967296)
 				return v >= 2147483648 and v - 4294967296 or v
 			end } or nil
-			for text, want in pairs(vectors) do
-				T.eq(Subzones.Hash(text), want, (withBit and "bit: " or "plain: ") .. text)
+			for _, v in ipairs(vectors) do
+				T.eq(Subzones.Hash(v.text), v.hash, (withBit and "bit: " or "plain: ") .. v.text)
 			end
-			-- UTF-8 bytes as they are: a German name with an umlaut.
-			local h = Subzones.Hash("Königsgasse")
-			T.ok(h >= 0 and h < 4294967296 and h == math.floor(h), "a 32-bit value")
 		end
-		_G.bit = nil
-		local plain = Subzones.Hash("Königsgasse")
-		_G.bit = { bxor = function(a, b)
-			return xor32(a % 4294967296, b)
-		end }
-		T.eq(Subzones.Hash("Königsgasse"), plain, "both paths agree")
 	end)
 	_G.bit = saved
 	T.ok(ok, tostring(err))
 end)
 
-T.case("Subzones: the shipped data holds hashes of the client's names, never a name", function()
+T.case("Subzones: only numbers in the data: IDs, positions, hashes, never a name", function()
 	local f = assert(io.open("Data/SubzoneData.lua", "rb"))
-	local text = f:read("*a")
+	local code = f:read("*a"):gsub("%-%-[^\n]*", "")
 	f:close()
-	local code = text:gsub("%-%-[^\n]*", "")
 	local strings = {}
 	for s in code:gmatch('"([^"]*)"') do
 		strings[#strings + 1] = s
 	end
 	T.eq(#strings, #ns.SubzoneLocales, "the only strings are the language codes: " .. table.concat(strings, ", "))
-	-- Every WMO area's hashes are those of its names in data-src, in every language the file has.
-	local G = dofile("tools/gen_subzones.lua")
+	-- data-src too: the tool writes hashes and keeps the names in its work folder.
 	local spawns = dofile("tools/gen_spawns.lua")
-	local checked = 0
-	for _, file in ipairs(dofile("tools/gen_bosses.lua").ListFiles("data-src/subzones", ".json")) do
+	local files = dofile("tools/gen_bosses.lua").ListFiles("data-src/subzones", ".json")
+	T.ok(#files >= 25, "files: " .. #files)
+	for _, file in ipairs(files) do
 		local doc = spawns.DecodeJSON(assert(io.open("data-src/subzones/" .. file, "rb")):read("*a"))
-		local research = spawns.DecodeJSON(assert(io.open("data-src/dungeons/" .. file, "rb")):read("*a"))
-		local data = ns.SubzoneData[spawns.InstanceKey(research.name)]
-		for _, a in ipairs(data and doc.areas or {}) do
-			for _, shipped in ipairs(data) do
-				if a.wmo and shipped.w == a.wmo then
-					for i, loc in ipairs(ns.SubzoneLocales) do
-						local names = loc == "enUS" and { a.name } or a.names and a.names[loc] or {}
-						local h = shipped.h[i]
-						for _, n in ipairs(names) do
-							local v = G.Hash(n)
-							T.ok(h == v or (type(h) == "table" and (h[1] == v or h[2] == v or h[3] == v or h[4] == v)),
-								file .. ": " .. a.name .. " in " .. loc)
-							checked = checked + 1
-						end
-					end
-				end
+		for _, a in ipairs(doc.areas) do
+			T.ok(a.name == nil and a.names == nil, file .. ": " .. tostring(a.key) .. " carries no name")
+		end
+		for _, field in ipairs({ "overrides", "exclude" }) do
+			for _, x in ipairs(doc[field] or {}) do
+				T.ok(x.name == nil and type(x.key) == "string", file .. ": a hand fix by key")
 			end
 		end
 	end
-	T.ok(checked > 500, "names checked: " .. checked)
 end)
 
 T.case("Subzones: a name several areas share places the one on the floor shown", function()
-	ns.SubzoneData.testinstance = { iid = 9001,
-		{ w = 1, at = { { 1, 0.1, 0.1 } }, h = { Subzones.Hash("Hall") } },
-		{ w = 2, at = { { 2, 0.9, 0.9 } }, h = { Subzones.Hash("Hall") } },
-	}
-	local plan = { instance = { name = "Test Instance" }, floors = { { name = "One" }, { name = "Two" } } }
-	local back = client({ iid = 9001, zone = "Test Instance", sub = "Hall" })
+	local plan = testInstance({ { names = { enUS = "Hall" }, at = { { 1, 0.1, 0.1 } } },
+		{ names = { enUS = "Hall" }, at = { { 2, 0.9, 0.9 } } } })
+	local back = client({ iid = 9001, zone = "Zone", sub = "Hall" })
 	local ok, err = pcall(function()
 		T.eq(#Subzones.Find(Subzones.For(plan), Subzones.Where()), 2, "both match")
 		T.eq(Subzones.Here(plan, 1).x, 0.1, "floor 1")
@@ -229,12 +228,13 @@ T.case("Subzones: a name several areas share places the one on the floor shown",
 end)
 
 T.case("Subzones: a secret sub-zone, or one named like the zone, places nothing", function()
-	local hall = bundled("hall-of-thanes")
+	local ruins = bundled("ruins-of-lordaeron")
+	local a = ns.SubzoneData.ruinsoflordaeron[1]
 	local secret = {}
-	local back = client({ iid = 3065, zone = "The Hall of Thanes", sub = "Anvilmar's Rest" })
+	local back = client({ iid = 2999, zone = "Zone", sub = "Area " .. a.a })
 	local saved, sub, mini = rawget(_G, "issecretvalue"), _G.GetSubZoneText, _G.GetMinimapZoneText
 	local ok, err = pcall(function()
-		T.ok(Subzones.Here(hall, 1), "plain")
+		T.ok(Subzones.Here(ruins, a.at[1][1]), "plain")
 		_G.issecretvalue = function(v)
 			return v == secret
 		end
@@ -243,10 +243,10 @@ T.case("Subzones: a secret sub-zone, or one named like the zone, places nothing"
 		end
 		_G.GetMinimapZoneText = _G.GetSubZoneText
 		T.eq(Subzones.Where().subzone, nil, "secret dropped")
-		T.eq(Subzones.Here(hall, 1), nil, "no marker")
+		T.eq(Subzones.Here(ruins, a.at[1][1]), nil, "no marker")
 		_G.issecretvalue, _G.GetSubZoneText, _G.GetMinimapZoneText = saved, sub, mini
-		mock.subzone = "The Hall of Thanes"
-		T.eq(Subzones.Here(hall, 1), nil, "the zone itself")
+		mock.subzone = "Zone"
+		T.eq(Subzones.Here(ruins, a.at[1][1]), nil, "the zone itself")
 		mock.subzone = ""
 		T.eq(Subzones.Where().subzone, nil, "no sub-zone")
 	end)
@@ -256,16 +256,18 @@ T.case("Subzones: a secret sub-zone, or one named like the zone, places nothing"
 end)
 
 T.case("Subzones: nothing outside the plan's instance or on a floor without the area", function()
-	local hall, maw = bundled("hall-of-thanes"), bundled("blackmaw-hold")
-	local back = client({ iid = nil, zone = "Ironforge", sub = "Anvilmar's Rest" })
-	T.eq(Subzones.Here(hall, 1), nil, "outside any instance")
+	local ruins, maw = bundled("ruins-of-lordaeron"), bundled("blackmaw-hold")
+	local a = ns.SubzoneData.ruinsoflordaeron[1]
+	local back = client({ iid = nil, zone = "Zone", sub = "Area " .. a.a })
+	T.eq(Subzones.Here(ruins, a.at[1][1]), nil, "outside any instance")
 	back()
-	back = client({ iid = 2974, zone = "Blackmaw Hold", sub = "Anvilmar's Rest" })
-	T.eq(Subzones.Here(hall, 1), nil, "inside another instance")
+	back = client({ iid = 2974, zone = "Zone", sub = "Area " .. a.a })
+	T.eq(Subzones.Here(ruins, a.at[1][1]), nil, "inside another instance")
 	back()
+	-- Blackmaw Hold: an area whose ground on floor 1 is the mountains has its anchor only on its cave floor.
 	local grotto = area("blackmawhold", 17310)
-	T.eq(#grotto.at, 1, "only the grotto's own floor")
-	back = client({ iid = 2974, zone = "Blackmaw Hold", sub = "Festering Grotto", areas = { [17310] = "Festering Grotto" } })
+	T.eq(#grotto.at, 1, "only its cave floor")
+	back = client({ iid = 2974, zone = "Zone", sub = "Area 17310" })
 	local ok, err = pcall(function()
 		T.ok(Subzones.Here(maw, grotto.at[1][1]), "its floor")
 		T.eq(Subzones.Here(maw, 1), nil, "another floor")
@@ -297,11 +299,12 @@ end
 
 T.case("Subzones: the map's marker, its events only while the map shows, a zone change moves it", function()
 	boot()
-	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "hall-of-thanes")
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "ruins-of-lordaeron")
 	ns.UI.SelectTab("map")
 	ns.UI.RefreshPage()
 	local view = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
-	local back = client({ iid = 3065, zone = "The Hall of Thanes", sub = "Anvilmar's Rest" })
+	local data = ns.SubzoneData.ruinsoflordaeron
+	local back = client({ iid = 2999, zone = "Zone", sub = "Area " .. data[1].a })
 	local ok, err = pcall(function()
 		mock.FireEvent("ZONE_CHANGED_NEW_AREA")
 		view:DrawContent()
@@ -341,14 +344,14 @@ T.case("Subzones: the map's marker, its events only while the map shows, a zone 
 		view:HereHover(nil)
 		tt.SetOwner, tt.IsOwned = setOwner, isOwned
 		local _, _, _, x1, y1 = view.here:GetPoint(1)
-		mock.subzone = "Reliquary of Kings"
+		mock.subzone = "Area " .. data[2].a
 		mock.FireEvent("ZONE_CHANGED_INDOORS")
 		local _, _, _, x2, y2 = view.here:GetPoint(1)
 		T.ok(view.here:IsShown() and (x1 ~= x2 or y1 ~= y2), "moved to the new area")
 		mock.subzone = ""
 		mock.FireEvent("ZONE_CHANGED")
 		T.ok(not view.here:IsShown(), "hidden without a sub-zone")
-		mock.subzone = "Anvilmar's Rest"
+		mock.subzone = "Area " .. data[1].a
 		mock.FireEvent("ZONE_CHANGED")
 		ns.db.settings.mapHere = false
 		view:DrawContent()
@@ -384,34 +387,45 @@ end)
 T.case("Subzones: the generator checks its files, applies the hand fixes and is up to date", function()
 	local G = dofile("tools/gen_subzones.lua")
 	local research = { instanceMapID = 3065 }
+	local h = { 1, 2, false, { 3, 4 }, 5, 6, 7, 8, 9, 10, 11 }
 	local good = { schema = 1, slug = "x", instanceMapID = 3065, position = "game",
 		sources = { { id = "wago", name = "w", licence = "l" }, { id = "game", name = "g", licence = "l" } },
-		areas = { { name = "Room", wmo = 5, names = { deDE = { "Raum" } }, at = { { floor = 1, x = 0.5, y = 0.5 } } },
-			{ name = "Hall", area = 7, at = { { floor = 1, x = 0.2, y = 0.2 }, { floor = 2, x = 0.3, y = 0.3 } } } },
-		overrides = { { name = "Hall", floor = 2, drop = true, why = "a reason" },
-			{ name = "Room", floor = 1, x = 0.6, y = 0.4, src = "own", why = "read on the map" } },
+		areas = { { key = "w5", wmo = 5, hashes = h, at = { { floor = 1, x = 0.5, y = 0.5 } } },
+			{ key = "a7", area = 7, at = { { floor = 1, x = 0.2, y = 0.2 }, { floor = 2, x = 0.3, y = 0.3 } } } },
+		overrides = { { key = "a7", floor = 2, drop = true, why = "a reason" },
+			{ key = "w5", floor = 1, x = 0.6, y = 0.4, src = "own", why = "read on the map" } },
 		exclude = {} }
-	T.eq(#G.Validate(good, "x.json", research, 2), 0, "valid")
+	T.eq(#G.Validate(good, "x.json", research, 2), 0, "valid: " .. table.concat(G.Validate(good, "x.json", research, 2), "; "))
 	local anchors = G.Anchors(good)
 	T.eq(#anchors, 2)
-	T.eq(#anchors[1].at, 1, "Hall: floor 2 dropped")
-	T.eq(anchors[2].at[1][2], 0.6, "Room: moved by hand")
-	good.exclude = { { name = "Room", why = "off the map" } }
+	T.eq(#anchors[1].at, 1, "a7: floor 2 dropped")
+	T.eq(anchors[2].at[1][2], 0.6, "w5: moved by hand")
+	good.exclude = { { key = "w5", why = "off the map" } }
 	T.eq(#G.Anchors(good), 1, "excluded")
+	-- Bad hashes: too few, out of range, a one-element list, a name.
+	for _, bad in ipairs({ { 1, 2 }, { 2 ^ 32, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { { 1 }, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ "Room", 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }) do
+		good.areas[1].hashes = bad
+		T.eq(#G.Validate(good, "x.json", research, 2), 1, "bad hashes refused")
+	end
+	good.areas[1].hashes = h
+	good.areas[1].name = "Room"
+	T.eq(#G.Validate(good, "x.json", research, 2), 1, "a name refused")
+	good.areas[1].name = nil
 	local bad = { schema = 1, slug = "y", instanceMapID = 1, position = "web", sources = {},
-		areas = { { name = "Room", wmo = 5, at = { { floor = 3, x = 1.5, y = 0 } } } },
-		overrides = { { name = "Nowhere", floor = 1, why = "x" } }, exclude = { { name = "Room" } } }
+		areas = { { key = "w6", wmo = 5, at = { { floor = 3, x = 1.5, y = 0 } } } },
+		overrides = { { key = "a1", floor = 1, why = "x" } }, exclude = { { key = "w5" } } }
 	local errs = G.Validate(bad, "x.json", research, 2)
-	T.ok(#errs >= 7, "slug, map ID, sources, position, names, anchor, override, exclude: " .. table.concat(errs, "; "))
+	T.ok(#errs >= 8, "slug, map ID, sources, position, key, hashes, anchor, override, exclude: " .. table.concat(errs, "; "))
 	-- Names that hash alike in one language: an error unless both areas have the same anchors.
-	local twins = { { name = "A", wmo = 1, names = { deDE = { "Halle" } }, at = { { floor = 1, x = 0.1, y = 0.1 } } },
-		{ name = "B", wmo = 2, names = { deDE = { "Halle" } }, at = { { floor = 1, x = 0.5, y = 0.5 } } } }
-	local doc = { areas = twins, overrides = {}, exclude = {} }
-	T.eq(#G.Collisions(G.Anchors(doc), "x.json"), 1, "deDE shared, other anchors")
-	twins[2].at = { { floor = 1, x = 0.1, y = 0.1 } }
-	T.eq(#G.Collisions(G.Anchors(doc), "x.json"), 0, "the same anchors")
-	T.eq(G.Anchors(doc)[1].hashes[2], G.Hash("Halle"), "the hash of its name, in its language's place")
-	T.eq(G.Anchors(doc)[1].hashes[3], false, "no name in that language")
+	local twins = { areas = {
+		{ key = "w1", wmo = 1, hashes = { 9, 100, false, false, false, false, false, false, false, false, false },
+			at = { { floor = 1, x = 0.1, y = 0.1 } } },
+		{ key = "w2", wmo = 2, hashes = { 8, { 100, 101 }, false, false, false, false, false, false, false, false, false },
+			at = { { floor = 1, x = 0.5, y = 0.5 } } } }, overrides = {}, exclude = {} }
+	T.eq(#G.Collisions(G.Anchors(twins), "x.json"), 1, "deDE shared, other anchors")
+	twins.areas[2].at = { { floor = 1, x = 0.1, y = 0.1 } }
+	T.eq(#G.Collisions(G.Anchors(twins), "x.json"), 0, "the same anchors")
 	local p = assert(io.popen("lua tools/gen_subzones.lua --check 2>&1"))
 	local out = p:read("*a")
 	p:close()

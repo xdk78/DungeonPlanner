@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Chamber of the Dreamer",
+   "key": "w131783",
    "wmo": 131783,
-   "names": {
-    "deDE": [
-     "Die Kammer des Träumers"
-    ],
-    "esES": [
-     "Cámara de los Sueños"
-    ],
-    "esMX": [
-     "Cámara de los Sueños"
-    ],
-    "frFR": [
-     "Chambre du rêveur"
-    ],
-    "itIT": [
-     "Chamber of the Dreamer"
-    ],
-    "koKR": [
-     "꿈꾸는 자의 방"
-    ],
-    "ptBR": [
-     "Câmara do Sonhador"
-    ],
-    "ruRU": [
-     "Чертог Дремлющего"
-    ],
-    "zhCN": [
-     "沉睡者之厅"
-    ],
-    "zhTW": [
-     "沉睡者之廳"
-    ]
-   },
+   "hashes": [
+    3157458989,
+    1700550839,
+    1760656199,
+    1760656199,
+    542317207,
+    3157458989,
+    2255323510,
+    2706938875,
+    3445286804,
+    902497816,
+    3957745687
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Hall of Serpents",
+   "key": "w131785",
    "wmo": 131785,
-   "names": {
-    "deDE": [
-     "Die Halle der Schlangen"
-    ],
-    "esES": [
-     "Sala de las Serpientes"
-    ],
-    "esMX": [
-     "Sala de las Serpientes"
-    ],
-    "frFR": [
-     "Hall des serpents"
-    ],
-    "itIT": [
-     "Hall of Serpents"
-    ],
-    "koKR": [
-     "뱀의 전당"
-    ],
-    "ptBR": [
-     "Salão das Serpentes"
-    ],
-    "ruRU": [
-     "Зал Змей"
-    ],
-    "zhCN": [
-     "毒蛇大厅"
-    ],
-    "zhTW": [
-     "毒蛇大廳"
-    ]
-   },
+   "hashes": [
+    3423664541,
+    4145793149,
+    358929609,
+    358929609,
+    3248161722,
+    3423664541,
+    248898773,
+    1580271721,
+    4183020634,
+    1220367510,
+    1653187105
+   ],
    "at": [
     {
      "floor": 1,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Hall of the Cursed",
+   "key": "w131797",
    "wmo": 131797,
-   "names": {
-    "deDE": [
-     "Die Halle der Verfluchten"
-    ],
-    "esES": [
-     "Sala de los Malditos"
-    ],
-    "esMX": [
-     "Sala de los Malditos"
-    ],
-    "frFR": [
-     "Hall des maudits"
-    ],
-    "itIT": [
-     "Hall of the Cursed"
-    ],
-    "koKR": [
-     "저주받은 자의 전당"
-    ],
-    "ptBR": [
-     "Salão dos Amaldiçoados"
-    ],
-    "ruRU": [
-     "Зал Проклятых"
-    ],
-    "zhCN": [
-     "诅咒大厅"
-    ],
-    "zhTW": [
-     "詛咒大廳"
-    ]
-   },
+   "hashes": [
+    2925583390,
+    1033114220,
+    2147096,
+    2147096,
+    2634562241,
+    2925583390,
+    2029100475,
+    2052539600,
+    1877711615,
+    3113903110,
+    2756579917
+   ],
    "at": [
     {
      "floor": 1,
@@ -157,40 +100,21 @@
    ]
   },
   {
-   "name": "Lair of the Chosen",
+   "key": "w131784",
    "wmo": 131784,
-   "names": {
-    "deDE": [
-     "Der Unterschlupf des Auserwählten"
-    ],
-    "esES": [
-     "Guarida de los Elegidos"
-    ],
-    "esMX": [
-     "Guarida de los Elegidos"
-    ],
-    "frFR": [
-     "Repaire de l’Élu"
-    ],
-    "itIT": [
-     "Lair of the Chosen"
-    ],
-    "koKR": [
-     "선택받은 자의 보금자리"
-    ],
-    "ptBR": [
-     "Covil dos Escolhidos"
-    ],
-    "ruRU": [
-     "Обитель Избранного"
-    ],
-    "zhCN": [
-     "天选者之巢"
-    ],
-    "zhTW": [
-     "天選者之巢"
-    ]
-   },
+   "hashes": [
+    4269125325,
+    1228105512,
+    2379585119,
+    2379585119,
+    358619968,
+    4269125325,
+    560581319,
+    1953016333,
+    1668696366,
+    4026693226,
+    3321605264
+   ],
    "at": [
     {
      "floor": 1,
@@ -202,40 +126,21 @@
    ]
   },
   {
-   "name": "Sanctum of the Fallen God",
+   "key": "w131782",
    "wmo": 131782,
-   "names": {
-    "deDE": [
-     "Das Sanktum des Gefallenen Gottes"
-    ],
-    "esES": [
-     "Sagrario del Dios Caído"
-    ],
-    "esMX": [
-     "Sagrario del Dios Caído"
-    ],
-    "frFR": [
-     "Sanctuaire du dieu déchu"
-    ],
-    "itIT": [
-     "Sanctum of the Fallen God"
-    ],
-    "koKR": [
-     "죽은 신의 성소"
-    ],
-    "ptBR": [
-     "Sacrário do Deus Caído"
-    ],
-    "ruRU": [
-     "Святилище Падшего Бога"
-    ],
-    "zhCN": [
-     "堕神圣地"
-    ],
-    "zhTW": [
-     "墮神聖地"
-    ]
-   },
+   "hashes": [
+    3187141038,
+    836981793,
+    1394115020,
+    1394115020,
+    4081096232,
+    3187141038,
+    3562779535,
+    1466664251,
+    1497695679,
+    1366124270,
+    1184955120
+   ],
    "at": [
     {
      "floor": 1,
@@ -247,40 +152,21 @@
    ]
   },
   {
-   "name": "The Pit of Refuse",
+   "key": "w131883",
    "wmo": 131883,
-   "names": {
-    "deDE": [
-     "Die Grube der Weigerung"
-    ],
-    "esES": [
-     "La Fosa del Rechazo"
-    ],
-    "esMX": [
-     "La Fosa del Rechazo"
-    ],
-    "frFR": [
-     "La Fosse aux ordures"
-    ],
-    "itIT": [
-     "The Pit of Refuse"
-    ],
-    "koKR": [
-     "앙금의 구덩이"
-    ],
-    "ptBR": [
-     "O Poço de Refugo"
-    ],
-    "ruRU": [
-     "Мусорная яма"
-    ],
-    "zhCN": [
-     "抛弃之池"
-    ],
-    "zhTW": [
-     "拋棄之池"
-    ]
-   },
+   "hashes": [
+    1850129146,
+    550373786,
+    2648431762,
+    2648431762,
+    2184672824,
+    1850129146,
+    500226905,
+    3085504301,
+    2677220321,
+    2550536779,
+    427633571
+   ],
    "at": [
     {
      "floor": 1,
@@ -292,40 +178,21 @@
    ]
   },
   {
-   "name": "The Pit of Sacrifice",
+   "key": "w131873",
    "wmo": 131873,
-   "names": {
-    "deDE": [
-     "Die Grube der Opferung"
-    ],
-    "esES": [
-     "La Fosa de los Sacrificios"
-    ],
-    "esMX": [
-     "La Fosa de los Sacrificios"
-    ],
-    "frFR": [
-     "La Fosse aux sacrifices"
-    ],
-    "itIT": [
-     "The Pit of Sacrifice"
-    ],
-    "koKR": [
-     "희생의 구덩이"
-    ],
-    "ptBR": [
-     "O Fosso do Sacrifício"
-    ],
-    "ruRU": [
-     "Жертвенный колодец"
-    ],
-    "zhCN": [
-     "牺牲之池"
-    ],
-    "zhTW": [
-     "獻祭坑"
-    ]
-   },
+   "hashes": [
+    3525097275,
+    3348993581,
+    2322294085,
+    2322294085,
+    32279794,
+    3525097275,
+    1065438183,
+    925923854,
+    4134711627,
+    2748230082,
+    231163122
+   ],
    "at": [
     {
      "floor": 1,

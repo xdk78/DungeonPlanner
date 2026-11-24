@@ -21,7 +21,7 @@
  "position": "game",
  "areas": [
   {
-   "name": "Botanical Grounds",
+   "key": "a16937",
    "area": 16937,
    "at": [
     {
@@ -34,40 +34,21 @@
    ]
   },
   {
-   "name": "Hall of Repose",
+   "key": "w44787",
    "wmo": 44787,
-   "names": {
-    "deDE": [
-     "Halle der Muße"
-    ],
-    "esES": [
-     "Sala del Descanso"
-    ],
-    "esMX": [
-     "Sala del Descanso"
-    ],
-    "frFR": [
-     "Hall de la quiétude"
-    ],
-    "itIT": [
-     "Hall of Repose"
-    ],
-    "koKR": [
-     "영면의 전당"
-    ],
-    "ptBR": [
-     "Salão do Repouso"
-    ],
-    "ruRU": [
-     "Зал Спокойствия"
-    ],
-    "zhCN": [
-     "休眠大厅"
-    ],
-    "zhTW": [
-     "安詳大廳"
-    ]
-   },
+   "hashes": [
+    2109503581,
+    705695297,
+    748718921,
+    748718921,
+    4293902401,
+    2109503581,
+    3148338078,
+    965135842,
+    1346126643,
+    71168929,
+    1928336968
+   ],
    "at": [
     {
      "floor": 1,
@@ -79,7 +60,7 @@
    ]
   },
   {
-   "name": "Marshal's Refuge",
+   "key": "a541",
    "area": 541,
    "at": [
     {
@@ -92,7 +73,7 @@
    ]
   },
   {
-   "name": "Pillar of Assimilation",
+   "key": "a16929",
    "area": 16929,
    "at": [
     {
@@ -105,41 +86,22 @@
    ]
   },
   {
-   "name": "Roguefeather Den",
+   "key": "a487",
    "area": 487,
    "wmo": 19261,
-   "names": {
-    "deDE": [
-     "Bau der Wildfedern"
-    ],
-    "esES": [
-     "Guarida Malapluma"
-    ],
-    "esMX": [
-     "Guarida Malapluma"
-    ],
-    "frFR": [
-     "Tanière des Volplumes"
-    ],
-    "itIT": [
-     "Roguefeather Den"
-    ],
-    "koKR": [
-     "하피 동굴"
-    ],
-    "ptBR": [
-     "Covil Plumerrante"
-    ],
-    "ruRU": [
-     "Логово Легкоперых"
-    ],
-    "zhCN": [
-     "飞羽洞穴"
-    ],
-    "zhTW": [
-     "飛羽洞穴"
-    ]
-   },
+   "hashes": [
+    922445935,
+    56973682,
+    2765206944,
+    2765206944,
+    3209835062,
+    922445935,
+    2152620432,
+    3155277987,
+    3706221529,
+    3094856859,
+    1255973138
+   ],
    "at": [
     {
      "floor": 1,
@@ -151,7 +113,7 @@
    ]
   },
   {
-   "name": "Ruby Spring",
+   "key": "a16932",
    "area": 16932,
    "at": [
     {
@@ -164,7 +126,7 @@
    ]
   },
   {
-   "name": "Shaper's Plateau",
+   "key": "a16928",
    "area": 16928,
    "at": [
     {
@@ -177,7 +139,7 @@
    ]
   },
   {
-   "name": "The Highlands Causeway",
+   "key": "a16934",
    "area": 16934,
    "at": [
     {
@@ -190,7 +152,7 @@
    ]
   },
   {
-   "name": "The Verdant Plains",
+   "key": "a16930",
    "area": 16930,
    "at": [
     {
@@ -203,7 +165,7 @@
    ]
   },
   {
-   "name": "Walk of Communion",
+   "key": "a16933",
    "area": 16933,
    "at": [
     {
@@ -216,7 +178,7 @@
    ]
   },
   {
-   "name": "Watcher's Overlook",
+   "key": "a16935",
    "area": 16935,
    "at": [
     {

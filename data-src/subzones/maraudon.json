@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Earth Song Falls",
+   "key": "w31451",
    "wmo": 31451,
-   "names": {
-    "deDE": [
-     "Fälle des irdenen Gesangs"
-    ],
-    "esES": [
-     "Cascadas del Canto de la Tierra"
-    ],
-    "esMX": [
-     "Cascadas del Canto de la Tierra"
-    ],
-    "frFR": [
-     "Chutes de Chanteterre"
-    ],
-    "itIT": [
-     "Earth Song Falls"
-    ],
-    "koKR": [
-     "대지노래 폭포"
-    ],
-    "ptBR": [
-     "Cachoeiras do Canção Telúrica"
-    ],
-    "ruRU": [
-     "Поющие водопады"
-    ],
-    "zhCN": [
-     "地歌瀑布"
-    ],
-    "zhTW": [
-     "地歌瀑布"
-    ]
-   },
+   "hashes": [
+    2950065850,
+    905794096,
+    2656388439,
+    2656388439,
+    2536810205,
+    2950065850,
+    1298506487,
+    1601494164,
+    708701595,
+    431585359,
+    431585359
+   ],
    "at": [
     {
      "floor": 2,
@@ -67,42 +48,27 @@
    ]
   },
   {
-   "name": "Foulspore Cavern",
+   "key": "w31472",
    "wmo": 31472,
-   "names": {
-    "deDE": [
-     "Faulsporenhöhle"
+   "hashes": [
+    3169074041,
+    3677649980,
+    3825386876,
+    3825386876,
+    3758530265,
+    3169074041,
+    [
+     2298053200,
+     3786470302
     ],
-    "esES": [
-     "Gruta de la Espora Fétida"
+    2681980732,
+    4201835511,
+    [
+     2118845008,
+     2254198862
     ],
-    "esMX": [
-     "Gruta de la Espora Fétida"
-    ],
-    "frFR": [
-     "Caverne Vilespores"
-    ],
-    "itIT": [
-     "Foulspore Cavern"
-    ],
-    "koKR": [
-     "썩은버섯 동굴",
-     "썩은포자 동굴"
-    ],
-    "ptBR": [
-     "Caverna Esporelama"
-    ],
-    "ruRU": [
-     "Зловонная пещера"
-    ],
-    "zhCN": [
-     "毒孢洞穴",
-     "毒菇洞穴"
-    ],
-    "zhTW": [
-     "毒菇洞穴"
-    ]
-   },
+    2254198862
+   ],
    "at": [
     {
      "floor": 1,
@@ -114,40 +80,21 @@
    ]
   },
   {
-   "name": "Poison Falls",
+   "key": "w31493",
    "wmo": 31493,
-   "names": {
-    "deDE": [
-     "Giftfälle"
-    ],
-    "esES": [
-     "Cascada Hedionda"
-    ],
-    "esMX": [
-     "Cascada Hedionda"
-    ],
-    "frFR": [
-     "Chutes empoisonnées"
-    ],
-    "itIT": [
-     "Poison Falls"
-    ],
-    "koKR": [
-     "맹독 폭포"
-    ],
-    "ptBR": [
-     "Cachoeira Venenosa"
-    ],
-    "ruRU": [
-     "Ядопады"
-    ],
-    "zhCN": [
-     "毒水瀑布"
-    ],
-    "zhTW": [
-     "毒水瀑布"
-    ]
-   },
+   "hashes": [
+    845216059,
+    2337384043,
+    150933269,
+    150933269,
+    2973137215,
+    845216059,
+    3861234280,
+    2252672407,
+    4285398999,
+    4191483482,
+    4191483482
+   ],
    "at": [
     {
      "floor": 1,
@@ -159,40 +106,21 @@
    ]
   },
   {
-   "name": "The Noxious Hollow",
+   "key": "w31485",
    "wmo": 31485,
-   "names": {
-    "deDE": [
-     "Die giftige Senke"
-    ],
-    "esES": [
-     "Hoya Ponzoñosa"
-    ],
-    "esMX": [
-     "Hoya Ponzoñosa"
-    ],
-    "frFR": [
-     "Le creux empoisonné"
-    ],
-    "itIT": [
-     "The Noxious Hollow"
-    ],
-    "koKR": [
-     "맹독의 동굴"
-    ],
-    "ptBR": [
-     "O Vale Nocivo"
-    ],
-    "ruRU": [
-     "Ядовитая низина"
-    ],
-    "zhCN": [
-     "毒水谷"
-    ],
-    "zhTW": [
-     "毒水谷"
-    ]
-   },
+   "hashes": [
+    188284288,
+    1855360722,
+    79396217,
+    79396217,
+    3662460411,
+    188284288,
+    831280472,
+    465151456,
+    2412860660,
+    1947531547,
+    1947531547
+   ],
    "at": [
     {
      "floor": 1,
@@ -204,41 +132,24 @@
    ]
   },
   {
-   "name": "The Wicked Grotto",
+   "key": "w31476",
    "wmo": 31476,
-   "names": {
-    "deDE": [
-     "Die tückische Grotte"
+   "hashes": [
+    892101874,
+    4194879939,
+    2538708250,
+    2538708250,
+    [
+     1638281622,
+     4053507062
     ],
-    "esES": [
-     "La Gruta Maligna"
-    ],
-    "esMX": [
-     "La Gruta Maligna"
-    ],
-    "frFR": [
-     "La Grotte maudite",
-     "La grotte maudite"
-    ],
-    "itIT": [
-     "The Wicked Grotto"
-    ],
-    "koKR": [
-     "악의 동굴"
-    ],
-    "ptBR": [
-     "Gruta Malévola"
-    ],
-    "ruRU": [
-     "Оскверненный грот"
-    ],
-    "zhCN": [
-     "邪恶洞穴"
-    ],
-    "zhTW": [
-     "邪惡洞穴"
-    ]
-   },
+    892101874,
+    1533340542,
+    715913618,
+    1409405401,
+    2078239673,
+    3814128806
+   ],
    "at": [
     {
      "floor": 1,
@@ -250,40 +161,21 @@
    ]
   },
   {
-   "name": "Vyletongue Seat",
+   "key": "w31491",
    "wmo": 31491,
-   "names": {
-    "deDE": [
-     "Schlangenzunges Sitz"
-    ],
-    "esES": [
-     "Trono de Lenguavil"
-    ],
-    "esMX": [
-     "Trono de Lenguavil"
-    ],
-    "frFR": [
-     "Siège de Vylelangue"
-    ],
-    "itIT": [
-     "Vyletongue Seat"
-    ],
-    "koKR": [
-     "바일텅의 왕좌"
-    ],
-    "ptBR": [
-     "Trono do Torpelíngua"
-    ],
-    "ruRU": [
-     "Палата Злоязыкого"
-    ],
-    "zhCN": [
-     "草藤之座"
-    ],
-    "zhTW": [
-     "草藤之座"
-    ]
-   },
+   "hashes": [
+    141321152,
+    1796385422,
+    3022443459,
+    3022443459,
+    1120857667,
+    141321152,
+    3445459647,
+    685827879,
+    2061970346,
+    609111760,
+    609111760
+   ],
    "at": [
     {
      "floor": 1,
@@ -295,40 +187,21 @@
    ]
   },
   {
-   "name": "Zaetar's Grave",
+   "key": "w31464",
    "wmo": 31464,
-   "names": {
-    "deDE": [
-     "Zaetars Grab"
-    ],
-    "esES": [
-     "Tumba de Zaetar"
-    ],
-    "esMX": [
-     "Tumba de Zaetar"
-    ],
-    "frFR": [
-     "Tombe de Zaetar"
-    ],
-    "itIT": [
-     "Zaetar's Grave"
-    ],
-    "koKR": [
-     "재타르의 무덤"
-    ],
-    "ptBR": [
-     "Túmulo de Zaetar"
-    ],
-    "ruRU": [
-     "Могила Зейтара"
-    ],
-    "zhCN": [
-     "扎尔塔之墓"
-    ],
-    "zhTW": [
-     "札爾塔之墓"
-    ]
-   },
+   "hashes": [
+    2657184965,
+    4243494451,
+    3890391450,
+    3890391450,
+    2616316760,
+    2657184965,
+    3276967753,
+    541081195,
+    375480102,
+    3460915697,
+    3321642797
+   ],
    "at": [
     {
      "floor": 2,

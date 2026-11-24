@@ -21,41 +21,24 @@
  "position": "game",
  "areas": [
   {
-   "name": "Canals",
+   "key": "w15078",
    "wmo": 15078,
-   "names": {
-    "deDE": [
-     "Die Kanäle",
-     "Kanäle"
+   "hashes": [
+    1054692617,
+    [
+     2402070325,
+     2816026739
     ],
-    "esES": [
-     "Canales"
-    ],
-    "esMX": [
-     "Canales"
-    ],
-    "frFR": [
-     "Canaux"
-    ],
-    "itIT": [
-     "Canals"
-    ],
-    "koKR": [
-     "용수로"
-    ],
-    "ptBR": [
-     "Canais"
-    ],
-    "ruRU": [
-     "Каналы"
-    ],
-    "zhCN": [
-     "运河"
-    ],
-    "zhTW": [
-     "運河"
-    ]
-   },
+    2018080356,
+    2018080356,
+    1243233305,
+    1054692617,
+    1224274074,
+    1458090948,
+    4064576649,
+    2286828081,
+    1283820581
+   ],
    "at": [
     {
      "floor": 1,
@@ -67,7 +50,7 @@
    ]
   },
   {
-   "name": "King's Alley",
+   "key": "a16612",
    "area": 16612,
    "at": [
     {
@@ -80,7 +63,7 @@
    ]
   },
   {
-   "name": "Lordaeron Graveyard",
+   "key": "a16614",
    "area": 16614,
    "at": [
     {
@@ -93,7 +76,7 @@
    ]
   },
   {
-   "name": "Lordamere Overlook",
+   "key": "a16615",
    "area": 16615,
    "at": [
     {
@@ -106,43 +89,30 @@
    ]
   },
   {
-   "name": "Magic Quarter",
+   "key": "w15126",
    "wmo": 15126,
-   "names": {
-    "deDE": [
-     "Das Magieviertel",
-     "Magieviertel"
+   "hashes": [
+    17657192,
+    [
+     1588144309,
+     3281611917
     ],
-    "esES": [
-     "Barrio de la Magia"
+    1648712731,
+    1648712731,
+    [
+     1349428891,
+     3288328699
     ],
-    "esMX": [
-     "Barrio de la Magia"
+    17657192,
+    830094515,
+    3452583797,
+    [
+     229818099,
+     3227124947
     ],
-    "frFR": [
-     "Quartier de la Magie",
-     "Quartier de la magie"
-    ],
-    "itIT": [
-     "Magic Quarter"
-    ],
-    "koKR": [
-     "마법 지구"
-    ],
-    "ptBR": [
-     "Distrito da Magia"
-    ],
-    "ruRU": [
-     "Квартал Магов",
-     "Квартал магов"
-    ],
-    "zhCN": [
-     "魔法区"
-    ],
-    "zhTW": [
-     "魔法區"
-    ]
-   },
+    53506310,
+    523323569
+   ],
    "at": [
     {
      "floor": 1,
@@ -154,7 +124,7 @@
    ]
   },
   {
-   "name": "Market Street",
+   "key": "a16617",
    "area": 16617,
    "at": [
     {
@@ -167,43 +137,30 @@
    ]
   },
   {
-   "name": "Rogues' Quarter",
+   "key": "w15124",
    "wmo": 15124,
-   "names": {
-    "deDE": [
-     "Das Schurkenviertel",
-     "Schurkenviertel"
+   "hashes": [
+    595439271,
+    [
+     1979763967,
+     4033003767
     ],
-    "esES": [
-     "Barrio de los Pícaros"
+    1486858659,
+    1486858659,
+    [
+     645411048,
+     3381571912
     ],
-    "esMX": [
-     "Barrio de los Pícaros"
+    595439271,
+    1986031838,
+    1218136539,
+    [
+     52212576,
+     3322222357
     ],
-    "frFR": [
-     "Quartier des Voleurs",
-     "Quartier des voleurs"
-    ],
-    "itIT": [
-     "Rogues' Quarter"
-    ],
-    "koKR": [
-     "도적 지구"
-    ],
-    "ptBR": [
-     "Distrito dos Ladinos"
-    ],
-    "ruRU": [
-     "Квартал Разбойников",
-     "Квартал разбойников"
-    ],
-    "zhCN": [
-     "潜行者区"
-    ],
-    "zhTW": [
-     "盜賊區"
-    ]
-   },
+    278430713,
+    2075767892
+   ],
    "at": [
     {
      "floor": 1,
@@ -215,41 +172,24 @@
    ]
   },
   {
-   "name": "Royal Quarter",
+   "key": "w15148",
    "wmo": 15148,
-   "names": {
-    "deDE": [
-     "Das Königsviertel",
-     "Königsviertel"
+   "hashes": [
+    3604200868,
+    [
+     933208971,
+     2581536947
     ],
-    "esES": [
-     "Barrio Real"
-    ],
-    "esMX": [
-     "Barrio Real"
-    ],
-    "frFR": [
-     "Quartier Royal"
-    ],
-    "itIT": [
-     "Royal Quarter"
-    ],
-    "koKR": [
-     "왕실"
-    ],
-    "ptBR": [
-     "Distrito Real"
-    ],
-    "ruRU": [
-     "Королевский квартал"
-    ],
-    "zhCN": [
-     "皇家区"
-    ],
-    "zhTW": [
-     "皇家區"
-    ]
-   },
+    1626120760,
+    1626120760,
+    172673939,
+    3604200868,
+    1854144696,
+    2327043839,
+    1340188452,
+    2355065073,
+    1281047194
+   ],
    "at": [
     {
      "floor": 1,
@@ -261,42 +201,27 @@
    ]
   },
   {
-   "name": "Sewers",
+   "key": "w15086",
    "wmo": 15086,
-   "names": {
-    "deDE": [
-     "Die Abwasserkanäle"
+   "hashes": [
+    3962688054,
+    766067681,
+    180739703,
+    180739703,
+    [
+     3270454820,
+     3321762223
     ],
-    "esES": [
-     "Cloacas"
+    3962688054,
+    3971829690,
+    1126197739,
+    [
+     812376677,
+     1094116867
     ],
-    "esMX": [
-     "Cloacas"
-    ],
-    "frFR": [
-     "Egouts",
-     "Égouts"
-    ],
-    "itIT": [
-     "Sewers"
-    ],
-    "koKR": [
-     "하수구"
-    ],
-    "ptBR": [
-     "Esgotos"
-    ],
-    "ruRU": [
-     "Канализация",
-     "Стоки"
-    ],
-    "zhCN": [
-     "下水道"
-    ],
-    "zhTW": [
-     "下水道"
-    ]
-   },
+    3413641283,
+    3413641283
+   ],
    "at": [
     {
      "floor": 1,
@@ -308,41 +233,24 @@
    ]
   },
   {
-   "name": "The Apothecarium",
+   "key": "w15139",
    "wmo": 15139,
-   "names": {
-    "deDE": [
-     "Das Apothekarium"
+   "hashes": [
+    702279862,
+    3317277511,
+    922787278,
+    922787278,
+    [
+     225937106,
+     3191316070
     ],
-    "esES": [
-     "El Apothecarium"
-    ],
-    "esMX": [
-     "El Apothecarium"
-    ],
-    "frFR": [
-     "L'Apothicarium",
-     "L’Apothicarium"
-    ],
-    "itIT": [
-     "The Apothecarium"
-    ],
-    "koKR": [
-     "연금술 실험실"
-    ],
-    "ptBR": [
-     "Boticarium"
-    ],
-    "ruRU": [
-     "Квартал аптекарей"
-    ],
-    "zhCN": [
-     "炼金房"
-    ],
-    "zhTW": [
-     "鍊金房"
-    ]
-   },
+    702279862,
+    3155278258,
+    3511847198,
+    2242112832,
+    3519162530,
+    1914407581
+   ],
    "at": [
     {
      "floor": 1,
@@ -354,42 +262,27 @@
    ]
   },
   {
-   "name": "Trade Quarter",
+   "key": "w15064",
    "wmo": 15064,
-   "names": {
-    "deDE": [
-     "Das Handwerksviertel",
-     "Handwerksviertel"
+   "hashes": [
+    2808360257,
+    [
+     2142439847,
+     2726159407
     ],
-    "esES": [
-     "Barrio del Comercio"
+    2255551856,
+    2255551856,
+    [
+     2366009653,
+     3020931797
     ],
-    "esMX": [
-     "Barrio del Comercio"
-    ],
-    "frFR": [
-     "Quartier des Marchands",
-     "Quartier des marchands"
-    ],
-    "itIT": [
-     "Trade Quarter"
-    ],
-    "koKR": [
-     "상업 지구"
-    ],
-    "ptBR": [
-     "Distrito Comercial"
-    ],
-    "ruRU": [
-     "Торговый квартал"
-    ],
-    "zhCN": [
-     "贸易区"
-    ],
-    "zhTW": [
-     "貿易區"
-    ]
-   },
+    2808360257,
+    1745578209,
+    843322690,
+    942611689,
+    466602739,
+    3748268531
+   ],
    "at": [
     {
      "floor": 1,
@@ -401,43 +294,30 @@
    ]
   },
   {
-   "name": "War Quarter",
+   "key": "w15011",
    "wmo": 15011,
-   "names": {
-    "deDE": [
-     "Das Kriegsviertel",
-     "Kriegsviertel"
+   "hashes": [
+    988522069,
+    [
+     936108471,
+     3346875759
     ],
-    "esES": [
-     "Barrio de la Guerra"
+    3611218968,
+    3611218968,
+    [
+     42305816,
+     1218090552
     ],
-    "esMX": [
-     "Barrio de la Guerra"
+    988522069,
+    3986719744,
+    1721452014,
+    [
+     1934678757,
+     2294365253
     ],
-    "frFR": [
-     "Quartier de la Guerre",
-     "Quartier de la guerre"
-    ],
-    "itIT": [
-     "War Quarter"
-    ],
-    "koKR": [
-     "군사 지구"
-    ],
-    "ptBR": [
-     "Distrito Bélico"
-    ],
-    "ruRU": [
-     "Квартал Воинов",
-     "Квартал воинов"
-    ],
-    "zhCN": [
-     "军事区"
-    ],
-    "zhTW": [
-     "軍事區"
-    ]
-   },
+    3000363515,
+    4219722640
+   ],
    "at": [
     {
      "floor": 1,
@@ -452,35 +332,35 @@
  "overrides": [],
  "exclude": [
   {
-   "name": "Canals",
+   "key": "w15078",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "Magic Quarter",
+   "key": "w15126",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "Rogues' Quarter",
+   "key": "w15124",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "Royal Quarter",
+   "key": "w15148",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "Sewers",
+   "key": "w15086",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "The Apothecarium",
+   "key": "w15139",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "Trade Quarter",
+   "key": "w15064",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   },
   {
-   "name": "War Quarter",
+   "key": "w15011",
    "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
   }
  ]

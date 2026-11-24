@@ -22,40 +22,21 @@
  "position": "fdr",
  "areas": [
   {
-   "name": "Chamber of Battle",
+   "key": "w143371",
    "wmo": 143371,
-   "names": {
-    "deDE": [
-     "Die Kammer der Schlachten"
-    ],
-    "esES": [
-     "Sala de la Batalla"
-    ],
-    "esMX": [
-     "Sala de la Batalla"
-    ],
-    "frFR": [
-     "Chambre de guerre"
-    ],
-    "itIT": [
-     "Chamber of Battle"
-    ],
-    "koKR": [
-     "전투의 방"
-    ],
-    "ptBR": [
-     "Câmara de Batalha"
-    ],
-    "ruRU": [
-     "Чертог Битвы"
-    ],
-    "zhCN": [
-     "战斗之厅"
-    ],
-    "zhTW": [
-     "戰鬥之廳"
-    ]
-   },
+   "hashes": [
+    1570053704,
+    204578306,
+    1119048065,
+    1119048065,
+    3257476228,
+    1570053704,
+    2357521445,
+    4273991646,
+    1473185732,
+    1933799520,
+    2842733614
+   ],
    "at": [
     {
      "floor": 6,
@@ -67,40 +48,21 @@
    ]
   },
   {
-   "name": "Halycon's Lair",
+   "key": "w143364",
    "wmo": 143364,
-   "names": {
-    "deDE": [
-     "Halycons Hort"
-    ],
-    "esES": [
-     "Guarida de Halycon"
-    ],
-    "esMX": [
-     "Guarida de Halycon"
-    ],
-    "frFR": [
-     "Antre d’Halycon"
-    ],
-    "itIT": [
-     "Halycon's Lair"
-    ],
-    "koKR": [
-     "할리콘의 둥지"
-    ],
-    "ptBR": [
-     "Covil de Halycon"
-    ],
-    "ruRU": [
-     "Логово Халикон"
-    ],
-    "zhCN": [
-     "哈雷肯之巢"
-    ],
-    "zhTW": [
-     "哈雷肯之巢"
-    ]
-   },
+   "hashes": [
+    180538759,
+    2656025303,
+    2347638337,
+    2347638337,
+    2471656180,
+    180538759,
+    886830124,
+    3285232081,
+    2730159994,
+    3664722453,
+    3664722453
+   ],
    "at": [
     {
      "floor": 5,
@@ -112,40 +74,21 @@
    ]
   },
   {
-   "name": "Hordemar City",
+   "key": "w143346",
    "wmo": 143346,
-   "names": {
-    "deDE": [
-     "Hordemar"
-    ],
-    "esES": [
-     "Ciudad Hordemar"
-    ],
-    "esMX": [
-     "Ciudad Hordemar"
-    ],
-    "frFR": [
-     "Cité d’Hordemar"
-    ],
-    "itIT": [
-     "Hordemar City"
-    ],
-    "koKR": [
-     "호드마르 도시"
-    ],
-    "ptBR": [
-     "Hordamar"
-    ],
-    "ruRU": [
-     "Ордамар"
-    ],
-    "zhCN": [
-     "霍德玛尔城"
-    ],
-    "zhTW": [
-     "霍德瑪爾城"
-    ]
-   },
+   "hashes": [
+    4059564466,
+    3956458263,
+    13930157,
+    13930157,
+    3595866594,
+    4059564466,
+    334702421,
+    338133075,
+    1499927491,
+    3277250082,
+    154327854
+   ],
    "at": [
     {
      "floor": 1,
@@ -192,40 +135,21 @@
    ]
   },
   {
-   "name": "Mok'Doom",
+   "key": "w143366",
    "wmo": 143366,
-   "names": {
-    "deDE": [
-     "Mok'Doom"
-    ],
-    "esES": [
-     "Mok'Doom"
-    ],
-    "esMX": [
-     "Mok'Doom"
-    ],
-    "frFR": [
-     "Mok’Deuil"
-    ],
-    "itIT": [
-     "Mok'Doom"
-    ],
-    "koKR": [
-     "모크둠"
-    ],
-    "ptBR": [
-     "Mok'Doom"
-    ],
-    "ruRU": [
-     "Мок'Дум"
-    ],
-    "zhCN": [
-     "摩多姆"
-    ],
-    "zhTW": [
-     "摩多姆"
-    ]
-   },
+   "hashes": [
+    3239250094,
+    3239250094,
+    3239250094,
+    3239250094,
+    2523673610,
+    3239250094,
+    1629922394,
+    3239250094,
+    3211446178,
+    3321639682,
+    3321639682
+   ],
    "at": [
     {
      "floor": 3,
@@ -237,40 +161,21 @@
    ]
   },
   {
-   "name": "Skitterweb Tunnels",
+   "key": "w143349",
    "wmo": 143349,
-   "names": {
-    "deDE": [
-     "Die Skitterwebtunnel"
-    ],
-    "esES": [
-     "Túneles de Arácnidas"
-    ],
-    "esMX": [
-     "Túneles de Arácnidas"
-    ],
-    "frFR": [
-     "Tunnels de Toile-grouillante"
-    ],
-    "itIT": [
-     "Skitterweb Tunnels"
-    ],
-    "koKR": [
-     "그물걸이 통로"
-    ],
-    "ptBR": [
-     "Túneis Tremeteia"
-    ],
-    "ruRU": [
-     "Паучий лабиринт"
-    ],
-    "zhCN": [
-     "蛛网隧道"
-    ],
-    "zhTW": [
-     "蛛網隧道"
-    ]
-   },
+   "hashes": [
+    127601238,
+    4092500569,
+    4172437559,
+    4172437559,
+    2770717249,
+    127601238,
+    530585531,
+    1403014169,
+    2163670714,
+    1052716179,
+    3972352749
+   ],
    "at": [
     {
      "floor": 1,
@@ -289,40 +194,21 @@
    ]
   },
   {
-   "name": "Tazz'Alaor",
+   "key": "w143351",
    "wmo": 143351,
-   "names": {
-    "deDE": [
-     "Tazz'Alaor"
-    ],
-    "esES": [
-     "Tazz'Alor"
-    ],
-    "esMX": [
-     "Tazz'Alaor"
-    ],
-    "frFR": [
-     "Tazz’Alaor"
-    ],
-    "itIT": [
-     "Tazz'Alaor"
-    ],
-    "koKR": [
-     "타즈알라올"
-    ],
-    "ptBR": [
-     "Tazz'Alaor"
-    ],
-    "ruRU": [
-     "Тазз'Алаор"
-    ],
-    "zhCN": [
-     "塔萨洛尔"
-    ],
-    "zhTW": [
-     "塔薩洛爾"
-    ]
-   },
+   "hashes": [
+    2062061528,
+    2062061528,
+    2375379063,
+    2062061528,
+    1784691452,
+    2062061528,
+    2284243188,
+    2062061528,
+    2964138718,
+    910111161,
+    1685718516
+   ],
    "at": [
     {
      "floor": 1,
@@ -341,40 +227,21 @@
    ]
   },
   {
-   "name": "The Storehouse",
+   "key": "w143381",
    "wmo": 143381,
-   "names": {
-    "deDE": [
-     "Das Lagerhaus"
-    ],
-    "esES": [
-     "Almacén"
-    ],
-    "esMX": [
-     "Almacén"
-    ],
-    "frFR": [
-     "L’entrepôt"
-    ],
-    "itIT": [
-     "The Storehouse"
-    ],
-    "koKR": [
-     "창고"
-    ],
-    "ptBR": [
-     "O Armazém"
-    ],
-    "ruRU": [
-     "Кладовая"
-    ],
-    "zhCN": [
-     "仓库"
-    ],
-    "zhTW": [
-     "倉庫"
-    ]
-   },
+   "hashes": [
+    546529563,
+    2758804955,
+    1930994799,
+    1930994799,
+    103396897,
+    546529563,
+    4253781425,
+    3881139014,
+    1300861562,
+    1950380371,
+    1526386817
+   ],
    "at": [
     {
      "floor": 5,
