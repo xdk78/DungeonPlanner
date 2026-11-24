@@ -25,6 +25,16 @@ local function listening()
 	return n
 end
 
+-- Is any frame (AceEvent's) still registered for the event, so the client sends it?
+local function clientDelivers(event)
+	for _, f in ipairs(mock.frames) do
+		if f._events and f._events[event] then
+			return true
+		end
+	end
+	return false
+end
+
 T.case("Kill messages: formats become patterns, English and German, positional and escaped", function()
 	local english = RunLog.KillPatterns({ "%s dies, you gain %d experience.", "%s dies." })
 	T.eq(#english, 2)
@@ -86,6 +96,7 @@ T.case("Recorder: name sources are listened to only while a run is recorded in i
 	R.SetEnabled(false)
 	R.ClearHistory()
 	T.eq(listening(), 0, "recording off: nothing listens")
+	T.ok(not clientDelivers("UNIT_SPELLCAST_SENT"), "the client does not even send the cast event")
 	R.SetEnabled(true)
 	local run = R.Current()
 	T.ok(run, "inside an instance, a run is recorded")
@@ -141,17 +152,20 @@ T.case("Recorder: kill messages and casts name enemies in the pull in progress; 
 	mock.FireEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH", mock.SECRET)
 	mock.FireEvent("CHAT_MSG_COMBAT_XP_GAIN", mock.SECRET)
 	T.eq(#run.p[1].kn, 2, "a secret message is ignored")
-	-- Casts: a plain target name of a hostile target.
+	-- Casts: the cast's target name counts only when it is the player's hostile target's plain name.
+	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Gnoll Brute", "cast-guid", 133)
+	T.eq(#run.p[1].kn, 2, "the target's name is secret: a cast's name cannot be matched to it")
+	mock.units.target.name = "Gnoll Brute"
 	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Gnoll Brute", "cast-guid", 133)
 	T.eq(run.p[1].kn[3], "Gnoll Brute", "the target of the player's cast")
+	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Healbot", "cast-guid", 133)
+	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Tester", "cast-guid", 133)
 	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", mock.SECRET, "cast-guid", 133)
 	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "", "cast-guid", 133)
-	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Tester", "cast-guid", 133)
-	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Healbot", "cast-guid", 133)
-	mock.FireEvent("UNIT_SPELLCAST_SENT", "party1", "Somebody Else", "cast-guid", 133)
-	mock.FireEvent("UNIT_SPELLCAST_SENT", mock.SECRET, "Somebody Else", "cast-guid", 133)
-	T.eq(#run.p[1].kn, 3, "a secret or empty target, the player, a party member, another unit's cast: not enemies")
-	mock.units.target.hostile = false
+	mock.FireEvent("UNIT_SPELLCAST_SENT", "party1", "Gnoll Shaman", "cast-guid", 133)
+	mock.FireEvent("UNIT_SPELLCAST_SENT", mock.SECRET, "Gnoll Shaman", "cast-guid", 133)
+	T.eq(#run.p[1].kn, 3, "a hostile target, but the cast names an ally, the player, a secret or empty name, or another unit's cast")
+	mock.units.target.hostile, mock.units.target.name = false, "Friendly Vendor"
 	mock.FireEvent("UNIT_SPELLCAST_SENT", "player", "Friendly Vendor", "cast-guid", 133)
 	T.eq(#run.p[1].kn, 3, "a friendly target is not an enemy")
 	mock.units.target.hostile = true
@@ -212,5 +226,89 @@ T.case("Compat: /dp debug reports the new events and format strings", function()
 	end
 	T.ok(found["Kill message: death"] and found["Kill message: experience"], "the format strings")
 	T.ok(found["Secrets API"] and found["Addon restriction state"] and found["Unit distance"], "the scan's probes")
-	T.eq(listening(), 0, "the check leaves nothing registered")
+end)
+
+T.case("Run log: a pull whose enemy a kill message named is kept even with no nameplate count", function()
+	local store = RunLog.NewStore()
+	local run = RunLog.Enter(store, "3065", "Hall of Thanes", 1, 1000)
+	RunLog.PullStart(run, 1010)
+	T.ok(RunLog.Learn(run, "Defias Thug"))
+	T.ok(RunLog.PullEnd(run, 1030, 0, false), "kept")
+	T.eq(run.p[1].c, 0)
+	RunLog.PullStart(run, 1100)
+	T.eq(RunLog.PullEnd(run, 1110, 0, false), nil, "nothing seen and nothing named: dropped")
+	T.eq(#run.p, 1)
+end)
+
+T.case("Events: removing a handler leaves the others; the last one unregisters the event", function()
+	boot()
+	local event, calls = "DP_TEST_EVENT", {}
+	local function a()
+		calls[#calls + 1] = "a"
+	end
+	local function b()
+		calls[#calls + 1] = "b"
+	end
+	T.ok(ns:RegisterEvent(event, a))
+	T.ok(ns:RegisterEvent(event, b))
+	mock.FireEvent(event)
+	T.eq(table.concat(calls), "ab")
+	ns:UnregisterEvent(event, a)
+	calls = {}
+	mock.FireEvent(event)
+	T.eq(table.concat(calls), "b", "the other handler still runs")
+	T.ok(ns.EventTable()[event], "and the event stays registered")
+	ns:UnregisterEvent(event, a)
+	ns:UnregisterEvent("DP_NEVER_REGISTERED", a)
+	T.eq(#ns.EventTable()[event], 1, "a handler that was not registered changes nothing")
+	T.eq(ns.EventTable().DP_NEVER_REGISTERED, nil)
+	-- Registered twice, it runs twice and one call removes both.
+	ns:RegisterEvent(event, a)
+	ns:RegisterEvent(event, a)
+	calls = {}
+	mock.FireEvent(event)
+	T.eq(table.concat(calls), "baa")
+	ns:UnregisterEvent(event, a)
+	calls = {}
+	mock.FireEvent(event)
+	T.eq(table.concat(calls), "b", "every registration of the handler is gone")
+	ns:UnregisterEvent(event, b)
+	T.eq(ns.EventTable()[event], nil, "the last handler takes the event with it")
+	T.ok(not clientDelivers(event), "the client is told to stop")
+	calls = {}
+	mock.FireEvent(event)
+	T.eq(#calls, 0, "and the game no longer delivers it")
+end)
+
+T.case("Perf: an event unregistered during a probe stays unregistered when the probe stops", function()
+	boot()
+	local Perf = ns.Perf
+	local event, ran = "DP_TEST_PROBE_EVENT", 0
+	local function handler()
+		ran = ran + 1
+	end
+	ns:RegisterEvent(event, handler)
+	T.ok(Perf.Start())
+	mock.FireEvent(event)
+	T.eq(ran, 1, "timed, and still delivered")
+	ns:UnregisterEvent(event, handler)
+	Perf.Stop()
+	mock.FireEvent(event)
+	T.eq(ran, 1, "not delivered again after the stop")
+	T.eq(ns.EventTable()[event], nil)
+	T.ok(not clientDelivers(event), "and the client no longer sends it to the addon")
+	Perf.Reset()
+end)
+
+T.case("Recorder: switching recording off removes the sources even when it was not through SetEnabled", function()
+	boot()
+	R.SetEnabled(false)
+	R.ClearHistory()
+	R.SetEnabled(true)
+	T.eq(listening(), #EVENTS)
+	ns.db.settings.recorder.enabled = false
+	R.OnZone()
+	T.eq(listening(), 0, "a zone change with recording off drops them")
+	R.SetEnabled(false)
+	R.ClearHistory()
 end)

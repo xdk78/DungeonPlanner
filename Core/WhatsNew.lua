@@ -29,8 +29,8 @@ local ENTRIES = {
 		return {
 			title = L["What's new in 0.2.3"],
 			items = {
-				{ L["Names of killed enemies"],
-					L["A recorded pull names the enemies you killed, read from the game's kill messages where nameplates hide their names."] },
+				{ L["Names of enemies you fought"],
+					L["A recorded pull names the enemies you fought, read from the game's kill messages and your casts where nameplates hide their names."] },
 			},
 		}
 	end,

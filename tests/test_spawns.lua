@@ -175,7 +175,8 @@ T.case("Spawns: /dp scan reports the secrets API, the addon restriction state an
 	for _, k in ipairs(names) do
 		saved[k] = rawget(_G, k)
 	end
-	local enum = rawget(_G, "Enum") or {}
+	local savedEnum = rawget(_G, "Enum")
+	local enum = savedEnum or {}
 	_G.Enum = enum
 	local savedType = enum.AddOnRestrictionType
 	local function collect()
@@ -238,7 +239,8 @@ T.case("Spawns: /dp scan reports the secrets API, the addon restriction state an
 	T.eq(r.restrictionState, "missing")
 	T.eq(r.partyDistance, "missing")
 	enum.AddOnRestrictionType = savedType
-	for k, f in pairs(saved) do
-		_G[k] = f
+	_G.Enum = savedEnum
+	for _, k in ipairs(names) do
+		_G[k] = saved[k]
 	end
 end)

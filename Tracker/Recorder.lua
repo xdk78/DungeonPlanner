@@ -5,7 +5,7 @@
 --   a 0.5 s ticker, only while in combat           enemy nameplates: count, level and classification (names only when
 --                                                 they are not secret); never positions, never GUIDs
 --   ENCOUNTER_END / BOSS_KILL                      boss kills with timing; a failed encounter is a wipe
---   CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH,      names of killed enemies, only while a run is being recorded
+--   CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH,      names of enemies fought, only while a run is being recorded
 --   UNIT_SPELLCAST_SENT                            (inside its instance), for the pull in progress
 -- Nothing runs while idle or out of combat, and nothing here touches protected frames.
 
@@ -138,19 +138,15 @@ local function onKillMessage(_, text)
 	end
 end
 
--- The player's, the group's and the pet's names: a cast on one of them is not a cast on an enemy.
-local function isFriendly(name)
-	local id = ns.Roster.Id(name)
-	return id == ns.Roster.Me() or Util.IndexOf(ns.Roster.Members(), id) ~= nil or call(UnitName, "pet") == name
-end
-
+-- A cast can name a mouseover, a focus or an ally by name, so its target is taken only when it is the player's own
+-- hostile target: the same plain name as UnitName("target"), which is nil while the client keeps it secret.
 local function onCastSent(_, unit, target)
 	local run = Recorder.Current()
 	target = Util.Plain(target)
 	if not (Util.Plain(unit) == "player" and type(target) == "string" and target ~= "" and run and RunLog.OpenPull(run)) then
 		return
 	end
-	if call(UnitCanAttack, "player", "target") == true and not isFriendly(target) then
+	if call(UnitName, "target") == target and call(UnitCanAttack, "player", "target") == true then
 		RunLog.Learn(run, target)
 	end
 end
@@ -260,6 +256,7 @@ end
 function Recorder.OnZone()
 	local store = Recorder.Store()
 	if not store or not Recorder.Enabled() then
+		syncSources()
 		return
 	end
 	local cur = ns.Instances.Current()

@@ -440,7 +440,8 @@ function ns:RegisterEvent(event, handler)
 	return true
 end
 
--- Removing an event's last handler unregisters the event.
+-- Removes every registration of `handler` on the event (registering one twice calls it twice); removing the event's last
+-- handler unregisters the event. A handler that was not registered changes nothing.
 function ns:UnregisterEvent(event, handler)
 	local handlers = eventHandlers[event]
 	if not handlers then

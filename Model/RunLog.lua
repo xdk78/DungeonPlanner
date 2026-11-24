@@ -14,7 +14,7 @@
 --   k key, n instance name, d difficultyID, t start (wall time), e end (wall time), done = finished
 --   p pulls: { s = start (seconds after t), u = duration, c = enemies seen at once (peak), el = elites, r = rares,
 --              b = bosses (by classification), lo/hi = level range, nm = plain names (<= MAX_NAMES), z = sub-zone,
---              kn = names the client's kill messages and casts gave (<= MAX_NAMES, see Learn), dd = deaths,
+--              kn = names of enemies fought, from kill messages and casts (<= MAX_NAMES, see Learn), dd = deaths,
 --              w = wipe, k = encounter killed during the pull }
 --   b boss kills: { i = encounterID, n = name, a = seconds after t, p = pull index }
 --   w wipes (count), dd deaths (count), dk = deaths could be read (else the deaths count is not available)
@@ -321,7 +321,7 @@ function Recorder.KilledName(patterns, text)
 end
 
 -- Combat ended. deaths = group members dead at the end; wiped = everyone dead. A pull in which no enemy was ever seen
--- (a stray hit, a duel, combat with no nameplate shown) is dropped.
+-- (a stray hit, a duel, combat with no nameplate shown) is dropped, unless a kill message or cast named an enemy.
 function Recorder.PullEnd(run, now, deaths, wiped)
 	local pull = Recorder.OpenPull(run)
 	if not pull then
@@ -339,7 +339,7 @@ function Recorder.PullEnd(run, now, deaths, wiped)
 		pull.w = true
 		run.w = (run.w or 0) + 1
 	end
-	if pull.c == 0 and not pull.k and not pull.w then
+	if pull.c == 0 and not pull.k and not pull.w and not pull.kn then
 		run.p[#run.p] = nil
 		return nil
 	end

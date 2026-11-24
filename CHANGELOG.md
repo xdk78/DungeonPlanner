@@ -6,10 +6,11 @@ follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
-- **Names of killed enemies in recorded runs**: with "Record my runs" on, a pull in the Runs section and in a drafted
-  plan can now name the enemies you killed. The game hides enemy names on nameplates inside instances, so the names
-  come from its kill messages in chat and from the target of your casts; they are listed beside what the nameplates
-  found, at most four per pull, and only while a run is being recorded. Runs recorded before keep working as they are.
+- **Names of enemies you fought in recorded runs**: with "Record my runs" on, a pull in the Runs section and in a
+  drafted plan can now name the enemies you fought. The game hides enemy names on nameplates inside instances, so the
+  names come from its kill messages in chat and from the target of your casts; they are listed beside what the
+  nameplates found, at most four per pull, and only while a run is being recorded. Runs recorded before keep working
+  as they are.
 
 ## [0.2.2] - 2026-11-23
 
