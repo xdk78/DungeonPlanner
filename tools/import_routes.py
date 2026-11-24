@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["numpy", "pillow", "scipy", "scikit-image"]
+# dependencies = ["numpy==2.5.5", "pillow==13.0.0", "scipy==1.18.1", "scikit-image==0.26.0"]
 # ///
 """Import the routes of Forever Dungeon Routes (MIT) into the recommended plans' route files.
 
@@ -87,7 +87,8 @@ end
 local version = "?"
 local toc = io.open(root .. "/ForeverDungeonRoutes/ForeverDungeonRoutes.toc", "rb")
 if toc then version = (toc:read("*a"):match("## Version:%s*([^\r\n]+)") or "?"); toc:close() end
-io.write(enc({ dungeons = DR.Dungeons, floors = DR.Floors, routes = DR.DefaultRoutes, version = version }))
+io.write(enc({ dungeons = DR.Dungeons, floors = DR.Floors, routes = DR.DefaultRoutes, rooms = DR.Rooms,
+  version = version }))
 """
 
 

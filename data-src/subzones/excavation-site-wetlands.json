@@ -1,0 +1,131 @@
+{
+ "schema": 1,
+ "slug": "excavation-site-wetlands",
+ "instanceMapID": 2998,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "key": "a836",
+   "area": 836,
+   "wmo": 20192,
+   "hashes": [
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1529537977,
+    1790456994,
+    1529537977,
+    759908578,
+    4027344799,
+    1862642786
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8989,
+     "y": 0.8428,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "key": "a16880",
+   "area": 16880,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.069,
+     "y": 0.4982,
+     "share": 1.0,
+     "samples": 47
+    }
+   ]
+  },
+  {
+   "key": "a16877",
+   "area": 16877,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5523,
+     "y": 0.382,
+     "share": 1.0,
+     "samples": 52
+    }
+   ]
+  },
+  {
+   "key": "a16879",
+   "area": 16879,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2882,
+     "y": 0.6811,
+     "share": 1.0,
+     "samples": 36
+    }
+   ]
+  },
+  {
+   "key": "a16878",
+   "area": 16878,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2853,
+     "y": 0.4602,
+     "share": 1.0,
+     "samples": 36
+    }
+   ]
+  },
+  {
+   "key": "a1021",
+   "area": 1021,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8154,
+     "y": 0.442,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "key": "a118",
+   "area": 118,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.418,
+     "y": 0.0317,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

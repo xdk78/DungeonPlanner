@@ -104,6 +104,7 @@ Style.THEMES = {
 		hover = rgb(0.22, 0.17, 0.11, 0.92),
 		selected = rgb(0.38, 0.24, 0.09, 0.96), -- amber, like the Adventure Guide's selected row
 		accent = rgb(0.42, 0.66, 0.82, 1), -- steel blue: the focused step's ring on the map
+		here = rgb(1, 0.86, 0.52, 1), -- warm candle light: the player's area on the map ("You are here (approx.)")
 		button = rgb(0.16, 0.12, 0.085, 0.97),
 		buttonHover = rgb(0.24, 0.18, 0.12, 0.97),
 		buttonPress = rgb(0.09, 0.07, 0.05, 0.97),

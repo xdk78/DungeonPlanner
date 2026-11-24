@@ -1,0 +1,134 @@
+{
+ "schema": 1,
+ "slug": "razorfen-downs",
+ "instanceMapID": 129,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w17955",
+   "wmo": 17955,
+   "hashes": [
+    2908959329,
+    4289847333,
+    2067705673,
+    2067705673,
+    73944368,
+    2908959329,
+    2817502390,
+    1494007755,
+    3370378430,
+    507554501,
+    2379093265
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4418,
+     "y": 0.5676,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "key": "w17958",
+   "wmo": 17958,
+   "hashes": [
+    2293281806,
+    3426166577,
+    3037433222,
+    3037433222,
+    3798415517,
+    2293281806,
+    3819302493,
+    1666005936,
+    2865328186,
+    [
+     866643720,
+     1285993366
+    ],
+    866643720
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8548,
+     "y": 0.4703,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w17959",
+   "wmo": 17959,
+   "hashes": [
+    2936220227,
+    3843018281,
+    3725352649,
+    3725352649,
+    632413258,
+    2936220227,
+    1445221634,
+    3759368624,
+    4075491512,
+    669320359,
+    2234422108
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5882,
+     "y": 0.3353,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w17960",
+   "wmo": 17960,
+   "hashes": [
+    3287743741,
+    244985971,
+    3292847341,
+    3292847341,
+    688712859,
+    3287743741,
+    157772484,
+    1279502646,
+    1711562317,
+    1635447071,
+    2804084756
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7545,
+     "y": 0.3085,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

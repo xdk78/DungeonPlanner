@@ -1,0 +1,53 @@
+{
+ "schema": 1,
+ "slug": "dire-maul-west",
+ "instanceMapID": 429,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w33698",
+   "wmo": 33698,
+   "hashes": [
+    3045671479,
+    3276797429,
+    734580800,
+    581045707,
+    44559622,
+    3045671479,
+    773816819,
+    759818123,
+    2648903972,
+    201935605,
+    2684397343
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.9339,
+     "y": 0.6159,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

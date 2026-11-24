@@ -1,0 +1,105 @@
+{
+ "schema": 1,
+ "slug": "ruins-of-ahnqiraj",
+ "instanceMapID": 509,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "a3449",
+   "area": 3449,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5859,
+     "y": 0.5015,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "key": "a3448",
+   "area": 3448,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6342,
+     "y": 0.2349,
+     "share": 1.0,
+     "samples": 9
+    }
+   ]
+  },
+  {
+   "key": "a3452",
+   "area": 3452,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6085,
+     "y": 0.8948,
+     "share": 1.0,
+     "samples": 10
+    }
+   ]
+  },
+  {
+   "key": "a3451",
+   "area": 3451,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6833,
+     "y": 0.6761,
+     "share": 1.0,
+     "samples": 16
+    }
+   ]
+  },
+  {
+   "key": "a3450",
+   "area": 3450,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4016,
+     "y": 0.426,
+     "share": 1.0,
+     "samples": 16
+    }
+   ]
+  },
+  {
+   "key": "a3453",
+   "area": 3453,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4465,
+     "y": 0.6761,
+     "share": 1.0,
+     "samples": 10
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

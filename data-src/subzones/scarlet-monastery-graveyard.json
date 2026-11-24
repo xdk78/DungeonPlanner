@@ -1,0 +1,110 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-graveyard",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w143830",
+   "wmo": 143830,
+   "hashes": [
+    3787248605,
+    2706862103,
+    2586446423,
+    2586446423,
+    2020906138,
+    3787248605,
+    1695722676,
+    638801488,
+    2404941374,
+    2679921203,
+    2096664801
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7015,
+     "y": 0.6268,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143843",
+   "wmo": 143843,
+   "hashes": [
+    3414818704,
+    351064638,
+    4153310017,
+    4153310017,
+    1294980283,
+    3414818704,
+    2863372166,
+    3295851936,
+    4231735360,
+    232763780,
+    4001072258
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3654,
+     "y": 0.3678,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143836",
+   "wmo": 143836,
+   "hashes": [
+    3592498241,
+    2205930859,
+    3777256033,
+    3777256033,
+    1651659093,
+    3592498241,
+    860528245,
+    2451447155,
+    323245010,
+    415402965,
+    1083368095
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2423,
+     "y": 0.5567,
+     "share": 1.0,
+     "samples": 7
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "key": "w143843",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
+  }
+ ]
+}

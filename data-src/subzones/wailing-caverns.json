@@ -1,0 +1,162 @@
+{
+ "schema": 1,
+ "slug": "wailing-caverns",
+ "instanceMapID": 43,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w143253",
+   "wmo": 143253,
+   "hashes": [
+    3198640247,
+    2706830476,
+    2962574798,
+    2962574798,
+    2575498404,
+    3198640247,
+    1856520783,
+    166642091,
+    254454060,
+    679222117,
+    679222117
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5918,
+     "y": 0.6576,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143254",
+   "wmo": 143254,
+   "hashes": [
+    3066904670,
+    3648442781,
+    890421639,
+    890421639,
+    2594663440,
+    3066904670,
+    676173579,
+    2066436343,
+    2583127189,
+    1947657507,
+    3243910078
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3547,
+     "y": 0.1444,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143252",
+   "wmo": 143252,
+   "hashes": [
+    1888983028,
+    3957153099,
+    3573618895,
+    3573618895,
+    3606535537,
+    1888983028,
+    740751371,
+    2542495253,
+    1828636024,
+    3785569777,
+    3666993611
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1237,
+     "y": 0.416,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "w143250",
+   "wmo": 143250,
+   "hashes": [
+    3436888495,
+    1645062300,
+    1251631287,
+    1251631287,
+    2775162321,
+    3436888495,
+    4031705530,
+    2783049046,
+    4030100087,
+    3803153181,
+    3803153181
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4049,
+     "y": 0.3635,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "key": "w143259",
+   "wmo": 143259,
+   "hashes": [
+    2188317167,
+    2954118491,
+    2122587827,
+    2122587827,
+    659583249,
+    2188317167,
+    336518838,
+    2159910999,
+    2983232806,
+    2179584897,
+    3222302318
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7996,
+     "y": 0.5968,
+     "share": 1.0,
+     "samples": 10
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "key": "w143259",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
+  }
+ ]
+}

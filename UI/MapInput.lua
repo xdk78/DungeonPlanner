@@ -217,6 +217,9 @@ function MapCanvas.InstallInput(view)
 
 	function view.OnDragUpdate(self)
 		local d = self.drag
+		if self.hereTip and self.HereHover then -- a pan, a drag or a stroke ends the marker's tooltip (UI/MapHere.lua)
+			self:HereHover(nil)
+		end
 		-- A held button with a still pointer changes nothing: no layout, no redraw.
 		local px, py = GetCursorPosition()
 		if px == d.lastX and py == d.lastY then
@@ -560,10 +563,16 @@ function MapCanvas.InstallInput(view)
 			v:UpdateCoords()
 			v:RouteHoverUpdate()
 			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapRoutes.lua SetRouteHover)
+			if v.HereHover then -- UI/MapHere.lua; as the route hover, only while idle and with no drawing tool
+				local cx, cy = cursorIn(v.canvas)
+				local left, top = v.canvas:GetLeft(), v.canvas:GetTop()
+				local idle = v.drag.mode == "idle" and not (v.cb.drawTool and v.cb.drawTool())
+				v:HereHover(idle and left and cx - left, top and cy - top)
+			end
 		end
 	end
 	local function wantsHover(v)
-		return v.cb.showCoordinates() or hoverEnabled()
+		return v.cb.showCoordinates() or hoverEnabled() or v.hereAt ~= nil
 	end
 	-- Back to idle after a press, a drag, a stroke or a zoom: the coordinate readout keeps following a pointer that is
 	-- still over the map itself (view.pointerIn: false after the map's OnLeave, which a pin under the pointer causes too,
@@ -583,6 +592,9 @@ function MapCanvas.InstallInput(view)
 	end)
 	view:SetScript("OnLeave", function(self)
 		self.pointerIn = false
+		if self.HereHover then
+			self:HereHover(nil)
+		end
 		if self.drag.mode == "idle" then
 			self:SetScript("OnUpdate", nil)
 			self.coords:SetText("")

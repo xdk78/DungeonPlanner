@@ -1,0 +1,131 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-armory",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w143886",
+   "wmo": 143886,
+   "hashes": [
+    3144390238,
+    3769691754,
+    3800127055,
+    3800127055,
+    1330889978,
+    3144390238,
+    1348191980,
+    1727541761,
+    1589213950,
+    413551830,
+    3492786974
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7281,
+     "y": 0.3521,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143881",
+   "wmo": 143881,
+   "hashes": [
+    166780781,
+    1035433608,
+    15089003,
+    15089003,
+    383273201,
+    166780781,
+    804306256,
+    4217163829,
+    2150807813,
+    3568944719,
+    3971607575
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7281,
+     "y": 0.5674,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143875",
+   "wmo": 143875,
+   "hashes": [
+    2499132111,
+    1686775280,
+    1823215358,
+    1823215358,
+    197205442,
+    2499132111,
+    3909231394,
+    3342933308,
+    615347647,
+    3571771751,
+    3681162012
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7865,
+     "y": 0.1069,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143883",
+   "wmo": 143883,
+   "hashes": [
+    3919108455,
+    2586782616,
+    2065502337,
+    2065502337,
+    1291044809,
+    3919108455,
+    102587761,
+    2320150214,
+    907284756,
+    3177196338,
+    2049893823
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6693,
+     "y": 0.8147,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

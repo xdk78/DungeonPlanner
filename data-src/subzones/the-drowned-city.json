@@ -1,0 +1,136 @@
+{
+ "schema": 1,
+ "slug": "the-drowned-city",
+ "instanceMapID": 2970,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "key": "a17042",
+   "area": 17042,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1929,
+     "y": 0.5093,
+     "share": 1.0,
+     "samples": 51
+    }
+   ]
+  },
+  {
+   "key": "a17040",
+   "area": 17040,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5492,
+     "y": 0.3184,
+     "share": 1.0,
+     "samples": 57
+    }
+   ]
+  },
+  {
+   "key": "a17046",
+   "area": 17046,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6051,
+     "y": 0.7077,
+     "share": 1.0,
+     "samples": 11
+    }
+   ]
+  },
+  {
+   "key": "a17039",
+   "area": 17039,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5516,
+     "y": 0.7443,
+     "share": 1.0,
+     "samples": 73
+    }
+   ]
+  },
+  {
+   "key": "a17041",
+   "area": 17041,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3111,
+     "y": 0.5202,
+     "share": 1.0,
+     "samples": 36
+    }
+   ]
+  },
+  {
+   "key": "a17038",
+   "area": 17038,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5669,
+     "y": 0.5495,
+     "share": 1.0,
+     "samples": 37
+    }
+   ]
+  },
+  {
+   "key": "a17037",
+   "area": 17037,
+   "wmo": 141466,
+   "hashes": [
+    2143821524,
+    2564809273,
+    3965438645,
+    4147491978,
+    3360588736,
+    2143821524,
+    3454084747,
+    2360712832,
+    4056243665,
+    870453175,
+    1576889774
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7991,
+     "y": 0.5278,
+     "share": 1.0,
+     "samples": 82
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "key": "a17046",
+   "why": "A floor of its own (Santiago Reyes' Atal'Byzal map), which this plan does not have."
+  }
+ ]
+}

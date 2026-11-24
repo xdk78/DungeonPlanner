@@ -661,6 +661,29 @@ label, or that stands within 0.02 of a marker on the same floor, is left out, so
 The legend row "Enemies" appears only when the floor has spawns to show; the layer is on by default for recommended
 plans and off for your own until you switch it. The dots pass clicks and drags through to the map.
 
+### You are here (approx.)
+
+Inside a dungeon the game gives addons no position, only the name of the area the player stands in, so the marker is
+an area, not a point (`UI/MapHere.lua`, `Data/Subzones.lua`): a soft disc in warm candle light (`here` in
+`UI/Style.lua`) with a ring and a fainter inner ring, centred on the middle of that area's ground and about a room
+wide (12% of the map's width, 48 to 180 units on screen), so it grows with the zoom like the room it stands for. It
+sits over the enemy dots and under the route's stops and the plan's pins, and shows the same on run mode's mini map.
+Its tooltip says "You are here (approx.)", names the area as the game does, and says why it is approximate. The marker
+takes no mouse, so the enemy dots, route legs and coordinates under it keep theirs: the map's hover update shows its
+tooltip while the pointer is inside the ring and no route leg has the tooltip, only while the map is idle and no
+drawing tool is chosen, as the route hover (a dot or a pin under the pointer, a pan, a drag or a stroke ends it). The
+tooltip goes when the marker moves or changes area; a marker that appears under a pointer already over the map starts
+the hover update itself.
+
+It shows only while the player is inside the plan's own instance (any plan of it: the recommended one, a copy, a plan
+made inside), the area is known (a sub-zone that reads like the zone, or a secret one, places nothing) and has an
+anchor on the floor shown; otherwise it hides. The zone events (`ZONE_CHANGED`, `ZONE_CHANGED_INDOORS`,
+`ZONE_CHANGED_NEW_AREA`) and `PLAYER_ENTERING_WORLD` (entering an instance with the window open) are registered only
+while a map view is shown; where the player is is asked on them and when
+the view shows, not on every draw, and a change moves the marker alone. The setting "Show where you are on dungeon
+maps (approx.)" (Appearance, beside "Show map coordinates"; on by default) turns it off. The map does not switch floors
+for it. The anchors and their sources: data-src/subzones/README.md.
+
 ### The "Forever" tag
 
 An instance new in WoW: Forever (its recommended plan's `instance.origin`, docs/DATA-SOURCES.md) carries a small chip,
@@ -742,6 +765,14 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
+- You are here (approx.): inside Hall of Thanes, Ruins of Lordaeron, Blackmaw Hold and a classic dungeon (the
+  Deadmines), the marker on the map and run mode's mini map in the area the game names (walk from room to room: it
+  moves at once, and hides between named areas and on another floor); the sub-zone text the client gives there is plain
+  (not secret) and matches in a German or French client (an area named by the area table and a WMO room such as
+  one of Hall of Thanes' rooms; `bit.bxor` present, so the room hashes match); its look on the parchment and on the minimap
+  pictures; its tooltip with the pointer in the ring, and enemy dot tooltips, route-leg hover and the coordinates still
+  working inside it; clicks, drags and the drawing tools going through it to the map and the pins; the setting turning it off; `/dp debug` listing "Area names", "Zone
+  text" and the three new files after an update without a restart.
 - Prep: quest states after accepting, abandoning and turning in a quest; quest titles in Polish and Russian clients;
   the key icons and names (a key on the key ring, in the bank); the group lines in a party and a raid; the Getting
   there card outdoors (distance and direction match the world map; the entrance coordinates of a classic and a Forever

@@ -1,0 +1,105 @@
+{
+ "schema": 1,
+ "slug": "upper-blackrock-spire",
+ "instanceMapID": 229,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w143322",
+   "wmo": 143322,
+   "hashes": [
+    1750830740,
+    3956553275,
+    2554422824,
+    2554422824,
+    2426935773,
+    1750830740,
+    1302312600,
+    4259832935,
+    820438157,
+    51891705,
+    638105086
+   ],
+   "at": [
+    {
+     "floor": 5,
+     "x": 0.3535,
+     "y": 0.2162,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "key": "w143328",
+   "wmo": 143328,
+   "hashes": [
+    775636450,
+    1205470765,
+    3205389423,
+    3205389423,
+    316576015,
+    775636450,
+    816346362,
+    4259102600,
+    965187891,
+    1637502114,
+    3967335843
+   ],
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.3038,
+     "y": 0.2706,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w143332",
+   "wmo": 143332,
+   "hashes": [
+    2017773665,
+    357806669,
+    2360603962,
+    2360603962,
+    953067919,
+    2017773665,
+    2271885015,
+    3010660034,
+    742641643,
+    806343525,
+    151972457
+   ],
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.3366,
+     "y": 0.4091,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

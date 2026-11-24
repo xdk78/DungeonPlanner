@@ -1,0 +1,196 @@
+{
+ "schema": 1,
+ "slug": "shapers-terrace",
+ "instanceMapID": 3001,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "key": "a16937",
+   "area": 16937,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4397,
+     "y": 0.7278,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "key": "w44787",
+   "wmo": 44787,
+   "hashes": [
+    2109503581,
+    705695297,
+    748718921,
+    748718921,
+    4293902401,
+    2109503581,
+    3148338078,
+    965135842,
+    1346126643,
+    71168929,
+    1928336968
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4609,
+     "y": 0.8266,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "a541",
+   "area": 541,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6176,
+     "y": 0.8279,
+     "share": 1.0,
+     "samples": 16
+    }
+   ]
+  },
+  {
+   "key": "a16929",
+   "area": 16929,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7405,
+     "y": 0.5824,
+     "share": 1.0,
+     "samples": 20
+    }
+   ]
+  },
+  {
+   "key": "a487",
+   "area": 487,
+   "wmo": 19261,
+   "hashes": [
+    922445935,
+    56973682,
+    2765206944,
+    2765206944,
+    3209835062,
+    922445935,
+    2152620432,
+    3155277987,
+    3706221529,
+    3094856859,
+    1255973138
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7519,
+     "y": 0.2417,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "key": "a16932",
+   "area": 16932,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1804,
+     "y": 0.6883,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "key": "a16928",
+   "area": 16928,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7285,
+     "y": 0.792,
+     "share": 1.0,
+     "samples": 31
+    }
+   ]
+  },
+  {
+   "key": "a16934",
+   "area": 16934,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.0697,
+     "y": 0.447,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "key": "a16930",
+   "area": 16930,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4355,
+     "y": 0.5413,
+     "share": 1.0,
+     "samples": 269
+    }
+   ]
+  },
+  {
+   "key": "a16933",
+   "area": 16933,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6059,
+     "y": 0.3677,
+     "share": 1.0,
+     "samples": 94
+    }
+   ]
+  },
+  {
+   "key": "a16935",
+   "area": 16935,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1042,
+     "y": 0.2145,
+     "share": 1.0,
+     "samples": 40
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

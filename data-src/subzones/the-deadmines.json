@@ -1,0 +1,113 @@
+{
+ "schema": 1,
+ "slug": "the-deadmines",
+ "instanceMapID": 36,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w11776",
+   "wmo": 11776,
+   "hashes": [
+    128119983,
+    3572954583,
+    2000423346,
+    2000423346,
+    3960792392,
+    128119983,
+    3170941249,
+    1340214752,
+    1794375106,
+    1832171931,
+    799714943
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6114,
+     "y": 0.6446,
+     "share": 0.44,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.124,
+     "y": 0.8122,
+     "share": 0.56,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "a1582",
+   "area": 1582,
+   "wmo": 11772,
+   "hashes": [
+    2514198068,
+    3917930721,
+    3103598711,
+    3103598711,
+    1428783127,
+    2514198068,
+    2785538574,
+    1694297533,
+    1501762993,
+    3102546784,
+    3957230223
+   ],
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5241,
+     "y": 0.3855,
+     "share": 1.0,
+     "samples": 17
+    }
+   ]
+  },
+  {
+   "key": "w11808",
+   "wmo": 11808,
+   "hashes": [
+    3824944791,
+    3520976715,
+    1821322610,
+    1821322610,
+    3895387703,
+    3824944791,
+    1342914999,
+    3155103475,
+    635523917,
+    694229485,
+    694229485
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4806,
+     "y": 0.8727,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

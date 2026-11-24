@@ -1,0 +1,198 @@
+{
+ "schema": 1,
+ "slug": "zulgurub",
+ "instanceMapID": 309,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "a3378",
+   "area": 3378,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3983,
+     "y": 0.7074,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "a3384",
+   "area": 3384,
+   "wmo": 35768,
+   "hashes": [
+    2247275977,
+    3334319648,
+    1845941277,
+    1845941277,
+    2781762710,
+    2247275977,
+    3908625222,
+    1598186264,
+    3272939055,
+    295902282,
+    1160746756
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4861,
+     "y": 0.3784,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "key": "a3398",
+   "area": 3398,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6224,
+     "y": 0.4668,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "a3380",
+   "area": 3380,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6331,
+     "y": 0.7768,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "key": "a3381",
+   "area": 3381,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6553,
+     "y": 0.3166,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "key": "a3419",
+   "area": 3419,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5716,
+     "y": 0.3128,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "a3379",
+   "area": 3379,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4998,
+     "y": 0.7964,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "key": "a3382",
+   "area": 3382,
+   "wmo": 19710,
+   "hashes": [
+    461556123,
+    4019034515,
+    1617335775,
+    1617335775,
+    674863641,
+    461556123,
+    1713523035,
+    1617335775,
+    606358921,
+    3203707767,
+    942810402
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4993,
+     "y": 0.1816,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "a3383",
+   "area": 3383,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3149,
+     "y": 0.2051,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "key": "a3377",
+   "area": 3377,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5288,
+     "y": 0.556,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "a3397",
+   "area": 3397,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5893,
+     "y": 0.5524,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

@@ -11,6 +11,12 @@ follow [Semantic Versioning](https://semver.org/).
   names come from its kill messages in chat and from the target of your casts; they are listed beside what the
   nameplates found, at most four per pull, and only while a run is being recorded. Runs recorded before keep working
   as they are.
+- **You are here, roughly**: inside a dungeon, the map and run mode's mini map ring the area the game says you are in
+  ("You are here (approx.)"; its tooltip names the area). The game gives addons no position inside dungeons, only the
+  area's name, so the ring sits in the middle of that area, on the floor the area is on. It covers 30 recommended
+  plans, among them Hall of Thanes, Ruins of Lordaeron and Blackmaw Hold (data-src/subzones/README.md lists them). Turn
+  it off with "Show where you are on dungeon maps (approx.)" in the settings. New files: restart the game after
+  updating.
 
 ## [0.2.2] - 2026-11-23
 

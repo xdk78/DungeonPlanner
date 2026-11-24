@@ -91,6 +91,8 @@ Data\ReyesMaps.lua
 Data\Floors.lua
 Data\WalkData.lua
 Data\Corridors.lua
+Data\SubzoneData.lua
+Data\Subzones.lua
 Data\BossData.lua
 Data\BossInfo.lua
 Data\Templates.lua
@@ -259,6 +261,7 @@ UI\BossSections.lua
 UI\Window.lua
 UI\Popup.lua
 UI\MapSpawns.lua
+UI\MapHere.lua
 UI\MapPins.lua
 UI\MapRoutes.lua
 UI\MapDraw.lua

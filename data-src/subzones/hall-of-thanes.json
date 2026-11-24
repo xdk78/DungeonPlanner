@@ -1,0 +1,104 @@
+{
+ "schema": 1,
+ "slug": "hall-of-thanes",
+ "instanceMapID": 3065,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "key": "w140756",
+   "wmo": 140756,
+   "hashes": [
+    3324822481,
+    1378206234,
+    1063778753,
+    1163681874,
+    4214041993,
+    3324822481,
+    3398749880,
+    1154526286,
+    571776646,
+    2494294803,
+    972261250
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5161,
+     "y": 0.6724,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w141320",
+   "wmo": 141320,
+   "hashes": [
+    1813960886,
+    2765299684,
+    2433958935,
+    1462990056,
+    2132172574,
+    1813960886,
+    4125825963,
+    3912866249,
+    3057758639,
+    1763060471,
+    1439574142
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6847,
+     "y": 0.5118,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "key": "w140768",
+   "wmo": 140768,
+   "hashes": [
+    3990300882,
+    1967397685,
+    768297396,
+    2571290611,
+    424249321,
+    3990300882,
+    939308824,
+    575657929,
+    300357901,
+    1898010099,
+    3507490332
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5148,
+     "y": 0.1842,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

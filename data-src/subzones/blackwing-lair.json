@@ -1,0 +1,145 @@
+{
+ "schema": 1,
+ "slug": "blackwing-lair",
+ "instanceMapID": 469,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "key": "w29470",
+   "wmo": 29470,
+   "hashes": [
+    2367125218,
+    3789116589,
+    1144837034,
+    1144837034,
+    2355131566,
+    2367125218,
+    2007681580,
+    145075143,
+    1735873899,
+    627257429,
+    3825201113
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4183,
+     "y": 0.6062,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w29474",
+   "wmo": 29474,
+   "hashes": [
+    657055671,
+    2945078713,
+    2358084632,
+    2852382128,
+    2687950621,
+    657055671,
+    284157854,
+    1698880674,
+    3886871637,
+    73649937,
+    135692610
+   ],
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.4147,
+     "y": 0.6329,
+     "share": 0.6,
+     "samples": 4
+    },
+    {
+     "floor": 3,
+     "x": 0.481,
+     "y": 0.7438,
+     "share": 0.4,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "key": "w29462",
+   "wmo": 29462,
+   "hashes": [
+    3828552883,
+    98973649,
+    3277164773,
+    3277164773,
+    53793328,
+    3828552883,
+    4255874100,
+    1282939861,
+    1201935536,
+    2805283244,
+    2805283244
+   ],
+   "at": [
+    {
+     "floor": 4,
+     "x": 0.6992,
+     "y": 0.7344,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "key": "w29471",
+   "wmo": 29471,
+   "hashes": [
+    364165996,
+    2256633914,
+    2951958796,
+    3130674381,
+    1241493581,
+    364165996,
+    321349782,
+    349743771,
+    4027252065,
+    996270682,
+    996270682
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3469,
+     "y": 0.268,
+     "share": 0.63,
+     "samples": 2
+    },
+    {
+     "floor": 2,
+     "x": 0.4439,
+     "y": 0.3195,
+     "share": 0.37,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

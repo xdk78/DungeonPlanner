@@ -1,0 +1,367 @@
+{
+ "schema": 1,
+ "slug": "ruins-of-lordaeron",
+ "instanceMapID": 2999,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "key": "w15078",
+   "wmo": 15078,
+   "hashes": [
+    1054692617,
+    [
+     2402070325,
+     2816026739
+    ],
+    2018080356,
+    2018080356,
+    1243233305,
+    1054692617,
+    1224274074,
+    1458090948,
+    4064576649,
+    2286828081,
+    1283820581
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5289,
+     "y": 0.524,
+     "share": 1.0,
+     "samples": 45
+    }
+   ]
+  },
+  {
+   "key": "a16612",
+   "area": 16612,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6514,
+     "y": 0.5652,
+     "share": 1.0,
+     "samples": 62
+    }
+   ]
+  },
+  {
+   "key": "a16614",
+   "area": 16614,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4742,
+     "y": 0.5816,
+     "share": 1.0,
+     "samples": 9
+    }
+   ]
+  },
+  {
+   "key": "a16615",
+   "area": 16615,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4426,
+     "y": 0.7249,
+     "share": 1.0,
+     "samples": 43
+    }
+   ]
+  },
+  {
+   "key": "w15126",
+   "wmo": 15126,
+   "hashes": [
+    17657192,
+    [
+     1588144309,
+     3281611917
+    ],
+    1648712731,
+    1648712731,
+    [
+     1349428891,
+     3288328699
+    ],
+    17657192,
+    830094515,
+    3452583797,
+    [
+     229818099,
+     3227124947
+    ],
+    53506310,
+    523323569
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6494,
+     "y": 0.3473,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "key": "a16617",
+   "area": 16617,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3738,
+     "y": 0.3709,
+     "share": 1.0,
+     "samples": 28
+    }
+   ]
+  },
+  {
+   "key": "w15124",
+   "wmo": 15124,
+   "hashes": [
+    595439271,
+    [
+     1979763967,
+     4033003767
+    ],
+    1486858659,
+    1486858659,
+    [
+     645411048,
+     3381571912
+    ],
+    595439271,
+    1986031838,
+    1218136539,
+    [
+     52212576,
+     3322222357
+    ],
+    278430713,
+    2075767892
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6478,
+     "y": 0.7234,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "key": "w15148",
+   "wmo": 15148,
+   "hashes": [
+    3604200868,
+    [
+     933208971,
+     2581536947
+    ],
+    1626120760,
+    1626120760,
+    172673939,
+    3604200868,
+    1854144696,
+    2327043839,
+    1340188452,
+    2355065073,
+    1281047194
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4145,
+     "y": 0.9484,
+     "share": 1.0,
+     "samples": 7
+    }
+   ]
+  },
+  {
+   "key": "w15086",
+   "wmo": 15086,
+   "hashes": [
+    3962688054,
+    766067681,
+    180739703,
+    180739703,
+    [
+     3270454820,
+     3321762223
+    ],
+    3962688054,
+    3971829690,
+    1126197739,
+    [
+     812376677,
+     1094116867
+    ],
+    3413641283,
+    3413641283
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1649,
+     "y": 0.4389,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "key": "w15139",
+   "wmo": 15139,
+   "hashes": [
+    702279862,
+    3317277511,
+    922787278,
+    922787278,
+    [
+     225937106,
+     3191316070
+    ],
+    702279862,
+    3155278258,
+    3511847198,
+    2242112832,
+    3519162530,
+    1914407581
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4035,
+     "y": 0.7272,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "key": "w15064",
+   "wmo": 15064,
+   "hashes": [
+    2808360257,
+    [
+     2142439847,
+     2726159407
+    ],
+    2255551856,
+    2255551856,
+    [
+     2366009653,
+     3020931797
+    ],
+    2808360257,
+    1745578209,
+    843322690,
+    942611689,
+    466602739,
+    3748268531
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5281,
+     "y": 0.5384,
+     "share": 1.0,
+     "samples": 22
+    }
+   ]
+  },
+  {
+   "key": "w15011",
+   "wmo": 15011,
+   "hashes": [
+    988522069,
+    [
+     936108471,
+     3346875759
+    ],
+    3611218968,
+    3611218968,
+    [
+     42305816,
+     1218090552
+    ],
+    988522069,
+    3986719744,
+    1721452014,
+    [
+     1934678757,
+     2294365253
+    ],
+    3000363515,
+    4219722640
+   ],
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.405,
+     "y": 0.3493,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "key": "w15078",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15126",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15124",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15148",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15086",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15139",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15064",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  },
+  {
+   "key": "w15011",
+   "why": "Under the ruins, in the old Undercity: not on this plan's only floor."
+  }
+ ]
+}

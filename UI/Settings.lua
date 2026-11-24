@@ -304,6 +304,20 @@ local function options()
 							set({ "showCoordinates" }, v)
 						end,
 					},
+					mapHere = {
+						type = "toggle",
+						order = 6.05,
+						width = "full",
+						name = L["Show where you are on dungeon maps (approx.)"],
+						desc = L["Inside a dungeon, a soft ring marks the area the game says you are in. The game gives addons no exact position there."],
+						get = function()
+							return get({ "mapHere" })
+						end,
+						set = function(_, v)
+							set({ "mapHere" }, v)
+							UI.ApplyColors()
+						end,
+					},
 					-- Forever's new dungeons (Data/MinimapArt.lua Choose): drawn maps (Santiago Reyes' bundled ones,
 					-- another addon's) or the game's own minimap pictures first.
 					preferProviderMaps = {
