@@ -142,7 +142,9 @@ Compat.CHECKS = {
 	{ "Unit online", "UnitIsConnected", "offline members are not dimmed in the party strip" },
 	{ "Specialization count", "C_SpecializationInfo.GetNumSpecializationsForClassID",
 		"role guesses from class in the party strip (GetNumSpecializationsForClassID is tried instead)" },
-	{ "Area names", "C_Map.GetAreaInfo", "zone names of Questie's quest givers" },
+	{ "Area names", "C_Map.GetAreaInfo",
+		"zone names of Questie's quest givers; the map's You are here marker in areas the game's area table names" },
+	{ "Zone text", "GetZoneText", "the map's You are here marker where a sub-zone is named like the dungeon" },
 	-- Getting there (Data/Travel.lua, Data/Navigation.lua): outdoors only.
 	{ "World to map", "C_Map.GetMapPosFromWorldPos", "the entrance's coordinates on its zone map" },
 	{ "Map to world", "C_Map.GetWorldPosFromMapPos", "distances, flight masters near Forever's new dungeons" },
@@ -214,6 +216,9 @@ Compat.FILES = {
 	{ "UI/FontTest.lua", "Style.RunFontTest", "the font test in /dp debug and /dp scan" },
 	{ "UI/RunLines.lua", "RunMode.RecorderText", "run mode's recorder, drift and prep lines" },
 	{ "Share/SendStats.lua", "SendStats", "counting refused addon messages (sharing and group sync do not say so)" },
+	{ "Data/SubzoneData.lua", "SubzoneData", "the map's You are here marker" },
+	{ "Data/Subzones.lua", "Subzones", "the map's You are here marker" },
+	{ "UI/MapHere.lua", "MapHere", "the map's You are here marker" },
 }
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a

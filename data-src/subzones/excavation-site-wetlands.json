@@ -1,0 +1,150 @@
+{
+ "schema": 1,
+ "slug": "excavation-site-wetlands",
+ "instanceMapID": 2998,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "Dun Algaz",
+   "area": 836,
+   "wmo": 20192,
+   "names": {
+    "deDE": [
+     "Dun Algaz"
+    ],
+    "esES": [
+     "Dun Algaz"
+    ],
+    "esMX": [
+     "Dun Algaz"
+    ],
+    "frFR": [
+     "Dun Algaz"
+    ],
+    "itIT": [
+     "Dun Algaz"
+    ],
+    "koKR": [
+     "던 알가즈"
+    ],
+    "ptBR": [
+     "Dun Algaz"
+    ],
+    "ruRU": [
+     "Дун Альгаз"
+    ],
+    "zhCN": [
+     "丹奥加兹"
+    ],
+    "zhTW": [
+     "丹奧加茲"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8989,
+     "y": 0.8428,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "name": "Lost Dig Site",
+   "area": 16880,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.069,
+     "y": 0.4982,
+     "share": 1.0,
+     "samples": 47
+    }
+   ]
+  },
+  {
+   "name": "Lost Marsh",
+   "area": 16877,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5523,
+     "y": 0.382,
+     "share": 1.0,
+     "samples": 52
+    }
+   ]
+  },
+  {
+   "name": "Site of the Guardian",
+   "area": 16879,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2882,
+     "y": 0.6811,
+     "share": 1.0,
+     "samples": 36
+    }
+   ]
+  },
+  {
+   "name": "Stalker's Thicket",
+   "area": 16878,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2853,
+     "y": 0.4602,
+     "share": 1.0,
+     "samples": 36
+    }
+   ]
+  },
+  {
+   "name": "Thelgen Rock",
+   "area": 1021,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8154,
+     "y": 0.442,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "name": "Whelgar's Excavation Site",
+   "area": 118,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.418,
+     "y": 0.0317,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

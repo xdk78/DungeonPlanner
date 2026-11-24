@@ -53,6 +53,8 @@ jobs:
         run: lua tools/gen_bosses.lua --check
       - name: Travel facts match data-src/travel
         run: lua tools/gen_travel.lua --check
+      - name: Sub-zone anchors match data-src/subzones
+        run: lua tools/gen_subzones.lua --check
       - name: UI layout lint, English (tests/ui_dump.lua; new findings fail, tests/ui_lint_baseline.txt)
         run: lua tests/ui_dump.lua --out "$RUNNER_TEMP/ui"
       - name: UI layout lint, every other locale in Locales/

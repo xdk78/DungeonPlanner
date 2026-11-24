@@ -1,0 +1,167 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-graveyard",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Chamber of Atonement",
+   "wmo": 143830,
+   "names": {
+    "deDE": [
+     "Die Kammer der Buße"
+    ],
+    "esES": [
+     "Cámara Expiatoria"
+    ],
+    "esMX": [
+     "Cámara Expiatoria"
+    ],
+    "frFR": [
+     "Chambre de l’expiation"
+    ],
+    "itIT": [
+     "Chamber of Atonement"
+    ],
+    "koKR": [
+     "속죄의 방"
+    ],
+    "ptBR": [
+     "Câmara da Redenção"
+    ],
+    "ruRU": [
+     "Чертог Искупления"
+    ],
+    "zhCN": [
+     "忏悔室"
+    ],
+    "zhTW": [
+     "懺悔室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7015,
+     "y": 0.6268,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Forlorn Cloister",
+   "wmo": 143843,
+   "names": {
+    "deDE": [
+     "Der Unglückselige Kreuzgang"
+    ],
+    "esES": [
+     "Claustro Abandonado"
+    ],
+    "esMX": [
+     "Claustro Abandonado"
+    ],
+    "frFR": [
+     "Cloître solitaire"
+    ],
+    "itIT": [
+     "Forlorn Cloister"
+    ],
+    "koKR": [
+     "쓸쓸한 회랑"
+    ],
+    "ptBR": [
+     "Claustro Esquecido"
+    ],
+    "ruRU": [
+     "Покинутый двор"
+    ],
+    "zhCN": [
+     "遗忘回廊"
+    ],
+    "zhTW": [
+     "孤寂迴廊"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3654,
+     "y": 0.3678,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Honor's Tomb",
+   "wmo": 143836,
+   "names": {
+    "deDE": [
+     "Das Ehrengrabmal"
+    ],
+    "esES": [
+     "Tumba del Honor"
+    ],
+    "esMX": [
+     "Tumba del Honor"
+    ],
+    "frFR": [
+     "Tombe de l’Honneur"
+    ],
+    "itIT": [
+     "Honor's Tomb"
+    ],
+    "koKR": [
+     "명예의 무덤"
+    ],
+    "ptBR": [
+     "Tumba de Honra"
+    ],
+    "ruRU": [
+     "Гробница Доблести"
+    ],
+    "zhCN": [
+     "荣耀之墓"
+    ],
+    "zhTW": [
+     "榮耀之墓"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2423,
+     "y": 0.5567,
+     "share": 1.0,
+     "samples": 7
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "name": "Forlorn Cloister",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
+  }
+ ]
+}

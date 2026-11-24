@@ -1,0 +1,162 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-library",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Athenaeum",
+   "wmo": 143854,
+   "names": {
+    "deDE": [
+     "Das Athenaeum"
+    ],
+    "esES": [
+     "El Athenaeum"
+    ],
+    "esMX": [
+     "El Athenaeum"
+    ],
+    "frFR": [
+     "Athenaeum"
+    ],
+    "itIT": [
+     "Athenaeum"
+    ],
+    "koKR": [
+     "도서관"
+    ],
+    "ptBR": [
+     "Ateneu"
+    ],
+    "ruRU": [
+     "Читальня"
+    ],
+    "zhCN": [
+     "图书馆"
+    ],
+    "zhTW": [
+     "圖書館"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8339,
+     "y": 0.5281,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Gallery of Treasures",
+   "wmo": 143848,
+   "names": {
+    "deDE": [
+     "Die Galerie der Schätze"
+    ],
+    "esES": [
+     "Galería de los Tesoros"
+    ],
+    "esMX": [
+     "Galería de los Tesoros"
+    ],
+    "frFR": [
+     "Galerie des trésors"
+    ],
+    "itIT": [
+     "Gallery of Treasures"
+    ],
+    "koKR": [
+     "보물 전시실"
+    ],
+    "ptBR": [
+     "Galeria dos Tesouros"
+    ],
+    "ruRU": [
+     "Сокровищница"
+    ],
+    "zhCN": [
+     "珍宝陈列室"
+    ],
+    "zhTW": [
+     "珍寶陳列室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5126,
+     "y": 0.2928,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Huntsman's Cloister",
+   "wmo": 143869,
+   "names": {
+    "deDE": [
+     "Der Kreuzgang des Jägers"
+    ],
+    "esES": [
+     "Claustro del Cazador"
+    ],
+    "esMX": [
+     "Claustro del Cazador"
+    ],
+    "frFR": [
+     "Cloître du veneur"
+    ],
+    "itIT": [
+     "Huntsman's Cloister"
+    ],
+    "koKR": [
+     "사냥꾼의 회랑"
+    ],
+    "ptBR": [
+     "Claustro do Guarda-caça"
+    ],
+    "ruRU": [
+     "Двор охотника"
+    ],
+    "zhCN": [
+     "猎手回廊"
+    ],
+    "zhTW": [
+     "獵手迴廊"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3203,
+     "y": 0.6084,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

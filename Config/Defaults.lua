@@ -11,6 +11,7 @@ Defaults.settings = {
 	debug = false,
 	gamepad = "auto", -- the gamepad interface style: "auto" (detected) | "on" | "off" (Core/Compat.lua Gamepad)
 	showCoordinates = true,
+	mapHere = true, -- the map's "You are here (approx.)" marker inside dungeons (UI/MapHere.lua)
 	confirmDelete = true,
 	colorblind = false, -- colour-blind friendly colours for pulls, routes, drawings and roles (UI/Style.lua)
 	gameIcon = false, -- the minimap button and the window show the game's map icon instead of our logo (UI/Art.lua)

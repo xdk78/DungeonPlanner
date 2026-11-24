@@ -1,0 +1,257 @@
+{
+ "schema": 1,
+ "slug": "wailing-caverns",
+ "instanceMapID": 43,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Crag of the Everliving",
+   "wmo": 143253,
+   "names": {
+    "deDE": [
+     "Die Klippe der Ewiglebenden"
+    ],
+    "esES": [
+     "Risco de los Eternos"
+    ],
+    "esMX": [
+     "Risco de los Eternos"
+    ],
+    "frFR": [
+     "Combe des Éternels"
+    ],
+    "itIT": [
+     "Crag of the Everliving"
+    ],
+    "koKR": [
+     "영생의 바위굴"
+    ],
+    "ptBR": [
+     "Rochedo do Sempre-vivo"
+    ],
+    "ruRU": [
+     "Утес Вечноживущего"
+    ],
+    "zhCN": [
+     "永生峭壁"
+    ],
+    "zhTW": [
+     "永生峭壁"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5918,
+     "y": 0.6576,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Dreamer's Rock",
+   "wmo": 143254,
+   "names": {
+    "deDE": [
+     "Der Träumerstein"
+    ],
+    "esES": [
+     "Roca del Soñador"
+    ],
+    "esMX": [
+     "Roca del Soñador"
+    ],
+    "frFR": [
+     "Rocher du Rêveur"
+    ],
+    "itIT": [
+     "Dreamer's Rock"
+    ],
+    "koKR": [
+     "꿈꾸는 자의 바위"
+    ],
+    "ptBR": [
+     "Rocha do Sonhador"
+    ],
+    "ruRU": [
+     "Скала Дремлющего"
+    ],
+    "zhCN": [
+     "美梦石"
+    ],
+    "zhTW": [
+     "美夢石"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3547,
+     "y": 0.1444,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Pit of Fangs",
+   "wmo": 143252,
+   "names": {
+    "deDE": [
+     "Die Fangzahngrube"
+    ],
+    "esES": [
+     "Foso de los Colmillos"
+    ],
+    "esMX": [
+     "Foso de los Colmillos"
+    ],
+    "frFR": [
+     "Abîme des Crocs"
+    ],
+    "itIT": [
+     "Pit of Fangs"
+    ],
+    "koKR": [
+     "송곳니 구덩이"
+    ],
+    "ptBR": [
+     "Fosso das Presas"
+    ],
+    "ruRU": [
+     "Змеиная яма"
+    ],
+    "zhCN": [
+     "毒牙深渊"
+    ],
+    "zhTW": [
+     "毒牙深淵"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1237,
+     "y": 0.416,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Screaming Gully",
+   "wmo": 143250,
+   "names": {
+    "deDE": [
+     "Die Kreischende Schlucht"
+    ],
+    "esES": [
+     "Quebrada del Llanto"
+    ],
+    "esMX": [
+     "Quebrada del Llanto"
+    ],
+    "frFR": [
+     "Ravine hurlante"
+    ],
+    "itIT": [
+     "Screaming Gully"
+    ],
+    "koKR": [
+     "울부짖는 협곡"
+    ],
+    "ptBR": [
+     "Barranca Estridente"
+    ],
+    "ruRU": [
+     "Овраг Воплей"
+    ],
+    "zhCN": [
+     "激流溪谷"
+    ],
+    "zhTW": [
+     "激流溪谷"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4049,
+     "y": 0.3635,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Winding Chasm",
+   "wmo": 143259,
+   "names": {
+    "deDE": [
+     "Der Gewundene Abgrund"
+    ],
+    "esES": [
+     "Sima Serpenteante"
+    ],
+    "esMX": [
+     "Sima Serpenteante"
+    ],
+    "frFR": [
+     "Gouffre tortueux"
+    ],
+    "itIT": [
+     "Winding Chasm"
+    ],
+    "koKR": [
+     "굽이치는 바위굴"
+    ],
+    "ptBR": [
+     "Fenda Sinuosa"
+    ],
+    "ruRU": [
+     "Извилистая расщелина"
+    ],
+    "zhCN": [
+     "狂风裂口"
+    ],
+    "zhTW": [
+     "狂風裂口"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7996,
+     "y": 0.5968,
+     "share": 1.0,
+     "samples": 10
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "name": "Winding Chasm",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
+  }
+ ]
+}

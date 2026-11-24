@@ -1,0 +1,234 @@
+{
+ "schema": 1,
+ "slug": "shapers-terrace",
+ "instanceMapID": 3001,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "Botanical Grounds",
+   "area": 16937,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4397,
+     "y": 0.7278,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "name": "Hall of Repose",
+   "wmo": 44787,
+   "names": {
+    "deDE": [
+     "Halle der Muße"
+    ],
+    "esES": [
+     "Sala del Descanso"
+    ],
+    "esMX": [
+     "Sala del Descanso"
+    ],
+    "frFR": [
+     "Hall de la quiétude"
+    ],
+    "itIT": [
+     "Hall of Repose"
+    ],
+    "koKR": [
+     "영면의 전당"
+    ],
+    "ptBR": [
+     "Salão do Repouso"
+    ],
+    "ruRU": [
+     "Зал Спокойствия"
+    ],
+    "zhCN": [
+     "休眠大厅"
+    ],
+    "zhTW": [
+     "安詳大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4609,
+     "y": 0.8266,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Marshal's Refuge",
+   "area": 541,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6176,
+     "y": 0.8279,
+     "share": 1.0,
+     "samples": 16
+    }
+   ]
+  },
+  {
+   "name": "Pillar of Assimilation",
+   "area": 16929,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7405,
+     "y": 0.5824,
+     "share": 1.0,
+     "samples": 20
+    }
+   ]
+  },
+  {
+   "name": "Roguefeather Den",
+   "area": 487,
+   "wmo": 19261,
+   "names": {
+    "deDE": [
+     "Bau der Wildfedern"
+    ],
+    "esES": [
+     "Guarida Malapluma"
+    ],
+    "esMX": [
+     "Guarida Malapluma"
+    ],
+    "frFR": [
+     "Tanière des Volplumes"
+    ],
+    "itIT": [
+     "Roguefeather Den"
+    ],
+    "koKR": [
+     "하피 동굴"
+    ],
+    "ptBR": [
+     "Covil Plumerrante"
+    ],
+    "ruRU": [
+     "Логово Легкоперых"
+    ],
+    "zhCN": [
+     "飞羽洞穴"
+    ],
+    "zhTW": [
+     "飛羽洞穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7519,
+     "y": 0.2417,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "name": "Ruby Spring",
+   "area": 16932,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1804,
+     "y": 0.6883,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "name": "Shaper's Plateau",
+   "area": 16928,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7285,
+     "y": 0.792,
+     "share": 1.0,
+     "samples": 31
+    }
+   ]
+  },
+  {
+   "name": "The Highlands Causeway",
+   "area": 16934,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.0697,
+     "y": 0.447,
+     "share": 1.0,
+     "samples": 14
+    }
+   ]
+  },
+  {
+   "name": "The Verdant Plains",
+   "area": 16930,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4355,
+     "y": 0.5413,
+     "share": 1.0,
+     "samples": 269
+    }
+   ]
+  },
+  {
+   "name": "Walk of Communion",
+   "area": 16933,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6059,
+     "y": 0.3677,
+     "share": 1.0,
+     "samples": 94
+    }
+   ]
+  },
+  {
+   "name": "Watcher's Overlook",
+   "area": 16935,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.1042,
+     "y": 0.2145,
+     "share": 1.0,
+     "samples": 40
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

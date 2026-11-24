@@ -1,0 +1,2069 @@
+{
+ "schema": 1,
+ "slug": "city-of-dalaran",
+ "instanceMapID": 2959,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "A Hero's Welcome",
+   "wmo": 134302,
+   "names": {
+    "deDE": [
+     "Zum Gefeierten Helden"
+    ],
+    "esES": [
+     "La Bienvenida de un Héroe"
+    ],
+    "esMX": [
+     "La Bienvenida de un Héroe"
+    ],
+    "frFR": [
+     "L’échoppe des héros"
+    ],
+    "itIT": [
+     "A Hero's Welcome"
+    ],
+    "koKR": [
+     "영웅의 쉼터 여관"
+    ],
+    "ptBR": [
+     "Recanto dos Heróis"
+    ],
+    "ruRU": [
+     "Благодарность за отвагу"
+    ],
+    "zhCN": [
+     "英雄之家"
+    ],
+    "zhTW": [
+     "英雄光臨"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3849,
+     "y": 0.4246,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "Antonidas' Antiquities",
+   "wmo": 134307,
+   "names": {
+    "deDE": [
+     "Antonidas' Antiquitäten"
+    ],
+    "esES": [
+     "Anticuario de Antonidas"
+    ],
+    "esMX": [
+     "Antigüedades de Antonidas"
+    ],
+    "frFR": [
+     "Les antiquités d’Antonidas"
+    ],
+    "itIT": [
+     "Antonidas' Antiquities"
+    ],
+    "koKR": [
+     "안토니다스의 골동품"
+    ],
+    "ptBR": [
+     "Antiguidades do Antônidas"
+    ],
+    "ruRU": [
+     "Редкости Антонидаса"
+    ],
+    "zhCN": [
+     "安东尼达斯珍玩店"
+    ],
+    "zhTW": [
+     "安東尼達斯古跡"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6674,
+     "y": 0.6855,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Archival Exhibit",
+   "wmo": 134292,
+   "names": {
+    "deDE": [
+     "Das Archivexponat"
+    ],
+    "esES": [
+     "Exposición archivística"
+    ],
+    "esMX": [
+     "Exposición de Archivos"
+    ],
+    "frFR": [
+     "Exposition d’archives"
+    ],
+    "itIT": [
+     "Archival Exhibit"
+    ],
+    "koKR": [
+     "기록 전시관"
+    ],
+    "ptBR": [
+     "Exibição Arquivística"
+    ],
+    "ruRU": [
+     "Архивная выставка"
+    ],
+    "zhCN": [
+     "档案展厅"
+    ],
+    "zhTW": [
+     "文物展覽區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6538,
+     "y": 0.7642,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Cantrips & Crows",
+   "wmo": 134333,
+   "names": {
+    "deDE": [
+     "Zur Zauberkrähe"
+    ],
+    "esES": [
+     "Taberna de los Cuervos"
+    ],
+    "esMX": [
+     "Taberna de los Cuervos"
+    ],
+    "frFR": [
+     "Caboulot des corbeaux"
+    ],
+    "itIT": [
+     "Cantrips & Crows"
+    ],
+    "koKR": [
+     "마법과 까마귀 선술집"
+    ],
+    "ptBR": [
+     "Urubus e Urucubacas"
+    ],
+    "ruRU": [
+     "Ведьма и ворон"
+    ],
+    "zhCN": [
+     "咒语和乌鸦旅店"
+    ],
+    "zhTW": [
+     "咒語與烏鴉"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4538,
+     "y": 0.4913,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Cartier & Co. Fine Jewelry",
+   "wmo": 134287,
+   "names": {
+    "deDE": [
+     "Juwelier Cartier & Co."
+    ],
+    "esES": [
+     "Joyería Fina Cartier y Cía."
+    ],
+    "esMX": [
+     "Joyería Fina Cartier y Cía."
+    ],
+    "frFR": [
+     "Joaillerie de luxe Kartier & Co."
+    ],
+    "itIT": [
+     "Cartier & Co. Fine Jewelry"
+    ],
+    "koKR": [
+     "까르티엘 보석공예품"
+    ],
+    "ptBR": [
+     "Joias Finas Cartier e Associados",
+     "Sojoia e Joalheiros Associados"
+    ],
+    "ruRU": [
+     "Ювелирный магазин Картье и компании"
+    ],
+    "zhCN": [
+     "卡蒂亚珠宝店"
+    ],
+    "zhTW": [
+     "卡地亞珠寶公司"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5914,
+     "y": 0.4353,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Curiosities & Moore",
+   "wmo": 134274,
+   "names": {
+    "deDE": [
+     "Kuriositäten & Meer"
+    ],
+    "esES": [
+     "Curiosidades y Más"
+    ],
+    "esMX": [
+     "Curiosidades y Más"
+    ],
+    "frFR": [
+     "Les Objets de la Moore"
+    ],
+    "itIT": [
+     "Curiosities & Moore"
+    ],
+    "koKR": [
+     "무어의 골동품점"
+    ],
+    "ptBR": [
+     "Casa dos Bricabraques"
+    ],
+    "ruRU": [
+     "Диковины и редкости"
+    ],
+    "zhCN": [
+     "摩尔珍品店"
+    ],
+    "zhTW": [
+     "不只是配件"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4751,
+     "y": 0.555,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Dalaran",
+   "area": 16558,
+   "wmo": 134271,
+   "names": {
+    "deDE": [
+     "Dalaran"
+    ],
+    "esES": [
+     "Dalaran"
+    ],
+    "esMX": [
+     "Dalaran"
+    ],
+    "frFR": [
+     "Dalaran"
+    ],
+    "itIT": [
+     "Dalaran"
+    ],
+    "koKR": [
+     "달라란"
+    ],
+    "ptBR": [
+     "Dalaran"
+    ],
+    "ruRU": [
+     "Даларан"
+    ],
+    "zhCN": [
+     "达拉然"
+    ],
+    "zhTW": [
+     "達拉然"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5005,
+     "y": 0.5391,
+     "share": 1.0,
+     "samples": 162
+    }
+   ]
+  },
+  {
+   "name": "Dalaran Merchant's Bank",
+   "wmo": 134283,
+   "names": {
+    "deDE": [
+     "Die Händlerbank von Dalaran",
+     "Händlerbank von Dalaran"
+    ],
+    "esES": [
+     "Banco de Mercaderes de Dalaran"
+    ],
+    "esMX": [
+     "Banco de Mercaderes de Dalaran"
+    ],
+    "frFR": [
+     "Banque des marchands de Dalaran"
+    ],
+    "itIT": [
+     "Dalaran Merchant's Bank"
+    ],
+    "koKR": [
+     "달라란 상업 은행"
+    ],
+    "ptBR": [
+     "Banco Mercantil de Dalaran"
+    ],
+    "ruRU": [
+     "Даларанский торговый банк"
+    ],
+    "zhCN": [
+     "达拉然商业银行"
+    ],
+    "zhTW": [
+     "達拉然商業銀行"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.345,
+     "y": 0.4648,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Dalaran Orphanage",
+   "wmo": 134273,
+   "names": {
+    "deDE": [
+     "Das Waisenhaus von Dalaran"
+    ],
+    "esES": [
+     "Orfanato de Dalaran"
+    ],
+    "esMX": [
+     "Orfanato de Dalaran"
+    ],
+    "frFR": [
+     "Orphelinat de Dalaran"
+    ],
+    "itIT": [
+     "Dalaran Orphanage"
+    ],
+    "koKR": [
+     "달라란 보육원"
+    ],
+    "ptBR": [
+     "Orfanato de Dalaran"
+    ],
+    "ruRU": [
+     "Даларанский приют"
+    ],
+    "zhCN": [
+     "达拉然孤儿院"
+    ],
+    "zhTW": [
+     "達拉然孤兒院"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5972,
+     "y": 0.8107,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Dalaran Visitor Center",
+   "wmo": 134276,
+   "names": {
+    "deDE": [
+     "Das Besucherzentrum von Dalaran"
+    ],
+    "esES": [
+     "Centro de visitantes de Dalaran"
+    ],
+    "esMX": [
+     "Centro de Visitantes de Dalaran"
+    ],
+    "frFR": [
+     "Accueil des visiteurs de Dalaran"
+    ],
+    "itIT": [
+     "Dalaran Visitor Center"
+    ],
+    "koKR": [
+     "달라란 관광 안내소"
+    ],
+    "ptBR": [
+     "Centro para Visitantes de Dalaran"
+    ],
+    "ruRU": [
+     "Гостевые покои Даларана"
+    ],
+    "zhCN": [
+     "达拉然访客中心"
+    ],
+    "zhTW": [
+     "達拉然旅客中心"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4746,
+     "y": 0.5686,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Eclipse with Shears",
+   "wmo": 134268,
+   "names": {
+    "deDE": [
+     "Die Scherenfinsternis"
+    ],
+    "esES": [
+     "Eclipse con Cizallas"
+    ],
+    "esMX": [
+     "Eclipse con Tijeras",
+     "Eclipse con tijeras"
+    ],
+    "frFR": [
+     "Éclipse et ciseaux"
+    ],
+    "itIT": [
+     "Eclipse with Shears"
+    ],
+    "koKR": [
+     "월식 미용실"
+    ],
+    "ptBR": [
+     "Tampar com Tesouras"
+    ],
+    "ruRU": [
+     "Ослепительные стрижки"
+    ],
+    "zhCN": [
+     "日蚀与剪刀"
+    ],
+    "zhTW": [
+     "以剪蔽日"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6139,
+     "y": 0.5947,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "First to your Aid",
+   "wmo": 134288,
+   "names": {
+    "deDE": [
+     "Die Helfende Hand"
+    ],
+    "esES": [
+     "Te Auxiliamos los Primeros"
+    ],
+    "esMX": [
+     "Te Auxiliamos los Primeros"
+    ],
+    "frFR": [
+     "Premier à votre secours"
+    ],
+    "itIT": [
+     "First to your Aid"
+    ],
+    "koKR": [
+     "응급치료소"
+    ],
+    "ptBR": [
+     "Socorro em Primeiro Lugar"
+    ],
+    "ruRU": [
+     "Спешим на помощь"
+    ],
+    "zhCN": [
+     "急你所急"
+    ],
+    "zhTW": [
+     "急救你優先"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5778,
+     "y": 0.3905,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Forge of Fate",
+   "wmo": 134327,
+   "names": {
+    "deDE": [
+     "Die Schmiede des Schicksals"
+    ],
+    "esES": [
+     "Forja del Destino"
+    ],
+    "esMX": [
+     "Forja del Destino"
+    ],
+    "frFR": [
+     "La forge du Destin"
+    ],
+    "itIT": [
+     "Forge of Fate"
+    ],
+    "koKR": [
+     "운명의 용광로"
+    ],
+    "ptBR": [
+     "Forja do Destino"
+    ],
+    "ruRU": [
+     "Кузня судьбы"
+    ],
+    "zhCN": [
+     "命运熔炉"
+    ],
+    "zhTW": [
+     "命運熔爐"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6381,
+     "y": 0.4772,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Glorious Goods",
+   "wmo": 134295,
+   "names": {
+    "deDE": [
+     "Wunderbare Waren"
+    ],
+    "esES": [
+     "Objetos Gloriosos"
+    ],
+    "esMX": [
+     "Objetos Gloriosos"
+    ],
+    "frFR": [
+     "Produits de Prestige"
+    ],
+    "itIT": [
+     "Glorious Goods"
+    ],
+    "koKR": [
+     "영광의 일용품점"
+    ],
+    "ptBR": [
+     "Tudo de Bom"
+    ],
+    "ruRU": [
+     "Великолепные товары"
+    ],
+    "zhCN": [
+     "荣耀杂货店"
+    ],
+    "zhTW": [
+     "輝煌商品"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3857,
+     "y": 0.5893,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Langrom's Leather",
+   "wmo": 134297,
+   "names": {
+    "deDE": [
+     "Langroms Leder"
+    ],
+    "esES": [
+     "Peletería de Langrom"
+    ],
+    "esMX": [
+     "Cueros de Langrom"
+    ],
+    "frFR": [
+     "Cuirs de Langrom"
+    ],
+    "itIT": [
+     "Langrom's Leather"
+    ],
+    "koKR": [
+     "랭그롬의 가죽 방어구 상점"
+    ],
+    "ptBR": [
+     "Couros do Langrom"
+    ],
+    "ruRU": [
+     "Кожа от Лангрома"
+    ],
+    "zhCN": [
+     "兰格鲁皮货铺"
+    ],
+    "zhTW": [
+     "朗格姆的皮甲"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3761,
+     "y": 0.5669,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Magical Menagerie",
+   "wmo": 134269,
+   "names": {
+    "deDE": [
+     "Die Magische Menagerie"
+    ],
+    "esES": [
+     "Arca Mágica"
+    ],
+    "esMX": [
+     "Arca Mágica"
+    ],
+    "frFR": [
+     "Ménagerie magique"
+    ],
+    "itIT": [
+     "Magical Menagerie"
+    ],
+    "koKR": [
+     "마법 동물원"
+    ],
+    "ptBR": [
+     "A Arca Mágica"
+    ],
+    "ruRU": [
+     "Волшебный зверинец"
+    ],
+    "zhCN": [
+     "魔法动物店"
+    ],
+    "zhTW": [
+     "魔法動物園"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5752,
+     "y": 0.6852,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Magus Commerce Exchange",
+   "wmo": 134290,
+   "names": {
+    "deDE": [
+     "Der Handelsmarkt der Magier"
+    ],
+    "esES": [
+     "Mercado de Magos"
+    ],
+    "esMX": [
+     "Mercado de Magos"
+    ],
+    "frFR": [
+     "La halle des mages"
+    ],
+    "itIT": [
+     "Magus Commerce Exchange"
+    ],
+    "koKR": [
+     "마법사 교역소"
+    ],
+    "ptBR": [
+     "Área Comercial Magus"
+    ],
+    "ruRU": [
+     "Торговая палата волшебников"
+    ],
+    "zhCN": [
+     "魔法商业区"
+    ],
+    "zhTW": [
+     "魔導師貿易區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6221,
+     "y": 0.4256,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "One More Glass",
+   "wmo": 134284,
+   "names": {
+    "deDE": [
+     "Noch ein Gläschen"
+    ],
+    "esES": [
+     "Una Copa Más"
+    ],
+    "esMX": [
+     "Una Copa Más"
+    ],
+    "frFR": [
+     "Un Dernier pour la route"
+    ],
+    "itIT": [
+     "One More Glass"
+    ],
+    "koKR": [
+     "한 잔 더"
+    ],
+    "ptBR": [
+     "Desce a Saideira"
+    ],
+    "ruRU": [
+     "Еще по сто"
+    ],
+    "zhCN": [
+     "再来一杯"
+    ],
+    "zhTW": [
+     "勸君更進一杯酒"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6062,
+     "y": 0.6215,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Path of Renewal",
+   "wmo": 134312,
+   "names": {
+    "deDE": [
+     "Der Pfad der Erneuerung"
+    ],
+    "esES": [
+     "Sendero de la Renovación"
+    ],
+    "esMX": [
+     "Camino de Renovación"
+    ],
+    "frFR": [
+     "Voie du Renouveau"
+    ],
+    "itIT": [
+     "Path of Renewal"
+    ],
+    "koKR": [
+     "소생의 길"
+    ],
+    "ptBR": [
+     "Caminho da Renovação"
+    ],
+    "ruRU": [
+     "Путь обновления"
+    ],
+    "zhCN": [
+     "复苏之路"
+    ],
+    "zhTW": [
+     "復原之路"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6758,
+     "y": 0.5214,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Presage Plaza",
+   "wmo": 134346,
+   "names": {
+    "deDE": [
+     "Die Plaza der Prophezeiung",
+     "Plaza der Prophezeiung"
+    ],
+    "esES": [
+     "Plaza del Presagio"
+    ],
+    "esMX": [
+     "Plaza del Presagio"
+    ],
+    "frFR": [
+     "Place des Présages"
+    ],
+    "itIT": [
+     "Presage Plaza"
+    ],
+    "koKR": [
+     "예언의 광장"
+    ],
+    "ptBR": [
+     "Praça do Presságio"
+    ],
+    "ruRU": [
+     "Площадь предвестника"
+    ],
+    "zhCN": [
+     "预兆广场"
+    ],
+    "zhTW": [
+     "預兆廣場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6121,
+     "y": 0.7372,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Runeweaver Lounge",
+   "wmo": 134275,
+   "names": {
+    "deDE": [
+     "Der Runenwebersalon"
+    ],
+    "esES": [
+     "Salón Tejerruna"
+    ],
+    "esMX": [
+     "Sala de los Tejerrunas"
+    ],
+    "frFR": [
+     "Pavillon Tisserune"
+    ],
+    "itIT": [
+     "Runeweaver Lounge"
+    ],
+    "koKR": [
+     "룬위버 휴게소"
+    ],
+    "ptBR": [
+     "Pavilhão Fiarruna"
+    ],
+    "ruRU": [
+     "Приют Руноплета"
+    ],
+    "zhCN": [
+     "鲁因维沃尔休息室"
+    ],
+    "zhTW": [
+     "織符者招待所"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5529,
+     "y": 0.5429,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "Runeweaver Square",
+   "wmo": 134311,
+   "names": {
+    "deDE": [
+     "Der Runenweberplatz"
+    ],
+    "esES": [
+     "Plaza Tejerruna"
+    ],
+    "esMX": [
+     "Plaza Tejerruna"
+    ],
+    "frFR": [
+     "Place Tisserune"
+    ],
+    "itIT": [
+     "Runeweaver Square"
+    ],
+    "koKR": [
+     "룬위버 광장"
+    ],
+    "ptBR": [
+     "Praça Fiarruna"
+    ],
+    "ruRU": [
+     "Площадь Руноплета"
+    ],
+    "zhCN": [
+     "鲁因广场"
+    ],
+    "zhTW": [
+     "織符者廣場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5193,
+     "y": 0.5542,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Sewer",
+   "wmo": 134350,
+   "names": {
+    "deDE": [
+     "Der Abwasserkanal"
+    ],
+    "esES": [
+     "Cloacas"
+    ],
+    "esMX": [
+     "Cloaca"
+    ],
+    "frFR": [
+     "Égouts"
+    ],
+    "itIT": [
+     "Sewer"
+    ],
+    "koKR": [
+     "하수구"
+    ],
+    "ptBR": [
+     "Esgoto"
+    ],
+    "ruRU": [
+     "Канализация",
+     "Стоки"
+    ],
+    "zhCN": [
+     "下水道"
+    ],
+    "zhTW": [
+     "下水道"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4272,
+     "y": 0.2902,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Sisters Sorcerous",
+   "wmo": 134298,
+   "names": {
+    "deDE": [
+     "Zauberhafte Schwestern"
+    ],
+    "esES": [
+     "Hermanas Hechiceras"
+    ],
+    "esMX": [
+     "Hermanas Hechiceras",
+     "Hermanas hechiceras"
+    ],
+    "frFR": [
+     "Aux Sœurs sorcières"
+    ],
+    "itIT": [
+     "Sisters Sorcerous"
+    ],
+    "koKR": [
+     "자매 마술사"
+    ],
+    "ptBR": [
+     "Feito Feiticeiro",
+     "Irmãs Bruxedas"
+    ],
+    "ruRU": [
+     "Ведовские сестрички"
+    ],
+    "zhCN": [
+     "巫术姐妹"
+    ],
+    "zhTW": [
+     "巫術姊妹"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4738,
+     "y": 0.3993,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Talismanic Textiles",
+   "wmo": 134293,
+   "names": {
+    "deDE": [
+     "Glück bringende Textilien"
+    ],
+    "esES": [
+     "Telas talismánicas"
+    ],
+    "esMX": [
+     "Telas Talismánicas"
+    ],
+    "frFR": [
+     "Textiles talismaniques"
+    ],
+    "itIT": [
+     "Talismanic Textiles"
+    ],
+    "koKR": [
+     "마법의 옷가게"
+    ],
+    "ptBR": [
+     "Tecidos Talismânicos"
+    ],
+    "ruRU": [
+     "Охранные ткани"
+    ],
+    "zhCN": [
+     "避邪纺织店"
+    ],
+    "zhTW": [
+     "咒符織品店"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5977,
+     "y": 0.3766,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Tempered Tomes",
+   "wmo": 134272,
+   "names": {
+    "deDE": [
+     "Die Gehärteten Folianten"
+    ],
+    "esES": [
+     "Tomos Templados"
+    ],
+    "esMX": [
+     "Tomos Templados"
+    ],
+    "frFR": [
+     "Tomes tranchants"
+    ],
+    "itIT": [
+     "Tempered Tomes"
+    ],
+    "koKR": [
+     "연마된 고서"
+    ],
+    "ptBR": [
+     "Tomos Temperados"
+    ],
+    "ruRU": [
+     "Закаленные фолианты"
+    ],
+    "zhCN": [
+     "精炼法典阁"
+    ],
+    "zhTW": [
+     "淬鍊書卷"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3848,
+     "y": 0.3214,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Agronomical Apothecary",
+   "wmo": 134286,
+   "names": {
+    "deDE": [
+     "Das Agrarwissenschaftliche Apothekarium"
+    ],
+    "esES": [
+     "La Botica Agronómica"
+    ],
+    "esMX": [
+     "La Botica Agronómica"
+    ],
+    "frFR": [
+     "L’apothicaire agronomique"
+    ],
+    "itIT": [
+     "The Agronomical Apothecary"
+    ],
+    "koKR": [
+     "농업공학 연금술점"
+    ],
+    "ptBR": [
+     "A Boticária Agronômica"
+    ],
+    "ruRU": [
+     "Аптека агронома"
+    ],
+    "zhCN": [
+     "农艺炼金房"
+    ],
+    "zhTW": [
+     "農藝藥材行"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6036,
+     "y": 0.4566,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Arsenal Absolute",
+   "wmo": 134299,
+   "names": {
+    "deDE": [
+     "Das Absolute Arsenal"
+    ],
+    "esES": [
+     "El Arsenal Absoluto"
+    ],
+    "esMX": [
+     "El Arsenal Absoluto"
+    ],
+    "frFR": [
+     "L’Arsenal absolu"
+    ],
+    "itIT": [
+     "The Arsenal Absolute"
+    ],
+    "koKR": [
+     "절대의 무기고"
+    ],
+    "ptBR": [
+     "O Arsenal Absoluto"
+    ],
+    "ruRU": [
+     "Полный арсенал"
+    ],
+    "zhCN": [
+     "神兵利器"
+    ],
+    "zhTW": [
+     "完全軍械庫"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4293,
+     "y": 0.6123,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Atrium of Fortune",
+   "wmo": 134344,
+   "names": {
+    "deDE": [
+     "Das Atrium des Glücks"
+    ],
+    "esES": [
+     "Claustro de la Fortuna"
+    ],
+    "esMX": [
+     "El Atrio de la Fortuna"
+    ],
+    "frFR": [
+     "L’atrium de la Fortune"
+    ],
+    "itIT": [
+     "The Atrium of Fortune"
+    ],
+    "koKR": [
+     "행운의 안뜰"
+    ],
+    "ptBR": [
+     "Átrio da Fortuna"
+    ],
+    "ruRU": [
+     "Атриум судьбы"
+    ],
+    "zhCN": [
+     "命运中庭"
+    ],
+    "zhTW": [
+     "機運中庭"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.406,
+     "y": 0.3589,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Dalaran Charter",
+   "wmo": 134300,
+   "names": {
+    "deDE": [
+     "Die Charta von Dalaran"
+    ],
+    "esES": [
+     "Estatuto de Dalaran"
+    ],
+    "esMX": [
+     "Fueros de Dalaran"
+    ],
+    "frFR": [
+     "Le Coffre de Dalaran"
+    ],
+    "itIT": [
+     "The Dalaran Charter"
+    ],
+    "koKR": [
+     "달라란 은행"
+    ],
+    "ptBR": [
+     "Caixa de Dalaran"
+    ],
+    "ruRU": [
+     "Даларанский капитул"
+    ],
+    "zhCN": [
+     "达拉然特许银行"
+    ],
+    "zhTW": [
+     "達拉然自治區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6941,
+     "y": 0.5975,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "The Eventide",
+   "wmo": 134313,
+   "names": {
+    "deDE": [
+     "Die Abendruh"
+    ],
+    "esES": [
+     "El Manto de la Noche"
+    ],
+    "esMX": [
+     "El Manto de la Noche"
+    ],
+    "frFR": [
+     "Le Brunant"
+    ],
+    "itIT": [
+     "The Eventide"
+    ],
+    "koKR": [
+     "어스름 거리"
+    ],
+    "ptBR": [
+     "Anoitecer"
+    ],
+    "ruRU": [
+     "Вечерняя Заря"
+    ],
+    "zhCN": [
+     "日暮广场"
+    ],
+    "zhTW": [
+     "日暮區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3708,
+     "y": 0.5217,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Linguist's Lounge",
+   "wmo": 134321,
+   "names": {
+    "deDE": [
+     "Der Salon der Sprachkundler"
+    ],
+    "esES": [
+     "Salón del Lingüista"
+    ],
+    "esMX": [
+     "El Salón del Lingüista"
+    ],
+    "frFR": [
+     "Le Vers de trop"
+    ],
+    "itIT": [
+     "The Linguist's Lounge"
+    ],
+    "koKR": [
+     "언어학자의 휴게실"
+    ],
+    "ptBR": [
+     "Lounge dos Linguistas"
+    ],
+    "ruRU": [
+     "Приют лингвиста"
+    ],
+    "zhCN": [
+     "语言学家沙龙"
+    ],
+    "zhTW": [
+     "語言學家休息室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5558,
+     "y": 0.5426,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Militant Mystic",
+   "wmo": 134296,
+   "names": {
+    "deDE": [
+     "Der Militante Mystiker"
+    ],
+    "esES": [
+     "El Místico Militante"
+    ],
+    "esMX": [
+     "El Místico Militante"
+    ],
+    "frFR": [
+     "Le Mystique belliqueux"
+    ],
+    "itIT": [
+     "The Militant Mystic"
+    ],
+    "koKR": [
+     "신비스러운 투사의 무기점"
+    ],
+    "ptBR": [
+     "O Militante Místico"
+    ],
+    "ruRU": [
+     "Воинствующий мистик"
+    ],
+    "zhCN": [
+     "好战的秘法师"
+    ],
+    "zhTW": [
+     "軍事狂秘術店"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3719,
+     "y": 0.5398,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Purple Parlor",
+   "wmo": 134347,
+   "names": {
+    "deDE": [
+     "Der Purpursalon"
+    ],
+    "esES": [
+     "El Salón Púrpura"
+    ],
+    "esMX": [
+     "El Salón Púrpura"
+    ],
+    "frFR": [
+     "Le salon Violet"
+    ],
+    "itIT": [
+     "The Purple Parlor"
+    ],
+    "koKR": [
+     "화려한 응접실"
+    ],
+    "ptBR": [
+     "Salão Púrpura"
+    ],
+    "ruRU": [
+     "Лиловая гостиная"
+    ],
+    "zhCN": [
+     "紫色天台"
+    ],
+    "zhTW": [
+     "紫羅蘭頂閣"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5656,
+     "y": 0.2234,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Scribes' Sacellum",
+   "wmo": 134291,
+   "names": {
+    "deDE": [
+     "Das Sacellum der Schreiber"
+    ],
+    "esES": [
+     "El Templete de los Escribas"
+    ],
+    "esMX": [
+     "El Templete de los Escribas"
+    ],
+    "frFR": [
+     "Le Sacellum du scribe"
+    ],
+    "itIT": [
+     "The Scribes' Sacellum"
+    ],
+    "koKR": [
+     "각인사의 성소"
+    ],
+    "ptBR": [
+     "O Sacelo dos Escribas"
+    ],
+    "ruRU": [
+     "Скрипторий"
+    ],
+    "zhCN": [
+     "铭文师的殿堂"
+    ],
+    "zhTW": [
+     "雕銘師禮拜堂"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5795,
+     "y": 0.4527,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Silver Enclave",
+   "wmo": 134270,
+   "names": {
+    "deDE": [
+     "Die Silberne Enklave"
+    ],
+    "esES": [
+     "El Enclave de Plata"
+    ],
+    "esMX": [
+     "El Enclave de Plata"
+    ],
+    "frFR": [
+     "L’enclave Argentée"
+    ],
+    "itIT": [
+     "The Silver Enclave"
+    ],
+    "koKR": [
+     "은빛 자치구"
+    ],
+    "ptBR": [
+     "Enclave Prateado"
+    ],
+    "ruRU": [
+     "Серебряный Анклав"
+    ],
+    "zhCN": [
+     "银色领地"
+    ],
+    "zhTW": [
+     "白銀領區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4436,
+     "y": 0.4236,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "The Sky Enclave",
+   "wmo": 142312,
+   "names": {
+    "deDE": [
+     "Die Himmelsenklave"
+    ],
+    "esES": [
+     "El Enclave Celestial"
+    ],
+    "esMX": [
+     "El Enclave del Cielo"
+    ],
+    "frFR": [
+     "L’enclave Céleste"
+    ],
+    "itIT": [
+     "The Sky Enclave"
+    ],
+    "koKR": [
+     "창공 자치구"
+    ],
+    "ptBR": [
+     "Enclave Celeste"
+    ],
+    "ruRU": [
+     "Небесный Анклав"
+    ],
+    "zhCN": [
+     "苍穹领地"
+    ],
+    "zhTW": [
+     "天空領區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5202,
+     "y": 0.2001,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "The Threads of Fate",
+   "wmo": 134278,
+   "names": {
+    "deDE": [
+     "Die Fäden des Schicksals"
+    ],
+    "esES": [
+     "Los Hilos del Destino"
+    ],
+    "esMX": [
+     "Los Hilos del Destino"
+    ],
+    "frFR": [
+     "Le Fil du destin"
+    ],
+    "itIT": [
+     "The Threads of Fate"
+    ],
+    "koKR": [
+     "운명의 실타래"
+    ],
+    "ptBR": [
+     "Os Fios do Destino"
+    ],
+    "ruRU": [
+     "Нити судьбы"
+    ],
+    "zhCN": [
+     "命运丝线"
+    ],
+    "zhTW": [
+     "命運織坊"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5134,
+     "y": 0.4872,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "The Underbelly",
+   "wmo": 134325,
+   "names": {
+    "deDE": [
+     "Die Schattenseite"
+    ],
+    "esES": [
+     "Los Bajos Fondos"
+    ],
+    "esMX": [
+     "Los Bajos Fondos"
+    ],
+    "frFR": [
+     "Les Entrailles"
+    ],
+    "itIT": [
+     "The Underbelly"
+    ],
+    "koKR": [
+     "마법의 뒤안길"
+    ],
+    "ptBR": [
+     "Os Esgotos"
+    ],
+    "ruRU": [
+     "Клоака"
+    ],
+    "zhCN": [
+     "达拉然下水道"
+    ],
+    "zhTW": [
+     "城底區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5331,
+     "y": 0.5715,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  },
+  {
+   "name": "The Violet Citadel",
+   "wmo": 134301,
+   "names": {
+    "deDE": [
+     "Die Violette Zitadelle"
+    ],
+    "esES": [
+     "La Ciudadela Violeta"
+    ],
+    "esMX": [
+     "La Ciudadela Violeta"
+    ],
+    "frFR": [
+     "Citadelle Pourpre"
+    ],
+    "itIT": [
+     "The Violet Citadel"
+    ],
+    "koKR": [
+     "보랏빛 성채"
+    ],
+    "ptBR": [
+     "Cidadela Violeta"
+    ],
+    "ruRU": [
+     "Аметистовая цитадель"
+    ],
+    "zhCN": [
+     "紫罗兰城堡"
+    ],
+    "zhTW": [
+     "紫羅蘭城塞"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5209,
+     "y": 0.2331,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "The Violet Gate",
+   "wmo": 134282,
+   "names": {
+    "deDE": [
+     "Das Violette Tor"
+    ],
+    "esES": [
+     "La Puerta Violeta"
+    ],
+    "esMX": [
+     "La Puerta Violeta"
+    ],
+    "frFR": [
+     "La porte Pourpre"
+    ],
+    "itIT": [
+     "The Violet Gate"
+    ],
+    "koKR": [
+     "보랏빛 관문"
+    ],
+    "ptBR": [
+     "Portão Violeta"
+    ],
+    "ruRU": [
+     "Аметистовые врата"
+    ],
+    "zhCN": [
+     "紫罗兰之门"
+    ],
+    "zhTW": [
+     "紫羅蘭之門"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5208,
+     "y": 0.6272,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Violet Hold",
+   "wmo": 134329,
+   "names": {
+    "deDE": [
+     "Die Violette Festung"
+    ],
+    "esES": [
+     "El Bastión Violeta"
+    ],
+    "esMX": [
+     "El Bastión Violeta"
+    ],
+    "frFR": [
+     "Le fort Pourpre"
+    ],
+    "itIT": [
+     "The Violet Hold"
+    ],
+    "koKR": [
+     "보랏빛 요새"
+    ],
+    "ptBR": [
+     "Castelo Violeta"
+    ],
+    "ruRU": [
+     "Аметистовая крепость"
+    ],
+    "zhCN": [
+     "紫罗兰监狱"
+    ],
+    "zhTW": [
+     "紫羅蘭堡"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3535,
+     "y": 0.832,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "The Wonder Works",
+   "wmo": 134280,
+   "names": {
+    "deDE": [
+     "Die Wunderwerke"
+    ],
+    "esES": [
+     "Obras Asombrosas"
+    ],
+    "esMX": [
+     "Obras Asombrosas"
+    ],
+    "frFR": [
+     "La Miraclerie"
+    ],
+    "itIT": [
+     "The Wonder Works"
+    ],
+    "koKR": [
+     "신기한 장난감 상점"
+    ],
+    "ptBR": [
+     "Reinações"
+    ],
+    "ruRU": [
+     "Чудо чудное"
+    ],
+    "zhCN": [
+     "魔法奇兵"
+    ],
+    "zhTW": [
+     "神奇玩具屋"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5221,
+     "y": 0.4842,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Trade District",
+   "wmo": 134294,
+   "names": {
+    "deDE": [
+     "Der Handelsdistrikt"
+    ],
+    "esES": [
+     "Distrito de Mercaderes"
+    ],
+    "esMX": [
+     "Distrito de Mercaderes"
+    ],
+    "frFR": [
+     "Quartier commerçant"
+    ],
+    "itIT": [
+     "Trade District"
+    ],
+    "koKR": [
+     "상업 지구"
+    ],
+    "ptBR": [
+     "Distrito Comercial"
+    ],
+    "ruRU": [
+     "Торговый квартал"
+    ],
+    "zhCN": [
+     "贸易区"
+    ],
+    "zhTW": [
+     "貿易區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5569,
+     "y": 0.4179,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Violet Plates and Framing",
+   "wmo": 134289,
+   "names": {
+    "deDE": [
+     "Violet Platten und Rahmen"
+    ],
+    "esES": [
+     "Taller de marcos Violeta"
+    ],
+    "esMX": [
+     "Placas y Armazones Violetas"
+    ],
+    "frFR": [
+     "Plaques et armatures pourpres"
+    ],
+    "itIT": [
+     "Violet Plates and Framing"
+    ],
+    "koKR": [
+     "보랏빛 판금 공방"
+    ],
+    "ptBR": [
+     "Placas e Armaduras Violeta"
+    ],
+    "ruRU": [
+     "Фиолетовые латы и каркасы",
+     "Фиолетовые тарелки и рамы"
+    ],
+    "zhCN": [
+     "紫罗兰板甲与构架"
+    ],
+    "zhTW": [
+     "紫羅蘭鎧甲與框架"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6308,
+     "y": 0.508,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "name": "The Underbelly",
+   "why": "Underground, on the Underbelly floor, which has no anchors."
+  },
+  {
+   "name": "Sewer",
+   "why": "Underground, on the Underbelly floor, which has no anchors."
+  }
+ ]
+}

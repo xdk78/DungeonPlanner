@@ -1,0 +1,207 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-armory",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Crusader's Armory",
+   "wmo": 143886,
+   "names": {
+    "deDE": [
+     "Die Waffenkammer der Kreuzzügler"
+    ],
+    "esES": [
+     "Arsenal de los Cruzados"
+    ],
+    "esMX": [
+     "Arsenal de los Cruzados"
+    ],
+    "frFR": [
+     "Armurerie des Croisés"
+    ],
+    "itIT": [
+     "Crusader's Armory"
+    ],
+    "koKR": [
+     "십자군 무기고"
+    ],
+    "ptBR": [
+     "Armaria do Cruzado"
+    ],
+    "ruRU": [
+     "Оружейная рыцарей"
+    ],
+    "zhCN": [
+     "十字军武器库"
+    ],
+    "zhTW": [
+     "十字軍武器庫"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7281,
+     "y": 0.3521,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Footman's Armory",
+   "wmo": 143881,
+   "names": {
+    "deDE": [
+     "Die Waffenkammer des Fußsoldaten"
+    ],
+    "esES": [
+     "Arsenal de los Soldados"
+    ],
+    "esMX": [
+     "Arsenal de los Soldados"
+    ],
+    "frFR": [
+     "Armurerie des fantassins"
+    ],
+    "itIT": [
+     "Footman's Armory"
+    ],
+    "koKR": [
+     "보병 무기고"
+    ],
+    "ptBR": [
+     "Armaria do Soldado"
+    ],
+    "ruRU": [
+     "Оружейная пехотинцев"
+    ],
+    "zhCN": [
+     "步兵武器库"
+    ],
+    "zhTW": [
+     "步兵武器庫"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7281,
+     "y": 0.5674,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Hall of Champions",
+   "wmo": 143875,
+   "names": {
+    "deDE": [
+     "Die Halle der Helden"
+    ],
+    "esES": [
+     "Sala de los Campeones"
+    ],
+    "esMX": [
+     "Sala de los Campeones"
+    ],
+    "frFR": [
+     "Hall des Champions"
+    ],
+    "itIT": [
+     "Hall of Champions"
+    ],
+    "koKR": [
+     "용사의 전당"
+    ],
+    "ptBR": [
+     "Salão dos Campeões"
+    ],
+    "ruRU": [
+     "Чертог Защитников"
+    ],
+    "zhCN": [
+     "勇士大厅"
+    ],
+    "zhTW": [
+     "勇士大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7865,
+     "y": 0.1069,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Training Grounds",
+   "wmo": 143883,
+   "names": {
+    "deDE": [
+     "Das Ausbildungsgelände"
+    ],
+    "esES": [
+     "Campo de Entrenamiento"
+    ],
+    "esMX": [
+     "Campo de Entrenamiento"
+    ],
+    "frFR": [
+     "Terrain d’entraînement"
+    ],
+    "itIT": [
+     "Training Grounds"
+    ],
+    "koKR": [
+     "훈련장"
+    ],
+    "ptBR": [
+     "Campo de Treinamento"
+    ],
+    "ruRU": [
+     "Тренировочная площадка"
+    ],
+    "zhCN": [
+     "训练场"
+    ],
+    "zhTW": [
+     "訓練場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6693,
+     "y": 0.8147,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

@@ -1,0 +1,72 @@
+{
+ "schema": 1,
+ "slug": "dire-maul-west",
+ "instanceMapID": 429,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "The Maul",
+   "wmo": 33698,
+   "names": {
+    "deDE": [
+     "Die Schlägergrube"
+    ],
+    "esES": [
+     "La Almádena"
+    ],
+    "esMX": [
+     "La Marra"
+    ],
+    "frFR": [
+     "L'Etripoir"
+    ],
+    "itIT": [
+     "The Maul"
+    ],
+    "koKR": [
+     "검투장"
+    ],
+    "ptBR": [
+     "A Arena"
+    ],
+    "ruRU": [
+     "Ристалище"
+    ],
+    "zhCN": [
+     "巨槌竞技场"
+    ],
+    "zhTW": [
+     "巨槌競技場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.9339,
+     "y": 0.6159,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

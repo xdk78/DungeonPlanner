@@ -1,0 +1,377 @@
+{
+ "schema": 1,
+ "slug": "gnomeregan",
+ "instanceMapID": 90,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Engineering Labs",
+   "wmo": 12867,
+   "names": {
+    "deDE": [
+     "Ingenieurlabore"
+    ],
+    "esES": [
+     "Laboratorios de Ingeniería"
+    ],
+    "esMX": [
+     "Laboratorios de Ingeniería"
+    ],
+    "frFR": [
+     "Labos d'ingénierie"
+    ],
+    "itIT": [
+     "Engineering Labs"
+    ],
+    "koKR": [
+     "기계공학 연구소"
+    ],
+    "ptBR": [
+     "Laboratório de Engenharia"
+    ],
+    "ruRU": [
+     "Инженерные лаборатории"
+    ],
+    "zhCN": [
+     "工程实验室"
+    ],
+    "zhTW": [
+     "工程實驗室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 3,
+     "x": 0.4348,
+     "y": 0.7663,
+     "share": 0.66,
+     "samples": 3
+    },
+    {
+     "floor": 4,
+     "x": 0.6732,
+     "y": 0.8188,
+     "share": 0.34,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Launch Bay",
+   "wmo": 12888,
+   "names": {
+    "deDE": [
+     "Startrampe"
+    ],
+    "esES": [
+     "Aeropuerto"
+    ],
+    "esMX": [
+     "Aeropuerto"
+    ],
+    "frFR": [
+     "Baie de lancement"
+    ],
+    "itIT": [
+     "Launch Bay"
+    ],
+    "koKR": [
+     "출격실"
+    ],
+    "ptBR": [
+     "Baia de Lançamento"
+    ],
+    "ruRU": [
+     "Пусковая установка"
+    ],
+    "zhCN": [
+     "发射台"
+    ],
+    "zhTW": [
+     "發射台"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.2521,
+     "y": 0.6846,
+     "share": 0.68,
+     "samples": 1
+    },
+    {
+     "floor": 3,
+     "x": 0.2726,
+     "y": 0.3189,
+     "share": 0.32,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Clean Zone",
+   "wmo": 12848,
+   "names": {
+    "deDE": [
+     "Die saubere Zone"
+    ],
+    "esES": [
+     "Punto de Limpieza"
+    ],
+    "esMX": [
+     "Punto de Limpieza"
+    ],
+    "frFR": [
+     "La zone propre"
+    ],
+    "itIT": [
+     "The Clean Zone"
+    ],
+    "koKR": [
+     "정화 지역"
+    ],
+    "ptBR": [
+     "A Zona Limpa"
+    ],
+    "ruRU": [
+     "Безопасная зона"
+    ],
+    "zhCN": [
+     "清洁区"
+    ],
+    "zhTW": [
+     "清潔區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3853,
+     "y": 0.6748,
+     "share": 0.5,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.6451,
+     "y": 0.6359,
+     "share": 0.5,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Clockwerk Run",
+   "wmo": 12898,
+   "names": {
+    "deDE": [
+     "Die Uhrwerkgasse"
+    ],
+    "esES": [
+     "La rampa del engranaje"
+    ],
+    "esMX": [
+     "La Rampa del Engranaje"
+    ],
+    "frFR": [
+     "La Fuite du temps"
+    ],
+    "itIT": [
+     "The Clockwerk Run"
+    ],
+    "koKR": [
+     "태엽장치 통로"
+    ],
+    "ptBR": [
+     "Corredor dos Mecanismos"
+    ],
+    "ruRU": [
+     "Часовой ход"
+    ],
+    "zhCN": [
+     "发条小径"
+    ],
+    "zhTW": [
+     "發條小徑"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6082,
+     "y": 0.3476,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Dormitory",
+   "wmo": 12843,
+   "names": {
+    "deDE": [
+     "Der Schlafsaal"
+    ],
+    "esES": [
+     "Los Dormitorios"
+    ],
+    "esMX": [
+     "Los Dormitorios"
+    ],
+    "frFR": [
+     "Le dortoir"
+    ],
+    "itIT": [
+     "The Dormitory"
+    ],
+    "koKR": [
+     "거주 지구"
+    ],
+    "ptBR": [
+     "Alojamentos"
+    ],
+    "ruRU": [
+     "Спальни"
+    ],
+    "zhCN": [
+     "宿舍"
+    ],
+    "zhTW": [
+     "宿舍"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4177,
+     "y": 0.8076,
+     "share": 0.32,
+     "samples": 6
+    },
+    {
+     "floor": 2,
+     "x": 0.7807,
+     "y": 0.7599,
+     "share": 0.68,
+     "samples": 11
+    }
+   ]
+  },
+  {
+   "name": "The Hall of Gears",
+   "wmo": 12842,
+   "names": {
+    "deDE": [
+     "Die Halle der Zahnräder"
+    ],
+    "esES": [
+     "La Sala de Máquinas"
+    ],
+    "esMX": [
+     "La Sala de Máquinas"
+    ],
+    "frFR": [
+     "Le Hall des engrenages"
+    ],
+    "itIT": [
+     "The Hall of Gears"
+    ],
+    "koKR": [
+     "톱니바퀴의 전당"
+    ],
+    "ptBR": [
+     "Salão das Engrenagens"
+    ],
+    "ruRU": [
+     "Машинный зал"
+    ],
+    "zhCN": [
+     "齿轮大厅"
+    ],
+    "zhTW": [
+     "齒輪大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4967,
+     "y": 0.4996,
+     "share": 0.47,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.7541,
+     "y": 0.4638,
+     "share": 0.53,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Tinkers' Court",
+   "wmo": 12830,
+   "names": {
+    "deDE": [
+     "Tüftlerhof"
+    ],
+    "esES": [
+     "Cámara Manitas"
+    ],
+    "esMX": [
+     "Cámara Manitas"
+    ],
+    "frFR": [
+     "Cour du Bricoleur"
+    ],
+    "itIT": [
+     "Tinkers' Court"
+    ],
+    "koKR": [
+     "땜장이 왕실"
+    ],
+    "ptBR": [
+     "Paço dos Faz-tudo"
+    ],
+    "ruRU": [
+     "Двор Механиков"
+    ],
+    "zhCN": [
+     "工匠议会"
+    ],
+    "zhTW": [
+     "工匠議會"
+    ]
+   },
+   "at": [
+    {
+     "floor": 4,
+     "x": 0.3137,
+     "y": 0.3036,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

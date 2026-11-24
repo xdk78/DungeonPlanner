@@ -1,0 +1,170 @@
+{
+ "schema": 1,
+ "slug": "the-deadmines",
+ "instanceMapID": 36,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Goblin Foundry",
+   "wmo": 11776,
+   "names": {
+    "deDE": [
+     "Goblin-Gießerei"
+    ],
+    "esES": [
+     "Fundición Goblin"
+    ],
+    "esMX": [
+     "Fundición Goblin"
+    ],
+    "frFR": [
+     "Fonderie des gobelins"
+    ],
+    "itIT": [
+     "Goblin Foundry"
+    ],
+    "koKR": [
+     "고블린 주물 공장"
+    ],
+    "ptBR": [
+     "Fundição dos Goblins"
+    ],
+    "ruRU": [
+     "Гоблинский цех"
+    ],
+    "zhCN": [
+     "地精锻造厂"
+    ],
+    "zhTW": [
+     "哥布林鍛造廠"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6114,
+     "y": 0.6446,
+     "share": 0.44,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.124,
+     "y": 0.8122,
+     "share": 0.56,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Ironclad Cove",
+   "area": 1582,
+   "wmo": 11772,
+   "names": {
+    "deDE": [
+     "Ironcladbucht"
+    ],
+    "esES": [
+     "Cala del Acorazado"
+    ],
+    "esMX": [
+     "Cala del Acorazado"
+    ],
+    "frFR": [
+     "Crique du cuirassé"
+    ],
+    "itIT": [
+     "Ironclad Cove"
+    ],
+    "koKR": [
+     "철갑 동굴"
+    ],
+    "ptBR": [
+     "Covil Encouraçado"
+    ],
+    "ruRU": [
+     "Потайная бухта"
+    ],
+    "zhCN": [
+     "铁甲湾"
+    ],
+    "zhTW": [
+     "鐵甲灣"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5241,
+     "y": 0.3855,
+     "share": 1.0,
+     "samples": 17
+    }
+   ]
+  },
+  {
+   "name": "Mast Room",
+   "wmo": 11808,
+   "names": {
+    "deDE": [
+     "Mastraum"
+    ],
+    "esES": [
+     "Sala del Mástil"
+    ],
+    "esMX": [
+     "Sala del Mástil"
+    ],
+    "frFR": [
+     "Salle du Mât"
+    ],
+    "itIT": [
+     "Mast Room"
+    ],
+    "koKR": [
+     "목재 작업장"
+    ],
+    "ptBR": [
+     "Sala do Mastro"
+    ],
+    "ruRU": [
+     "Мачтовая мастерская"
+    ],
+    "zhCN": [
+     "船桅室"
+    ],
+    "zhTW": [
+     "船桅室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4806,
+     "y": 0.8727,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

@@ -1,0 +1,236 @@
+{
+ "schema": 1,
+ "slug": "zulgurub",
+ "instanceMapID": 309,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Altar of Hir'eek",
+   "area": 3378,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3983,
+     "y": 0.7074,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Altar of the Blood God",
+   "area": 3384,
+   "wmo": 35768,
+   "names": {
+    "deDE": [
+     "Altar des Blutgottes"
+    ],
+    "esES": [
+     "Altar del Dios de la Sangre"
+    ],
+    "esMX": [
+     "Altar del Dios de la Sangre"
+    ],
+    "frFR": [
+     "Autel du Dieu sanglant"
+    ],
+    "itIT": [
+     "Altar of the Blood God"
+    ],
+    "koKR": [
+     "혈신의 제단"
+    ],
+    "ptBR": [
+     "Altar do Deus Sanguinário"
+    ],
+    "ruRU": [
+     "Алтарь Кровавого бога"
+    ],
+    "zhCN": [
+     "血神祭坛"
+    ],
+    "zhTW": [
+     "血神祭壇"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4861,
+     "y": 0.3784,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "name": "Edge of Madness",
+   "area": 3398,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6224,
+     "y": 0.4668,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Hakkari Grounds",
+   "area": 3380,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6331,
+     "y": 0.7768,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "name": "Naze of Shirvallah",
+   "area": 3381,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6553,
+     "y": 0.3166,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "Pagle's Pointe",
+   "area": 3419,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5716,
+     "y": 0.3128,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Shadra'zaar",
+   "area": 3379,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4998,
+     "y": 0.7964,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "Temple of Bethekk",
+   "area": 3382,
+   "wmo": 19710,
+   "names": {
+    "deDE": [
+     "Tempel von Bethekk"
+    ],
+    "esES": [
+     "Templo de Bethekk"
+    ],
+    "esMX": [
+     "Templo de Bethekk"
+    ],
+    "frFR": [
+     "Temple de Bethekk"
+    ],
+    "itIT": [
+     "Temple of Bethekk"
+    ],
+    "koKR": [
+     "베데크 신전"
+    ],
+    "ptBR": [
+     "Templo de Bethekk"
+    ],
+    "ruRU": [
+     "Храм Бетекк"
+    ],
+    "zhCN": [
+     "贝瑟克神殿"
+    ],
+    "zhTW": [
+     "比塞克神廟"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4993,
+     "y": 0.1816,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "The Bloodfire Pit",
+   "area": 3383,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3149,
+     "y": 0.2051,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Coil",
+   "area": 3377,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5288,
+     "y": 0.556,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Zanza's Rise",
+   "area": 3397,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5893,
+     "y": 0.5524,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

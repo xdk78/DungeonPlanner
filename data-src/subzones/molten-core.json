@@ -1,0 +1,117 @@
+{
+ "schema": 1,
+ "slug": "molten-core",
+ "instanceMapID": 409,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Magmadar Cavern",
+   "wmo": 28651,
+   "names": {
+    "deDE": [
+     "Magmadarhöhle"
+    ],
+    "esES": [
+     "Cueva Magmadar"
+    ],
+    "esMX": [
+     "Cueva Magmadar"
+    ],
+    "frFR": [
+     "Caverne de Magmadar"
+    ],
+    "itIT": [
+     "Magmadar Cavern"
+    ],
+    "koKR": [
+     "마그마다르 용암굴"
+    ],
+    "ptBR": [
+     "Caverna de Magmadar"
+    ],
+    "ruRU": [
+     "Пещера Магмадара"
+    ],
+    "zhCN": [
+     "玛格曼达洞穴"
+    ],
+    "zhTW": [
+     "瑪格曼達洞穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.67,
+     "y": 0.3173,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Ragnaros' Lair",
+   "wmo": 28645,
+   "names": {
+    "deDE": [
+     "Ragnaros' Unterschlupf"
+    ],
+    "esES": [
+     "Guarida de Ragnaros"
+    ],
+    "esMX": [
+     "Guarida de Ragnaros"
+    ],
+    "frFR": [
+     "Antre de Ragnaros"
+    ],
+    "itIT": [
+     "Ragnaros' Lair"
+    ],
+    "koKR": [
+     "라그나로스의 둥지"
+    ],
+    "ptBR": [
+     "Covil de Ragnaros"
+    ],
+    "ruRU": [
+     "Логово Рагнароса"
+    ],
+    "zhCN": [
+     "拉格纳罗斯之巢"
+    ],
+    "zhTW": [
+     "拉格納羅斯的巢穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.535,
+     "y": 0.5679,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

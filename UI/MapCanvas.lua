@@ -160,6 +160,11 @@ function MapCanvas.Create(parent, cb)
 	MapCanvas.Install(view)
 	MapCanvas.InstallArt(view) -- UI/MapArt.lua
 	ns.MapSpawns.Install(view)
+	-- UI/MapHere.lua may be new to a running client (docs/COMPATIBILITY.md section 7): no marker until a restart.
+	view.DrawHere = function() end
+	if ns.MapHere then
+		ns.MapHere.Install(view)
+	end
 	if ns.MapRoutes then
 		ns.MapRoutes.Install(view)
 	else
@@ -606,6 +611,7 @@ function MapCanvas.Install(view)
 			-- Where enemies stand (Data/Spawns.lua), under everything the plan draws.
 			local spawns = self.cb.spawnsShown and self.cb.spawnsShown()
 			nSpawns = self:DrawSpawns(spawns and plan or nil, floor, px, py, scale)
+			self:DrawHere(plan, floor, px, py, s) -- UI/MapHere.lua
 
 			-- Routes under the pins (UI/MapRoutes.lua): the paths (cased lines, joints at bends), then the stops; the
 			-- direction arrows once the pins and labels are laid out (below), so they keep clear of them.
@@ -775,6 +781,7 @@ function MapCanvas.Install(view)
 		if not plan then
 			self:DrawShapes(nil)
 			self:DrawSpawns(nil)
+			self:DrawHere(nil)
 			self.focusGlow:Hide()
 			self.focusRing:Hide()
 		end

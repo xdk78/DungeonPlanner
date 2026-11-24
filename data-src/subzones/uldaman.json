@@ -1,0 +1,489 @@
+{
+ "schema": 1,
+ "slug": "uldaman",
+ "instanceMapID": 70,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Dig One",
+   "wmo": 13030,
+   "names": {
+    "deDE": [
+     "Grabung eins"
+    ],
+    "esES": [
+     "Excavación 1"
+    ],
+    "esMX": [
+     "Excavación 1"
+    ],
+    "frFR": [
+     "Fouille n°1"
+    ],
+    "itIT": [
+     "Dig One"
+    ],
+    "koKR": [
+     "제 1 발굴지"
+    ],
+    "ptBR": [
+     "Sítio Um"
+    ],
+    "ruRU": [
+     "Первый раскоп"
+    ],
+    "zhCN": [
+     "一号挖掘场"
+    ],
+    "zhTW": [
+     "一號挖掘場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7379,
+     "y": 0.7147,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Dig Three",
+   "wmo": 13024,
+   "names": {
+    "deDE": [
+     "Grabung drei"
+    ],
+    "esES": [
+     "Excavación 3"
+    ],
+    "esMX": [
+     "Excavación 3"
+    ],
+    "frFR": [
+     "Fouille n°3"
+    ],
+    "itIT": [
+     "Dig Three"
+    ],
+    "koKR": [
+     "제 3 발굴지"
+    ],
+    "ptBR": [
+     "Sítio Três"
+    ],
+    "ruRU": [
+     "Третий раскоп"
+    ],
+    "zhCN": [
+     "三号挖掘场"
+    ],
+    "zhTW": [
+     "三號挖掘場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2699,
+     "y": 0.3307,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Dig Two",
+   "wmo": 12989,
+   "names": {
+    "deDE": [
+     "Grabung zwei"
+    ],
+    "esES": [
+     "Excavación 2"
+    ],
+    "esMX": [
+     "Excavación 2"
+    ],
+    "frFR": [
+     "Fouille n°2"
+    ],
+    "itIT": [
+     "Dig Two"
+    ],
+    "koKR": [
+     "제 2 발굴지"
+    ],
+    "ptBR": [
+     "Sítio Dois"
+    ],
+    "ruRU": [
+     "Второй раскоп"
+    ],
+    "zhCN": [
+     "二号挖掘场"
+    ],
+    "zhTW": [
+     "二號挖掘場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5937,
+     "y": 0.9111,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Echomok Cavern",
+   "wmo": 13025,
+   "names": {
+    "deDE": [
+     "Echomokhöhle"
+    ],
+    "esES": [
+     "Cueva Echomok"
+    ],
+    "esMX": [
+     "Cueva Echomok"
+    ],
+    "frFR": [
+     "Caverne d’Echomok"
+    ],
+    "itIT": [
+     "Echomok Cavern"
+    ],
+    "koKR": [
+     "메아리 동굴"
+    ],
+    "ptBR": [
+     "Caverna Ecomok"
+    ],
+    "ruRU": [
+     "Пещера Эхомок"
+    ],
+    "zhCN": [
+     "艾卡默克洞穴"
+    ],
+    "zhTW": [
+     "艾卡莫克洞穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2938,
+     "y": 0.6034,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Hall of the Crafters",
+   "wmo": 12990,
+   "names": {
+    "deDE": [
+     "Halle der Handwerker"
+    ],
+    "esES": [
+     "Sala de los Artesanos"
+    ],
+    "esMX": [
+     "Sala de los Artesanos"
+    ],
+    "frFR": [
+     "Hall des Artisans"
+    ],
+    "itIT": [
+     "Hall of the Crafters"
+    ],
+    "koKR": [
+     "장인의 전당"
+    ],
+    "ptBR": [
+     "Salão dos Artesãos"
+    ],
+    "ruRU": [
+     "Зал Ремесленников"
+    ],
+    "zhCN": [
+     "工匠大厅"
+    ],
+    "zhTW": [
+     "工匠大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4273,
+     "y": 0.1723,
+     "share": 0.44,
+     "samples": 6
+    },
+    {
+     "floor": 2,
+     "x": 0.6011,
+     "y": 0.4977,
+     "share": 0.56,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "Hall of the Keepers",
+   "wmo": 12988,
+   "names": {
+    "deDE": [
+     "Halle der Bewahrer"
+    ],
+    "esES": [
+     "Sala de los Guardianes"
+    ],
+    "esMX": [
+     "Sala de los Guardianes"
+    ],
+    "frFR": [
+     "Hall des Gardiens"
+    ],
+    "itIT": [
+     "Hall of the Keepers"
+    ],
+    "koKR": [
+     "수호자의 전당"
+    ],
+    "ptBR": [
+     "Salão dos Guardiões"
+    ],
+    "ruRU": [
+     "Зал Хранителей"
+    ],
+    "zhCN": [
+     "守护者大厅"
+    ],
+    "zhTW": [
+     "守護者大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5941,
+     "y": 0.7301,
+     "share": 1.0,
+     "samples": 7
+    }
+   ]
+  },
+  {
+   "name": "Khaz'goroth's Seat",
+   "wmo": 12996,
+   "names": {
+    "deDE": [
+     "Khaz'goroths Sitz"
+    ],
+    "esES": [
+     "Trono de Khaz'goroth"
+    ],
+    "esMX": [
+     "Trono de Khaz'goroth"
+    ],
+    "frFR": [
+     "Siège de Khaz'goroth"
+    ],
+    "itIT": [
+     "Khaz'goroth's Seat"
+    ],
+    "koKR": [
+     "카즈고로스의 왕좌"
+    ],
+    "ptBR": [
+     "Trono de Khaz'Goroth"
+    ],
+    "ruRU": [
+     "Трон Каз'горота"
+    ],
+    "zhCN": [
+     "卡兹格罗斯的王座"
+    ],
+    "zhTW": [
+     "卡茲格羅斯的王座"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5531,
+     "y": 0.5058,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Map Chamber",
+   "wmo": 13029,
+   "names": {
+    "deDE": [
+     "Kartenkammer"
+    ],
+    "esES": [
+     "Cámara del Mapa"
+    ],
+    "esMX": [
+     "Cámara del Mapa"
+    ],
+    "frFR": [
+     "Chambre des cartes"
+    ],
+    "itIT": [
+     "Map Chamber"
+    ],
+    "koKR": [
+     "발굴 지도실"
+    ],
+    "ptBR": [
+     "Câmara do Mapa"
+    ],
+    "ruRU": [
+     "Зал Карт"
+    ],
+    "zhCN": [
+     "地图厅"
+    ],
+    "zhTW": [
+     "地圖室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.45,
+     "y": 0.7328,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Temple Hall",
+   "wmo": 12995,
+   "names": {
+    "deDE": [
+     "Tempelhalle"
+    ],
+    "esES": [
+     "Cámara del Templo"
+    ],
+    "esMX": [
+     "Sala del Templo"
+    ],
+    "frFR": [
+     "Hall du Temple"
+    ],
+    "itIT": [
+     "Temple Hall"
+    ],
+    "koKR": [
+     "신전 전당"
+    ],
+    "ptBR": [
+     "Salão do Templo"
+    ],
+    "ruRU": [
+     "Храмовый зал"
+    ],
+    "zhCN": [
+     "神殿大厅"
+    ],
+    "zhTW": [
+     "神殿大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4569,
+     "y": 0.4666,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Stone Vault",
+   "wmo": 13015,
+   "names": {
+    "deDE": [
+     "Das Steingewölbe"
+    ],
+    "esES": [
+     "Cámara de Piedra"
+    ],
+    "esMX": [
+     "El Arca Pétrea"
+    ],
+    "frFR": [
+     "Caveau de pierre"
+    ],
+    "itIT": [
+     "The Stone Vault"
+    ],
+    "koKR": [
+     "지하 석실"
+    ],
+    "ptBR": [
+     "Galeria de Pedra"
+    ],
+    "ruRU": [
+     "Каменный свод"
+    ],
+    "zhCN": [
+     "石窖"
+    ],
+    "zhTW": [
+     "石窖"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2776,
+     "y": 0.2512,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "name": "Dig One",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua)."
+  }
+ ]
+}

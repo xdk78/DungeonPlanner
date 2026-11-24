@@ -1,0 +1,117 @@
+{
+ "schema": 1,
+ "slug": "scarlet-monastery-cathedral",
+ "instanceMapID": 189,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Chapel Gardens",
+   "wmo": 143789,
+   "names": {
+    "deDE": [
+     "Der Kapellengarten"
+    ],
+    "esES": [
+     "Jardines de la Capilla"
+    ],
+    "esMX": [
+     "Jardines de la Capilla"
+    ],
+    "frFR": [
+     "Jardins de la chapelle"
+    ],
+    "itIT": [
+     "Chapel Gardens"
+    ],
+    "koKR": [
+     "예배당 정원"
+    ],
+    "ptBR": [
+     "Jardins da Capela"
+    ],
+    "ruRU": [
+     "Церковные сады"
+    ],
+    "zhCN": [
+     "教堂花园"
+    ],
+    "zhTW": [
+     "教堂花園"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4868,
+     "y": 0.5549,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Crusader's Chapel",
+   "wmo": 143775,
+   "names": {
+    "deDE": [
+     "Die Kapelle des Kreuzfahrers"
+    ],
+    "esES": [
+     "Capilla de los Cruzados"
+    ],
+    "esMX": [
+     "Capilla de los Cruzados"
+    ],
+    "frFR": [
+     "Chapelle des Croisés"
+    ],
+    "itIT": [
+     "Crusader's Chapel"
+    ],
+    "koKR": [
+     "십자군 예배당"
+    ],
+    "ptBR": [
+     "Capela do Cruzado"
+    ],
+    "ruRU": [
+     "Часовня Ордена"
+    ],
+    "zhCN": [
+     "十字军礼拜堂"
+    ],
+    "zhTW": [
+     "十字軍禮拜堂"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4907,
+     "y": 0.3057,
+     "share": 1.0,
+     "samples": 8
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

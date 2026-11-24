@@ -1,0 +1,208 @@
+{
+ "schema": 1,
+ "slug": "razorfen-downs",
+ "instanceMapID": 129,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Spiral of Thorns",
+   "wmo": 17955,
+   "names": {
+    "deDE": [
+     "Wendel der Dornen"
+    ],
+    "esES": [
+     "Espiral de las Zarzas"
+    ],
+    "esMX": [
+     "Espiral de las Zarzas"
+    ],
+    "frFR": [
+     "Spirale des épines"
+    ],
+    "itIT": [
+     "Spiral of Thorns"
+    ],
+    "koKR": [
+     "가시덩굴 소용돌이"
+    ],
+    "ptBR": [
+     "Espiral de Espinhos"
+    ],
+    "ruRU": [
+     "Тернистый серпантин"
+    ],
+    "zhCN": [
+     "荆棘螺旋"
+    ],
+    "zhTW": [
+     "荊棘螺旋"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4418,
+     "y": 0.5676,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "The Bone Pile",
+   "wmo": 17958,
+   "names": {
+    "deDE": [
+     "Der Knochenhaufen"
+    ],
+    "esES": [
+     "El Montón de Huesos"
+    ],
+    "esMX": [
+     "El Montón de Huesos"
+    ],
+    "frFR": [
+     "Le Tas d'os"
+    ],
+    "itIT": [
+     "The Bone Pile"
+    ],
+    "koKR": [
+     "뼈의 산"
+    ],
+    "ptBR": [
+     "A Pilha de Ossos"
+    ],
+    "ruRU": [
+     "Груда костей"
+    ],
+    "zhCN": [
+     "白骨之堆",
+     "白骨堆"
+    ],
+    "zhTW": [
+     "白骨之堆"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.8548,
+     "y": 0.4703,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Caller's Chamber",
+   "wmo": 17959,
+   "names": {
+    "deDE": [
+     "Der Bittstellerraum"
+    ],
+    "esES": [
+     "Cámara de la Llamada"
+    ],
+    "esMX": [
+     "Cámara de la Llamada"
+    ],
+    "frFR": [
+     "La chambre de l'Invocateur"
+    ],
+    "itIT": [
+     "The Caller's Chamber"
+    ],
+    "koKR": [
+     "강령술 집회장"
+    ],
+    "ptBR": [
+     "A Câmara do Arauto"
+    ],
+    "ruRU": [
+     "Зал Призыва"
+    ],
+    "zhCN": [
+     "召唤者之厅"
+    ],
+    "zhTW": [
+     "召喚者之廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5882,
+     "y": 0.3353,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Murder Pens",
+   "wmo": 17960,
+   "names": {
+    "deDE": [
+     "Die Mörderpferche"
+    ],
+    "esES": [
+     "El Matadero"
+    ],
+    "esMX": [
+     "El Matadero"
+    ],
+    "frFR": [
+     "Les enclos meurtriers"
+    ],
+    "itIT": [
+     "The Murder Pens"
+    ],
+    "koKR": [
+     "학살의 울타리"
+    ],
+    "ptBR": [
+     "Os Redis da Morte"
+    ],
+    "ruRU": [
+     "Камеры обреченных"
+    ],
+    "zhCN": [
+     "谋杀者围栏"
+    ],
+    "zhTW": [
+     "謀殺者圍欄"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.7545,
+     "y": 0.3085,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

@@ -1,0 +1,161 @@
+{
+ "schema": 1,
+ "slug": "hall-of-thanes",
+ "instanceMapID": 3065,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "Anvilmar's Rest",
+   "wmo": 140756,
+   "names": {
+    "deDE": [
+     "Anvilmars Rast"
+    ],
+    "esES": [
+     "Reposo de Yunquemar"
+    ],
+    "esMX": [
+     "El Reposo de Yunquemar"
+    ],
+    "frFR": [
+     "Repos de Courbenclume"
+    ],
+    "itIT": [
+     "Anvilmar's Rest"
+    ],
+    "koKR": [
+     "앤빌마의 휴식처"
+    ],
+    "ptBR": [
+     "Repouso de Sidermar"
+    ],
+    "ruRU": [
+     "Обитель Старой Наковальни"
+    ],
+    "zhCN": [
+     "安威玛尔之眠"
+    ],
+    "zhTW": [
+     "安威瑪之眠"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5161,
+     "y": 0.6724,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Dark Iron Ingress",
+   "wmo": 141320,
+   "names": {
+    "deDE": [
+     "Der Dunkeleisenvorstoß"
+    ],
+    "esES": [
+     "Acceso Hierro Negro"
+    ],
+    "esMX": [
+     "Acceso a los Hierro Negro"
+    ],
+    "frFR": [
+     "Antre Sombrefer"
+    ],
+    "itIT": [
+     "Dark Iron Ingress"
+    ],
+    "koKR": [
+     "검은무쇠 침투지"
+    ],
+    "ptBR": [
+     "Passagem Ferro Negro"
+    ],
+    "ruRU": [
+     "Врата черного железа"
+    ],
+    "zhCN": [
+     "黑铁要道"
+    ],
+    "zhTW": [
+     "黑鐵入口"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6847,
+     "y": 0.5118,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Reliquary of Kings",
+   "wmo": 140768,
+   "names": {
+    "deDE": [
+     "Das Reliquiar der Könige"
+    ],
+    "esES": [
+     "Relicario de los Reyes"
+    ],
+    "esMX": [
+     "El Relicario de Reyes"
+    ],
+    "frFR": [
+     "Reliquaire des rois"
+    ],
+    "itIT": [
+     "Reliquary of Kings"
+    ],
+    "koKR": [
+     "왕가의 성물 보관소"
+    ],
+    "ptBR": [
+     "Relicário dos Reis"
+    ],
+    "ruRU": [
+     "Реликварий королей"
+    ],
+    "zhCN": [
+     "帝王圣物区"
+    ],
+    "zhTW": [
+     "諸王聖物間"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5148,
+     "y": 0.1842,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

@@ -31,6 +31,8 @@ local ENTRIES = {
 			items = {
 				{ L["Names of enemies you fought"],
 					L["A recorded pull names the enemies you fought, read from the game's kill messages and your casts where nameplates hide their names."] },
+				{ L["You are here, roughly"],
+					L["Inside a dungeon, the map and run mode's mini map ring the area the game says you are in. The game gives no exact position there."] },
 			},
 		}
 	end,

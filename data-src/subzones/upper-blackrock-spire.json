@@ -1,0 +1,162 @@
+{
+ "schema": 1,
+ "slug": "upper-blackrock-spire",
+ "instanceMapID": 229,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Dragonspire Hall",
+   "wmo": 143322,
+   "names": {
+    "deDE": [
+     "Die Dragonspirehalle"
+    ],
+    "esES": [
+     "Sala Dracopico"
+    ],
+    "esMX": [
+     "Sala Dracopico"
+    ],
+    "frFR": [
+     "Hall de la Flèche des dragons"
+    ],
+    "itIT": [
+     "Dragonspire Hall"
+    ],
+    "koKR": [
+     "용첨탑 전당"
+    ],
+    "ptBR": [
+     "Salão do Pináculo do Dragão"
+    ],
+    "ruRU": [
+     "Зал Драконов"
+    ],
+    "zhCN": [
+     "龙塔大厅"
+    ],
+    "zhTW": [
+     "龍塔大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 5,
+     "x": 0.3535,
+     "y": 0.2162,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "Hall of Binding",
+   "wmo": 143328,
+   "names": {
+    "deDE": [
+     "Die Halle der Bindung"
+    ],
+    "esES": [
+     "Sala de Vínculos"
+    ],
+    "esMX": [
+     "Sala de Vínculos"
+    ],
+    "frFR": [
+     "Hall des liens"
+    ],
+    "itIT": [
+     "Hall of Binding"
+    ],
+    "koKR": [
+     "속박의 전당"
+    ],
+    "ptBR": [
+     "Salão da Vinculação"
+    ],
+    "ruRU": [
+     "Зал Оков"
+    ],
+    "zhCN": [
+     "禁锢之厅"
+    ],
+    "zhTW": [
+     "禁錮大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.3038,
+     "y": 0.2706,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Rookery",
+   "wmo": 143332,
+   "names": {
+    "deDE": [
+     "Der Krähenhorst"
+    ],
+    "esES": [
+     "El Grajero"
+    ],
+    "esMX": [
+     "El Grajero"
+    ],
+    "frFR": [
+     "La colonie"
+    ],
+    "itIT": [
+     "The Rookery"
+    ],
+    "koKR": [
+     "부화장"
+    ],
+    "ptBR": [
+     "O Viveiro"
+    ],
+    "ruRU": [
+     "Гнездовье"
+    ],
+    "zhCN": [
+     "孵化间"
+    ],
+    "zhTW": [
+     "孵化間"
+    ]
+   },
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.3366,
+     "y": 0.4091,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

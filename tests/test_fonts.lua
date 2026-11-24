@@ -124,8 +124,9 @@ T.case("The separators the code builds and every locale string have glyphs in ev
 	p:close()
 	T.ok(#files > 50, "git ls-files listed the addon's Lua files (run the tests from a git checkout): " .. #files)
 	for _, path in ipairs(files) do
-		-- Discord export text is read in Discord, not in the game.
-		if not path:find("Discord", 1, true) then
+		-- Discord export text is read in Discord, not in the game. The sub-zone names are compared with the game's own
+		-- text and never drawn by the addon (it shows the game's).
+		if not path:find("Discord", 1, true) and path ~= "Data/SubzoneData.lua" then
 			local text = codeStrings(path)
 			for _, c in ipairs(Cmap.CodePoints(text)) do
 				T.ok(not NOT_IN_GAME_FACES[c], path .. ": " .. tostring(NOT_IN_GAME_FACES[c]))

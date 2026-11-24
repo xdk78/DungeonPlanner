@@ -897,6 +897,33 @@ V.views = {
 			ns.ReyesMaps.Reset()
 		end,
 	},
+	-- The same map with the player inside Hall of Thanes, in Anvilmar's Rest: the "You are here (approx.)" marker
+	-- (UI/MapHere.lua) at the middle of that area.
+	{
+		name = "map-subzone",
+		setup = function()
+			mock.RemoveProviders()
+			ns.Providers.Reset()
+			ns.Providers.ResetCaches()
+			ns.ReyesMaps.Reset()
+			V.savedHere = { info = _G.GetInstanceInfo, zone = rawget(_G, "GetZoneText"), sub = mock.subzone }
+			_G.GetInstanceInfo = function()
+				return "The Hall of Thanes", "party", 1, "Normal", 5, 0, false, ns.SubzoneData.hallofthanes.iid
+			end
+			_G.GetZoneText = function()
+				return "The Hall of Thanes"
+			end
+			mock.subzone = "Anvilmar's Rest"
+			ns.Subzones.Reset()
+			openPlan("hall-of-thanes", "map")
+		end,
+		window = window,
+		teardown = function()
+			_G.GetInstanceInfo, _G.GetZoneText, mock.subzone = V.savedHere.info, V.savedHere.zone, V.savedHere.sub
+			V.installProviders()
+			ns.ReyesMaps.Reset()
+		end,
+	},
 	-- One map family: a classic dungeon on its old tiles (Ragefire Chasm: every kind of step in the side panel, a label
 	-- at the map's edge), an outdoor minimap floor (Ruins of Lordaeron) and a building floor (Blackmaw Hold, floor 2).
 	{

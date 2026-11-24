@@ -1,0 +1,391 @@
+{
+ "schema": 1,
+ "slug": "lower-blackrock-spire",
+ "instanceMapID": 229,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Chamber of Battle",
+   "wmo": 143371,
+   "names": {
+    "deDE": [
+     "Die Kammer der Schlachten"
+    ],
+    "esES": [
+     "Sala de la Batalla"
+    ],
+    "esMX": [
+     "Sala de la Batalla"
+    ],
+    "frFR": [
+     "Chambre de guerre"
+    ],
+    "itIT": [
+     "Chamber of Battle"
+    ],
+    "koKR": [
+     "전투의 방"
+    ],
+    "ptBR": [
+     "Câmara de Batalha"
+    ],
+    "ruRU": [
+     "Чертог Битвы"
+    ],
+    "zhCN": [
+     "战斗之厅"
+    ],
+    "zhTW": [
+     "戰鬥之廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.5639,
+     "y": 0.59,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Halycon's Lair",
+   "wmo": 143364,
+   "names": {
+    "deDE": [
+     "Halycons Hort"
+    ],
+    "esES": [
+     "Guarida de Halycon"
+    ],
+    "esMX": [
+     "Guarida de Halycon"
+    ],
+    "frFR": [
+     "Antre d’Halycon"
+    ],
+    "itIT": [
+     "Halycon's Lair"
+    ],
+    "koKR": [
+     "할리콘의 둥지"
+    ],
+    "ptBR": [
+     "Covil de Halycon"
+    ],
+    "ruRU": [
+     "Логово Халикон"
+    ],
+    "zhCN": [
+     "哈雷肯之巢"
+    ],
+    "zhTW": [
+     "哈雷肯之巢"
+    ]
+   },
+   "at": [
+    {
+     "floor": 5,
+     "x": 0.3785,
+     "y": 0.8562,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Hordemar City",
+   "wmo": 143346,
+   "names": {
+    "deDE": [
+     "Hordemar"
+    ],
+    "esES": [
+     "Ciudad Hordemar"
+    ],
+    "esMX": [
+     "Ciudad Hordemar"
+    ],
+    "frFR": [
+     "Cité d’Hordemar"
+    ],
+    "itIT": [
+     "Hordemar City"
+    ],
+    "koKR": [
+     "호드마르 도시"
+    ],
+    "ptBR": [
+     "Hordamar"
+    ],
+    "ruRU": [
+     "Ордамар"
+    ],
+    "zhCN": [
+     "霍德玛尔城"
+    ],
+    "zhTW": [
+     "霍德瑪爾城"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5105,
+     "y": 0.5264,
+     "share": 0.22,
+     "samples": 2
+    },
+    {
+     "floor": 2,
+     "x": 0.5105,
+     "y": 0.5264,
+     "share": 0.22,
+     "samples": 2
+    },
+    {
+     "floor": 3,
+     "x": 0.5108,
+     "y": 0.527,
+     "share": 0.22,
+     "samples": 3
+    },
+    {
+     "floor": 4,
+     "x": 0.468,
+     "y": 0.54,
+     "share": 0.16,
+     "samples": 2
+    },
+    {
+     "floor": 5,
+     "x": 0.3972,
+     "y": 0.715,
+     "share": 0.04,
+     "samples": 4
+    },
+    {
+     "floor": 6,
+     "x": 0.4679,
+     "y": 0.5392,
+     "share": 0.16,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Mok'Doom",
+   "wmo": 143366,
+   "names": {
+    "deDE": [
+     "Mok'Doom"
+    ],
+    "esES": [
+     "Mok'Doom"
+    ],
+    "esMX": [
+     "Mok'Doom"
+    ],
+    "frFR": [
+     "Mok’Deuil"
+    ],
+    "itIT": [
+     "Mok'Doom"
+    ],
+    "koKR": [
+     "모크둠"
+    ],
+    "ptBR": [
+     "Mok'Doom"
+    ],
+    "ruRU": [
+     "Мок'Дум"
+    ],
+    "zhCN": [
+     "摩多姆"
+    ],
+    "zhTW": [
+     "摩多姆"
+    ]
+   },
+   "at": [
+    {
+     "floor": 3,
+     "x": 0.3917,
+     "y": 0.5932,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Skitterweb Tunnels",
+   "wmo": 143349,
+   "names": {
+    "deDE": [
+     "Die Skitterwebtunnel"
+    ],
+    "esES": [
+     "Túneles de Arácnidas"
+    ],
+    "esMX": [
+     "Túneles de Arácnidas"
+    ],
+    "frFR": [
+     "Tunnels de Toile-grouillante"
+    ],
+    "itIT": [
+     "Skitterweb Tunnels"
+    ],
+    "koKR": [
+     "그물걸이 통로"
+    ],
+    "ptBR": [
+     "Túneis Tremeteia"
+    ],
+    "ruRU": [
+     "Паучий лабиринт"
+    ],
+    "zhCN": [
+     "蛛网隧道"
+    ],
+    "zhTW": [
+     "蛛網隧道"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6068,
+     "y": 0.7367,
+     "share": 0.45,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.5931,
+     "y": 0.7397,
+     "share": 0.55,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Tazz'Alaor",
+   "wmo": 143351,
+   "names": {
+    "deDE": [
+     "Tazz'Alaor"
+    ],
+    "esES": [
+     "Tazz'Alor"
+    ],
+    "esMX": [
+     "Tazz'Alaor"
+    ],
+    "frFR": [
+     "Tazz’Alaor"
+    ],
+    "itIT": [
+     "Tazz'Alaor"
+    ],
+    "koKR": [
+     "타즈알라올"
+    ],
+    "ptBR": [
+     "Tazz'Alaor"
+    ],
+    "ruRU": [
+     "Тазз'Алаор"
+    ],
+    "zhCN": [
+     "塔萨洛尔"
+    ],
+    "zhTW": [
+     "塔薩洛爾"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5966,
+     "y": 0.5788,
+     "share": 0.49,
+     "samples": 5
+    },
+    {
+     "floor": 2,
+     "x": 0.5786,
+     "y": 0.5894,
+     "share": 0.51,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "The Storehouse",
+   "wmo": 143381,
+   "names": {
+    "deDE": [
+     "Das Lagerhaus"
+    ],
+    "esES": [
+     "Almacén"
+    ],
+    "esMX": [
+     "Almacén"
+    ],
+    "frFR": [
+     "L’entrepôt"
+    ],
+    "itIT": [
+     "The Storehouse"
+    ],
+    "koKR": [
+     "창고"
+    ],
+    "ptBR": [
+     "O Armazém"
+    ],
+    "ruRU": [
+     "Кладовая"
+    ],
+    "zhCN": [
+     "仓库"
+    ],
+    "zhTW": [
+     "倉庫"
+    ]
+   },
+   "at": [
+    {
+     "floor": 5,
+     "x": 0.5398,
+     "y": 0.8485,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

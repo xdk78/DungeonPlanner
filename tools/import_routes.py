@@ -87,7 +87,8 @@ end
 local version = "?"
 local toc = io.open(root .. "/ForeverDungeonRoutes/ForeverDungeonRoutes.toc", "rb")
 if toc then version = (toc:read("*a"):match("## Version:%s*([^\r\n]+)") or "?"); toc:close() end
-io.write(enc({ dungeons = DR.Dungeons, floors = DR.Floors, routes = DR.DefaultRoutes, version = version }))
+io.write(enc({ dungeons = DR.Dungeons, floors = DR.Floors, routes = DR.DefaultRoutes, rooms = DR.Rooms,
+  version = version }))
 """
 
 

@@ -1,0 +1,105 @@
+{
+ "schema": 1,
+ "slug": "blackmaw-hold",
+ "instanceMapID": 2974,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "Blackmaw Grove",
+   "area": 17311,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2632,
+     "y": 0.6354,
+     "share": 1.0,
+     "samples": 84
+    }
+   ]
+  },
+  {
+   "name": "Blackmaw Stillwater",
+   "area": 17312,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3106,
+     "y": 0.3744,
+     "share": 1.0,
+     "samples": 23
+    }
+   ]
+  },
+  {
+   "name": "Bonesnout's Thicket",
+   "area": 17313,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.686,
+     "y": 0.5963,
+     "share": 1.0,
+     "samples": 56
+    }
+   ]
+  },
+  {
+   "name": "Defiled Peak",
+   "area": 17309,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4274,
+     "y": 0.7153,
+     "share": 1.0,
+     "samples": 37
+    }
+   ]
+  },
+  {
+   "name": "Festering Grotto",
+   "area": 17310,
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6273,
+     "y": 0.1629,
+     "share": 0.72,
+     "samples": 99
+    },
+    {
+     "floor": 2,
+     "x": 0.5892,
+     "y": 0.4668,
+     "share": 0.28,
+     "samples": 6
+    }
+   ]
+  }
+ ],
+ "overrides": [
+  {
+   "name": "Festering Grotto",
+   "floor": 1,
+   "drop": true,
+   "why": "Its ground on this floor is the mountains around the map; the grotto itself is floor 2."
+  }
+ ],
+ "exclude": []
+}

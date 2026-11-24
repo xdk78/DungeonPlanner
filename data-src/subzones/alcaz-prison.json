@@ -1,0 +1,76 @@
+{
+ "schema": 1,
+ "slug": "alcaz-prison",
+ "instanceMapID": 2994,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "game",
+   "name": "the game client's own files (WDT, ADT, WMO), read locally by tools/subzone_anchors.py",
+   "licence": "facts measured by us",
+   "what": "anchor positions of Forever's new dungeons"
+  }
+ ],
+ "position": "game",
+ "areas": [
+  {
+   "name": "Maximum Security",
+   "wmo": 137676,
+   "names": {
+    "deDE": [
+     "Der Hochsicherheitstrakt"
+    ],
+    "esES": [
+     "Máxima seguridad"
+    ],
+    "esMX": [
+     "Máxima Seguridad"
+    ],
+    "frFR": [
+     "Haute sécurité"
+    ],
+    "itIT": [
+     "Maximum Security"
+    ],
+    "koKR": [
+     "최고 보안 시설"
+    ],
+    "ptBR": [
+     "Segurança Máxima"
+    ],
+    "ruRU": [
+     "Камера строгого режима"
+    ],
+    "zhCN": [
+     "最高戒备区"
+    ],
+    "zhTW": [
+     "最高警戒室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5451,
+     "y": 0.6519,
+     "share": 1.0,
+     "samples": 9
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": [
+  {
+   "name": "Maximum Security",
+   "why": "Its anchor lies off the drawn map of this floor (tests/test_subzones.lua). The Maximum Security Unit is a floor of its own, which this plan does not have."
+  }
+ ]
+}

@@ -1,0 +1,574 @@
+{
+ "schema": 1,
+ "slug": "naxxramas",
+ "instanceMapID": 533,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Gallery of Treasures",
+   "wmo": 47606,
+   "names": {
+    "deDE": [
+     "Galerie der Schätze"
+    ],
+    "esES": [
+     "Galería de los Tesoros"
+    ],
+    "esMX": [
+     "Galería de los Tesoros"
+    ],
+    "frFR": [
+     "Galerie des trésors"
+    ],
+    "itIT": [
+     "Gallery of Treasures"
+    ],
+    "koKR": [
+     "보물 전시실"
+    ],
+    "ptBR": [
+     "Galeria dos Tesouros"
+    ],
+    "ruRU": [
+     "Сокровищница"
+    ],
+    "zhCN": [
+     "珍宝陈列室"
+    ],
+    "zhTW": [
+     "珍寶陳列室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 5,
+     "x": 0.3649,
+     "y": 0.1091,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "Kel'Thuzad's Chamber",
+   "wmo": 37540,
+   "names": {
+    "deDE": [
+     "Kel'Thuzads Gemach"
+    ],
+    "esES": [
+     "Cámara de Kel'Thuzad"
+    ],
+    "esMX": [
+     "Cámara de Kel'Thuzad"
+    ],
+    "frFR": [
+     "Appartements de Kel'Thuzad"
+    ],
+    "itIT": [
+     "Kel'Thuzad's Chamber"
+    ],
+    "koKR": [
+     "켈투자드의 방"
+    ],
+    "ptBR": [
+     "Câmara de Kel'Thuzad"
+    ],
+    "ruRU": [
+     "Зал Кел'Тузада"
+    ],
+    "zhCN": [
+     "克尔苏加德的大厅"
+    ],
+    "zhTW": [
+     "科爾蘇加德之間"
+    ]
+   },
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.3661,
+     "y": 0.2323,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Maexxna's Nest",
+   "wmo": 36828,
+   "names": {
+    "deDE": [
+     "Maexxnas Nest"
+    ],
+    "esES": [
+     "Nido de Maexxna"
+    ],
+    "esMX": [
+     "Nido de Maexxna"
+    ],
+    "frFR": [
+     "Nid de Maexxna"
+    ],
+    "itIT": [
+     "Maexxna's Nest"
+    ],
+    "koKR": [
+     "맥스나의 둥지"
+    ],
+    "ptBR": [
+     "Ninho de Maexxna"
+    ],
+    "ruRU": [
+     "Гнездо Мексны"
+    ],
+    "zhCN": [
+     "迈克斯纳之巢"
+    ],
+    "zhTW": [
+     "梅克絲娜之巢"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.6998,
+     "y": 0.1647,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Sapphiron's Lair",
+   "wmo": 37054,
+   "names": {
+    "deDE": [
+     "Saphirons Hort"
+    ],
+    "esES": [
+     "Sala Vermis Gélida"
+    ],
+    "esMX": [
+     "Guarida de Sapphiron"
+    ],
+    "frFR": [
+     "Repaire de Saphiron"
+    ],
+    "itIT": [
+     "Sapphiron's Lair"
+    ],
+    "koKR": [
+     "서리고룡의 방"
+    ],
+    "ptBR": [
+     "Covil do Sapphiron"
+    ],
+    "ruRU": [
+     "Логово Сафирона"
+    ],
+    "zhCN": [
+     "冰霜巨龙的大厅"
+    ],
+    "zhTW": [
+     "冰霜龍人之室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 6,
+     "x": 0.6032,
+     "y": 0.687,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Arachnid Quarter",
+   "wmo": 36774,
+   "names": {
+    "deDE": [
+     "Das Arachnidenviertel"
+    ],
+    "esES": [
+     "El Arrabal Arácnido"
+    ],
+    "esMX": [
+     "El Arrabal Arácnido"
+    ],
+    "frFR": [
+     "Le quartier des Arachnides"
+    ],
+    "itIT": [
+     "The Arachnid Quarter"
+    ],
+    "koKR": [
+     "거미 지구"
+    ],
+    "ptBR": [
+     "O Distrito dos Aracnídeos"
+    ],
+    "ruRU": [
+     "Паучий квартал"
+    ],
+    "zhCN": [
+     "蜘蛛区"
+    ],
+    "zhTW": [
+     "蜘蛛區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.4454,
+     "y": 0.535,
+     "share": 1.0,
+     "samples": 7
+    }
+   ]
+  },
+  {
+   "name": "The Construct Quarter",
+   "wmo": 36802,
+   "names": {
+    "deDE": [
+     "Das Konstruktviertel"
+    ],
+    "esES": [
+     "El Arrabal de los Ensamblajes"
+    ],
+    "esMX": [
+     "El Arrabal de los Ensamblajes"
+    ],
+    "frFR": [
+     "Le quartier des Assemblages"
+    ],
+    "itIT": [
+     "The Construct Quarter"
+    ],
+    "koKR": [
+     "피조물 지구"
+    ],
+    "ptBR": [
+     "O Distrito dos Constructos"
+    ],
+    "ruRU": [
+     "Квартал Мерзости"
+    ],
+    "zhCN": [
+     "构造区"
+    ],
+    "zhTW": [
+     "傀儡區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5274,
+     "y": 0.5989,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  },
+  {
+   "name": "The Halls of Reanimation",
+   "wmo": 37068,
+   "names": {
+    "deDE": [
+     "Die Hallen der Wiederbelebung"
+    ],
+    "esES": [
+     "Las Salas de la Reanimación"
+    ],
+    "esMX": [
+     "Las Salas de la Reanimación"
+    ],
+    "frFR": [
+     "Les salles de réanimation"
+    ],
+    "itIT": [
+     "The Halls of Reanimation"
+    ],
+    "koKR": [
+     "부활의 전당"
+    ],
+    "ptBR": [
+     "Os Salões da Reanimação"
+    ],
+    "ruRU": [
+     "Залы воскрешения"
+    ],
+    "zhCN": [
+     "复活大厅"
+    ],
+    "zhTW": [
+     "再活化大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.307,
+     "y": 0.2086,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Horsemen's Assembly",
+   "wmo": 37066,
+   "names": {
+    "deDE": [
+     "Das Reiterkonzil"
+    ],
+    "esES": [
+     "La Asamblea de los Jinetes"
+    ],
+    "esMX": [
+     "La Asamblea de los Jinetes"
+    ],
+    "frFR": [
+     "L'assemblée des Cavaliers"
+    ],
+    "itIT": [
+     "The Horsemen's Assembly"
+    ],
+    "koKR": [
+     "기사단 회합실"
+    ],
+    "ptBR": [
+     "A Assembleia dos Cavaleiros"
+    ],
+    "ruRU": [
+     "Ассамблея всадников"
+    ],
+    "zhCN": [
+     "骑士议会厅"
+    ],
+    "zhTW": [
+     "騎士聚所"
+    ]
+   },
+   "at": [
+    {
+     "floor": 3,
+     "x": 0.3124,
+     "y": 0.7545,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Military Quarter",
+   "wmo": 36833,
+   "names": {
+    "deDE": [
+     "Das Militärviertel"
+    ],
+    "esES": [
+     "El Arrabal Militar"
+    ],
+    "esMX": [
+     "El Arrabal Militar"
+    ],
+    "frFR": [
+     "Le quartier Militaire"
+    ],
+    "itIT": [
+     "The Military Quarter"
+    ],
+    "koKR": [
+     "군사 지구"
+    ],
+    "ptBR": [
+     "O Distrito Militar"
+    ],
+    "ruRU": [
+     "Военный квартал"
+    ],
+    "zhCN": [
+     "军事区"
+    ],
+    "zhTW": [
+     "軍事區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 3,
+     "x": 0.5394,
+     "y": 0.4242,
+     "share": 1.0,
+     "samples": 5
+    }
+   ]
+  },
+  {
+   "name": "The Necrotic Vault",
+   "wmo": 36824,
+   "names": {
+    "deDE": [
+     "Die Nekrotische Kammer"
+    ],
+    "esES": [
+     "La Cripta Necrótica"
+    ],
+    "esMX": [
+     "La Cripta Necrótica"
+    ],
+    "frFR": [
+     "Le caveau nécrotique"
+    ],
+    "itIT": [
+     "The Necrotic Vault"
+    ],
+    "koKR": [
+     "죽음의 감옥"
+    ],
+    "ptBR": [
+     "A Câmara Necrótica"
+    ],
+    "ruRU": [
+     "Мертвые Своды"
+    ],
+    "zhCN": [
+     "死灵穹顶"
+    ],
+    "zhTW": [
+     "死靈穹殿"
+    ]
+   },
+   "at": [
+    {
+     "floor": 4,
+     "x": 0.7666,
+     "y": 0.2841,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Outer Ring",
+   "wmo": 36775,
+   "names": {
+    "deDE": [
+     "Der Äußere Ring"
+    ],
+    "esES": [
+     "El Anillo Exterior"
+    ],
+    "esMX": [
+     "El Anillo Exterior"
+    ],
+    "frFR": [
+     "Le cercle extérieur"
+    ],
+    "itIT": [
+     "The Outer Ring"
+    ],
+    "koKR": [
+     "외곽 지구"
+    ],
+    "ptBR": [
+     "O Círculo Externo"
+    ],
+    "ruRU": [
+     "Внешнее кольцо"
+    ],
+    "zhCN": [
+     "外环"
+    ],
+    "zhTW": [
+     "外環區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4228,
+     "y": 0.3763,
+     "share": 0.28,
+     "samples": 8
+    },
+    {
+     "floor": 2,
+     "x": 0.5724,
+     "y": 0.3832,
+     "share": 0.27,
+     "samples": 9
+    }
+   ]
+  },
+  {
+   "name": "The Plague Quarter",
+   "wmo": 36818,
+   "names": {
+    "deDE": [
+     "Das Seuchenviertel"
+    ],
+    "esES": [
+     "El Arrabal de la Peste"
+    ],
+    "esMX": [
+     "El Arrabal de la Peste"
+    ],
+    "frFR": [
+     "Le quartier de la Peste"
+    ],
+    "itIT": [
+     "The Plague Quarter"
+    ],
+    "koKR": [
+     "역병 지구"
+    ],
+    "ptBR": [
+     "O Distrito da Peste"
+    ],
+    "ruRU": [
+     "Чумной квартал"
+    ],
+    "zhCN": [
+     "瘟疫区"
+    ],
+    "zhTW": [
+     "瘟疫區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 4,
+     "x": 0.4431,
+     "y": 0.428,
+     "share": 1.0,
+     "samples": 6
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

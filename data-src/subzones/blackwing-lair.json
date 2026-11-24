@@ -1,0 +1,221 @@
+{
+ "schema": 1,
+ "slug": "blackwing-lair",
+ "instanceMapID": 469,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Dragonmaw Garrison",
+   "wmo": 29470,
+   "names": {
+    "deDE": [
+     "Dragonmaw-Garnison"
+    ],
+    "esES": [
+     "Cuartel Faucedraco"
+    ],
+    "esMX": [
+     "Cuartel Faucedraco"
+    ],
+    "frFR": [
+     "Garnison des Dragonmaw"
+    ],
+    "itIT": [
+     "Dragonmaw Garrison"
+    ],
+    "koKR": [
+     "용아귀 주둔지"
+    ],
+    "ptBR": [
+     "Guarnição Presa do Dragão"
+    ],
+    "ruRU": [
+     "Гарнизон Драконьей Пасти"
+    ],
+    "zhCN": [
+     "龙喉兵营"
+    ],
+    "zhTW": [
+     "龍喉兵營"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4183,
+     "y": 0.6062,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Halls of Strife",
+   "wmo": 29474,
+   "names": {
+    "deDE": [
+     "Hallen des Zwists"
+    ],
+    "esES": [
+     "Salas de los Confictos"
+    ],
+    "esMX": [
+     "Salas de los Conflictos"
+    ],
+    "frFR": [
+     "Halls des conflits"
+    ],
+    "itIT": [
+     "Halls of Strife"
+    ],
+    "koKR": [
+     "투쟁의 전당"
+    ],
+    "ptBR": [
+     "Salões da Contenda"
+    ],
+    "ruRU": [
+     "Зал Раздора"
+    ],
+    "zhCN": [
+     "征战大厅"
+    ],
+    "zhTW": [
+     "征戰大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.4147,
+     "y": 0.6329,
+     "share": 0.6,
+     "samples": 4
+    },
+    {
+     "floor": 3,
+     "x": 0.481,
+     "y": 0.7438,
+     "share": 0.4,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Nefarian's Lair",
+   "wmo": 29462,
+   "names": {
+    "deDE": [
+     "Nefarians Unterschlupf"
+    ],
+    "esES": [
+     "Guarida de Nefarian"
+    ],
+    "esMX": [
+     "Guarida de Nefarian"
+    ],
+    "frFR": [
+     "Antre de Nefarian"
+    ],
+    "itIT": [
+     "Nefarian's Lair"
+    ],
+    "koKR": [
+     "네파리안의 둥지"
+    ],
+    "ptBR": [
+     "Covil de Nefarian"
+    ],
+    "ruRU": [
+     "Логово Нефариана"
+    ],
+    "zhCN": [
+     "奈法利安的巢穴"
+    ],
+    "zhTW": [
+     "奈法利安的巢穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 4,
+     "x": 0.6992,
+     "y": 0.7344,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Shadow Wing Lair",
+   "wmo": 29471,
+   "names": {
+    "deDE": [
+     "Schattenschwingenunterschlupf"
+    ],
+    "esES": [
+     "Guardia Alasombra"
+    ],
+    "esMX": [
+     "Guarida de Alasombra"
+    ],
+    "frFR": [
+     "Repaire de l'Aile de l'ombre"
+    ],
+    "itIT": [
+     "Shadow Wing Lair"
+    ],
+    "koKR": [
+     "어둠날개 둥지"
+    ],
+    "ptBR": [
+     "Covil do Asa Sombria"
+    ],
+    "ruRU": [
+     "Логово Крыльев Тени"
+    ],
+    "zhCN": [
+     "影翼巢穴"
+    ],
+    "zhTW": [
+     "影翼巢穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3469,
+     "y": 0.268,
+     "share": 0.63,
+     "samples": 2
+    },
+    {
+     "floor": 2,
+     "x": 0.4439,
+     "y": 0.3195,
+     "share": 0.37,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

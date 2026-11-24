@@ -1,0 +1,963 @@
+{
+ "schema": 1,
+ "slug": "blackrock-depths",
+ "instanceMapID": 230,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Chamber of Enchantment",
+   "wmo": 147915,
+   "names": {
+    "deDE": [
+     "Die Kammer der Verzauberung"
+    ],
+    "esES": [
+     "Cámara del Encantamiento"
+    ],
+    "esMX": [
+     "Cámara del Encantamiento"
+    ],
+    "frFR": [
+     "Chambre des Enchantements"
+    ],
+    "itIT": [
+     "Chamber of Enchantment"
+    ],
+    "koKR": [
+     "마법의 방"
+    ],
+    "ptBR": [
+     "Câmara do Encantamento"
+    ],
+    "ruRU": [
+     "Колдовской чертог"
+    ],
+    "zhCN": [
+     "魔法之厅"
+    ],
+    "zhTW": [
+     "魔法之廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5635,
+     "y": 0.4398,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Dark Iron Highway",
+   "wmo": 147901,
+   "names": {
+    "deDE": [
+     "Die Dunkeleisenstraße"
+    ],
+    "esES": [
+     "Ruta Hierro Negro"
+    ],
+    "esMX": [
+     "Ruta Hierro Negro"
+    ],
+    "frFR": [
+     "Grand-route des Sombrefer"
+    ],
+    "itIT": [
+     "Dark Iron Highway"
+    ],
+    "koKR": [
+     "검은무쇠 대로"
+    ],
+    "ptBR": [
+     "Estrada do Ferro Negro"
+    ],
+    "ruRU": [
+     "Тракт Черного Железа"
+    ],
+    "zhCN": [
+     "黑铁大道"
+    ],
+    "zhTW": [
+     "黑鐵大道"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3077,
+     "y": 0.5515,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Detention Block",
+   "wmo": 147888,
+   "names": {
+    "deDE": [
+     "Der Gefängnisblock"
+    ],
+    "esES": [
+     "Bloque de Detención"
+    ],
+    "esMX": [
+     "Bloque de Detención"
+    ],
+    "frFR": [
+     "Le mitard"
+    ],
+    "itIT": [
+     "Detention Block"
+    ],
+    "koKR": [
+     "감금 구역"
+    ],
+    "ptBR": [
+     "Bloco de Detenção"
+    ],
+    "ruRU": [
+     "Тюремный блок"
+    ],
+    "zhCN": [
+     "禁闭室"
+    ],
+    "zhTW": [
+     "禁閉室"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4474,
+     "y": 0.8225,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "East Garrison",
+   "wmo": 147894,
+   "names": {
+    "deDE": [
+     "Die Ostgarnison"
+    ],
+    "esES": [
+     "Cuartel del Este"
+    ],
+    "esMX": [
+     "Cuartel del Este"
+    ],
+    "frFR": [
+     "Garnison de l’Est"
+    ],
+    "itIT": [
+     "East Garrison"
+    ],
+    "koKR": [
+     "동쪽 주둔지"
+    ],
+    "ptBR": [
+     "Guarnição Leste"
+    ],
+    "ruRU": [
+     "Восточный гарнизон"
+    ],
+    "zhCN": [
+     "东区兵营"
+    ],
+    "zhTW": [
+     "東部兵營"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4289,
+     "y": 0.63,
+     "share": 0.47,
+     "samples": 2
+    },
+    {
+     "floor": 2,
+     "x": 0.4416,
+     "y": 0.884,
+     "share": 0.53,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "Hall of Crafting",
+   "wmo": 147913,
+   "names": {
+    "deDE": [
+     "Die Halle des Handwerks"
+    ],
+    "esES": [
+     "Sala de los Oficios"
+    ],
+    "esMX": [
+     "Sala de los Oficios"
+    ],
+    "frFR": [
+     "Chambre de l’Artisanat"
+    ],
+    "itIT": [
+     "Hall of Crafting"
+    ],
+    "koKR": [
+     "장인의 전당"
+    ],
+    "ptBR": [
+     "Salão da Criação"
+    ],
+    "ruRU": [
+     "Зал Ремесла"
+    ],
+    "zhCN": [
+     "工艺之厅"
+    ],
+    "zhTW": [
+     "工匠大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6428,
+     "y": 0.2505,
+     "share": 0.53,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.6333,
+     "y": 0.5457,
+     "share": 0.47,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Halls of the Law",
+   "wmo": 147890,
+   "names": {
+    "deDE": [
+     "Die Halle des Gesetzes"
+    ],
+    "esES": [
+     "Salas de la Ley"
+    ],
+    "esMX": [
+     "Salas de la Ley"
+    ],
+    "frFR": [
+     "Chambres de la Loi"
+    ],
+    "itIT": [
+     "Halls of the Law"
+    ],
+    "koKR": [
+     "법의 전당"
+    ],
+    "ptBR": [
+     "Salões da Lei"
+    ],
+    "ruRU": [
+     "Галереи Правосудия"
+    ],
+    "zhCN": [
+     "秩序大厅"
+    ],
+    "zhTW": [
+     "秩序大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5178,
+     "y": 0.6329,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "Mold Foundry",
+   "wmo": 147918,
+   "names": {
+    "deDE": [
+     "Die Formgießerei"
+    ],
+    "esES": [
+     "Fundición del Molde"
+    ],
+    "esMX": [
+     "Fundición del Molde"
+    ],
+    "frFR": [
+     "La fonderie"
+    ],
+    "itIT": [
+     "Mold Foundry"
+    ],
+    "koKR": [
+     "거푸집 주조소"
+    ],
+    "ptBR": [
+     "Fundição dos Moldes"
+    ],
+    "ruRU": [
+     "Литейная"
+    ],
+    "zhCN": [
+     "浇铸间"
+    ],
+    "zhTW": [
+     "澆鑄間"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.4968,
+     "y": 0.3451,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Ring of the Law",
+   "wmo": 147896,
+   "names": {
+    "deDE": [
+     "Der Ring des Gesetzes"
+    ],
+    "esES": [
+     "Círculo de la Ley"
+    ],
+    "esMX": [
+     "Círculo de la Ley"
+    ],
+    "frFR": [
+     "Cercle de la loi"
+    ],
+    "itIT": [
+     "Ring of the Law"
+    ],
+    "koKR": [
+     "법의 심판장"
+    ],
+    "ptBR": [
+     "Círculo da Lei"
+    ],
+    "ruRU": [
+     "Зал Правосудия"
+    ],
+    "zhCN": [
+     "秩序竞技场"
+    ],
+    "zhTW": [
+     "秩序競技場"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5085,
+     "y": 0.6144,
+     "share": 0.57,
+     "samples": 2
+    },
+    {
+     "floor": 2,
+     "x": 0.5005,
+     "y": 0.8867,
+     "share": 0.43,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Shadowforge City",
+   "wmo": 147902,
+   "names": {
+    "deDE": [
+     "Die Schattenschmiede"
+    ],
+    "esES": [
+     "Ciudad Forjatiniebla"
+    ],
+    "esMX": [
+     "Ciudad Forjatiniebla"
+    ],
+    "frFR": [
+     "Ville des Ombreforge"
+    ],
+    "itIT": [
+     "Shadowforge City"
+    ],
+    "koKR": [
+     "어둠괴철로 도시"
+    ],
+    "ptBR": [
+     "Cidade de Umbraforja"
+    ],
+    "ruRU": [
+     "Тенегорн"
+    ],
+    "zhCN": [
+     "暗炉城"
+    ],
+    "zhTW": [
+     "影爐城"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.5526,
+     "y": 0.3718,
+     "share": 0.54,
+     "samples": 3
+    },
+    {
+     "floor": 2,
+     "x": 0.55,
+     "y": 0.6584,
+     "share": 0.46,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "Shrine of Thaurissan",
+   "wmo": 147899,
+   "names": {
+    "deDE": [
+     "Der Schrein von Thaurissan"
+    ],
+    "esES": [
+     "Santuario de Thaurissan"
+    ],
+    "esMX": [
+     "Santuario de Thaurissan"
+    ],
+    "frFR": [
+     "Sanctuaire de Thaurissan"
+    ],
+    "itIT": [
+     "Shrine of Thaurissan"
+    ],
+    "koKR": [
+     "타우릿산의 제단"
+    ],
+    "ptBR": [
+     "Santuário de Thaurissan"
+    ],
+    "ruRU": [
+     "Святилище Тауриссана"
+    ],
+    "zhCN": [
+     "索瑞森神殿"
+    ],
+    "zhTW": [
+     "索瑞森神殿"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5555,
+     "y": 0.916,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Summoners' Tomb",
+   "wmo": 147929,
+   "names": {
+    "deDE": [
+     "Die Gruft der Beschwörer"
+    ],
+    "esES": [
+     "Tumba del Invocador"
+    ],
+    "esMX": [
+     "Tumba del Invocador"
+    ],
+    "frFR": [
+     "Tombe des invocateurs"
+    ],
+    "itIT": [
+     "Summoners' Tomb"
+    ],
+    "koKR": [
+     "소환사의 무덤"
+    ],
+    "ptBR": [
+     "Tumba dos Evocadores"
+    ],
+    "ruRU": [
+     "Гробница Заклинателей"
+    ],
+    "zhCN": [
+     "召唤者之墓"
+    ],
+    "zhTW": [
+     "召喚師之墓"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5368,
+     "y": 0.2474,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Black Vault",
+   "wmo": 147912,
+   "names": {
+    "deDE": [
+     "Das schwarze Gewölbe"
+    ],
+    "esES": [
+     "Cámara Negra"
+    ],
+    "esMX": [
+     "Cámara Negra",
+     "La Cámara Negra"
+    ],
+    "frFR": [
+     "La Voûte noire"
+    ],
+    "itIT": [
+     "The Black Vault"
+    ],
+    "koKR": [
+     "검은 금고"
+    ],
+    "ptBR": [
+     "O Cofre Negro"
+    ],
+    "ruRU": [
+     "Черное Хранилище"
+    ],
+    "zhCN": [
+     "黑色宝库"
+    ],
+    "zhTW": [
+     "黑鐵寶庫"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.6013,
+     "y": 0.6682,
+     "share": 1.0,
+     "samples": 2
+    }
+   ]
+  },
+  {
+   "name": "The Domicile",
+   "wmo": 147909,
+   "names": {
+    "deDE": [
+     "Das Domizil"
+    ],
+    "esES": [
+     "Domicilio"
+    ],
+    "esMX": [
+     "El Domicilio"
+    ],
+    "frFR": [
+     "Le Domicile"
+    ],
+    "itIT": [
+     "The Domicile"
+    ],
+    "koKR": [
+     "거주지"
+    ],
+    "ptBR": [
+     "O Domicílio"
+    ],
+    "ruRU": [
+     "Жилой квартал"
+    ],
+    "zhCN": [
+     "住宅区"
+    ],
+    "zhTW": [
+     "住宅區"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.5566,
+     "y": 0.702,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Grim Guzzler",
+   "wmo": 147905,
+   "names": {
+    "deDE": [
+     "Zum Grimmigen Säufer"
+    ],
+    "esES": [
+     "Tragapenas"
+    ],
+    "esMX": [
+     "Tragapenas"
+    ],
+    "frFR": [
+     "Le Sinistre écluseur"
+    ],
+    "itIT": [
+     "The Grim Guzzler"
+    ],
+    "koKR": [
+     "험상궂은 주정뱅이 선술집"
+    ],
+    "ptBR": [
+     "O Glutão Implacável"
+    ],
+    "ruRU": [
+     "Трактир \"Угрюмый обжора\""
+    ],
+    "zhCN": [
+     "黑铁酒吧"
+    ],
+    "zhTW": [
+     "黑鐵酒吧"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.4947,
+     "y": 0.6214,
+     "share": 1.0,
+     "samples": 4
+    }
+   ]
+  },
+  {
+   "name": "The Imperial Seat",
+   "wmo": 147923,
+   "names": {
+    "deDE": [
+     "Der Kaiserliche Sitz"
+    ],
+    "esES": [
+     "El Trono Imperial"
+    ],
+    "esMX": [
+     "El Trono Imperial"
+    ],
+    "frFR": [
+     "Le Siège impérial"
+    ],
+    "itIT": [
+     "The Imperial Seat"
+    ],
+    "koKR": [
+     "옥좌"
+    ],
+    "ptBR": [
+     "O Trono Imperial"
+    ],
+    "ruRU": [
+     "Императорский Трон"
+    ],
+    "zhCN": [
+     "帝王之座"
+    ],
+    "zhTW": [
+     "帝王之座"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.8959,
+     "y": 0.1189,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Iron Hall",
+   "wmo": 147922,
+   "names": {
+    "deDE": [
+     "Die Eisenhalle"
+    ],
+    "esES": [
+     "Cámara de Hierro"
+    ],
+    "esMX": [
+     "Cámara de Hierro"
+    ],
+    "frFR": [
+     "Le Hall de fer"
+    ],
+    "itIT": [
+     "The Iron Hall"
+    ],
+    "koKR": [
+     "철의 전당"
+    ],
+    "ptBR": [
+     "O Salão de Ferro"
+    ],
+    "ruRU": [
+     "Железный зал"
+    ],
+    "zhCN": [
+     "钢铁大厅"
+    ],
+    "zhTW": [
+     "鐵之大廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.7996,
+     "y": 0.1189,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Lyceum",
+   "wmo": 147920,
+   "names": {
+    "deDE": [
+     "Das Lyzeum"
+    ],
+    "esES": [
+     "Lyceum"
+    ],
+    "esMX": [
+     "El Lyceum"
+    ],
+    "frFR": [
+     "Le Lyceum"
+    ],
+    "itIT": [
+     "The Lyceum"
+    ],
+    "koKR": [
+     "훈련강당"
+    ],
+    "ptBR": [
+     "O Liceu"
+    ],
+    "ruRU": [
+     "Лекторий"
+    ],
+    "zhCN": [
+     "讲学厅"
+    ],
+    "zhTW": [
+     "講學廳"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.663,
+     "y": 0.1225,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Manufactory",
+   "wmo": 147926,
+   "names": {
+    "deDE": [
+     "Die Manufaktur"
+    ],
+    "esES": [
+     "La Fábrica"
+    ],
+    "esMX": [
+     "El Taller"
+    ],
+    "frFR": [
+     "La Manufacture"
+    ],
+    "itIT": [
+     "The Manufactory"
+    ],
+    "koKR": [
+     "제조 공장"
+    ],
+    "ptBR": [
+     "A Fábrica"
+    ],
+    "ruRU": [
+     "Фабрика"
+    ],
+    "zhCN": [
+     "制造厂"
+    ],
+    "zhTW": [
+     "製造廠"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.3746,
+     "y": 0.7105,
+     "share": 1.0,
+     "samples": 3
+    }
+   ]
+  },
+  {
+   "name": "The Molten Bridge",
+   "wmo": 147919,
+   "names": {
+    "deDE": [
+     "Die Geschmolzene Brücke"
+    ],
+    "esES": [
+     "Puente de Magma"
+    ],
+    "esMX": [
+     "Puente de Magma"
+    ],
+    "frFR": [
+     "Le pont de magma"
+    ],
+    "itIT": [
+     "The Molten Bridge"
+    ],
+    "koKR": [
+     "작열하는 다리"
+    ],
+    "ptBR": [
+     "A Ponte Derretida"
+    ],
+    "ruRU": [
+     "Огненный мост"
+    ],
+    "zhCN": [
+     "熔火之桥"
+    ],
+    "zhTW": [
+     "熔火之橋"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.657,
+     "y": 0.2901,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "West Garrison",
+   "wmo": 147903,
+   "names": {
+    "deDE": [
+     "Die Westgarnison"
+    ],
+    "esES": [
+     "Cuartel del Oeste"
+    ],
+    "esMX": [
+     "Cuartel del Oeste"
+    ],
+    "frFR": [
+     "Garnison de l’Ouest"
+    ],
+    "itIT": [
+     "West Garrison"
+    ],
+    "koKR": [
+     "서쪽 주둔지"
+    ],
+    "ptBR": [
+     "Guarnição Oeste"
+    ],
+    "ruRU": [
+     "Западный гарнизон"
+    ],
+    "zhCN": [
+     "西区兵营"
+    ],
+    "zhTW": [
+     "西部兵營"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3562,
+     "y": 0.5232,
+     "share": 0.46,
+     "samples": 1
+    },
+    {
+     "floor": 2,
+     "x": 0.3761,
+     "y": 0.7857,
+     "share": 0.54,
+     "samples": 2
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}

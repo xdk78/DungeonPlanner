@@ -1,0 +1,345 @@
+{
+ "schema": 1,
+ "slug": "maraudon",
+ "instanceMapID": 349,
+ "build": "1.60.1.71037",
+ "sources": [
+  {
+   "id": "wago",
+   "name": "wago.tools DB2 exports of WoW: Forever 1.60.1.71037 (AreaTable, WMOAreaTable, Map)",
+   "url": "https://wago.tools/db2",
+   "licence": "facts from the game's tables",
+   "what": "area IDs, WMO area IDs and the names of WMO areas in each client language"
+  },
+  {
+   "id": "fdr",
+   "name": "Forever Dungeon Routes, Data/Rooms.lua",
+   "url": "https://github.com/Checkov23/ForeverDungeonRoutes",
+   "licence": "MIT",
+   "what": "anchor positions of classic dungeons (its room boxes)"
+  }
+ ],
+ "position": "fdr",
+ "areas": [
+  {
+   "name": "Earth Song Falls",
+   "wmo": 31451,
+   "names": {
+    "deDE": [
+     "Fälle des irdenen Gesangs"
+    ],
+    "esES": [
+     "Cascadas del Canto de la Tierra"
+    ],
+    "esMX": [
+     "Cascadas del Canto de la Tierra"
+    ],
+    "frFR": [
+     "Chutes de Chanteterre"
+    ],
+    "itIT": [
+     "Earth Song Falls"
+    ],
+    "koKR": [
+     "대지노래 폭포"
+    ],
+    "ptBR": [
+     "Cachoeiras do Canção Telúrica"
+    ],
+    "ruRU": [
+     "Поющие водопады"
+    ],
+    "zhCN": [
+     "地歌瀑布"
+    ],
+    "zhTW": [
+     "地歌瀑布"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.2915,
+     "y": 0.4774,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Foulspore Cavern",
+   "wmo": 31472,
+   "names": {
+    "deDE": [
+     "Faulsporenhöhle"
+    ],
+    "esES": [
+     "Gruta de la Espora Fétida"
+    ],
+    "esMX": [
+     "Gruta de la Espora Fétida"
+    ],
+    "frFR": [
+     "Caverne Vilespores"
+    ],
+    "itIT": [
+     "Foulspore Cavern"
+    ],
+    "koKR": [
+     "썩은버섯 동굴",
+     "썩은포자 동굴"
+    ],
+    "ptBR": [
+     "Caverna Esporelama"
+    ],
+    "ruRU": [
+     "Зловонная пещера"
+    ],
+    "zhCN": [
+     "毒孢洞穴",
+     "毒菇洞穴"
+    ],
+    "zhTW": [
+     "毒菇洞穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4534,
+     "y": 0.3594,
+     "share": 1.0,
+     "samples": 10
+    }
+   ]
+  },
+  {
+   "name": "Poison Falls",
+   "wmo": 31493,
+   "names": {
+    "deDE": [
+     "Giftfälle"
+    ],
+    "esES": [
+     "Cascada Hedionda"
+    ],
+    "esMX": [
+     "Cascada Hedionda"
+    ],
+    "frFR": [
+     "Chutes empoisonnées"
+    ],
+    "itIT": [
+     "Poison Falls"
+    ],
+    "koKR": [
+     "맹독 폭포"
+    ],
+    "ptBR": [
+     "Cachoeira Venenosa"
+    ],
+    "ruRU": [
+     "Ядопады"
+    ],
+    "zhCN": [
+     "毒水瀑布"
+    ],
+    "zhTW": [
+     "毒水瀑布"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.2988,
+     "y": 0.5843,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Noxious Hollow",
+   "wmo": 31485,
+   "names": {
+    "deDE": [
+     "Die giftige Senke"
+    ],
+    "esES": [
+     "Hoya Ponzoñosa"
+    ],
+    "esMX": [
+     "Hoya Ponzoñosa"
+    ],
+    "frFR": [
+     "Le creux empoisonné"
+    ],
+    "itIT": [
+     "The Noxious Hollow"
+    ],
+    "koKR": [
+     "맹독의 동굴"
+    ],
+    "ptBR": [
+     "O Vale Nocivo"
+    ],
+    "ruRU": [
+     "Ядовитая низина"
+    ],
+    "zhCN": [
+     "毒水谷"
+    ],
+    "zhTW": [
+     "毒水谷"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.4062,
+     "y": 0.1966,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "The Wicked Grotto",
+   "wmo": 31476,
+   "names": {
+    "deDE": [
+     "Die tückische Grotte"
+    ],
+    "esES": [
+     "La Gruta Maligna"
+    ],
+    "esMX": [
+     "La Gruta Maligna"
+    ],
+    "frFR": [
+     "La Grotte maudite",
+     "La grotte maudite"
+    ],
+    "itIT": [
+     "The Wicked Grotto"
+    ],
+    "koKR": [
+     "악의 동굴"
+    ],
+    "ptBR": [
+     "Gruta Malévola"
+    ],
+    "ruRU": [
+     "Оскверненный грот"
+    ],
+    "zhCN": [
+     "邪恶洞穴"
+    ],
+    "zhTW": [
+     "邪惡洞穴"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.6445,
+     "y": 0.6833,
+     "share": 1.0,
+     "samples": 9
+    }
+   ]
+  },
+  {
+   "name": "Vyletongue Seat",
+   "wmo": 31491,
+   "names": {
+    "deDE": [
+     "Schlangenzunges Sitz"
+    ],
+    "esES": [
+     "Trono de Lenguavil"
+    ],
+    "esMX": [
+     "Trono de Lenguavil"
+    ],
+    "frFR": [
+     "Siège de Vylelangue"
+    ],
+    "itIT": [
+     "Vyletongue Seat"
+    ],
+    "koKR": [
+     "바일텅의 왕좌"
+    ],
+    "ptBR": [
+     "Trono do Torpelíngua"
+    ],
+    "ruRU": [
+     "Палата Злоязыкого"
+    ],
+    "zhCN": [
+     "草藤之座"
+    ],
+    "zhTW": [
+     "草藤之座"
+    ]
+   },
+   "at": [
+    {
+     "floor": 1,
+     "x": 0.3738,
+     "y": 0.8095,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  },
+  {
+   "name": "Zaetar's Grave",
+   "wmo": 31464,
+   "names": {
+    "deDE": [
+     "Zaetars Grab"
+    ],
+    "esES": [
+     "Tumba de Zaetar"
+    ],
+    "esMX": [
+     "Tumba de Zaetar"
+    ],
+    "frFR": [
+     "Tombe de Zaetar"
+    ],
+    "itIT": [
+     "Zaetar's Grave"
+    ],
+    "koKR": [
+     "재타르의 무덤"
+    ],
+    "ptBR": [
+     "Túmulo de Zaetar"
+    ],
+    "ruRU": [
+     "Могила Зейтара"
+    ],
+    "zhCN": [
+     "扎尔塔之墓"
+    ],
+    "zhTW": [
+     "札爾塔之墓"
+    ]
+   },
+   "at": [
+    {
+     "floor": 2,
+     "x": 0.3564,
+     "y": 0.7779,
+     "share": 1.0,
+     "samples": 1
+    }
+   ]
+  }
+ ],
+ "overrides": [],
+ "exclude": []
+}
