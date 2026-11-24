@@ -2,14 +2,16 @@
 --
 -- The store (DungeonPlannerCharDB.progress):
 --   kills      ["<encounterID>:<difficultyID>"] = { name, count, first, last }   lifetime, per difficulty
---   run        the current instance run or nil: { key, name, difficultyID, started, kills = { [encounterID] = time } }
+--   run        the current instance run or nil: { key, name, difficultyID, started, kills = { [encounterID] = time },
+--              pre = { [encounterID] = true } }; `pre` lists the kills that were already there when the player joined
+--              (the instance's lock says the boss is dead): they count as killed, but they are not the player's kills
 --   history    finished runs, newest last, at most MAX_HISTORY
 --   objectives [planId] = { [objectiveId] = true }
 -- A run is "the same" while the player stays in, or comes back to, the same instance within RESUME seconds.
 
 local _, ns = ...
 local Progress = ns:NewModule("Progress")
-local Util = ns.Util
+local Util, Match = ns.Util, ns.Match
 
 Progress.MAX_HISTORY = 50
 Progress.RESUME = 30 * 60
@@ -34,6 +36,9 @@ function Progress.Normalize(store)
 	end
 	if store.run ~= nil and (type(store.run) ~= "table" or type(store.run.kills) ~= "table") then
 		store.run = nil
+	end
+	if store.run and type(store.run.pre) ~= "table" then
+		store.run.pre = nil
 	end
 	for key, rec in pairs(store.kills) do
 		if type(rec) ~= "table" or type(rec.count) ~= "number" then
@@ -71,8 +76,34 @@ function Progress.RecordKill(store, encounterID, difficultyID, name, now)
 	end
 	if store.run then
 		store.run.kills[encounterID] = now
+		if store.run.pre then
+			store.run.pre[encounterID] = nil -- the player killed it after all
+		end
 	end
 	return rec
+end
+
+-- A boss the instance's lock reports dead that the player did not kill: killed in this run, but not among the player's
+-- kills (store.kills). Returns whether it was new.
+function Progress.MarkDeadOnJoin(store, encounterID, now)
+	local run = store.run
+	if not (run and Util.IsInteger(encounterID)) or run.kills[encounterID] ~= nil then
+		return false
+	end
+	run.kills[encounterID] = now
+	run.pre = run.pre or {}
+	run.pre[encounterID] = true
+	return true
+end
+
+function Progress.WasDeadOnJoin(store, encounterID)
+	local run = store.run
+	return run ~= nil and run.pre ~= nil and run.pre[encounterID] == true
+end
+
+function Progress.KilledAt(store, encounterID)
+	local run = store.run
+	return run and run.kills[encounterID] or nil
 end
 
 -- Total kills of an encounter over every difficulty, and the latest kill time.
@@ -88,6 +119,46 @@ function Progress.KillsOf(store, encounterID)
 		end
 	end
 	return count, last
+end
+
+-- The name the client gave a boss when the player last killed it (ENCOUNTER_END's, in the client's language), or nil.
+function Progress.NameOf(store, encounterID)
+	local name, last = nil, nil
+	local prefix = tostring(encounterID) .. ":"
+	for key, rec in pairs(store.kills) do
+		if key:sub(1, #prefix) == prefix and rec.name ~= "" and (not last or (rec.last or 0) > last) then
+			name, last = rec.name, rec.last or 0
+		end
+	end
+	return name
+end
+
+-- Which bosses the instance's lock lists as dead. entries = { { name = plain string or nil, killed = boolean or nil } },
+-- bosses = { { id = encounterID, names = { ... } } }. The lock gives no ID, so a boss matches by its plain name, and
+-- only when that name belongs to exactly one boss: a secret, missing, unknown or shared name marks nothing.
+function Progress.DeadByName(entries, bosses)
+	local byName = {} -- normalized name -> encounterID, or false when two bosses have it
+	for _, boss in ipairs(bosses) do
+		for _, name in ipairs(boss.names) do
+			local key = Match.Norm(name)
+			if key ~= "" then
+				if byName[key] == nil or byName[key] == boss.id then
+					byName[key] = boss.id
+				else
+					byName[key] = false
+				end
+			end
+		end
+	end
+	local out, seen = {}, {}
+	for _, e in ipairs(entries) do
+		local id = e.killed == true and type(e.name) == "string" and byName[Match.Norm(e.name)] or nil
+		if id and not seen[id] then
+			seen[id] = true
+			out[#out + 1] = id
+		end
+	end
+	return out
 end
 
 -- Entering an instance: resume the current run if it is the same instance and recent, otherwise archive it and start

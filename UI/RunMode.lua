@@ -701,7 +701,48 @@ function RunMode.OnKill(encounterID, name)
 	end
 end
 
+-- Bosses found dead on joining: move past their steps as a live kill would, never back, and not while following a
+-- leader (the leader's step decides).
+function RunMode.OnFoundDead(ids)
+	local c = ctx()
+	local plan = c:Plan()
+	local steps = plan and c:Steps() or {}
+	if #steps == 0 or ns.RunSync.state.mode == "following" then
+		return
+	end
+	local current = c:StepIndex() or 1
+	local index, idOf = current, ns.Journal.GameIdOf(plan)
+	for _, id in ipairs(ids) do
+		local enc = ns.Plan.FindEncounterByGameID(plan, id, idOf)
+		if enc then
+			index = ns.Steps.AfterKill(steps, index, enc.id)
+		end
+	end
+	if index > current then
+		UI.FocusStep(index, { stay = true })
+		RunMode.Refresh()
+	end
+end
+
+-- A new copy of an instance: a plan for it goes back to its first step. Not while following a leader: the leader's step
+-- goes back the same way and is what the follower shows.
+function RunMode.OnInstanceReset(name, key)
+	local c = ctx()
+	local plan = c:Plan()
+	if not (plan and c:StepIndex()) or ns.RunSync.state.mode == "following" then
+		return
+	end
+	local iid = ns.Instances.InstanceMapID(plan)
+	local sameId = iid ~= nil and key ~= nil and tostring(iid) == key
+	if sameId or ns.Match.Norm(ns.Names.Instance(plan.instance)) == ns.Match.Norm(name) then
+		ns.db.ui.step = nil
+		ns:Fire("STEP_CHANGED")
+	end
+end
+
 function RunMode.Init()
+	ns:On("BOSSES_FOUND_DEAD", RunMode, RunMode.OnFoundDead)
+	ns:On("INSTANCE_RESET", RunMode, RunMode.OnInstanceReset)
 	ns:On("STEP_CHANGED", RunMode, RunMode.Refresh)
 	ns:On("ITEMS_READY", RunMode, function()
 		if RunMode.IsShown() then

@@ -15,7 +15,8 @@
 --   p pulls: { s = start (seconds after t), u = duration, c = enemies seen at once (peak), el = elites, r = rares,
 --              b = bosses (by classification), lo/hi = level range, nm = plain names (<= MAX_NAMES), z = sub-zone,
 --              kn = names of enemies fought, from kill messages and casts (<= MAX_NAMES, see Learn), dd = deaths,
---              w = wipe, k = encounter killed during the pull }
+--              gk = enemies the group killed (PARTY_KILL; a count of its own, not c), w = wipe, k = encounter killed
+--              during the pull }
 --   b boss kills: { i = encounterID, n = name, a = seconds after t, p = pull index }
 --   w wipes (count), dd deaths (count), dk = deaths could be read (else the deaths count is not available)
 --   wx = seen in two wings (kills of two wings' bosses): its wing stays unknown (Unwing)
@@ -27,6 +28,7 @@ local Util = ns.Util
 Recorder.MAX_RUNS = 20 -- per instance
 Recorder.MAX_PULLS = 120 -- per run
 Recorder.MAX_NAMES = 4 -- per pull
+Recorder.MAX_GROUP_KILLS = 500 -- per pull
 Recorder.MAX_INSTANCES = 60
 Recorder.RESUME = 30 * 60 -- a run continues when the player comes back to the same instance within this time
 Recorder.KILL_DEDUPE = 15 -- ENCOUNTER_END and BOSS_KILL report the same kill
@@ -53,6 +55,9 @@ local function soundRun(run)
 	for _, p in ipairs(run.p) do
 		if type(p) ~= "table" or type(p.s) ~= "number" then
 			return false
+		end
+		if p.gk ~= nil then
+			p.gk = Util.IsInteger(p.gk) and p.gk > 0 and math.min(p.gk, Recorder.MAX_GROUP_KILLS) or nil
 		end
 	end
 	for _, b in ipairs(run.b) do
@@ -244,6 +249,17 @@ function Recorder.Learn(run, name)
 	return pull ~= nil and addName(pull, "kn", name)
 end
 
+-- An enemy died to the group (PARTY_KILL) in the pull in progress. Kept apart from the nameplates' count (c: the most
+-- enemies up at once). Returns whether it was counted (not without a pull, nor past MAX_GROUP_KILLS).
+function Recorder.GroupKill(run)
+	local pull = Recorder.OpenPull(run)
+	if not pull or (pull.gk or 0) >= Recorder.MAX_GROUP_KILLS then
+		return false
+	end
+	pull.gk = (pull.gk or 0) + 1
+	return true
+end
+
 -- A pull's names to show: the nameplates' first, then the learned ones, each once, at most MAX_NAMES.
 function Recorder.PullNames(pull)
 	local out = {}
@@ -321,7 +337,8 @@ function Recorder.KilledName(patterns, text)
 end
 
 -- Combat ended. deaths = group members dead at the end; wiped = everyone dead. A pull in which no enemy was ever seen
--- (a stray hit, a duel, combat with no nameplate shown) is dropped, unless a kill message or cast named an enemy.
+-- (a stray hit, a duel, combat with no nameplate shown) is dropped, unless a kill message or cast named an enemy, or
+-- the group killed something (gk).
 function Recorder.PullEnd(run, now, deaths, wiped)
 	local pull = Recorder.OpenPull(run)
 	if not pull then
@@ -339,7 +356,7 @@ function Recorder.PullEnd(run, now, deaths, wiped)
 		pull.w = true
 		run.w = (run.w or 0) + 1
 	end
-	if pull.c == 0 and not pull.k and not pull.w and not pull.kn then
+	if pull.c == 0 and not pull.k and not pull.w and not pull.kn and not pull.gk then
 		run.p[#run.p] = nil
 		return nil
 	end
@@ -477,16 +494,17 @@ function Recorder.Duration(run)
 end
 
 function Recorder.Summary(run)
-	local fight, enemies = 0, 0
+	local fight, enemies, killed = 0, 0, 0
 	for _, p in ipairs(run.p) do
 		fight = fight + (p.u or 0)
 		enemies = enemies + (p.c or 0)
+		killed = killed + (p.gk or 0)
 	end
 	-- Deaths are known only when the client answered for the group at least once; otherwise nil ("not available"),
 	-- never a made-up zero.
 	local deaths = (run.dk or (run.dd or 0) > 0) and (run.dd or 0) or nil
 	return { duration = Recorder.Duration(run), pulls = #run.p, bosses = #run.b, wipes = run.w or 0, deaths = deaths,
-		fighting = fight, enemies = enemies }
+		fighting = fight, enemies = enemies, killed = killed }
 end
 
 local function bossKey(b)

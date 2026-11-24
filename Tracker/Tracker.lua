@@ -2,13 +2,28 @@
 -- come from ENCOUNTER_END (success = 1) and BOSS_KILL. As a fallback signal only, when DBM or BigWigs is loaded, their
 -- public kill callbacks count too (guarded, no dependency). One kill is counted once per encounter per few seconds,
 -- whichever source reports it first. Runs start and end with instance changes.
+--
+-- Two more things come from the client's own words about the instance (docs/COMPATIBILITY.md, sections 3 and 10):
+--   * Bosses already dead when the player enters or joins: the instance's lock (GetInstanceLockTimeRemaining and
+--     ...Encounter) lists its bosses by name and whether each is killed. They are matched to the plans' bosses by plain
+--     name, never guessed, and marked killed in this run as "found dead" (Progress.MarkDeadOnJoin), not as the
+--     player's kills.
+--   * A reset: the system message INSTANCE_RESET_SUCCESS ("%s has been reset.") names the instance. A boss that starts
+--     (ENCOUNTER_START) though this run has it dead also means a new copy of the instance. Both end the run, and
+--     INSTANCE_RESET tells the recorder and run mode.
+-- Neither listens while idle: the lock events are registered only inside the instance of a run, the system message
+-- only while a run exists.
 
 local _, ns = ...
 local Tracker = ns:NewModule("Tracker")
-local Util, Progress = ns.Util, ns.Progress
+local Util, Progress, Match = ns.Util, ns.Progress, ns.Match
 
 local DEDUPE = 15 -- seconds
 local lastKill = {}
+
+Tracker.LOCK_MAX = 40
+Tracker.LOCK_REQUEST_EVERY = 10 -- seconds between two RequestRaidInfo calls
+Tracker.NEW_COPY_GRACE = 30 -- seconds: a boss killed this recently that starts again is a late or repeated event
 
 local function enabled()
 	return ns.db and ns.db.settings.tracker.enabled and not ns.DB.IsReadOnly()
@@ -48,8 +63,12 @@ function Tracker.RecordKill(encounterID, name, difficultyID, source)
 	ns:FirePublic("DUNGEONPLANNER_BOSS_KILLED", encounterID, type(name) == "string" and name or nil, planId)
 	ns:Fire("BOSS_KILLED", encounterID, type(name) == "string" and name or nil)
 	ns:Debug("kill", encounterID, source or "event")
+	-- The lock may list other bosses dead now (a lock that updated late).
+	Tracker.ReadDeadBosses(true)
 	return true
 end
+
+local syncSources
 
 local function onZone()
 	local current = ns.Instances.Current()
@@ -62,6 +81,186 @@ local function onZone()
 	else
 		Progress.LeaveInstance(store(), now)
 	end
+	syncSources()
+end
+
+-- The lock's bosses as the client lists them, { { name, killed }, ... }, or nil when the API is missing or does not say
+-- how many there are. A secret name is no name, a secret flag is not "killed".
+function Tracker.ReadLock()
+	local lock, encounter = rawget(_G, "GetInstanceLockTimeRemaining"), rawget(_G, "GetInstanceLockTimeRemainingEncounter")
+	if type(lock) ~= "function" or type(encounter) ~= "function" then
+		return nil
+	end
+	local ok, _, _, total = pcall(lock)
+	total = ok and Util.Plain(total) or nil
+	if not Util.IsInteger(total) or total < 1 then
+		return nil
+	end
+	local entries = {}
+	for i = 1, math.min(total, Tracker.LOCK_MAX) do
+		local okEntry, name, _, killed = pcall(encounter, i)
+		if okEntry then
+			name, killed = Util.Plain(name), Util.Plain(killed)
+			entries[#entries + 1] = { name = type(name) == "string" and name or nil, killed = killed }
+		end
+	end
+	return entries
+end
+
+-- The bosses of the plans (saved and recommended) made for this instance, { { id = encounterID, names = { ... } } }.
+-- A boss goes by the journal's name or the plan's own, and by the name ENCOUNTER_END gave at an earlier kill: the only
+-- one in the client's language while the journal is empty.
+local function hereBosses(current)
+	local bosses, byId = {}, {}
+	local function scan(plan)
+		if not ns.Instances.IsHere(plan, current) then
+			return
+		end
+		local idOf = ns.Journal.GameIdOf(plan)
+		for _, enc in ipairs(plan.encounters) do
+			local id = idOf(enc)
+			if Util.IsInteger(id) then
+				local boss = byId[id]
+				if not boss then
+					boss = { id = id, names = { Progress.NameOf(store(), id) } }
+					byId[id] = boss
+					bosses[#bosses + 1] = boss
+				end
+				boss.names[#boss.names + 1] = ns.Names.Encounter(enc)
+			end
+		end
+	end
+	for _, plan in pairs(ns.db.plans) do
+		scan(plan)
+	end
+	for _, plan in ipairs(ns.Bundled.All()) do
+		scan(plan)
+	end
+	return bosses
+end
+
+local lastRequest
+
+-- Mark the bosses the lock says are dead in this run. `request` first asks the game for fresh lock data (its answer,
+-- UPDATE_INSTANCE_INFO, reads again without asking). Returns the encounter IDs newly marked.
+function Tracker.ReadDeadBosses(request)
+	local run = enabled() and store().run
+	local current = run and ns.Instances.Current()
+	if not (current and current.inInstance and tostring(current.instanceID) == run.key) then
+		return {}
+	end
+	local requestRaidInfo, clock = rawget(_G, "RequestRaidInfo"), ns.Clock()
+	if request and type(requestRaidInfo) == "function" and (not lastRequest or clock - lastRequest >= Tracker.LOCK_REQUEST_EVERY) then
+		lastRequest = clock
+		pcall(requestRaidInfo)
+	end
+	local entries = Tracker.ReadLock()
+	local found = {}
+	for _, id in ipairs(entries and Progress.DeadByName(entries, hereBosses(current)) or {}) do
+		if Progress.MarkDeadOnJoin(store(), id, ns.Now()) then
+			found[#found + 1] = id
+		end
+	end
+	if #found > 0 then
+		ns:Fire("PROGRESS_CHANGED")
+		ns:Fire("BOSSES_FOUND_DEAD", found)
+	end
+	return found
+end
+
+-- The old copy's run is archived; inside an instance a new run starts at once. The recorder and run mode follow
+-- INSTANCE_RESET.
+function Tracker.NewCopy(name, key)
+	Progress.EndRun(store(), ns.Now())
+	for id in pairs(lastKill) do
+		lastKill[id] = nil
+	end
+	onZone()
+	ns:Fire("PROGRESS_CHANGED")
+	ns:Fire("INSTANCE_RESET", name, key)
+end
+
+local resetPattern
+
+-- The instance a system message says was reset, or nil: the client's own INSTANCE_RESET_SUCCESS ("%s has been reset.")
+-- as a pattern, so it reads in every language.
+function Tracker.ResetName(text)
+	if type(text) ~= "string" then
+		return nil
+	end
+	if resetPattern == nil then
+		local pattern, at = ns.RunLog.FormatPattern(rawget(_G, "INSTANCE_RESET_SUCCESS"))
+		resetPattern = pattern and { pattern = pattern, at = at } or false
+	end
+	local name = resetPattern and ({ text:match(resetPattern.pattern) })[resetPattern.at]
+	return name ~= "" and name or nil
+end
+
+-- Tests change the global.
+function Tracker.ResetPatterns()
+	resetPattern = nil
+end
+
+function Tracker.OnInstanceReset(name)
+	local run = enabled() and store().run
+	if not run or Match.Norm(name) == "" or Match.Norm(run.name) ~= Match.Norm(name) then
+		return false
+	end
+	Tracker.NewCopy(run.name, run.key)
+	return true
+end
+
+-- A boss starts that this run has dead: a new copy, unless the kill is the player's own and only just happened. A
+-- wiped boss is not dead, so a retry never gets here.
+function Tracker.OnEncounterStart(encounterID)
+	encounterID = Util.Plain(encounterID)
+	local run = enabled() and store().run
+	local at = run and Util.IsInteger(encounterID) and Progress.KilledAt(store(), encounterID)
+	if not at then
+		return false
+	end
+	if not Progress.WasDeadOnJoin(store(), encounterID) and ns.Now() - at < Tracker.NEW_COPY_GRACE then
+		return false
+	end
+	Tracker.NewCopy(run.name, run.key)
+	return true
+end
+
+-- A reset message can come while a run exists, also after leaving its instance; the lock's updates and encounters
+-- starting matter only inside it. Outside both, nothing is registered.
+local GROUPS = {
+	run = { events = { { "CHAT_MSG_SYSTEM", function(_, text)
+		local name = Tracker.ResetName(Util.Plain(text))
+		if name then
+			Tracker.OnInstanceReset(name)
+		end
+	end } } },
+	inside = { events = { { "UPDATE_INSTANCE_INFO", function()
+		Tracker.ReadDeadBosses(false)
+	end }, { "ENCOUNTER_START", function(_, encounterID)
+		Tracker.OnEncounterStart(encounterID)
+	end } } },
+}
+
+local function listen(group, want)
+	if group.on == want then
+		return
+	end
+	group.on = want
+	for _, e in ipairs(group.events) do
+		if want then
+			ns:RegisterEvent(e[1], e[2])
+		else
+			ns:UnregisterEvent(e[1], e[2])
+		end
+	end
+end
+
+function syncSources()
+	local run = enabled() and store().run
+	local current = run and ns.Instances.Current()
+	listen(GROUPS.run, run and true or false)
+	listen(GROUPS.inside, current and current.inInstance and tostring(current.instanceID) == run.key or false)
 end
 
 -- DBM: DBM:RegisterCallback("DBM_Kill", fn(event, mod)); mod.combatInfo.eId / mod.encounterId is the encounter ID.
@@ -109,6 +308,7 @@ function Tracker.Init()
 	local function zone()
 		if enabled() then
 			onZone()
+			Tracker.ReadDeadBosses(true)
 		end
 	end
 	ns:RegisterEvent("PLAYER_ENTERING_WORLD", zone)
@@ -119,6 +319,7 @@ end
 
 function Tracker.EndRun()
 	Progress.EndRun(store(), ns.Now())
+	syncSources()
 	ns:Fire("PROGRESS_CHANGED")
 end
 

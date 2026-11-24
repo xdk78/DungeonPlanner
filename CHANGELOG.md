@@ -6,6 +6,17 @@ follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- **Bosses already dead when you join, and instance resets**: when you enter an instance, or join a group in one, the
+  bosses the game's instance lock lists as dead count as killed in the run: the Bosses and Progress sections say "killed
+  before you joined", and run mode moves past their steps (not while following a leader). A boss is matched to the
+  plan's by its name as the game gives it, and only when that name belongs to exactly one boss; otherwise nothing is
+  marked. When the game says an instance was reset ("... has been reset"), or a boss starts that your run has dead for
+  more than half a minute, the run's kills are cleared, run mode goes back to the first step and the recorder starts
+  a new run. A group follows the leader's step, so a reset needs no message of its own. The game's answers are not
+  verified on Forever yet: `/dp scan` inside an instance records them.
+- **Enemies your group killed, per pull**: with "Record my runs" on, the Runs section shows "12 killed" for a pull and
+  for the whole run, counted from the game's group kill event. It is a count of its own, apart from the enemies the
+  nameplates saw at once.
 - **Names of enemies you fought in recorded runs**: with "Record my runs" on, a pull in the Runs section and in a
   drafted plan can now name the enemies you fought. The game hides enemy names on nameplates inside instances, so the
   names come from its kill messages in chat and from the target of your casts; they are listed beside what the

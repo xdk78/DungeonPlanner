@@ -287,7 +287,10 @@ PLAYER_REGEN_DISABLED (inside the run's instance ID) -> RunLog.PullStart; a 0.5 
          -> RunLog.Observe (peak counts: the same mob cannot be told apart between looks)
 kill messages (CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH) and UNIT_SPELLCAST_SENT -> RunLog.Learn (names the nameplates
   could not give, in the pull's `kn`); registered only while a run of the player's instance is recorded
-PLAYER_REGEN_ENABLED -> ticker stops; RunLog.PullEnd (group members dead, all dead = wipe); a pull with no enemy seen is dropped
+PARTY_KILL -> RunLog.GroupKill (the pull's `gk`: enemies the group killed, a count of its own beside the nameplates'
+  peak `c`, at most MAX_GROUP_KILLS); registered with the sources above
+PLAYER_REGEN_ENABLED -> ticker stops; RunLog.PullEnd (group members dead, all dead = wipe); a pull with no enemy seen,
+  no name and no group kill is dropped
 ENCOUNTER_END success 1 / BOSS_KILL -> RunLog.BossKill (deduplicated); success 0 -> RunLog.BossWipe
 another instance, "End run", or coming back after 30 min -> RunLog.Finish (kept only with a pull or a kill)
 ```
@@ -328,6 +331,32 @@ At most 60 instance keys are kept: a new key makes room by dropping the key whos
 Run mode shows the live pull count.
 `RECORDER_CHANGED` refreshes both. Idle cost: nothing (event handlers only; the ticker runs only during combat inside
 a recorded run).
+
+### Progress inside an instance (Tracker/Tracker.lua, Model/Progress.lua)
+
+The tracker keeps one run per character (`Progress`: the bosses killed in it, by encounter ID). Three more readings
+feed it, none of them from the combat log:
+
+- **Bosses already dead on joining.** On entering an instance, on `UPDATE_INSTANCE_INFO` and after a kill, the
+  instance's lock is read (`Tracker.ReadLock`: `GetInstanceLockTimeRemaining` and `...Encounter(i)`, each value through
+  `Util.Plain`; `RequestRaidInfo` is asked for at most every 10 s, and the read its answer triggers does not ask again).
+  The lock lists bosses by name only, so `Progress.DeadByName` matches a name to a plan boss (every plan made for the
+  instance, saved or recommended) by its plain name, and only when that name belongs to exactly one boss ID: the
+  journal's name, the plan's own, and the name `ENCOUNTER_END` gave at the player's earlier kill (`Progress.NameOf`; the
+  only one in the client's language while the journal is empty). A secret, missing or unknown name marks nothing. A
+  match is `Progress.MarkDeadOnJoin`: killed in the run (`run.pre[id]`), not in the lifetime counts, and no
+  run-recorder kill. `BOSSES_FOUND_DEAD` moves run mode past their steps (`RunMode.OnFoundDead`, never back, not while
+  following a leader).
+- **A new copy of the instance.** `CHAT_MSG_SYSTEM` with the client's `INSTANCE_RESET_SUCCESS` as a pattern
+  (`Tracker.ResetName`, the same format-string reading as the recorder's kill messages) names the reset instance; a run
+  of that name ends. `ENCOUNTER_START` of a boss the run has dead ends it too, unless the kill is the player's own and
+  under `NEW_COPY_GRACE` seconds old (a boss found dead ends it at once; a wiped boss is not dead, so a retry never does).
+  `Tracker.NewCopy` archives the run, starts a new one inside an instance and fires `INSTANCE_RESET`: the recorder
+  finishes its run of that instance (`Recorder.OnInstanceReset`) and run mode goes back to the first step
+  (`RunMode.OnInstanceReset`; a follower keeps the leader's step). Group sync has no message for it: a leader's step
+  going back to the start is an ordinary step report.
+- **What listens when.** `CHAT_MSG_SYSTEM` only while a run exists, `UPDATE_INSTANCE_INFO` and `ENCOUNTER_START` only
+  inside that run's instance (the tracker's `syncSources`, after every zone event and run change); nothing otherwise.
 
 ### Runs against the plan (Model/RunCompare.lua)
 
@@ -537,7 +566,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | Model/GearFilter.lua | the Gear page's class and slot filters over drops: which armor and weapon types each class can equip, by the item's class and subclass |
 | Model/Drawing.lua, Model/History.lua, Model/PlanLists.lua, Model/PlanBosses.lua | map drawings (data, simplification, caps, geometry, hit-testing); undo and redo snapshots; gear and objectives, and bosses, assignments and groups (split from Plan.lua) |
 | Model/Match.lua, Model/MapLayout.lua, Model/Steps.lua | pure matching of plans to journal entries (names, wings, map IDs, bosses, floors); map label and pin collision avoidance, dot merging, route chevrons and bend joints; a plan as ordered steps |
-| Tracker/ | kill and run tracking; `Recorder.lua`: the opt-in run recorder (events, nameplate scans during combat) |
+| Tracker/ | kill and run tracking, bosses already dead on joining (the instance's lock) and instance resets; `Recorder.lua`: the opt-in run recorder (events, nameplate scans during combat) |
 | Model/RunLog.lua | the run recorder's pure model: pulls, kills, wipes, history caps, best splits, plan from run |
 | Model/RunCompare.lua | a run against its plan (pulls paired by order between boss kills, divergences), two runs side by side, live drift |
 | Data/Providers.lua, Data/Providers/ | data-provider layer and adapters: Dungeon Journal, Forever Dungeon Routes, OpenMap, NeedRoll, Questie |

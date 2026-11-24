@@ -7,6 +7,7 @@
 --   ENCOUNTER_END / BOSS_KILL                      boss kills with timing; a failed encounter is a wipe
 --   CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH,      names of enemies fought, only while a run is being recorded
 --   UNIT_SPELLCAST_SENT                            (inside its instance), for the pull in progress
+--   PARTY_KILL                                     how many enemies the group killed in the pull in progress
 -- Nothing runs while idle or out of combat, and nothing here touches protected frames.
 
 local _, ns = ...
@@ -151,8 +152,16 @@ local function onCastSent(_, unit, target)
 	end
 end
 
+-- PARTY_KILL comes even where the enemy is secret; neither GUID is read, only counted.
+local function onGroupKill()
+	local run = Recorder.Current()
+	if run then
+		RunLog.GroupKill(run)
+	end
+end
+
 local SOURCES = { { "CHAT_MSG_COMBAT_XP_GAIN", onKillMessage }, { "CHAT_MSG_COMBAT_HOSTILE_DEATH", onKillMessage },
-	{ "UNIT_SPELLCAST_SENT", onCastSent } }
+	{ "UNIT_SPELLCAST_SENT", onCastSent }, { "PARTY_KILL", onGroupKill } }
 local listening = false
 
 -- Handlers on these events exist only while a run of the instance the player is in is recorded.
@@ -333,6 +342,15 @@ function Recorder.OnKill(encounterID, name)
 	changed = changed or run.k ~= before
 	if changed then
 		ns:Fire("RECORDER_CHANGED")
+	end
+end
+
+-- A new copy of the instance: the old copy's run ends, so the new copy's pulls and kills are not added to it.
+function Recorder.OnInstanceReset(name)
+	local run = Recorder.Current()
+	if run and Recorder.Enabled() and ns.Match.Norm(run.n) == ns.Match.Norm(name) then
+		Recorder.FinishRun()
+		Recorder.OnZone()
 	end
 end
 
@@ -545,4 +563,5 @@ function Recorder.Init()
 	ns:RegisterEvent("BOSS_KILL", function(_, encounterID, encounterName)
 		Recorder.OnKill(encounterID, encounterName)
 	end)
+	ns:On("INSTANCE_RESET", Recorder, Recorder.OnInstanceReset)
 end
