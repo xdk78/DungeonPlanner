@@ -528,6 +528,7 @@ T.case("Rooms: an instance several plans share (Scarlet Monastery): the sender's
 		twin.h[1] = room.h[1]
 		Subzones.Reset()
 		iid, key = ns.GroupRooms.Where()
+		T.eq(iid, 189)
 		T.eq(key, Subzones.Key(twin), "the first wing's room of that name")
 		members.Ann.area = key
 		local rooms = ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-library")), 1, members, {})
@@ -600,12 +601,12 @@ T.case("Subzones: an area name the client has not given yet is asked again, not 
 	end
 	h[1] = Subzones.Hash("Late name")
 	local data = { iid = 9001, { a = 7, at = { { 1, 0.5, 0.5 } } }, { w = 3, h = h, at = { { 1, 0.2, 0.2 } } } }
-	local where = { instanceID = 9001, subzone = "Late name", hash = Subzones.Hash("Late name") }
+	local late = { instanceID = 9001, subzone = "Late name", hash = Subzones.Hash("Late name") }
 	local ok, err = pcall(function()
-		T.eq(Subzones.Names(data[1], where), false, "no name yet")
+		T.eq(Subzones.Names(data[1], late), false, "no name yet")
 		T.eq(Subzones.Place(data, "w3", 1).w, 3, "the room alone")
 		answer = "Late name"
-		T.eq(Subzones.Names(data[1], where), true, "asked again")
+		T.eq(Subzones.Names(data[1], late), true, "asked again")
 		T.eq(Subzones.Place(data, "w3", 1).a, 7, "its hashes asked again: the first of that name")
 	end)
 	_G.C_Map.GetAreaInfo = real

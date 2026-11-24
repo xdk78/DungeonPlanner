@@ -32,7 +32,8 @@ Rules:
   the floor names and the client's own names, the stored name last. A plan of a bundled instance opens on that
   instance's home card (`UI.EntryForPlan`), and plans are grouped for it by `Bundled.SameInstance`, not by key.
 - **Explicit state machines** for phased behaviour: transfers (`Share/Transfer.lua`: state + `Step*(state, event, now)`
-  returning effects), group sync for run mode (`Share/Sync.lua`: `Sync.Step(state, event, now)`) and map dragging
+  returning effects), group sync for run mode (`Share/Sync.lua`: `Sync.Step(state, event, now)`), the group's rooms
+  (`Share/Rooms.lua`: `Rooms.Step(state, event, now)`) and map dragging
   (`MapCanvas` `view.drag`: idle / pan / marker / point / draw). Timers are events.
 - **Idle costs nothing.** No OnUpdate unless dragging or hovering the map (throttled to 20 Hz); the comm ticker runs
   only while a transfer is open; the window is built on first open, not at login; the journal is scanned on demand.
@@ -592,6 +593,7 @@ section (rows with the spell icon and name from `C_Spell`, tags, our note, the g
 | UI/Panels/PrepPanel.lua, UI/GettingThere.lua | the Prep section; the Getting there card and its window |
 | Share/Acks.lua | shared-plan tracking: acks of imported plans, versions per member, the group's status (current, outdated, missing, unknown); links from received copies to their sender's plan |
 | Share/Sync.lua, UI/RunSync.lua | group sync for run mode: the state machine (leading, following, free, mismatch), plan matching and the steps revision; the glue (messages, timers, step focus) and run mode's sync line |
+| Share/Rooms.lua, UI/GroupRooms.lua, UI/MapGroup.lua | the group's rooms inside dungeons: the state machine (a member's area key sent on change, coalesced and throttled, asked for once, repeated while inside; the members' areas kept, dropped with the roster or when stale, never during a lockdown); the glue (zone and roster events, messages through the outbox, timers); the class-coloured dots on a map view, placed with the "You are here" marker |
 | Share/Roster.lua | the group's units and members, a sender's rank by its whole name (surnames on Forever), whisper targets as names arrived |
 | Share/SendStats.lua | what became of the addon messages sent: parts sent and refused per distribution, the last refusal's code, refusals in a row (`Comm.Problem` and `Comm.ProblemText` turn it and the game's lockdown answers into the line sharing and group sync show) |
 | Model/Pages.lua, UI/Panels/PagesEditor.lua, UI/NotesFrame.lua | raid pages: data, validation, keywords, permissions, the Notes window's state machine; the Party section's editor; the Notes window, sending and chat posting |
