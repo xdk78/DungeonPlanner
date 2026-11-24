@@ -236,7 +236,8 @@ nearly the same spot.
 ## In-game transfer (protocol 2)
 
 Prefix `DungeonPlanner`, sent with AceComm-3.0 (which splits long messages and paces them with ChatThrottleLib).
-Fields are joined with `^`.
+Fields are joined with `^`. The first field is exactly the tag; number fields are plain decimal digits (no sign,
+spaces, hex or exponent). A message that breaks either rule is dropped.
 
 | Message | Meaning |
 |---|---|
@@ -377,7 +378,13 @@ state machine (`Rooms.Step(state, event, now)` -> effects), `UI/GroupRooms.lua` 
   roster (as group sync), only with the same protocol number. Every field is range-checked in `Transfer.Parse`. The
   receiver keeps `{ instance, area, time }` per sender, at most 40 (the oldest goes first); an entry goes when its
   member sends instance 0, leaves the group (a roster change), or is not heard from for 5 minutes (the refresh comes
-  every minute; a lockdown holds it for the fight). Leaving the group drops every entry. The per-sender flood limit
-  applies; this message adds at most one every 3 s.
+  every minute). While the game holds addon messages (a boss fight) nobody goes stale, and every member's 5 minutes
+  start again when messages flow. Leaving the group drops every entry. The per-sender flood limit applies; this
+  message adds at most one every 3 s.
+- **Which area:** the key names an area of any plan of the instance (several plans share one: Scarlet Monastery's
+  wings, Stratholme's halves, Lower and Upper Blackrock Spire); the sender sends the first area the sub-zone names, in
+  the order of the plans' keys. The receiver looks the key up in the shown plan's own areas, and takes areas that share
+  that area's name in the client's language as one (the sender cannot tell them apart): the first with an anchor on
+  the floor shown.
 - **Older versions:** Dungeon Planner 0.2.2 and older parse `L` as nothing (an unknown tag) and drop it, so the
   protocol number stays 2. Their players are not drawn.

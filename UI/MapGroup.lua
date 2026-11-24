@@ -28,16 +28,16 @@ function MapGroup.Rooms(plan, floor, members, who)
 		return out
 	end
 	for id, m in pairs(members) do
-		local a = m.iid == data.iid and m.area and ns.Subzones.Area(data, m.area)
-		local x, y
-		if a then
-			x, y = ns.Subzones.Anchor(a, floor)
+		local a, x, y
+		if m.iid == data.iid and m.area then
+			a, x, y = ns.Subzones.Place(data, m.area, floor)
 		end
-		if x then
-			local room = byKey[m.area]
+		if a then
+			local key = ns.Subzones.Key(a)
+			local room = byKey[key]
 			if not room then
-				room = { key = m.area, x = x, y = y, members = {} }
-				byKey[m.area] = room
+				room = { key = key, x = x, y = y, members = {} }
+				byKey[key] = room
 				out[#out + 1] = room
 			end
 			local p = who[id]
@@ -80,17 +80,20 @@ function MapGroup.Install(view)
 		local d = pool[i]
 		if not d then
 			d = CreateFrame("Frame", nil, view.overlay)
-			d:SetFrameLevel(view.overlay:GetFrameLevel() + 3) -- over the player's marker (+2)
+			-- The marker's level (+2), under the route's stops (+3) and the pins; drawn in OVERLAY, above the marker's
+			-- ARTWORK, so they show on its edge.
+			d:SetFrameLevel(view.overlay:GetFrameLevel() + 2)
 			d:EnableMouse(false)
 			d:SetSize(DOT, DOT)
-			d.fill = d:CreateTexture(nil, "ARTWORK", nil, 0)
+			d.fill = d:CreateTexture(nil, "OVERLAY", nil, 1)
 			d.fill:SetTexture(S.MEDIA .. "Circle")
 			d.fill:SetAllPoints()
-			d.ring = d:CreateTexture(nil, "ARTWORK", nil, 1)
+			d.ring = d:CreateTexture(nil, "OVERLAY", nil, 2)
 			d.ring:SetTexture(S.MEDIA .. "Ring")
 			d.ring:SetAllPoints()
 			d.ring:SetVertexColor(0.08, 0.06, 0.04, 0.95)
 			d.letter = W.Text(d, "caption", "ink")
+			d.letter:SetDrawLayer("OVERLAY", 3)
 			d.letter:SetAllPoints()
 			d.letter:SetJustifyH("CENTER")
 			d.letter:SetTextColor(0.08, 0.06, 0.04, 1)

@@ -211,12 +211,71 @@ function Subzones.Area(data, key)
 	return nil
 end
 
--- The data of the instance with this instance map ID (GetInstanceInfo's eighth value), or nil: a player with no plan
--- of it open still has an area to tell the group. Asked on a zone change in a group, over a few dozen instances.
+-- The data of every plan of the instance with this instance map ID (GetInstanceInfo's eighth value), in the order of
+-- their keys: several where plans share an instance (Scarlet Monastery's wings, Stratholme's halves, Blackrock Spire);
+-- empty for one the data does not cover. A player with no plan open still has an area to tell the group.
 function Subzones.ForInstance(iid)
-	for _, data in pairs(iid and type(ns.SubzoneData) == "table" and ns.SubzoneData or {}) do
+	local keys = {}
+	for key, data in pairs(type(ns.SubzoneData) == "table" and ns.SubzoneData or {}) do
 		if type(data) == "table" and data.iid == iid then
-			return data
+			keys[#keys + 1] = key
+		end
+	end
+	table.sort(keys)
+	local out = {}
+	for i, key in ipairs(keys) do
+		out[i] = ns.SubzoneData[key]
+	end
+	return out
+end
+
+-- The hashes of area `a`'s name in this client's language, { [hash] = true }: empty when the client cannot name it.
+local hashCache = setmetatable({}, { __mode = "k" })
+local function nameHashes(a)
+	local set = hashCache[a]
+	if not set then
+		set = {}
+		local name = a.a and areaName(a.a)
+		if name then
+			set[Subzones.Hash(name)] = true
+		end
+		local i = a.h and langIndex()
+		local h = i and a.h[i]
+		for _, v in ipairs(type(h) == "table" and h or { h or nil }) do
+			set[v] = true
+		end
+		hashCache[a] = set
+	end
+	return set
+end
+
+local function sameName(a, b)
+	if a == b then
+		return true
+	end
+	local names = nameHashes(a)
+	for h in pairs(nameHashes(b)) do
+		if names[h] then
+			return true
+		end
+	end
+	return false
+end
+
+-- Where a member who sent area key `key` is drawn on floor `floor` of `data`: the area and x, y, or nil. The sender
+-- cannot tell apart areas that share a name, so any of them counts: the first, in the data's order, with an anchor on
+-- that floor, as the player's own marker is placed (Subzones.Here).
+function Subzones.Place(data, key, floor)
+	local sent = Subzones.Area(data, key)
+	if not sent then
+		return nil
+	end
+	for _, a in ipairs(data) do
+		if sameName(sent, a) then
+			local x, y = Subzones.Anchor(a, floor)
+			if x then
+				return a, x, y
+			end
 		end
 	end
 	return nil
@@ -224,5 +283,5 @@ end
 
 -- Forget the area names and the language asked (tests switch the client's language).
 function Subzones.Reset()
-	areaNames, localeIndex = {}, nil
+	areaNames, localeIndex, hashCache = {}, nil, setmetatable({}, { __mode = "k" })
 end

@@ -34,6 +34,15 @@ local function heard(from, iid, area, ask)
 	return { type = "heard", from = from, iid = iid, area = area, ask = ask }
 end
 
+local function boot()
+	if not _G.DungeonPlannerDB then
+		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
+		mock.loggedIn = true
+		mock.FireEvent("PLAYER_LOGIN")
+		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+	end
+end
+
 T.case("Rooms: wire format round-trips and rejects junk", function()
 	local text = Transfer.Encode({ type = "room", proto = 2, iid = 2999, area = "a16612", ask = true })
 	T.eq(text, "L^2^2999^a16612^1")
@@ -170,15 +179,66 @@ T.case("Rooms: members are kept, a question is answered, stale entries expire, t
 	T.ok(s.members["M" .. (Rooms.MAX_MEMBERS + 5)])
 end)
 
--- The real Comm, AceComm and outbox, as tests/test_sync.lua drives them.
-local function boot()
-	if not _G.DungeonPlannerDB then
-		mock.FireEvent("ADDON_LOADED", "DungeonPlanner")
-		mock.loggedIn = true
-		mock.FireEvent("PLAYER_LOGIN")
-		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+T.case("Rooms: nobody goes stale while the game holds messages; the clock restarts when they flow", function()
+	local s = Rooms.New()
+	Rooms.Step(s, heard("Ann", 2999, "a1"), 0)
+	local fx = Rooms.Step(s, { type = "tick", locked = true }, Rooms.STALE)
+	T.ok(s.members.Ann, "a long boss fight keeps her")
+	T.ok(math.abs(find(fx, "timer")[2] - Rooms.LOCK_CHECK) < 1e-9, "a look whether messages flow again")
+	Rooms.Step(s, { type = "tick", locked = true }, Rooms.STALE + 600)
+	T.ok(s.members.Ann)
+	fx = Rooms.Step(s, { type = "tick" }, Rooms.STALE + 610)
+	T.ok(s.members.Ann, "messages flow: her clock starts again")
+	T.ok(math.abs(find(fx, "timer")[2] - Rooms.STALE) < 1e-9)
+	Rooms.Step(s, { type = "tick" }, Rooms.STALE + 610 + Rooms.STALE - 1)
+	T.ok(s.members.Ann)
+	Rooms.Step(s, { type = "tick" }, Rooms.STALE + 610 + Rooms.STALE)
+	T.eq(s.members.Ann, nil, "stale after the fight")
+	T.eq(#Rooms.Step(s, { type = "tick", locked = true }, 2000), 0, "nobody to keep: no timer")
+end)
+
+T.case("Transfer.Parse: the tag is the whole first field, numbers are plain digits", function()
+	local good = { "H^2^0.2.3", "h^2^dev", "O^2^abc1^120^0000abcd^plan^My plan", "K^abc1^p1^1700000000", "A^abc1",
+		"D^abc1", "X^abc1", "R^2^abc1^7^p1^100^12^1", "F^2^abc1^u", "Q^2", "W^2^abc1", "L^2^48^a1^0" }
+	for _, text in ipairs(good) do
+		T.ok(Transfer.Parse(text), text)
+		local tag, rest = text:sub(1, 1), text:sub(2)
+		T.eq(Transfer.Parse(tag .. "x" .. rest), nil, "tag " .. tag .. "x")
 	end
-end
+	for _, bad in ipairs({
+		"H^0x2^v", "H^ 2^v", "H^2.0^v", "H^-2^v",
+		"O^2^abc1^0x78^0000abcd^plan^n", "O^2^abc1^1.2e2^0000abcd^plan^n", "O^ 2^abc1^120^0000abcd^plan^n",
+		"K^abc1^p1^ 17", "K^abc1^p1^-1", "K^abc1^p1^1e3",
+		"R^2^abc1^0x7^p1^100^12^1", "R^2^abc1^7^p1^1e2^12^1", "R^2^abc1^7^p1^100^ 12^1", "R^2^abc1^7^p1^100^12^+1",
+		"F^0x2^abc1^u", "Q^ 2", "W^2.0^abc1",
+		"L^2^0x30^a1^0", "L^2^ 48^a1^0", "L^2^4.8e1^a1^0", "L^2^48^a1^ 1", "L^02e0^48^a1^0",
+	}) do
+		T.eq(Transfer.Parse(bad), nil, bad)
+	end
+end)
+
+T.case("Rooms: an update that added the files, before a restart: no errors without them", function()
+	boot()
+	ns.UI.Show()
+	ns.UI.SelectPlan(ns.Bundled.PREFIX .. "ruins-of-lordaeron")
+	ns.UI.SelectTab("map")
+	local saved = { Rooms = ns.Rooms, GroupRooms = ns.GroupRooms, MapGroup = ns.MapGroup }
+	ns.Rooms, ns.GroupRooms, ns.MapGroup = nil, nil, nil
+	local ok, err = pcall(function()
+		T.eq(Transfer.Parse("L^2^48^a1^0").area, "a1", "parsed without Share/Rooms.lua")
+		ns.Comm.OnMessage(ns.prefix, "L^2^48^a1^0", "PARTY", "Ann")
+		local map = _G.DungeonPlannerMainFrame.instancePage.panels.map
+		local view = ns.MapCanvas.Create(UIParent, map.canvas.cb)
+		view:DrawContent()
+		view:HereHover(0, 0)
+		T.eq(rawget(view, "PlaceGroup"), nil, "no group dots")
+		view:Hide()
+	end)
+	ns.Rooms, ns.GroupRooms, ns.MapGroup = saved.Rooms, saved.GroupRooms, saved.MapGroup
+	T.ok(ok, tostring(err))
+end)
+
+-- The real Comm, AceComm and outbox, as tests/test_sync.lua drives them.
 
 -- The client in Ruins of Lordaeron, in the area with this AreaTable ID (the mock names it "Area <ID>"); nil: outside
 -- an instance.
@@ -373,6 +433,16 @@ T.case("Rooms, two clients: rooms both ways through Comm; outsiders, whispers an
 		mock.FireEvent("GROUP_ROSTER_UPDATE")
 		T.eq(members().Bob, nil, "Bob left the group")
 		T.ok(members().Ann, "Ann stays")
+		-- A boss fight longer than STALE: the game holds everyone's refresh, so nobody goes stale; afterwards the clock
+		-- starts again.
+		mock.lockdown = true
+		mock.Advance(Rooms.STALE + 30, 5)
+		T.ok(members().Ann, "kept through a long fight")
+		mock.lockdown = false
+		mock.Advance(Rooms.LOCK_CHECK + 1, 1)
+		T.ok(members().Ann, "kept right after it")
+		mock.Advance(Rooms.STALE, 5)
+		T.eq(members().Ann, nil, "stale once a full STALE passed without her")
 		mock.inGroup = false
 		mock.FireEvent("GROUP_ROSTER_UPDATE")
 		T.eq(next(members()), nil, "out of the group: nobody")
@@ -417,6 +487,77 @@ T.case("Rooms: which rooms are drawn on a floor (the plan's instance, the floor,
 		T.ok(d >= 16 - 1e-9, "neighbours apart")
 	end
 	T.ok(math.abs(ns.MapLayout.Ring(1, 16, 30)[1][2] + 30) < 1e-9, "one on a minimum: at the top")
+end)
+
+T.case("Rooms: an instance several plans share (Scarlet Monastery): the sender's wing, the shown plan's areas", function()
+	local Subzones = ns.Subzones
+	local all = Subzones.ForInstance(189)
+	T.eq(#all, 4, "four wings")
+	T.eq(all[1], ns.SubzoneData.scarletmonasteryarmory, "in the order of their keys")
+	-- A room of the last wing, named for the test (the data holds only hashes of the client's names).
+	local room = ns.SubzoneData.scarletmonasterylibrary[3]
+	local saved = { h = room.h[1], info = _G.GetInstanceInfo, sub = mock.subzone }
+	room.h[1] = Subzones.Hash("Test Reading Room")
+	Subzones.Reset()
+	_G.GetInstanceInfo = function()
+		return "Scarlet Monastery", "party", 1, "Normal", 5, 0, false, 189
+	end
+	mock.subzone = "Test Reading Room"
+	local ok, err = pcall(function()
+		local iid, key = ns.GroupRooms.Where()
+		T.eq(iid, 189)
+		T.eq(key, Subzones.Key(room), "the library's room")
+		local members = { Ann = { iid = 189, area = key } }
+		T.eq(#ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-library")), 1, members, {}), 1,
+			"drawn on the library's map")
+		T.eq(#ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-cathedral")), 1, members, {}), 0,
+			"not on the cathedral's")
+		mock.subzone = "A corridor"
+		iid, key = ns.GroupRooms.Where()
+		T.eq(iid, 189)
+		T.eq(key, nil, "inside, no area of that name")
+	end)
+	room.h[1], _G.GetInstanceInfo, mock.subzone = saved.h, saved.info, saved.sub
+	Subzones.Reset()
+	T.ok(ok, tostring(err))
+end)
+
+T.case("Rooms: areas that share a name count as one: the first with an anchor on the floor shown", function()
+	local Subzones = ns.Subzones
+	Subzones.Reset()
+	local function hashes(v)
+		local t = {}
+		for i = 1, #ns.SubzoneLocales do
+			t[i] = false
+		end
+		t[1] = v -- enUS, the mock client's language
+		return t
+	end
+	local hall = Subzones.Hash("Hall")
+	local data = { iid = 9001,
+		{ w = 1, h = hashes(hall), at = { { 1, 0.1, 0.1 } } },
+		{ w = 2, h = hashes(hall), at = { { 2, 0.2, 0.2 } } },
+		{ a = 7, at = { { 2, 0.7, 0.7 }, { 3, 0.3, 0.3 } } }, -- the mock client names it "Area 7"
+		{ w = 3, h = hashes(Subzones.Hash("Area 7")), at = { { 3, 0.9, 0.9 } } },
+		{ w = 4, h = hashes(Subzones.Hash("Other")), at = { { 2, 0.4, 0.4 } } },
+	}
+	T.eq(Subzones.Place(data, "w1", 1).w, 1)
+	local a, x, y = Subzones.Place(data, "w1", 2)
+	T.eq(a.w, 2, "the same name on the floor shown")
+	T.eq(x, 0.2)
+	T.eq(y, 0.2)
+	T.eq(Subzones.Place(data, "w2", 1).w, 1, "either key: the first in the data's order")
+	T.eq(Subzones.Place(data, "w3", 3).a, 7, "an AreaTable name and a room's hash alike")
+	T.eq(Subzones.Place(data, "w4", 1), nil, "no area of that name on that floor")
+	T.eq(Subzones.Place(data, "w9", 1), nil, "a key the data does not have")
+	-- Members who sent either key sit in one room.
+	ns.SubzoneData.testinstance = data
+	local plan = { instance = { name = "Test Instance" }, floors = { {}, {} } }
+	local rooms = ns.MapGroup.Rooms(plan, 2, { Ann = { iid = 9001, area = "w1" }, Bob = { iid = 9001, area = "w2" } }, {})
+	ns.SubzoneData.testinstance = nil
+	T.eq(#rooms, 1)
+	T.eq(rooms[1].key, "w2")
+	T.eq(#rooms[1].members, 2)
 end)
 
 T.case("Rooms on the map: several in a room spread, the player's room around the marker, another floor hides them", function()

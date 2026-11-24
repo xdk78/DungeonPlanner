@@ -19,6 +19,7 @@ GroupRooms.state = Rooms.New()
 local apply
 
 function GroupRooms.Step(event)
+	event.locked = ns.Comm.IsLockedDown()
 	apply(Rooms.Step(GroupRooms.state, event, ns.Clock()))
 end
 
@@ -28,16 +29,21 @@ function GroupRooms.Sharing()
 end
 
 -- The player's place as the game says it: the instance map ID while the data names that instance's areas, and the key
--- of the area the sub-zone names (nil for one it does not). Where several areas share the name, the first one.
+-- of the first area the sub-zone names, in any plan of the instance (nil for none).
 function GroupRooms.Where()
 	local Subzones = ns.Subzones
 	local where = Subzones.Where()
-	local data = Subzones.ForInstance(where.instanceID)
-	if not data then
+	local all = Subzones.ForInstance(where.instanceID)
+	if #all == 0 then
 		return nil
 	end
-	local area = Subzones.Find(data, where)[1]
-	return data.iid, area and Subzones.Key(area) or nil
+	for _, data in ipairs(all) do
+		local area = Subzones.Find(data, where)[1]
+		if area then
+			return where.instanceID, Subzones.Key(area)
+		end
+	end
+	return where.instanceID, nil
 end
 
 -- On a zone or group change, and when the setting changes.

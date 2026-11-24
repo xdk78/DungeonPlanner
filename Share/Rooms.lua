@@ -12,8 +12,9 @@
 --   ask       the next message asks the others for theirs; asked: that question went out since entering the instance;
 --   reply     someone asked: the next message goes out even though nothing changed
 --   members   { [name] = { iid, area, at } }: what the other members said, at most MAX_MEMBERS (oldest out first)
+--   locked    the game holds addon messages (a boss fight): nobody's refresh can arrive, so nobody goes stale
 --   wake      when the last timer asked for runs out
--- Events:
+-- Events (each may carry `locked`, whether the game holds addon messages now):
 --   where  { group, share, iid, area }  the player's own place (iid nil: outside an instance the data covers)
 --   heard  { from, iid, area, ask }     a group member's message, parsed (Transfer.Parse) and from the group
 --   roster { members }                  the other members' names (empty outside a group)
@@ -26,9 +27,8 @@ local Rooms = ns:NewModule("Rooms")
 Rooms.MIN_INTERVAL = 3 -- seconds between two messages: changes in between go out as one, the newest
 Rooms.REFRESH = 60 -- a member who stays in one room says so again this often while inside
 Rooms.STALE = 300 -- a member not heard from for this long is dropped (disconnected, or the addon gone)
+Rooms.LOCK_CHECK = 10 -- while messages are held, look this often whether they flow again
 Rooms.MAX_MEMBERS = 40
-Rooms.MAX_IID = 2 ^ 31 - 1
-Rooms.MAX_KEY = 12 -- "a" or "w" and an ID
 
 local NOWHERE = { iid = 0 }
 
@@ -136,6 +136,9 @@ function handlers.tick(s, _, now, effects)
 	elseif inside(s) and s.sentAt and now - s.sentAt >= Rooms.REFRESH then
 		send(s, now, effects)
 	end
+	if s.locked then
+		return
+	end
 	for name, m in pairs(s.members) do
 		if now - m.at >= Rooms.STALE then
 			drop(s, name, effects)
@@ -143,9 +146,9 @@ function handlers.tick(s, _, now, effects)
 	end
 end
 
--- The next time something is due: a waiting change, the refresh, or the oldest member going stale; nil with nothing to
--- wait for, so an idle state asks for no timer.
-local function nextWake(s)
+-- The next time something is due: a waiting change, the refresh, the oldest member going stale (while messages are
+-- held, a look whether they flow again instead); nil with nothing to wait for, so an idle state asks for no timer.
+local function nextWake(s, now)
 	local t
 	local function at(v)
 		if not t or v < t then
@@ -158,8 +161,12 @@ local function nextWake(s)
 	if inside(s) and s.sentAt then
 		at(s.sentAt + Rooms.REFRESH)
 	end
-	for _, m in pairs(s.members) do
-		at(m.at + Rooms.STALE)
+	if s.locked and next(s.members) then
+		at(now + Rooms.LOCK_CHECK)
+	elseif not s.locked then
+		for _, m in pairs(s.members) do
+			at(m.at + Rooms.STALE)
+		end
 	end
 	return t
 end
@@ -172,13 +179,22 @@ function Rooms.Step(s, e, now)
 	if e.type == "tick" and s.wake and now >= s.wake then
 		s.wake = nil
 	end
+	if e.locked then
+		s.locked = true
+	elseif s.locked then
+		-- Held messages flow again: everyone's clock restarts, as their refreshes were held too.
+		s.locked = nil
+		for _, m in pairs(s.members) do
+			m.at = now
+		end
+	end
 	local effects = {}
 	fn(s, e, now, effects)
 	if effects.changed then
 		effects.changed = nil
 		effects[#effects + 1] = { "changed" }
 	end
-	local t = nextWake(s)
+	local t = nextWake(s, now)
 	if t and not (s.wake and s.wake > now and s.wake <= t) then
 		s.wake = t
 		effects[#effects + 1] = { "timer", math.max(0, t - now) }

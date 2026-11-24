@@ -692,11 +692,15 @@ dot in the member's class colour (`RAID_CLASS_COLORS`; grey when the client cann
 first letter of their name in dark ink, caption size. A member alone in an area sits on its middle; several in one area
 sit on a small ring around it, evenly spaced from the top, clockwise, far enough apart that the dots do not touch (in
 name order). Members in the player's own area sit on the edge of the player's marker, and the marker's tooltip adds
-"With you: <names>". The dots sit over the marker and under the plan's pins; like the marker they take no mouse, and
-the map's hover update shows their tooltip while the pointer is over a dot: "Your group here (approx.)", each member of
-that area in class colour, and why it is approximate. A member in another instance, on another floor, or in a spot the
-area data does not name is not drawn. The dots are placed with the marker on every map draw, and again on their own
-when a member's area changes or a member leaves the group (`GROUP_ROOMS`). "Show where your group is on dungeon maps
+"With you: <names>". The dots are frames at the marker's level (the overlay's level + 2), so they stay under the
+route's stops (+3) and the plan's pins; their textures and initial are in the OVERLAY layer, above the marker's ARTWORK,
+so they show on its edge. Like the marker they take no mouse, and the map's hover update shows their tooltip while the
+pointer is over a dot: "Your group here (approx.)", each member of that area in class colour, and why it is
+approximate. A member in another instance, another plan of a shared instance (another wing of Scarlet Monastery, the
+other half of Stratholme, the other Blackrock Spire), on another floor, or in a spot the area data does not name is not
+drawn. Areas that share a name in the client's language count as one: the member is drawn at the first of them with an
+anchor on the floor shown, as the player's marker is. The dots are placed with the marker on every map draw, and again
+on their own when a member's area changes or a member leaves the group (`GROUP_ROOMS`). "Show where your group is on dungeon maps
 (approx.)" (Appearance, under the marker's setting; on by default) hides them; "Share my room with my group" (Sharing;
 on by default) stops telling the group yours.
 
