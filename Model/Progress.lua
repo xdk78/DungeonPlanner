@@ -4,7 +4,8 @@
 --   kills      ["<encounterID>:<difficultyID>"] = { name, count, first, last }   lifetime, per difficulty
 --   run        the current instance run or nil: { key, name, difficultyID, started, kills = { [encounterID] = time },
 --              pre = { [encounterID] = true } }; `pre` lists the kills that were already there when the player joined
---              (the instance's lock says the boss is dead): they count as killed, but they are not the player's kills
+--              (the instance's lock says the boss is dead): they count as killed, but they are not the player's kills;
+--              hand = { [encounterID] = true }, the kills the player marked by hand (the game did not report them)
 --   history    finished runs, newest last, at most MAX_HISTORY
 --   objectives [planId] = { [objectiveId] = true }
 -- A run is "the same" while the player stays in, or comes back to, the same instance within RESUME seconds.
@@ -37,8 +38,10 @@ function Progress.Normalize(store)
 	if store.run ~= nil and (type(store.run) ~= "table" or type(store.run.kills) ~= "table") then
 		store.run = nil
 	end
-	if store.run and type(store.run.pre) ~= "table" then
-		store.run.pre = nil
+	for _, field in ipairs({ "pre", "hand" }) do
+		if store.run and type(store.run[field]) ~= "table" then
+			store.run[field] = nil
+		end
 	end
 	for key, rec in pairs(store.kills) do
 		if type(rec) ~= "table" or type(rec.count) ~= "number" then
@@ -58,8 +61,9 @@ local function killKey(encounterID, difficultyID)
 end
 Progress.KillKey = killKey
 
--- An ENCOUNTER_END with success, or a BOSS_KILL. Returns the kill record.
-function Progress.RecordKill(store, encounterID, difficultyID, name, now)
+-- An ENCOUNTER_END with success, or a BOSS_KILL; `byHand` for the player's own mark (the "Boss killed" binding), which
+-- the game did not report. Returns the kill record.
+function Progress.RecordKill(store, encounterID, difficultyID, name, now, byHand)
 	if not Util.IsInteger(encounterID) then
 		return nil
 	end
@@ -74,13 +78,42 @@ function Progress.RecordKill(store, encounterID, difficultyID, name, now)
 	if type(name) == "string" and name ~= "" then
 		rec.name = Util.CleanText(name, 64) or rec.name
 	end
-	if store.run then
-		store.run.kills[encounterID] = now
-		if store.run.pre then
-			store.run.pre[encounterID] = nil -- the player killed it after all
+	local run = store.run
+	if run then
+		run.kills[encounterID] = now
+		if run.pre then
+			run.pre[encounterID] = nil -- the player killed it after all
+		end
+		if byHand then
+			run.hand = run.hand or {}
+			run.hand[encounterID] = true
+		elseif run.hand then
+			run.hand[encounterID] = nil
 		end
 	end
 	return rec
+end
+
+-- Was the boss's kill in this run only marked by hand?
+function Progress.MarkedByHand(store, encounterID)
+	local run = store.run
+	return run ~= nil and run.hand ~= nil and run.hand[encounterID] == true
+end
+
+-- Take back a mark made by hand (the boss turned out to be alive). The lifetime count stays.
+function Progress.DropMark(store, encounterID)
+	local run = store.run
+	if run and run.hand and run.hand[encounterID] then
+		run.hand[encounterID] = nil
+		run.kills[encounterID] = nil
+		return true
+	end
+	return false
+end
+
+-- Has the run been in its instance within RESUME seconds of `now`?
+function Progress.Fresh(run, now)
+	return now - (run.seen or run.started) <= Progress.RESUME
 end
 
 -- A boss the instance's lock reports dead that the player did not kill: killed in this run, but not among the player's
@@ -133,10 +166,11 @@ function Progress.NameOf(store, encounterID)
 	return name
 end
 
--- Which bosses the instance's lock lists as dead. entries = { { name = plain string or nil, killed = boolean or nil } },
--- bosses = { { id = encounterID, names = { ... } } }. The lock gives no ID, so a boss matches by its plain name, and
--- only when that name belongs to exactly one boss: a secret, missing, unknown or shared name marks nothing.
-function Progress.DeadByName(entries, bosses)
+-- Which bosses the instance's lock lists with the given state. entries = { { name = plain string or nil, killed =
+-- boolean or nil } }, bosses = { { id = encounterID, names = { ... } } }. The lock gives no ID, so a boss matches by
+-- its plain name, and only when that name belongs to exactly one boss: a secret, missing, unknown or shared name marks
+-- nothing, and so does a flag that is not plainly true or false.
+local function matchByName(entries, bosses, killed)
 	local byName = {} -- normalized name -> encounterID, or false when two bosses have it
 	for _, boss in ipairs(bosses) do
 		for _, name in ipairs(boss.names) do
@@ -152,7 +186,7 @@ function Progress.DeadByName(entries, bosses)
 	end
 	local out, seen = {}, {}
 	for _, e in ipairs(entries) do
-		local id = e.killed == true and type(e.name) == "string" and byName[Match.Norm(e.name)] or nil
+		local id = e.killed == killed and type(e.name) == "string" and byName[Match.Norm(e.name)] or nil
 		if id and not seen[id] then
 			seen[id] = true
 			out[#out + 1] = id
@@ -161,11 +195,19 @@ function Progress.DeadByName(entries, bosses)
 	return out
 end
 
+function Progress.DeadByName(entries, bosses)
+	return matchByName(entries, bosses, true)
+end
+
+function Progress.AliveByName(entries, bosses)
+	return matchByName(entries, bosses, false)
+end
+
 -- Entering an instance: resume the current run if it is the same instance and recent, otherwise archive it and start
 -- a new one. `key` identifies the instance (its instanceID from GetInstanceInfo, as a string).
 function Progress.EnterInstance(store, key, name, difficultyID, now)
 	local run = store.run
-	if run and run.key == key and run.difficultyID == difficultyID and now - (run.seen or run.started) <= Progress.RESUME then
+	if run and run.key == key and run.difficultyID == difficultyID and Progress.Fresh(run, now) then
 		run.seen = now
 		return run, false
 	end

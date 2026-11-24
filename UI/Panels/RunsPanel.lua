@@ -333,7 +333,7 @@ function Panel.Create(parent, ctx)
 		local facts = { ns.Plural(s.pulls, L["%d pull|%d pulls"]), ns.Plural(s.bosses, L["%d boss|%d bosses"]),
 			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }
 		if s.killed > 0 then
-			facts[#facts + 1] = string.format(L["%d killed"], s.killed)
+			facts[#facts + 1] = ns.Plural(s.killed, L["%d killed|%d killed"])
 		end
 		doc:Add("muted", table.concat(facts, " • "))
 		if Recorder.WingUnknown(run, plan()) then
@@ -368,7 +368,7 @@ function Panel.Create(parent, ctx)
 			for i, p in ipairs(run.p) do
 				local line = string.format("%d. %s  %s", i, T(p.u or 0), RunLog.PullText(p, L, ns.Plural))
 				if p.gk then
-					line = line .. " • " .. string.format(L["%d killed"], p.gk)
+					line = line .. " • " .. ns.Plural(p.gk, L["%d killed|%d killed"])
 				end
 				if p.z then
 					line = line .. " • " .. p.z

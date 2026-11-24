@@ -351,6 +351,10 @@ function Recorder.OnInstanceReset(name)
 	if run and Recorder.Enabled() and ns.Match.Norm(run.n) == ns.Match.Norm(name) then
 		Recorder.FinishRun()
 		Recorder.OnZone()
+		-- Found by a boss starting: the fight is on and belongs to the new run (its nameplates, its kills).
+		if call(UnitAffectingCombat, "player") == true then
+			Recorder.OnCombat(true)
+		end
 	end
 end
 

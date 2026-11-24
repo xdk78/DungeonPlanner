@@ -412,8 +412,13 @@ local function dispatch(event, ...)
 	if not handlers then
 		return
 	end
+	-- A copy: a handler may unregister itself (or another) while the event is delivered.
+	local copy = {}
 	for i = 1, #handlers do
-		ns.SafeCall(handlers[i], event, ...)
+		copy[i] = handlers[i]
+	end
+	for i = 1, #copy do
+		ns.SafeCall(copy[i], event, ...)
 	end
 end
 

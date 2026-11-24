@@ -45,7 +45,7 @@ end
 local function setLock(entries, opts)
 	opts = opts or {}
 	_G.GetInstanceLockTimeRemaining = function()
-		return 0, false, opts.total or #entries, opts.complete or 0
+		return 0, opts.previous or false, opts.total or #entries, opts.complete or 0
 	end
 	_G.GetInstanceLockTimeRemainingEncounter = function(i)
 		local e = entries[i]
@@ -232,6 +232,7 @@ T.case("Lock: entering an instance marks the dead bosses of its plan, as found d
 		ns:On("BOSSES_FOUND_DEAD", seen, function(ids)
 			seen.found = ids
 		end)
+		R.SetEnabled(true)
 		local run = enter()
 		ns:Off("PROGRESS_CHANGED", seen)
 		ns:Off("BOSSES_FOUND_DEAD", seen)
@@ -244,9 +245,8 @@ T.case("Lock: entering an instance marks the dead bosses of its plan, as found d
 		T.eq(table.concat(seen.found, ","), "501", "run mode is told")
 		T.ok(seen.changed >= 1, "the progress views refresh")
 		T.eq(asked, 1, "fresh lock data was asked for")
-		-- Nothing is invented for the recorder.
-		R.SetEnabled(true)
-		T.eq(#R.Current().b, 0, "no run-recorder kill for it")
+		T.ok(R.Current(), "the recorder was on while the player entered")
+		T.eq(#R.Current().b, 0, "and has no kill for the boss found dead")
 		R.SetEnabled(false)
 		-- Asked again at once: not again within the throttle.
 		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
@@ -314,9 +314,10 @@ T.case("Lock: the name the client gave at an earlier kill, or the journal's, mat
 end)
 
 T.case("Lock: events are listened to only inside the instance of a run (and the system message only while a run exists)", function()
-	scenario(function()
+	scenario(function(_, clock)
 		setLock({})
-		local base = { info = handlers("UPDATE_INSTANCE_INFO"), start = handlers("ENCOUNTER_START"), system = handlers("CHAT_MSG_SYSTEM") }
+		local base = { info = handlers("UPDATE_INSTANCE_INFO"), start = handlers("ENCOUNTER_START"), system = handlers("CHAT_MSG_SYSTEM"),
+			lockStart = handlers("INSTANCE_LOCK_START") }
 		-- Tracking off: nothing is started, nothing listened to.
 		ns.db.settings.tracker.enabled = false
 		enter()
@@ -327,6 +328,7 @@ T.case("Lock: events are listened to only inside the instance of a run (and the 
 		T.ok(ns.char.progress.run, "a run")
 		T.eq(handlers("UPDATE_INSTANCE_INFO"), base.info + 1, "inside: the lock's update")
 		T.eq(handlers("ENCOUNTER_START"), base.start + 1, "inside: encounters starting")
+		T.eq(handlers("INSTANCE_LOCK_START"), base.lockStart + 1, "inside: the lock prompt")
 		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system + 1, "a run: the reset message")
 		-- Leaving the instance: the run stays, so the reset message can still come; the rest stops.
 		_G.GetInstanceInfo = OUTSIDE
@@ -334,8 +336,24 @@ T.case("Lock: events are listened to only inside the instance of a run (and the 
 		T.ok(ns.char.progress.run, "the run is kept")
 		T.eq(handlers("UPDATE_INSTANCE_INFO"), base.info, "outside: no lock events")
 		T.eq(handlers("ENCOUNTER_START"), base.start)
+		T.eq(handlers("INSTANCE_LOCK_START"), base.lockStart)
 		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system + 1, "the reset message still counts")
+		-- Long after leaving, the run is no longer one the player can come back to: the first message sees it and stops
+		-- listening, with no timer. Neither does a login (outdoors) make it fresh again.
+		clock.advance(Progress.RESUME - 60)
+		mock.FireEvent("CHAT_MSG_SYSTEM", "Welcome to the game.")
+		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system + 1, "still within the window")
+		clock.advance(120)
+		mock.FireEvent("CHAT_MSG_SYSTEM", "Welcome to the game.")
+		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system, "past it: not listening")
+		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system, "a login does not bring it back")
 		-- Without a run, nothing at all.
+		_G.GetInstanceInfo = INSIDE
+		enter()
+		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system + 1)
+		_G.GetInstanceInfo = OUTSIDE
+		mock.FireEvent("PLAYER_ENTERING_WORLD", false, false)
 		Tracker.EndRun()
 		T.eq(handlers("CHAT_MSG_SYSTEM"), base.system, "no run: no listening")
 		_G.GetInstanceInfo = INSIDE
@@ -511,6 +529,141 @@ T.case("Reset: with tracking off nothing is cleared, and an outside run is not t
 		T.eq(Tracker.OnInstanceReset(""), false, "no name")
 		T.eq(Tracker.OnInstanceReset("Test Dungeon"), true)
 	end)
+end)
+
+T.case("Reset: a boss marked by hand that starts is alive: only that mark goes, the run stays", function()
+	scenario(function(plan, clock)
+		local listener, resets = {}, 0
+		ns:On("INSTANCE_RESET", listener, function()
+			resets = resets + 1
+		end)
+		setLock({})
+		local run = enter()
+		ns.db.ui.selectedPlan = plan.id
+		T.eq(Tracker.MarkNextBossKilled().id, plan.encounters[1].id, "Boss A, marked by hand")
+		mock.Advance(20)
+		mock.FireEvent("ENCOUNTER_END", 502, "Boss B", 1, 5, 1)
+		T.ok(Progress.MarkedByHand(ns.char.progress, 501) and not Progress.MarkedByHand(ns.char.progress, 502))
+		clock.advance(Tracker.NEW_COPY_GRACE * 3)
+		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
+		T.ok(ns.char.progress.run == run, "the same run")
+		T.ok(not Progress.IsKilledInRun(ns.char.progress, 501), "the mark is gone")
+		T.ok(Progress.IsKilledInRun(ns.char.progress, 502), "the game's kill stays")
+		T.eq(resets, 0, "and nothing was told to start over")
+		-- Marked by hand, then killed for real: the game has said it, so it is no longer only a mark.
+		Tracker.MarkNextBossKilled()
+		mock.Advance(20)
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		T.ok(not Progress.MarkedByHand(ns.char.progress, 501))
+		clock.advance(Tracker.NEW_COPY_GRACE * 3)
+		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
+		ns:Off("INSTANCE_RESET", listener)
+		T.eq(resets, 1, "that kill does mean a new copy when the boss starts again")
+		-- A mark by hand is not evidence on entering either.
+		setLock({ { "Boss A", false } })
+		Tracker.MarkNextBossKilled()
+		clock.advance(Tracker.NEW_COPY_GRACE * 3)
+		local current = enter()
+		T.ok(ns.char.progress.run == current and Progress.IsKilledInRun(ns.char.progress, 501), "the lock listing it alive changes nothing")
+	end)
+end)
+
+T.case("Lock: a boss the run has dead but the lock lists alive, on entering, means a new copy", function()
+	scenario(function(_, clock)
+		setLock({})
+		local run = enter()
+		mock.Advance(20)
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		-- The lock lags right after the kill: not evidence.
+		setLock({ { "Boss A", false } })
+		T.ok(ns.char.progress.run == run)
+		enter()
+		T.ok(ns.char.progress.run == run and Progress.IsKilledInRun(ns.char.progress, 501), "just killed: the lock may lag")
+		-- Later, coming back: the lock lists Boss A alive and Boss B dead (the instance was reset and Boss B killed since).
+		clock.advance(Tracker.NEW_COPY_GRACE + 5)
+		setLock({ { "Boss A", false }, { "Boss B", true } })
+		local listener, told = {}, 0
+		ns:On("INSTANCE_RESET", listener, function()
+			told = told + 1
+		end)
+		local again = enter()
+		ns:Off("INSTANCE_RESET", listener)
+		T.ok(again ~= run, "a new run")
+		T.eq(told, 1)
+		T.ok(not Progress.IsKilledInRun(ns.char.progress, 501), "Boss A is alive in the new copy")
+		T.ok(Progress.WasDeadOnJoin(ns.char.progress, 502), "and Boss B is found dead there")
+		T.eq(#ns.char.progress.history, 1, "the old copy's run is kept")
+		-- A boss found dead that the lock then lists alive: the lock was of another copy.
+		setLock({ { "Boss B", false } })
+		local third = enter()
+		T.ok(third ~= again and next(third.kills) == nil, "found dead, now alive")
+		-- Secret names and flags are no evidence.
+		setLock({ { "Boss A", true } })
+		local fourth = enter()
+		setLock({ { mock.SECRET, false }, { "Boss A", mock.SECRET } })
+		T.ok(enter() == fourth and Progress.WasDeadOnJoin(ns.char.progress, 501))
+	end)
+end)
+
+T.case("Lock: a lock of a previous instance is not read", function()
+	scenario(function()
+		setLock({ { "Boss A", true } }, { previous = true })
+		T.eq(Tracker.ReadLock(), nil)
+		enter()
+		T.ok(not Progress.IsKilledInRun(ns.char.progress, 501), "nothing marked from it")
+		setLock({ { "Boss A", true } }, { previous = false })
+		T.eq(#Tracker.ReadLock(), 1)
+		setLock({ { "Boss A", true } }, { previous = mock.SECRET })
+		T.eq(#Tracker.ReadLock(), 1, "a secret answer is not a yes")
+	end)
+end)
+
+T.case("Recorder: a reset found by a boss starting in combat goes on recording the fight in the new run", function()
+	scenario(function(_, clock)
+		setLock({})
+		R.SetEnabled(true)
+		enter()
+		local old = R.Current()
+		mock.Advance(20)
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		clock.advance(Tracker.NEW_COPY_GRACE + 5)
+		mock.units = { player = { combat = true }, nameplate1 = { level = 14, class = "elite", name = "Boss A", hostile = true, combat = true } }
+		mock.plates = { "nameplate1" }
+		mock.inCombat = true
+		mock.FireEvent("PLAYER_REGEN_DISABLED")
+		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
+		local run = R.Current()
+		T.ok(run and run ~= old, "a new recorder run")
+		T.ok(RunLog.OpenPull(run), "the fight under way is its first pull")
+		mock.FireEvent("PARTY_KILL", mock.SECRET, mock.SECRET)
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		mock.inCombat = false
+		mock.FireEvent("PLAYER_REGEN_ENABLED")
+		T.eq(run.p[1].gk, 1, "its group kills are counted")
+		T.eq(run.p[1].c, 1, "and its nameplates scanned")
+		T.eq(#run.b, 1, "and the kill is in the new run")
+		T.eq(#R.Store().runs["9001"], 1, "the old copy's run was kept apart")
+		mock.units, mock.plates = {}, {}
+	end)
+end)
+
+T.case("Events: a handler that unregisters while an event is delivered does not make the next one skip", function()
+	local calls = {}
+	local function second()
+		calls[#calls + 1] = "second"
+	end
+	local function first()
+		calls[#calls + 1] = "first"
+		ns:UnregisterEvent("DP_TEST_EVENT", first)
+	end
+	ns:RegisterEvent("DP_TEST_EVENT", first)
+	ns:RegisterEvent("DP_TEST_EVENT", second)
+	ns.EventDispatcher()("DP_TEST_EVENT")
+	T.eq(table.concat(calls, ","), "first,second")
+	ns.EventDispatcher()("DP_TEST_EVENT")
+	T.eq(table.concat(calls, ","), "first,second,second", "the one that left is gone")
+	ns:UnregisterEvent("DP_TEST_EVENT", second)
+	T.ok(not ns.EventTable().DP_TEST_EVENT)
 end)
 
 T.case("Run mode: bosses found dead move the step past them, never back, and not while following", function()

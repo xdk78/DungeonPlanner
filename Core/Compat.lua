@@ -191,6 +191,7 @@ function Compat.Methods()
 		for _, event in ipairs({ { "CHAT_MSG_COMBAT_XP_GAIN", NAMES }, { "CHAT_MSG_COMBAT_HOSTILE_DEATH", NAMES },
 			{ "UNIT_SPELLCAST_SENT", NAMES }, { "PARTY_KILL", "the count of enemies the group killed in recorded pulls" },
 			{ "UPDATE_INSTANCE_INFO", "bosses already dead when you join (the lock is read on entering and after a kill)" },
+			{ "INSTANCE_LOCK_START", "bosses already dead when you join (read again when the game shows the lock prompt)" },
 			{ "CHAT_MSG_SYSTEM", "ending a run when its instance is reset (a boss that starts again after its kill still does)" } }) do
 			local known = pcall(f.RegisterEvent, f, event[1])
 			out[#out + 1] = { "Event " .. event[1], known, event[2] }
