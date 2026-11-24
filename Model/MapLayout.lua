@@ -433,3 +433,19 @@ function MapLayout.FitView(points, o)
 	local cx, cy = (x0 + x1) / 2 * o.baseW * s, (y0 + y1) / 2 * o.baseH * s
 	return { zoom = zoom, ox = inset + availW / 2 - cx, oy = inset + availH / 2 - cy }
 end
+
+-- Offsets { dx, dy } (y down) for n dots around one point, the first at the top and the rest clockwise, on a circle of
+-- at least `minRadius` and wide enough that neighbours' centres stay `gap` apart. One dot with no minimum sits on the
+-- point. The group's members in one room (UI/MapGroup.lua).
+function MapLayout.Ring(n, gap, minRadius)
+	local out = {}
+	local r = minRadius or 0
+	if n > 1 then
+		r = math.max(r, gap / (2 * math.sin(math.pi / n)))
+	end
+	for i = 1, n do
+		local a = 2 * math.pi * (i - 1) / n
+		out[i] = { r * math.sin(a), -r * math.cos(a) }
+	end
+	return out
+end

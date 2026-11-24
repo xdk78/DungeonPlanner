@@ -122,20 +122,21 @@ local function langIndex()
 	return localeIndex
 end
 
--- AreaTable names by ID, asked once each (bounded by the areas in the data); false for an ID the client cannot name.
+-- AreaTable names by ID, kept once the client gives one (bounded by the areas in the data). No answer is not kept: the
+-- client may not have loaded the name yet, so the next call asks again.
 local areaNames = {}
 
 local function areaName(id)
-	if areaNames[id] == nil then
+	if not areaNames[id] then
 		local api = rawget(_G, "C_Map")
 		local name
 		if type(api) == "table" and type(api.GetAreaInfo) == "function" then
 			local ok, value = pcall(api.GetAreaInfo, id)
 			name = ok and plainText(value) or nil
 		end
-		areaNames[id] = name ~= "" and name or false
+		areaNames[id] = name ~= "" and name or nil
 	end
-	return areaNames[id] or nil
+	return areaNames[id]
 end
 
 -- Does area `a` of the data read like `where` (Subzones.Where) in this client?
@@ -177,9 +178,111 @@ end
 function Subzones.Here(plan, floor, where)
 	where = where or Subzones.Where()
 	for _, a in ipairs(Subzones.Find(Subzones.For(plan), where)) do
-		for _, p in ipairs(a.at) do
-			if p[1] == floor then
-				return { name = where.subzone, x = p[2], y = p[3] }
+		local x, y = Subzones.Anchor(a, floor)
+		if x then
+			return { name = where.subzone, x = x, y = y }
+		end
+	end
+	return nil
+end
+
+-- Where area `a` lies on floor `floor` of its plan: x, y in plan space, or nil.
+function Subzones.Anchor(a, floor)
+	for _, p in ipairs(a.at) do
+		if p[1] == floor then
+			return p[2], p[3]
+		end
+	end
+	return nil
+end
+
+-- An area's key, as data-src/subzones names it and group members send it (Share/Rooms.lua): "a<AreaTable ID>" or
+-- "w<WMOAreaTable ID>". IDs only, so it reads the same in every client language.
+function Subzones.Key(a)
+	return a.a and ("a" .. a.a) or ("w" .. a.w)
+end
+
+-- The area of `data` with key `key`, or nil.
+function Subzones.Area(data, key)
+	for _, a in ipairs(data) do
+		if Subzones.Key(a) == key then
+			return a
+		end
+	end
+	return nil
+end
+
+-- The data of every plan of the instance with this instance map ID (GetInstanceInfo's eighth value), in the order of
+-- their keys: several where plans share an instance (Scarlet Monastery's wings, Stratholme's halves, Blackrock Spire);
+-- empty for one the data does not cover. A player with no plan open still has an area to tell the group.
+function Subzones.ForInstance(iid)
+	local keys = {}
+	for key, data in pairs(type(ns.SubzoneData) == "table" and ns.SubzoneData or {}) do
+		if type(data) == "table" and data.iid == iid then
+			keys[#keys + 1] = key
+		end
+	end
+	table.sort(keys)
+	local out = {}
+	for i, key in ipairs(keys) do
+		out[i] = ns.SubzoneData[key]
+	end
+	return out
+end
+
+-- The hashes of area `a`'s name in this client's language, { [hash] = true }: empty when the client cannot name it.
+-- Kept only when complete: an AreaTable name the client has not given yet is asked again next time.
+local hashCache = setmetatable({}, { __mode = "k" })
+local function nameHashes(a)
+	local set = hashCache[a]
+	if not set then
+		set = {}
+		local name = a.a and areaName(a.a)
+		if name then
+			set[Subzones.Hash(name)] = true
+		end
+		local i = a.h and langIndex()
+		local h = i and a.h[i]
+		for _, v in ipairs(type(h) == "table" and h or { h or nil }) do
+			set[v] = true
+		end
+		if name or not a.a then
+			hashCache[a] = set
+		end
+	end
+	return set
+end
+
+local function sameName(a, b)
+	if a == b then
+		return true
+	end
+	local names = nameHashes(a)
+	for h in pairs(nameHashes(b)) do
+		if names[h] then
+			return true
+		end
+	end
+	return false
+end
+
+-- Where a member who sent area key `key` is drawn on floor `floor` of `data`: the area and x, y, or nil. The sender
+-- cannot tell apart areas that share a name, so any of them counts: the first, in the data's order, with an anchor on
+-- that floor, as the player's own marker is placed (Subzones.Here). A key from another plan of the same instance (the
+-- sender sends the first match across them) counts for an area of this plan with the same name.
+function Subzones.Place(data, key, floor)
+	local sent = Subzones.Area(data, key)
+	for _, other in ipairs(sent and {} or Subzones.ForInstance(data.iid)) do
+		sent = sent or Subzones.Area(other, key)
+	end
+	if not sent then
+		return nil
+	end
+	for _, a in ipairs(data) do
+		if sameName(sent, a) then
+			local x, y = Subzones.Anchor(a, floor)
+			if x then
+				return a, x, y
 			end
 		end
 	end
@@ -188,5 +291,5 @@ end
 
 -- Forget the area names and the language asked (tests switch the client's language).
 function Subzones.Reset()
-	areaNames, localeIndex = {}, nil
+	areaNames, localeIndex, hashCache = {}, nil, setmetatable({}, { __mode = "k" })
 end

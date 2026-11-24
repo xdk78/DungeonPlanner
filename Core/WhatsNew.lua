@@ -35,6 +35,8 @@ local ENTRIES = {
 					L["Inside a dungeon, the map and run mode's mini map ring the area the game says you are in. The game gives no exact position there."] },
 				{ L["Joining a run in progress"],
 					L["Bosses already dead when you enter count as killed and run mode skips them; a reset starts over; recorded pulls count your group's kills."] },
+				{ L["Your group, room by room"],
+					L["Inside a dungeon, the map and run mode's mini map show which area each group member is in, when they use Dungeon Planner too."] },
 			},
 		}
 	end,

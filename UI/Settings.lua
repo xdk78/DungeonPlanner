@@ -318,6 +318,20 @@ local function options()
 							UI.ApplyColors()
 						end,
 					},
+					mapGroup = {
+						type = "toggle",
+						order = 6.06,
+						width = "full",
+						name = L["Show where your group is on dungeon maps (approx.)"],
+						desc = L["Group members who use Dungeon Planner and share their room show as dots in their class colour, in the area the game says they are in."],
+						get = function()
+							return get({ "mapGroup" })
+						end,
+						set = function(_, v)
+							set({ "mapGroup" }, v)
+							UI.ApplyColors()
+						end,
+					},
 					-- Forever's new dungeons (Data/MinimapArt.lua Choose): drawn maps (Santiago Reyes' bundled ones,
 					-- another addon's) or the game's own minimap pictures first.
 					preferProviderMaps = {
@@ -561,6 +575,22 @@ local function options()
 						end,
 						set = function(_, v)
 							set({ "share", "announce" }, v)
+						end,
+					},
+					rooms = {
+						type = "toggle",
+						order = 3,
+						name = L["Share my room with my group"],
+						desc = L["Inside a dungeon, group members who use Dungeon Planner see on their map which area the game says you are in."],
+						width = "double",
+						get = function()
+							return get({ "share", "rooms" })
+						end,
+						set = function(_, v)
+							set({ "share", "rooms" }, v)
+							if ns.GroupRooms then
+								ns.GroupRooms.Update()
+							end
 						end,
 					},
 				},

@@ -85,12 +85,13 @@ local function restoreComm()
 end
 
 -- Addon messages from a known state, for cases that count what goes out: no group, no lockdown, nothing waiting in
--- Comm's outbox, no run led or followed, the timers an earlier file left run out (a hello goes 5 s after a roster
--- change), and ChatThrottleLib's queue sent. Advances the mock clock by 10 s.
+-- Comm's outbox, no run led or followed, no group members' rooms, the timers an earlier file left run out (a hello
+-- goes 5 s after a roster change), and ChatThrottleLib's queue sent. Advances the mock clock by 10 s.
 function T.quietComm()
 	mock.inGroup, mock.units, mock.lockdown = false, {}, false
 	ns.Comm.outbox = {}
 	ns.RunSync.state = ns.Sync.New()
+	ns.GroupRooms.state = ns.Rooms.New()
 	mock.Advance(10, 0.1)
 end
 
@@ -146,7 +147,7 @@ local files = { "test_model.lua", "test_share.lua", "test_db.lua", "test_v2.lua"
 	"test_walk.lua", "test_walk_ui.lua", "test_gearfilter.lua", "test_routes.lua",
 	"test_provider_pins.lua", "test_scroll.lua",
 	"test_routelegs.lua", "test_routelook.lua", "test_openmap_overlay.lua", "test_identity.lua", "test_zoom.lua",
-	"test_subzones.lua",
+	"test_subzones.lua", "test_rooms.lua",
 	"test_release_changelog.lua", "test_recorder_names.lua", "test_instance_progress.lua" }
 if onlyFile then
 	local listed = {}

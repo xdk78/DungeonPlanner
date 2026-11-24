@@ -676,6 +676,12 @@ function Comm.OnMessage(prefix, text, channel, sender)
 		end
 		return
 	end
+	if msg.type == "room" then -- UI/GroupRooms.lua; older versions parse the L tag as nothing
+		if msg.proto == ns.PROTOCOL_VERSION and ns.GroupRooms then
+			ns.GroupRooms.OnMessage(msg, sender, channel)
+		end
+		return
+	end
 
 	if msg.type == "offer" then
 		local key = sender .. ":" .. msg.tid

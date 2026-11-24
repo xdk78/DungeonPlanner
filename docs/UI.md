@@ -684,6 +684,26 @@ the view shows, not on every draw, and a change moves the marker alone. The sett
 maps (approx.)" (Appearance, beside "Show map coordinates"; on by default) turns it off. The map does not switch floors
 for it. The anchors and their sources: data-src/subzones/README.md.
 
+### Your group, room by room
+
+Group members who run Dungeon Planner tell the group the area they are in (docs/SHARING-FORMAT.md, "Rooms of the
+group"), and the map and run mode's mini map draw them there (`UI/MapGroup.lua`, installed with the marker): a 14-unit
+dot in the member's class colour (`RAID_CLASS_COLORS`; grey when the client cannot say) with a dark edge and the
+first letter of their name in dark ink, caption size. A member alone in an area sits on its middle; several in one area
+sit on a small ring around it, evenly spaced from the top, clockwise, far enough apart that the dots do not touch (in
+name order). Members in the player's own area sit on the edge of the player's marker, and the marker's tooltip adds
+"With you: <names>". The dots are frames at the marker's level (the overlay's level + 2), so they stay under the
+route's stops (+3) and the plan's pins; their textures and initial are in the OVERLAY layer, above the marker's ARTWORK,
+so they show on its edge. Like the marker they take no mouse, and the map's hover update shows their tooltip while the
+pointer is over a dot: "Your group here (approx.)", each member of that area in class colour, and why it is
+approximate. A member in another instance, another plan of a shared instance (another wing of Scarlet Monastery, the
+other half of Stratholme, the other Blackrock Spire), on another floor, or in a spot the area data does not name is not
+drawn, unless an area of the shown plan has the same name. Areas that share a name in the client's language count as
+one: the member is drawn at the first of them with an anchor on the floor shown, as the player's marker is. The dots are placed with the marker on every map draw, and again
+on their own when a member's area changes or a member leaves the group (`GROUP_ROOMS`). "Show where your group is on dungeon maps
+(approx.)" (Appearance, under the marker's setting; on by default) hides them; "Share my room with my group" (Sharing;
+on by default) stops telling the group yours.
+
 ### The "Forever" tag
 
 An instance new in WoW: Forever (its recommended plan's `instance.origin`, docs/DATA-SOURCES.md) carries a small chip,
@@ -784,6 +804,13 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   pictures; its tooltip with the pointer in the ring, and enemy dot tooltips, route-leg hover and the coordinates still
   working inside it; clicks, drags and the drawing tools going through it to the map and the pins; the setting turning it off; `/dp debug` listing "Area names", "Zone
   text" and the three new files after an update without a restart.
+- Your group, room by room: two or more clients with Dungeon Planner in a party inside Hall of Thanes or Ruins of
+  Lordaeron: each sees the others' dots in their class colours, moving within a few seconds of a room change, around
+  the marker when in the same room, on the mini map too, and gone when a member leaves the instance or the group;
+  several in one room spread on a ring; the tooltip over a dot names them, and the marker's tooltip says who is with
+  you; nothing sent outside a group or an instance (`/dp debug`'s addon message line), the room held during a boss
+  fight and sent once after it; "Share my room with my group" off: the others drop your dot; an older Dungeon
+  Planner in the group shows no error; `/dp debug` listing the three new files after an update without a restart.
 - Prep: quest states after accepting, abandoning and turning in a quest; quest titles in Polish and Russian clients;
   the key icons and names (a key on the key ring, in the bank); the group lines in a party and a raid; the Getting
   there card outdoors (distance and direction match the world map; the entrance coordinates of a classic and a Forever

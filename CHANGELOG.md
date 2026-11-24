@@ -30,6 +30,12 @@ follow [Semantic Versioning](https://semver.org/).
   plans, among them Hall of Thanes, Ruins of Lordaeron and Blackmaw Hold (data-src/subzones/README.md lists them). Turn
   it off with "Show where you are on dungeon maps (approx.)" in the settings. New files: restart the game after
   updating.
+- **Your group, room by room**: inside a dungeon, the map and run mode's mini map show group members who also use
+  Dungeon Planner as small dots in their class colour, with their initial, in the area the game says each of them is
+  in. Several in one area sit around its middle; those in your own area sit on the edge of your marker. Hover a dot to
+  see who is there. Each member's addon tells the group only the area's ID, a few seconds after a change, and only
+  inside a dungeon. "Share my room with my group" (Sharing) and "Show where your group is on dungeon maps (approx.)"
+  turn either side off. Older versions ignore the new message. New files: restart the game after updating.
 
 ## [0.2.2] - 2026-11-23
 

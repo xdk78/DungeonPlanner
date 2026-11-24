@@ -17,6 +17,8 @@
 --   F^<proto>^<session>^<status>                           a member's follow status, whispered to the leader
 --   Q^<proto>                                              who leads the run? (to the group)
 --   W^<proto>^<session>                                    a member asks the leader for the plan (whispered)
+--   L^<proto>^<instance>^<area>^<ask>                      the room a member is in (Share/Rooms.lua); instance 0 and
+--                                                          area "-": nowhere to show; ask 1: send yours
 -- AceComm splits long messages into parts and ChatThrottleLib paces them; we only bound sizes and check sums.
 -- See docs/SHARING-FORMAT.md.
 
@@ -30,6 +32,8 @@ Transfer.OFFER_TIMEOUT = 90 -- seconds a receiver has to answer the prompt
 Transfer.GATHER = 6 -- seconds a group offer waits for more accepts after the first one
 Transfer.RECEIVE_TIMEOUT = 300 -- seconds after accepting before a receive gives up
 Transfer.MAX_NOTE = 12000 -- a pushed page's encoded string (Codec.EncodeNote of at most Schema.TEXT.page bytes)
+Transfer.MAX_IID = 2 ^ 31 - 1 -- an instance map ID in a room message (Share/Rooms.lua)
+Transfer.MAX_AREA_KEY = 12 -- an area key in a room message: "a" or "w" and an ID
 
 local SEP = "^"
 
@@ -87,15 +91,19 @@ function Transfer.Encode(msg)
 		return "Q" .. SEP .. msg.proto
 	elseif t == "want" then
 		return "W" .. SEP .. msg.proto .. SEP .. msg.session
+	elseif t == "room" then
+		return table.concat({ "L", msg.proto, msg.iid, msg.area or "-", msg.ask and 1 or 0 }, SEP)
 	end
 	error("unknown message type " .. tostring(t))
 end
 
--- An integer within lo..hi, else nil.
+-- A field of digits only within lo..hi (no sign, spaces, hex or exponent, which tonumber would take), else nil.
 local function intIn(s, lo, hi)
-	local n = tonumber(s)
-	return Util.IsInteger(n) and n >= lo and n <= hi and n or nil
+	local n = type(s) == "string" and s:match("^%d+$") and tonumber(s)
+	return n and n >= lo and n <= hi and n or nil
 end
+
+local MAX_INT = 2 ^ 53 -- sizes and times: every integer a double holds exactly
 
 -- Run sync (Share/Sync.lua): each field is checked here; who may send and which plan it is, in Sync.Step.
 local FOLLOW_STATUS = { f = true, u = true, m = true, o = true }
@@ -137,6 +145,22 @@ local function parseSync(tag, parts)
 		pull = pull }
 end
 
+-- A member's room (Share/Rooms.lua): an instance map ID (0: nowhere) and an area key of Data/Subzones.lua ("a" or "w"
+-- and an ID; "-": none), never a name.
+local function parseRoom(parts)
+	local proto, iid, ask = intIn(parts[2], 0, 999), intIn(parts[3], 0, Transfer.MAX_IID), intIn(parts[5], 0, 1)
+	local area = parts[4]
+	if #parts ~= 5 or not (proto and iid and ask) then
+		return nil
+	end
+	if area == "-" then
+		area = nil
+	elseif iid == 0 or #area > Transfer.MAX_AREA_KEY or not area:match("^[aw][1-9]%d*$") then
+		return nil
+	end
+	return { type = "room", proto = proto, iid = iid, area = area, ask = ask == 1 }
+end
+
 -- Returns a message table or nil for anything malformed. Never raises.
 function Transfer.Parse(text)
 	if type(text) ~= "string" or #text > Transfer.MAX_MESSAGE then
@@ -161,8 +185,11 @@ function Transfer.Parse(text)
 		return nil
 	end
 	local parts = Util.Split(text, SEP)
+	if parts[1] ~= tag then
+		return nil
+	end
 	if tag == "H" or tag == "h" then
-		local proto = tonumber(parts[2])
+		local proto = intIn(parts[2], 0, 999)
 		if not proto or #parts ~= 3 then
 			return nil
 		end
@@ -175,8 +202,8 @@ function Transfer.Parse(text)
 		if #parts ~= 7 then
 			return nil
 		end
-		local proto, bytes = tonumber(parts[2]), tonumber(parts[4])
-		if not (proto and validTid(parts[3]) and Util.IsInteger(bytes)) then
+		local proto, bytes = intIn(parts[2], 0, 999), intIn(parts[4], 0, MAX_INT)
+		if not (proto and validTid(parts[3]) and bytes) then
 			return nil
 		end
 		if not parts[5]:match("^%x%x%x%x%x%x%x%x$") or not ns.Codec.KINDS[parts[6]] then
@@ -192,14 +219,16 @@ function Transfer.Parse(text)
 			name = Util.CleanText(parts[7], 64) or "",
 		}
 	elseif tag == "K" then
-		local version = tonumber(parts[4])
-		if #parts ~= 4 or not validTid(parts[2]) or not Util.IsInteger(version) or version < 0 then
+		local version = intIn(parts[4], 0, MAX_INT)
+		if #parts ~= 4 or not validTid(parts[2]) or not version then
 			return nil
 		end
 		local plan = parts[3] ~= "-" and ns.Acks.ValidPlanId(parts[3]) and parts[3] or nil
 		return { type = "ack", tid = parts[2], plan = plan, version = version }
 	elseif tag == "R" or tag == "F" or tag == "Q" or tag == "W" then
 		return parseSync(tag, parts)
+	elseif tag == "L" then
+		return parseRoom(parts)
 	elseif tag == "A" or tag == "D" or tag == "X" then
 		if #parts ~= 2 or not validTid(parts[2]) then
 			return nil
