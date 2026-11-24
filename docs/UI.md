@@ -765,6 +765,17 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
 
 ## Needs a look in game
 
+- Bosses already dead on joining, resets and group kills: inside a dungeon after killing a boss and leaving, then
+  re-entering (or joining a group that has killed some), `/dp scan` first: do `GetInstanceLockTimeRemaining` and its
+  `Encounter` call answer here, are the boss names and the killed flags plain, and does the name equal the plan's boss
+  name (in English and in another client language)? Then the Bosses and Progress sections say "killed before you
+  joined" for exactly those bosses, run mode's step moves past them (not while following), and the Runs section shows
+  no split for them. After resetting the instance ("... has been reset." in chat, text as the client words it) the
+  Progress section's kills clear, run mode shows "Start" again and a new run is recorded; a wipe and a second pull on
+  the same boss clear nothing, and a kill followed by pulling the same boss again after a reset does. Does `PARTY_KILL`
+  fire at all as a frame event, and does the Runs section's "N killed" per pull and per run match what the group
+  killed (compare with the nameplate count: they differ on purpose). The "killed before you joined" line in the
+  Bosses list at the narrowest window, in German and Polish.
 - You are here (approx.): inside Hall of Thanes, Ruins of Lordaeron, Blackmaw Hold and a classic dungeon (the
   Deadmines), the marker on the map and run mode's mini map in the area the game names (walk from room to room: it
   moves at once, and hides between named areas and on another floor); the sub-zone text the client gives there is plain

@@ -117,7 +117,9 @@ function Panel.Create(parent, ctx)
 			row.dot:SetStatus(killed and "ok" or "dim")
 			W.FitText(row.text, ns.Names.Encounter(enc))
 			if id then
-				row.meta:SetText(ns.Plural(Progress.KillsOf(store(), id), L["%d kill|%d kills"]))
+				local kills = ns.Plural(Progress.KillsOf(store(), id), L["%d kill|%d kills"])
+				row.meta:SetText(Progress.WasDeadOnJoin(store(), id) and (kills .. " \226\128\162 " .. L["killed before you joined"])
+					or kills)
 			else
 				row.meta:SetText(L["not tracked"])
 			end

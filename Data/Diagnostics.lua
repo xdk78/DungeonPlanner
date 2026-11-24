@@ -6,7 +6,8 @@
 -- pictures); which of the plans' map IDs exist and have art; which maps carry a plan's instance or floor name; which
 -- old dungeon map tiles and loading screens the client has (Data/GameFiles.lua); the portrait APIs; the UI font; and
 -- whether the player's position and a targeted mob can be read where the scan runs (inside a dungeon: spawn recording);
--- and what the client says is restricted (C_Secrets, the addon restriction state, the distance to a party member).
+-- and what the client says is restricted (C_Secrets, the addon restriction state, the distance to a party member), and
+-- what the instance's lock says about its bosses (GetInstanceLockTimeRemaining and its Encounter call).
 
 local _, ns = ...
 local Diagnostics = ns:NewModule("Diagnostics")
@@ -414,13 +415,47 @@ local function restrictions(out)
 	out.restrictions = r
 end
 
+-- The instance's lock (Tracker.ReadLock reads the same two calls): is "which bosses are already dead" readable here?
+-- Run inside an instance. Each value is "nil", "secret", "missing", "error" or the value itself; a boss name is shown as
+-- "plain <name>" so it can be compared with the plan's names. At most LOCK_ROWS bosses.
+local LOCK_ROWS = 12
+
+local function lockName(ok, name)
+	if ok and type(name) == "string" and not Util.IsSecret(name) then
+		return "plain " .. name
+	end
+	return state(ok, name)
+end
+
+local function instanceLock(out)
+	local lock = {}
+	local okL, left, previous, total, complete = call(rawget(_G, "GetInstanceLockTimeRemaining"))
+	if okL then
+		lock.timeLeft = plainNumber(true, left)
+		lock.previousInstance = state(true, previous)
+		lock.encountersTotal = plainNumber(true, total)
+		lock.encountersComplete = plainNumber(true, complete)
+	else
+		lock.timeLeft = state(false, left) -- "missing" or "error"
+	end
+	local count = okL and Util.IsInteger(Util.Plain(total)) and math.min(total, LOCK_ROWS) or 1
+	local rows = {}
+	for i = 1, count do
+		local okE, name, _, killed = call(rawget(_G, "GetInstanceLockTimeRemainingEncounter"), i)
+		rows[#rows + 1] = i .. " " .. lockName(okE, name) .. " | killed " .. (okE and state(true, killed) or "-")
+	end
+	lock.encounters = rows
+	lock.requestRaidInfo = type(rawget(_G, "RequestRaidInfo")) == "function" and "present" or "missing"
+	out.instanceLock = lock
+end
+
 -- Everything above, plus the journal resolver's own view (Journal.Diagnostics). Each part is guarded on its own.
 function Diagnostics.Collect()
 	local out = ns.Journal.Diagnostics()
 	out.errors = out.errors or {}
 	for _, part in ipairs({ { "journal", journal }, { "finder", finder }, { "maps", maps }, { "mapSources", mapSources }, { "files", files },
 		{ "portraits", portraits }, { "fonts", fonts }, { "position", position }, { "minimap", minimap },
-		{ "namePlates", namePlates }, { "restrictions", restrictions } }) do
+		{ "namePlates", namePlates }, { "restrictions", restrictions }, { "instanceLock", instanceLock } }) do
 		local ok, err = pcall(part[2], out)
 		if not ok then
 			out.errors[#out.errors + 1] = part[1] .. ": " .. tostring(err)

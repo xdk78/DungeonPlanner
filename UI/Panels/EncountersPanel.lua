@@ -94,7 +94,8 @@ function Panel.Create(parent, ctx)
 			S.TextColor(row.title, enc.id == selectedId and "white" or "ink")
 			local meta = #enc.phases > 0 and ns.Plural(#enc.phases, L["%d phase|%d phases"]) or ""
 			if killed then
-				meta = (meta ~= "" and (meta .. " \226\128\162 ") or "") .. L["killed this run"]
+				meta = (meta ~= "" and (meta .. " \226\128\162 ") or "")
+					.. (ns.Progress.WasDeadOnJoin(ns.char.progress, dungeonID) and L["killed before you joined"] or L["killed this run"])
 			end
 			row.meta:SetText(meta)
 			-- Without a second line the name sits in the middle of the row.
@@ -331,7 +332,8 @@ function Panel.Create(parent, ctx)
 		end
 		local _, dungeonID = ns.Journal.EncounterIds(p, enc)
 		if dungeonID and ns.Progress.IsKilledInRun(ns.char.progress, dungeonID) then
-			meta[#meta + 1] = L["killed this run"]
+			meta[#meta + 1] = ns.Progress.WasDeadOnJoin(ns.char.progress, dungeonID) and L["killed before you joined"]
+				or L["killed this run"]
 		end
 		head.meta:SetText(table.concat(meta, "  \226\128\162  "))
 		doc:Place(head, 72 + 2 * SP.md)

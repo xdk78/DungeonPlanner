@@ -33,6 +33,8 @@ local ENTRIES = {
 					L["A recorded pull names the enemies you fought, read from the game's kill messages and your casts where nameplates hide their names."] },
 				{ L["You are here, roughly"],
 					L["Inside a dungeon, the map and run mode's mini map ring the area the game says you are in. The game gives no exact position there."] },
+				{ L["Joining a run in progress"],
+					L["Bosses already dead when you enter count as killed and run mode skips them; a reset starts over; recorded pulls count your group's kills."] },
 			},
 		}
 	end,

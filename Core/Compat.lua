@@ -117,6 +117,11 @@ Compat.CHECKS = {
 	{ "Kill message: experience, group", "COMBATLOG_XPGAIN_FIRSTPERSON_GROUP", "names of enemies you fought from experience messages" },
 	{ "Kill message: experience, raid", "COMBATLOG_XPGAIN_FIRSTPERSON_RAID", "names of enemies you fought from experience messages" },
 	{ "Kill message: death", "UNITDIESOTHER", "names of enemies you fought from death messages" },
+	-- Bosses already dead when you join, and instance resets (Tracker/Tracker.lua).
+	{ "Instance lock", "GetInstanceLockTimeRemaining", "bosses already dead when you join (marked killed in the run)" },
+	{ "Instance lock bosses", "GetInstanceLockTimeRemainingEncounter", "bosses already dead when you join (marked killed in the run)" },
+	{ "Raid info request", "RequestRaidInfo", "fresh lock data on entering (the game's own update is waited for)" },
+	{ "Reset message", "INSTANCE_RESET_SUCCESS", "ending a run when its instance is reset (a boss that starts again after its kill still does)" },
 	-- /dp scan's restriction probes (Data/Diagnostics.lua): recorded, nothing is built on them.
 	{ "Secrets API", "C_Secrets", "/dp scan's secrets check" },
 	{ "Addon restriction state", "C_RestrictedActions.GetAddOnRestrictionState", "/dp scan's secrets check" },
@@ -180,10 +185,18 @@ function Compat.Methods()
 		out[#out + 1] = { "Global mouse events", mouse, "closing dropdown lists on an outside click (a screen catcher instead)" }
 		out[#out + 1] = { "Keyboard pass-through", f.SetPropagateKeyboardInput ~= nil,
 			"arrow keys in dropdown lists without a search field" }
-		-- The run recorder's name sources (Tracker/Recorder.lua): the client raises on an event it does not know.
-		for _, event in ipairs({ "CHAT_MSG_COMBAT_XP_GAIN", "CHAT_MSG_COMBAT_HOSTILE_DEATH", "UNIT_SPELLCAST_SENT" }) do
-			local known = pcall(f.RegisterEvent, f, event)
-			out[#out + 1] = { "Event " .. event, known, "names of enemies you fought in recorded pulls" }
+		-- Events only some features listen to (Tracker/Recorder.lua, Tracker/Tracker.lua): the client raises on an event it
+		-- does not know.
+		local NAMES = "names of enemies you fought in recorded pulls"
+		for _, event in ipairs({ { "CHAT_MSG_COMBAT_XP_GAIN", NAMES }, { "CHAT_MSG_COMBAT_HOSTILE_DEATH", NAMES },
+			{ "UNIT_SPELLCAST_SENT", NAMES }, { "PARTY_KILL", "the count of enemies the group killed in recorded pulls" },
+			{ "UPDATE_INSTANCE_INFO", "bosses already dead when you join (the lock is read on entering and after a kill)" },
+			{ "PLAYER_LEAVING_WORLD", "a run resuming after a /reload or a logout inside its instance" },
+			{ "PLAYER_LOGOUT", "a run resuming after a logout inside its instance" },
+			{ "INSTANCE_LOCK_START", "bosses already dead when you join (read again when the game shows the lock prompt)" },
+			{ "CHAT_MSG_SYSTEM", "ending a run when its instance is reset (a boss that starts again after its kill still does)" } }) do
+			local known = pcall(f.RegisterEvent, f, event[1])
+			out[#out + 1] = { "Event " .. event[1], known, event[2] }
 		end
 		f:UnregisterAllEvents()
 		f:Hide()

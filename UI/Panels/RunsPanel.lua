@@ -330,8 +330,12 @@ function Panel.Create(parent, ctx)
 		doc:Add("title", T(s.duration))
 		-- What the client cannot tell says so instead of showing a zero.
 		local deaths = s.deaths and ns.Plural(s.deaths, L["%d death|%d deaths"]) or L["deaths not available"]
-		doc:Add("muted", table.concat({ ns.Plural(s.pulls, L["%d pull|%d pulls"]), ns.Plural(s.bosses, L["%d boss|%d bosses"]),
-			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }, " • "))
+		local facts = { ns.Plural(s.pulls, L["%d pull|%d pulls"]), ns.Plural(s.bosses, L["%d boss|%d bosses"]),
+			ns.Plural(s.wipes, L["%d wipe|%d wipes"]), deaths, string.format(L["%s in combat"], T(s.fighting)) }
+		if s.killed > 0 then
+			facts[#facts + 1] = ns.Plural(s.killed, L["%d killed|%d killed"])
+		end
+		doc:Add("muted", table.concat(facts, " • "))
 		if Recorder.WingUnknown(run, plan()) then
 			doc:Add("muted", L["Recorded without knowing the wing: it may be a run of another wing of this instance."])
 		end
@@ -363,6 +367,9 @@ function Panel.Create(parent, ctx)
 			doc:Add("heading", L["Pulls"])
 			for i, p in ipairs(run.p) do
 				local line = string.format("%d. %s  %s", i, T(p.u or 0), RunLog.PullText(p, L, ns.Plural))
+				if p.gk then
+					line = line .. " • " .. ns.Plural(p.gk, L["%d killed|%d killed"])
+				end
 				if p.z then
 					line = line .. " • " .. p.z
 				end
