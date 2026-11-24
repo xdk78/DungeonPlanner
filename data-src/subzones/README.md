@@ -21,8 +21,9 @@ By ID, never by its English name, so every client language matches:
 - No name is in the repository, here or in the addon: `tools/subzone_anchors.py` hashes them (the same FNV-1a; both
   are checked against `tests/fnv1a_vectors.json`) and keeps the names in its work folder (`names/<slug>.txt`, by key)
   for checking by eye. An ID can be looked up on [wago.tools](https://wago.tools/db2/WMOAreaTable).
-- Names are trimmed at both ends, by the tool and in game: 27 English WMO area rows of this build end in a space, and
-  a few in every other language.
+- Names are trimmed of ASCII whitespace at both ends (what Lua's `%s` matches), by the tool and in game: 27 English WMO
+  area rows of this build end in a space, and a few in every other language; no name in these tables begins or ends
+  with other whitespace (a no-break space, an ideographic space).
 - A sub-zone that reads the same as the zone (`GetZoneText()`) is the instance itself and places nothing; the
   instance's own areas are left out here. Several areas of one name: the one with an anchor on the floor shown.
 

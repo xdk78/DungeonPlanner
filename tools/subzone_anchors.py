@@ -65,6 +65,7 @@ MIN_SHARE = 0.25
 CHUNK = ma.ADT / 16.0  # yards per terrain chunk
 MARGIN = 0.02  # plan units a sample may lie outside the map and still count
 EDGE = 0.03  # plan units from the map's border within which an anchor is left out
+SPACE = " \t\n\r\v\f"  # what Lua's %s trims in game (Data/Subzones.lua); str.strip() would trim more
 
 SOURCES = [
     {"id": "wago", "name": f"wago.tools DB2 exports of WoW: Forever {BUILD} (AreaTable, WMOAreaTable, Map)",
@@ -290,7 +291,7 @@ def instance_keys(casc, tables: Tables, map_id: int):
             found.setdefault(english(tables, key), set()).add(key)
     for aid, a in sorted(tables.areas.items()):
         if a["map"] == map_id and a["parent"] != 0:
-            found.setdefault(a["name"].strip(), set()).add(("area", aid))
+            found.setdefault(a["name"].strip(SPACE), set()).add(("area", aid))
     return found
 
 
@@ -299,7 +300,7 @@ def fdr_samples(slug, plan, d, fdr, fdr_root, casc, instances, keys, log):
     fmap = ir.floor_map(fdr, fdr_root, d, plan, {}, casc, instances, lambda s: None)
     out = {}
     for room in rooms:
-        found = keys.get(room["name"].strip())
+        found = keys.get(room["name"].strip(SPACE))
         if not found:
             log(f"{slug}: room {room['name']!r} matches no area row of the instance; left out")
             continue
@@ -319,7 +320,7 @@ def fdr_samples(slug, plan, d, fdr, fdr_root, casc, instances, keys, log):
 
 
 def english(tables: Tables, key):
-    return (tables.wmo_rows[key[1]]["names"]["enUS"] if key[0] == "wmo" else tables.areas[key[1]]["name"]).strip()
+    return (tables.wmo_rows[key[1]]["names"]["enUS"] if key[0] == "wmo" else tables.areas[key[1]]["name"]).strip(SPACE)
 
 
 def anchors(per_floor, tables: Tables, map_id: int, known):
@@ -327,7 +328,7 @@ def anchors(per_floor, tables: Tables, map_id: int, known):
     heaviest) and a WMO area ID (the lowest) when rows of that kind show it; `known` adds the instance's other rows of
     the same names."""
     # The instance's own name is the zone text: the addon ignores a sub-zone that reads the same.
-    roots = {a["name"].strip() for a in tables.areas.values() if a["map"] == map_id and a["parent"] == 0}
+    roots = {a["name"].strip(SPACE) for a in tables.areas.values() if a["map"] == map_id and a["parent"] == 0}
     acc, weight_of = {}, {}
     for floor, samples in per_floor.items():
         for key, x, y, weight in samples:
@@ -371,7 +372,7 @@ def anchors(per_floor, tables: Tables, map_id: int, known):
             entry["wmo"] = wmos[0]
             entry["names"] = {}
             for loc in LOCALES[1:]:
-                spellings = sorted({tables.wmo_rows[w]["names"][loc].strip() for w in wmos
+                spellings = sorted({tables.wmo_rows[w]["names"][loc].strip(SPACE) for w in wmos
                                     if tables.wmo_rows[w]["names"].get(loc)})
                 if spellings:
                     entry["names"][loc] = spellings

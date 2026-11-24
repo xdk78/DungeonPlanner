@@ -670,13 +670,16 @@ wide (12% of the map's width, 48 to 180 units on screen), so it grows with the z
 sits over the enemy dots and under the route's stops and the plan's pins, and shows the same on run mode's mini map.
 Its tooltip says "You are here (approx.)", names the area as the game does, and says why it is approximate. The marker
 takes no mouse, so the enemy dots, route legs and coordinates under it keep theirs: the map's hover update shows its
-tooltip while the pointer is inside the ring and no route leg has the tooltip (a dot or a pin under the pointer ends
-it, as it ends the route hover).
+tooltip while the pointer is inside the ring and no route leg has the tooltip, only while the map is idle and no
+drawing tool is chosen, as the route hover (a dot or a pin under the pointer, a pan, a drag or a stroke ends it). The
+tooltip goes when the marker moves or changes area; a marker that appears under a pointer already over the map starts
+the hover update itself.
 
 It shows only while the player is inside the plan's own instance (any plan of it: the recommended one, a copy, a plan
 made inside), the area is known (a sub-zone that reads like the zone, or a secret one, places nothing) and has an
 anchor on the floor shown; otherwise it hides. The zone events (`ZONE_CHANGED`, `ZONE_CHANGED_INDOORS`,
-`ZONE_CHANGED_NEW_AREA`) are registered only while a map view is shown; where the player is is asked on them and when
+`ZONE_CHANGED_NEW_AREA`) and `PLAYER_ENTERING_WORLD` (entering an instance with the window open) are registered only
+while a map view is shown; where the player is is asked on them and when
 the view shows, not on every draw, and a change moves the marker alone. The setting "Show where you are on dungeon
 maps (approx.)" (Appearance, beside "Show map coordinates"; on by default) turns it off. The map does not switch floors
 for it. The anchors and their sources: data-src/subzones/README.md.

@@ -342,6 +342,69 @@ T.case("Subzones: the map's marker, its events only while the map shows, a zone 
 		T.ok(not view.hereTip, "a route leg's tooltip stays")
 		view.routeTip = nil
 		view:HereHover(nil)
+		-- End to end: the pointer over the marker and the map's own hover update (its OnUpdate), then leaving the map.
+		-- The mock lays out no anchors: the canvas reports where its anchor puts it (as tests/test_zoom.lua does).
+		local routes = ns.db.settings.routes.hover
+		ns.db.settings.routes.hover = false -- no route leg under the pointer takes the tooltip
+		view.canvas.GetLeft = function()
+			return view:GetLeft() + view.ox
+		end
+		view.canvas.GetTop = function()
+			return view:GetTop() - view.oy
+		end
+		local scale = view.canvas:GetEffectiveScale()
+		local function pointAt(x, y)
+			mock.SetCursor((view.canvas:GetLeft() + x) * scale, (view.canvas:GetTop() + y) * scale)
+		end
+		pointAt(at.x, at.y)
+		mock.Hover(view)
+		mock.Advance(0.1)
+		T.ok(view.hereTip and tt:IsShown(), "the map's hover update shows it")
+		mock.Leave(view)
+		T.ok(not view.hereTip and not tt:IsShown(), "leaving the map hides it")
+		-- A drawing tool: no marker tooltip, as no route hover.
+		local drawTool = view.cb.drawTool
+		view.cb.drawTool = function()
+			return "line"
+		end
+		mock.Hover(view)
+		mock.Advance(0.1)
+		T.ok(not view.hereTip, "none with a drawing tool")
+		view.cb.drawTool = drawTool
+		view.hoverAt = nil
+		mock.Advance(0.1)
+		T.ok(view.hereTip, "back without it")
+		-- A pan starting ends it.
+		view.drag = { mode = "pan", startX = 0, startY = 0, ox = view.ox, oy = view.oy, moved = false }
+		view.OnDragUpdate(view)
+		T.ok(not view.hereTip and not tt:IsShown(), "a pan hides it")
+		view.drag = { mode = "idle" }
+		mock.Leave(view)
+		-- The marker appearing under a pointer already over the map, with nothing else wanting the hover (coordinates
+		-- and route hover off): the hover update starts for it.
+		local coords = ns.db.settings.showCoordinates
+		ns.db.settings.showCoordinates = false
+		mock.subzone = ""
+		mock.FireEvent("ZONE_CHANGED")
+		pointAt(view.hereAt and view.hereAt.x or at.x, view.hereAt and view.hereAt.y or at.y)
+		mock.Hover(view)
+		T.eq(view:GetScript("OnUpdate"), nil, "no hover update for nothing")
+		mock.subzone = "Area " .. data[1].a
+		mock.FireEvent("ZONE_CHANGED")
+		pointAt(view.hereAt.x, view.hereAt.y)
+		T.ok(view:GetScript("OnUpdate") ~= nil, "started for the marker")
+		mock.Advance(0.1)
+		T.ok(view.hereTip, "its tooltip without leaving and coming back")
+		-- The marker moving to another area takes its tooltip away.
+		mock.subzone = "Area " .. data[2].a
+		mock.FireEvent("PLAYER_ENTERING_WORLD")
+		T.ok(not view.hereTip and not tt:IsShown(), "gone when the marker moves (here after a loading screen)")
+		mock.Leave(view)
+		ns.db.settings.showCoordinates = coords
+		mock.subzone = "Area " .. data[1].a
+		mock.FireEvent("ZONE_CHANGED")
+		view.canvas.GetLeft, view.canvas.GetTop = nil, nil
+		ns.db.settings.routes.hover = routes
 		tt.SetOwner, tt.IsOwned = setOwner, isOwned
 		local _, _, _, x1, y1 = view.here:GetPoint(1)
 		mock.subzone = "Area " .. data[2].a

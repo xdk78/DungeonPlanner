@@ -15,7 +15,8 @@ local _, ns = ...
 local MapHere = ns:NewModule("MapHere")
 local S, W = ns.Style, ns.Widgets
 
-MapHere.EVENTS = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA" }
+-- PLAYER_ENTERING_WORLD: entering an instance with the window open (a loading screen, not always a zone change).
+MapHere.EVENTS = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "PLAYER_ENTERING_WORLD" }
 MapHere.SPAN = 0.12 -- the marker's width as a share of the map's: about a room
 MapHere.MIN, MapHere.MAX = 48, 180 -- its width on screen, in UI units, at any zoom
 
@@ -98,6 +99,7 @@ function MapHere.Install(view)
 			self.hereWhere = ns.Subzones.Where()
 		end
 		local here = a and MapHere.Enabled() and ns.Subzones.Here(a.plan, a.floor, self.hereWhere)
+		local was = self.hereAt
 		self.hereAt = nil
 		if not here then
 			b:Hide()
@@ -117,6 +119,14 @@ function MapHere.Install(view)
 		b:SetPoint("CENTER", view.canvas, "TOPLEFT", x, y)
 		self.hereAt = { x = x, y = y, r = size / 2, name = here.name }
 		b:Show()
+		-- Moved, resized or another area: the tooltip goes, and the map's hover looks again (and starts, for a marker
+		-- that appeared under a pointer already over the map: UI/MapInput.lua Idle).
+		if not (was and was.x == x and was.y == y and was.r == size / 2 and was.name == here.name) then
+			hideTip()
+			if self.drag and self.drag.mode == "idle" and self.Idle then
+				self:Idle()
+			end
+		end
 		return true
 	end
 

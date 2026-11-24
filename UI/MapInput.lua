@@ -217,6 +217,9 @@ function MapCanvas.InstallInput(view)
 
 	function view.OnDragUpdate(self)
 		local d = self.drag
+		if self.hereTip and self.HereHover then -- a pan, a drag or a stroke ends the marker's tooltip (UI/MapHere.lua)
+			self:HereHover(nil)
+		end
 		-- A held button with a still pointer changes nothing: no layout, no redraw.
 		local px, py = GetCursorPosition()
 		if px == d.lastX and py == d.lastY then
@@ -560,10 +563,11 @@ function MapCanvas.InstallInput(view)
 			v:UpdateCoords()
 			v:RouteHoverUpdate()
 			at.jobs = v.routeJobs -- after the hover's own restyle (UI/MapRoutes.lua SetRouteHover)
-			if v.HereHover then -- UI/MapHere.lua
+			if v.HereHover then -- UI/MapHere.lua; as the route hover, only while idle and with no drawing tool
 				local cx, cy = cursorIn(v.canvas)
 				local left, top = v.canvas:GetLeft(), v.canvas:GetTop()
-				v:HereHover(left and cx - left, top and cy - top)
+				local idle = v.drag.mode == "idle" and not (v.cb.drawTool and v.cb.drawTool())
+				v:HereHover(idle and left and cx - left, top and cy - top)
 			end
 		end
 	end
