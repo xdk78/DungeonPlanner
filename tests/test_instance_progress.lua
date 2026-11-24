@@ -559,49 +559,93 @@ T.case("Reset: a boss marked by hand that starts is alive: only that mark goes, 
 		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
 		ns:Off("INSTANCE_RESET", listener)
 		T.eq(resets, 1, "that kill does mean a new copy when the boss starts again")
-		-- A mark by hand is not evidence on entering either.
-		setLock({ { "Boss A", false } })
-		Tracker.MarkNextBossKilled()
-		clock.advance(Tracker.NEW_COPY_GRACE * 3)
-		local current = enter()
-		T.ok(ns.char.progress.run == current and Progress.IsKilledInRun(ns.char.progress, 501), "the lock listing it alive changes nothing")
 	end)
 end)
 
-T.case("Lock: a boss the run has dead but the lock lists alive, on entering, means a new copy", function()
+T.case("Lock: entering again with a lock that lists a killed boss alive does not end the run", function()
 	scenario(function(_, clock)
 		setLock({})
 		local run = enter()
 		mock.Advance(20)
 		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
-		-- The lock lags right after the kill: not evidence.
+		clock.advance(Tracker.NEW_COPY_GRACE * 3)
+		-- The client's list may be cached while RequestRaidInfo is still answering: a /reload or a portal must not read
+		-- it as a reset.
 		setLock({ { "Boss A", false } })
-		T.ok(ns.char.progress.run == run)
+		T.ok(enter() == run and Progress.IsKilledInRun(ns.char.progress, 501))
+	end)
+end)
+
+T.case("Hand marks: the game's report within the dedupe window replaces the mark, and a mark survives a reload", function()
+	scenario(function(plan, clock)
+		setLock({})
 		enter()
-		T.ok(ns.char.progress.run == run and Progress.IsKilledInRun(ns.char.progress, 501), "just killed: the lock may lag")
-		-- Later, coming back: the lock lists Boss A alive and Boss B dead (the instance was reset and Boss B killed since).
-		clock.advance(Tracker.NEW_COPY_GRACE + 5)
-		setLock({ { "Boss A", false }, { "Boss B", true } })
-		local listener, told = {}, 0
-		ns:On("INSTANCE_RESET", listener, function()
-			told = told + 1
-		end)
-		local again = enter()
-		ns:Off("INSTANCE_RESET", listener)
-		T.ok(again ~= run, "a new run")
-		T.eq(told, 1)
-		T.ok(not Progress.IsKilledInRun(ns.char.progress, 501), "Boss A is alive in the new copy")
-		T.ok(Progress.WasDeadOnJoin(ns.char.progress, 502), "and Boss B is found dead there")
-		T.eq(#ns.char.progress.history, 1, "the old copy's run is kept")
-		-- A boss found dead that the lock then lists alive: the lock was of another copy.
-		setLock({ { "Boss B", false } })
-		local third = enter()
-		T.ok(third ~= again and next(third.kills) == nil, "found dead, now alive")
-		-- Secret names and flags are no evidence.
-		setLock({ { "Boss A", true } })
-		local fourth = enter()
-		setLock({ { mock.SECRET, false }, { "Boss A", mock.SECRET } })
-		T.ok(enter() == fourth and Progress.WasDeadOnJoin(ns.char.progress, 501))
+		ns.db.ui.selectedPlan = plan.id
+		Tracker.MarkNextBossKilled()
+		T.eq(Progress.KillsOf(ns.char.progress, 501), 1)
+		-- The real kill comes at once (inside the 15 s dedupe window).
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		T.ok(not Progress.MarkedByHand(ns.char.progress, 501), "no longer only a mark")
+		T.ok(Progress.IsKilledInRun(ns.char.progress, 501))
+		T.eq(Progress.KillsOf(ns.char.progress, 501), 1, "the same kill, counted once")
+		-- It is now game evidence: the boss starting again later means a new copy.
+		clock.advance(Tracker.NEW_COPY_GRACE * 3)
+		local run = ns.char.progress.run
+		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
+		T.ok(ns.char.progress.run ~= run)
+		-- A mark made by hand is still one after the saved data is read back.
+		Tracker.MarkNextBossKilled()
+		T.ok(Progress.MarkedByHand(ns.char.progress, 501))
+		local loaded = Progress.Normalize(ns.Util.DeepCopy(ns.char.progress))
+		T.ok(loaded.run.hand and loaded.run.hand[501], "kept by Normalize")
+		ns.char.progress = loaded
+		T.ok(Progress.MarkedByHand(ns.char.progress, 501))
+		mock.FireEvent("ENCOUNTER_START", 501, "Boss A", 1, 5)
+		T.ok(not Progress.IsKilledInRun(ns.char.progress, 501), "and a boss that starts still only loses it")
+		T.ok(ns.char.progress.run, "the run stays")
+		-- A saved `hand` of the wrong type is dropped.
+		loaded.run.hand = "x"
+		T.eq(Progress.Normalize(loaded).run.hand, nil)
+	end)
+end)
+
+T.case("Resume: the run is stamped while inside, so a logout or a reload inside, long after it began, still resumes it", function()
+	scenario(function(_, clock)
+		setLock({})
+		local MIN = 60
+		local run = enter()
+		-- A logout inside, 26 minutes after the last zone event inside and another 26 after that: logging in outdoors
+		-- 6 minutes later and walking back in resumes the run.
+		clock.advance(26 * MIN)
+		enter()
+		clock.advance(26 * MIN)
+		ns.EventDispatcher()("PLAYER_LOGOUT") -- our handlers only: the mock's logout also closes the saved data
+		clock.advance(6 * MIN)
+		_G.GetInstanceInfo = OUTSIDE
+		mock.FireEvent("PLAYER_ENTERING_WORLD", true, false)
+		T.ok(ns.char.progress.run == run, "kept")
+		_G.GetInstanceInfo = INSIDE
+		T.ok(enter() == run, "resumed")
+		-- Outdoor events never refresh it: 40 minutes of them leave it behind.
+		_G.GetInstanceInfo = OUTSIDE
+		mock.FireEvent("PLAYER_LEAVING_WORLD")
+		for _ = 1, 4 do
+			clock.advance(10 * MIN)
+			mock.FireEvent("ZONE_CHANGED_NEW_AREA")
+		end
+		_G.GetInstanceInfo = INSIDE
+		T.ok(enter() ~= run, "a new run after being away for long")
+		-- A reload inside after a long quiet stretch: PLAYER_LEAVING_WORLD stamps, so the run goes on.
+		local second = ns.char.progress.run
+		clock.advance(2 * 60 * MIN)
+		mock.FireEvent("PLAYER_LEAVING_WORLD")
+		T.ok(enter() == second, "the run of a long dungeon survives a reload")
+		-- And a kill is activity too.
+		clock.advance(29 * MIN)
+		mock.Advance(20)
+		mock.FireEvent("ENCOUNTER_END", 501, "Boss A", 1, 5, 1)
+		clock.advance(29 * MIN)
+		T.ok(enter() == second and Progress.IsKilledInRun(ns.char.progress, 501), "29 minutes after a kill, resumed")
 	end)
 end)
 

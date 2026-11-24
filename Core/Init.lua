@@ -412,13 +412,9 @@ local function dispatch(event, ...)
 	if not handlers then
 		return
 	end
-	-- A copy: a handler may unregister itself (or another) while the event is delivered.
-	local copy = {}
+	-- The list as it is now: UnregisterEvent makes a new one, so a handler may unregister while the event is delivered.
 	for i = 1, #handlers do
-		copy[i] = handlers[i]
-	end
-	for i = 1, #copy do
-		ns.SafeCall(copy[i], event, ...)
+		ns.SafeCall(handlers[i], event, ...)
 	end
 end
 
@@ -452,16 +448,21 @@ function ns:UnregisterEvent(event, handler)
 	if not handlers then
 		return
 	end
-	for i = #handlers, 1, -1 do
-		if handlers[i] == handler then
-			table.remove(handlers, i)
+	local kept = {}
+	for i = 1, #handlers do
+		if handlers[i] ~= handler then
+			kept[#kept + 1] = handlers[i]
 		end
 	end
-	if #handlers == 0 then
+	if #kept == #handlers then
+		return
+	elseif #kept == 0 then
 		eventHandlers[event] = nil
 		if self.addon then
 			pcall(self.addon.UnregisterEvent, self.addon, event)
 		end
+	else
+		eventHandlers[event] = kept
 	end
 end
 

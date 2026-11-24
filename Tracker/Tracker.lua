@@ -39,7 +39,9 @@ function Tracker.RecordKill(encounterID, name, difficultyID, source)
 		return false
 	end
 	local clock = ns.Clock()
-	if lastKill[encounterID] and clock - lastKill[encounterID] < DEDUPE then
+	-- The game's own report replaces a hand mark made moments before; it is not a repeat of it.
+	local replacesMark = source ~= "manual" and Progress.MarkedByHand(store(), encounterID)
+	if lastKill[encounterID] and clock - lastKill[encounterID] < DEDUPE and not replacesMark then
 		return false
 	end
 	lastKill[encounterID] = clock
@@ -70,23 +72,16 @@ end
 
 local syncSources
 
-local wasInside = false
-
+-- The run's last-seen time is stamped while the player is inside (every zone event here, every kill, and as they leave
+-- the world: PLAYER_LEAVING_WORLD, PLAYER_LOGOUT), never by an outdoor event: a login outdoors would else make an old run
+-- fresh again.
 local function onZone()
 	local current = ns.Instances.Current()
-	local now = ns.Now()
 	if current.inInstance and current.instanceID then
-		local _, isNew = Progress.EnterInstance(store(), tostring(current.instanceID), current.name, current.difficultyID, now)
+		local _, isNew = Progress.EnterInstance(store(), tostring(current.instanceID), current.name, current.difficultyID, ns.Now())
 		if isNew then
 			ns:Fire("PROGRESS_CHANGED")
 		end
-		wasInside = true
-	else
-		-- Stamped when the player leaves, not by every outdoor event: a login would else make an old run fresh again.
-		if wasInside then
-			Progress.LeaveInstance(store(), now)
-		end
-		wasInside = false
 	end
 	syncSources()
 end
@@ -149,7 +144,7 @@ end
 local lastRequest
 
 -- Is the boss dead in this run by something the game said (a kill it reported, or the lock), and not just marked by
--- hand? A kill the player made only just now does not count: the lock and the events can lag.
+-- hand? A kill the player made only just now does not count: a late or repeated event is not a new copy.
 local function provenDead(encounterID)
 	local at = Progress.KilledAt(store(), encounterID)
 	return at ~= nil and not Progress.MarkedByHand(store(), encounterID)
@@ -157,10 +152,8 @@ local function provenDead(encounterID)
 end
 
 -- Mark the bosses the lock says are dead in this run. `request` first asks the game for fresh lock data (its answer,
--- UPDATE_INSTANCE_INFO, reads again without asking). `entering`: the player just came in; a boss this run has dead that
--- the lock lists alive means the instance is another copy than the run's (it was reset since), so the run ends first.
--- Returns the encounter IDs newly marked.
-function Tracker.ReadDeadBosses(request, entering)
+-- UPDATE_INSTANCE_INFO, reads again without asking). Returns the encounter IDs newly marked.
+function Tracker.ReadDeadBosses(request)
 	local run = enabled() and store().run
 	local current = run and ns.Instances.Current()
 	if not (current and current.inInstance and tostring(current.instanceID) == run.key) then
@@ -172,17 +165,8 @@ function Tracker.ReadDeadBosses(request, entering)
 		pcall(requestRaidInfo)
 	end
 	local entries = Tracker.ReadLock()
-	local bosses = entries and hereBosses(current) or {}
-	if entering then
-		for _, id in ipairs(Progress.AliveByName(entries or {}, bosses)) do
-			if provenDead(id) then
-				Tracker.NewCopy(run.name, run.key)
-				break
-			end
-		end
-	end
 	local found = {}
-	for _, id in ipairs(entries and Progress.DeadByName(entries, bosses) or {}) do
+	for _, id in ipairs(entries and Progress.DeadByName(entries, hereBosses(current)) or {}) do
 		if Progress.MarkDeadOnJoin(store(), id, ns.Now()) then
 			found[#found + 1] = id
 		end
@@ -256,6 +240,12 @@ function Tracker.OnEncounterStart(encounterID)
 	return true
 end
 
+local function leaving()
+	if enabled() then
+		Progress.LeaveInstance(store(), ns.Now())
+	end
+end
+
 -- A reset message can come while a run exists that the player was in lately; the lock's updates and encounters
 -- starting matter only inside the run's instance. Outside both, nothing is registered.
 local GROUPS = {
@@ -275,7 +265,7 @@ local GROUPS = {
 		Tracker.ReadDeadBosses(false)
 	end }, { "ENCOUNTER_START", function(_, encounterID)
 		Tracker.OnEncounterStart(encounterID)
-	end } } },
+	end }, { "PLAYER_LEAVING_WORLD", leaving }, { "PLAYER_LOGOUT", leaving } } },
 }
 
 local function listen(group, want)
@@ -342,18 +332,14 @@ function Tracker.Init()
 	ns:RegisterEvent("BOSS_KILL", function(_, encounterID, encounterName)
 		Tracker.RecordKill(encounterID, encounterName, nil, "BOSS_KILL")
 	end)
-	local function zone(entering)
+	local function zone()
 		if enabled() then
 			onZone()
-			Tracker.ReadDeadBosses(true, entering)
+			Tracker.ReadDeadBosses(true)
 		end
 	end
-	ns:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-		zone(true)
-	end)
-	ns:RegisterEvent("ZONE_CHANGED_NEW_AREA", function()
-		zone(false)
-	end)
+	ns:RegisterEvent("PLAYER_ENTERING_WORLD", zone)
+	ns:RegisterEvent("ZONE_CHANGED_NEW_AREA", zone)
 	Tracker.sources.dbm = hookDBM() and true or false
 	Tracker.sources.bigwigs = hookBigWigs() and true or false
 end

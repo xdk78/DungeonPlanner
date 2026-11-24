@@ -73,14 +73,18 @@ function Progress.RecordKill(store, encounterID, difficultyID, name, now, byHand
 		rec = { name = "", count = 0, first = now }
 		store.kills[key] = rec
 	end
-	rec.count = rec.count + 1
+	local run = store.run
+	-- The game's report of a kill the player marked by hand is that kill, not another.
+	if byHand or not (run and run.hand and run.hand[encounterID]) then
+		rec.count = rec.count + 1
+	end
 	rec.last = now
 	if type(name) == "string" and name ~= "" then
 		rec.name = Util.CleanText(name, 64) or rec.name
 	end
-	local run = store.run
 	if run then
 		run.kills[encounterID] = now
+		run.seen = now
 		if run.pre then
 			run.pre[encounterID] = nil -- the player killed it after all
 		end
@@ -166,11 +170,11 @@ function Progress.NameOf(store, encounterID)
 	return name
 end
 
--- Which bosses the instance's lock lists with the given state. entries = { { name = plain string or nil, killed =
--- boolean or nil } }, bosses = { { id = encounterID, names = { ... } } }. The lock gives no ID, so a boss matches by
--- its plain name, and only when that name belongs to exactly one boss: a secret, missing, unknown or shared name marks
--- nothing, and so does a flag that is not plainly true or false.
-local function matchByName(entries, bosses, killed)
+-- Which bosses the instance's lock lists as dead. entries = { { name = plain string or nil, killed = boolean or nil } },
+-- bosses = { { id = encounterID, names = { ... } } }. The lock gives no ID, so a boss matches by its plain name, and
+-- only when that name belongs to exactly one boss: a secret, missing, unknown or shared name marks nothing, and so does
+-- a flag that is not plainly true.
+function Progress.DeadByName(entries, bosses)
 	local byName = {} -- normalized name -> encounterID, or false when two bosses have it
 	for _, boss in ipairs(bosses) do
 		for _, name in ipairs(boss.names) do
@@ -186,21 +190,13 @@ local function matchByName(entries, bosses, killed)
 	end
 	local out, seen = {}, {}
 	for _, e in ipairs(entries) do
-		local id = e.killed == killed and type(e.name) == "string" and byName[Match.Norm(e.name)] or nil
+		local id = e.killed == true and type(e.name) == "string" and byName[Match.Norm(e.name)] or nil
 		if id and not seen[id] then
 			seen[id] = true
 			out[#out + 1] = id
 		end
 	end
 	return out
-end
-
-function Progress.DeadByName(entries, bosses)
-	return matchByName(entries, bosses, true)
-end
-
-function Progress.AliveByName(entries, bosses)
-	return matchByName(entries, bosses, false)
 end
 
 -- Entering an instance: resume the current run if it is the same instance and recent, otherwise archive it and start

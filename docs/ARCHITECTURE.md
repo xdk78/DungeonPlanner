@@ -352,15 +352,17 @@ feed it, none of them from the combat log:
   of that name ends. `ENCOUNTER_START` of a boss the run has dead ends it too, unless the kill is the player's own and
   under `NEW_COPY_GRACE` seconds old (a boss found dead ends it at once; a wiped boss is not dead, so a retry never
   does). Only what the game said counts as evidence: a kill marked by hand (`run.hand`) that starts is alive and loses
-  just its mark. On entering, a boss the run has dead that the lock lists alive is the same evidence.
+  just its mark. The lock never ends a run: its list may be cached or the prompt's copy's.
   `Tracker.NewCopy` archives the run, starts a new one inside an instance and fires `INSTANCE_RESET`: the recorder
   finishes its run of that instance (`Recorder.OnInstanceReset`) and run mode goes back to the first step
   (`RunMode.OnInstanceReset`; a follower keeps the leader's step). Group sync has no message for it: a leader's step
   going back to the start is an ordinary step report.
 - **What listens when.** `CHAT_MSG_SYSTEM` only while a run exists that the player was in during the last
-  `Progress.RESUME` seconds (the first message that finds it older unregisters it; leaving stamps the run, a login does
-  not), `UPDATE_INSTANCE_INFO`, `INSTANCE_LOCK_START` and `ENCOUNTER_START` only inside that run's instance (the
-  tracker's `syncSources`, after every zone event and run change); nothing otherwise.
+  `Progress.RESUME` seconds (the first message that finds it older unregisters it), `UPDATE_INSTANCE_INFO`,
+  `INSTANCE_LOCK_START`, `ENCOUNTER_START`, `PLAYER_LEAVING_WORLD` and `PLAYER_LOGOUT` only inside that run's instance
+  (the tracker's `syncSources`, after every zone event and run change); nothing otherwise. The run's last-seen time is
+  stamped by every zone event inside, every kill and the last two events, never by an outdoor event, so a login
+  outdoors does not make an old run fresh, and a reload or logout inside a long dungeon still resumes it.
 
 ### Runs against the plan (Model/RunCompare.lua)
 
