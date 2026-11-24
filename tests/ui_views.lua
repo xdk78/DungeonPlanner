@@ -927,6 +927,46 @@ V.views = {
 			ns.ReyesMaps.Reset()
 		end,
 	},
+	-- The same with the group's rooms (UI/MapGroup.lua): two members in one area, one alone, one in the player's area
+	-- on the edge of the marker, each a dot in their class colour with their initial.
+	{
+		name = "map-group-rooms",
+		setup = function()
+			mock.RemoveProviders()
+			ns.Providers.Reset()
+			ns.Providers.ResetCaches()
+			ns.ReyesMaps.Reset()
+			local data = ns.SubzoneData.ruinsoflordaeron
+			V.savedHere = { info = _G.GetInstanceInfo, zone = rawget(_G, "GetZoneText"), sub = mock.subzone }
+			_G.GetInstanceInfo = function()
+				return "Ruins of Lordaeron", "party", 1, "Normal", 5, 0, false, data.iid
+			end
+			_G.GetZoneText = function()
+				return "Ruins of Lordaeron"
+			end
+			mock.subzone = "Area " .. data[1].a
+			ns.Subzones.Reset()
+			party(true)
+			mock.FireEvent("GROUP_ROSTER_UPDATE")
+			local key = ns.Subzones.Key
+			ns.GroupRooms.state = ns.Rooms.New()
+			ns.GroupRooms.state.members = { Aldra = { iid = data.iid, area = key(data[4]), at = 0 },
+				Bram = { iid = data.iid, area = key(data[4]), at = 0 }, Corin = { iid = data.iid, area = key(data[1]), at = 0 },
+				Dessa = { iid = data.iid, area = key(data[2]), at = 0 } }
+			mock.FireEvent("ZONE_CHANGED")
+			openPlan("ruins-of-lordaeron", "map")
+		end,
+		window = window,
+		teardown = function()
+			_G.GetInstanceInfo, _G.GetZoneText, mock.subzone = V.savedHere.info, V.savedHere.zone, V.savedHere.sub
+			party(false)
+			mock.FireEvent("GROUP_ROSTER_UPDATE")
+			ns.GroupRooms.state = ns.Rooms.New()
+			mock.FireEvent("ZONE_CHANGED")
+			V.installProviders()
+			ns.ReyesMaps.Reset()
+		end,
+	},
 	-- One map family: a classic dungeon on its old tiles (Ragefire Chasm: every kind of step in the side panel, a label
 	-- at the map's edge), an outdoor minimap floor (Ruins of Lordaeron) and a building floor (Blackmaw Hold, floor 2).
 	{

@@ -10,6 +10,9 @@
 -- (UI/MapInput.lua) shows its tooltip when the pointer is inside it and nothing else is hovered. Where the player is
 -- is asked on the zone events and when the view shows, not on every draw; the events are registered only while the
 -- view is shown, and a zone change moves the marker alone. No OnUpdate of its own.
+--
+-- The group's dots (UI/MapGroup.lua) are installed and placed with the marker and share its hover: the members of the
+-- player's own room sit on the marker's edge.
 
 local _, ns = ...
 local MapHere = ns:NewModule("MapHere")
@@ -92,8 +95,28 @@ function MapHere.Install(view)
 		return self:PlaceHere()
 	end
 
-	-- Show or hide the marker for where the game said the player is; true when shown.
+	-- The marker or the group's dots moved, appeared or went: the tooltip goes, and the map's hover looks again (and
+	-- starts, for something that appeared under a pointer already over the map: UI/MapInput.lua Idle).
+	function view:HereMoved()
+		hideTip()
+		if self.drag and self.drag.mode == "idle" and self.Idle then
+			self:Idle()
+		end
+	end
+
+	local placeMarker
+
+	-- Show or hide the marker for where the game said the player is, then the group's dots (UI/MapGroup.lua, which sit
+	-- around the marker in the player's own room); true when the marker shows.
 	function view:PlaceHere()
+		local shown = placeMarker(self)
+		if self.PlaceGroup then
+			self:PlaceGroup()
+		end
+		return shown
+	end
+
+	function placeMarker(self)
 		local a = self.hereArgs
 		if a and not self.hereWhere then
 			self.hereWhere = ns.Subzones.Where()
@@ -119,30 +142,30 @@ function MapHere.Install(view)
 		b:SetPoint("CENTER", view.canvas, "TOPLEFT", x, y)
 		self.hereAt = { x = x, y = y, r = size / 2, name = here.name }
 		b:Show()
-		-- Moved, resized or another area: the tooltip goes, and the map's hover looks again (and starts, for a marker
-		-- that appeared under a pointer already over the map: UI/MapInput.lua Idle).
 		if not (was and was.x == x and was.y == y and was.r == size / 2 and was.name == here.name) then
-			hideTip()
-			if self.drag and self.drag.mode == "idle" and self.Idle then
-				self:Idle()
-			end
+			self:HereMoved()
 		end
 		return true
 	end
 
 	-- From the map's hover update: the pointer at canvas offset (x, y) (y up, as the marker is placed), or nil when it
-	-- left the map. The tooltip shows while the pointer is inside the marker and no route leg has the tooltip.
+	-- left the map. The tooltip shows while the pointer is over a group member's dot (it names everyone in that room)
+	-- or inside the marker, and no route leg has the tooltip.
 	function view:HereHover(x, y)
 		if self.routeTip then
 			self.hereTip = nil
 			return
 		end
 		local at = self.hereAt
-		if not (at and x and (x - at.x) ^ 2 + (y - at.y) ^ 2 <= at.r ^ 2) then
+		local hit = x and self.GroupAt and self:GroupAt(x, y)
+		if not hit and at and x and (x - at.x) ^ 2 + (y - at.y) ^ 2 <= at.r ^ 2 then
+			hit = at
+		end
+		if not hit then
 			hideTip()
 			return
 		end
-		if self.hereTip == at then
+		if self.hereTip == hit then
 			return
 		end
 		local tt = W.Tip()
@@ -150,11 +173,24 @@ function MapHere.Install(view)
 			return
 		end
 		tt:SetOwner(self, "ANCHOR_CURSOR")
-		tt:SetText(L["You are here (approx.)"], 1, 0.82, 0)
-		tt:AddLine(at.name, 1, 1, 1, true)
-		tt:AddLine(L["Inside dungeons the game tells addons only the name of the area you are in, so this marks the middle of that area."],
-			1, 1, 1, true)
+		if hit ~= at then
+			ns.MapGroup.Tooltip(tt, hit)
+		else
+			tt:SetText(L["You are here (approx.)"], 1, 0.82, 0)
+			tt:AddLine(at.name, 1, 1, 1, true)
+			local with = self.GroupWithMe and self:GroupWithMe()
+			if with then
+				tt:AddLine(string.format(L["With you: %s"], with), 1, 1, 1, true)
+			end
+			tt:AddLine(L["Inside dungeons the game tells addons only the name of the area you are in, so this marks the middle of that area."],
+				1, 1, 1, true)
+		end
 		W.TipShow(tt)
-		self.hereTip = at
+		self.hereTip = hit
+	end
+
+	-- UI/MapGroup.lua may be new to a running client (docs/COMPATIBILITY.md section 7): no group dots until a restart.
+	if ns.MapGroup then
+		ns.MapGroup.Install(view)
 	end
 end

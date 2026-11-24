@@ -572,7 +572,7 @@ function MapCanvas.InstallInput(view)
 		end
 	end
 	local function wantsHover(v)
-		return v.cb.showCoordinates() or hoverEnabled() or v.hereAt ~= nil
+		return v.cb.showCoordinates() or hoverEnabled() or v.hereAt ~= nil or v.groupAt ~= nil
 	end
 	-- Back to idle after a press, a drag, a stroke or a zoom: the coordinate readout keeps following a pointer that is
 	-- still over the map itself (view.pointerIn: false after the map's OnLeave, which a pin under the pointer causes too,

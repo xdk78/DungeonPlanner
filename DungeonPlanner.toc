@@ -64,6 +64,7 @@ Share\Codec.lua
 Share\Transfer.lua
 Share\Acks.lua
 Share\Sync.lua
+Share\Rooms.lua
 Share\SendStats.lua
 
 Config\Defaults.lua
@@ -262,6 +263,7 @@ UI\Window.lua
 UI\Popup.lua
 UI\MapSpawns.lua
 UI\MapHere.lua
+UI\MapGroup.lua
 UI\MapPins.lua
 UI\MapRoutes.lua
 UI\MapDraw.lua
@@ -305,6 +307,7 @@ UI\Panels\PrepPanel.lua
 UI\RunMode.lua
 UI\RunLines.lua
 UI\RunSync.lua
+UI\GroupRooms.lua
 UI\NotesFrame.lua
 UI\ReportFrame.lua
 UI\NewsFrame.lua

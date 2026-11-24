@@ -12,6 +12,7 @@ Defaults.settings = {
 	gamepad = "auto", -- the gamepad interface style: "auto" (detected) | "on" | "off" (Core/Compat.lua Gamepad)
 	showCoordinates = true,
 	mapHere = true, -- the map's "You are here (approx.)" marker inside dungeons (UI/MapHere.lua)
+	mapGroup = true, -- the group members' rooms on dungeon maps, from their own addon (UI/MapGroup.lua)
 	confirmDelete = true,
 	colorblind = false, -- colour-blind friendly colours for pulls, routes, drawings and roles (UI/Style.lua)
 	gameIcon = false, -- the minimap button and the window show the game's map icon instead of our logo (UI/Art.lua)
@@ -48,6 +49,7 @@ Defaults.settings = {
 		acceptFrom = "groupGuild", -- "nobody" | "group" | "groupGuild" | "anyone"
 		announce = true, -- send a hello to the group so others see who runs Dungeon Planner
 		replyHello = true,
+		rooms = true, -- tell the group which room of a dungeon you are in (UI/GroupRooms.lua)
 	},
 }
 

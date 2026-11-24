@@ -233,6 +233,9 @@ Compat.FILES = {
 	{ "Data/SubzoneData.lua", "SubzoneData", "the map's You are here marker" },
 	{ "Data/Subzones.lua", "Subzones", "the map's You are here marker" },
 	{ "UI/MapHere.lua", "MapHere", "the map's You are here marker" },
+	{ "Share/Rooms.lua", "Rooms", "the group's rooms on dungeon maps" },
+	{ "UI/GroupRooms.lua", "GroupRooms", "the group's rooms on dungeon maps" },
+	{ "UI/MapGroup.lua", "MapGroup", "the group's rooms on dungeon maps" },
 }
 
 -- The gamepad interface style. With it on, registering a slash command sets off blocked protected calls that end in a

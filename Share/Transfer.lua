@@ -17,6 +17,8 @@
 --   F^<proto>^<session>^<status>                           a member's follow status, whispered to the leader
 --   Q^<proto>                                              who leads the run? (to the group)
 --   W^<proto>^<session>                                    a member asks the leader for the plan (whispered)
+--   L^<proto>^<instance>^<area>^<ask>                      the room a member is in (Share/Rooms.lua); instance 0 and
+--                                                          area "-": nowhere to show; ask 1: send yours
 -- AceComm splits long messages into parts and ChatThrottleLib paces them; we only bound sizes and check sums.
 -- See docs/SHARING-FORMAT.md.
 
@@ -87,6 +89,8 @@ function Transfer.Encode(msg)
 		return "Q" .. SEP .. msg.proto
 	elseif t == "want" then
 		return "W" .. SEP .. msg.proto .. SEP .. msg.session
+	elseif t == "room" then
+		return table.concat({ "L", msg.proto, msg.iid, msg.area or "-", msg.ask and 1 or 0 }, SEP)
 	end
 	error("unknown message type " .. tostring(t))
 end
@@ -135,6 +139,23 @@ local function parseSync(tag, parts)
 	end
 	return { type = "run", proto = proto, session = parts[3], seq = seq, plan = plan, version = version, step = step,
 		pull = pull }
+end
+
+-- A member's room (Share/Rooms.lua): an instance map ID (0: nowhere) and an area key of Data/Subzones.lua ("a" or "w"
+-- and an ID; "-": none), never a name.
+local function parseRoom(parts)
+	local Rooms = ns.Rooms
+	local proto, iid, ask = intIn(parts[2], 0, 999), intIn(parts[3], 0, Rooms.MAX_IID), intIn(parts[5], 0, 1)
+	local area = parts[4]
+	if #parts ~= 5 or not (proto and iid and ask) then
+		return nil
+	end
+	if area == "-" then
+		area = nil
+	elseif iid == 0 or #area > Rooms.MAX_KEY or not area:match("^[aw][1-9]%d*$") then
+		return nil
+	end
+	return { type = "room", proto = proto, iid = iid, area = area, ask = ask == 1 }
 end
 
 -- Returns a message table or nil for anything malformed. Never raises.
@@ -200,6 +221,8 @@ function Transfer.Parse(text)
 		return { type = "ack", tid = parts[2], plan = plan, version = version }
 	elseif tag == "R" or tag == "F" or tag == "Q" or tag == "W" then
 		return parseSync(tag, parts)
+	elseif tag == "L" then
+		return parseRoom(parts)
 	elseif tag == "A" or tag == "D" or tag == "X" then
 		if #parts ~= 2 or not validTid(parts[2]) then
 			return nil

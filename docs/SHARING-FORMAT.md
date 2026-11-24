@@ -251,6 +251,7 @@ Fields are joined with `^`.
 | `F^<proto>^<session>^<status>` | A member's follow status, whispered to the leader (group sync) |
 | `Q^<proto>` | Who leads the run? (to the group; group sync) |
 | `W^<proto>^<session>` | A member asks the leader for the plan it leads (whispered; group sync) |
+| `L^<proto>^<instance>^<area>^<ask>` | The area of a dungeon a member is in (to the group; rooms of the group, below) |
 
 Flow: the sender offers (to a player by whisper, or to the group/guild channel). Each receiver whose setting allows the
 sender (default: group and guild) gets a prompt, out of combat; Escape or 90 s without an answer declines. A whispered
@@ -349,3 +350,34 @@ following, free, mismatch), `UI/RunSync.lua` the glue.
   their ack is for an older version, else as no answer.
 - **Older versions:** Dungeon Planner 0.1.0 parses `R`, `F`, `Q` and `W` as nothing (unknown tags) and drops them, so
   the protocol number stays 2. Its players show as "no answer".
+
+### Rooms of the group
+
+Inside a dungeon the client gives no positions, but it names the area each player stands in, and
+`Data/Subzones.lua` finds that area's key by ID (data-src/subzones). Each member running Dungeon Planner tells the group
+its key, and the map draws the others in their areas (docs/UI.md, "Your group, room by room"). `Share/Rooms.lua` is the
+state machine (`Rooms.Step(state, event, now)` -> effects), `UI/GroupRooms.lua` the glue.
+
+| Message | Fields |
+|---|---|
+| `L^<proto>^<instance>^<area>^<ask>` | `instance`: the instance map ID (`GetInstanceInfo`'s eighth value, 1 to 2^31-1), or 0 for nowhere to show (the member left the instance or turned sharing off); `area`: the area's key, `a<AreaTable ID>` or `w<WMOAreaTable ID>` (at most 12 characters), or `-` for none (nowhere, or a spot inside that the data does not name); `ask`: 1 asks the others to send theirs, else 0. IDs only, never a name, so every client language reads the same key. To the group |
+
+- **Sending:** only in a group, only inside an instance whose areas the data covers, and only with "Share my room with
+  my group" on, except for two messages: when the player leaves such an instance or turns the setting off after
+  telling the group a room, one `L` with instance 0 says so (the others drop the dot at once instead of waiting for it
+  to go stale); and on entering with the setting off, one `L` with instance 0 and `ask` 1 asks for the others' rooms
+  without telling one. A room goes out at once when the last message left at least 3 s ago; changes within those
+  seconds go out as one message, the newest, when they end, and a change back to what the group already has sends
+  nothing (a corridor between two rooms). The first message after entering the instance, joining a group inside it or
+  a reload asks (`ask` 1); a member who hears a question answers with its room through the same 3-second limit, so a
+  raid's questions coalesce. Inside, the same room is said again every 60 s while nothing changes. Through the outbox
+  at ChatThrottleLib's NORMAL priority with one key: during a lockdown a newer room replaces the one still waiting, so
+  the fight's end sends one current room. Outside a group nothing is read from the game but whether there is one.
+- **Receiving:** only on the group channel (`PARTY`, `RAID`, `INSTANCE_CHAT`), only from a member of the receiver's own
+  roster (as group sync), only with the same protocol number. Every field is range-checked in `Transfer.Parse`. The
+  receiver keeps `{ instance, area, time }` per sender, at most 40 (the oldest goes first); an entry goes when its
+  member sends instance 0, leaves the group (a roster change), or is not heard from for 5 minutes (the refresh comes
+  every minute; a lockdown holds it for the fight). Leaving the group drops every entry. The per-sender flood limit
+  applies; this message adds at most one every 3 s.
+- **Older versions:** Dungeon Planner 0.2.2 and older parse `L` as nothing (an unknown tag) and drop it, so the
+  protocol number stays 2. Their players are not drawn.

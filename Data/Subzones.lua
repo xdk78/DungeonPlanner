@@ -177,10 +177,46 @@ end
 function Subzones.Here(plan, floor, where)
 	where = where or Subzones.Where()
 	for _, a in ipairs(Subzones.Find(Subzones.For(plan), where)) do
-		for _, p in ipairs(a.at) do
-			if p[1] == floor then
-				return { name = where.subzone, x = p[2], y = p[3] }
-			end
+		local x, y = Subzones.Anchor(a, floor)
+		if x then
+			return { name = where.subzone, x = x, y = y }
+		end
+	end
+	return nil
+end
+
+-- Where area `a` lies on floor `floor` of its plan: x, y in plan space, or nil.
+function Subzones.Anchor(a, floor)
+	for _, p in ipairs(a.at) do
+		if p[1] == floor then
+			return p[2], p[3]
+		end
+	end
+	return nil
+end
+
+-- An area's key, as data-src/subzones names it and group members send it (Share/Rooms.lua): "a<AreaTable ID>" or
+-- "w<WMOAreaTable ID>". IDs only, so it reads the same in every client language.
+function Subzones.Key(a)
+	return a.a and ("a" .. a.a) or ("w" .. a.w)
+end
+
+-- The area of `data` with key `key`, or nil.
+function Subzones.Area(data, key)
+	for _, a in ipairs(data) do
+		if Subzones.Key(a) == key then
+			return a
+		end
+	end
+	return nil
+end
+
+-- The data of the instance with this instance map ID (GetInstanceInfo's eighth value), or nil: a player with no plan
+-- of it open still has an area to tell the group. Asked on a zone change in a group, over a few dozen instances.
+function Subzones.ForInstance(iid)
+	for _, data in pairs(iid and type(ns.SubzoneData) == "table" and ns.SubzoneData or {}) do
+		if type(data) == "table" and data.iid == iid then
+			return data
 		end
 	end
 	return nil
