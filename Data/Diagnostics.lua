@@ -5,7 +5,8 @@
 -- was opened (and 3 seconds later); what the Group Finder lists (names, levels, instance map IDs, background
 -- pictures); which of the plans' map IDs exist and have art; which maps carry a plan's instance or floor name; which
 -- old dungeon map tiles and loading screens the client has (Data/GameFiles.lua); the portrait APIs; the UI font; and
--- whether the player's position and a targeted mob can be read where the scan runs (inside a dungeon: spawn recording).
+-- whether the player's position and a targeted mob can be read where the scan runs (inside a dungeon: spawn recording);
+-- and what the client says is restricted (C_Secrets, the addon restriction state, the distance to a party member).
 
 local _, ns = ...
 local Diagnostics = ns:NewModule("Diagnostics")
@@ -253,6 +254,14 @@ local function state(ok, x)
 	return tostring(x)
 end
 
+-- state, but a number unrounded (an enum value).
+local function plainNumber(ok, x)
+	if ok and type(x) == "number" and not Util.IsSecret(x) then
+		return tostring(x)
+	end
+	return state(ok, x)
+end
+
 local function position(out)
 	local mapAPI = rawget(_G, "C_Map") or {}
 	local okI, inside, kind = call(IsInInstance)
@@ -365,13 +374,53 @@ local function namePlates(out)
 	out.namePlates = n
 end
 
+-- What the client says is restricted (docs/COMPATIBILITY.md section 10). Read only; nothing is built on it yet.
+local function restrictions(out)
+	local r = {}
+	local secrets = rawget(_G, "C_Secrets")
+	if type(secrets) == "table" then
+		local names = {}
+		for name, fn in pairs(secrets) do
+			if type(name) == "string" and type(fn) == "function" then
+				names[#names + 1] = name
+			end
+		end
+		table.sort(names)
+		r.cSecrets = #names > 0 and table.concat(names, ", ") or "no functions"
+	else
+		r.cSecrets = "missing"
+	end
+	local actions, enum = rawget(_G, "C_RestrictedActions"), rawget(_G, "Enum")
+	local get = type(actions) == "table" and actions.GetAddOnRestrictionState or nil
+	local types = type(enum) == "table" and type(enum.AddOnRestrictionType) == "table" and enum.AddOnRestrictionType or nil
+	if type(get) ~= "function" then
+		r.restrictionState = "missing"
+	elseif types then
+		local rows = {}
+		for _, name in ipairs(Util.SortedKeys(types)) do
+			rows[#rows + 1] = name .. " " .. plainNumber(call(get, types[name]))
+		end
+		r.restrictionState = rows
+	else
+		r.restrictionState = "no Enum.AddOnRestrictionType: " .. plainNumber(call(get))
+	end
+	local okE, exists = call(UnitExists, "party1")
+	if okE and Util.Plain(exists) then
+		local okD, distance, checked = call(rawget(_G, "UnitDistanceSquared"), "party1")
+		r.partyDistance = state(okD, distance) .. (okD and (" | checked " .. state(true, checked)) or "")
+	else
+		r.partyDistance = "no party1"
+	end
+	out.restrictions = r
+end
+
 -- Everything above, plus the journal resolver's own view (Journal.Diagnostics). Each part is guarded on its own.
 function Diagnostics.Collect()
 	local out = ns.Journal.Diagnostics()
 	out.errors = out.errors or {}
 	for _, part in ipairs({ { "journal", journal }, { "finder", finder }, { "maps", maps }, { "mapSources", mapSources }, { "files", files },
 		{ "portraits", portraits }, { "fonts", fonts }, { "position", position }, { "minimap", minimap },
-		{ "namePlates", namePlates } }) do
+		{ "namePlates", namePlates }, { "restrictions", restrictions } }) do
 		local ok, err = pcall(part[2], out)
 		if not ok then
 			out.errors[#out.errors + 1] = part[1] .. ": " .. tostring(err)

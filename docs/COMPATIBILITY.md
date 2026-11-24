@@ -112,6 +112,8 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `CreateMaskTexture` / `AddMaskTexture` | Verified | NeedRoll `UI/Theme.lua`, ForeverDungeonJournal `LFGButton.lua` | Round portraits and icons; square without |
 | `Texture:SetRotation` | Inferred, guarded | — | Route direction arrows, the Share section's Advanced caret; without it arrows point up and the caret down |
 | `C_NamePlate.GetNamePlates`, `UnitAffectingCombat`, `UnitIsDead`, `UnitIsDeadOrGhost`, `UnitLevel`, `UnitClassification`, `UnitCanAttack` | Inferred, guarded (each value through `Util.Plain`) | Retail 12.1.5 API; hostility, level and classification **checked in game** inside Hall of Thanes | The run recorder's enemy counts (`Tracker/Recorder.lua`); without nameplates pulls are only timed |
+| `CHAT_MSG_COMBAT_XP_GAIN`, `CHAT_MSG_COMBAT_HOSTILE_DEATH`, and the format strings `COMBATLOG_XPGAIN_FIRSTPERSON` (and `_GROUP`, `_RAID`) and `UNITDIESOTHER` | Inferred, guarded: Retail 12.1.5 events and global strings, not seen in a Forever-only addon; whether the client hands these messages over plain inside Forever's instances is unverified | Retail 12.1.5 API; the strings are in every client language's GlobalStrings | Names of enemies fought in recorded pulls (`Tracker/Recorder.lua`): the patterns are built from the client's own strings (`%s`, `%d` and positional `%1$s` read, other conversions refused), so every language works; each missing string drops only its own pattern. The events are registered only while a run of the instance the player is in is recorded, and unregistered when it ends. A message that is not plain is dropped. `/dp debug` reports the events and strings |
+| `UNIT_SPELLCAST_SENT` | Inferred, guarded: Retail 12.1.5 event (unit, target name, cast GUID, spell ID), not seen in a Forever-only addon; whether the target name is plain inside Forever's instances is unverified | Retail 12.1.5 API | The target name of the player's own cast names an enemy in the pull in progress, only when it is the same plain name as `UnitName("target")` and that target is hostile (a cast can name a mouseover, a focus or an ally, and an enemy may be fought without being killed). Same registration rule as the kill messages; a secret or empty name is dropped. `/dp debug` reports the event |
 | `GetMinimapZoneText`, `GetSubZoneText` | Inferred, guarded | Retail 12.1.5 API | Sub-zone names of recorded pulls |
 | `GetPlayerFacing` | Inferred, guarded | Retail 12.1.5 API | The live Getting there map's arrow, outdoors (`/dp scan` records it too); the arrow points up without it |
 | `PLAYER_LEAVING_WORLD` | Inferred | Retail event | The last outdoor spot before a loading screen, for learned entrances |
@@ -533,8 +535,8 @@ chevron pointed up in game, whatever the path's direction (2026-11-16 screenshot
 ## 10. What the client allows inside instances
 
 Checked in game on build 70938 (Hall of Thanes, instance 3065, in a party, a hostile elite targeted) and from the
-Retail 12.x rules Forever inherits. `/dp scan` records each row where it runs (`position`, `minimap` and `namePlates`
-in the diagnostics).
+Retail 12.x rules Forever inherits. `/dp scan` records each row where it runs (`position`, `minimap`, `namePlates` and
+`restrictions` in the diagnostics).
 
 | Reading | Inside an instance | Evidence | Used for |
 |---|---|---|---|
@@ -542,7 +544,11 @@ in the diagnostics).
 | The player's floor (`GetBestMapForUnit`, its `C_Map.GetMapGroupID` and the group members' `relativeHeightIndex`, `GetInstanceInfo`'s 8th value, `IsIndoors`) | **Unverified.** Our 2026-11-15 scan in Hall of Thanes found no best map; another addon's shipped recorder expects a uiMap inside Forever's new dungeons and logs the map group and height index as they change | `/dp scan` records all of them inside any instance (`position`: `bestMap`, `mapGroup`, `mapGroupMembers`, `instanceMapID`, `indoors`) | When a map comes back: the map section switches to the player's floor (on a change of floor only, inside an instance; `Floors.PlayerFloor`, `UI/Panels/FloorBar.lua`), and run mode's mini map says which floor the player is on. Until a scan shows one, nothing switches |
 | World position (`UnitPosition`) | x and y nil, only the instance ID | In game | Nothing |
 | Creature GUID and name (`UnitGUID`, `UnitName` on an enemy) | secret | In game; Fellowship Ledger's check | Names are stored only when plain |
+| Names of enemies fought: kill messages in chat (`CHAT_MSG_COMBAT_XP_GAIN`, `CHAT_MSG_COMBAT_HOSTILE_DEATH`) and the target name of the player's casts (`UNIT_SPELLCAST_SENT`) | **Unverified** whether the text is plain inside Forever's instances (the enemy's own name is secret there) | Section 3; the recorder keeps only what passes `Util.Plain` | Names beside a pull's counts (`kn`, next to the nameplates' `nm`); the saved run format is unchanged, the field is optional |
 | Hostility, level, classification (`UnitCanAttack`, `UnitLevel`, `UnitClassification`) | readable | In game | The run recorder's pull make-up |
+| The `C_Secrets` table (which functions it has) | **Unverified** | `/dp scan` lists the function names (`restrictions.cSecrets`) | Nothing yet |
+| `C_RestrictedActions.GetAddOnRestrictionState` for each `Enum.AddOnRestrictionType` | **Unverified** | `/dp scan` records the state per type, or the answer without a type when the enum is missing (`restrictions.restrictionState`) | Nothing yet |
+| `UnitDistanceSquared("party1")` | **Unverified**: plain, secret or nil | `/dp scan` records the distance and whether it was checked, in a group (`restrictions.partyDistance`) | Nothing yet |
 | Nameplates (`C_NamePlate.GetNamePlates`) | the plates of nearby enemies, each with its unit token (inferred) | Retail API; `/dp scan` records the count and which fields read | The run recorder's enemy counts, every 0.5 s during combat only |
 | Combat start and end, encounters (`PLAYER_REGEN_*`, `ENCOUNTER_END`, `BOSS_KILL`) | available | Verified (section 3) | Pull segments, boss kills, wipes |
 | Facing (`GetPlayerFacing`) | nil in instances on Retail since 7.1 (inferred for Forever) | `/dp scan` records it | Nothing inside; outdoors it turns the live Getting there map's arrow |

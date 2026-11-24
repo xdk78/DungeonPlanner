@@ -233,8 +233,11 @@ function Perf.Stop()
 	if not running then
 		return false
 	end
+	-- An event whose last handler left during the probe stays unregistered.
 	for _, event in ipairs(original.events or {}) do
-		pcall(ns.addon.RegisterEvent, ns.addon, event, original.dispatch)
+		if ns.EventTable()[event] then
+			pcall(ns.addon.RegisterEvent, ns.addon, event, original.dispatch)
+		end
 	end
 	ns.Fire, ns.SafeCall = original.fire, original.safeCall
 	original = {}
