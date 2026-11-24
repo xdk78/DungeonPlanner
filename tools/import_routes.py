@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["numpy", "pillow", "scipy", "scikit-image"]
+# dependencies = ["numpy==2.5.5", "pillow==13.0.0", "scipy==1.18.1", "scikit-image==0.26.0"]
 # ///
 """Import the routes of Forever Dungeon Routes (MIT) into the recommended plans' route files.
 

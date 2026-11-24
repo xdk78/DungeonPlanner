@@ -60,12 +60,11 @@
       ]
     },
     "file-length": {
-      "_overrides": "Addon code stays under 800 lines (AGENTS.md, \"Keep files under ~800 lines\"). Translation tables keep one string per line; development tools never ship; Data/SubzoneData.lua is generated data (tools/gen_subzones.lua), one name per line. Tests are off (disable above); the vendored harness and libraries are excluded. The first matching glob wins.",
+      "_overrides": "Addon code stays under 800 lines (AGENTS.md, \"Keep files under ~800 lines\"). Translation tables keep one string per line; development tools never ship. Tests are off (disable above); the vendored harness and libraries are excluded. The first matching glob wins.",
       "maxLines": 800,
       "overrides": {
         "Locales/**": 1500,
-        "tools/**": 1200,
-        "Data/SubzoneData.lua": 4000
+        "tools/**": 1200
       }
     },
     "test-shell-find": { "tests": ["tests/**"] },

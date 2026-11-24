@@ -13,11 +13,17 @@ By ID, never by its English name, so every client language matches:
 - `area`: an AreaTable ID. The addon asks the client for its name in the player's language
   (`C_Map.GetAreaInfo(id)`) and compares it with the sub-zone text.
 - `wmo`: a WMOAreaTable ID, for a room that the client names in its WMO area table only. No game function returns that
-  name for an ID, so `names` carries the names the client's own table gives it in each client language (`enUS` is
+  name for an ID, so `names` here holds the names the client's own table gives it in each client language (`enUS` is
   `name`); several spellings where rows of one room are spelled differently in a language. An area that rows of both
   kinds show has both IDs.
+- The names stay in this folder, which does not ship. `Data/SubzoneData.lua` holds a 32-bit FNV-1a hash of each
+  trimmed spelling (`Subzones.Hash` in `Data/Subzones.lua`, the same function in the generator and in game), in the
+  order of `ns.SubzoneLocales`; the addon hashes the trimmed sub-zone text and compares. The generator fails when two
+  areas of one instance share a hash in one language and their anchors differ.
+- Names are trimmed at both ends, here and in game: 27 English WMO area rows of this build end in a space
+  ("Engineering Labs ", "The Domicile "), and a few in every other language.
 - A sub-zone that reads the same as the zone (`GetZoneText()`) is the instance itself and places nothing; the
-  instance's own areas are left out here.
+  instance's own areas are left out here. Several areas of one name: the one with an anchor on the floor shown.
 
 ## Files
 
@@ -47,9 +53,9 @@ and the tool keeps them.
 
 | id | Source | Licence | Used for |
 |---|---|---|---|
-| `wago` | [wago.tools](https://wago.tools/db2) DB2 exports of the WoW: Forever client, build 1.60.1.71037: `AreaTable`, `WMOAreaTable` (every client language), `Map` | facts from the game's tables | Area IDs, WMO area IDs, which WMO and map they belong to, the WMO areas' names |
+| `wago` | [wago.tools](https://wago.tools/db2) DB2 exports of the WoW: Forever client, build 1.60.1.71037: `AreaTable`, `WMOAreaTable` (every client language), `Map` | facts from the game's tables | Area IDs, WMO area IDs, which WMO and map they belong to, the WMO areas' names (hashed for the addon) |
 | `game` | The client's own files on a local install (WDT, terrain tiles, WMOs), read by `tools/subzone_anchors.py` | facts measured by us | Anchors of Forever's new dungeons: each terrain chunk carries its AreaTable ID; each WMO part, placed on the map, has a WMO area row. The floors' plan space comes from `tools/minimap_art.py`'s plan-to-world transform (data-src/minimaps.json) |
-| `fdr` | [Forever Dungeon Routes](https://github.com/Checkov23/ForeverDungeonRoutes) `Data/Rooms.lua` | MIT ([copy](../../docs/licenses/ForeverDungeonRoutes-LICENSE.txt)) | Anchors of classic dungeons and raids: its room boxes, which its author generated from the same client tables (WMO area names, WMO part boxes, floors from `UiMapAssignment`), on the old dungeon maps the plans use. Its English room names are matched to the IDs of the instance's own rows |
+| `fdr` | [Forever Dungeon Routes](https://github.com/Checkov23/ForeverDungeonRoutes) `Data/Rooms.lua` | MIT ([copy](../../docs/licenses/ForeverDungeonRoutes-LICENSE.txt)) | Anchors of classic dungeons and raids: its room boxes on the old dungeon maps the plans use. The file's own header says it was generated from the WoW: Forever client (1.60.1.70245): WMO area names, WMO part boxes placed by the map's `MODF`, floors from `UiMapAssignment`. Its English room names are matched to the IDs of the instance's own rows |
 
 Nothing comes from AllTheThings, NeedRoll, GPL addons or unlicensed sources.
 
@@ -60,7 +66,7 @@ Nothing comes from AllTheThings, NeedRoll, GPL addons or unlicensed sources.
   Shaper's Terrace) were checked by eye against the tool's preview pictures, where the anchors sit by the map's own
   painted area names.
 - An anchor within 0.03 of the map's edge is not written: such an area is mostly the mountains around the map.
-- `lua tools/gen_subzones.lua --check` (CI) fails on invalid JSON and on an out-of-date `Data/SubzoneData.lua`.
+- `lua tools/gen_subzones.lua --check` (CI) fails on invalid JSON, on two areas of one instance whose names hash alike in a language with other anchors, and on an out-of-date `Data/SubzoneData.lua` (its hashes included). `tests/test_subzones.lua` checks the hash against FNV-1a test vectors, with and without the game's `bit` library, and every shipped hash against the names here.
 
 ## Coverage
 

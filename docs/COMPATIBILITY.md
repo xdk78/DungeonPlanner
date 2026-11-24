@@ -126,7 +126,8 @@ addon. **Every inferred API is guarded and reported by `/dp debug`.**
 | `C_Map.GetPlayerMapPosition` + `GetBestMapForUnit` | Verified, guarded; **outdoors only** (section 10) | GearQuestForever, ForeverFishing, TomTom | Getting there: distance and direction to the entrance; inside an instance the card says where distances show |
 | `C_Map.SetUserWaypoint`, `C_Map.CanSetUserWaypointOnMap`, `UiMapPoint.CreateFromCoordinates`, `C_SuperTrack.SetSuperTrackedUserWaypoint` | Verified, guarded | Attune `Attune.lua`, GearQuestForever `Map.lua`, AllTheThings | The game's own map pin on the entrance (the baseline of "Navigate") |
 | `C_Map.OpenWorldMap` | Verified, guarded | GearQuestForever `Map.lua`, Polestar `Core/Compat.lua` | "Show on world map". The global `OpenWorldMap` is never called (below) |
-| `C_Map.GetAreaInfo` | Verified, guarded | WhatsTraining, OpenMap | Zone names of Questie's quest givers; the "You are here (approx.)" marker's areas, kept by AreaTable ID and named in the client's language at runtime (`Data/Subzones.lua`). Without it only the rooms the WMO area table names still match (their names ship, data-src/subzones/README.md) |
+| `bit.bxor` (the BitOp library) | Inferred (WoW has shipped `bit` since 2.x), looked up when used | — | The 32-bit FNV-1a hash of a sub-zone name (`Subzones.Hash`) that the "You are here (approx.)" marker compares with the bundled hashes of WMO room names; without it the same hash from plain arithmetic (the generator and the offline tests take that path) |
+| `C_Map.GetAreaInfo` | Verified, guarded | WhatsTraining, OpenMap | Zone names of Questie's quest givers; the "You are here (approx.)" marker's areas, kept by AreaTable ID and named in the client's language at runtime (`Data/Subzones.lua`). Without it only the rooms the WMO area table names still match (by a hash of their names, data-src/subzones/README.md) |
 
 ### Navigation and the world map (rules from Polestar's shipped code)
 

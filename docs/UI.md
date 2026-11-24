@@ -668,15 +668,18 @@ an area, not a point (`UI/MapHere.lua`, `Data/Subzones.lua`): a soft disc in war
 `UI/Style.lua`) with a ring and a fainter inner ring, centred on the middle of that area's ground and about a room
 wide (12% of the map's width, 48 to 180 units on screen), so it grows with the zoom like the room it stands for. It
 sits over the enemy dots and under the route's stops and the plan's pins, and shows the same on run mode's mini map.
-Its tooltip says "You are here (approx.)", names the area as the game does, and says why it is approximate. The pointer
-over it shows the tooltip; presses go through to the map and the pins.
+Its tooltip says "You are here (approx.)", names the area as the game does, and says why it is approximate. The marker
+takes no mouse, so the enemy dots, route legs and coordinates under it keep theirs: the map's hover update shows its
+tooltip while the pointer is inside the ring and no route leg has the tooltip (a dot or a pin under the pointer ends
+it, as it ends the route hover).
 
 It shows only while the player is inside the plan's own instance (any plan of it: the recommended one, a copy, a plan
 made inside), the area is known (a sub-zone that reads like the zone, or a secret one, places nothing) and has an
 anchor on the floor shown; otherwise it hides. The zone events (`ZONE_CHANGED`, `ZONE_CHANGED_INDOORS`,
-`ZONE_CHANGED_NEW_AREA`) are registered only while a map view is shown, and a change moves the marker alone. The
-setting "Show where you are on dungeon maps (approx.)" (Appearance, beside "Show map coordinates"; on by default) turns it off. The map does not
-switch floors for it. The anchors and their sources: data-src/subzones/README.md.
+`ZONE_CHANGED_NEW_AREA`) are registered only while a map view is shown; where the player is is asked on them and when
+the view shows, not on every draw, and a change moves the marker alone. The setting "Show where you are on dungeon
+maps (approx.)" (Appearance, beside "Show map coordinates"; on by default) turns it off. The map does not switch floors
+for it. The anchors and their sources: data-src/subzones/README.md.
 
 ### The "Forever" tag
 
@@ -763,8 +766,9 @@ plan changes, in near-linear time (about 0.03 s for a plan at every list limit).
   Deadmines), the marker on the map and run mode's mini map in the area the game names (walk from room to room: it
   moves at once, and hides between named areas and on another floor); the sub-zone text the client gives there is plain
   (not secret) and matches in a German or French client (an area named by the area table and a WMO room such as
-  Anvilmar's Rest); its look on the parchment and on the minimap pictures; the tooltip; clicks, drags and the drawing
-  tools going through it to the map and the pins; the setting turning it off; `/dp debug` listing "Area names", "Zone
+  Anvilmar's Rest; `bit.bxor` present, so the room hashes match); its look on the parchment and on the minimap
+  pictures; its tooltip with the pointer in the ring, and enemy dot tooltips, route-leg hover and the coordinates still
+  working inside it; clicks, drags and the drawing tools going through it to the map and the pins; the setting turning it off; `/dp debug` listing "Area names", "Zone
   text" and the three new files after an update without a restart.
 - Prep: quest states after accepting, abandoning and turning in a quest; quest titles in Polish and Russian clients;
   the key icons and names (a key on the key ring, in the bank); the group lines in a party and a raid; the Getting

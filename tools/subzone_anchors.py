@@ -11,7 +11,8 @@ mark roughly where the player is. Two kinds of area name the client can show (do
   * an AreaTable area (terrain chunks carry its ID; a WMO area row may point to it): kept by its AreaTable ID, its name
     read at runtime with C_Map.GetAreaInfo, so it is right in every client language;
   * a WMO area with a name of its own (WMOAreaTable, no AreaTable row): kept by its WMOAreaTable ID with its names in
-    the client's languages, since no game function gives that name for an ID.
+    the client's languages, since no game function gives that name for an ID; the addon gets only their hashes
+    (tools/gen_subzones.lua), never the names.
 
 IDs and names come from the client's tables as wago.tools exports them for one WoW: Forever build (BUILD; downloaded
 once into the work folder). Positions:
@@ -81,14 +82,30 @@ SOURCES = [
 # The client's tables.
 
 
+COLUMNS = {
+    "AreaTable": {"ID", "AreaName_lang", "ContinentID", "ParentAreaID"},
+    "Map": {"ID", "WdtFileDataID", "AreaTableID"},
+    "WMOAreaTable": {"ID", "AreaName_lang", "WMOID", "NameSetID", "WMOGroupID", "AreaTableID"},
+}
+
+
 def table(work: Path, name: str, locale: str = "enUS"):
+    """A table's rows, downloaded once into the work folder. A download whose header lacks the columns used (an error
+    page, a changed export) is refused and not kept."""
     path = work / "tables" / BUILD / f"{name}_{locale}.csv"
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         url = WAGO.format(table=name, build=BUILD, locale=locale)
         req = urllib.request.Request(url, headers={"User-Agent": "subzone-anchors"})
+        part = path.with_suffix(".part")
         with urllib.request.urlopen(req, timeout=120) as r:
-            path.write_bytes(r.read())
+            part.write_bytes(r.read())
+        with part.open(encoding="utf-8", newline="") as f:
+            header = set(next(csv.reader(f), []))
+        if not COLUMNS[name] <= header:
+            part.unlink()
+            raise SystemExit(f"{url}: not the {name} table (columns missing: {sorted(COLUMNS[name] - header)})")
+        part.replace(path)
     with path.open(encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
 
@@ -410,7 +427,7 @@ def main(argv=None):
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 when a JSON file would change")
     args = ap.parse_args(argv)
     work = args.work.resolve()
-    if REPO in work.parents:
+    if work == REPO or REPO in work.parents:
         raise SystemExit("keep --work outside the repository")
     fdr_root = (args.fdr or args.game / "Interface" / "AddOns").resolve()
     only = {s for s in args.only.split(",") if s}
@@ -429,13 +446,24 @@ def main(argv=None):
     game_slugs = {e["slug"] for e in minimaps if e.get("planSpace", "provider") == "provider"}
     by_key = {ir.norm_key(instances, d["name"]): d for d in fdr["dungeons"]}
     changed = []
+
+    def drop(path: Path, why: str):
+        """A file whose plan has no anchors any more is stale: removed (listed by --check)."""
+        if path.exists():
+            log(f"{path.name}: stale ({why})")
+            changed.append(path.name)
+            if not args.check:
+                path.unlink()
+
     for plan in plans:
         slug = plan["id"]
         if only and slug not in only:
             continue
+        path = OUT_DIR / f"{slug}.json"
         research = json.loads((REPO / "data-src" / "dungeons" / f"{slug}.json").read_text(encoding="utf-8"))
         map_id = research.get("instanceMapID")
         if not map_id or map_id not in tables.maps:
+            drop(path, f"its instance map {map_id} is not in the Map table")
             continue
         known = instance_keys(casc, tables, map_id)
         if slug in game_slugs:
@@ -446,18 +474,14 @@ def main(argv=None):
             key = ir.norm_key(instances, plan["instance"]["name"])
             d = by_key.get(key) or next((v for k, v in by_key.items() if len(k) >= 8 and key.startswith(k)), None)
             if not d or not (fdr.get("rooms") or {}).get(d["key"]):
+                drop(path, "Forever Dungeon Routes has no rooms for it")
                 continue
             per_floor = fdr_samples(slug, plan, d, fdr, fdr_root, casc, instances, known, log)
             src = "fdr"
         areas = anchors(per_floor, tables, map_id, known)
         areas = [a for a in areas if a["at"]]
-        path = OUT_DIR / f"{slug}.json"
         if not areas:
-            log(f"{slug}: no named area on the plan's floors")
-            if path.exists():
-                changed.append(path.name)
-                if not args.check:
-                    path.unlink()
+            drop(path, "no named area on the plan's floors")
             continue
         preview(args.game, casc, fdj, instances, plan, per_floor, areas, tables, work)
         old = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
@@ -479,6 +503,11 @@ def main(argv=None):
             if not args.check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8", newline="\n")
+    if not only:
+        slugs = {p["id"] for p in plans}
+        for path in sorted(OUT_DIR.glob("*.json")):
+            if path.stem not in slugs:
+                drop(path, "no recommended plan of that name")
     work.mkdir(parents=True, exist_ok=True)
     (work / "subzone_anchors.log").write_text("\n".join(lines) + "\n", encoding="utf-8")
     if args.check and changed:

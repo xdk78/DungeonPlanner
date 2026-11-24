@@ -3,8 +3,8 @@
 --   lua tools/gen_subzones.lua            writes Data/SubzoneData.lua
 --   lua tools/gen_subzones.lua --check    writes nothing; exits 1 when the JSON is invalid or the file differs
 --   lua tools/gen_subzones.lua --report   also prints the coverage
--- Plain Lua 5.1, run from the repository root; deterministic output. Only IDs, positions and the client's own names of
--- WMO areas (which no game function returns by ID) ship.
+-- Plain Lua 5.1, run from the repository root; deterministic output. Only IDs, positions and hashes of the names of
+-- WMO areas (which no game function returns by ID) ship, never a name.
 
 local IN_DIR = "data-src/subzones"
 local PLANS_DIR = "data-src/dungeons"
@@ -15,11 +15,29 @@ local spawns = dofile("tools/gen_spawns.lua")
 local decode = spawns.DecodeJSON
 local listFiles = dofile("tools/gen_bosses.lua").ListFiles
 
+-- The addon's own hash (Data/Subzones.lua), so the shipped hashes are what the game's text hashes to in game.
+local Subzones
+do
+	local ns = { Util = {} }
+	function ns:NewModule(name)
+		self[name] = {}
+		return self[name]
+	end
+	assert(loadfile("Data/Subzones.lua"))("DungeonPlanner", ns)
+	Subzones = ns.Subzones
+end
+
 local M = {}
-M.LOCALES = { enUS = true, deDE = true, esES = true, esMX = true, frFR = true, itIT = true, koKR = true, ptBR = true,
-	ruRU = true, zhCN = true, zhTW = true }
+-- The client languages (GetLocale; enGB reports enUS): Blizzard lists none for WoW: Forever, and the client carries
+-- all of these (docs/COMPATIBILITY.md section 8).
+M.LOCALE_ORDER = { "enUS", "deDE", "esES", "esMX", "frFR", "itIT", "koKR", "ptBR", "ruRU", "zhCN", "zhTW" }
+M.LOCALES = {}
+for _, loc in ipairs(M.LOCALE_ORDER) do
+	M.LOCALES[loc] = true
+end
 M.POSITIONS = { game = true, fdr = true }
 M.MAX_NAME, M.MAX_WHY, M.MAX_SPELLINGS, M.MAX_AREAS = 128, 160, 4, 64 -- name: bytes (UTF-8)
+M.Hash = Subzones.Hash
 
 local function readFile(path)
 	local f = io.open(path, "rb")
@@ -152,8 +170,32 @@ function M.Validate(doc, file, research, floors)
 	return errs
 end
 
+-- The hashes of an area's names, one per client language in M.LOCALE_ORDER: a number, a list of numbers (spellings
+-- that differ between rows of the area), or false (no name in that language). Hashed with the addon's own function.
+local function hashes(a)
+	local out = {}
+	for i, loc in ipairs(M.LOCALE_ORDER) do
+		local list = loc == "enUS" and { a.name } or (a.names or {})[loc] or {}
+		local seen, h = {}, {}
+		for _, name in ipairs(list) do
+			local v = Subzones.Hash(name)
+			if not seen[v] then
+				seen[v] = true
+				h[#h + 1] = v
+			end
+		end
+		table.sort(h)
+		if #h == 0 then
+			out[i] = false
+		else
+			out[i] = #h == 1 and h[1] or h
+		end
+	end
+	return out
+end
+
 -- The anchors that ship for one file: the areas, less the excluded ones, with the overrides applied. Each
--- { name, area, wmo, names, at = { { floor, x, y } } }, sorted by name.
+-- { name, area, wmo, hashes (WMO areas), at = { { floor, x, y } } }, sorted by name.
 function M.Anchors(doc)
 	local excluded = {}
 	for _, e in ipairs(doc.exclude or {}) do
@@ -179,7 +221,7 @@ function M.Anchors(doc)
 				return p[1] < q[1]
 			end)
 			if #at > 0 then
-				out[#out + 1] = { name = a.name, area = a.area, wmo = a.wmo, names = a.names, at = at }
+				out[#out + 1] = { name = a.name, area = a.area, wmo = a.wmo, hashes = a.wmo and hashes(a) or nil, at = at }
 			end
 		end
 	end
@@ -189,15 +231,55 @@ function M.Anchors(doc)
 	return out
 end
 
--- Rendering --------------------------------------------------------------------------------------------------------------
-
-local function q(s)
-	return (string.format("%q", s):gsub("\\\n", "\\n"))
+local function anchorsKey(a)
+	local parts = {}
+	for i, p in ipairs(a.at) do
+		parts[i] = table.concat(p, ",")
+	end
+	return table.concat(parts, ";")
 end
+
+-- Two areas of one instance whose names hash alike in a language, where their anchors differ: the addon could not tell
+-- which one the player is in. Returns a list of errors.
+function M.Collisions(anchors, file)
+	local errs = {}
+	for i, loc in ipairs(M.LOCALE_ORDER) do
+		local owner = {}
+		for _, a in ipairs(anchors) do
+			local h = a.hashes and a.hashes[i]
+			for _, v in ipairs(type(h) == "table" and h or { h or nil }) do
+				local other = owner[v]
+				if other and other ~= a and anchorsKey(other) ~= anchorsKey(a) then
+					errs[#errs + 1] = string.format("%s: %s and %s share a name hash in %s", file, other.name, a.name, loc)
+				end
+				owner[v] = owner[v] or a
+			end
+		end
+	end
+	return errs
+end
+
+-- Rendering --------------------------------------------------------------------------------------------------------------
 
 local function num(v)
 	local s = string.format("%.4f", v):gsub("0+$", ""):gsub("%.$", "")
 	return s
+end
+
+-- Values joined with ", " and wrapped under the 160-column lint limit, continuation lines at `indent`.
+local function wrap(values, indent)
+	local lines, cur = {}, ""
+	for i, v in ipairs(values) do
+		local piece = v .. (i < #values and "," or "")
+		if cur ~= "" and #indent + #cur + #piece + 1 > 120 then
+			lines[#lines + 1] = cur
+			cur = piece
+		else
+			cur = cur == "" and piece or cur .. " " .. piece
+		end
+	end
+	lines[#lines + 1] = cur
+	return table.concat(lines, "\n" .. indent)
 end
 
 local function renderArea(a)
@@ -207,28 +289,20 @@ local function renderArea(a)
 	end
 	if a.wmo then
 		parts[#parts + 1] = "w = " .. a.wmo
-		local locs = { "enUS" }
-		for loc in pairs(a.names or {}) do
-			locs[#locs + 1] = loc
-		end
-		table.sort(locs)
-		local n = {}
-		for _, loc in ipairs(locs) do
-			local list = loc == "enUS" and { a.name } or a.names[loc]
-			local quoted = {}
-			for i, s in ipairs(list) do
-				quoted[i] = q(s)
-			end
-			n[#n + 1] = loc .. " = { " .. table.concat(quoted, ", ") .. " }"
-		end
-		parts[#parts + 1] = "n = {\n\t\t\t" .. table.concat(n, ",\n\t\t\t") .. ",\n\t\t}"
 	end
-	local at = {}
 	for i, p in ipairs(a.at) do
-		at[i] = "{ " .. p[1] .. ", " .. num(p[2]) .. ", " .. num(p[3]) .. " }"
+		parts[#parts + 1] = (i == 1 and "at = { " or "") .. "{ " .. p[1] .. ", " .. num(p[2]) .. ", " .. num(p[3]) .. " }"
+			.. (i == #a.at and " }" or "")
 	end
-	parts[#parts + 1] = "at = { " .. table.concat(at, ", ") .. " }"
-	return "\t\t{ " .. table.concat(parts, ", ") .. " }, -- " .. a.name
+	local line = "\t\t{ " .. wrap(parts, "\t\t\t")
+	if not a.hashes then
+		return line .. " },"
+	end
+	local h = {}
+	for i, v in ipairs(a.hashes) do
+		h[i] = type(v) == "table" and "{ " .. table.concat(v, ", ") .. " }" or tostring(v)
+	end
+	return line .. ",\n\t\t\th = { " .. wrap(h, "\t\t\t\t") .. " } },"
 end
 
 function M.Render(entries)
@@ -236,16 +310,20 @@ function M.Render(entries)
 		"-- GENERATED by tools/gen_subzones.lua from data-src/subzones/*.json. Do not edit by hand: change the JSON and run",
 		"-- `lua tools/gen_subzones.lua`. Sources and coverage: data-src/subzones/README.md, docs/DATA-SOURCES.md.",
 		"-- Where each named area of a dungeon lies on its recommended plan's floors, for the map's \"You are here (approx.)\"",
-		"-- marker (Data/Subzones.lua). Every anchor is approximate: the middle of the area's ground.",
+		"-- marker (Data/Subzones.lua). Every anchor is approximate: the middle of the area's ground. IDs and names from the",
+		"-- client's own tables (wago.tools exports); anchors from the client's own files (\"the game's files\") or from",
+		"-- Forever Dungeon Routes' room boxes (MIT, Copyright (c) 2026 Checkov23, docs/licenses/ForeverDungeonRoutes-LICENSE.txt).",
 		"--   [instance key] = { iid = instance map ID (GetInstanceInfo's eighth value),",
-		"--     { a = AreaTable ID (its name from C_Map.GetAreaInfo), w = WMOAreaTable ID, n = that area's names by client",
-		"--       language (no game function names it by ID), at = { { plan floor, x, y }, ... } }, ... }",
+		"--     { a = AreaTable ID (its name from C_Map.GetAreaInfo), w = WMOAreaTable ID, at = { { plan floor, x, y }, ... },",
+		"--       h = a WMO area's name hashes (Subzones.Hash) in the order of ns.SubzoneLocales: one, several, or false } }",
 		"",
 		"local _, ns = ...",
+		"ns.SubzoneLocales = { \"" .. table.concat(M.LOCALE_ORDER, "\", \"") .. "\" }",
 		"ns.SubzoneData = {",
 	}
+	local from = { game = "the game's files", fdr = "Forever Dungeon Routes (MIT)" }
 	for _, e in ipairs(entries) do
-		out[#out + 1] = "\t" .. e.key .. " = { iid = " .. e.iid .. ","
+		out[#out + 1] = "\t" .. e.key .. " = { iid = " .. e.iid .. ", -- anchors: " .. from[e.position]
 		for _, a in ipairs(e.anchors) do
 			out[#out + 1] = renderArea(a)
 		end
@@ -277,9 +355,12 @@ local function main(args)
 				errors[#errors + 1] = e
 			end
 			local anchors = #errs == 0 and M.Anchors(doc) or {}
+			for _, e in ipairs(M.Collisions(anchors, file)) do
+				errors[#errors + 1] = e
+			end
 			if #anchors > 0 then
 				entries[#entries + 1] = { key = spawns.InstanceKey(research.name), iid = doc.instanceMapID, slug = doc.slug,
-					anchors = anchors }
+					position = doc.position, anchors = anchors }
 			end
 		end
 	end

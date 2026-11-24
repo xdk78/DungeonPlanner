@@ -76,6 +76,7 @@ local function client(o)
 		_G.GetInstanceInfo, _G.GetZoneText, _G.C_Map.GetAreaInfo = saved.GetInstanceInfo, saved.GetZoneText, saved.GetAreaInfo
 		mock.subzone, mock.locale = saved.subzone, saved.locale
 		Subzones.Reset()
+		mock.FireEvent("ZONE_CHANGED") -- map views shown now ask again where the player is
 	end
 end
 
@@ -116,13 +117,113 @@ T.case("Subzones: a WMO area matches the names the data carries for the client's
 	local back = client({ iid = 3065, zone = "Die Halle der Thanen", sub = "Anvilmars Rast", loc = "deDE" })
 	local ok, err = pcall(function()
 		T.eq(Subzones.Here(hall, 1).x, rest.at[1][2], "German")
+		mock.subzone = "  Anvilmars Rast "
+		T.ok(Subzones.Here(hall, 1), "trimmed, as the generator trims")
 		mock.subzone = "Anvilmar's Rest"
 		T.eq(Subzones.Here(hall, 1), nil, "English text on a German client")
 		mock.locale = "enGB"
+		Subzones.Reset()
 		T.ok(Subzones.Here(hall, 1), "a British client reads the English names")
 		mock.locale = "xxXX"
+		Subzones.Reset()
 		T.eq(Subzones.Here(hall, 1), nil, "a language the data has no names for")
 	end)
+	back()
+	T.ok(ok, tostring(err))
+end)
+
+-- XOR of two values below 2^32, without a bit library: the `bit.bxor` the game has, for the test of that path.
+local function xor32(a, b)
+	local out, place = 0, 1
+	for _ = 1, 32 do
+		local x, y = a % 2, b % 2
+		if x ~= y then
+			out = out + place
+		end
+		a, b, place = (a - x) / 2, (b - y) / 2, place * 2
+	end
+	return out
+end
+
+T.case("Subzones: the name hash is 32-bit FNV-1a, with the game's bit library and without", function()
+	local vectors = { [""] = 0x811c9dc5, a = 0xe40c292c, foobar = 0xbf9cf968 }
+	local saved = rawget(_G, "bit")
+	local ok, err = pcall(function()
+		for _, withBit in ipairs({ false, true }) do
+			-- The game's BitOp answers signed 32-bit values; the hash must come out the same.
+			_G.bit = withBit and { bxor = function(a, b)
+				local v = xor32(a % 4294967296, b % 4294967296)
+				return v >= 2147483648 and v - 4294967296 or v
+			end } or nil
+			for text, want in pairs(vectors) do
+				T.eq(Subzones.Hash(text), want, (withBit and "bit: " or "plain: ") .. text)
+			end
+			-- UTF-8 bytes as they are: a German name with an umlaut.
+			local h = Subzones.Hash("Königsgasse")
+			T.ok(h >= 0 and h < 4294967296 and h == math.floor(h), "a 32-bit value")
+		end
+		_G.bit = nil
+		local plain = Subzones.Hash("Königsgasse")
+		_G.bit = { bxor = function(a, b)
+			return xor32(a % 4294967296, b)
+		end }
+		T.eq(Subzones.Hash("Königsgasse"), plain, "both paths agree")
+	end)
+	_G.bit = saved
+	T.ok(ok, tostring(err))
+end)
+
+T.case("Subzones: the shipped data holds hashes of the client's names, never a name", function()
+	local f = assert(io.open("Data/SubzoneData.lua", "rb"))
+	local text = f:read("*a")
+	f:close()
+	local code = text:gsub("%-%-[^\n]*", "")
+	local strings = {}
+	for s in code:gmatch('"([^"]*)"') do
+		strings[#strings + 1] = s
+	end
+	T.eq(#strings, #ns.SubzoneLocales, "the only strings are the language codes: " .. table.concat(strings, ", "))
+	-- Every WMO area's hashes are those of its names in data-src, in every language the file has.
+	local G = dofile("tools/gen_subzones.lua")
+	local spawns = dofile("tools/gen_spawns.lua")
+	local checked = 0
+	for _, file in ipairs(dofile("tools/gen_bosses.lua").ListFiles("data-src/subzones", ".json")) do
+		local doc = spawns.DecodeJSON(assert(io.open("data-src/subzones/" .. file, "rb")):read("*a"))
+		local research = spawns.DecodeJSON(assert(io.open("data-src/dungeons/" .. file, "rb")):read("*a"))
+		local data = ns.SubzoneData[spawns.InstanceKey(research.name)]
+		for _, a in ipairs(data and doc.areas or {}) do
+			for _, shipped in ipairs(data) do
+				if a.wmo and shipped.w == a.wmo then
+					for i, loc in ipairs(ns.SubzoneLocales) do
+						local names = loc == "enUS" and { a.name } or a.names and a.names[loc] or {}
+						local h = shipped.h[i]
+						for _, n in ipairs(names) do
+							local v = G.Hash(n)
+							T.ok(h == v or (type(h) == "table" and (h[1] == v or h[2] == v or h[3] == v or h[4] == v)),
+								file .. ": " .. a.name .. " in " .. loc)
+							checked = checked + 1
+						end
+					end
+				end
+			end
+		end
+	end
+	T.ok(checked > 500, "names checked: " .. checked)
+end)
+
+T.case("Subzones: a name several areas share places the one on the floor shown", function()
+	ns.SubzoneData.testinstance = { iid = 9001,
+		{ w = 1, at = { { 1, 0.1, 0.1 } }, h = { Subzones.Hash("Hall") } },
+		{ w = 2, at = { { 2, 0.9, 0.9 } }, h = { Subzones.Hash("Hall") } },
+	}
+	local plan = { instance = { name = "Test Instance" }, floors = { { name = "One" }, { name = "Two" } } }
+	local back = client({ iid = 9001, zone = "Test Instance", sub = "Hall" })
+	local ok, err = pcall(function()
+		T.eq(#Subzones.Find(Subzones.For(plan), Subzones.Where()), 2, "both match")
+		T.eq(Subzones.Here(plan, 1).x, 0.1, "floor 1")
+		T.eq(Subzones.Here(plan, 2).x, 0.9, "floor 2")
+	end)
+	ns.SubzoneData.testinstance = nil
 	back()
 	T.ok(ok, tostring(err))
 end)
@@ -202,9 +303,43 @@ T.case("Subzones: the map's marker, its events only while the map shows, a zone 
 	local view = _G.DungeonPlannerMainFrame.instancePage.panels.map.canvas
 	local back = client({ iid = 3065, zone = "The Hall of Thanes", sub = "Anvilmar's Rest" })
 	local ok, err = pcall(function()
+		mock.FireEvent("ZONE_CHANGED_NEW_AREA")
 		view:DrawContent()
 		T.ok(view.here:IsShown(), "shown in its area")
 		T.ok(listening(view), "listening while shown")
+		T.ok(not view.here:IsMouseEnabled(), "takes no mouse: the dots, legs and coordinates under it keep theirs")
+		-- Where the player is was asked on the zone event; a redraw (a drag, a zoom) does not ask the game again.
+		local asked = 0
+		local real = _G.GetSubZoneText
+		_G.GetSubZoneText = function()
+			asked = asked + 1
+			return real()
+		end
+		view:DrawContent()
+		_G.GetSubZoneText = real
+		T.eq(asked, 0, "no game calls on a redraw")
+		-- The tooltip, from the map's hover update: inside the marker, outside it, and a route leg's tooltip first.
+		local at = view.hereAt
+		local tt = ns.Widgets.Tip()
+		local owner
+		local setOwner, isOwned = tt.SetOwner, tt.IsOwned
+		tt.SetOwner = function(self, o, ...)
+			owner = o
+			return setOwner(self, o, ...)
+		end
+		tt.IsOwned = function(_, o)
+			return o == owner
+		end
+		view:HereHover(at.x, at.y)
+		T.ok(tt:IsShown() and owner == view and view.hereTip, "tooltip inside the marker")
+		view:HereHover(at.x + at.r * 2, at.y)
+		T.ok(not view.hereTip and not tt:IsShown(), "gone outside it")
+		view.routeTip = true
+		view:HereHover(at.x, at.y)
+		T.ok(not view.hereTip, "a route leg's tooltip stays")
+		view.routeTip = nil
+		view:HereHover(nil)
+		tt.SetOwner, tt.IsOwned = setOwner, isOwned
 		local _, _, _, x1, y1 = view.here:GetPoint(1)
 		mock.subzone = "Reliquary of Kings"
 		mock.FireEvent("ZONE_CHANGED_INDOORS")
@@ -214,6 +349,7 @@ T.case("Subzones: the map's marker, its events only while the map shows, a zone 
 		mock.FireEvent("ZONE_CHANGED")
 		T.ok(not view.here:IsShown(), "hidden without a sub-zone")
 		mock.subzone = "Anvilmar's Rest"
+		mock.FireEvent("ZONE_CHANGED")
 		ns.db.settings.mapHere = false
 		view:DrawContent()
 		T.ok(not view.here:IsShown(), "the setting turns it off")
@@ -267,6 +403,15 @@ T.case("Subzones: the generator checks its files, applies the hand fixes and is 
 		overrides = { { name = "Nowhere", floor = 1, why = "x" } }, exclude = { { name = "Room" } } }
 	local errs = G.Validate(bad, "x.json", research, 2)
 	T.ok(#errs >= 7, "slug, map ID, sources, position, names, anchor, override, exclude: " .. table.concat(errs, "; "))
+	-- Names that hash alike in one language: an error unless both areas have the same anchors.
+	local twins = { { name = "A", wmo = 1, names = { deDE = { "Halle" } }, at = { { floor = 1, x = 0.1, y = 0.1 } } },
+		{ name = "B", wmo = 2, names = { deDE = { "Halle" } }, at = { { floor = 1, x = 0.5, y = 0.5 } } } }
+	local doc = { areas = twins, overrides = {}, exclude = {} }
+	T.eq(#G.Collisions(G.Anchors(doc), "x.json"), 1, "deDE shared, other anchors")
+	twins[2].at = { { floor = 1, x = 0.1, y = 0.1 } }
+	T.eq(#G.Collisions(G.Anchors(doc), "x.json"), 0, "the same anchors")
+	T.eq(G.Anchors(doc)[1].hashes[2], G.Hash("Halle"), "the hash of its name, in its language's place")
+	T.eq(G.Anchors(doc)[1].hashes[3], false, "no name in that language")
 	local p = assert(io.popen("lua tools/gen_subzones.lua --check 2>&1"))
 	local out = p:read("*a")
 	p:close()

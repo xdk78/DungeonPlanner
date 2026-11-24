@@ -145,6 +145,7 @@ Compat.CHECKS = {
 	{ "Area names", "C_Map.GetAreaInfo",
 		"zone names of Questie's quest givers; the map's You are here marker in areas the game's area table names" },
 	{ "Zone text", "GetZoneText", "the map's You are here marker where a sub-zone is named like the dungeon" },
+	{ "Bit operations", "bit.bxor", "nothing: the room-name hash of the You are here marker is computed without it" },
 	-- Getting there (Data/Travel.lua, Data/Navigation.lua): outdoors only.
 	{ "World to map", "C_Map.GetMapPosFromWorldPos", "the entrance's coordinates on its zone map" },
 	{ "Map to world", "C_Map.GetWorldPosFromMapPos", "distances, flight masters near Forever's new dungeons" },

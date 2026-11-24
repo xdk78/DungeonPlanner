@@ -4,10 +4,12 @@
 -- Inside a dungeon the game names only the area the player is in (Data/Subzones.lua), so the marker is an area, not a
 -- point: a soft disc with a ring at the middle of that area, sized in map units so it grows with the zoom like the
 -- room it stands for. It shows only inside the plan's own instance, while the area has an anchor on the floor shown,
--- and with the setting "Show where you are on dungeon maps" on. The tooltip names the area.
+-- and with the setting "Show where you are on dungeon maps" on.
 --
--- The zone events are registered only while the view is shown (its OnShow / OnHide), and a zone change moves the
--- marker alone: the rest of the map is not redrawn. No OnUpdate.
+-- It takes no mouse, so the enemy dots, route legs and coordinates under it keep theirs: the map's own hover update
+-- (UI/MapInput.lua) shows its tooltip when the pointer is inside it and nothing else is hovered. Where the player is
+-- is asked on the zone events and when the view shows, not on every draw; the events are registered only while the
+-- view is shown, and a zone change moves the marker alone. No OnUpdate of its own.
 
 local _, ns = ...
 local MapHere = ns:NewModule("MapHere")
@@ -26,6 +28,7 @@ function MapHere.Install(view)
 	local b = CreateFrame("Frame", nil, view.overlay)
 	-- Over the enemy dots (+1), under the route's stops (+3) and the plan's pins.
 	b:SetFrameLevel(view.overlay:GetFrameLevel() + 2)
+	b:EnableMouse(false)
 	b.fill = b:CreateTexture(nil, "ARTWORK", nil, 0)
 	b.fill:SetTexture(S.MEDIA .. "Circle")
 	b.fill:SetAllPoints()
@@ -35,20 +38,20 @@ function MapHere.Install(view)
 	b.inner = b:CreateTexture(nil, "ARTWORK", nil, 1)
 	b.inner:SetTexture(S.MEDIA .. "Ring")
 	b.inner:SetPoint("CENTER")
-	-- The pointer over it shows the tooltip; presses go through to the map and the pins, so the marker never stands in
-	-- the way of a tool. Without these calls it takes no mouse at all (no tooltip).
-	if b.SetMouseClickEnabled and b.SetMouseMotionEnabled then
-		b:EnableMouse(true)
-		b:SetMouseClickEnabled(false)
-		b:SetMouseMotionEnabled(true)
-	else
-		b:EnableMouse(false)
-	end
 	b:Hide()
 	view.here = b
 
+	local function hideTip()
+		local tt = W.Tip()
+		if view.hereTip and tt and tt:IsOwned(view) then
+			tt:Hide()
+		end
+		view.hereTip = nil
+	end
+
 	local listening = false
 	local function onZone()
+		view.hereWhere = ns.Subzones.Where()
 		view:PlaceHere()
 	end
 	view.hereHandler = onZone
@@ -62,9 +65,10 @@ function MapHere.Install(view)
 	end
 	view:HookScript("OnShow", function()
 		listen()
-		view:PlaceHere()
+		onZone()
 	end)
 	view:HookScript("OnHide", function()
+		hideTip()
 		if listening then
 			listening = false
 			for _, e in ipairs(MapHere.EVENTS) do
@@ -87,12 +91,17 @@ function MapHere.Install(view)
 		return self:PlaceHere()
 	end
 
-	-- Show or hide the marker for where the game says the player is now; true when shown.
+	-- Show or hide the marker for where the game said the player is; true when shown.
 	function view:PlaceHere()
 		local a = self.hereArgs
-		local here = a and MapHere.Enabled() and ns.Subzones.Here(a.plan, a.floor)
+		if a and not self.hereWhere then
+			self.hereWhere = ns.Subzones.Where()
+		end
+		local here = a and MapHere.Enabled() and ns.Subzones.Here(a.plan, a.floor, self.hereWhere)
+		self.hereAt = nil
 		if not here then
 			b:Hide()
+			hideTip()
 			return false
 		end
 		local w = self:BaseSize()
@@ -103,11 +112,39 @@ function MapHere.Install(view)
 		b.ring:SetVertexColor(r, g, bl, 0.9)
 		b.inner:SetSize(size * 0.55, size * 0.55)
 		b.inner:SetVertexColor(r, g, bl, 0.35)
+		local x, y = a.px(here.x, here.y), a.py(here.y, here.x)
 		b:ClearAllPoints()
-		b:SetPoint("CENTER", view.canvas, "TOPLEFT", a.px(here.x, here.y), a.py(here.y, here.x))
-		W.SetTooltip(b, L["You are here (approx.)"], here.name .. "\n"
-			.. L["Inside dungeons the game tells addons only the name of the area you are in, so this marks the middle of that area."])
+		b:SetPoint("CENTER", view.canvas, "TOPLEFT", x, y)
+		self.hereAt = { x = x, y = y, r = size / 2, name = here.name }
 		b:Show()
 		return true
+	end
+
+	-- From the map's hover update: the pointer at canvas offset (x, y) (y up, as the marker is placed), or nil when it
+	-- left the map. The tooltip shows while the pointer is inside the marker and no route leg has the tooltip.
+	function view:HereHover(x, y)
+		if self.routeTip then
+			self.hereTip = nil
+			return
+		end
+		local at = self.hereAt
+		if not (at and x and (x - at.x) ^ 2 + (y - at.y) ^ 2 <= at.r ^ 2) then
+			hideTip()
+			return
+		end
+		if self.hereTip == at then
+			return
+		end
+		local tt = W.Tip()
+		if not tt then
+			return
+		end
+		tt:SetOwner(self, "ANCHOR_CURSOR")
+		tt:SetText(L["You are here (approx.)"], 1, 0.82, 0)
+		tt:AddLine(at.name, 1, 1, 1, true)
+		tt:AddLine(L["Inside dungeons the game tells addons only the name of the area you are in, so this marks the middle of that area."],
+			1, 1, 1, true)
+		W.TipShow(tt)
+		self.hereTip = at
 	end
 end

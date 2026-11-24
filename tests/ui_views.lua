@@ -915,11 +915,13 @@ V.views = {
 			end
 			mock.subzone = "Anvilmar's Rest"
 			ns.Subzones.Reset()
+			mock.FireEvent("ZONE_CHANGED")
 			openPlan("hall-of-thanes", "map")
 		end,
 		window = window,
 		teardown = function()
 			_G.GetInstanceInfo, _G.GetZoneText, mock.subzone = V.savedHere.info, V.savedHere.zone, V.savedHere.sub
+			mock.FireEvent("ZONE_CHANGED")
 			V.installProviders()
 			ns.ReyesMaps.Reset()
 		end,
