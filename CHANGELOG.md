@@ -11,11 +11,11 @@ follow [Semantic Versioning](https://semver.org/).
   before you joined", and run mode moves past their steps (not while following a leader). A boss is matched to the
   plan's by its name as the game gives it, and only when that name belongs to exactly one boss; otherwise nothing is
   marked. When the game says an instance was reset ("... has been reset"), or a boss starts that your run has dead for
-  more than half a minute, the run's kills are cleared, run mode goes back to the first step and the recorder starts
-  a new run. A boss you marked by hand with the
-  "Boss killed" key that then starts only loses its mark. Resets are recognised while tracking is on in the settings
-  (it is by default). A group follows the leader's step, so a reset needs no message of its own. The game's answers
-  are not verified on Forever yet: `/dp scan` inside an instance records them.
+  more than half a minute, the run's kills are cleared, run mode goes back to the first step and the recorder starts a
+  new run. A boss you marked by hand with the "Boss killed" key that then starts only loses its mark. Resets are
+  recognised while tracking is on in the settings (it is by default). A group follows the leader's step, so a reset
+  needs no message of its own. The game's answers are not verified on Forever yet: `/dp scan` inside an instance
+  records them.
 - **Enemies your group killed, per pull**: with "Record my runs" on, the Runs section shows "12 killed" for a pull and
   for the whole run, counted from the game's group kill event. It is a count of its own, apart from the enemies the
   nameplates saw at once.

@@ -710,6 +710,25 @@ T.case("Events: a handler that unregisters while an event is delivered does not 
 	T.ok(not ns.EventTable().DP_TEST_EVENT)
 end)
 
+T.case("Events: a handler registered while an event is delivered runs from the next delivery on", function()
+	local calls = {}
+	local function late()
+		calls[#calls + 1] = "late"
+	end
+	local function early()
+		calls[#calls + 1] = "early"
+		ns:RegisterEvent("DP_TEST_EVENT", late)
+	end
+	ns:RegisterEvent("DP_TEST_EVENT", early)
+	ns.EventDispatcher()("DP_TEST_EVENT")
+	T.eq(table.concat(calls, ","), "early", "not in the round that registered it")
+	ns:UnregisterEvent("DP_TEST_EVENT", early) -- or it would register another one each round
+	ns.EventDispatcher()("DP_TEST_EVENT")
+	T.eq(table.concat(calls, ","), "early,late", "in the next")
+	ns:UnregisterEvent("DP_TEST_EVENT", late)
+	T.ok(not ns.EventTable().DP_TEST_EVENT)
+end)
+
 T.case("Run mode: bosses found dead move the step past them, never back, and not while following", function()
 	scenario(function(plan)
 		ns.db.ui.selectedPlan = plan.id

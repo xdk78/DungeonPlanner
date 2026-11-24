@@ -193,7 +193,7 @@ function Compat.Methods()
 			{ "UPDATE_INSTANCE_INFO", "bosses already dead when you join (the lock is read on entering and after a kill)" },
 			{ "PLAYER_LEAVING_WORLD", "a run resuming after a /reload or a logout inside its instance" },
 			{ "PLAYER_LOGOUT", "a run resuming after a logout inside its instance" },
-			{ "INSTANCE_LOCK_START","bosses already dead when you join (read again when the game shows the lock prompt)" },
+			{ "INSTANCE_LOCK_START", "bosses already dead when you join (read again when the game shows the lock prompt)" },
 			{ "CHAT_MSG_SYSTEM", "ending a run when its instance is reset (a boss that starts again after its kill still does)" } }) do
 			local known = pcall(f.RegisterEvent, f, event[1])
 			out[#out + 1] = { "Event " .. event[1], known, event[2] }
