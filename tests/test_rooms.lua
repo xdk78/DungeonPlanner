@@ -362,6 +362,15 @@ T.case("Rooms, in game: sent on a zone change through Comm, coalesced, held in a
 		end
 		T.eq(#sentRooms(outgoing), 0, "nothing during the lockdown")
 		T.eq(waitingRooms(), 1, "one waiting: the newest replaced the older ones")
+		local refreshes, sendSync = 0, ns.Comm.SendSync
+		ns.Comm.SendSync = function(...)
+			refreshes = refreshes + 1
+			return sendSync(...)
+		end
+		mock.Advance(2 * Rooms.REFRESH + 5, 1)
+		ns.Comm.SendSync = sendSync
+		T.eq(refreshes, 2, "two refreshes in the fight")
+		T.eq(waitingRooms(), 1, "still one waiting")
 		mock.lockdown = false
 		mock.Advance(1, 0.1)
 		sent = sentRooms(outgoing)
@@ -512,11 +521,28 @@ T.case("Rooms: an instance several plans share (Scarlet Monastery): the sender's
 			"drawn on the library's map")
 		T.eq(#ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-cathedral")), 1, members, {}), 0,
 			"not on the cathedral's")
+		-- A room of the same name in an earlier wing: the sender sends that wing's key, and the library's map still
+		-- draws the member in its own room of that name.
+		local twin = ns.SubzoneData.scarletmonasterycathedral[2]
+		saved.twin = twin.h[1]
+		twin.h[1] = room.h[1]
+		Subzones.Reset()
+		iid, key = ns.GroupRooms.Where()
+		T.eq(key, Subzones.Key(twin), "the first wing's room of that name")
+		members.Ann.area = key
+		local rooms = ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-library")), 1, members, {})
+		T.eq(#rooms, 1, "drawn on the library's map too")
+		T.eq(rooms[1].key, Subzones.Key(room), "in the library's room of that name")
+		T.eq(#ns.MapGroup.Rooms(assert(ns.Bundled.Get("b:scarlet-monastery-armory")), 1, members, {}), 0,
+			"not on a wing without that name")
 		mock.subzone = "A corridor"
 		iid, key = ns.GroupRooms.Where()
 		T.eq(iid, 189)
 		T.eq(key, nil, "inside, no area of that name")
 	end)
+	if saved.twin then
+		ns.SubzoneData.scarletmonasterycathedral[2].h[1] = saved.twin
+	end
 	room.h[1], _G.GetInstanceInfo, mock.subzone = saved.h, saved.info, saved.sub
 	Subzones.Reset()
 	T.ok(ok, tostring(err))
@@ -558,6 +584,33 @@ T.case("Rooms: areas that share a name count as one: the first with an anchor on
 	T.eq(#rooms, 1)
 	T.eq(rooms[1].key, "w2")
 	T.eq(#rooms[1].members, 2)
+end)
+
+T.case("Subzones: an area name the client has not given yet is asked again, not kept as none", function()
+	local Subzones = ns.Subzones
+	local real = _G.C_Map.GetAreaInfo
+	local answer
+	_G.C_Map.GetAreaInfo = function()
+		return answer
+	end
+	Subzones.Reset()
+	local h = {}
+	for i = 1, #ns.SubzoneLocales do
+		h[i] = false
+	end
+	h[1] = Subzones.Hash("Late name")
+	local data = { iid = 9001, { a = 7, at = { { 1, 0.5, 0.5 } } }, { w = 3, h = h, at = { { 1, 0.2, 0.2 } } } }
+	local where = { instanceID = 9001, subzone = "Late name", hash = Subzones.Hash("Late name") }
+	local ok, err = pcall(function()
+		T.eq(Subzones.Names(data[1], where), false, "no name yet")
+		T.eq(Subzones.Place(data, "w3", 1).w, 3, "the room alone")
+		answer = "Late name"
+		T.eq(Subzones.Names(data[1], where), true, "asked again")
+		T.eq(Subzones.Place(data, "w3", 1).a, 7, "its hashes asked again: the first of that name")
+	end)
+	_G.C_Map.GetAreaInfo = real
+	Subzones.Reset()
+	T.ok(ok, tostring(err))
 end)
 
 T.case("Rooms on the map: several in a room spread, the player's room around the marker, another floor hides them", function()

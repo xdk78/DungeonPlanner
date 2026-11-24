@@ -122,20 +122,21 @@ local function langIndex()
 	return localeIndex
 end
 
--- AreaTable names by ID, asked once each (bounded by the areas in the data); false for an ID the client cannot name.
+-- AreaTable names by ID, kept once the client gives one (bounded by the areas in the data). No answer is not kept: the
+-- client may not have loaded the name yet, so the next call asks again.
 local areaNames = {}
 
 local function areaName(id)
-	if areaNames[id] == nil then
+	if not areaNames[id] then
 		local api = rawget(_G, "C_Map")
 		local name
 		if type(api) == "table" and type(api.GetAreaInfo) == "function" then
 			local ok, value = pcall(api.GetAreaInfo, id)
 			name = ok and plainText(value) or nil
 		end
-		areaNames[id] = name ~= "" and name or false
+		areaNames[id] = name ~= "" and name or nil
 	end
-	return areaNames[id] or nil
+	return areaNames[id]
 end
 
 -- Does area `a` of the data read like `where` (Subzones.Where) in this client?
@@ -230,6 +231,7 @@ function Subzones.ForInstance(iid)
 end
 
 -- The hashes of area `a`'s name in this client's language, { [hash] = true }: empty when the client cannot name it.
+-- Kept only when complete: an AreaTable name the client has not given yet is asked again next time.
 local hashCache = setmetatable({}, { __mode = "k" })
 local function nameHashes(a)
 	local set = hashCache[a]
@@ -244,7 +246,9 @@ local function nameHashes(a)
 		for _, v in ipairs(type(h) == "table" and h or { h or nil }) do
 			set[v] = true
 		end
-		hashCache[a] = set
+		if name or not a.a then
+			hashCache[a] = set
+		end
 	end
 	return set
 end
@@ -264,9 +268,13 @@ end
 
 -- Where a member who sent area key `key` is drawn on floor `floor` of `data`: the area and x, y, or nil. The sender
 -- cannot tell apart areas that share a name, so any of them counts: the first, in the data's order, with an anchor on
--- that floor, as the player's own marker is placed (Subzones.Here).
+-- that floor, as the player's own marker is placed (Subzones.Here). A key from another plan of the same instance (the
+-- sender sends the first match across them) counts for an area of this plan with the same name.
 function Subzones.Place(data, key, floor)
 	local sent = Subzones.Area(data, key)
+	for _, other in ipairs(sent and {} or Subzones.ForInstance(data.iid)) do
+		sent = sent or Subzones.Area(other, key)
+	end
 	if not sent then
 		return nil
 	end

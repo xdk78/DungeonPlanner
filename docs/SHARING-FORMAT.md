@@ -383,8 +383,9 @@ state machine (`Rooms.Step(state, event, now)` -> effects), `UI/GroupRooms.lua` 
   message adds at most one every 3 s.
 - **Which area:** the key names an area of any plan of the instance (several plans share one: Scarlet Monastery's
   wings, Stratholme's halves, Lower and Upper Blackrock Spire); the sender sends the first area the sub-zone names, in
-  the order of the plans' keys. The receiver looks the key up in the shown plan's own areas, and takes areas that share
-  that area's name in the client's language as one (the sender cannot tell them apart): the first with an anchor on
-  the floor shown.
+  the order of the plans' keys. The receiver finds the key's area in the shown plan, else in another plan of the same
+  instance, and takes the shown plan's areas that share that area's name in the client's language (compared by the
+  names' hashes) as one, since the sender cannot tell them apart: the first with an anchor on the floor shown. A key
+  whose name no area of the shown plan has is not drawn there.
 - **Older versions:** Dungeon Planner 0.2.2 and older parse `L` as nothing (an unknown tag) and drop it, so the
   protocol number stays 2. Their players are not drawn.

@@ -698,8 +698,8 @@ so they show on its edge. Like the marker they take no mouse, and the map's hove
 pointer is over a dot: "Your group here (approx.)", each member of that area in class colour, and why it is
 approximate. A member in another instance, another plan of a shared instance (another wing of Scarlet Monastery, the
 other half of Stratholme, the other Blackrock Spire), on another floor, or in a spot the area data does not name is not
-drawn. Areas that share a name in the client's language count as one: the member is drawn at the first of them with an
-anchor on the floor shown, as the player's marker is. The dots are placed with the marker on every map draw, and again
+drawn, unless an area of the shown plan has the same name. Areas that share a name in the client's language count as
+one: the member is drawn at the first of them with an anchor on the floor shown, as the player's marker is. The dots are placed with the marker on every map draw, and again
 on their own when a member's area changes or a member leaves the group (`GROUP_ROOMS`). "Show where your group is on dungeon maps
 (approx.)" (Appearance, under the marker's setting; on by default) hides them; "Share my room with my group" (Sharing;
 on by default) stops telling the group yours.
