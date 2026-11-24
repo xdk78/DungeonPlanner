@@ -5,6 +5,8 @@
 --   a 0.5 s ticker, only while in combat           enemy nameplates: count, level and classification (names only when
 --                                                 they are not secret); never positions, never GUIDs
 --   ENCOUNTER_END / BOSS_KILL                      boss kills with timing; a failed encounter is a wipe
+--   CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH,      names of killed enemies, only while a run is being recorded
+--   UNIT_SPELLCAST_SENT                            (inside its instance), for the pull in progress
 -- Nothing runs while idle or out of combat, and nothing here touches protected frames.
 
 local _, ns = ...
@@ -97,6 +99,81 @@ local function stopTicker()
 	if ticker then
 		ticker:Cancel()
 		ticker = nil
+	end
+end
+
+-- Enemy names for the pull in progress where nameplate names are secret: the client's kill messages and the target of
+-- the player's own casts. A secret message or name is dropped.
+
+-- Format strings whose first argument is the dead enemy's name; each is looked up alone, so a client without one loses
+-- only that pattern.
+Recorder.KILL_TEXTS = { "COMBATLOG_XPGAIN_FIRSTPERSON", "COMBATLOG_XPGAIN_FIRSTPERSON_GROUP", "COMBATLOG_XPGAIN_FIRSTPERSON_RAID",
+	"UNITDIESOTHER" }
+
+local killPatterns
+
+function Recorder.KillPatterns()
+	if not killPatterns then
+		local formats = {}
+		for _, name in ipairs(Recorder.KILL_TEXTS) do
+			local format = rawget(_G, name)
+			if type(format) == "string" then
+				formats[#formats + 1] = format
+			end
+		end
+		killPatterns = RunLog.KillPatterns(formats)
+	end
+	return killPatterns
+end
+
+-- Tests change the globals.
+function Recorder.ResetKillPatterns()
+	killPatterns = nil
+end
+
+local function onKillMessage(_, text)
+	local run = Recorder.Current()
+	if run and RunLog.OpenPull(run) then
+		RunLog.Learn(run, RunLog.KilledName(Recorder.KillPatterns(), Util.Plain(text)))
+	end
+end
+
+-- The player's, the group's and the pet's names: a cast on one of them is not a cast on an enemy.
+local function isFriendly(name)
+	local id = ns.Roster.Id(name)
+	return id == ns.Roster.Me() or Util.IndexOf(ns.Roster.Members(), id) ~= nil or call(UnitName, "pet") == name
+end
+
+local function onCastSent(_, unit, target)
+	local run = Recorder.Current()
+	target = Util.Plain(target)
+	if not (Util.Plain(unit) == "player" and type(target) == "string" and target ~= "" and run and RunLog.OpenPull(run)) then
+		return
+	end
+	if call(UnitCanAttack, "player", "target") == true and not isFriendly(target) then
+		RunLog.Learn(run, target)
+	end
+end
+
+local SOURCES = { { "CHAT_MSG_COMBAT_XP_GAIN", onKillMessage }, { "CHAT_MSG_COMBAT_HOSTILE_DEATH", onKillMessage },
+	{ "UNIT_SPELLCAST_SENT", onCastSent } }
+local listening = false
+
+-- Handlers on these events exist only while a run of the instance the player is in is recorded.
+local function syncSources()
+	local run = Recorder.Enabled() and Recorder.Current()
+	local cur = run and ns.Instances.Current()
+	local want = cur and cur.inInstance and RunLog.SplitKey(run.k) == tostring(cur.instanceID) or false
+	if want == listening then
+		return
+	end
+	listening = want
+	for _, source in ipairs(SOURCES) do
+		if want then
+			ns:RegisterEvent(source[1], source[2])
+		else
+			ns:UnregisterEvent(source[1], source[2])
+		end
 	end
 end
 
@@ -196,6 +273,7 @@ function Recorder.OnZone()
 	else
 		RunLog.Leave(store, now)
 	end
+	syncSources()
 end
 
 function Recorder.OnCombat(started)
@@ -268,6 +346,7 @@ function Recorder.SetEnabled(on)
 	else
 		stopTicker()
 	end
+	syncSources()
 	ns:Fire("RECORDER_CHANGED")
 end
 
@@ -276,6 +355,7 @@ function Recorder.FinishRun()
 	local store = Recorder.Store()
 	stopTicker()
 	local run = store and RunLog.Finish(store, ns.Now())
+	syncSources()
 	ns:Fire("RECORDER_CHANGED")
 	return run
 end
@@ -284,6 +364,7 @@ function Recorder.ClearHistory(key)
 	local store = Recorder.Store()
 	if store then
 		RunLog.Clear(store, key)
+		syncSources()
 		ns:Fire("RECORDER_CHANGED")
 	end
 end

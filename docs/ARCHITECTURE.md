@@ -285,6 +285,8 @@ PLAYER_ENTERING_WORLD / ZONE_CHANGED_NEW_AREA -> RunLog.Enter (same instance, no
 PLAYER_REGEN_DISABLED (inside the run's instance ID) -> RunLog.PullStart; a 0.5 s C_Timer ticker starts
   ticker -> Recorder.ScanPlates (C_NamePlate: hostile, living, in-combat units; level, classification, plain names)
          -> RunLog.Observe (peak counts: the same mob cannot be told apart between looks)
+kill messages (CHAT_MSG_COMBAT_XP_GAIN / _HOSTILE_DEATH) and UNIT_SPELLCAST_SENT -> RunLog.Learn (names the nameplates
+  could not give, in the pull's `kn`); registered only while a run of the player's instance is recorded
 PLAYER_REGEN_ENABLED -> ticker stops; RunLog.PullEnd (group members dead, all dead = wipe); a pull with no enemy seen is dropped
 ENCOUNTER_END success 1 / BOSS_KILL -> RunLog.BossKill (deduplicated); success 0 -> RunLog.BossWipe
 another instance, "End run", or coming back after 30 min -> RunLog.Finish (kept only with a pull or a kill)

@@ -167,3 +167,78 @@ T.case("Spawns: /dp scan reports position and target readability", function()
 	T.eq(p.targetGUID, "secret")
 	T.eq(p.targetClass, "elite")
 end)
+
+T.case("Spawns: /dp scan reports the secrets API, the addon restriction state and the party distance", function()
+	local secret = {}
+	local names = { "issecretvalue", "C_Secrets", "C_RestrictedActions", "UnitDistanceSquared", "UnitExists" }
+	local saved = {}
+	for _, k in ipairs(names) do
+		saved[k] = rawget(_G, k)
+	end
+	local enum = rawget(_G, "Enum") or {}
+	_G.Enum = enum
+	local savedType = enum.AddOnRestrictionType
+	local function collect()
+		local ok, d = pcall(ns.Diagnostics.Collect)
+		T.ok(ok, tostring(d))
+		return d.restrictions
+	end
+	_G.issecretvalue = function(x)
+		return x == secret
+	end
+	_G.UnitExists = function()
+		return true
+	end
+	-- Present: the function names, each restriction type's state, the distance as the client gives it.
+	_G.C_Secrets = { ShouldUnitIdentityBeSecret = function() end, HasSecretRestrictions = function() end, Note = "not a function" }
+	_G.C_RestrictedActions = {
+		GetAddOnRestrictionState = function(kind)
+			return kind == 1 and secret or kind
+		end,
+	}
+	enum.AddOnRestrictionType = { Combat = 0, Encounter = 1 }
+	_G.UnitDistanceSquared = function()
+		return secret, true
+	end
+	local r = collect()
+	T.eq(r.cSecrets, "HasSecretRestrictions, ShouldUnitIdentityBeSecret")
+	T.eq(table.concat(r.restrictionState, "; "), "Combat 0; Encounter secret")
+	T.eq(r.partyDistance, "secret | checked true")
+	-- A plain distance, and no value at all.
+	_G.UnitDistanceSquared = function()
+		return 25, true
+	end
+	T.eq(collect().partyDistance, "25.0000 | checked true")
+	_G.UnitDistanceSquared = function()
+		return nil
+	end
+	T.eq(collect().partyDistance, "nil | checked nil")
+	-- Not in a group.
+	_G.UnitExists = function()
+		return false
+	end
+	T.eq(collect().partyDistance, "no party1")
+	-- An error is recorded, not raised; no enum: asked without a type.
+	_G.C_RestrictedActions.GetAddOnRestrictionState = function(kind)
+		if kind ~= nil then
+			error("takes no type")
+		end
+		return 2
+	end
+	T.eq(collect().restrictionState[1], "Combat error", "a failing call")
+	enum.AddOnRestrictionType = nil
+	T.eq(collect().restrictionState, "no Enum.AddOnRestrictionType: 2")
+	-- Missing on a client without them.
+	_G.C_Secrets, _G.C_RestrictedActions, _G.UnitDistanceSquared = nil, nil, nil
+	_G.UnitExists = function()
+		return true
+	end
+	r = collect()
+	T.eq(r.cSecrets, "missing")
+	T.eq(r.restrictionState, "missing")
+	T.eq(r.partyDistance, "missing")
+	enum.AddOnRestrictionType = savedType
+	for k, f in pairs(saved) do
+		_G[k] = f
+	end
+end)

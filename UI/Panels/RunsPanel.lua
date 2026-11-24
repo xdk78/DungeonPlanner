@@ -366,8 +366,9 @@ function Panel.Create(parent, ctx)
 				if p.z then
 					line = line .. " • " .. p.z
 				end
-				if p.nm then
-					line = line .. " • " .. table.concat(p.nm, ", ")
+				local names = RunLog.PullNames(p)
+				if #names > 0 then
+					line = line .. " • " .. table.concat(names, ", ")
 				end
 				if p.w then
 					line = line .. " • " .. L["wipe"]

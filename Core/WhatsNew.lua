@@ -25,6 +25,15 @@ end
 -- Newest first by the entry's version; each entry is a function so the text follows the language chosen at runtime.
 -- items = { { heading, text, settingsGroup? } } (the card's Open Settings button goes to the first group named)
 local ENTRIES = {
+	["0.2.3"] = function()
+		return {
+			title = L["What's new in 0.2.3"],
+			items = {
+				{ L["Names of killed enemies"],
+					L["A recorded pull names the enemies you killed, read from the game's kill messages where nameplates hide their names."] },
+			},
+		}
+	end,
 	["0.2.2"] = function()
 		return {
 			title = L["What's new in 0.2.2"],

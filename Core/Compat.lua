@@ -112,6 +112,15 @@ Compat.CHECKS = {
 	{ "Minimap zone text", "GetMinimapZoneText", "sub-zone names of recorded pulls" },
 	{ "Player facing", "GetPlayerFacing", "the live map's arrow turning (it points up), /dp scan's position check" },
 	{ "Indoors", "IsIndoors", "/dp scan's position check" },
+	-- The kill messages' format strings (Recorder.KILL_TEXTS): each one missing is one message not read.
+	{ "Kill message: experience", "COMBATLOG_XPGAIN_FIRSTPERSON", "names of killed enemies from experience messages" },
+	{ "Kill message: experience, group", "COMBATLOG_XPGAIN_FIRSTPERSON_GROUP", "names of killed enemies from experience messages" },
+	{ "Kill message: experience, raid", "COMBATLOG_XPGAIN_FIRSTPERSON_RAID", "names of killed enemies from experience messages" },
+	{ "Kill message: death", "UNITDIESOTHER", "names of killed enemies from death messages" },
+	-- /dp scan's restriction probes (Data/Diagnostics.lua): recorded, nothing is built on them.
+	{ "Secrets API", "C_Secrets", "/dp scan's secrets check" },
+	{ "Addon restriction state", "C_RestrictedActions.GetAddOnRestrictionState", "/dp scan's secrets check" },
+	{ "Unit distance", "UnitDistanceSquared", "/dp scan's secrets check" },
 	-- /dp perf (Core/Perf.lua) and the report window (Core/Report.lua).
 	{ "Addon profiler", "C_AddOnProfiler.GetAddOnMetric", "the game's own timings in /dp perf" },
 	{ "Addon memory", "C_AddOns.GetAddOnMemoryUsage", "memory use in /dp perf" },
@@ -168,6 +177,12 @@ function Compat.Methods()
 		out[#out + 1] = { "Global mouse events", mouse, "closing dropdown lists on an outside click (a screen catcher instead)" }
 		out[#out + 1] = { "Keyboard pass-through", f.SetPropagateKeyboardInput ~= nil,
 			"arrow keys in dropdown lists without a search field" }
+		-- The run recorder's name sources (Tracker/Recorder.lua): the client raises on an event it does not know.
+		for _, event in ipairs({ "CHAT_MSG_COMBAT_XP_GAIN", "CHAT_MSG_COMBAT_HOSTILE_DEATH", "UNIT_SPELLCAST_SENT" }) do
+			local known = pcall(f.RegisterEvent, f, event)
+			out[#out + 1] = { "Event " .. event, known, "names of killed enemies in recorded pulls" }
+		end
+		f:UnregisterAllEvents()
 		f:Hide()
 	end
 	return out

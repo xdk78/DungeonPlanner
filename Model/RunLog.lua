@@ -14,7 +14,8 @@
 --   k key, n instance name, d difficultyID, t start (wall time), e end (wall time), done = finished
 --   p pulls: { s = start (seconds after t), u = duration, c = enemies seen at once (peak), el = elites, r = rares,
 --              b = bosses (by classification), lo/hi = level range, nm = plain names (<= MAX_NAMES), z = sub-zone,
---              dd = deaths, w = wipe, k = encounter killed during the pull }
+--              kn = names the client's kill messages and casts gave (<= MAX_NAMES, see Learn), dd = deaths,
+--              w = wipe, k = encounter killed during the pull }
 --   b boss kills: { i = encounterID, n = name, a = seconds after t, p = pull index }
 --   w wipes (count), dd deaths (count), dk = deaths could be read (else the deaths count is not available)
 --   wx = seen in two wings (kills of two wings' bosses): its wing stays unknown (Unwing)
@@ -184,6 +185,24 @@ function Recorder.PullStart(run, now, subzone)
 	return pull
 end
 
+-- Add a plain name to one of a pull's name lists (nm, kn): bounded, each name once. Returns whether it was added.
+local function addName(pull, field, name)
+	name = type(name) == "string" and Util.CleanText(name, 48) or nil
+	if not name or name == "" then
+		return false
+	end
+	local list = pull[field]
+	if list and (#list >= Recorder.MAX_NAMES or Util.IndexOf(list, name)) then
+		return false
+	end
+	if not list then
+		list = {}
+		pull[field] = list
+	end
+	list[#list + 1] = name
+	return true
+end
+
 -- One look at the enemies in combat: units = { { level = n?, class = "elite"|..., name = plain string? }, ... }.
 -- Unit identity is secret inside instances, so the same mob cannot be told apart between looks: a pull's size is the
 -- most enemies seen at once (peak), and so is each class count.
@@ -210,18 +229,95 @@ function Recorder.Observe(run, units)
 		elseif lv == -1 then
 			b = b + (field == "b" and 0 or 1) -- "??" level: a boss
 		end
-		local name = type(u.name) == "string" and Util.CleanText(u.name, 48) or nil
-		if name and name ~= "" then
-			pull.nm = pull.nm or {}
-			if #pull.nm < Recorder.MAX_NAMES and not Util.IndexOf(pull.nm, name) then
-				pull.nm[#pull.nm + 1] = name
-			end
-		end
+		addName(pull, "nm", u.name)
 	end
 	pull.c = math.max(pull.c, c)
 	pull.el = math.max(pull.el, el)
 	pull.r = math.max(pull.r, r)
 	pull.b = math.max(pull.b, b)
+end
+
+-- An enemy's name from the game's own text (a kill message, a cast's target) for the pull in progress. It goes in kn,
+-- beside the nameplates' nm, and never replaces it.
+function Recorder.Learn(run, name)
+	local pull = Recorder.OpenPull(run)
+	return pull ~= nil and addName(pull, "kn", name)
+end
+
+-- A pull's names to show: the nameplates' first, then the learned ones, each once, at most MAX_NAMES.
+function Recorder.PullNames(pull)
+	local out = {}
+	for _, field in ipairs({ "nm", "kn" }) do
+		for _, name in ipairs(type(pull[field]) == "table" and pull[field] or {}) do
+			if type(name) == "string" and #out < Recorder.MAX_NAMES and not Util.IndexOf(out, name) then
+				out[#out + 1] = name
+			end
+		end
+	end
+	return out
+end
+
+-- A client format string ("%s dies, you gain %d experience.", "%1$s dies.") as a Lua pattern, so the message reads in
+-- every client language. Returns the pattern and which capture is the format's first argument (the dead enemy's name);
+-- nil when there is none or the format uses a conversion other than %s and %d.
+function Recorder.FormatPattern(format)
+	if type(format) ~= "string" then
+		return nil
+	end
+	local parts, args, sequential, i = {}, {}, 0, 1
+	while i <= #format do
+		if format:sub(i, i) ~= "%" then
+			parts[#parts + 1] = (format:sub(i, i):gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
+			i = i + 1
+		else
+			local _, last, position, conversion = format:find("^%%(%d+)%$([sd])", i)
+			if not last then
+				_, last, conversion = format:find("^%%([sd])", i)
+				sequential = sequential + (last and 1 or 0)
+				position = sequential
+			end
+			if last then
+				args[#args + 1] = { position = tonumber(position), conversion = conversion }
+				parts[#parts + 1] = conversion == "s" and "(.-)" or "(%d+)"
+				i = last + 1
+			elseif format:sub(i + 1, i + 1) == "%" then
+				parts[#parts + 1] = "%%"
+				i = i + 2
+			else
+				return nil
+			end
+		end
+	end
+	for at, arg in ipairs(args) do
+		if arg.position == 1 and arg.conversion == "s" then
+			return "^" .. table.concat(parts) .. "$", at
+		end
+	end
+	return nil
+end
+
+function Recorder.KillPatterns(formats)
+	local out = {}
+	for _, format in ipairs(formats) do
+		local pattern, at = Recorder.FormatPattern(format)
+		if pattern then
+			out[#out + 1] = { pattern = pattern, at = at }
+		end
+	end
+	return out
+end
+
+function Recorder.KilledName(patterns, text)
+	if type(text) ~= "string" then
+		return nil
+	end
+	for _, p in ipairs(patterns) do
+		local name = ({ text:match(p.pattern) })[p.at]
+		if name and name ~= "" then
+			return name
+		end
+	end
+	return nil
 end
 
 -- Combat ended. deaths = group members dead at the end; wiped = everyone dead. A pull in which no enemy was ever seen
@@ -526,8 +622,9 @@ function Recorder.PlanFromRun(run, instance, text)
 			n = n + 1
 			local note = Recorder.PullText(p, L, plural)
 			local extra = {}
-			if p.nm and #p.nm > 0 then
-				extra[#extra + 1] = table.concat(p.nm, ", ")
+			local names = Recorder.PullNames(p)
+			if #names > 0 then
+				extra[#extra + 1] = table.concat(names, ", ")
 			end
 			if p.z then
 				extra[#extra + 1] = p.z

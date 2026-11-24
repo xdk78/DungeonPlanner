@@ -440,6 +440,25 @@ function ns:RegisterEvent(event, handler)
 	return true
 end
 
+-- Removing an event's last handler unregisters the event.
+function ns:UnregisterEvent(event, handler)
+	local handlers = eventHandlers[event]
+	if not handlers then
+		return
+	end
+	for i = #handlers, 1, -1 do
+		if handlers[i] == handler then
+			table.remove(handlers, i)
+		end
+	end
+	if #handlers == 0 then
+		eventHandlers[event] = nil
+		if self.addon then
+			pcall(self.addon.UnregisterEvent, self.addon, event)
+		end
+	end
+end
+
 -- Combat deferral: run fn now, or when combat ends. Dungeon Planner never touches protected frames, but sharing,
 -- popups and heavy work wait until the player is out of combat.
 local afterCombat = {}
